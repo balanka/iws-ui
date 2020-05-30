@@ -3,8 +3,7 @@ import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
 import {Col, Nav, NavItem, NavLink, Row, TabContent, TabPane} from 'reactstrap';
 import {currencyFormatDE, dateFormat} from "../../../utils/utils";
-const Forms2 = React.lazy(() => import('../Forms2/Forms2'));
-const Tables2 = React.lazy(() => import('../Tables2/Tables2'));
+
 const FastGridApp = React.lazy(() => import('../Forms/FastGridApp'));
 const CrudAccount = React.lazy(() => import('../Components/CrudAccount'));
 
