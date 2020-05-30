@@ -237,6 +237,7 @@ const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
                        addLabel    = "Add Financials"
                        updateLabel = "Edit Financials"
                        title       = "Financials"
+                       lineTitle   = "Line Financials"
                        form        = 'financialsForm'>
           </CrudAccount>
         </TabPane>
