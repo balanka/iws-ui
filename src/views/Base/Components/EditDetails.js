@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import Grid from "react-fast-grid";
 import {IoMdMenu} from "react-icons/io";
-import {Collapse, Input, Label} from "reactstrap";
+import {Badge, Col, Collapse, Row, Input, Label} from "reactstrap";
 import DatePicker from "react-datepicker";
 import { de } from "date-fns/locale";
-import {capitalize} from "../../../utils/utils";
 
 const styles = {
   outer: {
@@ -15,7 +14,7 @@ const styles = {
 };
 export default function EditDetails(props) {
   console.log('propsZ', props)
-  const {value, initAddLine, submitEditLine, posted, mapping} = props.props
+  const {value, initAddLine, submitEditLine, posted, mapping, title} = props.props
 
   const UP="fa fa-angle-double-up";
   const DOWN="fa fa-angle-double-down";
@@ -57,13 +56,13 @@ export default function EditDetails(props) {
     submitEditLine(rec);
   }
   return (
-    <Grid item xs  style={{padding:0}}>
+      <Grid container direction="column" style={{...styles.outer, 'min-height':30}} >
       <Grid container justify="space-between">
         <Grid container xs spacing={1} justify="flex-start">
           <Grid item justify="center" alignItems="center">
             <IoMdMenu />
           </Grid>
-          <Grid item>Lines Financials</Grid>
+          <Grid item><h5><Badge color="primary">{title}</Badge></h5></Grid>
         </Grid>
         <Grid item justify="flex-end" alignItems="center">
           <div className="card-header-actions" style={{  align: 'right', padding:4}}>
@@ -79,58 +78,52 @@ export default function EditDetails(props) {
           </div>
         </Grid>
       </Grid>
-      <Collapse isOpen={state.collapse} id="FScollapse" style={{'min-height':5,padding:0}}>
-        <Grid container style={{...styles.outer}} maximize>
-          <Grid container spacing={4} alignItems="center"  >
-            <Grid item alignItems="flex-start" justify="flex-start">
-              <Label>Account</Label>
-            </Grid>
-            <Grid item alignItems="flex-start" justify="flex-start" style={{width: 300, 'padding-left':2, 'padding-right':1}}>
-              <Input  disabled={posted} className ="input-sm" type="select" name="account" id="account-id"
-                      value={account} onChange={(e)=>setAccount(e.target.value)} >
-                {value.accData.hits.map(item => mapping(item))};
-              </Input>
-            </Grid>
-            <Grid item alignItems="flex-start" justify="flex-start" style={{width: 40, 'padding-left':2, 'padding-right': 2}}>
-              <div>O.Acc.</div>
-            </Grid>
-            <Grid item alignItems="flex-start" justify="center" style={{width: 300, 'padding-left':2}}>
-              <Input  disabled={posted} className ="input-sm" type="select" name="oaccount" id="oaccount-id"
-                      value={oaccount} onChange={(e)=>setOaccount(e.target.value)} >
-                {value.accData.hits.map(item => mapping(item))}
-              </Input>
-            </Grid>
-            <Grid item alignItems="flex-end" justify="flex-end" style={{'text-align': 'right', padding: 2}}>
-              <div>Duedate</div>
-            </Grid>
-            <Grid item style={{width:115, 'padding-left':1}}>
-              <DatePicker disabled ={posted} id='transdate-id'  selected={duedate} onChange={date => setDuedate(date)}
-                          locale={de} dateFormat='dd.MM.yyyy' className="form-control dateInput"/>
-            </Grid>
-            <Grid item alignItems="center" justify="lex-start">
-              <div>Amount.</div>
-            </Grid>
-            <Grid item style={{'text-align': 'right', padding: 1}}>
-              <Input disabled={posted} bsSize="sm" type="text" id="amount-input" name="oid" className="input-sm"
-                     placeholder="depositor" value={amount} onChange={(e)=>setAmount(e.target.value)}
-                     style={{width:80, 'text-align':'right',  padding: 1}}/>
-            </Grid>
-            <Grid item style={{'text-align': 'right', padding: 1}}>
-              <Label size="sm" htmlFor="input-small" style={{width:50, 'text-align':'right',  padding: 1}}>{record.currency}</Label>
-            </Grid>
-          </Grid>
-          <div/>
-          <Grid container spacing={4} alignItems="center">
-            <Grid item alignItems="flex-start" justify="flex-start" >
-              <div>Text</div>
-            </Grid>
-            <Grid item style={{ 'padding-left':28, 'padding-top':18}}>
-              <Input disabled={posted} bsSize="sm" type="textarea" id="textx-input" name="text" className="input-sm"
-                     placeholder="text" value={text} onChange={(e)=>setText(e.target.value)}
-                     style={{width:1300,  padding:1}}/>
-            </Grid>
-          </Grid>
-        </Grid>
+      <Collapse isOpen={state.collapse} id="FScollapse">
+        <Row xs="16" style={{height:25 }}>
+          <Col  sm="1" style={{'padding-right':0.5}}>
+            <Label size="sm" htmlFor="input-small" style={{padding:0.5}}>Account</Label>
+          </Col>
+          <Col  sm="3"  style={{'padding-left':0, 'padding-right':1}}>
+            <Input  disabled={posted} className ="input-sm" type="select" name="account" id="account-id"
+                    value={account} onChange={(e)=>setAccount(e.target.value)}>
+              {value.accData.hits.map(item => mapping(item))};
+            </Input>
+          </Col>
+          <Col  sm="0.5"  style={{'padding-left':1, 'padding-right':0.5}}>
+            <Label size="sm" htmlFor="input-small">O.Acc.</Label>
+          </Col>
+          <Col  sm="3"  style={{'left-padding':0}}>
+            <Input  disabled={posted} className ="input-sm" type="select" name="oaccount" id="oaccount-id"
+                    value={oaccount} onChange={(e)=>setOaccount(e.target.value)} >
+              {value.accData.hits.map(item => mapping(item))}
+            </Input>
+          </Col>
+          <Col sm="0.5" style={{'padding-left':1, 'padding-right':0.5}}>
+            <Label size="sm" htmlFor="input-small">Duedate</Label>
+          </Col>
+          <Col sm="1" style={{'padding-left':0}}>
+            <DatePicker disabled ={posted} id='transdate-id'  selected={duedate} onChange={date => setDuedate(date)}
+                        locale={de} dateFormat='dd.MM.yy' className="form-control dateInput" style={{'left-padding':0}}/>
+          </Col>
+        <Col sm="0.5" style={{'padding-left':1, 'padding-right':0.5}}>
+          <Label size="sm" htmlFor="input-small">Amount</Label>
+        </Col>
+        <Col  sm="2"  style={{'padding-left':0}}>
+          <Input disabled={posted} bsSize="sm" type="text" id="amount-input" name="oid" className="input-sm"
+                 placeholder="depositor" value={amount} onChange={(e)=>setAmount(e.target.value)}
+                 style={{'text-align':'right'}}/>
+        </Col>
+       </Row>
+        <Row xs="16" style={{height:50, padding:0.5 }}>
+          <Col sm="1"  style={{'padding-right':0.5}}>
+            <Label size="sm" htmlFor="input-small">Text</Label>
+          </Col>
+          <Col  xs="11"  style={{'padding-left':0, 'padding-right':1, 'padding-top':1}}>
+            <Input disabled={posted} bsSize="sm" type="textarea" id="textx-input" name="text" className="input-sm"
+                   placeholder="text" value={text} onChange={(e)=>setText(e.target.value)}
+            />
+          </Col>
+        </Row>
       </Collapse>
     </Grid>
   );

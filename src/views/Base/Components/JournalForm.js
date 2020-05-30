@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Button, Col, Collapse, Form, FormGroup, Input, Label, Row} from "reactstrap";
+import {Badge, Button, Col, Collapse, Form, FormGroup, Input, Label, Row} from "reactstrap";
 import {capitalize} from "../../../utils/utils"
 import EnhancedTable from '../Tables2/EnhancedTable';
 import {accountContext} from './AccountContext';
@@ -130,7 +130,7 @@ const JournalForm = () => {
               <Grid item justify="center" alignItems="center">
                 <IoMdMenu />
               </Grid>
-              <Grid item>{value.title}</Grid>
+              <Grid item><h5><Badge color="primary">{value.title}</Badge></h5></Grid>
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>

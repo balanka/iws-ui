@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react'
-import { Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
+import {Badge, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
 import { dateFormat, capitalize } from '../../../utils/utils';
 import EnhancedTable from '../Tables2/EnhancedTable';
 import {accountContext} from './AccountContext';
@@ -147,37 +147,7 @@ const VatForm = () => {
     setCurrent(row);
     console.log('submitAdd current', current);
   };
-  const renderData = datax =>(
-    <tr key={datax.id}>
-      <td>{datax.id.value}</td>
-      <td>{datax.name}</td>
-      <td>{datax.description}</td>
-      <td>{datax.percent}</td>
-      <td>{datax.inputVatAccount}</td>
-      <td>{datax.outputVatAccount}</td>
-      <td>{dateFormat(datax.enterdate, "dd mm yy")}</td>
-      <td>{dateFormat(datax.postingdate, "dd mm yy")}</td>
-      <td>{dateFormat(datax.changedate, "dd mm yy")}</td>
-      <td>{datax.company}</td>
-      <td>{datax.modelid}</td>
-      <td>
-        <button
-          onClick={() => {
-            value.editRow(datax);
-          }}
-          className="button muted-button"
-        >
-          Edit
-        </button>
-        <button
-          onClick={() => value.deleteUser(datax.id)}
-          className="button muted-button"
-        >
-          Delete
-        </button>
-      </td>
-    </tr>
-  );
+
   function buildForm(current1){
     console.log("editing", editing);
     console.log("user1xx", current1);
@@ -188,14 +158,14 @@ const VatForm = () => {
       , editable:true, setSelected: setSelected, cancel: cancelEdit, handleFilter: handleFilter, rowsPerPageOptions: [5, 15, 25, 100]
     }
     return <>
-      <Grid container spacing={2} style={{ padding: 20, 'background-color':blue }} direction="column" >
+      <Grid container spacing={2}  direction="column" >
         <Form  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
                 <IoMdMenu />
               </Grid>
-              <Grid item>{value.title}</Grid>
+              <Grid item><h5><Badge color="primary">{value.title}</Badge></h5></Grid>
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>

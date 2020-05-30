@@ -89,7 +89,7 @@ export default function CrudAccount(props) {
 
     return (
       <div className="animated fadeIn">
-          <AccountContext  form ={props.form} url={props.url}  get={props.get} title={props.title}
+          <AccountContext  form ={props.form} url={props.url}  get={props.get} title={props.title} lineTitle={props.lineTitle}
                            accUrl={props.accUrl} ccUrl={props.ccUrl} submitAdd={submitAdd}
                            editing={editing} setEditing={setEditing} editRow={editRow} current={current}
                            setCurrent={setCurrent} submitEdit={submitEdit} submitPost={submitPost}

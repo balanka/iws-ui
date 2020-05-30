@@ -20,7 +20,7 @@ export  const AccountContext = props => {
     <accountContext.Provider value={{data:data, accData:accData, ccData:ccData,user:props.current, editing:props.editing
       , editRow:props.editRow, setCurrent:props.setCurrent, submitEdit:props.submitEdit, submitAdd:props.submitAdd
       , submitPost:props.submitPost, initialState:props.initialState
-      , addLabel:props.addLabel, updateLabel:props.updateLabel, title:props.title
+      , addLabel:props.addLabel, updateLabel:props.updateLabel, title:props.title, lineTitle:props.lineTitle
       , deleteUser:props.deleteUser, headers:props.headers, url:props.url, get:props.get, accUrl:props.accUrl}}>
       {props.children}
     </accountContext.Provider>

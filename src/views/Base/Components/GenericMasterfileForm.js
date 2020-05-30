@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
+import {Badge, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
 import {accountContext} from './AccountContext';
 import EnhancedTable from '../Tables2/EnhancedTable';
 import blue from "@material-ui/core/colors/blue";
@@ -121,7 +121,7 @@ const GenericMasterfileForm = () => {
                       <Grid item justify="center" alignItems="center">
                         <IoMdMenu />
                       </Grid>
-                      <Grid item>{value.title}</Grid>
+                      <Grid item><h5><Badge color="primary">{value.title}</Badge></h5></Grid>
                     </Grid>
                     <Grid item justify="flex-end" alignItems="center">
                       <div className="card-header-actions" style={{  align: 'right' }}>

@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Button, Card, CardBody, CardFooter, CardHeader, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
-import { IoIosCheckmarkCircleOutline, IoMdMenu , IoIosExpand} from "react-icons/io";
-import {dateFormat, capitalize, currencyFormatDE} from '../../../utils/utils';
+import {Badge, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
+import {  IoMdMenu} from "react-icons/io";
+import {dateFormat, capitalize} from '../../../utils/utils';
 import EnhancedTable from '../Tables2/EnhancedTable';
 import DetailsFormFinancials from "./DetailsFormFinancials";
 import {accountContext} from './AccountContext';
@@ -41,6 +41,7 @@ const FinancialsForm = () => {
   const lineHeaders=HeadersWithLines[0].title;
   console.log('HeadersWithLines', HeadersWithLines);
   console.log('lineHeaders', lineHeaders);
+  console.log('lineTitle', value.lineTitle);
   var index = value.headers.indexOf('lines');
   console.log('index_', index);
   const headers = value.headers.filter(function(e) { return e.id !== 'lines' });
@@ -244,16 +245,15 @@ const FinancialsForm = () => {
     }
     const detailsProps={current:current, initialState:initLine, lineHeaders:lineHeaders, data:data
       , setCurrent:setCurrent, getCurrentRow}
-    return <div style={styles.outer}>
-      <Grid container spacing={2} style={{ padding: 20, 'background-color':blue }} direction="column" >
+    return <>
+      <Grid container spacing={2}  direction="column" style={{...styles.outer}}>
          <Form  className="form-horizontal" id ="financialsMasterform" onSubmit={ addOrEdit?submitEdit:submitAdd}>
-
              <Grid container justify="space-between">
                <Grid container xs spacing={1} justify="flex-start">
                  <Grid item justify="center" alignItems="center">
                    <IoMdMenu />
                  </Grid>
-                 <Grid item>Financials</Grid>
+                 <Grid item><h5><Badge color="primary">{value.title}</Badge></h5></Grid>
                </Grid>
                <Grid item justify="flex-end" alignItems="center">
                  <Input className ="input-sm" type="select" name="module" id="module-id"
@@ -269,8 +269,7 @@ const FinancialsForm = () => {
                </Grid>
              </Grid>
 
-            <Collapse isOpen={state.collapse} id="FScollapse" style={{'min-height':200,padding:1}}>
-              <CardBody>
+            <Collapse isOpen={state.collapse} id="FScollapse" style={{'min-height':200}}>
               <FormGroup row style={{  height:15 }}>
                 <Col sm="1">
                   <Label size="sm" htmlFor="input-small">Id</Label>
@@ -381,12 +380,11 @@ const FinancialsForm = () => {
                   </Col>
                 </FormGroup>
                 <DetailsFormFinancials detailsProps={detailsProps}/>
-            </CardBody>
           </Collapse>
         </Form>
       </Grid>
       <EnhancedTable props={props} style={{padding:0, 'padding-top':2, height: 50}}/>
-       </div>
+   </>
   }
 
   return buildForm();

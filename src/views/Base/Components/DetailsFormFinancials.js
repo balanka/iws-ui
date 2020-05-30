@@ -135,21 +135,15 @@ export default function DetailsFormFinancials( props) {
     </>
   }
 
-  return (
-    <FormGroup>
-      <Grid container spacing={4} style={{ padding:0.5 }} direction="column">
-        <Grid item style={{ padding:0.5 }}>
+  return (<>
           <GenericTable data={(current.lines&&current.lines.length) > 0 ? current.lines:[value.initialState.lines[0]]}
                         renderData={renderDetails}
                         renderTotal={renderTotal}
                         renderDT = {renderDT}
                         headers= {lineHeaders}
                         sortFn={sortFunctionD} disabled={posted}/>
-
-          <EditDetails props={{value:value, initState:state, submitEditLine:submitEditLine
+          <EditDetails props={{value:value, initState:state, title:value.lineTitle, submitEditLine:submitEditLine
             , initAddLine:initAddLine, posted:posted, mapping:mapping}} />
-        </Grid>
-      </Grid>
-    </FormGroup>
+        </>
   );
 }

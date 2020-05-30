@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
+import {Badge, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
 import {capitalize, dateFormat, currencyAmountFormatDE} from "../../../utils/utils"
 import {accountContext} from './AccountContext';
 import EnhancedTable from '../Tables2/EnhancedTable';
@@ -114,12 +114,7 @@ const BankStatementForm = () => {
   const toggle= ()=> {
     setState({ collapse:!state.collapse });
   }
-  const initAdd =()=> {
-    const row = {...value.initialState, editing:false};
-     setEditing(false);
-    value.editRow(row, false);
-   // setCurrent(row);
-  };
+
   const cancelEdit = (e) => {
    // e.preventDefault();
     //initAdd();
@@ -144,9 +139,6 @@ const BankStatementForm = () => {
     setCurrent(row);
   };
 
-
-  const mapping = item => <option key={item.id} value={item.id}>
-    {item.id.value+ " ".concat (item.name)}</option>;
 
   const submitEdit = event => {
     event.preventDefault();
@@ -174,14 +166,14 @@ const BankStatementForm = () => {
     const props={title:value.title, columns:value.headers, rows:filteredRows, edit:edit, submit:submit, selected:selected
       , editable:true, setSelected:setSelected, cancel:cancelEdit, handleFilter:handleFilter,rowsPerPageOptions:[15, 25, 100,500, 1000]}
     return <>
-      <Grid container spacing={2} style={{ padding: 20, 'background-color':blue }} direction="column" >
+      <Grid container spacing={2} direction="column" >
         <Form  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
                 <IoMdMenu />
               </Grid>
-              <Grid item>{value.title}</Grid>
+              <Grid item> <h5><Badge color="primary">{value.title}</Badge></h5></Grid>
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>

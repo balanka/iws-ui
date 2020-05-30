@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Col, Collapse,Form, FormGroup, Input, Label} from "reactstrap";
+import {Badge, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
 import { dateFormat, capitalize } from '../../../utils/utils';
 import EnhancedTable from '../Tables2/EnhancedTable';
 import {accountContext} from './AccountContext';
@@ -132,14 +132,14 @@ const CostCenterForm = () => {
       , editable:true, setSelected: setSelected, cancel: cancelEdit, handleFilter: handleFilter, rowsPerPageOptions: [5, 15, 25, 100]
     }
     return <>
-      <Grid container spacing={2} style={{ padding: 20, 'background-color':blue }} direction="column" >
+      <Grid container spacing={2} direction="column" >
         <Form  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
                 <IoMdMenu />
               </Grid>
-              <Grid item>{value.title}</Grid>
+              <Grid item><h5><Badge color="primary">{value.title}</Badge></h5></Grid>
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>
