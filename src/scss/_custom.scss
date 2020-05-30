@@ -1,0 +1,20 @@
+// Here you can add other styles
+.inlineLeft, .inlineRight {
+  display: inline-block;
+}
+
+.inlineRight {
+  display:inline-block;
+  position:absolute;
+  right:0;
+  margin-right:8px;
+}
+.amount {
+  text-align: right;
+}
+.Total {
+  font-weight: bold;
+}
+.Empty {
+empty-cells: hide;
+}
