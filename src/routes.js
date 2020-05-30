@@ -6,7 +6,6 @@ const Carousels = React.lazy(() => import('./views/Base/Carousels'));
 const Collapses = React.lazy(() => import('./views/Base/Collapses'));
 const Dropdowns = React.lazy(() => import('./views/Base/Dropdowns'));
 const Forms = React.lazy(() => import('./views/Base/Forms'));
-const Forms2 = React.lazy(() => import('./views/Base/Forms2'));
 const Jumbotrons = React.lazy(() => import('./views/Base/Jumbotrons'));
 const ListGroups = React.lazy(() => import('./views/Base/ListGroups'));
 const Navbars = React.lazy(() => import('./views/Base/Navbars'));
@@ -49,7 +48,6 @@ const routes = [
   { path: '/base', exact: true, name: 'Base', component: Cards },
   { path: '/base/cards', name: 'Cards', component: Cards },
   { path: '/base/forms', name: 'Forms', component: Forms },
-  { path: '/base/forms2', name: 'Forms2', component: Forms2 },
   { path: '/base/switches', name: 'Switches', component: Switches },
   { path: '/base/tables', name: 'Tables', component: Tables },
   { path: '/base/tables2', name: 'Tables2', component: Tables2 },

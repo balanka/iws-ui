@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react'
-import { Card, CardBody,CardHeader, Col, Collapse,Form, FormGroup, Input, Label} from "reactstrap";
+import {Col, Collapse,Form, FormGroup, Input, Label} from "reactstrap";
 import { dateFormat, capitalize } from '../../../utils/utils';
 import EnhancedTable from '../Tables2/EnhancedTable';
 import {accountContext} from './AccountContext';
@@ -150,7 +150,6 @@ const CostCenterForm = () => {
             </Grid>
           </Grid>
           <Collapse isOpen={state.collapse} id="JScollapse" style={{padding: 2}}>
-            <CardBody>
               <FormGroup row style={{  height:15 }}>
                 <Col sm="2">
                   <Label size="sm" htmlFor="input-small">Id</Label>
@@ -226,7 +225,6 @@ const CostCenterForm = () => {
                          placeholder="Content..." value={description} onChange={handleInputChange}/>
                 </Col>
               </FormGroup>
-            </CardBody>
           </Collapse>
       </Form>
     </Grid>

@@ -1,10 +1,13 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Button, Card, CardBody, CardHeader, Col, Collapse, Form, FormGroup, Input, Label, Row} from "reactstrap";
-import {capitalize, dateFormat, currencyFormatDE} from "../../../utils/utils"
+import {Button, Col, Collapse, Form, FormGroup, Input, Label, Row} from "reactstrap";
+import {capitalize} from "../../../utils/utils"
 import EnhancedTable from '../Tables2/EnhancedTable';
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
-import GStickyHeadTable from "../Tables2/GStickyHeadTable";
+import Grid from "react-fast-grid";
+import blue from "@material-ui/core/colors/blue";
+import {IoMdMenu} from "react-icons/io";
+
 
 const JournalForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -120,29 +123,25 @@ const JournalForm = () => {
       , setSelected: setSelected, cancel: cancelEdit, handleFilter: handleFilter, rowsPerPageOptions: [5, 15, 25, 100]
     }
     return <>
-
-        <Form  className="form-horizontal" onSubmit={submitQuery}>
-          <Card>
-            <CardHeader style={{ height: 40, padding:2 }}>
-              <FormGroup row className ="flex-row" style={{ height: 30, padding:2 }}>
-              <Col sm="1">
-                <strong>{value.title}</strong>
-              </Col>
-              <Col sm="10"/>
-              <Col sm="1" style={{  align: 'right' }}>
-                <div className="card-header-actions" style={{ height: 30, padding:2 }}>
-                  {/*eslint-disable-next-line*/}
-                  <a href="#" className="card-header-action btn btn-setting"><i className="icon-settings"></i></a>
-                  {/*eslint-disable-next-line*/}
-                  <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggle}>
-                    <i className={state.collapse?UP:DOWN}></i></a>
-                </div>
-              </Col>
-            </FormGroup>
-            </CardHeader>
+      <Grid container spacing={2} style={{ padding: 20, 'background-color':blue }} direction="column" >
+        <Form  className="form-horizontal" onSubmit={submitQuery} style={{padding:0}}>
+          <Grid container justify="space-between">
+            <Grid container xs spacing={1} justify="flex-start">
+              <Grid item justify="center" alignItems="center">
+                <IoMdMenu />
+              </Grid>
+              <Grid item>{value.title}</Grid>
+            </Grid>
+            <Grid item justify="flex-end" alignItems="center">
+              <div className="card-header-actions" style={{  align: 'right' }}>
+                {/*eslint-disable-next-line*/}
+                <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggle}>
+                  <i className={state.collapse?UP:DOWN}></i></a>
+              </div>
+            </Grid>
+          </Grid>
             <Collapse isOpen={state.collapse} id="JScollapse" style={{height:40,padding:2}}>
-              <CardBody style={{padding:2 }}>
-                 <FormGroup row >
+              <FormGroup row >
                 <Col sm="1">
                   <Label size="sm" htmlFor="input-small">Account</Label>
                 </Col>
@@ -179,17 +178,14 @@ const JournalForm = () => {
                   </i></Button>
                 </Col>
               </FormGroup>
-               </CardBody>
            </Collapse>
-          </Card>
         </Form>
-         <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
-       </>
+      </Grid>
+      <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
+  </>
   }
 
   return buildForm(current);
 
 };
 export default JournalForm;
-//<GStickyHeadTable props={props}/>
-//<GenericTable data={data_.hits} renderData={renderData} headers={value.headers} style={{ padding:2 }}/>

@@ -1,12 +1,8 @@
 import React, {useEffect, useState, useContext} from 'react'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {
-  Card, CardBody, CardHeader, Col, Collapse, Form, FormGroup,
-  Input, Label, Row
-} from "reactstrap";
+import {Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
 import {capitalize, dateFormat, currencyAmountFormatDE} from "../../../utils/utils"
-import GenericTable from "../Tables2/GenericTable";
 import {accountContext} from './AccountContext';
 import EnhancedTable from '../Tables2/EnhancedTable';
 import Grid from "react-fast-grid";
