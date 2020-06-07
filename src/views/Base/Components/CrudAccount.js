@@ -9,6 +9,7 @@ import FinancialsForm from "./FinancialsForm";
 import GenericMasterfileForm from "./GenericMasterfileForm";
 import BankStatementForm from './BankStatementForm';
 import {AccountContext} from "./AccountContext";
+import BalancesheetForm from "./BalancesheetForm";
 import axios from "axios";
 
 export default function CrudAccount(props) {
@@ -25,6 +26,7 @@ export default function CrudAccount(props) {
       vatForm          : (<VatForm/>),
       pacForm          : (<PACBForm/>),
       financialsForm   : (<FinancialsForm/>),
+      balancesheetForm : (<BalancesheetForm/>),
       journalForm      : (<JournalForm/>),
       masterfileForm   : (<GenericMasterfileForm/>)
     };

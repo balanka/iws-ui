@@ -1,24 +1,30 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Button, Card, CardBody, CardHeader, Col, Collapse, Form, FormGroup, Input, Label, Row} from "reactstrap";
-import GenericTable from "../Tables2/GenericTable";
+import {Badge, Button, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
+import EnhancedTable from '../Tables2/EnhancedTable';
+import { StyledTableRow, StyledTableCell} from '../Tables2/EnhancedTableHelper'
 import {accountContext} from './AccountContext';
 import {capitalize, currencyFormatDE} from "../../../utils/utils";
 import useFetch from "../../../utils/useFetch";
-import GStickyHeadTable from "../Tables2/GStickyHeadTable";
+import Grid from "react-fast-grid";
+import blue from "@material-ui/core/colors/blue";
+import {IoMdMenu} from "react-icons/io";
 
 const PACBForm = () => {
   const UP="icon-arrow-up";
   const DOWN="icon-arrow-down";
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
+  const [selected, setSelected] = useState([]);
   const [url,setUrl] = useState('');
   const value = useContext(accountContext);
   const res  = useFetch(url, {});
   const data_ = res && res.response?res.response:{hits:[]};
-
+    const dx=data_?.hits?data_?.hits:[value.initialState]
+    console.log("dx", dx);
   const current_= value.user;
   const account_= value.user.account;
   const fromPeriod_ = value.user.period;
   const toPeriod_ = value.user.period;
+  const columns = value.headers
 
   console.log("data_", data_);
   console.log("value.accData", value.accData.hits);
@@ -62,6 +68,40 @@ const PACBForm = () => {
   const mapping2 = item => <option key={item.name} value={item.name}>
     {item.name+" ".concat(item.id)}</option>;
 
+    const [filteredRows, setFilteredRows] = useState(dx);
+    useEffect(() => {}, [data_]);
+    function handleFilter(text) {
+        const filteredRows_ = !text?dx:dx.filter(function(rc) {
+            return (rc.id.toString().indexOf(text)>-1
+                ||rc.transid.toString().indexOf(text)>-1
+                ||rc.account.indexOf(text)>-1
+                ||rc.oaccount.indexOf(text)>-1
+                ||rc.transdate.indexOf(text)>-1
+                ||rc.enterdate.indexOf(text)>-1
+                ||rc.postingdate.indexOf(text)>-1
+                ||rc.period.toString().indexOf(text)>-1
+                ||rc.amount.toString().indexOf(text)>-1
+                ||rc.idebit.toString().indexOf(text)>-1
+                ||rc.debit.toString().indexOf(text)>-1
+                ||rc.icredit.toString().indexOf(text)>-1
+                ||rc.credit.toString().indexOf(text)>-1
+                ||rc.currency.indexOf(text)>-1
+                ||rc.side.toString().indexOf(text)>-1
+                ||rc.year.toString().indexOf(text)>-1
+                ||rc.month.toString().indexOf(text)>-1
+                ||rc.credit.toString().indexOf(text)>-1
+                ||rc.modelid.toString().indexOf(text)>-1
+                ||rc.company.indexOf(text)>-1
+                ||rc.text.indexOf(text)>-1
+                ||rc.typeJournal.toString().indexOf(text)>-1
+                ||rc.file_content.toString().indexOf(text)>-1)});
+        console.log('filteredRows+', filteredRows_);
+        setFilteredRows(filteredRows_);
+    }
+
+    const getFilteredRows=()=>{
+        return filteredRows?filteredRows:dx
+    }
   const submitEdit = event => {
     event.preventDefault();
     console.log("submitEdit1 current", current);
@@ -87,31 +127,41 @@ const PACBForm = () => {
   }
 
 
-   const renderData = datax =>
-      (
-        <tr key={datax.id.value}>
-          <td>{datax.period}</td>
-          <td className='amount'>{currencyFormatDE(Number(datax.idebit))}</td>
-          <td className='amount'>{currencyFormatDE(Number(datax.debit))}</td>
-          <td className='amount'>{currencyFormatDE(Number(datax.icredit))}</td>
-          <td className='amount'>{currencyFormatDE(Number(datax.credit))}</td>
-          <td className='amount'>{currencyFormatDE(getBalance(datax))}</td>
-          <td>{datax.currency}</td>
-        </tr>
-      );
 
 
-  const init={id:'', account:'', period:'', idebit:'', icredit:'', debit:'', credit:'', currency:'', company:''}
-  const reducerFn =(a,b)  =>({id:'', account:'', period:""
-    , idebit:Number(b.idebit), icredit:Number(b.icredit)
+  const init=value.initialState//{id:'', account:'', period:'', idebit:'', icredit:'', debit:'', credit:'', currency:'', company:''}
+  const reducerFn =(a,b)  =>({ period:""
+    , idebit:Number(b.idebit)
     , debit:Number(a.debit)+Number(b.debit)
-    , credit:Number(a.credit)+Number(b.credit), currency:b.currency, company:''});
+    , icredit:Number(b.icredit)
+    , credit:Number(a.credit)+Number(b.credit)
+    , currency:b.currency, company:b.company});
 
   const  addRunningTotal = (data) => data.length>0?data.reduce(reducerFn, init):init;
-
   const renderDT=(data)=> addRunningTotal(data);
 
-  const renderTotal = (record) =>(
+    const renderTotal = (rows)=>{
+        return(
+
+            <StyledTableRow>
+                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 15, 'font-weight':"bolder" }}>Total</StyledTableCell>
+                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 15, 'font-weight':"bolder"
+                    , 'text-align':"right" }}>
+                    {columns[3].format(renderDT(rows).debit)}
+                </StyledTableCell>
+                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 15, 'font-weight':"bolder"
+                    , 'text-align':"right" }}>
+                    {columns[3].format(renderDT(rows).credit)}
+                </StyledTableCell>
+                <StyledTableCell style={{ height: 33, 'font-size': 15, 'font-weight':"bolder"
+                    , 'text-align':"left" }}>
+                    {renderDT(rows).currency}
+                </StyledTableCell>
+            </StyledTableRow>
+        )
+    }
+
+  const renderTotal1 = (record) =>(
     <tr key={Number.MAX_SAFE_INTEGER + 1}>
       <td className='Empty'>{record.period}</td>
       <td className='Total amount'>-</td>
@@ -123,31 +173,32 @@ const PACBForm = () => {
     </tr>
   );
   function buildForm(){
-    return <Row>
-             <Col xs="12" md="12">
 
-                  <Card>
-                    <CardHeader style={{ height: 40, padding:2 }}>
-                      <FormGroup row className ="flex-row" style={{ height: 30, padding:2 }}>
-                        <Col sm="1">
-                          <strong>{value.title}</strong>
-                        </Col>
-                        <Col sm="10"/>
-                        <Col sm="1" style={{  align: 'right' }}>
-                          <div className="card-header-actions" style={{ height: 30, padding:2 }}>
-                            {/*eslint-disable-next-line*/}
-                            <a href="#" className="card-header-action btn btn-setting"><i className="icon-settings"></i></a>
-                            {/*eslint-disable-next-line*/}
-                            <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggle}>
-                              <i className={state.collapse?UP:DOWN}></i></a>
-                          </div>
-                        </Col>
-                      </FormGroup>
-                    </CardHeader>
-                    <Collapse isOpen={state.collapse} id="JScollapse" style={{height:70,padding:2}}>
-                    <CardBody>
-                      <Form  className="form-horizontal" onSubmit={submitEdit}>
-                        <FormGroup row>
+      const props = { title: value.title, columns:value.headers, rows:dx,  editable:false
+          ,  submit:submitEdit, selected:selected, colId:3, initialState:init, renderDT:renderDT
+          ,  reducerFn:reducerFn, renderTotal:renderTotal, setSelected: setSelected
+          , rowsPerPageOptions: [15, 25, 100]
+      }
+    return <>
+      <Grid container spacing={2} style={{ padding: 20, 'background-color':blue }} direction="column" >
+        <Form  className="form-horizontal" onSubmit={submitEdit} style={{padding:0}}>
+          <Grid container justify="space-between">
+            <Grid container xs spacing={1} justify="flex-start">
+              <Grid item justify="center" alignItems="center">
+                <IoMdMenu />
+              </Grid>
+              <Grid item><h5><Badge color="primary">{value.title}</Badge></h5></Grid>
+            </Grid>
+            <Grid item justify="flex-end" alignItems="center">
+              <div className="card-header-actions" style={{  align: 'right' }}>
+                {/*eslint-disable-next-line*/}
+                <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggle}>
+                  <i className={state.collapse?UP:DOWN}></i></a>
+              </div>
+            </Grid>
+          </Grid>
+            <Collapse isOpen={state.collapse} id="JScollapse" style={{height:70,padding:2}}>
+              <FormGroup row>
                           <Col sm="1">
                             <Label size="sm" htmlFor="input-small">Account</Label>
                           </Col>
@@ -184,19 +235,11 @@ const PACBForm = () => {
                              </i></Button>
                           </Col>
                         </FormGroup>
-                       </Form>
-                    </CardBody>
-                   </Collapse>
-                  </Card>
-
-              </Col>
-             <Col xs="12" md="12" style={{ padding:2 }}>
-              <GenericTable data={data_.hits} renderData={renderData} renderTotal={renderTotal} renderDT = {renderDT}
-                            headers={value.headers} style={{ padding:2 }}/>
-
-
-             </Col>
-         </Row>;
+             </Collapse>
+           </Form>
+         </Grid>
+          <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
+         </>;
   }
 
   return buildForm();

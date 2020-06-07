@@ -1,13 +1,13 @@
 import React, {useEffect, useState, useContext} from 'react'
 import {Badge, Button, Col, Collapse, Form, FormGroup, Input, Label, Row} from "reactstrap";
-import {capitalize} from "../../../utils/utils"
+import {capitalize, currencyFormatDE} from "../../../utils/utils"
 import EnhancedTable from '../Tables2/EnhancedTable';
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
-
+import { StyledTableRow, StyledTableCell} from '../Tables2/EnhancedTableHelper'
 
 const JournalForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -18,12 +18,14 @@ const JournalForm = () => {
   const [url,setUrl] = useState('');
   const res  = useFetch(url, {});
   const data_ = res && res.response?res.response:{hits:[]};
-  const dx=data_?.hits?data_?.hits:[value.initialState]
+  const init = value.initialState
+  const dx=data_?.hits?data_?.hits:[init]
   console.log("dx", dx);
   const current_= value.user;
   const account_= value.user.account;
   const fromPeriod_ = value.user.period;
   const toPeriod_ = value.user.period;
+  const columns = value.headers
 
   console.log("data_", data_);
   const [current,setCurrent] = useState(current_);
@@ -104,6 +106,7 @@ const JournalForm = () => {
     console.log('filteredRows+', filteredRows_);
     setFilteredRows(filteredRows_);
   }
+
   const getFilteredRows=()=>{
     return filteredRows?filteredRows:dx
   }
@@ -114,13 +117,32 @@ const JournalForm = () => {
   const cancelEdit = (e) => {
     setSelected([]);
   };
+  const  addRunningTotal = (data) => data.length>0?data.reduce(reducerFn, init):init;
+  const renderDT=(data)=> addRunningTotal(data);
+  const reducerFn =(a,b)  =>({id:'', transid:'', account:"", oaccount:"", transdate:"", enterdate:""
+    , postingdate:"", period:"", amount:Number(a.amount)+Number(b.amount), idebit:"", icredit:"", debit:""
+    , credit:"", currency:b.currency, side:"", year:"", month: "", company:"", text:""
+    , typeJournal:"", file_content:""});
+  const renderTotal = (rows)=>{
+    return(
+    <StyledTableRow>
+      <StyledTableCell colSpan={10} style={{ height: 33, 'font-size': 15, 'font-weight':"bolder" }}>Total</StyledTableCell>
+      <StyledTableCell style={{ height: 33, 'font-size': 15, 'font-weight':"bolder"
+        , 'text-align':"right" }}>
+        {columns[10].format(renderDT(rows).amount)}
+      </StyledTableCell>
+    </StyledTableRow>
+    )
+  }
+
   function buildForm(current1){
    // console.log("editing", editing);
-    console.log("user1xx", current1);
+    console.log("user1xxz", current1);
 
-    const props = { title: value.title, columns:value.headers, rows:getFilteredRows()
-      , edit:edit, editable:false, submit:submitQuery, selected:selected
-      , setSelected: setSelected, cancel: cancelEdit, handleFilter: handleFilter, rowsPerPageOptions: [5, 15, 25, 100]
+    const props = { title: value.title, columns:value.headers, rows:getFilteredRows(), edit:edit, editable:false
+      ,  submit:submitQuery, selected:selected, colId:10, initialState:value.initialState, renderDT:renderDT
+      ,  reducerFn:reducerFn, renderTotal:renderTotal, setSelected: setSelected, cancel: cancelEdit
+      ,  handleFilter: handleFilter, rowsPerPageOptions: [15, 25, 100]
     }
     return <>
       <Grid container spacing={2} style={{ padding: 20, 'background-color':blue }} direction="column" >

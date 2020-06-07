@@ -11,6 +11,8 @@ import { de } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 
 const styles = {
@@ -163,7 +165,21 @@ const FinancialsForm = () => {
     console.log('record', record);
     value.editRow(record);
   }
-  const dx=data_?.hits?data_?.hits:[value.initialState];
+  const  lineReducer = (accumulator, line) => {
+    console.log('accumulator', accumulator);
+    console.log('lineX', line);
+    const x=accumulator + line.amount
+    console.log('XXX', x);
+  return x;
+  };
+
+  const addAmount =(tr)=> {
+    console.log('lineReducer', tr.lines.reduce(lineReducer, 0))
+    return {...tr, total: tr.lines.reduce(lineReducer, 0)}
+  }
+
+  const dx=(data_?.hits?data_?.hits:[value.initialState]).map(addAmount);
+  console.log('currentzdx', dx);
   const [filteredRows, setFilteredRows] = useState(dx);
   useEffect(() => {}, [data_]);
 
@@ -270,16 +286,17 @@ const FinancialsForm = () => {
              </Grid>
 
             <Collapse isOpen={state.collapse} id="FScollapse" style={{'min-height':200}}>
-              <FormGroup row style={{  height:15 }}>
+              <FormGroup row style={{  height:15}}>
                 <Col sm="1">
                   <Label size="sm" htmlFor="input-small">Id</Label>
                 </Col>
-                <Col sm="1.5">
-                  <Input disabled bsSize="sm" type="text" id="id" name="id" className="input-sm" placeholder="Id" value= {id}  />
+                <Col sm="2">
+                  <Input disabled bsSize="sm" type="text" id="id" name="id" className="input-sm" placeholder="Id"
+                         value= {id}  />
                 </Col>
                 <Col sm="4"/>
                 <Col sm="1">
-                  <Label size="sm" htmlFor="input-small" style={{  padding:2 }}>Postingdate</Label>
+                  <Label size="sm" htmlFor="input-small" style={{padding:2}}>Postingdate</Label>
                 </Col>
                 <Col sm="1">
                   <Input disabled bsSize="sm"  type="text"  id="postingdate-id" name="postingdate" className="input-sm"
@@ -298,7 +315,7 @@ const FinancialsForm = () => {
                 <Col sm="1">
                   <Label size="sm" htmlFor="input-small">oid</Label>
                 </Col>
-                <Col sm="1.5">
+                <Col sm="2">
                   <Input disabled bsSize="sm" type="text" id="oid-input" name="oid" className="input-sm"
                          placeholder="depositor" value={oid} onChange={handleInputChange} />
                 </Col>
@@ -308,7 +325,8 @@ const FinancialsForm = () => {
                 </Col>
                 <Col sm="1">
                   <Input disabled bsSize="sm"  type="text"  id="enterdate-id" name="enterdate" className="input-sm"
-                         placeholder="enterdate" value={dateFormat(enterdate, "dd mm yy")} style={{'text-align':'right', padding:2 }}/>
+                         placeholder="enterdate" value={dateFormat(enterdate, "dd.mm.yy")}
+                         style={{'text-align':'right', padding:2 }}/>
                 </Col>
                 <Col sm="1">
                   <Label size="sm" htmlFor="input-small" style={{  padding:2 }}>Company</Label>
@@ -368,9 +386,10 @@ const FinancialsForm = () => {
                   <Label className="form-check-label" check htmlFor="inline-posted" style={{'padding-left':80, 'padding-right':10, padding:1 }}>Posted?</Label>
                 </Col>
                 <Col sm="1">
-                  <Input disabled className="form-check-input" type="checkbox" id="posted" name="posted" value={current.posted}
-                         checked={posted} />
-
+                  <FormControlLabel id="posted" name="posted"
+                                    control={<Switch checked={current.posted} onChange={handleInputChange}/>}
+                                    label="Posted?"
+                  />
                 </Col>
               </FormGroup>
                 <FormGroup>

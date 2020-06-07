@@ -6,6 +6,8 @@ import {accountContext} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 const AccountForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -123,8 +125,9 @@ const AccountForm = () => {
     event.preventDefault();
     console.log("submitEdit1 current", current);
     const row = {id:id, name:name, description:description, enterdate:enterdate
-      ,   postingdate:postingdate, changedate:changedate, modelid:current.modelid
-      ,  account:account, company:company, isDebit:isDebit, balancesheet:balancesheet};
+      ,   postingdate:postingdate, changedate:changedate, company:company, modelid:current.modelid
+      ,  account:account,  isDebit:isDebit, balancesheet:balancesheet
+      , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0, subAccounts:[]};
     console.log("submitEdit1 current", row);
     setCurrent(row);
     value.submitEdit(row, data);
@@ -135,8 +138,9 @@ const AccountForm = () => {
     event.preventDefault();
     console.log("submitAdd1 current", current);
     const row = {id:id, name:name, description:description, enterdate:current_.enterdate
-      , postingdate:current_.postingdate, changedate:current_.changedate,  modelid:current.modelid
-      , account:account, company:company, isDebit:isDebit, balancesheet:balancesheet};
+      , postingdate:current_.postingdate, changedate:current_.changedate,  company:company, modelid:current.modelid
+      , account:account, isDebit:isDebit, balancesheet:balancesheet
+      , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0, subAccounts:[]};
 
     console.log('submitAdd row', row);
     value.submitAdd(row, data);
@@ -238,15 +242,16 @@ const AccountForm = () => {
                                  placeholder="company" value={company} onChange={handleInputChange} />
                         </Col>
                         <Col sm="2">
-                          <Input className="form-check-input" type="checkbox" id="isDebit" name="isDebit" value={current.isDebit}
-                                 checked={isDebit}  onChange={handleInputChange} />
-                          <Label className="form-check-label" check htmlFor="inline-isDebit" style={{ 'padding-left':2 }}>Debit?</Label>
+                          <FormControlLabel id="isDebit" name="isDebit"
+                              control={<Switch checked={current.isDebit} onChange={handleInputChange} style={{ 'padding-left':2 }}/>}
+                              label="Debit?"
+                          />
                         </Col>
-
                         <Col sm="1">
-                          <Input className="form-check-input" type="checkbox" id="balancesheet" name="balancesheet" value={current.balancesheet}
-                                 checked={balancesheet} onClick={handleInputChange} style={{ 'padding-left':2 }}/>
-                          <Label className="form-check-label" check htmlFor="balancesheet" style={{ 'padding-left':2 }}>Balancesheet?</Label>
+                          <FormControlLabel id="balancesheet" name="balancesheet"
+                                            control={<Switch checked={current.balancesheet} onChange={handleInputChange} style={{ 'padding-left':2 }}/>}
+                                            label="Balancesheet?"
+                          />
                         </Col>
                       </FormGroup>
                         <FormGroup row style={{  height:15 }}>
