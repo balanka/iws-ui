@@ -73,7 +73,8 @@ const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
                          , {id:'changedate', label:'Modified', minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
                          ]}
                        initialState={{ id:'', name: '', description: '', enterdate:new Date().getTime(), postingdate:new Date().getTime()
-                         , changedate:new Date().getTime(), company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false}}
+                         , changedate:new Date().getTime(), company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false
+                         , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0 }}
                        addLabel    = "Add Account"
                        updateLabel = "Edit Account"
                        title       = "Account"
@@ -197,12 +198,14 @@ const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
         </TabPane>
         <TabPane tabId="10">
           <CrudAccount url ="http://localhost:8080/pets/pac" get="md/106" accUrl="http://localhost:8080/pets/accmd/9"
-                       headers = {[ {name:'period', title:'Period'}, {name:'idebit', title:'IDebit'}
-                         , {name:'debit', title:'Debit'}, {name:'icredit', title:'Icredit'}
-                         , {name:'credit', title:'Credit'}, {name:'balance', title:'Balance'}
-                         , {name:'currency', title:'Currency'}]}
-                       initialState={{ id:'', account:'', period:'', idebit:'', icredit:'', debit:''
-                         , credit:'', currency:'', company:''}}
+                       headers = {[ {id:'period', label:'Period', minWidth:1, numeric:true }
+                           , { id: 'idebit', label: 'IDebit', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                           , { id: 'debit', label: 'Debit', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                           , { id: 'icredit', label: 'Icredit', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                           , { id: 'credit', label: 'Credit', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                           , { id: 'currency', label: 'Currency', minWidth:1}
+                           ]}
+                       initialState={{ period:'', idebit:'', icredit:'', debit:'', credit:'', currency:'', company:''}}
                        addLabel    = "Add PACB"
                        updateLabel = "Submit"
                        title       = "Balance"
@@ -221,6 +224,7 @@ const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
                        , {id:'postingdate', label:'Posted', numeric:true, disablePadding: false, minWidth:2, format:(value) =>  dateFormat(value, "dd mm yy")}
                        , {id:'period', label:'Period', numeric:true, disablePadding: false, minWidth:2, format:(value) => value}
                        , {id:'posted', label:'Validated', numeric:true, disablePadding: false, minWidth:1, format:(value) => value.toString()}
+                       , {id:'total', label:'Total', numeric:true, disablePadding: false, minWidth:1, format:(value) => currencyFormatDE(Number(value))}
                        , {id:'text', label:'Text', numeric:false, disablePadding: false, minWidth:15}
                        , {id:'typeJournal', label:'Typ', numeric:true, disablePadding: false, minWidth:1, format:(value) => value}
                        , {id:'modelid', label:'M.Id', numeric:true, disablePadding: false, minWidth:1, format:(value) => value}
@@ -241,6 +245,27 @@ const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
                        form        = 'financialsForm'>
           </CrudAccount>
         </TabPane>
+            <TabPane tabId="12">
+                <CrudAccount url ="http://localhost:8080/pets/acc/balance/201601/201612" get="md/9" accUrl="http://localhost:8080/pets/accmd/9"
+                             headers = {[ {id:'id', label:'Id', minWidth:1}, {id:'name', label:'Name', minWidth:8}
+                                 , {id:'description', label:'Description', minWidth:30}
+                                 , {id:'modelid', label:'MId.', numeric:true, disablePadding:false, minWidth:1, format:(value) => value}
+                                 , {id:'account', label:'Account'}, {id:'company', label:'Co.'}
+                                 , {id:'isDebit', label:'D/C', numeric:true, format:(value) => String(value)}
+                                 , {id:'balancesheet', label:'Balancesheet', numeric:true, format:(value) => String(value)},
+                                 , {id:'enterdate', label:'Created', minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+                                 , {id:'postingdate', label:'Posted', minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+                                 , {id:'changedate', label:'Modified', minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+                             ]}
+                             initialState={{ id:'', name: '', description: '', enterdate:new Date().getTime(), postingdate:new Date().getTime()
+                                 , changedate:new Date().getTime(), company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false
+                                 , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0 }}
+                             addLabel    = "Add Balancesheet"
+                             updateLabel = "Edt Balancesheett"
+                             title       = "Balancesheet"
+                             form        = 'balancesheetForm'>
+                </CrudAccount>
+            </TabPane>
       </>
     );
   }
@@ -326,7 +351,13 @@ const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
                   Financials
                 </NavLink>
               </NavItem>
-
+                <NavItem>
+                    <NavLink
+                        active={state.activeTab[0] === '12'}
+                        onClick={() => { toggle(0, '12'); }}>
+                        Balancesheet
+                    </NavLink>
+                </NavItem>
             </Nav>
             <TabContent activeTab={state.activeTab[0]}>
               {tabPane()}
