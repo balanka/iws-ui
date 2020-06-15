@@ -126,7 +126,7 @@ const AccountForm = () => {
     console.log("submitEdit1 current", current);
     const row = {id:id, name:name, description:description, enterdate:enterdate
       ,   postingdate:postingdate, changedate:changedate, company:company, modelid:current.modelid
-      ,  account:account,  isDebit:isDebit, balancesheet:balancesheet
+      ,  account:account,  isDebit:isDebit, balancesheet:balancesheet, currency: current.currency
       , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0, subAccounts:[]};
     console.log("submitEdit1 current", row);
     setCurrent(row);
@@ -139,7 +139,7 @@ const AccountForm = () => {
     console.log("submitAdd1 current", current);
     const row = {id:id, name:name, description:description, enterdate:current_.enterdate
       , postingdate:current_.postingdate, changedate:current_.changedate,  company:company, modelid:current.modelid
-      , account:account, isDebit:isDebit, balancesheet:balancesheet
+      , account:account, isDebit:isDebit, balancesheet:balancesheet, currency: current.currency
       , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0, subAccounts:[]};
 
     console.log('submitAdd row', row);
@@ -147,7 +147,24 @@ const AccountForm = () => {
     setCurrent(row);
     console.log('submitAdd current', current);
   };
-
+  function handleFilter(text) {
+    const filteredRows_ = !text?dx:dx.filter(function(rc) {
+      return (rc.id.indexOf(text)>-1
+          ||rc.name.indexOf(text)>-1
+          ||rc.description.indexOf(text)>-1
+          ||rc.account.indexOf(text)>-1
+          ||rc.changedate.indexOf(text)>-1
+          ||rc.enterdate.indexOf(text)>-1
+          ||rc.postingdate.indexOf(text)>-1
+          ||rc.idebit.toString().indexOf(text)>-1
+          ||rc.icredit.toString().indexOf(text)>-1
+          ||rc.debit.toString().indexOf(text)>-1
+          ||rc.credit.toString().indexOf(text)>-1
+          ||rc.balancesheet.toString().indexOf(text)>-1)
+    });
+    console.log('filteredRows+', filteredRows_);
+    setFilteredRows(filteredRows_);
+  }
   function buildForm(current1){
     console.log("editing", editing);
     console.log("user1xx", current1);
@@ -155,7 +172,7 @@ const AccountForm = () => {
     const submit = addOrEdit ? submitEdit : submitAdd
     const props = {
       title: value.title, columns: value.headers, rows: filteredRows, edit: edit, submit: submit, selected: selected
-      , editable:true, setSelected: setSelected, cancel: cancelEdit, handleFilter: handleFilter, rowsPerPageOptions: [5, 15, 25, 100]
+      , editable:true, setSelected: setSelected, cancel: cancelEdit, handleFilter:handleFilter, rowsPerPageOptions: [5, 15, 25, 100]
     }
     return <>
        <Grid container spacing={2} direction="column" >
