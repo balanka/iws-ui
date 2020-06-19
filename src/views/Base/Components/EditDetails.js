@@ -92,7 +92,7 @@ export default function EditDetails(props) {
           <Col  sm="0.5"  style={{'padding-left':1, 'padding-right':0.5}}>
             <Label size="sm" htmlFor="input-small">O.Acc.</Label>
           </Col>
-          <Col  sm="3"  style={{'left-padding':0}}>
+          <Col  sm="3"  style={{'padding-left':0}}>
             <Input  disabled={posted} className ="input-sm" type="select" name="oaccount" id="oaccount-id"
                     value={oaccount} onChange={(e)=>setOaccount(e.target.value)} >
               {value.accData.hits.map(item => mapping(item))}

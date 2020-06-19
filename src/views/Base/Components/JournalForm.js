@@ -20,6 +20,7 @@ const JournalForm = () => {
   const data_ = res && res.response?res.response:{hits:[]};
   const init = value.initialState
   const dx=data_?.hits?data_?.hits:[init]
+
   console.log("dx", dx);
   const current_= value.user;
   const account_= value.user.account;
@@ -41,7 +42,13 @@ const JournalForm = () => {
   useEffect(() => {}, [url]);
 
 
-
+  const styles = {
+    outer: {
+      borderRadius: 5,
+      boxShadow: "0 10px 30px #BBB",
+      padding: 10
+    }
+  };
   const toggle= ()=> {
     setState({ collapse: !state.collapse });
   }
@@ -49,15 +56,9 @@ const JournalForm = () => {
   const handleInputChange = event => {
     event.preventDefault();
     const { name, value } = event.target;
-    const namex=name
     const method="set"+capitalize(name)
-    console.log("method", method);
-    console.log("namea", name);
-    console.log("valuea", value);
     const row = Object.assign(current, {name:value});
      eval(method)(value);
-    console.log('currentz', row);
-    console.log('currentz', current);
     setCurrent(row);
   };
 
@@ -77,7 +78,8 @@ const JournalForm = () => {
     setUrl(url_);
   };
   const [filteredRows, setFilteredRows] = useState(dx);
-  useEffect(() => {}, [data_]);
+  //setFilteredRows(dx)
+  useEffect(() => {}, [dx]);
   function handleFilter(text) {
     const filteredRows_ = !text?dx:dx.filter(function(rc) {
       return (rc.id.toString().indexOf(text)>-1
@@ -145,7 +147,7 @@ const JournalForm = () => {
       ,  handleFilter: handleFilter, rowsPerPageOptions: [15, 25, 100]
     }
     return <>
-      <Grid container spacing={2} style={{ padding: 20, 'background-color':blue }} direction="column" >
+      <Grid container spacing={2}  direction="column"  style={{...styles.outer}}>
         <Form  className="form-horizontal" onSubmit={submitQuery} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">

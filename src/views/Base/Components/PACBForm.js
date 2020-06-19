@@ -6,7 +6,6 @@ import {accountContext} from './AccountContext';
 import {capitalize, currencyFormatDE} from "../../../utils/utils";
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
-import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
 
 const PACBForm = () => {
@@ -41,10 +40,13 @@ const PACBForm = () => {
   useEffect(() => { setToPeriod(toPeriod_)}, [toPeriod_]);
   useEffect(() => {}, [url]);
 
-
-
-
-
+    const styles = {
+        outer: {
+            borderRadius: 5,
+            boxShadow: "0 10px 30px #BBB",
+            padding: 10
+        }
+    };
   const toggle= ()=> {
     setState({ collapse: !state.collapse });
   }
@@ -52,14 +54,7 @@ const PACBForm = () => {
   const handleInputChange = event => {
     event.preventDefault();
     const { name, value } = event.target;
-    const namex=name
     const method="set"+capitalize(name)
-    console.log("method", method);
-    console.log("namea", name);
-    console.log("valuea", value);
-    const row = Object.assign(current, name=="id"?{id:{value:value}}:{namex:value});
-    console.log('name', name);
-    console.log('value', value);
     eval(method)(value);
   };
   const mapping = item => <option key={item.id} value={item.id}>
@@ -73,34 +68,24 @@ const PACBForm = () => {
     function handleFilter(text) {
         const filteredRows_ = !text?dx:dx.filter(function(rc) {
             return (rc.id.toString().indexOf(text)>-1
-                ||rc.transid.toString().indexOf(text)>-1
                 ||rc.account.indexOf(text)>-1
-                ||rc.oaccount.indexOf(text)>-1
-                ||rc.transdate.indexOf(text)>-1
-                ||rc.enterdate.indexOf(text)>-1
-                ||rc.postingdate.indexOf(text)>-1
                 ||rc.period.toString().indexOf(text)>-1
-                ||rc.amount.toString().indexOf(text)>-1
                 ||rc.idebit.toString().indexOf(text)>-1
                 ||rc.debit.toString().indexOf(text)>-1
                 ||rc.icredit.toString().indexOf(text)>-1
                 ||rc.credit.toString().indexOf(text)>-1
-                ||rc.currency.indexOf(text)>-1
-                ||rc.side.toString().indexOf(text)>-1
-                ||rc.year.toString().indexOf(text)>-1
-                ||rc.month.toString().indexOf(text)>-1
-                ||rc.credit.toString().indexOf(text)>-1
-                ||rc.modelid.toString().indexOf(text)>-1
-                ||rc.company.indexOf(text)>-1
-                ||rc.text.indexOf(text)>-1
-                ||rc.typeJournal.toString().indexOf(text)>-1
-                ||rc.file_content.toString().indexOf(text)>-1)});
+                ||rc.currency.indexOf(text)>-1)
+        });
         console.log('filteredRows+', filteredRows_);
         setFilteredRows(filteredRows_);
     }
 
     const getFilteredRows=()=>{
-        return filteredRows?filteredRows:dx
+        const row=filteredRows?filteredRows:dx
+        var rowx = row.slice();
+        for(var i = 0, len = row.length; i < len; ++i)
+            rowx[i] = {...rowx[i], balance:rowx[i].idebit+rowx[i].debit -(rowx[i].icredit+rowx[i].credit)};
+        return rowx
     }
   const submitEdit = event => {
     event.preventDefault();
@@ -111,30 +96,15 @@ const PACBForm = () => {
                      .concat(toPeriod);
     setUrl(url_);
   };
-  const getAccount =(id) =>value.accData.hits.filter(acc=>acc.id===id)
-  function getBalance(data) {
-    console.log('data.account', data.account);
-    const accArray=getAccount(data.account);
-    console.log('data.account', data.account);
-    const acc=accArray[0];
-    console.log('accArray', accArray);
-    const b =  acc.isDebit ?
-      (Number(data.idebit) + Number(data.debit)
-        - Number(data.icredit) - Number(data.credit)) :
-      (Number(data.icredit) + Number(data.credit)
-        - Number(data.idebit) - Number(data.debit));
-    return b;
-  }
 
-
-
-
-  const init=value.initialState//{id:'', account:'', period:'', idebit:'', icredit:'', debit:'', credit:'', currency:'', company:''}
+  const init=value.initialState
   const reducerFn =(a,b)  =>({ period:""
     , idebit:Number(b.idebit)
     , debit:Number(a.debit)+Number(b.debit)
     , icredit:Number(b.icredit)
     , credit:Number(a.credit)+Number(b.credit)
+    , balance:Number(a.debit)+Number(b.debit)+Number(a.idebit)+Number(b.idebit)
+          -Number(a.credit)-Number(b.credit)-Number(a.icredit)-Number(b.icredit)
     , currency:b.currency, company:b.company});
 
   const  addRunningTotal = (data) => data.length>0?data.reduce(reducerFn, init):init;
@@ -142,45 +112,29 @@ const PACBForm = () => {
 
     const renderTotal = (rows)=>{
         return(
-
             <StyledTableRow>
-                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 15, 'font-weight':"bolder" }}>Total</StyledTableCell>
-                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 15, 'font-weight':"bolder"
+                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder" }}>Total</StyledTableCell>
+                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
                     , 'text-align':"right" }}>
-                    {columns[3].format(renderDT(rows).debit)}
+                    {columns[3].format(renderDT(rows).debit).concat(" ").concat(renderDT(rows).currency)}
                 </StyledTableCell>
-                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 15, 'font-weight':"bolder"
-                    , 'text-align':"right" }}>
-                    {columns[3].format(renderDT(rows).credit)}
-                </StyledTableCell>
-                <StyledTableCell style={{ height: 33, 'font-size': 15, 'font-weight':"bolder"
-                    , 'text-align':"left" }}>
-                    {renderDT(rows).currency}
+                <StyledTableCell colSpan={3} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
+                    , 'text-align':"center" }}>
+                    {columns[3].format(renderDT(rows).credit).concat(" ").concat(renderDT(rows).currency)}
                 </StyledTableCell>
             </StyledTableRow>
         )
     }
 
-  const renderTotal1 = (record) =>(
-    <tr key={Number.MAX_SAFE_INTEGER + 1}>
-      <td className='Empty'>{record.period}</td>
-      <td className='Total amount'>-</td>
-      <td className='Total amount'>{currencyFormatDE(Number(record.debit))}</td>
-      <td className='Total amount'>-</td>
-      <td className='Total amount'>{currencyFormatDE(Number(record.credit))}</td>
-      <td className='Total amount'>-</td>
-      <td className='Total'>{record.currency}</td>
-    </tr>
-  );
   function buildForm(){
 
-      const props = { title: value.title, columns:value.headers, rows:dx,  editable:false
+      const props = { title: value.title, columns:value.headers, rows:getFilteredRows(),  editable:false
           ,  submit:submitEdit, selected:selected, colId:3, initialState:init, renderDT:renderDT
-          ,  reducerFn:reducerFn, renderTotal:renderTotal, setSelected: setSelected
+          ,  reducerFn:reducerFn, renderTotal:renderTotal, setSelected: setSelected, handleFilter:handleFilter
           , rowsPerPageOptions: [15, 25, 100]
       }
     return <>
-      <Grid container spacing={2} style={{ padding: 20, 'background-color':blue }} direction="column" >
+      <Grid container spacing={2} direction="column" style={{...styles.outer}}>
         <Form  className="form-horizontal" onSubmit={submitEdit} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
@@ -246,4 +200,4 @@ const PACBForm = () => {
 
 };
 export default PACBForm;
-//<GStickyHeadTable props={props}/>
+

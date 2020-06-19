@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import {setDefaultLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
 import {Col, Nav, NavItem, NavLink, Row, TabContent, TabPane} from 'reactstrap';
 import {currencyFormatDE, dateFormat} from "../../../utils/utils";
@@ -203,6 +203,7 @@ const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
                            , { id: 'debit', label: 'Debit', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
                            , { id: 'icredit', label: 'Icredit', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
                            , { id: 'credit', label: 'Credit', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                           , { id: 'balance', label: 'Balance', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
                            , { id: 'currency', label: 'Currency', minWidth:1}
                            ]}
                        initialState={{ period:'', idebit:'', icredit:'', debit:'', credit:'', currency:'', company:''}}
@@ -245,21 +246,40 @@ const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
                        form        = 'financialsForm'>
           </CrudAccount>
         </TabPane>
-            <TabPane tabId="12">
-                <CrudAccount url ="http://localhost:8080/pets/acc/balance/201601/201612" get="md/9" accUrl="http://localhost:8080/pets/accmd/9"
-                             headers = {[ {id:'id', label:'Id', minWidth:1}, {id:'name', label:'Name', minWidth:8}
-                                 , {id:'description', label:'Description', minWidth:30}
-                                 , {id:'modelid', label:'MId.', numeric:true, disablePadding:false, minWidth:1, format:(value) => value}
-                                 , {id:'account', label:'Account'}, {id:'company', label:'Co.'}
-                                 , {id:'isDebit', label:'D/C', numeric:true, format:(value) => String(value)}
-                                 , {id:'balancesheet', label:'Balancesheet', numeric:true, format:(value) => String(value)},
-                                 , {id:'enterdate', label:'Created', minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'postingdate', label:'Posted', minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'changedate', label:'Modified', minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+        <TabPane tabId="12">
+                <CrudAccount url ="http://localhost:8080/pets/acc/balance" get="md/9" accUrl="http://localhost:8080/pets/accmd/9"
+                             headers = {[ {id:'id', label:'Id', minWidth:1}
+                                 , {id:'name', label:'Name', minWidth:8}
+                                 , {id:'account', label:'Account'}
+                                 , { id: 'idebit', label: 'IDebit', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                                 , { id: 'debit', label: 'Debit', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                                 , { id: 'icredit', label: 'Icredit', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                                 , { id: 'credit', label: 'Credit', minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+
                              ]}
-                             initialState={{ id:'', name: '', description: '', enterdate:new Date().getTime(), postingdate:new Date().getTime()
-                                 , changedate:new Date().getTime(), company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false
-                                 , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0 }}
+
+                             initialState= {{"data":[{
+                                 "data" : {"id" : "9900", "name" : "Bilanz", "isDebit" : true, "balancesheet" : false,
+                                     "idebit" : 0.00, "icredit" : 0.00, "debit" : 254824.95, "credit" : 254824.95, "currency" : "",
+                                   "company" : "1000"},
+                                 "children" : [{"data" : {
+                                 "id" : "9901",
+                                 "name" : "Bilanz Aktiva",
+                                 "description" : "Bilanz Aktiva",
+                                 "modelId" : 19,
+                                 "isDebit" : true,
+                                 "balancesheet" : false,
+                                 "idebit" : 0.00,
+                                 "icredit" : 0.00,
+                                 "debit" : 247689.37,
+                                 "credit" : 0.00,
+                                 "currency" : "",
+                                 "company" : "1000"
+                             }, "children":[]},
+                                 {"data" : {"id" : "9902", "name" : "Bilanz Passiva", "isDebit" : false,
+                                     "balancesheet" : true, "idebit" : 0.00, "icredit" : 0.00, "debit" : 7135.58,
+                                     "credit" : 254824.95, "currency" : "", "company" : "1000"}, "children" :[]}]}]}}
+
                              addLabel    = "Add Balancesheet"
                              updateLabel = "Edt Balancesheett"
                              title       = "Balancesheet"

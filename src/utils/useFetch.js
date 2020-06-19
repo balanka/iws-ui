@@ -1,9 +1,9 @@
-import React, { useState,useMemo } from 'react'
+import React, {useState, useMemo, useEffect} from 'react'
 const useFetch = (url, options) => {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-  useMemo(() => {
+    useEffect(() => {
           const fetchData = async () => {
             console.log('Fetching data for ',url);
               setLoading(true);
@@ -19,6 +19,7 @@ const useFetch = (url, options) => {
                     setLoading(false);
                 }
             } catch (error) {
+                console.log('errorX',error);
                 setError(error);
                 setLoading(false);
             }
