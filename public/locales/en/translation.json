@@ -1,0 +1,43 @@
+{
+  "account": {
+    "title":      "Account",
+    "id":"Id",
+    "name":       "Name",
+    "description": "Description",
+  },
+  "bank": {
+    "title":      "Bank",
+    "id":"Id",
+    "name":       "Name",
+    "description": "Description",
+  },
+  "customer": {
+    "title":      "Customer",
+    "id":"Id",
+    "name":       "Name",
+    "description": "Description"
+  },
+  "supplier": {
+    "title":      "Supplier",
+    "id":"Id",
+    "name":       "Name",
+    "description": "Description"
+  },
+  "costcenter": {
+    "title":      "Cost Center",
+    "id":"Id",
+    "name":       "Name",
+    "description": "Description",
+    "enterdate"  : "Enterdate",
+    "postingdate": "Posted on",
+    "changedate": "Modified on",
+    "account"    : "Account",
+    "company"    : "Company"
+  },
+  "article": {
+    "title":      "Article",
+    "id":"Id",
+    "name":       "Name",
+    "description": "Beschreibung"
+  }
+}

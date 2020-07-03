@@ -1,0 +1,49 @@
+{
+  "title":"Konto",
+  "id":"Nummer",
+  "name":"Name",
+  "description":"Beschreibung",
+  "account": {
+    "title":"Konto",
+    "name":"Name",
+    "description":"Beschreibung",
+  },
+  "bank": {
+    "title":      "Bank",
+    "id":"Nummer",
+    "name":       "Name",
+    "description": "Beschreibung",
+  },
+  "customer": {
+   "title":      "Kunde",
+    "id":"Nummer",
+   "name":       "Firma",
+   "description": "Beschreibung"
+  },
+  "supplier": {
+    "title":      "Lieferant",
+    "id":"Nummer",
+    "name":       "Firma",
+    "description": "Beschreibung"
+  },
+  "costcenter": {
+    "title":"Kostenstelle",
+    "id":"Nummer",
+    "name":"Name",
+    "description":"Beschreibung",
+    "enterdate":"Enterdate",
+    "postingdate":"Gebucht am",
+    "changedate":"Geaendert am",
+    "account":"Konto",
+    "company":"Mandant"
+  },
+  "article": {
+    "title":      "Article",
+    "id":"Nummer",
+    "name":       "Name",
+    "description": "Beschreibung",
+    "enterdate"  : "Enterdate",
+    "postingdate": "Gebucht am",
+    "changedate":  "Geaendert am"
+  }
+}

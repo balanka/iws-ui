@@ -1,0 +1,46 @@
+{
+  "account": {
+    "title":      "Comptes",
+    "id":         "No",
+    "name":       "Nom",
+    "description": "Description"
+  },
+  "bank": {
+    "title":      "Banque",
+    "id":         "No",
+    "name":       "Nom",
+    "description": "Description"
+  },
+  "customer": {
+    "title":      "Client",
+    "id":         "No",
+    "name":       "Nom",
+    "description": "Description"
+  },
+  "supplier": {
+    "title":      "Fournisseur",
+    "id":         "No",
+    "name":       "Nom",
+    "description": "Description"
+  },
+  "costcenter": {
+    "title":      "Center cout",
+    "id":         "No",
+    "name":       "Nom",
+    "description": "Description",
+    "enterdate"  : "Date saisie",
+    "postingdate": "Date validation",
+    "changedate":  "Date mod.",
+    "account"    : "Compte",
+    "company"    : "Société"
+  },
+  "article": {
+    "title":      "Article",
+    "id":         "No",
+    "name":       "Nom",
+    "description": "Description",
+    "enterdate"  : "Date saisie",
+    "postingdate": "Date validation",
+    "changedate":  "Date mod."
+  }
+}
