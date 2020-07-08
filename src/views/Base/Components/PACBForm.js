@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react'
 import {Badge, Button, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
-import EnhancedTable from '../Tables2/EnhancedTable';
-import { StyledTableRow, StyledTableCell} from '../Tables2/EnhancedTableHelper'
+import EnhancedTable from '../../Tables2/EnhancedTable';
+import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelper'
 import {accountContext} from './AccountContext';
 import {capitalize, currencyFormatDE} from "../../../utils/utils";
 import useFetch from "../../../utils/useFetch";

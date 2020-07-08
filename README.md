@@ -60,7 +60,6 @@ CoreUI-React#v2.0.0
 
 ## Documentation
 
-The documentation for the CoreUI  Admin Template is hosted at our website [CoreUI for React](https://coreui.io/react/)
 
 
 ## Contributing

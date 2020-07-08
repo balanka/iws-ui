@@ -1,20 +1,37 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Badge, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
+import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
 import {dateFormat, capitalize} from "../../../utils/utils"
-import EnhancedTable from '../Tables2/EnhancedTable';
-import {accountContext} from './AccountContext';
+import EnhancedTable from '../../Tables2/EnhancedTable';
+import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
-
+import {useTranslation} from "react-i18next";
+import useFetch from "../../../utils/useFetch";
+import axios from "axios";
+import CIcon from "@coreui/icons-react";
+const styles = {
+  outer: {
+    borderRadius: 5,
+    boxShadow: "0 10px 30px #BBB",
+    padding: 10
+  }
+};
 const CustomerForm = () => {
-  const [state, setState]= useState({collapse: false, fadeIn: true, timeout: 300});
+  const { t, i18n } = useTranslation();
+  const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
+  const [token, setToken] = useGlobalState('token');
   const UP="icon-arrow-up";
   const DOWN="icon-arrow-down";
   const value = useContext(accountContext);
-  const data_= value.data;
-  const accData_= value.accData;
+  const [{ res, isLoading, isError }, doFetch]= useFetch(value.url, {});
+  const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
+  const data_ =  res?.hits?res.hits:value.initialState;
+  const accData_=  res2?.hits?res2.hits:value.accData;
+  console.log('data_',data_)
+  console.log('accData_',accData_)
+
   const current_= value.user;
   const id_ = value.user.id;
   const name_ = value.user.name;
@@ -79,8 +96,8 @@ const CustomerForm = () => {
   useEffect(() => { setChangedate(changedate_)}, [changedate_, current.changedate ]);
   useEffect(() => { setEnterdate(enterdate_)}, [enterdate_, current.enterdate ]);
   useEffect(() => { setEditing(editing_)}, [editing_ ]);
-  useEffect(() => { setData(data_)}, [data_, value.data]);
-  useEffect(() => { setAccData(accData_)}, [accData_, value.accData]);
+  //useEffect(() => { setData(data_)}, [data_, value.data]);
+ // useEffect(() => { setAccData(accData_)}, [accData_, value.accData]);
   console.log('editing', editing);
   console.log('editing_', editing_);
   console.log('valuex', value);
@@ -92,8 +109,29 @@ const CustomerForm = () => {
   console.log('name_', name_);
   console.log('description_', description_);
 
+  const changeLanguage = lng => {
+    i18n.changeLanguage(lng);
+  };
+
+  const submitGet = (url, func) => {
+    console.log('authorization2', token);
+    let res=null
+    axios.get( url, {headers: {'authorization':token}})
+      .then(response => {
+        console.log('response.data', response.data);
+        console.log('response.headers', response.headers);
+        const resp = response.data
+        res=resp
+        func(resp)
+        return resp;
+      }).catch(function (error) {
+      console.log('error', error);
+    });
+    return res;
+  }
+
   const toggle= ()=> {
-    setState({ collapse:!state.collapse });
+    setState({...state, collapse:!state.collapse });
   }
   const initAdd =()=> {
     const row = {...value.initialState, editing:false};
@@ -106,21 +144,43 @@ const CustomerForm = () => {
     initAdd();
     setSelected([]);
   };
-  const dx=data?.hits?data?.hits:[value.initialState]
-  const [filteredRows, setFilteredRows] = useState(dx);
-  useEffect(() => {handleFilter('')}, [dx]);
-  function handleFilter(text) {
+  const submitQuery = event => {
+      const fetchData =(url_, func)=>{
+      const res = submitGet(url_, func);
+      console.log("resx", res);
+      const datax = res?.hits ? res.hits : value.initialState;
+      return datax;
+    }
+    fetchData(value.url, setData);
+    fetchData(value.accUrl, setAccData);
+    event.preventDefault();
+  };
 
-    const filteredRows = !text?dx:dx.filter(function(rc) {
+  const [filteredRows, setFilteredRows] = useState(data);
+  useEffect(() => {handleFilter('')}, [data]);
+  function handleFilter(text) {
+    const filtered = data.hits.filter(function(rc) {
       return (rc.id.indexOf(text)>-1
         ||rc.name.indexOf(text)>-1
-        ||rc.description.indexOf(text)>-1)});
-    console.log('filteredRows+', filteredRows);
-    setFilteredRows(filteredRows);
+        ||rc.description.indexOf(text)>-1
+        ||rc.account.indexOf(text)>-1
+        ||rc.changedate.indexOf(text)>-1
+        ||rc.enterdate.indexOf(text)>-1
+        ||rc.postingdate.indexOf(text)>-1
+        ||rc.idebit.toString().indexOf(text)>-1
+        ||rc.icredit.toString().indexOf(text)>-1
+        ||rc.debit.toString().indexOf(text)>-1
+        ||rc.credit.toString().indexOf(text)>-1
+        ||rc.balancesheet.toString().indexOf(text)>-1)
+    });
+    const rows_=text?filtered:data.hits
+    console.log('filteredRows+', rows_);
+    setFilteredRows(rows_);
   }
 
+
   const edit = id =>{
-    const record = dx.find(obj => obj.id === id);
+    const record = filteredRows.find(obj => obj.id === id);
     value.editRow(record);
   }
   const handleInputChange = event => {
@@ -176,107 +236,113 @@ const CustomerForm = () => {
       , editable:true, setSelected: setSelected, cancel: cancelEdit, handleFilter: handleFilter, rowsPerPageOptions: [5, 15, 25, 100]
     }
     return <>
-      <Grid container spacing={2} direction="column" >
-        <Form  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
+      <Grid container spacing={2} style={{...styles.outer, padding: 20, 'background-color':blue }} direction="column" >
+        <CForm  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
                 <IoMdMenu />
               </Grid>
-              <Grid item><h5><Badge color="primary">{value.title}</Badge></h5></Grid>
+              <Grid item><h5><CBadge color="primary">{t(`${value.title}`)}</CBadge></h5></Grid>
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>
                 {/*eslint-disable-next-line*/}
-                <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggle}>
-                  <i className={state.collapse?UP:DOWN}></i></a>
+                <CButton type="submit" size="sm" color="primary" style={{ align: 'right' }}  onClick={event => {
+                  console.log("token", token)
+                  event.preventDefault(); submitQuery(event)
+                }}>
+                </CButton>
               </div>
+              <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                <CIcon name={ state.collapse ? "cil-arrow-top" : "cil-arrow-bottom"} />
+              </CButton>
             </Grid>
           </Grid>
-            <Collapse isOpen={state.collapse} id="JScollapse" style={{padding: 2}}>
-              <FormGroup row style={{  height:15 }}>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Id</Label>
-                          </Col>
-                          <Col sm="4">
-                            <Input bsSize="sm" type="text" id="account-id" name="id" className="input-sm" placeholder="Id" value= {id} onChange={handleInputChange} />
-                          </Col>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Enterdate</Label>
-                          </Col>
-                          <Col sm="2">
-                            <Input disabled bsSize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
+            <CCollapse show={state.collapse} id="JScollapse" style={{padding: 2}}>
+                          <CFormGroup row style={{  height:15 }}>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('customer.id')}</CLabel>
+                          </CCol>
+                          <CCol sm="4">
+                            <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm" placeholder="Id" value= {id} onChange={handleInputChange} />
+                          </CCol>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('customer.enterdate')}</CLabel>
+                          </CCol>
+                          <CCol sm="2">
+                            <CInput disabled bsSize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
                                    placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
                                    style={{'text-align':'right', padding:2 }}/>
-                          </Col>
-                        </FormGroup>
-              <FormGroup row style={{  height:15 }}>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Name</Label>
-                          </Col>
-                          <Col sm="4">
-                            <Input bsSize="sm" type="text" id="name-input" name="name" className="input-sm" placeholder="Name" value={name} onChange={handleInputChange} />
-                          </Col>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Modified</Label>
-                          </Col>
-                          <Col sm="2">
-                            <Input disabled bsSize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
+                          </CCol>
+                        </CFormGroup>
+                        <CFormGroup row style={{  height:15 }}>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('customer.name')}</CLabel>
+                          </CCol>
+                          <CCol sm="4">
+                            <CInput bsSize="sm" type="text" id="name-input" name="name" className="input-sm" placeholder="Name" value={name} onChange={handleInputChange} />
+                          </CCol>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('customer.changedate')}</CLabel>
+                          </CCol>
+                          <CCol sm="2">
+                            <CInput disabled bsSize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
                                    placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
                                    style={{'text-align':'right', padding:2 }}/>
-                          </Col>
-                        </FormGroup>
-              <FormGroup row style={{  height:15 }}>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Account</Label>
-                          </Col>
-                          <Col sm="4">
-                            <Input className ="flex-row" type="select" name="account" id="account-id"
+                          </CCol>
+                        </CFormGroup>
+                        <CFormGroup row style={{  height:15 }}>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('customer.account')}</CLabel>
+                          </CCol>
+                          <CCol sm="4">
+                            <CSelect className ="flex-row" type="select" name="account" id="account-id"
                                    value={account} onChange={handleInputChange} >
-                                 {value.accData.hits.map(item => mapping(item))};
+                                 {accData.hits.map(item => mapping(item))};
 
-                            </Input>
+                            </CSelect>
 
-                          </Col>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Posted on</Label>
-                          </Col>
-                          <Col sm="2">
-                            <Input disabled bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
+                          </CCol>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('customer.postingdate')}</CLabel>
+                          </CCol>
+                          <CCol sm="2">
+                            <CInput disabled bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                                    placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
                                    style={{'text-align':'right', padding:2 }}/>
-                          </Col>
-                        </FormGroup>
-               <FormGroup row style={{  height:15 }}>
-                        <Col sm="2">
-                          <Label size="sm" htmlFor="input-small">Revenue-Account</Label>
-                        </Col>
-                        <Col sm="4">
-                          <Input className ="flex-row" type="select" name="0account" id="oaccount-id"
+                          </CCol>
+                        </CFormGroup>
+                        <CFormGroup row style={{  height:15 }}>
+                        <CCol sm="2">
+                          <CLabel size="sm" htmlFor="input-small">{t('customer.oaccount')}</CLabel>
+                        </CCol>
+                        <CCol sm="4">
+                          <CSelect className ="flex-row" type="select" name="oaccount" id="oaccount-id"
                                  value={oaccount} onChange={handleInputChange} >
-                            {value.accData.hits.map(item => mapping(item))};
-                          </Input>
-                        </Col>
-                      </FormGroup>
-               <FormGroup row style={{  height:15 }}>
-                        <Col sm="2">
-                          <Label size="sm" htmlFor="input-small">Company</Label>
-                        </Col>
-                        <Col sm="4">
-                          <Input disabled bsSize="sm" type="text" id="company-id" name="company" className="input-sm" placeholder="company" value={company} onChange={handleInputChange} />
-                        </Col>
-                      </FormGroup>
-               <FormGroup row style={{  height:15 }}>
-                          <Col md="2">
-                            <Label htmlFor="textarea-input">Description</Label>
-                          </Col>
-                          <Col xs="12"   md="9">
-                            <Input type="texarea" name="description" id="description-id" rows="4"
+                            {accData.hits.map(item => mapping(item))};
+                          </CSelect>
+                        </CCol>
+                        <CCol sm="2">
+                          <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
+                        </CCol>
+                        <CCol sm="2">
+                          <CInput disabled bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
+                                  placeholder="company" value={company} onChange={handleInputChange}
+                                  style={{'text-align':'right', padding:2 }}/>
+                        </CCol>
+                      </CFormGroup>
+               <CFormGroup row style={{  height:15 }}>
+                          <CCol md="2">
+                            <CLabel htmlFor="textarea-input">{t('customer.description')}</CLabel>
+                          </CCol>
+                          <CCol xs="12"   md="9">
+                            <CTextarea type="texarea" name="description" id="description-id" rows="1"
                                     placeholder="Content..." value={description} onChange={handleInputChange} />
-                          </Col>
-                        </FormGroup>
-              </Collapse>
-            </Form>
+                          </CCol>
+                        </CFormGroup>
+              </CCollapse>
+            </CForm>
            </Grid>
             <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
          </>

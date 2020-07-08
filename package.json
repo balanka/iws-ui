@@ -1,56 +1,77 @@
 {
-  "name": "@coreui/coreui-free-react-admin-template",
-  "version": "2.6.0",
-  "description": "CoreUI React Open Source Bootstrap 4 Admin Template",
-  "author": "Łukasz Holeczek",
-  "homepage": "https://coreui.io",
-  "copyright": "Copyright 2017-2019 creativeLabs Łukasz Holeczek",
-  "license": "MIT",
+  "name": "@coreui/coreui-pro-react-admin-template",
+  "version": "3.0.0",
+  "description": "CoreUI Pro React Admin Template",
+  "author": {
+    "name": "CoreUI",
+    "url": "https://coreui.io",
+    "github": "https://github.com/coreui",
+    "twitter": "https://twitter.com/core_ui"
+  },
+  "contributors": [
+    {
+      "name": "CoreUI Team",
+      "url": "https://github.com/orgs/coreui/people"
+    }
+  ],
+  "homepage": ".",
+  "copyright": "Copyright 2017-2020 creativeLabs Łukasz Holeczek",
+  "license": "https://coreui.io/pro/license/",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git@github.com:coreui/coreui-free-react-admin-template.git"
+    "url": "git@github.com:coreui/coreui-pro-react-admin-template.git"
   },
   "dependencies": {
-    "@coreui/coreui": "^2.1.12",
-    "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.3.1",
-    "@coreui/icons": "0.3.0",
-    "@coreui/react": "^2.5.1",
-    "@material-ui/core": "^4.9.12",
+    "@coreui/chartjs": "^2.0.0",
+    "@coreui/coreui-pro": "^3.2.0",
+    "@coreui/icons": "2.0.0-beta.4",
+    "@coreui/icons-react": "^1.0.1",
+    "@coreui/react": "^3.0.1",
+    "@coreui/react-chartjs": "^1.0.0",
+    "@coreui/utils": "^1.3.1",
+    "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.55",
     "axios": "^0.19.2",
-    "bootstrap": "^4.3.1",
-    "chart.js": "^2.8.0",
     "classnames": "^2.2.6",
-    "core-js": "^3.1.4",
+    "codemirror": "^5.54.0",
+    "core-js": "^3.6.5",
     "cp-react-tree-table": "^1.0.0-beta.9",
-    "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.14.0",
-    "flag-icon-css": "^3.3.0",
-    "font-awesome": "^4.7.0",
-    "material-ui": "^0.20.2",
-    "node-sass": "^4.13.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "formik": "^2.1.4",
+    "i18next": "^19.5.1",
+    "i18next-browser-languagedetector": "^5.0.0",
+    "i18next-http-backend": "^1.0.15",
+    "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
-    "react": "^16.8.6",
-    "react-app-polyfill": "^1.0.1",
-    "react-chartjs-2": "^2.7.6",
-    "react-datepicker": "^2.14.1",
-    "react-dom": "^16.8.6",
+    "react": "^16.13.1",
+    "react-app-polyfill": "^1.0.6",
+    "react-big-calendar": "^0.25.0",
+    "react-codemirror2": "^7.2.0",
+    "react-datepicker": "^3.0.0",
+    "react-dates": "^21.8.0",
+    "react-dom": "^16.13.1",
     "react-fast-grid": "^2.1.7",
+    "react-google-maps": "9.4.5",
+    "react-grid-layout": "^0.18.3",
+    "react-hooks-global-state": "^1.0.0",
+    "react-i18next": "^11.7.0",
     "react-icons": "^3.10.0",
-    "react-jss": "^10.1.1",
-    "react-router-config": "^5.0.1",
-    "react-router-dom": "^5.1.2",
-    "react-select": "^3.0.8",
-    "react-spring": "^8.0.27",
-    "react-test-renderer": "^16.8.6",
-    "react-virtualized": "^9.21.2",
-    "reactstrap": "^8.0.0",
-    "simple-line-icons": "^2.4.1"
+    "react-jss": "^10.3.0",
+    "react-quill": "^1.3.5",
+    "react-redux": "7.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-select": "^3.1.0",
+    "react-text-mask-hoc": "^0.11.0",
+    "reactstrap": "^8.5.1",
+    "redux": "4.0.5",
+    "spinkit": "2.0.1",
+    "yup": "^0.29.1"
   },
   "devDependencies": {
-    "react-scripts": "^3.0.1"
+    "mutationobserver-shim": "^0.3.5",
+    "react-scripts": "^3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -58,7 +79,8 @@
     "test": "react-scripts test",
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "zip": "git archive -o coreui-pro-react-admin-template-v$npm_package_version.zip -9 HEAD"
   },
   "bugs": {
     "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"
@@ -69,7 +91,7 @@
   "browserslist": [
     ">0.2%",
     "not dead",
-    "not ie <= 9",
+    "not ie <= 10",
     "not op_mini all"
   ],
   "jest": {
@@ -81,7 +103,7 @@
     ]
   },
   "engines": {
-    "node": ">=8.10",
+    "node": ">=8.16",
     "npm": ">=6"
   }
 }

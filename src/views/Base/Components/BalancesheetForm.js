@@ -8,6 +8,13 @@ import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
 
+const styles = {
+  outer: {
+    borderRadius: 5,
+    boxShadow: "0 10px 30px #BBB",
+    padding: 10
+  }
+};
 
 const BalancesheetForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -130,7 +137,7 @@ const BalancesheetForm = () => {
     }
     */
     return <>
-      <Grid container spacing={2} style={{ padding: 20, 'background-color':blue }} direction="column" >
+      <Grid container spacing={2} style={{...styles.outer, padding: 20, 'background-color':blue }}  direction="column" >
         <Form  className="form-horizontal" onSubmit={submitQuery} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
@@ -159,4 +166,4 @@ const BalancesheetForm = () => {
 
 };
 export default BalancesheetForm;
-//   <EnhancedTableX props={props} style={{padding: 0, height: 500}}/>
+

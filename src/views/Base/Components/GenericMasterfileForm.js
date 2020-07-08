@@ -1,31 +1,48 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Badge, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
-import {accountContext} from './AccountContext';
-import EnhancedTable from '../Tables2/EnhancedTable';
+import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
+import {accountContext, useGlobalState} from './AccountContext';
+import EnhancedTable from '../../Tables2/EnhancedTable';
 import blue from "@material-ui/core/colors/blue";
 import Grid from "react-fast-grid";
 import {IoMdMenu} from "react-icons/io";
-
+import {useTranslation} from "react-i18next";
+import useFetch from "../../../utils/useFetch";
+import axios from "axios";
+const styles = {
+  outer: {
+    borderRadius: 5,
+    boxShadow: "0 10px 30px #BBB",
+    padding: 10
+  }
+};
 const GenericMasterfileForm = () => {
+  const { t, i18n } = useTranslation();
   const [state, setState]= useState({collapse: false, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
-
+  const [token] = useGlobalState('token');
   const UP="icon-arrow-up";
   const DOWN="icon-arrow-down";
   const value = useContext(accountContext);
-  const data_= value.data;
+  const [{ res, isLoading, isError }, doFetch]= useFetch(value.url, {});
+  const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
+  const data_ =  res?.hits?res.hits:value.initialState;
+  const accData_=  res2?.hits?res2.hits:value.accData;
+  console.log('data_',data_)
+  console.log('accData_',accData_)
   const user_id = value.user.id;
   const user_name = value.user.name;
   const user_description = value.user.description;
   const user_parent = value.user.parent;
   const editing_ = value.editing;
   const [data, setData] = useState(data_);
+  const [accData, setAccData] = useState(accData_);
   const [current,setCurrent] = useState(value.user);
   const [id,setId] = useState(user_id);
   const [name,setName] = useState(user_name);
   const [description, setDescription] = useState(user_description);
   const [parent, setParent] = useState(user_parent);
   const [editing, setEditing] = useState(editing_);
+  const [url,setUrl] = useState('');
   useEffect(() => {}, [current, setCurrent, data, setEditing ]);
   useEffect(() => {setCurrent(value.user)}, [ value.user, id, name, description, parent]);
   useEffect(() => { setId(user_id)}, [user_id, current.id ]);
@@ -33,13 +50,30 @@ const GenericMasterfileForm = () => {
   useEffect(() => { setDescription(user_description)}, [user_description, current.description]);
   useEffect(() => { setParent(user_parent)}, [user_parent, current.parent, data]);
   useEffect(() => { setEditing(editing_)}, [editing_ ]);
-  useEffect(() => { setData(data_)}, [data_, value.data]);
+  //useEffect(() => { setData(data_)}, [data_, value.data]);
 
-  console.log("parent", parent);
-  console.log("data.hits", data.hits);
+  const changeLanguage = lng => {
+    i18n.changeLanguage(lng);
+  };
 
+  const submitGet = (url, func) => {
+    console.log('authorization2', token);
+    let res=null
+    axios.get( url, {headers: {'authorization':token}})
+      .then(response => {
+        console.log('response.data', response.data);
+        console.log('response.headers', response.headers);
+        const resp = response.data
+        res=resp
+        func(resp)
+        return resp;
+      }).catch(function (error) {
+      console.log('error', error);
+    });
+    return res;
+  }
   const toggle= ()=> {
-    setState({ collapse:!state.collapse });
+    setState({...state, collapse:!state.collapse });
   }
   const initAdd =()=> {
     const row = {...value.initialState, editing:false};
@@ -54,11 +88,27 @@ const GenericMasterfileForm = () => {
     initAdd();
     setSelected([]);
   };
-  const dx=data?.hits?data?.hits:[value.initialState]
-  const [filteredRows, setFilteredRows] = useState(dx);
-  useEffect(() => {handleFilter('')}, [dx]);
+
+
+  const submitQuery = event => {
+
+    const fetchData =(url_, func)=>{
+      const res = submitGet(url_, func);
+      console.log("resx", res);
+      const datax = res?.hits ? res.hits : value.initialState;
+      return datax;
+    }
+    const datax = fetchData(value.url, setData);
+    fetchData(value.accUrl, setAccData);
+    //if(datax.length>0) setCurrent(data_(0))
+    event.preventDefault();
+  };
+
+  const [filteredRows, setFilteredRows] = useState(data);
+  useEffect(() => {handleFilter('')}, [data]);
   function handleFilter(text) {
-    const filteredRows = !text?dx:dx.filter(function(rc) {
+    console.log('dxx+', data);
+    const filteredRows = !text?data.hits:data.hits.filter(function(rc) {
       return (rc.id.indexOf(text)>-1
         ||rc.name.indexOf(text)>-1
         ||rc.description.indexOf(text)>-1)});
@@ -67,7 +117,7 @@ const GenericMasterfileForm = () => {
   }
 
   const edit = id =>{
-    const record = dx.find(obj => obj.id === id);
+    const record = filteredRows.find(obj => obj.id === id);
     value.editRow(record);
   }
 
@@ -114,16 +164,30 @@ const GenericMasterfileForm = () => {
       , editable:true, setSelected:setSelected, cancel:cancelEdit, handleFilter:handleFilter,rowsPerPageOptions:[5, 25, 100]}
     return(
            <>
-             <Grid container spacing={2} style={{ padding: 20, 'background-color':blue }} direction="column" >
-                <Form  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
+             <Grid container spacing={2}  style={{...styles.outer, padding: 20, 'background-color':blue }}  direction="column" >
+                <CForm  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
                   <Grid container justify="space-between">
                     <Grid container xs spacing={1} justify="flex-start">
                       <Grid item justify="center" alignItems="center">
                         <IoMdMenu />
                       </Grid>
-                      <Grid item><h5><Badge color="primary">{value.title}</Badge></h5></Grid>
+                      <Grid item><h5><CBadge color="primary">{t(`${value.title}`)}</CBadge></h5></Grid>
                     </Grid>
                     <Grid item justify="flex-end" alignItems="center">
+                      <div className="card-header-actions" style={{  align: 'right' }}>
+                        {/*eslint-disable-next-line*/}
+                        <CButton type="submit" size="sm" color="primary" style={{ align: 'right' }}  onClick={event => {
+                          console.log("token", token)
+                          doFetch(token);event.preventDefault(); submitQuery(event)
+                        }}>
+                        </CButton>
+                      </div>
+                      <div className="card-header-actions" style={{  align: 'right' }}>
+                        {/*eslint-disable-next-line*/}
+                          <CButton type="submit" size="sm" color="primary" style={{ align: 'right' }}  onClick={toggle}>
+                            <i className="fa fa-dot-circle-o"></i>
+                          </CButton>
+                      </div>
                       <div className="card-header-actions" style={{  align: 'right' }}>
                         {/*eslint-disable-next-line*/}
                         <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggle}>
@@ -131,65 +195,65 @@ const GenericMasterfileForm = () => {
                       </div>
                     </Grid>
                   </Grid>
-                    <Collapse isOpen={state.collapse} id="JScollapse" style={{padding:2}}>
-                        <FormGroup row style={{  height:15 }}>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Id</Label>
-                          </Col>
-                          <Col sm="4">
-                            <Input bsSize="sm" type="text" id="input-id" name="id" className="input-sm" placeholder="Id" value= {id} onChange={handleInputChange} />
-                          </Col>
-                          <Col sm="1.5">
-                            <Label size="sm" htmlFor="input-small">Enterdate</Label>
-                          </Col>
-                          <Col sm="4">
-                            <Input disabled bsSize="sm" type="date"  id="input-small" name="enterdate" className="input-sm" placeholder="31.12.2019" />
-                          </Col>
-                        </FormGroup>
-                        <FormGroup row style={{  height:15 }}>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Name</Label>
-                          </Col>
-                          <Col sm="4">
-                            <Input bsSize="sm" type="text" id="input-small" name="name" className="input-sm" placeholder="Name" value={name} onChange={handleInputChange} />
-                          </Col>
-                          <Col sm="1.5">
-                            <Label size="sm" htmlFor="input-small">Transdate</Label>
-                          </Col>
-                          <Col sm="4">
-                            <Input bsSize="sm"  type="date"  id="input-small" name="input-small" className="input-sm" placeholder="date" />
-                          </Col>
-                        </FormGroup>
-                        <FormGroup row style={{  height:15 }}>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Gruppe</Label>
-                          </Col>
-                          <Col sm="4">
-                            <Input className ="flex-row" type="select" name="parent" id="parent-id"
+                    <CCollapse show={state.collapse} id="JScollapse" style={{padding:2}}>
+                        <CFormGroup row style={{  height:15 }}>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('generic.id')}</CLabel>
+                          </CCol>
+                          <CCol sm="4">
+                            <CInput bsSize="sm" type="text" id="input-id" name="id" className="input-sm" placeholder="Id" value= {id} onChange={handleInputChange} />
+                          </CCol>
+                          <CCol sm="1.5">
+                            <CLabel size="sm" htmlFor="input-small">{t('generic.enterdate')}</CLabel>
+                          </CCol>
+                          <CCol sm="4">
+                            <CInput disabled bsSize="sm" type="date"  id="input-small" name="enterdate" className="input-sm" placeholder="31.12.2019" />
+                          </CCol>
+                        </CFormGroup>
+                        <CFormGroup row style={{  height:15 }}>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('generic.name')}</CLabel>
+                          </CCol>
+                          <CCol sm="4">
+                            <CInput bsSize="sm" type="text" id="input-small" name="name" className="input-sm" placeholder="Name" value={name} onChange={handleInputChange} />
+                          </CCol>
+                          <CCol sm="1.5">
+                            <CLabel size="sm" htmlFor="input-small">{t('generic.transdate')}</CLabel>
+                          </CCol>
+                          <CCol sm="4">
+                            <CInput bsSize="sm"  type="date"  id="input-small" name="input-small" className="input-sm" placeholder="date" />
+                          </CCol>
+                        </CFormGroup>
+                        <CFormGroup row style={{  height:15 }}>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('generic.group')}</CLabel>
+                          </CCol>
+                          <CCol sm="4">
+                            <CSelect className ="flex-row" type="select" name="parent" id="parent-id"
                                    value={parent} onChange={handleInputChange} >
-                                 {value.data.hits.map(item => mapping(item))};
+                                 {accData.hits.map(item => mapping(item))};
 
-                            </Input>
+                            </CSelect>
 
-                          </Col>
-                          <Col sm="1.5">
-                            <Label size="sm" htmlFor="input-small">Updated</Label>
-                          </Col>
-                          <Col sm="5">
-                            <Input disabled bsSize="sm" type="text" id="input-small" name="input-small" className="input-sm" placeholder="31.12.2019" />
-                          </Col>
-                        </FormGroup>
-                        <FormGroup row style={{  height:15 }}>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Description</Label>
-                          </Col>
-                          <Col sm="10">
-                            <Input type="texarea" name="description" id="description" rows="4"
+                          </CCol>
+                          <CCol sm="1.5">
+                            <CLabel size="sm" htmlFor="input-small">Updated</CLabel>
+                          </CCol>
+                          <CCol sm="5">
+                            <CInput disabled bsSize="sm" type="text" id="input-small" name="input-small" className="input-sm" placeholder="31.12.2019" />
+                          </CCol>
+                        </CFormGroup>
+                        <CFormGroup row style={{  height:15 }}>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('generic.description')}</CLabel>
+                          </CCol>
+                          <CCol sm="10">
+                            <CTextarea type="texarea" name="description" id="description" rows="4"
                                     placeholder="Content..." value={description} onChange={handleInputChange} />
-                          </Col>
-                        </FormGroup>
-                    </Collapse>
-                </Form>
+                          </CCol>
+                        </CFormGroup>
+                    </CCollapse>
+                </CForm>
              </Grid>
              <EnhancedTable props={props} style={{padding:0, height:50}}/>
       </>)
