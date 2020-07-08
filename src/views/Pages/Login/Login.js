@@ -48,7 +48,7 @@ const Login = () => {
     event.preventDefault();
     const url ="http://localhost:8080/users/login"
     const url2 ="http://localhost:8080/iws/mf"
-    const data={"userName": "bmk", "password": "wuduwali2x"}
+    const data={"userName": "xxxx", "password": "xxxx"}
     const auth=login(url, data);
     //const auth = useFetch(url,data)
     console.log("auth", auth);
