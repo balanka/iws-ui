@@ -2,7 +2,7 @@ import React, {useState, useContext} from 'react'
 import {currencyFormatDE, dateFormat} from "../../../utils/utils";
 import {FormGroup} from "reactstrap";
 import Grid from "react-fast-grid";
-import GenericTable from "../Tables2/GenericTable";
+import GenericTable from "../../Tables2/GenericTable";
 import EditDetails from "./EditDetails";
 import {accountContext} from "./AccountContext";
 

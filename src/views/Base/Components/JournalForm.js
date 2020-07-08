@@ -1,27 +1,37 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Badge, Button, Col, Collapse, Form, FormGroup, Input, Label, Row} from "reactstrap";
-import {capitalize, currencyFormatDE} from "../../../utils/utils"
-import EnhancedTable from '../Tables2/EnhancedTable';
-import {accountContext} from './AccountContext';
+import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
+import {capitalize} from "../../../utils/utils"
+import EnhancedTable from '../../Tables2/EnhancedTable';
+import {accountContext, useGlobalState} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
-import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
-import { StyledTableRow, StyledTableCell} from '../Tables2/EnhancedTableHelper'
+import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelper'
+import {useTranslation} from "react-i18next";
+import axios from "axios";
+import CIcon from "@coreui/icons-react";
 
 const JournalForm = () => {
+  const { t, i18n } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
+  const [token, setToken] = useGlobalState('token');
   const UP="icon-arrow-up";
   const DOWN="icon-arrow-down";
   const value = useContext(accountContext);
   const [url,setUrl] = useState('');
   const res  = useFetch(url, {});
-  const data_ = res && res.response?res.response:{hits:[]};
-  const init = value.initialState
-  const dx=data_?.hits?data_?.hits:[init]
+  //const init = value.initialState
+  const init = ()=> {return value.initialState}
+  const data_ = res && res.response?res.response:[value.initialState];
+  const getData =()=> { return data?.hits?data.hits:init().hits}
 
-  console.log("dx", dx);
+  //const dx=data_?.hits?data_?.hits:[init]
+  const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
+  //const data_ =  res?.hits?res.hits:value.initialState;
+  const accData_=  res2?.hits?res2.hits:value.accData;
+  console.log('data_',data_)
+  console.log('accData_',accData_)
   const current_= value.user;
   const account_= value.user.account;
   const fromPeriod_ = value.user.period;
@@ -34,12 +44,15 @@ const JournalForm = () => {
   const [account2,setAccount2] = useState('');
   const [fromPeriod, setFromPeriod] = useState(fromPeriod_);
   const [toPeriod, setToPeriod] = useState(toPeriod_);
+  const [data, setData] = useState(data_);
+  const [accData, setAccData] = useState(accData_);
+  const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {}, [current, setCurrent]);
   useEffect(() => {setCurrent(current_)}, [ current_,account, fromPeriod, toPeriod]);
   useEffect(() => { setAccount(account_)}, [account_, current.account ]);
   useEffect(() => { setFromPeriod(fromPeriod_)}, [fromPeriod_]);
   useEffect(() => { setToPeriod(toPeriod_)}, [toPeriod_]);
-  useEffect(() => {}, [url]);
+  useEffect(() => {handleFilter('')}, [data, getData()]);
 
 
   const styles = {
@@ -50,7 +63,11 @@ const JournalForm = () => {
     }
   };
   const toggle= ()=> {
-    setState({ collapse: !state.collapse });
+    console.log("accData", accData)
+    let result='xxx';
+    accData?.hits?.length<2? fetchData(value.accUrl, setAccData, result):void(0)
+    console.log("result", result)
+    setState({...state, collapse: !state.collapse });
   }
 
   const handleInputChange = event => {
@@ -68,20 +85,51 @@ const JournalForm = () => {
   const mapping2 = item => <option key={item.name} value={item.name}>
     {item.name+" ".concat(item.id)}</option>;
 
+  const submitGet = (url, func, result) => {
+    console.log('authorization2', token);
+    //let res=null;
+    axios.get( url, {headers: {'authorization':token}})
+      .then(response => {
+        const resp = response.data;
+        result=response.data;
+        console.log('response.data', resp);
+        console.log('response.headers', response.headers);
+        console.log('result', result);
+        //res=resp;
+        func(resp);
+        result=resp;
+        return result;
+      }).catch(function (error) {
+      console.log('error', error);
+    });
+    return result;
+  }
+  const fetchData =(url_, func)=>{
+    let result='xxx';
+    const res = submitGet(url_, func, result);
+    console.log("AccDatax", accData);
+    console.log("res", res);
+    const datax = res?.hits ? res.hits : value.initialState;
+    return datax;
+  }
+
   const submitQuery = event => {
     event.preventDefault();
     console.log("submitQuery current", current);
+    var result='xxx';
+    accData?.hits?.length<2? fetchData(value.accUrl, setAccData):void(0)
     const url_=value.url.concat('/')
       .concat(account).concat('/')
       .concat(fromPeriod).concat('/')
       .concat(toPeriod);
-    setUrl(url_);
+    console.log("url_", url_);
+    fetchData(url_, setData, result);
+    console.log("result", result);
   };
-  const [filteredRows, setFilteredRows] = useState(dx);
-  //setFilteredRows(dx)
-  useEffect(() => {}, [dx]);
+
+
   function handleFilter(text) {
-    const filteredRows_ = !text?dx:dx.filter(function(rc) {
+    const filteredRows_ = !text?getData():getData().filter(function(rc) {
       return (rc.id.toString().indexOf(text)>-1
         ||rc.transid.toString().indexOf(text)>-1
         ||rc.account.indexOf(text)>-1
@@ -110,10 +158,12 @@ const JournalForm = () => {
   }
 
   const getFilteredRows=()=>{
-    return filteredRows?filteredRows:dx
+    console.log('data+', filteredRows)
+    console.log('filteredRows+', filteredRows)
+    return filteredRows?filteredRows:data
   }
   const edit = id =>{
-    const record = dx.find(obj => obj.id === id);
+    const record = data.hits.find(obj => obj.id === id);
     value.editRow(record);
   }
   const cancelEdit = (e) => {
@@ -128,7 +178,7 @@ const JournalForm = () => {
   const renderTotal = (rows)=>{
     return(
     <StyledTableRow>
-      <StyledTableCell colSpan={10} style={{ height: 33, 'font-size': 15, 'font-weight':"bolder" }}>Total</StyledTableCell>
+      <StyledTableCell colSpan={10} style={{ height: 33, 'font-size': 15, 'font-weight':"bolder" }}>{t('common.total')}</StyledTableCell>
       <StyledTableCell style={{ height: 33, 'font-size': 15, 'font-weight':"bolder"
         , 'text-align':"right" }}>
         {columns[10].format(renderDT(rows).amount)}
@@ -148,62 +198,72 @@ const JournalForm = () => {
     }
     return <>
       <Grid container spacing={2}  direction="column"  style={{...styles.outer}}>
-        <Form  className="form-horizontal" onSubmit={submitQuery} style={{padding:0}}>
+        <CForm  className="form-horizontal"  style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
                 <IoMdMenu />
               </Grid>
-              <Grid item><h5><Badge color="primary">{value.title}</Badge></h5></Grid>
+              <Grid item><h5><CBadge color="primary">{t('journal.title')}</CBadge></h5></Grid>
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>
-                {/*eslint-disable-next-line*/}
-                <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggle}>
-                  <i className={state.collapse?UP:DOWN}></i></a>
+                <CButton type="submit" size="sm" color="primary" class="btn btn-primary btn-sm"  style={{ align: 'right' }}  onClick={event => {
+                  event.preventDefault(); submitQuery(event)
+                }}>
+                </CButton>
               </div>
+              <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                <CIcon name={ state.collapse ? "cil-arrow-top" : "cil-arrow-bottom"} />
+              </CButton>
             </Grid>
           </Grid>
-            <Collapse isOpen={state.collapse} id="JScollapse" style={{height:40,padding:2}}>
-              <FormGroup row >
-                <Col sm="1">
-                  <Label size="sm" htmlFor="input-small">Account</Label>
-                </Col>
-                <Col sm="3">
-                  <Input className ="flex-row" type="select" name="account" id="account-id"
+            <CCollapse show={state.collapse} id="JScollapse" style={{height:40,padding:2}}>
+              <CFormGroup row >
+                <CCol sm="1">
+                  <CLabel size="sm" htmlFor="input-small">{t('common.account')}</CLabel>
+                </CCol>
+                <CCol sm="3">
+                  <CSelect className ="flex-row" type="select" name="account" id="account-id"
                          value={account} onChange={handleInputChange} style={{ height: 30, padding:2 }}>
-                    {value.accData.hits.map(item => mapping(item))};
+                    {accData.hits.map(item => mapping(item))};
 
-                  </Input>
-                </Col>
-                <Col sm="4">
-                  <Input className ="flex-row" type="select" name="account2" id="account2-id"
+                  </CSelect>
+                </CCol>
+                <CCol sm="4">
+                  <CSelect className ="flex-row" type="select" name="account2" id="account2-id"
                          value={account} onChange={handleInputChange} style={{ height: 30, padding:2 }}>
-                    {value.accData.hits.map(item => mapping2(item))};
+                    {accData.hits.map(item => mapping2(item))};
 
-                  </Input>
-                </Col>
-                <Col sm="0.5" style={{ align: 'right' , padding:2}}>
-                  <Label size="sm" htmlFor="input-small">From</Label>
-                </Col>
-                <Col sm="1">
-                  <Input  bsSize="sm" type="text"  id="fromPeriod-id" name="fromPeriod" className="input-sm"
+                  </CSelect>
+                </CCol>
+                <CCol sm="0.5" style={{ align: 'right' , padding:2}}>
+                  <CLabel size="sm" htmlFor="input-small">{t('common.from')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                  <CInput  bsSize="sm" type="text"  id="fromPeriod-id" name="fromPeriod" className="input-sm"
                           placeholder="fromPeriod" value={fromPeriod} onChange={handleInputChange} style={{ height: 30, padding:1 }}/>
-                </Col>
-                <Col sm="0.5" style={{ align: 'right' , padding:2}}>
-                  <Label size="sm" htmlFor="input-small">To</Label>
-                </Col>
-                <Col sm="1">
-                  <Input  bsSize="sm" type="text"  id="toPeriod-id" name="toPeriod" className="input-sm"
-                          placeholder="toPeriod" value={toPeriod} onChange={handleInputChange} style={{ height: 30, padding:1, align: 'right'}}/>
-                </Col>
-                <Col sm="1" style={{ align: 'right' }}>
-                  <Button type="submit" size="sm" color="primary" style={{ align: 'right' }}><i className="fa fa-dot-circle-o">
-                  </i></Button>
-                </Col>
-              </FormGroup>
-           </Collapse>
-        </Form>
+                </CCol>
+                <CCol sm="0.5" style={{ align: 'right' , padding:2}}>
+                  <CLabel size="sm" htmlFor="input-small">{t('common.to')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                  <CInput  bsSize="sm" type="text"  id="toPeriod-id" name="toPeriod" className="input-sm"
+                          placeholder="toPeriod" value={toPeriod} onChange={ (event) => {
+                            event.preventDefault();
+                            setToPeriod(event.target.value)
+                            if(event.key==13) submitQuery(event)
+                          }
+                          }
+                           style={{ height: 30, padding:1, align: 'right'}}/>
+                </CCol>
+                <CCol sm="1" style={{ align: 'right' }}>
+                  <CButton type="submit" size="sm" color="primary" style={{ align: 'right' }}><i className="fa fa-dot-circle-o">
+                  </i></CButton>
+                </CCol>
+              </CFormGroup>
+           </CCollapse>
+        </CForm>
       </Grid>
       <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
   </>

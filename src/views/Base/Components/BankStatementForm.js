@@ -1,21 +1,38 @@
 import React, {useEffect, useState, useContext} from 'react'
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import {Badge, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
+//import "react-datepicker/dist/react-datepicker.css";
+
+import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
 import {capitalize, dateFormat, currencyAmountFormatDE} from "../../../utils/utils"
-import {accountContext} from './AccountContext';
-import EnhancedTable from '../Tables2/EnhancedTable';
+import Switch from "@material-ui/core/Switch";
+import {accountContext, useGlobalState} from './AccountContext';
+import EnhancedTable from '../../Tables2/EnhancedTable';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
+import {useTranslation} from "react-i18next";
+import useFetch from "../../../utils/useFetch";
+import axios from "axios";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import CIcon from "@coreui/icons-react";
+const styles = {
+  outer: {
+    borderRadius: 5,
+    boxShadow: "0 10px 30px #BBB",
+    padding: 10
+  }
+};
 
 const BankStatementForm = () => {
-  const [state, setState]= useState({collapse: false, fadeIn: true, timeout: 300});
+  const { t, i18n } = useTranslation();
+  const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
+  const [token, setToken] = useGlobalState('token');
   const value = useContext(accountContext);
-
-  const data_= value.data;
-
+  const init = ()=> {return value.initialState}
+  const [{ res, isLoading, isError }, doFetch]= useFetch(value.url, {});
+  const data_ =  res?.hits?res.hits:[value.initialState];
+  const getData =()=> { return data?.hits?data.hits:init().hits}
   const UP="icon-arrow-up";
   const DOWN="icon-arrow-down";
 
@@ -37,16 +54,11 @@ const BankStatementForm = () => {
   const posted_=value.user.posted;
   const editing_ = value.editing;
   const [data, setData] = useState(data_);
-  const dx=data_?.hits?data_?.hits:[value.initialState]
-  console.log('dxx', dx);
-  const [filteredRows, setFilteredRows] = useState(dx);
   const [current,setCurrent] = useState(current_);
   const [id,setId] = useState(id_);
   const [depositor,setDepositor] = useState(depositor_);
   const [postingdate, setPostingdate] = useState(postingdate_);
   const [valuedate, setValuedate] = useState(valuedate_);
-  console.log('valuedate_', valuedate_);
-  console.log('valuedate', valuedate);
   const [postingtext, setPostingtext] = useState(postingtext_);
   const [purpose,setPurpose] = useState(purpose_);
   const [beneficiary, setBeneficiary] = useState(beneficiary_);
@@ -59,6 +71,7 @@ const BankStatementForm = () => {
   const [companyIban,setCompanyIban] = useState(companyIban_);
   const [posted,setPosted] = useState(posted_);
   const [editing, setEditing] = useState(editing_);
+  const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {}, [current, setCurrent, data, setEditing ]);
   useEffect(() => {setCurrent(current_)}, [ current_, id, depositor, postingdate, valuedate
         , postingtext, purpose, beneficiary, accountno, bankCode,  amount, currency, info
@@ -79,8 +92,9 @@ const BankStatementForm = () => {
   useEffect(() => { setCompanyIban(companyIban_)}, [companyIban_, current.companyIban]);
   useEffect(() => { setPosted(posted_)}, [posted_, current.posted]);
   useEffect(() => { setEditing(editing_)}, [editing_ ]);
-  useEffect(() => { setData(data_)}, [data_, value.data]);
-  useEffect(() => { }, [filteredRows]);
+  useEffect(() => {handleFilter('')}, [data]);
+  //useEffect(() => { setData(data_)}, [data_, value.data]);
+  //useEffect(() => { }, [filteredRows]);
   console.log('editing', editing);
   console.log('editing_', editing_);
   console.log('valuex', value);
@@ -91,10 +105,47 @@ const BankStatementForm = () => {
   console.log('depositor_', depositor_);
   console.log('beneficiary_', beneficiary_);
 
+
+  const submitGet = (url, func, result) => {
+    console.log('authorization2', token);
+    axios.get( url, {headers: {'authorization':token}})
+      .then(response => {
+        const resp = response.data;
+        result=response.data;
+        console.log('response.data', resp);
+        console.log('response.headers', response.headers);
+        console.log('result', result);
+        func(resp);
+        result=resp;
+        return result;
+      }).catch(function (error) {
+      console.log('error', error);
+    });
+    return result;
+  }
+  const fetchData =(url_, func)=>{
+    let result='xxx';
+    const res = submitGet(url_, func, result);
+    console.log("res", res);
+    const datax = res?.hits ? res.hits : value.initialState;
+    return datax;
+  }
+  const submitQuery = event => {
+    event.preventDefault();
+    console.log("submitQuery current", current);
+    let result='xxx';
+    const url_=value.url //.concat('/')
+      //.concat(fromPeriod).concat('/')
+      //.concat(toPeriod);
+    console.log("url_", url_);
+    fetchData(url_, setData, result);
+    console.log("result", result);
+  };
+
+
   function handleFilter(text) {
 
-    console.log('called+', text)
-    let filteredRows_=!text?dx:dx.filter(function(rc) {
+    let filteredRows_=!text?getData():getData().filter(function(rc) {
 
       return (rc.id.toString().indexOf(text)>-1
         ||rc.depositor.indexOf(text)>-1
@@ -112,16 +163,15 @@ const BankStatementForm = () => {
         setFilteredRows(filteredRows_);
   }
   const toggle= ()=> {
-    setState({ collapse:!state.collapse });
+    setState({...state, collapse:!state.collapse });
   }
 
   const cancelEdit = (e) => {
    // e.preventDefault();
-    //initAdd();
     setSelected([]);
   };
   const edit = id =>{
-    const record = dx.find(obj => obj.id === id);
+    const record = data.hits.find(obj => obj.id === id);
     value.editRow(record);
   }
   const handleInputChange = event => {
@@ -166,128 +216,143 @@ const BankStatementForm = () => {
     const props={title:value.title, columns:value.headers, rows:filteredRows, edit:edit, submit:submit, selected:selected
       , editable:true, setSelected:setSelected, cancel:cancelEdit, handleFilter:handleFilter,rowsPerPageOptions:[15, 25, 100,500, 1000]}
     return <>
-      <Grid container spacing={2} direction="column" >
-        <Form  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
+      <Grid container spacing={2} style={{...styles.outer, padding: 20, 'background-color':blue }} direction="column" >
+        <CForm  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
                 <IoMdMenu />
               </Grid>
-              <Grid item> <h5><Badge color="primary">{value.title}</Badge></h5></Grid>
+              <Grid item> <h5><CBadge color="primary">{value.title}</CBadge></h5></Grid>
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>
-                {/*eslint-disable-next-line*/}
-                <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggle}>
-                  <i className={state.collapse?UP:DOWN}></i></a>
+                <CButton block color="success" type="submit"  style={{ align: 'right' }}  onClick={event => {
+                  event.preventDefault(); submitQuery(event)}}  >
+                </CButton>
               </div>
+              <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                <CIcon name={ state.collapse ? "cil-arrow-top" : "cil-arrow-bottom"} />
+              </CButton>
             </Grid>
           </Grid>
-             <Collapse isOpen={state.collapse} id="JScollapse" style={{padding:2}}>
-                 <FormGroup row style={{  height:15 }}>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Id</Label>
-                          </Col>
-                          <Col sm="4">
-                            <Input disabled bsSize="sm" type="text" id="account-id" name="id" className="input-sm" placeholder="Id" value= {id} onChange={handleInputChange} />
-                          </Col>
-                          <Col sm="1">
-                            <Label size="sm" htmlFor="input-small">Posted on</Label>
-                          </Col>
-                          <Col sm="1.5">
-                            <Input disabled bsSize="sm" type="text"  id="postingdate-id" name="postingdate" className="input-sm" placeholder="date" value={dateFormat(current.postingdate, "dd mm yy")} />
-                          </Col>
-                        </FormGroup>
-                 <FormGroup row style={{  height:15 }}>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Depositor</Label>
-                          </Col>
-                          <Col sm="4">
-                            <Input disabled bsSize="sm" type="text" id="depositor-input" name="depositor" className="input-sm" placeholder="depositor" value={depositor} onChange={handleInputChange} />
-                          </Col>
-                          <Col sm="1">
-                            <Label size="sm" htmlFor="input-small">Valuedate</Label>
-                          </Col>
-                          <Col sm="1.5">
-                            <DatePicker  disabled locale="de-DE" dateFormat='dd.MM.yyyy' selected={valuedate} onChange={date => setValuedate(date)} />
-                          </Col>
-                        </FormGroup>
-                 <FormGroup row style={{  height:15 }}>
-                          <Col sm="2">
-                            <Label size="sm" htmlFor="input-small">Payee/Payer</Label>
-                          </Col>
-                          <Col sm="4">
-                            <Input disabled bsSize="sm" type="text" id="beneficiary-input" name="beneficiary"
-                                   className="input-sm" placeholder="beneficiary" value={beneficiary}
-                                   onChange={handleInputChange} />
-                          </Col>
-                          <Col sm="1">
-                            <Label size="sm" htmlFor="input-small">P.Text</Label>
-                          </Col>
-                          <Col sm="1.5">
-                            <Input disabled bsSize="sm"  type="text"  id="postingtext-id" name="postingtext"
+             <CCollapse show={state.collapse} id="JScollapse" style={{padding:2}}>
+                 <CFormGroup row style={{  height:15 }}>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('bankstatement.id')}</CLabel>
+                          </CCol>
+                          <CCol sm="4">
+                            <CInput  bsSize="sm" type="text" id="account-id" name="id" className="input-sm"
+                                    placeholder="Id" value= {id}  />
+                          </CCol>
+                          <CCol sm="1">
+                            <CLabel size="sm" htmlFor="input-small">{t('bankstatement.postingdate')}</CLabel>
+                          </CCol>
+                          <CCol sm="1.5">
+                            <CInput  bsSize="sm" type="text"  id="postingdate-id" name="postingdate" className="input-sm"
+                                    placeholder="date" value={dateFormat(current1.postingdate, "dd.mm.yyyy")}
+                                    style={{'text-align':'right', padding:2 }}/>
+                          </CCol>
+                        </CFormGroup>
+                 <CFormGroup row style={{  height:15 }}>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('bankstatement.depositor')}</CLabel>
+                          </CCol>
+                          <CCol sm="4">
+                            <CInput  bsSize="sm" type="text" id="depositor-input" name="depositor"
+                                    className="input-sm" placeholder="depositor" value={depositor}  />
+                          </CCol>
+                          <CCol sm="1">
+                            <CLabel size="sm" htmlFor="input-small">{t('bankstatement.valuedate')}</CLabel>
+                          </CCol>
+                          <CCol sm="1.5">
+                            <DatePicker  locale="de-DE" dateFormat='dd.MM.yyyy' selected={valuedate}
+                                         onChange={date => setValuedate(date)} style={{ 'text-align':'right' }}/>
+                          </CCol>
+                        </CFormGroup>
+                 <CFormGroup row style={{  height:15 }}>
+                          <CCol sm="2">
+                            <CLabel size="sm" htmlFor="input-small">{t('bankstatement.beneficiary')}</CLabel>
+                          </CCol>
+                          <CCol sm="4">
+                            <CInput  bsSize="sm" type="text" id="beneficiary-input" name="beneficiary"
+                                   className="input-sm" placeholder="beneficiary" value={beneficiary}/>
+                          </CCol>
+                          <CCol sm="1">
+                            <CLabel size="sm" htmlFor="input-small">{t('bankstatement.postingtext')}</CLabel>
+                          </CCol>
+                          <CCol sm="1.5">
+                            <CInput  bsSize="sm"  type="text"  id="postingtext-id" name="postingtext"
                                    className="input-sm" placeholder="postingtext" value={current.postingtext} />
-                          </Col>
-                        </FormGroup>
-                 <FormGroup row style={{  height:15 }}>
-                        <Col sm="2">
-                          <Label size="sm" htmlFor="input-small">Info</Label>
-                        </Col>
-                        <Col xs="4">
-                          <Input disabled bsSize="sm" type="text" id="info-input" name="info" className="input-sm"
-                                 placeholder="info" value={info} onChange={handleInputChange} />
-                        </Col>
-                        <Col sm="1">
-                          <Label size="sm" htmlFor="input-small">Amount</Label>
-                        </Col>
-                        <Col sm="1.5">
-                          <Input disabled bsSize="sm" type="text" id="amount-input" name="amount" className="input-sm"
-                                 placeholder="amount" value={currencyAmountFormatDE(Number(amount),currency)} onChange={handleInputChange}
+                          </CCol>
+                        </CFormGroup>
+                 <CFormGroup row style={{  height:15 }}>
+                        <CCol sm="2">
+                          <CLabel size="sm" htmlFor="input-small">{t('bankstatement.info')}</CLabel>
+                        </CCol>
+                        <CCol xs="4">
+                          <CInput  bsSize="sm" type="text" id="info-input" name="info" className="input-sm"
+                                 placeholder="info" value={info}  />
+                        </CCol>
+                        <CCol sm="1">
+                          <CLabel size="sm" htmlFor="input-small">{t('bankstatement.amount')}</CLabel>
+                        </CCol>
+                        <CCol sm="1.5">
+                          <CInput  bsSize="sm" type="text" id="amount-input" name="amount" className="input-sm"
+                                 placeholder="amount" value={currencyAmountFormatDE(Number(amount),currency)}
                                  style={{ 'text-align':'right' }}/>
-                        </Col>
-                      </FormGroup>
-                 <FormGroup row style={{  height:15 }}>
-                        <Col sm="2">
-                          <Label size="sm" htmlFor="input-small">Company IBAN</Label>
-                        </Col>
-                        <Col sm="4">
-                          <Input disabled ={posted} bsSize="sm" type="text" id="companyIban-id" name="companyIban" className="input-sm" placeholder="companyIban" value={companyIban} onChange={handleInputChange} />
-                        </Col>
+                        </CCol>
+                      </CFormGroup>
+                 <CFormGroup row style={{  height:15 }}>
+                        <CCol sm="2">
+                          <CLabel size="sm" htmlFor="input-small">{t('bankstatement.companyIban')}</CLabel>
+                        </CCol>
+                        <CCol sm="4">
+                          <CInput disabled ={posted} bsSize="sm" type="text" id="companyIban-id" name="companyIban"
+                                  className="input-sm" placeholder="companyIban" value={companyIban} onChange={handleInputChange} />
+                        </CCol>
+                        <CCol sm="1">
+                          <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
+                        </CCol>
+                        <CCol sm="1.5">
+                          <CInput  bsSize="sm" type="text" id="company-input" name="company" className="input-sm"
+                                  placeholder="company" value={company} style={{ 'text-align':'right' }}/>
+                        </CCol>
 
-                        <Col sm="2">
-                          <Label size="sm" htmlFor="input-small">Co.</Label>
-                        </Col>
-                        <Col sm="2">
-                          <Input disabled bsSize="sm" type="text" id="company-input" name="company" className="input-sm" placeholder="company" value={company} onChange={handleInputChange} />
-                        </Col>
-                        <Col sm="1">
-                          <Input disabled className="form-check-input" type="checkbox" id="posted" name="posted" value={current.posted}
-                                 checked={posted} onClick={handleInputChange}/>
-                          <Label className="form-check-label" check htmlFor="posted">Posted?</Label>
-                        </Col>
-                      </FormGroup>
-                 <FormGroup row style={{  height:15 }}>
-                        <Col sm="2">
-                          <Label size="sm" htmlFor="input-small">Acc.No/BankCd.</Label>
-                        </Col>
-                        <Col sm="4">
-                          <Input disabled ={posted} bsSize="sm" type="text" id="accountno-input" name="accountno" className="input-sm" placeholder="accountno" value={accountno} onChange={handleInputChange} />
-                        </Col>
-                        <Col sm="1.5">
-                          <Input disabled ={posted} bsSize="sm" type="text" id="bankCode-input" name="bankCode" className="input-sm" placeholder="bankCode" value={bankCode} onChange={handleInputChange} />
-                        </Col>
-                      </FormGroup>
-                 <FormGroup row style={{  height:15 }}>
-                        <Col sm="2">
-                          <Label size="sm" htmlFor="input-small">Purpose</Label>
-                        </Col>
-                        <Col xs="12"   md="9">
-                          <Input disabled ={posted} bsSize="sm" type="textarea" id="purpose-input" name="purpose" className="input-sm"
-                                 placeholder="purpose" value={purpose} onChange={handleInputChange} rows="3"/>
-                        </Col>
-                      </FormGroup>
-             </Collapse>
-        </Form>
+                      </CFormGroup>
+                    <CFormGroup row style={{  height:15 }}>
+                        <CCol sm="2">
+                          <CLabel size="sm" htmlFor="input-small">{t('bankstatement.accountno')} </CLabel>
+                        </CCol>
+                        <CCol sm="4">
+                          <CInput disabled ={posted} bsSize="sm" type="text" id="accountno-input" name="accountno"
+                                  className="input-sm" placeholder="accountno" value={accountno} onChange={handleInputChange} />
+                        </CCol>
+                        <CCol sm="1">
+                             <CLabel size="sm" htmlFor="input-small">{t('bankstatement.bankCode')} </CLabel>
+                        </CCol>
+                        <CCol sm="1.5">
+                          <CInput disabled ={posted} bsSize="sm" type="text" id="bankCode-input" name="bankCode"
+                                  className="input-sm" placeholder="bankCode" value={bankCode} onChange={handleInputChange}
+                                  style={{ 'padding-left':0 }}/>
+                        </CCol>
+                        <CCol sm="1">
+                             <FormControlLabel id="posted" name="posted" bsSize="sm"
+                                       control={<Switch checked={current.posted} />}
+                                       label={t('bankstatement.posted')}/>
+                         </CCol>
+                      </CFormGroup>
+                  <CFormGroup row style={{  height:15 }}>
+                        <CCol sm="2">
+                          <CLabel size="sm" htmlFor="input-small">{t('bankstatement.purpose')}</CLabel>
+                        </CCol>
+                        <CCol xs="12"   md="10">
+                          <CTextarea disabled ={posted} bsSize="sm" type="textarea" id="purpose-input" name="purpose" className="input-sm"
+                                 placeholder="purpose" value={purpose} onChange={handleInputChange} rows="2"/>
+                        </CCol>
+                      </CFormGroup>
+             </CCollapse>
+        </CForm>
       </Grid>
       <EnhancedTable props={props} style={{padding:0, height:80}}/>
     </>;

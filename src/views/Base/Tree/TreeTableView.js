@@ -7,9 +7,11 @@ import { TreeTable, TreeState } from 'cp-react-tree-table';
 
 import './table.css';
 import './responsive.css';
+import {useTranslation} from "react-i18next";
 
 
 export default function TreeTableView ( props)  {
+  const { t, i18n } = useTranslation();
   const  data  = props.data
   console.log("propsZ", props);
   const treeTableRef = createRef();
@@ -122,19 +124,18 @@ export default function TreeTableView ( props)  {
 
                    ref={treeTableRef}
                    onScroll={handleOnScroll}  style={{ padding:5 }}>
-          <TreeTable.Column renderCell={renderIndexCell} renderHeaderCell={renderHeaderCell('Id')} basis="180px"
+          <TreeTable.Column renderCell={renderIndexCell} renderHeaderCell={renderHeaderCell(t('balancesheet.id'))} basis="180px"
                             grow="0"/>
-          <TreeTable.Column renderCell={renderEditableCell} renderHeaderCell={renderHeaderCell('Name')}/>
-          <TreeTable.Column renderCell={renderIDebitCell} renderHeaderCell={renderHeaderCell('IDebit', false)}/>
-          <TreeTable.Column renderCell={renderDebitCell} renderHeaderCell={renderHeaderCell('Debit', false)}/>
-          <TreeTable.Column renderCell={renderICreditCell} renderHeaderCell={renderHeaderCell('ICredit', false)}/>
-          <TreeTable.Column renderCell={renderCreditCell} renderHeaderCell={renderHeaderCell('Credit', false)}/>
-          <TreeTable.Column renderCell={renderBalanceCell} renderHeaderCell={renderHeaderCell('Balance', false)}/>
-          <TreeTable.Column renderCell={renderCurrencyCell} renderHeaderCell={renderHeaderCell('Currency', true)}/>
+          <TreeTable.Column renderCell={renderEditableCell} renderHeaderCell={renderHeaderCell(t('balancesheet.name'))}/>
+          <TreeTable.Column renderCell={renderIDebitCell} renderHeaderCell={renderHeaderCell(t('balancesheet.idebit'), false)}/>
+          <TreeTable.Column renderCell={renderDebitCell} renderHeaderCell={renderHeaderCell(t('balancesheet.debit'), false)}/>
+          <TreeTable.Column renderCell={renderICreditCell} renderHeaderCell={renderHeaderCell(t('balancesheet.icredit'), false)}/>
+          <TreeTable.Column renderCell={renderCreditCell} renderHeaderCell={renderHeaderCell(t('balancesheet.credit'), false)}/>
+          <TreeTable.Column renderCell={renderBalanceCell} renderHeaderCell={renderHeaderCell(t('balancesheet.balance'), false)}/>
+          <TreeTable.Column renderCell={renderCurrencyCell} renderHeaderCell={renderHeaderCell(t('balancesheet.currency'), true)}/>
         </TreeTable>
     </>);
   }
 return buildForm()
 
 }
-  

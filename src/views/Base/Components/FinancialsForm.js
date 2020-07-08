@@ -2,7 +2,7 @@ import React, {useEffect, useState, useContext} from 'react'
 import {Badge, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
 import {  IoMdMenu} from "react-icons/io";
 import {dateFormat, capitalize} from '../../../utils/utils';
-import EnhancedTable from '../Tables2/EnhancedTable';
+import EnhancedTable from '../../Tables2/EnhancedTable';
 import DetailsFormFinancials from "./DetailsFormFinancials";
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
