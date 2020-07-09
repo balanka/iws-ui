@@ -133,22 +133,32 @@
     "credit":      "Credit",
     "balance"     : "Balance"
   },
-  "financialstr": {
-    "title":      "Financials Transaction",
-    "id":         "Id",
-    "oid":        "Oid",
+  "financials": {
+    "title":      "Financials",
+    "id":        "Id",
+    "oid":        "O.Id",
     "period":       "Period",
     "enterdate"  : "Created",
-    "postingdate": "Posted on",
-    "changedate": "Modified on",
-    "idebit":     "Init. Debit",
-    "debit":      "Debit",
-    "icredit":     "Init. Credit",
-    "balance"     : "Balance",
-    "currency"    : "Currency",
-    "from"       :  "From",
-    "Bis"        :  "To"
+    "postingdate": "Posted",
+    "transdate":   "Transdate",
+    "accountHeader": "Deb./Cred.",
+    "costcenter":   "Cost center",
+    "text" :       "Text",
+    "type":         "Type",
+    "file":         "File",
+    "posted":     "Posted?",
+    "line": {
+      "title": "Lines",
+      "id": "Nº ligne",
+      "account": "Acc.",
+      "oaccount": "O.Acc.",
+      "amount": "Amount",
+      "side": "D/C?",
+      "duedate": "Due date",
+      "text": "Text"
+    }
   },
+
   "journal": {
     "title":      "Journal",
     "id":         "Id",

@@ -5,7 +5,8 @@
     "from"       :  "De",
     "to"        :  "A",
     "total"     : "Total",
-    "company":      "Société"
+    "company":      "Société",
+    "modelid"     : "Model"
   },
   "account": {
     "title":      "Comptes",
@@ -120,20 +121,35 @@
     "period":      "Periode",
     "idebit":     "Débit init.",
     "debit":      "Débit",
-    "icredit":     "Credit init.",
-    "credit":      "Credit",
-    "balance"     : "Balance"
-  },
-  "financialstr": {
-    "title":      "Financials Transaction",
-    "id":        "Nº pièce",
-    "oid":        "Nº ref",
-    "period":       "Periode",
-    "idebit":     "Débit init.",
-    "debit":      "Débit",
     "icredit":     "Crédit init.",
     "credit":      "Crédit",
     "balance"     : "Balance"
+  },
+
+  "financials": {
+    "title":      "Pièce comptable",
+    "id":        "Nº pièce",
+    "oid":        "Réf.",
+    "period":       "Periode",
+    "enterdate"  : "Saisie",
+    "postingdate": "Validée",
+    "transdate":   "Date pièce",
+    "account": "Compte",
+    "costcenter":   "C.de coût",
+    "text" :       "Texte",
+    "type":         "Type",
+    "file":         "Fichier",
+    "posted":     "Posted",
+    "line": {
+      "title": "Lignes",
+      "id": "Nº ligne",
+      "account": "C. débité",
+      "oaccount": "C. crédité",
+      "amount": "Montant",
+      "side": "D/C?",
+      "duedate": "Date valeur",
+      "text": "Texte"
+    }
   },
   "journal": {
     "title":      "Journal",
@@ -156,8 +172,7 @@
     "Month":        "Mois",
     "year":        "Année",
     "type":         "Type",
-    "file":         "Fichier",
-    "modelid"     : "Model"
+    "file":         "Fichier"
   },
   "balancesheet": {
     "title":      "Bilan",

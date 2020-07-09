@@ -116,6 +116,31 @@
     "output_account": "Umsatsteuerkonto",
     "percent":     "Prozent"
   },
+  "financials": {
+    "title":      "Beleg",
+    "id":        "Nr.",
+    "oid":        "O.BelegNr",
+    "period":       "Period",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Buchungsdatum",
+    "transdate":   "Belegdatum",
+    "account":      "Deb./Kred.",
+    "costcenter":   "Kostenstelle",
+    "text" :       "Text",
+    "type":         "B.Art",
+    "file":         "Datei",
+    "posted":     "Gebucht",
+    "line": {
+      "title": "Position(en)",
+      "id": "Pos.Nr.",
+      "account": "Konto",
+      "oaccount": "G.Konto",
+      "amount": "Betrag",
+      "side": "S/H?",
+      "duedate": "Fällig am",
+      "text": "Text"
+    }
+  },
   "journal": {
     "title":      "Journal",
     "id":         "Nr",
