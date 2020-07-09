@@ -80,7 +80,7 @@ const Tabs = () => {
             , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{lid:-1, transid:0
             , side:true, account:'', oaccount:'', amount:0, duedate:new Date(), text:'', currency:'EUR', company:'1000'
             }]}]}
-
+const initPac={hits:[{ period:'', idebit:'', icredit:'', debit:'', credit:'', currency:'', company:''}]}
     return (
     <CRow>
       <CCol xs="12" md="12" className="mb-4">
@@ -141,6 +141,11 @@ const Tabs = () => {
                   <CNavItem>
                       <CNavLink>
                           {t('financials.title')}
+                      </CNavLink>
+                  </CNavItem>
+                  <CNavItem>
+                      <CNavLink>
+                          {t('pac.title')}
                       </CNavLink>
                   </CNavItem>
               </CNav>
@@ -368,6 +373,24 @@ const Tabs = () => {
                                form        = 'financialsForm'>
                   </CrudAccount>
               </CTabPane>
+                  <CTabPane>
+                      <CrudAccount url ="http://127.0.0.1:8080/pac" get="md/106" accUrl="http://127.0.0.1:8080/acc"
+                                   headers = {[ {id:'period', label:t('pac.period'), minWidth:1, numeric:true }
+                                       , { id: 'idebit', label:t('pac.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                                       , { id: 'debit', label:t('pac.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                                       , { id: 'icredit', label:t('pac.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                                       , { id: 'credit', label:t('pac.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                                       , { id: 'balance', label:t('pac.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+                                       , { id: 'currency', label:t('common.currency'), minWidth:1}
+                                   ]}
+                                   initialState={initPac}
+                                   initAcc={initAcc}
+                                   addLabel    = "Add PACB"
+                                   updateLabel = "Submit"
+                                   title       = {t('pac.title')}
+                                   form        = 'pacForm'>
+                      </CrudAccount>
+                  </CTabPane>
               </CTabContent>
             </CTabs>
           </CCardBody>

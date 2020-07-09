@@ -10,38 +10,12 @@ import DatePicker from "react-datepicker";
 import { de } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import Grid from "react-fast-grid";
-import blue from "@material-ui/core/colors/blue";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import {useTranslation} from "react-i18next";
 import axios from "axios";
-import CIcon from "@coreui/icons-react";
-import { library } from '@fortawesome/fontawesome-svg-core'
-//import { fab } from '@fortawesome/free-brands-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faCog,
-  faSpinner,
-  faQuoteLeft,
-  faSquare,
-  faCheckSquare,
-  faThumbsUp,
-  faAngleDoubleUp,
-  faAngleDoubleDown,
-  faPlusSquare,
-  faEraser,
-  faSave,
-  faEdit
-} from '@fortawesome/free-solid-svg-icons'
-
-
-library.add(/*fab,*/ faCog, faSpinner, faQuoteLeft, faSquare, faCheckSquare, faThumbsUp, faAngleDoubleUp, faAngleDoubleDown
-    , faPlusSquare
-    , faEraser
-    , faSave
-    , faEdit
-)
-
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave} from "@fortawesome/free-solid-svg-icons";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -54,17 +28,7 @@ const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
   const [token, setToken] = useGlobalState('token');
-  const UP="fa fa-angle-double-up";
-
-  const DOWN="fa fa-angle-double-down";
-  const ADD ="fa fa-plus-square-o";
-  const REMOVE="fa fa-eraser";
-  const SAVE  ="fa fa-save";
-  const EDIT="fa fa-edit";
-
   const value = useContext(accountContext);
-  const url_=value.url;
-  const get_=value.get;
   const [url,setUrl] = useState('');
   console.log('value.headers', value.headers);
   const HeadersWithLines=value.headers.filter(function(e) { return e.id === 'lines' });
