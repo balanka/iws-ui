@@ -12,6 +12,8 @@ import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
 import axios from "axios";
 import CIcon from "@coreui/icons-react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faAngleDoubleDown, faAngleDoubleUp, faSpinner} from "@fortawesome/free-solid-svg-icons";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -111,14 +113,16 @@ export default function TreeTableForm ()  {
               </Grid>
               <Grid item justify="flex-end" alignItems="center">
                 <div className="card-header-actions" style={{  align: 'right' }}>
-                  <CButton type="submit" size="sm" color="primary" class="btn btn-primary btn-sm"  style={{ align: 'right' }}  onClick={event => {
-                    event.preventDefault(); submitQuery(event)
-                  }}>
+                  <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
+                    event.preventDefault(); submitQuery(event)}}>
+                    <FontAwesomeIcon icon={faSpinner} rotation={90}/>
                   </CButton>
                 </div>
-                <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                  <CIcon name={ state2.collapse ? "cil-arrow-top" : "cil-arrow-bottom"} />
-                </CButton>
+                <div className="card-header-actions" style={{  align: 'right' }}>
+                  <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                    <FontAwesomeIcon icon={state2.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
+                  </CButton>
+                </div>
               </Grid>
             </Grid>
             <CCollapse show={state2.collapse} id="JScollapse" style={{height:40,padding:2}}>
