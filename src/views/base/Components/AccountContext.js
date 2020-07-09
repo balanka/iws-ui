@@ -22,7 +22,7 @@ const [token, setToken] = useGlobalState('token');
   */
     const data = {hits:[]};
     const accData = props.initAcc;
-    const ccData = {hits:[]};
+    const ccData = props.initCc //{hits:[]};
   console.log('props.url', props.url );
   console.log('props.accUrl', props.accUrl );
   console.log('initialState', props.initialState );

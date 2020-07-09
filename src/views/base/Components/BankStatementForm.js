@@ -15,6 +15,8 @@ import useFetch from "../../../utils/useFetch";
 import axios from "axios";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import CIcon from "@coreui/icons-react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -226,14 +228,22 @@ const BankStatementForm = () => {
               <Grid item> <h5><CBadge color="primary">{value.title}</CBadge></h5></Grid>
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
-              <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton block color="success" type="submit"  style={{ align: 'right' }}  onClick={event => {
-                  event.preventDefault(); submitQuery(event)}}  >
-                </CButton>
-              </div>
-              <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                <CIcon name={ state.collapse ? "cil-arrow-top" : "cil-arrow-bottom"} />
-              </CButton>
+                <div className="card-header-actions" style={{  align: 'right' }}>
+                    <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                        <FontAwesomeIcon icon={faSave} />
+                    </CButton>
+                </div>
+                <div className="card-header-actions" style={{  align: 'right' }}>
+                    <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
+                        event.preventDefault(); submitQuery(event)}}>
+                        <FontAwesomeIcon icon={faSpinner} rotation={90}/>
+                    </CButton>
+                </div>
+                <div className="card-header-actions" style={{  align: 'right' }}>
+                    <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                        <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
+                    </CButton>
+                </div>
             </Grid>
           </Grid>
              <CCollapse show={state.collapse} id="JScollapse" style={{padding:2}}>

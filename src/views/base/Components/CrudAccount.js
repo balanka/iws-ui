@@ -123,7 +123,7 @@ export  function CrudAccount  (props) {
                            editing={editing} setEditing={setEditing} editRow={editRow} current={current}
                            setCurrent={setCurrent} submitEdit={submitEdit} submitPost={submitPost} initAcc={props.initAcc}
                            initialState={props.initialState} addLabel={props.addLabel} headers={props.headers}
-                           updateLabel={props.updateLabel} deleteUser={deleteUser} >
+                           initCc={props.initCc} updateLabel={props.updateLabel} deleteUser={deleteUser} >
 
             <div className="flex-row">
                 <div className="flex-large">

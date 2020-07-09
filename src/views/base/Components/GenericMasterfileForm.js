@@ -8,6 +8,8 @@ import {IoMdMenu} from "react-icons/io";
 import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
 import axios from "axios";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faAngleDoubleDown, faAngleDoubleUp, faSpinner} from "@fortawesome/free-solid-svg-icons";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -175,23 +177,15 @@ const GenericMasterfileForm = () => {
                     </Grid>
                     <Grid item justify="flex-end" alignItems="center">
                       <div className="card-header-actions" style={{  align: 'right' }}>
-                        {/*eslint-disable-next-line*/}
-                        <CButton type="submit" size="sm" color="primary" style={{ align: 'right' }}  onClick={event => {
-                          console.log("token", token)
-                          doFetch(token);event.preventDefault(); submitQuery(event)
-                        }}>
+                        <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
+                          event.preventDefault(); submitQuery(event)}}>
+                          <FontAwesomeIcon icon={faSpinner} rotation={90}/>
                         </CButton>
                       </div>
                       <div className="card-header-actions" style={{  align: 'right' }}>
-                        {/*eslint-disable-next-line*/}
-                          <CButton type="submit" size="sm" color="primary" style={{ align: 'right' }}  onClick={toggle}>
-                            <i className="fa fa-dot-circle-o"></i>
-                          </CButton>
-                      </div>
-                      <div className="card-header-actions" style={{  align: 'right' }}>
-                        {/*eslint-disable-next-line*/}
-                        <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggle}>
-                          <i className={state.collapse?UP:DOWN}></i></a>
+                        <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                          <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
+                        </CButton>
                       </div>
                     </Grid>
                   </Grid>

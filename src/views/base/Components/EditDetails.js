@@ -1,9 +1,35 @@
 import React, {useState, useEffect} from 'react'
 import Grid from "react-fast-grid";
 import {IoMdMenu} from "react-icons/io";
-import {Badge, Col, Collapse, Row, Input, Label} from "reactstrap";
+import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea, CRow} from '@coreui/react'
 import DatePicker from "react-datepicker";
 import { de } from "date-fns/locale";
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+//import { fab } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faCog,
+  faSpinner,
+  faQuoteLeft,
+  faSquare,
+  faCheckSquare,
+  faThumbsUp,
+  faAngleDoubleUp,
+  faAngleDoubleDown,
+  faPlusSquare,
+  faEraser,
+  faSave,
+  faEdit
+} from '@fortawesome/free-solid-svg-icons'
+import CIcon from "@coreui/icons-react";
+
+library.add(/*fab,*/ faCog, faSpinner, faQuoteLeft, faSquare, faCheckSquare, faThumbsUp, faAngleDoubleUp, faAngleDoubleDown
+    , faPlusSquare
+    , faEraser
+    , faSave
+    , faEdit
+)
 
 const styles = {
   outer: {
@@ -14,19 +40,17 @@ const styles = {
 };
 export default function EditDetails(props) {
   console.log('propsZ', props)
-  const {value, initAddLine, submitEditLine, posted, mapping, title} = props.props
-
-  const UP="fa fa-angle-double-up";
-  const DOWN="fa fa-angle-double-down";
-  const ADD ="fa fa-plus-square-o";
-  const REMOVE="fa fa-eraser";
-  const SAVE  ="fa fa-save";
-  const EDIT="fa fa-edit";
+  const {value, accData, initAddLine, submitEditLine, posted, mapping, title, t} = props.props
+  const UP="fas fa-angle-double-up";
+  const DOWN="fas fa-angle-double-down";
+  const ADD ="fas fa-plus-square";
+  const REMOVE="fas fa-eraser";
+  const SAVE  ="fas fa-save";
+  const EDIT="fas fa-edit";
 
   const [state, setState]= useState({ collapse: false, fadeIn: true, timeout: 300});
-
   console.log('recordx', props.props.initState)
-  console.log('value', value)
+  //console.log('value', value)
   const record_  = props.props.initState?props.props.initState:value.initialState.lines[0];
   const account_ = record_.account;
   const oaccount_= record_.oaccount;
@@ -47,7 +71,7 @@ export default function EditDetails(props) {
   useEffect(() => { setDuedate(duedate_)}, [duedate_]);
   useEffect(() => { setText(text_)}, [text_]);
 
-  const toggleD = ()=> setState({ collapse:!state.collapse });
+  const toggleD = ()=> setState({...state, collapse:!state.collapse });
 
   const submit =(e)=> {
     e.preventDefault();
@@ -62,69 +86,80 @@ export default function EditDetails(props) {
           <Grid item justify="center" alignItems="center">
             <IoMdMenu />
           </Grid>
-          <Grid item><h5><Badge color="primary">{title}</Badge></h5></Grid>
+          <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
         </Grid>
         <Grid item justify="flex-end" alignItems="center">
           <div className="card-header-actions" style={{  align: 'right', padding:4}}>
-            {/*eslint-disable-next-line*/}
-            <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={initAddLine}>
-              <i className={ADD}></i></a>
-            <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggleD}>
-              <i className={REMOVE}></i></a>
-            <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={submit}>
-              <i className={SAVE}></i></a>
-            <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggleD}>
-              <i className={state.collapse?UP:DOWN}></i></a>
+            <div className="card-header-actions" style={{  align: 'right' }}>
+              <CButton color="link" className="card-header-action btn-minimize" onClick={initAddLine}>
+                <FontAwesomeIcon icon={faPlusSquare} />
+              </CButton>
+            </div>
+            <div className="card-header-actions" style={{  align: 'right' }}>
+              <CButton color="link" className="card-header-action btn-minimize" onClick={toggleD}>
+                <FontAwesomeIcon icon={faEraser} />
+              </CButton>
+            </div>
+            <div className="card-header-actions" style={{  align: 'right' }}>
+              <CButton color="link" className="card-header-action btn-minimize" onClick={submit}>
+                <FontAwesomeIcon icon={faCheckSquare} />
+              </CButton>
+            </div>
+            <div className="card-header-actions" style={{  align: 'right' }}>
+              <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggleD()}>
+                <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
+              </CButton>
+            </div>
           </div>
         </Grid>
       </Grid>
-      <Collapse isOpen={state.collapse} id="FScollapse">
-        <Row xs="16" style={{height:25 }}>
-          <Col  sm="1" style={{'padding-right':0.5}}>
-            <Label size="sm" htmlFor="input-small" style={{padding:0.5}}>Account</Label>
-          </Col>
-          <Col  sm="3"  style={{'padding-left':0, 'padding-right':1}}>
-            <Input  disabled={posted} className ="input-sm" type="select" name="account" id="account-id"
+      <CCollapse show={state.collapse} id="FScollapse">
+        <CRow xs="16" style={{height:25 }}>
+          <CCol  sm="1" style={{'padding-right':0.5}}>
+            <CLabel size="sm" htmlFor="input-small" style={{padding:0.5}}>{t('financials.line.account')}</CLabel>
+          </CCol>
+          <CCol  sm="3"  style={{'padding-left':0, 'padding-right':1}}>
+            <CSelect  disabled={posted} className ="input-sm" type="select" name="account" id="account-id"
                     value={account} onChange={(e)=>setAccount(e.target.value)}>
-              {value.accData.hits.map(item => mapping(item))};
-            </Input>
-          </Col>
-          <Col  sm="0.5"  style={{'padding-left':1, 'padding-right':0.5}}>
-            <Label size="sm" htmlFor="input-small">O.Acc.</Label>
-          </Col>
-          <Col  sm="3"  style={{'padding-left':0}}>
-            <Input  disabled={posted} className ="input-sm" type="select" name="oaccount" id="oaccount-id"
+              {accData.hits.map(item => mapping(item))};
+            </CSelect>
+          </CCol>
+          <CCol  sm="0.5"  style={{'padding-left':1, 'padding-right':0.5}}>
+            <CLabel size="sm" htmlFor="input-small">{t('financials.line.oaccount')}</CLabel>
+          </CCol>
+          <CCol  sm="3"  style={{'padding-left':0}}>
+            <CSelect  disabled={posted} className ="input-sm" type="select" name="oaccount" id="oaccount-id"
                     value={oaccount} onChange={(e)=>setOaccount(e.target.value)} >
               {value.accData.hits.map(item => mapping(item))}
-            </Input>
-          </Col>
-          <Col sm="0.5" style={{'padding-left':1, 'padding-right':0.5}}>
-            <Label size="sm" htmlFor="input-small">Duedate</Label>
-          </Col>
-          <Col sm="1" style={{'padding-left':0}}>
+            </CSelect>
+          </CCol>
+          <CCol sm="0.5" style={{'padding-left':1, 'padding-right':0.5}}>
+            <CLabel size="sm" htmlFor="input-small">{t('financials.line.duedate')}</CLabel>
+          </CCol>
+          <CCol sm="1" style={{'padding-left':0}}>
             <DatePicker disabled ={posted} id='transdate-id'  selected={duedate} onChange={date => setDuedate(date)}
                         locale={de} dateFormat='dd.MM.yy' className="form-control dateInput" style={{'left-padding':0}}/>
-          </Col>
-        <Col sm="0.5" style={{'padding-left':1, 'padding-right':0.5}}>
-          <Label size="sm" htmlFor="input-small">Amount</Label>
-        </Col>
-        <Col  sm="2"  style={{'padding-left':0}}>
-          <Input disabled={posted} bsSize="sm" type="text" id="amount-input" name="oid" className="input-sm"
+          </CCol>
+        <CCol sm="0.5" style={{'padding-left':1, 'padding-right':0.5}}>
+          <CLabel size="sm" htmlFor="input-small">{t('financials.line.amount')}</CLabel>
+        </CCol>
+        <CCol  sm="2"  style={{'padding-left':0}}>
+          <CInput disabled={posted} bsSize="sm" type="text" id="amount-input" name="oid" className="input-sm"
                  placeholder="depositor" value={amount} onChange={(e)=>setAmount(e.target.value)}
                  style={{'text-align':'right'}}/>
-        </Col>
-       </Row>
-        <Row xs="16" style={{height:50, padding:0.5 }}>
-          <Col sm="1"  style={{'padding-right':0.5}}>
-            <Label size="sm" htmlFor="input-small">Text</Label>
-          </Col>
-          <Col  xs="11"  style={{'padding-left':0, 'padding-right':1, 'padding-top':1}}>
-            <Input disabled={posted} bsSize="sm" type="textarea" id="textx-input" name="text" className="input-sm"
+        </CCol>
+       </CRow>
+        <CRow xs="16" style={{height:50, padding:0.5 }}>
+          <CCol sm="1"  style={{'padding-right':0.5}}>
+            <CLabel size="sm" htmlFor="input-small">{t('financials.line.text')}</CLabel>
+          </CCol>
+          <CCol  xs="11"  style={{'padding-left':0, 'padding-right':1, 'padding-top':1}}>
+            <CInput disabled={posted} bsSize="sm" type="textarea" id="textx-input" name="text" className="input-sm"
                    placeholder="text" value={text} onChange={(e)=>setText(e.target.value)}
             />
-          </Col>
-        </Row>
-      </Collapse>
+          </CCol>
+        </CRow>
+      </CCollapse>
     </Grid>
   );
 }

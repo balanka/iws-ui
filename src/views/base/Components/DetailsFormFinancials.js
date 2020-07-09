@@ -7,15 +7,15 @@ import EditDetails from "./EditDetails";
 import {accountContext} from "./AccountContext";
 
 export default function DetailsFormFinancials( props) {
-  const {current, initialState, lineHeaders, data, setCurrent, getCurrentRow } = props.detailsProps;
+  const {current, initialState, lineHeaders, data, accData, setCurrent, getCurrentRow, t } = props.detailsProps;
   const value = useContext(accountContext);
   const posted=current.posted
   console.log('current', current);
   const [state, setState] = useState(initialState);
 
-  const getInitState={...value.initialState.lines[0], editing:false};
+  const getInitState={...value.initialState.hits[0].lines[0], editing:false};
   const initAddLine =()=> {
-    const row = getInitState; //{...value.initialState.lines[0], transid:current.tid, editing:false};
+    const row = getInitState;
     const lines_ = current.lines;
     console.log('rowN', row);
     console.log('lines_', lines_);
@@ -136,14 +136,14 @@ export default function DetailsFormFinancials( props) {
   }
 
   return (<>
-          <GenericTable data={(current.lines&&current.lines.length) > 0 ? current.lines:[value.initialState.lines[0]]}
+          <GenericTable data={(current.lines&&current.lines.length) > 0 ? current.lines:[value.initialState.hits[0].lines[0]]}
                         renderData={renderDetails}
                         renderTotal={renderTotal}
                         renderDT = {renderDT}
                         headers= {lineHeaders}
                         sortFn={sortFunctionD} disabled={posted}/>
-          <EditDetails props={{value:value, initState:state, title:value.lineTitle, submitEditLine:submitEditLine
-            , initAddLine:initAddLine, posted:posted, mapping:mapping}} />
+          <EditDetails props={{value:value, accData:accData, initState:state, title:value.lineTitle, submitEditLine:submitEditLine
+            , initAddLine:initAddLine, posted:posted, mapping:mapping, t:t}} />
         </>
   );
 }

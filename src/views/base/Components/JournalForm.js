@@ -10,7 +10,15 @@ import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelpe
 import {useTranslation} from "react-i18next";
 import axios from "axios";
 import CIcon from "@coreui/icons-react";
-
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faAngleDoubleDown, faAngleDoubleUp, faSpinner} from "@fortawesome/free-solid-svg-icons";
+const styles = {
+  outer: {
+    borderRadius: 5,
+    boxShadow: "0 10px 30px #BBB",
+    padding: 10
+  }
+};
 const JournalForm = () => {
   const { t, i18n } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -21,14 +29,11 @@ const JournalForm = () => {
   const value = useContext(accountContext);
   const [url,setUrl] = useState('');
   const res  = useFetch(url, {});
-  //const init = value.initialState
   const init = ()=> {return value.initialState}
   const data_ = res && res.response?res.response:[value.initialState];
   const getData =()=> { return data?.hits?data.hits:init().hits}
 
-  //const dx=data_?.hits?data_?.hits:[init]
   const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
-  //const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
   console.log('data_',data_)
   console.log('accData_',accData_)
@@ -55,13 +60,6 @@ const JournalForm = () => {
   useEffect(() => {handleFilter('')}, [data, getData()]);
 
 
-  const styles = {
-    outer: {
-      borderRadius: 5,
-      boxShadow: "0 10px 30px #BBB",
-      padding: 10
-    }
-  };
   const toggle= ()=> {
     console.log("accData", accData)
     let result='xxx';
@@ -87,15 +85,10 @@ const JournalForm = () => {
 
   const submitGet = (url, func, result) => {
     console.log('authorization2', token);
-    //let res=null;
     axios.get( url, {headers: {'authorization':token}})
       .then(response => {
         const resp = response.data;
         result=response.data;
-        console.log('response.data', resp);
-        console.log('response.headers', response.headers);
-        console.log('result', result);
-        //res=resp;
         func(resp);
         result=resp;
         return result;
@@ -208,14 +201,16 @@ const JournalForm = () => {
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton type="submit" size="sm" color="primary" class="btn btn-primary btn-sm"  style={{ align: 'right' }}  onClick={event => {
-                  event.preventDefault(); submitQuery(event)
-                }}>
+                <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
+                  event.preventDefault(); submitQuery(event)}}>
+                  <FontAwesomeIcon icon={faSpinner} rotation={90}/>
                 </CButton>
               </div>
-              <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                <CIcon name={ state.collapse ? "cil-arrow-top" : "cil-arrow-bottom"} />
-              </CButton>
+              <div className="card-header-actions" style={{  align: 'right' }}>
+                <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                  <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
+                </CButton>
+              </div>
             </Grid>
           </Grid>
             <CCollapse show={state.collapse} id="JScollapse" style={{height:40,padding:2}}>

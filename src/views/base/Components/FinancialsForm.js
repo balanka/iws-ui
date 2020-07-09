@@ -1,10 +1,10 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Badge, Col, Collapse, Form, FormGroup, Input, Label} from "reactstrap";
+import {CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea, CButton} from '@coreui/react'
 import {  IoMdMenu} from "react-icons/io";
 import {dateFormat, capitalize} from '../../../utils/utils';
 import EnhancedTable from '../../Tables2/EnhancedTable';
 import DetailsFormFinancials from "./DetailsFormFinancials";
-import {accountContext} from './AccountContext';
+import {accountContext, useGlobalState} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import DatePicker from "react-datepicker";
 import { de } from "date-fns/locale";
@@ -13,7 +13,34 @@ import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import {useTranslation} from "react-i18next";
+import axios from "axios";
+import CIcon from "@coreui/icons-react";
+import { library } from '@fortawesome/fontawesome-svg-core'
+//import { fab } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faCog,
+  faSpinner,
+  faQuoteLeft,
+  faSquare,
+  faCheckSquare,
+  faThumbsUp,
+  faAngleDoubleUp,
+  faAngleDoubleDown,
+  faPlusSquare,
+  faEraser,
+  faSave,
+  faEdit
+} from '@fortawesome/free-solid-svg-icons'
 
+
+library.add(/*fab,*/ faCog, faSpinner, faQuoteLeft, faSquare, faCheckSquare, faThumbsUp, faAngleDoubleUp, faAngleDoubleDown
+    , faPlusSquare
+    , faEraser
+    , faSave
+    , faEdit
+)
 
 const styles = {
   outer: {
@@ -23,13 +50,14 @@ const styles = {
   }
 };
 const FinancialsForm = () => {
-  const [state, setState]= useState({collapse: false, fadeIn: true, timeout: 300});
+  const { t, i18n } = useTranslation();
+  const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
+  const [token, setToken] = useGlobalState('token');
   const UP="fa fa-angle-double-up";
-  //const DOWN="icon-arrow-down";
+
   const DOWN="fa fa-angle-double-down";
   const ADD ="fa fa-plus-square-o";
-  //const REMOVE="fa fa-minus-square-o";
   const REMOVE="fa fa-eraser";
   const SAVE  ="fa fa-save";
   const EDIT="fa fa-edit";
@@ -49,9 +77,17 @@ const FinancialsForm = () => {
   const headers = value.headers.filter(function(e) { return e.id !== 'lines' });
   console.log('headers', headers);
   const res  = useFetch(url, {});
-  const data_ = res && res.response?res.response:{hits:[]};
-
-  console.log('data_', data_);
+  const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
+  const [{ res3, isLoading3, isError3 }, doFetch3] = useFetch(value.ccUrl, {});
+  const init = ()=> {return value.initialState}
+  const data_ = res && res.response?res.response:[value.initialState];
+  const getData =()=> { return data?.hits?data.hits:init().hits}
+  const accData_=  res2?.hits?res2.hits:value.accData;
+  const ccData_=  res3?.hits?res3.hits:value.ccData;
+  console.log('data_',data_)
+  console.log('accData_',accData_)
+  console.log('ccData_', ccData_);
+  console.log('value.initialState', value.initialState.hits[0].lines);
   const current_= value.user;
   const id_ = value.user.tid;
   const oid_ = value.user.oid;
@@ -67,9 +103,11 @@ const FinancialsForm = () => {
   const typeJournal_= value.user.typeJournal;
   const file_content_= value.user.file_content;
   const editing_ = value.editing;
-  const initLine=value.initialState.lines[0];
+  const initLine=value.initialState.hits[0].lines[0];
 
   const [data, setData] = useState(data_);
+  const [accData, setAccData] = useState(accData_);
+  const [ccData, setCcData] = useState(ccData_);
   const [current,setCurrent] = useState(current_);
   const [id,setId] = useState(id_);
   const [oid,setOid] = useState(oid_);
@@ -105,8 +143,9 @@ const FinancialsForm = () => {
   useEffect(() => { setFile_content(file_content_)}, [file_content_, current.file_content ]);
   useEffect(() => { setEditing(editing_)}, [editing_ ]);
 
+
   const toggle= ()=> {
-    setState({ collapse: !state.collapse });
+    setState({...state, collapse: !state.collapse });
   }
 
   const modules=[{ id:'112', name:'Supplier invoice'}
@@ -128,17 +167,66 @@ const FinancialsForm = () => {
     initAdd();
     setSelected([]);
   };
+
+  const submitGet = (url, func, result) => {
+    console.log('authorization2', token);
+    axios.get( url, {headers: {'authorization':token}})
+        .then(response => {
+          const resp = response.data;
+          result=response.data;
+          func(resp);
+          result=resp;
+          return result;
+        }).catch(function (error) {
+      console.log('error', error);
+    });
+    return result;
+  }
+  const fetchData =(url_, func)=>{
+    let result='xxx';
+    const res = submitGet(url_, func, result);
+    console.log("Datax", data);
+    console.log("res", res);
+    const datax = res?.hits ? res.hits : value.initialState;
+    return datax;
+  }
+  const submitQuery = modelid => {
+
+    console.log("modelid", modelid);
+    var result='xxx';
+    accData?.hits?.length<2? fetchData(value.accUrl, setAccData):void(0)
+    ccData?.hits?.length<2? fetchData(value.ccUrl, setCcData):void(0)
+    const url_=value.url.concat('/ftrmd/').concat(modelid);
+    console.log("url_", url_);
+    fetchData(url_, setData, result);
+    console.log("dataZ", data);
+  };
   const handleModuleChange = event => {
     event.preventDefault();
-    const { name, value } = event.target;
-    const newUrl=url_.concat(get_.substr(0, get_.indexOf('/')+1).concat(value));
+    const { name, value } = event.target
     setFmodule(value);
-    setUrl(newUrl);
+    submitQuery(value);
     console.log('getFilteredRows', getFilteredRows());
   };
+  const  lineReducer = (accumulator, line) => {
+    console.log('accumulator', accumulator);
+    console.log('lineX', line);
+    const x=accumulator + line.amount
+    console.log('XXX', x);
+    return x;
+  };
 
+  const addAmount =(tr)=> {
+    console.log('lineReducerX', tr)
+    console.log('lineReducer', tr.lines.reduce(lineReducer, 0))
+    return {...tr, total: tr.lines.reduce(lineReducer, 0)}
+  }
+  console.log('initX', init())
+  const dx=(data?.hits?data?.hits:init().hits).map( tr =>addAmount(tr));
+  console.log('lineReducerXdx', dx)
   function handleFilter(text) {
-    const filteredRows_ = !text?dx:dx.filter(function(rc) {
+    const filtered = dx.filter(function(rc) {
+      console.log('rc.tid', rc)
       return (rc.tid.toString().indexOf(text)>-1
         ||rc.oid.toString().indexOf(text)>-1
         ||rc.costcenter.indexOf(text)>-1
@@ -154,8 +242,9 @@ const FinancialsForm = () => {
         ||rc.file_content.toString().indexOf(text)>-1
         ||rc.posted.toString().indexOf(text)>-1
       )});
-    console.log('filteredRows+', filteredRows_);
-    setFilteredRows(filteredRows_);
+    const rows_=text?filtered:dx
+    console.log('filteredRows+', rows_);
+    setFilteredRows(rows_);
   }
   const getFilteredRows=()=>{
     return filteredRows?filteredRows:dx
@@ -165,23 +254,12 @@ const FinancialsForm = () => {
     console.log('record', record);
     value.editRow(record);
   }
-  const  lineReducer = (accumulator, line) => {
-    console.log('accumulator', accumulator);
-    console.log('lineX', line);
-    const x=accumulator + line.amount
-    console.log('XXX', x);
-  return x;
-  };
 
-  const addAmount =(tr)=> {
-    console.log('lineReducer', tr.lines.reduce(lineReducer, 0))
-    return {...tr, total: tr.lines.reduce(lineReducer, 0)}
-  }
 
-  const dx=(data_?.hits?data_?.hits:[value.initialState]).map(addAmount);
+
   console.log('currentzdx', dx);
   const [filteredRows, setFilteredRows] = useState(dx);
-  useEffect(() => {}, [data_]);
+  useEffect(() => {handleFilter('')}, [data]);
 
   const handleInputChange = event => {
    // event.preventDefault();
@@ -260,147 +338,158 @@ const FinancialsForm = () => {
       , rowsPerPageOptions: [5, 15, 25, 100]
     }
     const detailsProps={current:current, initialState:initLine, lineHeaders:lineHeaders, data:data
-      , setCurrent:setCurrent, getCurrentRow}
+      , accData:accData, setCurrent:setCurrent, getCurrentRow, t:t}
     return <>
       <Grid container spacing={2}  direction="column" style={{...styles.outer}}>
-         <Form  className="form-horizontal" id ="financialsMasterform" onSubmit={ addOrEdit?submitEdit:submitAdd}>
+         <CForm  className="form-horizontal" id ="financialsMasterform" onSubmit={ addOrEdit?submitEdit:submitAdd}>
              <Grid container justify="space-between">
                <Grid container xs spacing={1} justify="flex-start">
                  <Grid item justify="center" alignItems="center">
                    <IoMdMenu />
                  </Grid>
-                 <Grid item><h5><Badge color="primary">{value.title}</Badge></h5></Grid>
+                 <Grid item><h5><CBadge color="primary">{value.title}</CBadge></h5></Grid>
                </Grid>
                <Grid item justify="flex-end" alignItems="center">
-                 <Input className ="input-sm" type="select" name="module" id="module-id"
+                 <CSelect className ="input-sm" type="select" name="module" id="module-id"
                         value={fmodule}  onChange ={handleModuleChange} style={{ height: 30, padding:1, align: 'right' }}>
                    <option value="" selected disabled hidden>Choose here</option>
                    {modules.map(item => mapping(item))};
-                 </Input>
+                 </CSelect>
                  <div className="card-header-actions" style={{  align: 'right' }}>
-                   {/*eslint-disable-next-line*/}
-                   <a className="card-header-action btn btn-minimize" data-target="#collapseExample" onClick={toggle}>
-                     <i className={state.collapse?UP:DOWN}></i></a>
+                   <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                     <FontAwesomeIcon icon={faPlusSquare} />
+                   </CButton>
+                 </div>
+                 <div className="card-header-actions" style={{  align: 'right' }}>
+                   <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                     <FontAwesomeIcon icon={faSave} />
+                   </CButton>
+                 </div>
+                 <div className="card-header-actions" style={{  align: 'right' }}>
+                   <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                     <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
+                   </CButton>
                  </div>
                </Grid>
              </Grid>
 
-            <Collapse isOpen={state.collapse} id="FScollapse" style={{'min-height':200}}>
-              <FormGroup row style={{  height:15}}>
-                <Col sm="1">
-                  <Label size="sm" htmlFor="input-small">Id</Label>
-                </Col>
-                <Col sm="2">
-                  <Input disabled bsSize="sm" type="text" id="id" name="id" className="input-sm" placeholder="Id"
+            <CCollapse show={state.collapse} id="FScollapse" style={{'min-height':200}}>
+              <CFormGroup row style={{  height:15}}>
+                <CCol sm="1">
+                  <CLabel size="sm" htmlFor="input-small">{t('financials.id')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                  <CInput  bsSize="sm" type="text" id="id" name="id" className="input-sm" placeholder={t('financials.id')}
                          value= {id}  />
-                </Col>
-                <Col sm="4"/>
-                <Col sm="1">
-                  <Label size="sm" htmlFor="input-small" style={{padding:2}}>Postingdate</Label>
-                </Col>
-                <Col sm="1">
-                  <Input disabled bsSize="sm"  type="text"  id="postingdate-id" name="postingdate" className="input-sm"
-                         placeholder="postingdate" value={dateFormat(postingdate, "dd mm yy")}
+                </CCol>
+                <CCol sm="4"/>
+                <CCol sm="1">
+                  <CLabel size="sm" htmlFor="input-small" style={{padding:2}}>{t('financials.postingdate')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                  <CInput  bsSize="sm"  type="text"  id="postingdate-id" name="postingdate" className="input-sm"
+                         placeholder={t('financials.postingdate')} value={dateFormat(postingdate, "dd mm yy")}
                          style={{'text-align':'right', 'padding-left':400,'padding-right':0, padding:2 }}/>
-                </Col>
-                  <Col sm="1">
-                  <Label size="sm" htmlFor="input-small" style={{  'padding-right':1 }}>Period</Label>
-                </Col>
-                <Col sm="1">
-                  <Input disabled bsSize="sm" className="input-sm" type="text" id="period" name="period" value={period}
+                </CCol>
+                  <CCol sm="1">
+                  <CLabel size="sm" htmlFor="input-small" style={{  'padding-right':1 }}>{t('financials.period')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                  <CInput  bsSize="sm" className="input-sm" type="text" id="period" name="period" value={period}
                          style={{'text-align':'right',padding:2 }}/>
-                </Col>
-              </FormGroup>
-              <FormGroup row style={{  height:15 }}>
-                <Col sm="1">
-                  <Label size="sm" htmlFor="input-small">oid</Label>
-                </Col>
-                <Col sm="2">
-                  <Input disabled bsSize="sm" type="text" id="oid-input" name="oid" className="input-sm"
-                         placeholder="depositor" value={oid} onChange={handleInputChange} />
-                </Col>
-                <Col sm="4"/>
-                <Col sm="1">
-                  <Label size="sm" htmlFor="input-small" style={{ padding:2 }}>Enterdate</Label>
-                </Col>
-                <Col sm="1">
-                  <Input disabled bsSize="sm"  type="text"  id="enterdate-id" name="enterdate" className="input-sm"
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row style={{  height:15 }}>
+                <CCol sm="1">
+                  <CLabel size="sm" htmlFor="input-small">{t('financials.oid')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                  <CInput disabled={posted} bsSize="sm" type="text" id="oid-input" name="oid" className="input-sm"
+                         placeholder="o" value={t('financials.oid')} onChange={handleInputChange} />
+                </CCol>
+                <CCol sm="4"/>
+                <CCol sm="1">
+                  <CLabel size="sm" htmlFor="input-small" style={{ padding:2 }}>{t('financials.enterdate')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                  <CInput  bsSize="sm"  type="text"  id="enterdate-id" name="enterdate" className="input-sm"
                          placeholder="enterdate" value={dateFormat(enterdate, "dd.mm.yy")}
                          style={{'text-align':'right', padding:2 }}/>
-                </Col>
-                <Col sm="1">
-                  <Label size="sm" htmlFor="input-small" style={{  padding:2 }}>Company</Label>
-                </Col>
-                <Col sm="1">
-                  <Input disabled bsSize="sm" type="text" id="company-input" name="company" className="input-sm"
-                         placeholder="company" value={company}  style={{'text-align':'right',  padding:2 }}/>
-                </Col>
-              </FormGroup>
-              <FormGroup row style={{  height:15 }}>
-                <Col sm="1">
-                  <Label size="sm" htmlFor="input-small">Account</Label>
-                </Col>
-                <Col sm="2">
-                <Input  disabled={posted} className ="input-sm" type="select" name="account" id="account-id"
+                </CCol>
+                <CCol sm="1">
+                  <CLabel size="sm" htmlFor="input-small" style={{  padding:2 }}>{t('common.company')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                  <CInput  bsSize="sm" type="text" id="company-input" name="company" className="input-sm"
+                         placeholder={t('common.company')} value={company}  style={{'text-align':'right',  padding:2 }}/>
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row style={{  height:15 }}>
+                <CCol sm="1">
+                  <CLabel size="sm" htmlFor="input-small">{t('financials.account')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                <CSelect  disabled={posted} className ="input-sm" type="select" name="account" id="account-id"
                        value={account} onChange={handleInputChange} style={{ height:30}}>
-                  {value.accData.hits.map(item => mapping(item))};
-                </Input>
-                </Col>
-                <Col sm="3">
-                  <Input disabled={posted} className ="input-sm" type="select" name="account2" id="account2-id"
+                  {accData.hits.map(item => mapping(item))};
+                </CSelect>
+                </CCol>
+                <CCol sm="3">
+                  <CSelect disabled={posted} className ="input-sm" type="select" name="account2" id="account2-id"
                          value={account} onChange={handleInputChange} style={{ height:30}}>
-                    {value.accData.hits.map(item => mapping2(item))};
+                    {accData.hits.map(item => mapping2(item))};
 
-                  </Input>
-                </Col>
-                <Col sm="0.5"/>
-                <Col sm="1">
-                  <Label size="sm" htmlFor="input-small" style={{'padding-left':'80px', 'padding-right':1, padding:1 }}>Transdate</Label>
-                </Col>
-                <Col sm="1" style={{'text-align':'right', 'padding-left':2, padding:1 }}>
+                  </CSelect>
+                </CCol>
+                <CCol sm="0.5"/>
+                <CCol sm="1">
+                  <CLabel size="sm" htmlFor="input-small" style={{'padding-left':'80px', 'padding-right':1, padding:1 }}>
+                    {t('financials.transdate')}</CLabel>
+                </CCol>
+                <CCol sm="1" style={{'text-align':'right', 'padding-left':2, padding:1 }}>
                   <DatePicker  id='transdate-id'  selected={transdate} onChange={date => setTransdate(date)}
                                disabled ={posted} locale={de} dateFormat='dd.MM.yyyy' className="form-control dateInput" />
-                </Col>
+                </CCol>
 
-
-              </FormGroup>
-              <FormGroup row style={{  height:15 }}>
-                <Col sm="1">
-                  <Label size="sm" htmlFor="input-small">Cost center</Label>
-                </Col>
-                <Col sm="2">
-                  <Input disabled={posted} className ="input-sm" type="select" name="costcenter" id="costcenter-id"
+              </CFormGroup>
+              <CFormGroup row style={{  height:15 }}>
+                <CCol sm="1">
+                  <CLabel size="sm" htmlFor="input-small">{t('financials.costcenter')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                  <CSelect disabled={posted} className ="input-sm" type="select" name="costcenter" id="costcenter-id"
                          value={costcenter}  onChange={handleInputChange} style={{ height:30}}>
-                    {value.ccData.hits.map(item => mapping(item))};
+                    {ccData.hits.map(item => mapping(item))};
 
-                  </Input>
-                </Col>
-                <Col sm="3">
-                  <Input disabled={posted}  className ="input-sm" type="select" name="costcenter2" id="costcenter2-id"
+                  </CSelect>
+                </CCol>
+                <CCol sm="3">
+                  <CSelect disabled={posted}  className ="input-sm" type="select" name="costcenter2" id="costcenter2-id"
                          value={costcenter} onChange={handleInputChange} style={{ height:30}}>
-                    {value.ccData.hits.map(item => mapping2(item))};
+                    {ccData.hits.map(item => mapping2(item))};
 
-                  </Input>
-                </Col>
-                <Col sm="1">
-                  <Label className="form-check-label" check htmlFor="inline-posted" style={{'padding-left':80, 'padding-right':10, padding:1 }}>Posted?</Label>
-                </Col>
-                <Col sm="1">
+                  </CSelect>
+                </CCol>
+                <CCol sm="1">
+                  <CLabel className="form-check-label" check htmlFor="inline-posted" style={{'padding-left':80,
+                    'padding-right':10, padding:1 }}>{t('financials.posted')}</CLabel>
+                </CCol>
+                <CCol sm="1">
                   <FormControlLabel id="posted" name="posted"
                                     control={<Switch checked={current.posted} onChange={handleInputChange}/>}
                                     label="Posted?"
                   />
-                </Col>
-              </FormGroup>
-                <FormGroup>
-                  <Col sm="12" md="12">
-                    <Input disabled={posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
+                </CCol>
+              </CFormGroup>
+                <CFormGroup>
+                  <CCol sm="12" md="12">
+                    <CInput disabled={posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
                            placeholder="text" value={text} onChange={handleInputChange} />
-                  </Col>
-                </FormGroup>
+                  </CCol>
+                </CFormGroup>
                 <DetailsFormFinancials detailsProps={detailsProps}/>
-          </Collapse>
-        </Form>
+          </CCollapse>
+        </CForm>
       </Grid>
       <EnhancedTable props={props} style={{padding:0, 'padding-top':2, height: 50}}/>
    </>
