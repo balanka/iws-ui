@@ -75,8 +75,13 @@ const Tabs = () => {
   const initBS={hits:[{ id:'', depositor:'', postingdate:new Date(), valuedate:new Date(), postingtext:'', purpose:''
     , beneficiary:'', accountno:'', bankCode:'', amount:'', currency:'', info:'', company:'', companyIban:''
     , posted:'',modelid:18}]}
+  const initFrt={hits:[{ tid:-1, oid:0, costcenter:'', account:'', transdate:new Date()
+            , enterdate:new Date().toISOString(), postingdate:new Date().toISOString(), period:getPeriod(new Date())
+            , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{lid:-1, transid:0
+            , side:true, account:'', oaccount:'', amount:0, duedate:new Date(), text:'', currency:'EUR', company:'1000'
+            }]}]}
 
-  return (
+    return (
     <CRow>
       <CCol xs="12" md="12" className="mb-4">
         <CCard>
@@ -133,6 +138,11 @@ const Tabs = () => {
                     {t('bankstatement.title')}
                   </CNavLink>
                 </CNavItem>
+                  <CNavItem>
+                      <CNavLink>
+                          {t('financials.title')}
+                      </CNavLink>
+                  </CNavItem>
               </CNav>
               <CTabContent fade={false}>
                 <CTabPane>
@@ -294,7 +304,7 @@ const Tabs = () => {
                                   , { id: 'text', label:t('journal.text'), minWidth:15}, { id:'month', label:t('journal.month'), minWidth:1}
                                   , { id: 'year', label:t('journal.year'), minWidth:1}, { id:'company', label:t('common.company'), minWidth:1 }
                                   , { id: 'typeJournal', label:t('journal.type'), minWidth:1}, { id: 'file_content', label:t('journal.file'), minWidth:1}
-                                  , { id: 'modelid', label:t('journal.modelid'), minWidth:1}]}
+                                  , { id: 'modelid', label:t('common.modelid'), minWidth:1}]}
 
                                 initialState={initJour}
                                 initAcc={initAcc}
@@ -324,6 +334,40 @@ const Tabs = () => {
                                form        = 'bankStmtForm'>
                   </CrudAccount>
                 </CTabPane>
+                <CTabPane>
+                  <CrudAccount url ="http://127.0.0.1:8080/ftr" get="md/112" accUrl="http://127.0.0.1:8080/acc"
+                               ccUrl="http://127.0.0.1:8080/cc"
+                               headers = {[{id:'tid', label:t('financials.id'), numeric: false, disablePadding: true, minWidth:1, format:(value) => value}
+                                   , {id:'oid', label:t('financials.oid'), numeric:false, disablePadding: true, minWidth:1, format:(value) => value}
+                                   ,  {id:'costcenter', label:t('financials.costcenter'), numeric:false, disablePadding: false, minWidth:2}
+                                   , {id:'account', label:t('financials.account'), numeric:false, disablePadding: false, minWidth:2}
+                                   , {id:'transdate', label:t('financials.transdate'), numeric:true, disablePadding: false, minWidth:1, format:(value) =>  dateFormat(value, "dd mm yy")}
+                                   , {id:'enterdate', label:t('financials.enterdate'), numeric:true, disablePadding: false, minWidth:1, format:(value) =>  dateFormat(value, "dd mm yy")}
+                                   , {id:'postingdate', label:t('financials.postingdate'), numeric:true, disablePadding: false, minWidth:2, format:(value) =>  dateFormat(value, "dd mm yy")}
+                                   , {id:'period', label:t('financials.period'), numeric:true, disablePadding: false, minWidth:2, format:(value) => value}
+                                   , {id:'posted', label:t('financials.posted'), numeric:true, disablePadding: false, minWidth:1, format:(value) => String(value)}
+                                   , {id:'total', label:t('common.total'), numeric:true, disablePadding: false, minWidth:1, format:(value) => currencyFormatDE(Number(value))}
+                                   , {id:'text', label:t('financials.text'), numeric:false, disablePadding: false, minWidth:15}
+                                   , {id:'typeJournal', label:t('financials.type'), numeric:true, disablePadding: false, minWidth:1, format:(value) => value}
+                                   , {id:'modelid', label:t('common.modelid'), numeric:true, disablePadding: false, minWidth:1, format:(value) => value}
+                                   , {id:'company', label:t('common.company'), numeric:false, disablePadding: false, minWidth:2}
+                                   , {id:'file_content', label:'F.Content', numeric:true, disablePadding: true, minWidth:2, format:(value) => value}
+                                   , {id:'lines', title:[{id:'lid', title:t('financials.line.id')}
+                                           , {id:'account', title:t('financials.line.account')}, {id:'side', title:t('financials.line.side')}
+                                           , {name:'oaccount', title:t('financials.line.oaccount')}
+                                           ,{name:'duedate', title:t('financials.line.duedate')}, {id:'text', title:t('financials.line.text')}
+                                           , {name:'amount', title:t('financials.line.amount')}, {id:'currency', title:t('common.currency')}
+                                           , {name:'Actions', title:'Actions'}]}]}
+                               initialState={initFrt}
+                               initAcc={initAcc}
+                               initCc={initCC}
+                               addLabel    = "Add Financials"
+                               updateLabel = "Edit Financials"
+                               title       =  {t('financials.title')}
+                               lineTitle   = {t('financials.line.title')}
+                               form        = 'financialsForm'>
+                  </CrudAccount>
+              </CTabPane>
               </CTabContent>
             </CTabs>
           </CCardBody>
