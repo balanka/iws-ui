@@ -11,7 +11,6 @@ import Switch from "@material-ui/core/Switch";
 import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
 import axios from "axios";
-import CIcon from "@coreui/icons-react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
 const styles = {
