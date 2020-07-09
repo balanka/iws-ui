@@ -1,8 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react'
 import DatePicker from "react-datepicker";
-//import "react-datepicker/dist/react-datepicker.css";
-
-import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
+import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CTextarea} from '@coreui/react'
 import {capitalize, dateFormat, currencyAmountFormatDE} from "../../../utils/utils"
 import Switch from "@material-ui/core/Switch";
 import {accountContext, useGlobalState} from './AccountContext';
@@ -14,9 +12,8 @@ import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
 import axios from "axios";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import CIcon from "@coreui/icons-react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
+import {faAngleDoubleDown, faAngleDoubleUp, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -35,9 +32,6 @@ const BankStatementForm = () => {
   const [{ res, isLoading, isError }, doFetch]= useFetch(value.url, {});
   const data_ =  res?.hits?res.hits:[value.initialState];
   const getData =()=> { return data?.hits?data.hits:init().hits}
-  const UP="icon-arrow-up";
-  const DOWN="icon-arrow-down";
-
   const current_= value.user;
   const id_ = value.user.id;
   const depositor_ = value.user.depositor;
@@ -95,21 +89,8 @@ const BankStatementForm = () => {
   useEffect(() => { setPosted(posted_)}, [posted_, current.posted]);
   useEffect(() => { setEditing(editing_)}, [editing_ ]);
   useEffect(() => {handleFilter('')}, [data]);
-  //useEffect(() => { setData(data_)}, [data_, value.data]);
-  //useEffect(() => { }, [filteredRows]);
-  console.log('editing', editing);
-  console.log('editing_', editing_);
-  console.log('valuex', value);
-  console.log('company_', company);
-  console.log('id', id);
-  console.log('beneficiary', beneficiary);
-  console.log('id_', id_);
-  console.log('depositor_', depositor_);
-  console.log('beneficiary_', beneficiary_);
-
 
   const submitGet = (url, func, result) => {
-    console.log('authorization2', token);
     axios.get( url, {headers: {'authorization':token}})
       .then(response => {
         const resp = response.data;
@@ -137,8 +118,6 @@ const BankStatementForm = () => {
     console.log("submitQuery current", current);
     let result='xxx';
     const url_=value.url //.concat('/')
-      //.concat(fromPeriod).concat('/')
-      //.concat(toPeriod);
     console.log("url_", url_);
     fetchData(url_, setData, result);
     console.log("result", result);
@@ -181,9 +160,6 @@ const BankStatementForm = () => {
     const { name, value } = event.target;
     const namex=name
     const method="set"+capitalize(name)
-    console.log("method", method);
-    console.log("namea", name);
-    console.log("valuea", value);
     const row = Object.assign(current, {name:value});
     eval(method)(value);
     console.log('currentz', row);
@@ -207,11 +183,9 @@ const BankStatementForm = () => {
 
   const submitAdd = event => {
     event.preventDefault();
-    console.log("submitAdd1 current", current);
   };
 
   function buildForm(current1){
-    console.log("editing", editing);
     console.log("user1xx", current1);
     const addOrEdit = (typeof current1.editing==='undefined')?editing:current1.editing;
     const submit= addOrEdit?submitEdit:submitAdd
