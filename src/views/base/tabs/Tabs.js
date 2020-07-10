@@ -80,7 +80,7 @@ const Tabs = () => {
             , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{lid:-1, transid:0
             , side:true, account:'', oaccount:'', amount:0, duedate:new Date(), text:'', currency:'EUR', company:'1000'
             }]}]}
-const initPac={hits:[{ period:'', idebit:'', icredit:'', debit:'', credit:'', currency:'', company:''}]}
+const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''}]}
     return (
     <CRow>
       <CCol xs="12" md="12" className="mb-4">

@@ -54,23 +54,31 @@ const PACBForm = () => {
   const [toPeriod, setToPeriod] = useState(toPeriod_);
     const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
-  useEffect(() => {}, [current, setCurrent]);
+  /*useEffect(() => {}, [current, setCurrent]);
   useEffect(() => {setCurrent(current_)}, [ current_,account, fromPeriod, toPeriod]);
   useEffect(() => { setAccount(account_)}, [account_, current.account ]);
   useEffect(() => { setFromPeriod(fromPeriod_)}, [fromPeriod_]);
   useEffect(() => { setToPeriod(toPeriod_)}, [toPeriod_]);
   useEffect(() => {}, [url]);
 
+   */
+
 
   const toggle= ()=> {
     setState({...state, collapse: !state.collapse });
   }
-
+  const handleToPeriodChange = event => {
+     const { name, value } = event.target;
+     console.log ("event.target.value", event.target.value)
+        setToPeriod(value);
+        submitQuery(event);
+        event.preventDefault();
+    };
   const handleInputChange = event => {
-    event.preventDefault();
     const { name, value } = event.target;
     const method="set"+capitalize(name)
     eval(method)(value);
+      event.preventDefault();
   };
   const mapping = item => <option key={item.id} value={item.id}>
     {item.id+ " ".concat (item.name)}</option>;
@@ -173,29 +181,49 @@ const PACBForm = () => {
   };
 
 
-  const reducerFn =(a,b)  =>({ period:""
-    , idebit:Number(b.idebit)
-    , debit:Number(a.debit)+Number(b.debit)
-    , icredit:Number(b.icredit)
-    , credit:Number(a.credit)+Number(b.credit)
-    , balance:Number(a.debit)+Number(b.debit)+Number(a.idebit)+Number(b.idebit)
-          -Number(a.credit)-Number(b.credit)-Number(a.icredit)-Number(b.icredit)
-    , currency:b.currency, company:b.company});
+  const reducerFn =(a,b)  => {
+      console.log('a', a);
+      console.log('init', init().hits[0]);
+      return (
+          {
+              period: ""
+              , idebit: Number(b.idebit)
+              , debit: Number(a.debit) + Number(b.debit)
+              , icredit: Number(b.icredit)
+              , credit: Number(a.credit) + Number(b.credit)
+              , balance: Number(a.debit) + Number(b.debit) + Number(a.idebit) + Number(b.idebit)
+                  - Number(a.credit) - Number(b.credit) - Number(a.icredit) - Number(b.icredit)
+              , currency: b.currency, company: b.company
+          })
+  };
 
-  const  addRunningTotal = (data) => data.length>0?data.reduce(reducerFn, init()):init();
+  const  addRunningTotal = (data) => data.length>0?data.reduce(reducerFn, init().hits[0]):init().hits[0];
   const renderDT=(data)=> addRunningTotal(data);
 
     const renderTotal = (rows)=>{
+        console.log('rowsZ1',renderDT(rows).debit)
+        console.log('rowsZ2',renderDT(rows).credit)
+        console.log('rowsZ3',rows)
         return(
             <StyledTableRow>
-                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder" }}>Total</StyledTableCell>
+                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder" }}>
+                    {t('common.total')}
+                </StyledTableCell>
                 <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
                     , 'text-align':"right" }}>
-                    {columns[3].format(renderDT(rows).debit).concat(" ").concat(renderDT(rows).currency)}
+                    {columns[3].format(renderDT(rows).debit)}
                 </StyledTableCell>
-                <StyledTableCell colSpan={3} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
-                    , 'text-align':"center" }}>
-                    {columns[3].format(renderDT(rows).credit).concat(" ").concat(renderDT(rows).currency)}
+                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
+                    , 'text-align':"right" }}>
+                    {columns[2].format(renderDT(rows).credit)}
+                </StyledTableCell>
+                <StyledTableCell  colSpan={1} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
+                    , 'text-align':"right" }}>
+                    {columns[3].format(renderDT(rows).debit - renderDT(rows).credit)}
+                </StyledTableCell>
+                <StyledTableCell  colSpan={1} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
+                    , 'text-align':"left" }}>
+                    {renderDT(rows).currency}
                 </StyledTableCell>
             </StyledTableRow>
         )
@@ -249,31 +277,23 @@ const PACBForm = () => {
                        {accData.hits.map(item => mapping2(item))};
                     </CSelect>
                     </CCol>
-                    <CCol sm="1">
-                        <CLabel size="sm" htmlFor="input-small">{t('common.from')}</CLabel>
+                    <CCol sm="0.5">
+                        <CLabel size="sm" htmlFor="input-small" style={{  align: 'right' }}>{t('common.from')}</CLabel>
                      </CCol>
-                    <CCol sm="1">
+                    <CCol sm="1.2">
                     <CInput  bsSize="sm" type="text"  id="fromPeriod-id" name="fromPeriod" className="input-sm"
                           placeholder="fromPeriod" value={fromPeriod} onChange={handleInputChange} />
                     </CCol>
-                    <CCol sm="1">
-                       <CLabel size="sm" htmlFor="input-small">{t('common.to')}</CLabel>
+                    <CCol sm="0.5">
+                       <CLabel size="sm" htmlFor="input-small" style={{  align: 'right' }}>{t('common.to')}</CLabel>
                     </CCol>
-                    <CCol sm="1">
+                    <CCol sm="1.2">
                        <CInput  bsSize="sm" type="text"  id="toPeriod-id" name="toPeriod" className="input-sm"
-                          placeholder="toPeriod" value={toPeriod} onChange={ (event) => {
-                           setToPeriod(event.target.value)
-                           event.preventDefault();
-                           //if(event.key==13) submitQuery(event)
-                           }}
+                          placeholder="toPeriod" value={toPeriod} onChange={handleToPeriodChange}
                        />
                     </CCol>
                     <CCol sm="1">
-                      <CButton type="submit" size="sm" color="primary"
-                               onClick={ (event) => {
-                                   event.preventDefault();
-                                   setToPeriod(event.target.value)
-                                    submitQuery(event)}}>
+                      <CButton type="submit" size="sm" color="primary" onClick={submitQuery}>
                           <i className="fa fa-dot-circle-o"></i>
                       </CButton>
                      </CCol>

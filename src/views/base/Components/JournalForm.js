@@ -61,13 +61,20 @@ const JournalForm = () => {
 
 
   const toggle= ()=> {
-    console.log("accData", accData)
-    let result='xxx';
-    accData?.hits?.length<2? fetchData(value.accUrl, setAccData, result):void(0)
-    console.log("result", result)
     setState({...state, collapse: !state.collapse });
   }
 
+  const handleToPeriodChange = event => {
+    const { name, value } = event.target;
+    setToPeriod(value);
+    submitQuery(event);
+    event.preventDefault();
+  };
+
+  const load = event => {
+    event.preventDefault();
+    accData?.hits?.length<2? fetchData(value.accUrl, setAccData):void(0)
+  };
   const handleInputChange = event => {
     event.preventDefault();
     const { name, value } = event.target;
@@ -201,8 +208,8 @@ const JournalForm = () => {
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
-                  event.preventDefault(); submitQuery(event)}}>
+                <CButton block color="link" type="submit"  className="card-header-action btn-minimize"
+                         onClick={event => {event.preventDefault(); load(event)}}>
                   <FontAwesomeIcon icon={faSpinner} rotation={90}/>
                 </CButton>
               </div>
@@ -244,17 +251,13 @@ const JournalForm = () => {
                 </CCol>
                 <CCol sm="1">
                   <CInput  bsSize="sm" type="text"  id="toPeriod-id" name="toPeriod" className="input-sm"
-                          placeholder="toPeriod" value={toPeriod} onChange={ (event) => {
-                            event.preventDefault();
-                            setToPeriod(event.target.value)
-                            if(event.key==13) submitQuery(event)
-                          }
-                          }
+                          placeholder="toPeriod" value={toPeriod} onChange={handleToPeriodChange}
                            style={{ height: 30, padding:1, align: 'right'}}/>
                 </CCol>
                 <CCol sm="1" style={{ align: 'right' }}>
-                  <CButton type="submit" size="sm" color="primary" style={{ align: 'right' }}><i className="fa fa-dot-circle-o">
-                  </i></CButton>
+                  <CButton type="submit" size="sm" color="primary" style={{ align: 'right' }} onClick={submitQuery}>
+                    <i className="fa fa-dot-circle-o"></i>
+                  </CButton>
                 </CCol>
               </CFormGroup>
            </CCollapse>
