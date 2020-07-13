@@ -34,7 +34,8 @@ const [token, setToken] = useGlobalState('token');
       , editRow:props.editRow, setCurrent:props.setCurrent, submitEdit:props.submitEdit, submitAdd:props.submitAdd
       , submitGet:props.submitGet, login:props.login, submitPost:props.submitPost, initialState:props.initialState
       , addLabel:props.addLabel, updateLabel:props.updateLabel, title:props.title, lineTitle:props.lineTitle
-      , deleteUser:props.deleteUser, headers:props.headers, url:props.url, get:props.get, accUrl:props.accUrl}}>
+      , deleteUser:props.deleteUser, headers:props.headers, url:props.url, get:props.get, accUrl:props.accUrl
+      , initAcc:props.initAcc, submitQuery:props.submitQuery}}>
       {props.children}
     </accountContext.Provider>
   );

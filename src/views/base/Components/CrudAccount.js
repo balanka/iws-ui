@@ -68,7 +68,7 @@ export  function CrudAccount  (props) {
         console.log('error', error);
       });
   };
-  const submitPost = (record) => {
+    const submitPost = (record) => {
     console.log("Record", record);
     console.log("props.url", props.url);
     axios.patch(props.url.concat("/post"), record, {headers: {'authorization':token}})
@@ -78,7 +78,7 @@ export  function CrudAccount  (props) {
       console.log('error', error);
     });
   };
-  const login = (url, data) => {
+    const login = (url, data) => {
         axios.post( url, data)
             .then(response => {
                 console.log('responsex', response.data);
@@ -92,18 +92,34 @@ export  function CrudAccount  (props) {
         });
     }
 
- const submitGet = (url) => {
-                axios.get( url, {headers: {'authorization':'token'}})
-                    .then(response => {
-                        console.log('response.data', response.data);
-                        console.log('response.headers', response.headers);
-                        const resp = response.data
-                        return resp;
-                    }).catch(function (error) {
-                       console.log('error', error);
-                   });
+    const submitGet = (url, func) => {
+        console.log('authorization2', token);
+        let res=null
+        axios.get( url, {headers: {'authorization':token}})
+            .then(response => {
+                console.log('response.data', response.data);
+                console.log('response.headers', response.headers);
+                const resp = response.data
+                res=resp
+                func(resp)
+                return resp;
+            }).catch(function (error) {
+            console.log('error', error);
+        });
+        return res;
     }
 
+    const submitQuery = (event, url, func, init) => {
+
+        const fetchData =(url_, func)=>{
+            const res = submitGet(url_, func);
+            console.log("resx", res);
+            const datax = res?.hits ? res.hits : init;
+            return datax;
+        }
+        fetchData(url, func);
+        event.preventDefault();
+    };
 
     const deleteUser =() => setEditing(false);
     const editRow = (current_, isNew)  => {
@@ -123,7 +139,8 @@ export  function CrudAccount  (props) {
                            editing={editing} setEditing={setEditing} editRow={editRow} current={current}
                            setCurrent={setCurrent} submitEdit={submitEdit} submitPost={submitPost} initAcc={props.initAcc}
                            initialState={props.initialState} addLabel={props.addLabel} headers={props.headers}
-                           initCc={props.initCc} updateLabel={props.updateLabel} deleteUser={deleteUser} >
+                           initAcc={props.initAcc} initCc={props.initCc} updateLabel={props.updateLabel}
+                           deleteUser={deleteUser} submitQuery={submitQuery}>
 
             <div className="flex-row">
                 <div className="flex-large">

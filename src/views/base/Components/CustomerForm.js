@@ -2,14 +2,12 @@ import React, {useEffect, useState, useContext} from 'react'
 import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
 import {dateFormat, capitalize} from "../../../utils/utils"
 import EnhancedTable from '../../Tables2/EnhancedTable';
-import {accountContext, useGlobalState} from './AccountContext';
+import {accountContext} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
 import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
-import axios from "axios";
-import CIcon from "@coreui/icons-react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
 const styles = {
@@ -23,9 +21,6 @@ const CustomerForm = () => {
   const { t, i18n } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
-  const [token, setToken] = useGlobalState('token');
-  const UP="icon-arrow-up";
-  const DOWN="icon-arrow-down";
   const value = useContext(accountContext);
   const [{ res, isLoading, isError }, doFetch]= useFetch(value.url, {});
   const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
@@ -115,22 +110,6 @@ const CustomerForm = () => {
     i18n.changeLanguage(lng);
   };
 
-  const submitGet = (url, func) => {
-    console.log('authorization2', token);
-    let res=null
-    axios.get( url, {headers: {'authorization':token}})
-      .then(response => {
-        console.log('response.data', response.data);
-        console.log('response.headers', response.headers);
-        const resp = response.data
-        res=resp
-        func(resp)
-        return resp;
-      }).catch(function (error) {
-      console.log('error', error);
-    });
-    return res;
-  }
 
   const toggle= ()=> {
     setState({...state, collapse:!state.collapse });
@@ -146,17 +125,7 @@ const CustomerForm = () => {
     initAdd();
     setSelected([]);
   };
-  const submitQuery = event => {
-      const fetchData =(url_, func)=>{
-      const res = submitGet(url_, func);
-      console.log("resx", res);
-      const datax = res?.hits ? res.hits : value.initialState;
-      return datax;
-    }
-    fetchData(value.url, setData);
-    fetchData(value.accUrl, setAccData);
-    event.preventDefault();
-  };
+
 
   const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {handleFilter('')}, [data]);
@@ -260,7 +229,8 @@ const CustomerForm = () => {
               </div>
               <div className="card-header-actions" style={{  align: 'right' }}>
                 <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
-                  event.preventDefault(); submitQuery(event)}}>
+                  event.preventDefault(); value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
+                  value.submitQuery(event, value.url, setData, value.initialState);}}>
                   <FontAwesomeIcon icon={faSpinner} rotation={90}/>
                 </CButton>
               </div>

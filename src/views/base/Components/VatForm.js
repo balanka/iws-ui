@@ -228,7 +228,8 @@ const VatForm = () => {
               </div>
               <div className="card-header-actions" style={{  align: 'right' }}>
                 <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
-                  event.preventDefault(); submitQuery(event)}}>
+                  event.preventDefault(); value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
+                  value.submitQuery(event, value.url, setData, value.initialState);}}>
                   <FontAwesomeIcon icon={faSpinner} rotation={90}/>
                 </CButton>
               </div>
