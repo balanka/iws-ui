@@ -22,7 +22,7 @@ const PACBForm = () => {
   const { t, i18n } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
-  const [token, setToken] = useGlobalState('token');
+  const [profile, setProfile] = useGlobalState('profile');
   const [url,setUrl] = useState('');
   const value = useContext(accountContext);
   const [{ res, isLoading, isError }, doFetch]= useFetch(value.url, {});
@@ -128,7 +128,7 @@ const PACBForm = () => {
     }
 
     const submitGet = (url, func, result) => {
-        axios.get( url, {headers: {'authorization':token}})
+        axios.get( url, {headers: {'authorization':profile.token}})
             .then(response => {
                 const resp = response.data;
                 result=response.data;

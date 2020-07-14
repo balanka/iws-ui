@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import {CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CCard, CCardBody, CTabs
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import {CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CCard, CCardBody, CTabs} from '@coreui/react'
 import {useTranslation} from "react-i18next";
 import {setDefaultLocale} from "react-datepicker";
 import {CrudAccount} from "../Components/CrudAccount";
@@ -14,9 +12,7 @@ const Tabs = () => {
   const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
   setDefaultLocale('de');
 
-  const changeLanguage = lng => {
-    i18n.changeLanguage(lng);
-  };
+
 
   const toggle = (tabPane, tab) =>{
     const newArray = state.activeTab.slice();
@@ -27,25 +23,26 @@ const Tabs = () => {
     const p=date.getUTCMonth()+1;
     return p<=10?"0".concat(p.toString()):p.toString();
   }
+  const date=new Date().toISOString()
   const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
-  const initAcc = {hits:[{id:'', name: '', description: '', enterdate:new Date().getTime(), postingdate:new Date().getTime()
-      , changedate:new Date().getTime(), company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false
+  const initAcc = {hits:[{id:'', name: '', description: '', enterdate:date, postingdate:date
+      , changedate:date, company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false, currency:''
       , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0 }]}
-  const initbank = { hits:[ {id:'', name: '', description: '', enterdate:new Date().getTime(), postingdate:new Date().getTime()
-      , changedate:new Date().getTime(), modelid:11, account:'-1', company:''}]}
-  const initCC = { hits:[ {id:'', name: '', description: '', enterdate:new Date().getTime(), postingdate:new Date().getTime()
-      , changedate:new Date().getTime(), modelid:6, account:'-1', company:''}]}
+  const initbank = { hits:[ {id:'', name: '', description: '', enterdate:date, postingdate:date
+      , changedate:date, modelid:11, account:'-1', company:''}]}
+  const initCC = { hits:[ {id:'', name: '', description: '', enterdate:date, postingdate:date
+      , changedate:date, modelid:6, account:'-1', company:''}]}
   const initVat={ hits:[{ id:'', name:'', description:'', percent:'', inputVatAccount:'', outputVatAccount:''
-      , enterdate:new Date().toISOString(), postingdate:new Date().toISOString(), changedate:new Date().toISOString()
+      , enterdate:date, postingdate:date, changedate:date
       , company:'', modelid:14}]}
   const initCust={hits:[{ id:'', name:'', description:'', street:'', city:'', state:'', zip:''
       , country:'', phone:'', email:'', account:'-1', oaccount:'-1', iban:'-1', vatcode:'-1'
-      , enterdate:new Date().getTime(), postingdate:new Date().getTime()
-      , changedate:new Date().getTime(), company:'', modelid:3}]}
+      , enterdate:date, postingdate:date
+      , changedate:date, company:'', modelid:3}]}
   const initSup={hits:[{ id:'', name:'', description:'', street:'', city:'', state:'', zip:''
       , country:'', phone:'', email:'', account:'-1', oaccount:'-1', iban:'-1', vatcode:'-1'
-      , enterdate:new Date().getTime(), postingdate:new Date().getTime()
-      , changedate:new Date().getTime(), company:'', modelid:1}]}
+      , enterdate:date, postingdate:date
+      , changedate:date, company:'', modelid:1}]}
   const initJour={hits:[{id:'', transid:'', oid:'', account:'', oaccount:'', transdate:''
     , postingdate:'', enterdate:'', period:'', amount:'', idebit:'', debit:'', icredit:''
     , credit:'', currency:'',  side:'', text:'', month:'', year:'', company:'', typeJournal:''
@@ -72,13 +69,13 @@ const Tabs = () => {
       {"data" : {"id" : "9902", "name" : "Bilanz Passiva", "isDebit" : false,
           "balancesheet" : true, "idebit" : 0.00, "icredit" : 0.00, "debit" : 7135.58,
           "credit" : 254824.95, "currency" : "", "company" : "1000"}, "children" :[]}]}]}
-  const initBS={hits:[{ id:'', depositor:'', postingdate:new Date(), valuedate:new Date(), postingtext:'', purpose:''
+  const initBS={hits:[{ id:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
     , beneficiary:'', accountno:'', bankCode:'', amount:'', currency:'', info:'', company:'', companyIban:''
     , posted:'',modelid:18}]}
-  const initFrt={hits:[{ tid:-1, oid:0, costcenter:'', account:'', transdate:new Date()
-            , enterdate:new Date().toISOString(), postingdate:new Date().toISOString(), period:getPeriod(new Date())
+  const initFrt={hits:[{ tid:-1, oid:0, costcenter:'', account:'', transdate:date
+            , enterdate:date, postingdate:date, period:getPeriod(new Date())
             , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{lid:-1, transid:0
-            , side:true, account:'', oaccount:'', amount:0, duedate:new Date(), text:'', currency:'EUR', company:'1000'
+            , side:true, account:'', oaccount:'', amount:0, duedate:date, text:'', currency:'EUR', company:'1000'
             }]}]}
 const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''}]}
     return (
@@ -184,7 +181,7 @@ const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0
                                  , {id:'postingdate', label:t('account.postingdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
                                  , {id:'changedate', label:t('account.changedate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
                                ]}
-                               initialState={initCust}
+                               initialState={initAcc}
                                initAcc={initAcc}
                                addLabel    = "Add Account"
                                updateLabel = "Edit Account"

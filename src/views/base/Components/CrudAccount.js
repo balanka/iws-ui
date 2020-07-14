@@ -16,7 +16,7 @@ import axios from "axios";
 export  function CrudAccount  (props) {
     const [ current, setCurrent ] = useState(props.initialState);
     const [ editing, setEditing ] = useState(false);
-    const [token, setToken] = useGlobalState('token');
+    const [profile, setProfile] = useGlobalState('profile');
 
   const renderComponent =(componentName)=> {
     const componentLookup = {
@@ -40,7 +40,7 @@ export  function CrudAccount  (props) {
 
     const submitEdit = (newRecord, data) => {
      console.log("newRecord", newRecord);
-     axios.patch( props.url, newRecord, {headers: {'authorization':token}})
+     axios.patch( props.url, newRecord, {headers: {'authorization':profile.token}})
       .then(response => {
         console.log('response.data.', response.data);
         const index = data.hits.findIndex(obj => obj.id === newRecord.id);
@@ -53,7 +53,8 @@ export  function CrudAccount  (props) {
     const submitAdd = (record, data) => {
       console.log("Record", record);
       console.log("props.url", props.url);
-    axios.post( props.url, record, {headers: {'authorization':token}})
+        console.log("profile.token", profile.token);
+    axios.post( props.url, record, {headers: {'authorization':profile.token}})
       .then(response => {
         console.log('responsex', response.data);
         const i = data.hits.findIndex(obj => obj.id === record.id);
@@ -71,7 +72,7 @@ export  function CrudAccount  (props) {
     const submitPost = (record) => {
     console.log("Record", record);
     console.log("props.url", props.url);
-    axios.patch(props.url.concat("/post"), record, {headers: {'authorization':token}})
+    axios.patch(props.url.concat("/post"), record, {headers: {'authorization':profile.token}})
       .then(response => {
         console.log('responsex', response.data);
       }).catch(function (error) {
@@ -84,18 +85,18 @@ export  function CrudAccount  (props) {
                 console.log('responsex', response.data);
                 const {authorization} = response.headers
                 const tken= response.data.hash
-                setToken(authorization)
+                setProfile({token:authorization, company:response.data.company})
                 console.log('tken', tken)
-                console.log('token', token);
+                console.log('token', profile.token);
             }).catch(function (error) {
             console.log('error', error);
         });
     }
 
     const submitGet = (url, func) => {
-        console.log('authorization2', token);
+        console.log('authorization2', profile.token);
         let res=null
-        axios.get( url, {headers: {'authorization':token}})
+        axios.get( url, {headers: {'authorization':profile.token}})
             .then(response => {
                 console.log('response.data', response.data);
                 console.log('response.headers', response.headers);

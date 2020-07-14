@@ -2,14 +2,12 @@ import React, {useEffect, useState, useContext} from 'react'
 import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
 import {capitalize} from "../../../utils/utils"
 import EnhancedTable from '../../Tables2/EnhancedTable';
-import {accountContext, useGlobalState} from './AccountContext';
+import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
 import {IoMdMenu} from "react-icons/io";
 import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelper'
 import {useTranslation} from "react-i18next";
-import axios from "axios";
-import CIcon from "@coreui/icons-react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faSpinner} from "@fortawesome/free-solid-svg-icons";
 const styles = {
@@ -20,20 +18,18 @@ const styles = {
   }
 };
 const JournalForm = () => {
-  const { t, i18n } = useTranslation();
+
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
-  const [token, setToken] = useGlobalState('token');
-  const UP="icon-arrow-up";
-  const DOWN="icon-arrow-down";
   const value = useContext(accountContext);
+  const t = value.t
   const [url,setUrl] = useState('');
   const res  = useFetch(url, {});
   const init = ()=> {return value.initialState}
   const data_ = res && res.response?res.response:[value.initialState];
   const getData =()=> { return data?.hits?data.hits:init().hits}
 
-  const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
+  const [{ res2}] = useFetch(value.accUrl, {});
   const accData_=  res2?.hits?res2.hits:value.accData;
   console.log('data_',data_)
   console.log('accData_',accData_)
@@ -52,11 +48,6 @@ const JournalForm = () => {
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [filteredRows, setFilteredRows] = useState(data);
-  useEffect(() => {}, [current, setCurrent]);
-  useEffect(() => {setCurrent(current_)}, [ current_,account, fromPeriod, toPeriod]);
-  useEffect(() => { setAccount(account_)}, [account_, current.account ]);
-  useEffect(() => { setFromPeriod(fromPeriod_)}, [fromPeriod_]);
-  useEffect(() => { setToPeriod(toPeriod_)}, [toPeriod_]);
   useEffect(() => {handleFilter('')}, [data, getData()]);
 
 
@@ -73,7 +64,8 @@ const JournalForm = () => {
 
   const load = event => {
     event.preventDefault();
-    accData?.hits?.length<2? fetchData(value.accUrl, setAccData):void(0)
+    accData?.hits?.length<2?
+        value.submitQuery(event, value.accUrl, setAccData, value.initAcc):void(0)
   };
   const handleInputChange = event => {
     event.preventDefault();
@@ -90,41 +82,19 @@ const JournalForm = () => {
   const mapping2 = item => <option key={item.name} value={item.name}>
     {item.name+" ".concat(item.id)}</option>;
 
-  const submitGet = (url, func, result) => {
-    console.log('authorization2', token);
-    axios.get( url, {headers: {'authorization':token}})
-      .then(response => {
-        const resp = response.data;
-        result=response.data;
-        func(resp);
-        result=resp;
-        return result;
-      }).catch(function (error) {
-      console.log('error', error);
-    });
-    return result;
-  }
-  const fetchData =(url_, func)=>{
-    let result='xxx';
-    const res = submitGet(url_, func, result);
-    console.log("AccDatax", accData);
-    console.log("res", res);
-    const datax = res?.hits ? res.hits : value.initialState;
-    return datax;
-  }
+
 
   const submitQuery = event => {
     event.preventDefault();
-    console.log("submitQuery current", current);
-    var result='xxx';
-    accData?.hits?.length<2? fetchData(value.accUrl, setAccData):void(0)
+    accData?.hits?.length<2?
+        value.submitQuery(event, value.accUrl, setAccData,value.initAcc):void(0)
     const url_=value.url.concat('/')
       .concat(account).concat('/')
       .concat(fromPeriod).concat('/')
       .concat(toPeriod);
     console.log("url_", url_);
-    fetchData(url_, setData, result);
-    console.log("result", result);
+    value.submitQuery(event, url_, setData, value.initialState)
+
   };
 
 

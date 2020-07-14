@@ -11,7 +11,6 @@ import TreeTableView from './TreeTableView'
 import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
 import axios from "axios";
-import CIcon from "@coreui/icons-react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faSpinner} from "@fortawesome/free-solid-svg-icons";
 const styles = {
@@ -22,7 +21,7 @@ const styles = {
   }
 };
 export default function TreeTableForm ()  {
-  const [token, setToken] = useGlobalState('token');
+  const [profile, setProfile] = useGlobalState('profile');
   const { t, i18n } = useTranslation();
   const value = useContext(accountContext);
   const { data, isLoading, hasError, errorMessage, updateUrl } = useFetch2(value.url)
@@ -46,9 +45,9 @@ export default function TreeTableForm ()  {
   useEffect(() => {}, [updateUrl, data, getData()]);
 
   const submitGet = (url, func) => {
-    console.log('authorization2', token);
+    console.log('authorization2', profile.token);
     let res=null
-    axios.get( url, {headers: {'authorization':token}})
+    axios.get( url, {headers: {'authorization':profile.token}})
       .then(response => {
         console.log('response.data', response.data);
         console.log('response.headers', response.headers);

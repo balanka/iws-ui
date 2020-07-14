@@ -6,7 +6,7 @@ const useFetch2 = (initialUrl, skip = false) => {
     const [isLoading, setIsLoading] = useState(false)
     const [hasError, setHasError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-    const [token, setToken] = useGlobalState('token');
+    const [profile, setProfile] = useGlobalState('profile');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -14,7 +14,7 @@ const useFetch2 = (initialUrl, skip = false) => {
             setIsLoading(true)
             try {
                 console.log('fetaching data', url)
-                const response = await fetch(`${url}`, {headers: {'authorization':token}})
+                const response = await fetch(`${url}`, {headers: {'authorization':profile.token}})
                 const result = await response.json()
                 if (response.ok) {
                     setData(result)

@@ -8,11 +8,9 @@ import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
-import axios from "axios";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
+import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner,faWindowClose} from "@fortawesome/free-solid-svg-icons";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -21,15 +19,13 @@ const styles = {
   }
 };
 const AccountForm = () => {
-  const { t, i18n } = useTranslation();
+  const [profile, setProfile] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
-  const [token, setToken] = useGlobalState('token');
-  const UP="icon-arrow-up";
-  const DOWN="icon-arrow-down";
   const value = useContext(accountContext);
-  const [{ res, isLoading, isError }, doFetch]= useFetch(value.url, {});
-  const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
+  const t = value.t
+  const [{ res}, ]= useFetch(value.url, {});
+  const [{ res2 }, ] = useFetch(value.accUrl, {});
   const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
   console.log('data_',data_)
@@ -60,6 +56,7 @@ const AccountForm = () => {
   const [changedate, setChangedate] = useState(changedate_);
   const [enterdate, setEnterdate] = useState(enterdate_);
   const [editing, setEditing] = useState(editing_);
+
   useEffect(() => {}, [current, setCurrent, data, setEditing ]);
   useEffect(() => {setCurrent(current_)}, [ current_, id, name, description,
         account, company, enterdate, changedate, postingdate, isDebit, balancesheet ]);
@@ -75,47 +72,20 @@ const AccountForm = () => {
   useEffect(() => { setEnterdate(enterdate_)}, [enterdate_, current.enterdate ]);
   useEffect(() => { setEditing(editing_)}, [editing_ ]);
   //useEffect(() => { setData(data_)}, [data_, value.data]);
-  console.log('editing', editing);
-  console.log('editing_', editing_);
-  console.log('isDebit', isDebit);
-  console.log('balancesheet', balancesheet);
-  console.log('valuex', value);
-  console.log('company_', company);
-  console.log('id', id);
-  console.log('name', name);
-  console.log('description', description);
-  console.log('id_', id_);
-  console.log('name_', name_);
-  console.log('description_', description_);
 
-  const changeLanguage = lng => {
-    i18n.changeLanguage(lng);
-  };
 
-  const submitGet = (url, func) => {
-    console.log('authorization2', token);
-    let res=null
-    axios.get( url, {headers: {'authorization':token}})
-      .then(response => {
-        console.log('response.data', response.data);
-        console.log('response.headers', response.headers);
-        const resp = response.data
-        res=resp
-        func(resp)
-        return resp;
-      }).catch(function (error) {
-      console.log('error', error);
-    });
-    return res;
-  }
+
+
   const toggle= ()=> {
     setState({...state, collapse:!state.collapse });
   }
   const initAdd =()=> {
-    const row = {...value.initialState, editing:false};
+   // const row = {...value.initialState, editing:false};
+    const row = {...value.initialState.hits[0], company:profile.company, editing:false};
      setEditing(false);
     value.editRow(row, false);
     setCurrent(row);
+    console.log('rowZ', row)
   };
   const cancelEdit = (e) => {
    // e.preventDefault();
@@ -123,19 +93,7 @@ const AccountForm = () => {
     setSelected([]);
   };
 
-  const submitQuery = event => {
 
-    const fetchData =(url_, func)=>{
-      const res = submitGet(url_, func);
-      console.log("resx", res);
-      const datax = res?.hits ? res.hits : value.initialState;
-      return datax;
-    }
-    const datax = fetchData(value.url, setData);
-    fetchData(value.accUrl, setAccData);
-    if(datax.length>0) setCurrent(data_(0))
-    event.preventDefault();
-  };
   const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {handleFilter('')}, [data]);
   function handleFilter(text) {
@@ -184,15 +142,19 @@ const AccountForm = () => {
 
   const submitEdit = event => {
     event.preventDefault();
-    console.log("submitEdit1 current", current);
-    const row = {id:id, name:name, description:description, enterdate:enterdate
-      ,   postingdate:postingdate, changedate:changedate, company:company, modelid:current.modelid
-      ,  account:account,  isDebit:isDebit, balancesheet:balancesheet, currency: current.currency
-      , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0, subAccounts:[]};
-    console.log("submitEdit1 current", row);
-    setCurrent(row);
-    value.submitEdit(row, data);
-    console.log("submitEdit current", current);
+    if(current.editing) {
+      console.log("submitEdit1 current", current);
+      const row = {
+        id: id, name: name, description: description, enterdate: enterdate
+        , postingdate: postingdate, changedate: changedate, company: company, modelid: current.modelid
+        , account: account, isDebit: isDebit, balancesheet: balancesheet, currency: current.currency
+        , idebit: 0.0, icredit: 0.0, debit: 0.0, credit: 0.0, subAccounts: []
+      };
+      console.log("submitEdit1 current", row);
+      setCurrent(row);
+      value.submitEdit(row, data);
+      console.log("submitEdit current", current);
+    } else submitAdd(event)
   };
 
   const submitAdd = event => {
@@ -230,19 +192,25 @@ const AccountForm = () => {
               <Grid item><h5><CBadge color="primary">{value.title}</CBadge></h5></Grid>
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
+              <div className="card-header-actions" style={{  align: 'right' }}>
+                <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
+                  <FontAwesomeIcon icon={faWindowClose} />
+                </CButton>
+              </div>
                 <div className="card-header-actions" style={{  align: 'right' }}>
-                  <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                  <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
                     <FontAwesomeIcon icon={faPlusSquare} />
                   </CButton>
                 </div>
                 <div className="card-header-actions" style={{  align: 'right' }}>
-                  <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                  <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
                     <FontAwesomeIcon icon={faSave} />
                   </CButton>
                 </div>
                 <div>
                 <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
-                  event.preventDefault(); submitQuery(event)}}>
+                  event.preventDefault(); value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
+                  value.submitQuery(event, value.url, setData, value.initialState);}}>
                   <FontAwesomeIcon icon={faSpinner} rotation={90}/>
                 </CButton>
               </div>

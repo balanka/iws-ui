@@ -6,7 +6,6 @@ import {accountContext} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
-import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
@@ -18,12 +17,12 @@ const styles = {
   }
 };
 const CustomerForm = () => {
-  const { t, i18n } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
   const value = useContext(accountContext);
-  const [{ res, isLoading, isError }, doFetch]= useFetch(value.url, {});
-  const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
+  const t = value.t
+  const [{ res},]= useFetch(value.url, {});
+  const [{ res2},] = useFetch(value.accUrl, {});
   const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
   console.log('data_',data_)
@@ -93,23 +92,6 @@ const CustomerForm = () => {
   useEffect(() => { setChangedate(changedate_)}, [changedate_, current.changedate ]);
   useEffect(() => { setEnterdate(enterdate_)}, [enterdate_, current.enterdate ]);
   useEffect(() => { setEditing(editing_)}, [editing_ ]);
-  //useEffect(() => { setData(data_)}, [data_, value.data]);
- // useEffect(() => { setAccData(accData_)}, [accData_, value.accData]);
-  console.log('editing', editing);
-  console.log('editing_', editing_);
-  console.log('valuex', value);
-  console.log('company_', company);
-  console.log('id', id);
-  console.log('name', name);
-  console.log('description', description);
-  console.log('id_', id_);
-  console.log('name_', name_);
-  console.log('description_', description_);
-
-  const changeLanguage = lng => {
-    i18n.changeLanguage(lng);
-  };
-
 
   const toggle= ()=> {
     setState({...state, collapse:!state.collapse });
@@ -159,13 +141,8 @@ const CustomerForm = () => {
     const { name, value } = event.target;
     const namex=name
     const method="set"+capitalize(name)
-    console.log("method", method);
-    console.log("namea", name);
-    console.log("valuea", value);
     const row = Object.assign(current, {namex:value});
     eval(method)(value);
-    console.log('currentz', row);
-    console.log('currentz', current);
     setCurrent(row);
   };
   const mapping = item => <option key={item.id} value={item.id}>
@@ -173,33 +150,25 @@ const CustomerForm = () => {
 
   const submitEdit = event => {
     event.preventDefault();
-    console.log("submitEdit1 current", current);
     const row = {id:id, name:name, description:description, street:street, city:city, state:stateR, zip:zip
       , country:country, phone:phone, email:email, account:account, oaccount:oaccount, iban:iban, vatcode:vatcode
       , enterdate:current.enterdate, postingdate:current.postingdate, changedate:current.changedate
       ,  company:company, modelid:current.modelid};
-    console.log("submitEdit1 current", row);
     setCurrent(row);
     value.submitEdit(row, data);
-    console.log("submitEdit current", current);
   };
 
   const submitAdd = event => {
     event.preventDefault();
-    console.log("submitAdd1 current", current);
     const row = {id:id, name:name, description:description, street:street, city:city, state:stateR, zip:zip
       , country:country, phone:phone, email:email, account:account, oaccount:oaccount, iban:iban, vatcode:vatcode
       , enterdate:current_.enterdate, postingdate:current_.postingdate, changedate:current_.changedate
       ,  company:company, modelid:current.modelid};
-    console.log('submitAdd row', row);
     value.submitAdd(row, data);
     setCurrent(row);
-    console.log('submitAdd current', current);
   };
 
   function buildForm(current1){
-    console.log("editing", editing);
-    console.log("user1xx", current1);
     const addOrEdit = (typeof current1.editing==='undefined')?editing:current1.editing;
     const submit = addOrEdit ? submitEdit : submitAdd
     const props = {

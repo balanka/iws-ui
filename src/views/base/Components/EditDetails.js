@@ -40,14 +40,8 @@ const styles = {
 };
 export default function EditDetails(props) {
   console.log('propsZ', props)
-  const {value, accData, initAddLine, submitEditLine, posted, mapping, title, t} = props.props
-  const UP="fas fa-angle-double-up";
-  const DOWN="fas fa-angle-double-down";
-  const ADD ="fas fa-plus-square";
-  const REMOVE="fas fa-eraser";
-  const SAVE  ="fas fa-save";
-  const EDIT="fas fa-edit";
-
+  const {value, accData, initAddLine, submitEditLine, posted, mapping, title} = props.props
+  const t = value.t
   const [state, setState]= useState({ collapse: false, fadeIn: true, timeout: 300});
   console.log('recordx', props.props.initState)
   //console.log('value', value)

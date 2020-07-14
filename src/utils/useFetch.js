@@ -6,7 +6,7 @@ const useFetch = (url, data, options) => {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [token, setToken] = useGlobalState('token');
+    const [profile, setProfile] = useGlobalState('profile');
 
     const login = (url, data) => {
         axios.post( url, data)
@@ -14,7 +14,7 @@ const useFetch = (url, data, options) => {
                 console.log('responsex', response.data);
                 const {authorization} =  response.headers
                 const tken = response.data.hash
-                setToken(authorization)
+                setProfile({token:authorization, company:response.data.company})
                 console.log('tken', tken)
                 console.log('authorization', authorization);
                 return authorization
@@ -24,8 +24,8 @@ const useFetch = (url, data, options) => {
     }
 
     const submitGet = (url) => {
-        console.log('authorization2', token);
-        axios.get( url, {headers: {'authorization':token}})
+        console.log('authorization2', profile.token);
+        axios.get( url, {headers: {'authorization':profile.token}})
             .then(response => {
                 console.log('response.data', response.data);
                 console.log('response.headers', response.headers);
@@ -64,7 +64,7 @@ const useFetch = (url, data, options) => {
         setLoading(false);
           }
     }, [url]);
-    return [{ response, loading, error }, setToken];
+    return [{ response, loading, error }];
 }
 export default useFetch;
 

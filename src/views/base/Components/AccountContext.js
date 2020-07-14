@@ -1,28 +1,21 @@
 import React, {createContext} from 'react'
-
-import useFetch from "../../../utils/useFetch";
 import {createGlobalState} from "react-hooks-global-state";
+import {useTranslation} from "react-i18next";
 
-const initialState = {token:'noTOken'}
+const initialState = {profile:{
+    token:'noTOken'
+    , company:''
+    }}
+
 export const { useGlobalState } = createGlobalState(initialState);
 export const accountContext = createContext(null);
+
 export  const AccountContext = (props) => {
-
-const [token, setToken] = useGlobalState('token');
-
-  const url = props.url.concat(props.get);
-
-/*
-  const res  = useFetch( url,{headers: {'authorization':token}});
-  const res2 = useFetch(props.accUrl, {headers: {'authorization':token}});
-  const res3 = useFetch(props.ccUrl, {headers: {'authorization':token}});
-  const data = res && res.response?res.response:{hits:[]};
-  const accData = res2 && res2.response?res2.response:{hits:[]};
-  const ccData = res3 && res3.response?res3.response:{hits:[]};
-  */
+    const { t, i18n } = useTranslation();
     const data = {hits:[]};
     const accData = props.initAcc;
-    const ccData = props.initCc //{hits:[]};
+    const ccData = props.initCc
+
   console.log('props.url', props.url );
   console.log('props.accUrl', props.accUrl );
   console.log('initialState', props.initialState );
@@ -35,7 +28,7 @@ const [token, setToken] = useGlobalState('token');
       , submitGet:props.submitGet, login:props.login, submitPost:props.submitPost, initialState:props.initialState
       , addLabel:props.addLabel, updateLabel:props.updateLabel, title:props.title, lineTitle:props.lineTitle
       , deleteUser:props.deleteUser, headers:props.headers, url:props.url, get:props.get, accUrl:props.accUrl
-      , initAcc:props.initAcc, submitQuery:props.submitQuery}}>
+      , initAcc:props.initAcc, submitQuery:props.submitQuery, t:t}}>
       {props.children}
     </accountContext.Provider>
   );

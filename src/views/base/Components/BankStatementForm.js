@@ -26,10 +26,10 @@ const BankStatementForm = () => {
   const { t, i18n } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
-  const [token, setToken] = useGlobalState('token');
+  const [profile, setProfile] = useGlobalState('profile');
   const value = useContext(accountContext);
   const init = ()=> {return value.initialState}
-  const [{ res, isLoading, isError }, doFetch]= useFetch(value.url, {});
+  const [{ res}]= useFetch(value.url, {});
   const data_ =  res?.hits?res.hits:[value.initialState];
   const getData =()=> { return data?.hits?data.hits:init().hits}
   const current_= value.user;
@@ -91,7 +91,7 @@ const BankStatementForm = () => {
   useEffect(() => {handleFilter('')}, [data]);
 
   const submitGet = (url, func, result) => {
-    axios.get( url, {headers: {'authorization':token}})
+    axios.get( url, {headers: {'authorization':profile.token}})
       .then(response => {
         const resp = response.data;
         result=response.data;

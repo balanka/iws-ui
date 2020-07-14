@@ -15,10 +15,9 @@ import {
   CRow, CSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {capitalize} from "../../../utils/utils";
 import {accountContext, useGlobalState} from '../../base/Components/AccountContext';
 import axios from "axios";
-import { useTranslation, withTranslation, Trans } from 'react-i18next';
+import { useTranslation} from 'react-i18next';
 export const languages = {data:[
     {id:'en', name:'English'},
     {id:'de', name:'Deutsch'},
@@ -27,7 +26,7 @@ export const languages = {data:[
 }
 const Login = () => {
   const { t, i18n } = useTranslation();
-  const [token, setToken] = useGlobalState('token');
+  const [profile, setProfile] = useGlobalState('profile');
   const value = useContext(accountContext);
   const [username, setUsername] = useState();
   const [pwd, setPwd] = useState();
@@ -52,8 +51,7 @@ const Login = () => {
     const auth=login(url, data);
     //const auth = useFetch(url,data)
     console.log("auth", auth);
-    // const list=submitGet(url2)
-    // console.log("list", list);
+
   }
 
   const login = (url, data) => {
@@ -62,27 +60,17 @@ const Login = () => {
         console.log('responsex', response.data);
         const {authorization} =  response.headers
         const tken = response.data.hash
-        setToken(authorization)
+        setProfile({token:authorization, company:response.data.company})
         console.log('tken', tken)
         console.log('authorization', authorization);
+        console.log('profile', profile)
         return authorization
       }).catch(function (error) {
       console.log('error', error);
     });
   }
 
-  const submitGet = (url) => {
-    console.log('authorization2', token);
-    axios.get( url, {headers: {'authorization':token}})
-      .then(response => {
-        console.log('response.data', response.data);
-        console.log('response.headers', response.headers);
-        const resp = response.data
-        return resp;
-      }).catch(function (error) {
-      console.log('error', error);
-    });
-  }
+
   const mapping = item => <option key={item.id} value={item.id}>
     {item.id+ " ".concat (item.name)}</option>
 

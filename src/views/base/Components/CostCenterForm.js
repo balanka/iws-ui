@@ -6,10 +6,9 @@ import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
 import useFetch from "../../../utils/useFetch";
-import { useTranslation } from "react-i18next";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {accountContext} from './AccountContext';
-import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
+import {accountContext, useGlobalState} from './AccountContext';
+import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner, faWindowClose} from "@fortawesome/free-solid-svg-icons";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -18,12 +17,13 @@ const styles = {
   }
 };
 const CostCenterForm = () => {
-  const { t, i18n } = useTranslation();
+  const [profile, setProfile] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
   const value = useContext(accountContext);
-  const [{ res, isLoading, isError }, doFetch]= useFetch(value.url, {});
-  const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
+  const t = value.t
+  const [{ res },]= useFetch(value.url, {});
+  const [{ res2 },] = useFetch(value.accUrl, {});
   const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
   console.log('data_',data_)
@@ -50,6 +50,7 @@ const CostCenterForm = () => {
   const [changedate, setChangedate] = useState(changedate_);
   const [enterdate, setEnterdate] = useState(enterdate_);
   const [editing, setEditing] = useState(editing_);
+
   useEffect(() => {}, [current, setCurrent, data, setEditing ]);
   useEffect(() => {setCurrent(current_)}, [ current_,  id, name, description,
         account, company, enterdate, changedate, postingdate]);
@@ -63,25 +64,20 @@ const CostCenterForm = () => {
   useEffect(() => { setEnterdate(enterdate_)}, [enterdate_, current.enterdate ]);
   useEffect(() => { setEditing(editing_)}, [editing_ ]);
 
-
-  const changeLanguage = lng => {
-    i18n.changeLanguage(lng);
-  };
-
-
   const toggle= ()=> {
     setState({...state, collapse:!state.collapse });
   }
   const initAdd =()=> {
-    const row = {...value.initialState, editing:false};
+    const row = {...value.initialState.hits[0], company:profile.company, editing:false};
      setEditing(false);
     value.editRow(row, false);
     setCurrent(row);
   };
   const cancelEdit = (e) => {
-   // e.preventDefault();
-    initAdd();
+     initAdd();
+      e.preventDefault();
     setSelected([]);
+
   };
 
 
@@ -119,14 +115,18 @@ const CostCenterForm = () => {
 
   const submitEdit = event => {
     event.preventDefault();
-    console.log("submitEdit1 current", current);
-    const row = {id:id, name:name, description:description, enterdate:enterdate
-      ,   postingdate:postingdate, changedate:changedate, modelid:current.modelid
-      ,  account:account, company:company};
-    console.log("submitEdit1 current", row);
-    setCurrent(row);
-    value.submitEdit(row, data);
-    console.log("submitEdit current", current);
+      if(current.editing) {
+          console.log("submitEdit1 current", current);
+          const row = {
+              id: id, name: name, description: description, enterdate: enterdate
+              , postingdate: postingdate, changedate: changedate, modelid: current.modelid
+              , account: account, company: company
+          };
+          console.log("submitEdit1 current", row);
+          setCurrent(row);
+          value.submitEdit(row, data);
+          console.log("submitEdit current", current);
+      } else submitAdd(event)
   };
 
   const submitAdd = event => {
@@ -162,13 +162,18 @@ const CostCenterForm = () => {
               <Grid item><h5><CBadge color="primary">{t(`${value.title}`)}</CBadge></h5></Grid>
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
+                <div className="card-header-actions" style={{  align: 'right' }}>
+                    <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
+                        <FontAwesomeIcon icon={faWindowClose} />
+                    </CButton>
+                </div>
                     <div className="card-header-actions" style={{  align: 'right' }}>
-                        <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                        <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
                             <FontAwesomeIcon icon={faPlusSquare} />
                         </CButton>
                     </div>
                     <div className="card-header-actions" style={{  align: 'right' }}>
-                        <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                        <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
                             <FontAwesomeIcon icon={faSave} />
                         </CButton>
                     </div>

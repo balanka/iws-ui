@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea, CButton} from '@coreui/react'
+import {CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CButton} from '@coreui/react'
 import {  IoMdMenu} from "react-icons/io";
 import {dateFormat, capitalize} from '../../../utils/utils';
 import EnhancedTable from '../../Tables2/EnhancedTable';
@@ -12,8 +12,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import Grid from "react-fast-grid";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import {useTranslation} from "react-i18next";
-import axios from "axios";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave} from "@fortawesome/free-solid-svg-icons";
 const styles = {
@@ -24,11 +22,10 @@ const styles = {
   }
 };
 const FinancialsForm = () => {
-  const { t, i18n } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
-  const [token, setToken] = useGlobalState('token');
   const value = useContext(accountContext);
+  const t = value.t
   const [url,setUrl] = useState('');
   console.log('value.headers', value.headers);
   const HeadersWithLines=value.headers.filter(function(e) { return e.id === 'lines' });
@@ -88,6 +85,7 @@ const FinancialsForm = () => {
   const [file_content, setFile_content] = useState(file_content_);
   const [editing, setEditing] = useState(editing_);
   const [fmodule, setFmodule] = useState('');
+
   useEffect(() => {}, [current, setCurrent, setEditing ]);
   useEffect(() => {setCurrent(current_)}, [ current_, id, oid, costcenter, account
         , transdate, enterdate, postingdate, period, posted, company, text, typeJournal, file_content ]);
@@ -106,6 +104,7 @@ const FinancialsForm = () => {
   useEffect(() => { setTypeJournal(typeJournal_)}, [typeJournal_, current.typeJournal ]);
   useEffect(() => { setFile_content(file_content_)}, [file_content_, current.file_content ]);
   useEffect(() => { setEditing(editing_)}, [editing_ ]);
+
 
 
   const toggle= ()=> {
@@ -132,44 +131,23 @@ const FinancialsForm = () => {
     setSelected([]);
   };
 
-  const submitGet = (url, func, result) => {
-    console.log('authorization2', token);
-    axios.get( url, {headers: {'authorization':token}})
-        .then(response => {
-          const resp = response.data;
-          result=response.data;
-          func(resp);
-          result=resp;
-          return result;
-        }).catch(function (error) {
-      console.log('error', error);
-    });
-    return result;
-  }
-  const fetchData =(url_, func)=>{
-    let result='xxx';
-    const res = submitGet(url_, func, result);
-    console.log("Datax", data);
-    console.log("res", res);
-    const datax = res?.hits ? res.hits : value.initialState;
-    return datax;
-  }
-  const submitQuery = modelid => {
+
+  const submitQuery = (event,modelid) => {
 
     console.log("modelid", modelid);
-    var result='xxx';
-    accData?.hits?.length<2? fetchData(value.accUrl, setAccData):void(0)
-    ccData?.hits?.length<2? fetchData(value.ccUrl, setCcData):void(0)
+
+    accData?.hits?.length<2? value.submitQuery(event, value.accUrl, setAccData, value.initAcc):void(0)
+    ccData?.hits?.length<2? value.submitQuery(event, value.ccUrl, setCcData, value.initCc):void(0)
     const url_=value.url.concat('/ftrmd/').concat(modelid);
     console.log("url_", url_);
-    fetchData(url_, setData, result);
+    value.submitQuery(event, url_, setData, value.initialState);
     console.log("dataZ", data);
   };
   const handleModuleChange = event => {
     event.preventDefault();
     const { name, value } = event.target
     setFmodule(value);
-    submitQuery(value);
+    submitQuery(event, value);
     console.log('getFilteredRows', getFilteredRows());
   };
   const  lineReducer = (accumulator, line) => {
@@ -302,7 +280,7 @@ const FinancialsForm = () => {
       , rowsPerPageOptions: [5, 15, 25, 100]
     }
     const detailsProps={current:current, initialState:initLine, lineHeaders:lineHeaders, data:data
-      , accData:accData, setCurrent:setCurrent, getCurrentRow, t:t}
+      , accData:accData, setCurrent:setCurrent, getCurrentRow}
     return <>
       <Grid container spacing={2}  direction="column" style={{...styles.outer}}>
          <CForm  className="form-horizontal" id ="financialsMasterform" onSubmit={ addOrEdit?submitEdit:submitAdd}>
@@ -316,7 +294,7 @@ const FinancialsForm = () => {
                <Grid item justify="flex-end" alignItems="center">
                  <CSelect className ="input-sm" type="select" name="module" id="module-id"
                         value={fmodule}  onChange ={handleModuleChange} style={{ height: 30, padding:1, align: 'right' }}>
-                   <option value="" selected disabled hidden>Choose here</option>
+                   <option value={fmodule} selected >{fmodule}</option>
                    {modules.map(item => mapping(item))};
                  </CSelect>
                  <div className="card-header-actions" style={{  align: 'right' }}>

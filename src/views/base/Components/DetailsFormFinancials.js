@@ -1,14 +1,13 @@
 import React, {useState, useContext} from 'react'
 import {currencyFormatDE, dateFormat} from "../../../utils/utils";
-import {FormGroup} from "reactstrap";
-import Grid from "react-fast-grid";
 import GenericTable from "../../Tables2/GenericTable";
 import EditDetails from "./EditDetails";
 import {accountContext} from "./AccountContext";
 
 export default function DetailsFormFinancials( props) {
-  const {current, initialState, lineHeaders, data, accData, setCurrent, getCurrentRow, t } = props.detailsProps;
+  const {current, initialState, lineHeaders, data, accData, setCurrent, getCurrentRow} = props.detailsProps;
   const value = useContext(accountContext);
+  const t = value.t
   const posted=current.posted
   console.log('current', current);
   const [state, setState] = useState(initialState);
