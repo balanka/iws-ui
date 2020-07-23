@@ -1,5 +1,12 @@
 {
   "common": {
+    "title": "Ansprache",
+    "name": "Name",
+    "surname": "Familienname",
+    "sex": "Sex",
+    "type": "Typ",
+    "birthYear": "Jahrgang",
+    "birthCity": "Geburtsort",
     "account":      "Konto",
     "currency"    : "Währung",
     "from"       :  "Von",

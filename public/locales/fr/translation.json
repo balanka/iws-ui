@@ -1,5 +1,12 @@
 {
   "common": {
+    "title": "Titre",
+    "name": "Nom",
+    "surname": "Nom de Famille",
+    "sex": "Sexe",
+    "type": "Type",
+    "birthYear": "Ann.naissance",
+    "birthCity": "Lieu de naissance",
     "account":      "Comptes",
     "currency"    : "Monaie",
     "from"       :  "De",

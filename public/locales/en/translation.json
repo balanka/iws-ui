@@ -1,5 +1,12 @@
 {
   "common": {
+    "title": "Title",
+    "name": "Name",
+    "surname": "Surname",
+    "sex": "Sex",
+    "type": "Type",
+    "birthYear": "B. yearear",
+    "birthCity": "B. City",
     "account":      "Account",
     "currency"    : "Currency",
     "from"       :  "From",
