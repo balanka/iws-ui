@@ -4,7 +4,7 @@ import {  IoMdMenu} from "react-icons/io";
 import {dateFormat, capitalize} from '../../../utils/utils';
 import EnhancedTable from '../../Tables2/EnhancedTable';
 import DetailsFormFinancials from "./DetailsFormFinancials";
-import {accountContext, useGlobalState} from './AccountContext';
+import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import DatePicker from "react-datepicker";
 import { de } from "date-fns/locale";
@@ -38,8 +38,8 @@ const FinancialsForm = () => {
   const headers = value.headers.filter(function(e) { return e.id !== 'lines' });
   console.log('headers', headers);
   const res  = useFetch(url, {});
-  const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
-  const [{ res3, isLoading3, isError3 }, doFetch3] = useFetch(value.ccUrl, {});
+  const [{ res2}] = useFetch(value.accUrl, {});
+  const [{ res3}] = useFetch(value.ccUrl, {});
   const init = ()=> {return value.initialState}
   const data_ = res && res.response?res.response:[value.initialState];
   const getData =()=> { return data?.hits?data.hits:init().hits}

@@ -2,13 +2,20 @@ import React, {useEffect, useState, useContext} from 'react'
 import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
 import {dateFormat, capitalize} from "../../../utils/utils"
 import EnhancedTable from '../../Tables2/EnhancedTable';
-import {accountContext} from './AccountContext';
+import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
 import useFetch from "../../../utils/useFetch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDoubleDown,
+  faAngleDoubleUp,
+  faPlusSquare,
+  faSave,
+  faSpinner,
+  faWindowClose
+} from "@fortawesome/free-solid-svg-icons";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -17,14 +24,17 @@ const styles = {
   }
 };
 const CustomerForm = () => {
+  const [profile, setProfile] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
   const value = useContext(accountContext);
   const t = value.t
   const [{ res},]= useFetch(value.url, {});
   const [{ res2},] = useFetch(value.accUrl, {});
+  const [{ res3},] = useFetch(value.ccUrl, {});
   const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
+  const vatData_=  res3?.hits?res3.hits:value.ccData;
   console.log('data_',data_)
   console.log('accData_',accData_)
 
@@ -50,6 +60,8 @@ const CustomerForm = () => {
   const editing_ = value.editing;
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
+  const [vatData, setVatData] = useState(vatData_);
+  const [ibanData, setIbanData] = useState();
   const [current,setCurrent] = useState(current_);
   const [id,setId] = useState(id_);
   const [name,setName] = useState(name_);
@@ -97,7 +109,7 @@ const CustomerForm = () => {
     setState({...state, collapse:!state.collapse });
   }
   const initAdd =()=> {
-    const row = {...value.initialState, editing:false};
+    const row = {...value.initialState.hits[0], company:profile.company, editing:false};
      setEditing(false);
     value.editRow(row, false);
     setCurrent(row);
@@ -150,12 +162,14 @@ const CustomerForm = () => {
 
   const submitEdit = event => {
     event.preventDefault();
-    const row = {id:id, name:name, description:description, street:street, city:city, state:stateR, zip:zip
+    if(current.editing) {
+      const row = {id:id, name:name, description:description, street:street, city:city, state:stateR, zip:zip
       , country:country, phone:phone, email:email, account:account, oaccount:oaccount, iban:iban, vatcode:vatcode
       , enterdate:current.enterdate, postingdate:current.postingdate, changedate:current.changedate
       ,  company:company, modelid:current.modelid};
-    setCurrent(row);
-    value.submitEdit(row, data);
+      setCurrent(row);
+      value.submitEdit(row, data);
+    } else submitAdd(event)
   };
 
   const submitAdd = event => {
@@ -187,18 +201,25 @@ const CustomerForm = () => {
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
+                  <FontAwesomeIcon icon={faWindowClose} />
+                </CButton>
+              </div>
+              <div className="card-header-actions" style={{  align: 'right' }}>
+                <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
                   <FontAwesomeIcon icon={faPlusSquare} />
                 </CButton>
               </div>
               <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
                   <FontAwesomeIcon icon={faSave} />
                 </CButton>
               </div>
               <div className="card-header-actions" style={{  align: 'right' }}>
                 <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
-                  event.preventDefault(); value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
+                  event.preventDefault();
+                  value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
+                  value.submitQuery(event, value.ccUrl, setVatData, value.initCc);
                   value.submitQuery(event, value.url, setData, value.initialState);}}>
                   <FontAwesomeIcon icon={faSpinner} rotation={90}/>
                 </CButton>
@@ -222,7 +243,7 @@ const CustomerForm = () => {
                             <CLabel size="sm" htmlFor="input-small">{t('customer.enterdate')}</CLabel>
                           </CCol>
                           <CCol sm="2">
-                            <CInput disabled bsSize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
+                            <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
                                    placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
                                    style={{'text-align':'right', padding:2 }}/>
                           </CCol>
@@ -238,7 +259,7 @@ const CustomerForm = () => {
                             <CLabel size="sm" htmlFor="input-small">{t('customer.changedate')}</CLabel>
                           </CCol>
                           <CCol sm="2">
-                            <CInput disabled bsSize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
+                            <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
                                    placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
                                    style={{'text-align':'right', padding:2 }}/>
                           </CCol>
@@ -259,7 +280,7 @@ const CustomerForm = () => {
                             <CLabel size="sm" htmlFor="input-small">{t('customer.postingdate')}</CLabel>
                           </CCol>
                           <CCol sm="2">
-                            <CInput disabled bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
+                            <CInput  bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                                    placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
                                    style={{'text-align':'right', padding:2 }}/>
                           </CCol>
@@ -278,12 +299,72 @@ const CustomerForm = () => {
                           <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
                         </CCol>
                         <CCol sm="2">
-                          <CInput disabled bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
-                                  placeholder="company" value={company} onChange={handleInputChange}
+                          <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
+                                  placeholder="company" value={company}
                                   style={{'text-align':'right', padding:2 }}/>
                         </CCol>
                       </CFormGroup>
-               <CFormGroup row style={{  height:15 }}>
+              <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                  <CLabel size="sm" htmlFor="input-small">{t('customer.street')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                  <CInput  bsSize="sm" type="text" id="street-id" name="company" className="input-sm"
+                           placeholder="Street" value={street}
+                           style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+                <CCol sm="2">
+                  <CLabel size="sm" htmlFor="input-small">{t('customer.city')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                  <CLabel size="sm" htmlFor="input-small">{t('customer.zip')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                  <CInput  bsSize="sm" type="text" id="zip-id" name="zip" className="input-sm"
+                           placeholder="zip" value={zip}
+                           style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+                <CCol sm="2">
+                  <CInput  bsSize="sm" type="text" id="city-id" name="city" className="input-sm"
+                           placeholder="city" value={city}
+                           style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                  <CLabel size="sm" htmlFor="input-small">{t('customer.country')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                  <CInput  bsSize="sm" type="text" id="country-id" name="country" className="input-sm"
+                           placeholder="country" value={street}
+                           style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+                <CCol sm="2">
+                  <CLabel size="sm" htmlFor="input-small">{t('customer.phone')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                  <CInput  bsSize="sm" type="text" id="phone-id" name="phone" className="input-sm"
+                           placeholder="phone" value={phone}
+                           style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                  <CLabel size="sm" htmlFor="input-small">{t('customer.vat')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                  <CSelect className ="flex-row" type="select" name="vatcode" id="vatcode-id"
+                           value={vatcode} onChange={handleInputChange} >
+                    {vatData.hits.map(item => mapping(item))};
+                  </CSelect>
+                </CCol>
+                <CCol sm="2">
+                  <CLabel size="sm" htmlFor="input-small">{t('customer.iban')}</CLabel>
+                </CCol>
+
+              </CFormGroup>
+
+              <CFormGroup row style={{  height:15 }}>
                           <CCol md="2">
                             <CLabel htmlFor="textarea-input">{t('customer.description')}</CLabel>
                           </CCol>

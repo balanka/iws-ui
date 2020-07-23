@@ -9,7 +9,14 @@ import {IoMdMenu} from "react-icons/io";
 import useFetch from "../../../utils/useFetch";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDoubleDown,
+  faAngleDoubleUp,
+  faPlusSquare,
+  faSave,
+  faSpinner,
+  faWindowClose
+} from "@fortawesome/free-solid-svg-icons";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -18,6 +25,7 @@ const styles = {
   }
 };
 const VatForm = () => {
+  const [profile, setProfile] = useGlobalState('profile');
   const [state, setState] = useState({collapse:true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
   const value = useContext(accountContext);
@@ -78,7 +86,7 @@ const VatForm = () => {
   }
 
   const initAdd =()=> {
-    const row = {...value.initialState, editing:false};
+    const row = {...value.initialState.hits[0], company:profile.company, editing:false};
      setEditing(false);
     value.editRow(row, false);
     setCurrent(row);
@@ -119,13 +127,8 @@ const VatForm = () => {
     const { name, value } = event.target;
     //const namex=name
     const method="set"+capitalize(name)
-    console.log("method", method);
-    console.log("namea", name);
-    console.log("valuea", value);
     const row = Object.assign(current, {namex:value});
      eval(method)(value);
-    console.log('currentz', row);
-    console.log('currentz', current);
     setCurrent(row);
   };
   const mapping = item => <option key={item.id} value={item.id}>
@@ -133,13 +136,13 @@ const VatForm = () => {
 
   const submitEdit = event => {
     event.preventDefault();
-
-    const row = {id:id, name:name, description:description, percent:percent, inputVatAccount:inputaccount
-      ,   outputVatAccount:outputaccount, enterdate:enterdate, postingdate:postingdate, changedate:changedate
-      ,  company:company, modelid:current.modelid};
-
-    setCurrent(row);
-    value.submitEdit(row, data);
+    if(current.editing) {
+      const row = {id:id, name:name, description:description, percent:percent, inputVatAccount:inputaccount
+        ,   outputVatAccount:outputaccount, enterdate:enterdate, postingdate:postingdate, changedate:changedate
+        ,  company:company, modelid:current.modelid};
+        setCurrent(row);
+       value.submitEdit(row, data);
+    } else submitAdd(event)
   };
 
   const submitAdd = event => {
@@ -171,12 +174,17 @@ const VatForm = () => {
             </Grid>
             <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
+                  <FontAwesomeIcon icon={faWindowClose} />
+                </CButton>
+              </div>
+              <div className="card-header-actions" style={{  align: 'right' }}>
+                <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
                   <FontAwesomeIcon icon={faPlusSquare} />
                 </CButton>
               </div>
               <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
                   <FontAwesomeIcon icon={faSave} />
                 </CButton>
               </div>
@@ -207,7 +215,7 @@ const VatForm = () => {
                 <CLabel size="sm" htmlFor="input-small">{t('vat.enterdate')}</CLabel>
               </CCol>
               <CCol sm="2">
-                <CInput disabled bsSize="sm" type="text"  id="enterdate-id" name="enterdate"
+                <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate"
                         className="input-sm" placeholder="date"
                         value={dateFormat(current.enterdate, "dd.mm.yyyy")}
                         style={{'text-align':'right', padding:2 }}/>
@@ -225,7 +233,7 @@ const VatForm = () => {
                 <CLabel size="sm" htmlFor="input-small">{t('vat.changedate')}</CLabel>
               </CCol>
               <CCol sm="2">
-                <CInput disabled bsSize="sm"  type="text"  id="changedate-id" name="changedate"
+                <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate"
                         className="input-sm" placeholder="date"
                         value={dateFormat(current.changedate, "dd.mm.yyyy")}
                         style={{'text-align':'right', padding:2 }}/>
@@ -247,8 +255,8 @@ const VatForm = () => {
                 <CLabel size="sm" htmlFor="input-small">{t('vat.postingdate')}</CLabel>
               </CCol>
               <CCol sm="2">
-                <CInput disabled bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm" placeholder="date"
-                        value={dateFormat(current.postingdate, "dd mm yy")}
+                <CInput  bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm" placeholder="date"
+                        value={dateFormat(current.postingdate, "dd.mm.yyyy")}
                         style={{'text-align':'right', padding:2 }}/>
               </CCol>
             </CFormGroup>
@@ -266,13 +274,15 @@ const VatForm = () => {
                 <CLabel size="sm" htmlFor="input-small">{t('vat.percent')}</CLabel>
               </CCol>
               <CCol sm="1">
-                <CInput  bsSize="sm" type="text" id="percent-id" name="percent"  className="input-sm" placeholder="percent" value={percent} onChange={handleInputChange} />
+                <CInput  bsSize="sm" type="text" id="percent-id" name="percent"  className="input-sm"
+                         placeholder="percent" value={percent} onChange={handleInputChange} />
               </CCol>
               <CCol sm="1">
                 <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
               </CCol>
               <CCol sm="1">
-                <CInput disabled bsSize="sm" type="text" id="company-id" name="company" className="input-sm" placeholder="company" value={company} onChange={handleInputChange} />
+                <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
+                        placeholder="company" value={company} />
               </CCol>
 
             </CFormGroup>

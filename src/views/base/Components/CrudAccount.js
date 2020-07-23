@@ -11,6 +11,7 @@ import BankStatementForm from './BankStatementForm';
 import {AccountContext, useGlobalState} from "./AccountContext";
 import Login from '../../pages/login/Login'
 import TreeTableForm from "../Tree/TreeTableForm";
+import BasicTreeTable from "../Tree/BasicTreeTable";
 import axios from "axios";
 
 export  function CrudAccount  (props) {
@@ -31,6 +32,7 @@ export  function CrudAccount  (props) {
       balancesheetForm : (<TreeTableForm/>),
       journalForm      : (<JournalForm/>),
       loginForm        : (<Login/>),
+      treeForm        : (<BasicTreeTable/>),
       masterfileForm   : (<GenericMasterfileForm/>)
     };
     return (<Fragment>
