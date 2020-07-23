@@ -33,16 +33,16 @@ const Tabs = () => {
   const initCC = { hits:[ {id:'', name: '', description: '', enterdate:date, postingdate:date
       , changedate:date, modelid:6, account:'-1', company:''}]}
   const initVat={ hits:[{ id:'', name:'', description:'', percent:'', inputVatAccount:'', outputVatAccount:''
-      , enterdate:date, postingdate:date, changedate:date
-      , company:'', modelid:14}]}
+      , enterdate:date, postingdate:date, changedate:date, company:'', modelid:14}]}
+
   const initCust={hits:[{ id:'', name:'', description:'', street:'', city:'', state:'', zip:''
       , country:'', phone:'', email:'', account:'-1', oaccount:'-1', iban:'-1', vatcode:'-1'
-      , enterdate:date, postingdate:date
-      , changedate:date, company:'', modelid:3}]}
+      , enterdate:date, postingdate:date, changedate:date, company:'', modelid:3}]}
+
   const initSup={hits:[{ id:'', name:'', description:'', street:'', city:'', state:'', zip:''
       , country:'', phone:'', email:'', account:'-1', oaccount:'-1', iban:'-1', vatcode:'-1'
-      , enterdate:date, postingdate:date
-      , changedate:date, company:'', modelid:1}]}
+      , enterdate:date, postingdate:date, changedate:date, company:'', modelid:1}]}
+
   const initJour={hits:[{id:'', transid:'', oid:'', account:'', oaccount:'', transdate:''
     , postingdate:'', enterdate:'', period:'', amount:'', idebit:'', debit:'', icredit:''
     , credit:'', currency:'',  side:'', text:'', month:'', year:'', company:'', typeJournal:''
@@ -78,6 +78,17 @@ const Tabs = () => {
             , side:true, account:'', oaccount:'', amount:0, duedate:date, text:'', currency:'EUR', company:'1000'
             }]}]}
 const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''}]}
+const initTree={hits:[
+        {id: 1, name: 'a', surname: 'Baran', birthYear: 1987, birthCity: 63, sex: 'Male', type: 'adult'},
+        {id: 2, name: 'b', surname: 'Baran', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'adult', rentId: 1,},
+        {id: 3, name: 'c', surname: 'Baran', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child', parentId: 1,},
+        {id: 4, name: 'd', surname: 'Baran', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child', parentId: 3,},
+        {id: 5, name: 'e', surname: 'Baran', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child',},
+        {id: 6, name: 'f', surname: 'Baran', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child', parentId: 5,},
+        {id: 6, name: 'ff', surname: 'Baranf', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child', parentId: 4,},
+    ]}
+
+
     return (
     <CRow>
       <CCol xs="12" md="12" className="mb-4">
@@ -145,6 +156,11 @@ const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0
                           {t('pac.title')}
                       </CNavLink>
                   </CNavItem>
+                  <CNavItem>
+                      <CNavLink>
+                          {t('common.title')}
+                      </CNavLink>
+                  </CNavItem>
               </CNav>
               <CTabContent fade={false}>
                 <CTabPane>
@@ -207,6 +223,7 @@ const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/cust" get="md/3" accUrl="http://127.0.0.1:8080/acc/accmd/9"
+                               ccUrl="http://127.0.0.1:8080/vat"
                                headers = {[{id:'id', label:t('customer.id'), minWidth: 1}, {id:'name', label:t('customer.name'), minWidth: 8}
                                  , {id:'description', label:t('customer.description'), minWidth:8}, {id:'street', label:t('customer.street'), minWidth: 15}
                                  , {id:'zip', label:t('customer.zip'), minWidth:1}, {id:'country', label:t('customer.country'), minWidth:1}
@@ -219,8 +236,9 @@ const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0
                                  , {id:'modelid', label:'M.Id', minWidth:1, disablePadding: true}, {id:'company', label:t('common.company')
                                    , minWidth:1, disablePadding: true}]}
 
-                               initialState={initVat}
+                               initialState={initCust}
                                initAcc={initAcc}
+                               initCc={initVat}
                                addLabel    = "Add Customer"
                                updateLabel = "Edit Customer"
                                title       = {t('customer.title')}
@@ -229,6 +247,7 @@ const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/sup" get="md/3" accUrl="http://127.0.0.1:8080/acc/accmd/9"
+                               ccUrl="http://127.0.0.1:8080/vat"
                                headers = {[{id:'id', label:t('supplier.id'), minWidth: 1}, {id:'name', label:t('supplier.name'), minWidth: 8}
                                  , {id:'description', label:t('supplier.description'), minWidth:8}, {id:'street', label:t('supplier.street'), minWidth: 15}
                                  , {id:'zip', label:t('supplier.zip'), minWidth:1}, {id:'city', label:t('supplier.city'), minWidth:1}
@@ -244,6 +263,7 @@ const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0
 
                                initialState={initSup}
                                initAcc={initAcc}
+                               initCc={initVat}
                                addLabel    = "Add Customer"
                                updateLabel = "Edit Customer"
                                title       = {t('supplier.title')}
@@ -386,6 +406,24 @@ const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0
                                    updateLabel = "Submit"
                                    title       = {t('pac.title')}
                                    form        = 'pacForm'>
+                      </CrudAccount>
+                  </CTabPane>
+                  <CTabPane>
+                      <CrudAccount url ="http://127.0.0.1:8080/acc" get="md/106" accUrl="http://127.0.0.1:8080/acc"
+                           headers={[
+                                        { title: t('common.name'), field: 'name' }
+                                        , { title: t('common.surname'), field: 'surname' }
+                                        , { title: t('common.sex'), field: 'sex' }
+                                        , { title: t('common.type'), field: 'type', removable: false }
+                                        , { title: t('common.birthYear'), field: 'birthYear', type: 'numeric' }
+                                        , {title: t('common.birthCity'), field: 'birthCity', lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' }}
+                                        ]}
+                                   initialState={initTree}
+                                   initAcc={initAcc}
+                                   addLabel    = "Add PACB"
+                                   updateLabel = "Submit"
+                                   title       = {t('common.title')}
+                                   form        = 'treeForm'>
                       </CrudAccount>
                   </CTabPane>
               </CTabContent>
