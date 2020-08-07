@@ -87,7 +87,24 @@ const initTree={hits:[
         {id: 6, name: 'f', surname: 'Baran', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child', parentId: 5,},
         {id: 6, name: 'ff', surname: 'Baranf', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child', parentId: 4,},
     ]}
-
+ const treeHeaders = {h:[{ title:t('account.id'), field: 'id' }
+            ,  { title:t('account.name'), field: 'name' }
+            ,  { title:t('account.account'), field: 'account' }
+            ,  { title:t('balancesheet.idebit'), field: 'idebit', type: 'numeric', minWidth:3 }
+            ,  { title:t('balancesheet.debit'), field: 'debit' , type: 'numeric', minWidth:3}
+            ,  { title:t('balancesheet.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
+            ,  { title:t('balancesheet.credit'), field: 'credit' , type: 'numeric', minWidth:3}
+        ]}
+const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name', label:t('account.name'), minWidth:8}
+    , {id:'description', label:t('account.description'), minWidth:30}
+    , {id:'modelid', label:'MId.', numeric:true, disablePadding:false, minWidth:1, format:(value) => value}
+    , {id:'account', label:t('account.account')}, {id:'company', label:t('common.company')}
+    , {id:'isDebit', label:t('account.debit_credit'), numeric:true, format:(value) => String(value)}
+    , {id:'balancesheet', label:t('account.balancesheet'), numeric:true, format:(value) => String(value)}
+    , {id:'enterdate', label:t('account.enterdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id:'postingdate', label:t('account.postingdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id:'changedate', label:t('account.changedate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    ]}
 
     return (
     <CRow>
@@ -187,16 +204,7 @@ const initTree={hits:[
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/acc" get="md/9" accUrl="http://127.0.0.1:8080/acc/accmd/9"
-                               headers = {[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name', label:t('account.name'), minWidth:8}
-                                 , {id:'description', label:t('account.description'), minWidth:30}
-                                 , {id:'modelid', label:'MId.', numeric:true, disablePadding:false, minWidth:1, format:(value) => value}
-                                 , {id:'account', label:t('account.account')}, {id:'company', label:t('common.company')}
-                                 , {id:'isDebit', label:t('account.debit_credit'), numeric:true, format:(value) => String(value)}
-                                 , {id:'balancesheet', label:t('account.balancesheet'), numeric:true, format:(value) => String(value)},
-                                 , {id:'enterdate', label:t('account.enterdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'postingdate', label:t('account.postingdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'changedate', label:t('account.changedate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                               ]}
+                               headers = {accHeaders.h}
                                initialState={initAcc}
                                initAcc={initAcc}
                                addLabel    = "Add Account"
@@ -377,7 +385,7 @@ const initTree={hits:[
                                    , {id:'lines', title:[{id:'lid', title:t('financials.line.id')}
                                            , {id:'account', title:t('financials.line.account')}, {id:'side', title:t('financials.line.side')}
                                            , {name:'oaccount', title:t('financials.line.oaccount')}
-                                           ,{name:'duedate', title:t('financials.line.duedate')}, {id:'text', title:t('financials.line.text')}
+                                           , {name:'duedate', title:t('financials.line.duedate')}, {id:'text', title:t('financials.line.text')}
                                            , {name:'amount', title:t('financials.line.amount')}, {id:'currency', title:t('common.currency')}
                                            , {name:'Actions', title:'Actions'}]}]}
                                initialState={initFrt}
@@ -410,15 +418,8 @@ const initTree={hits:[
                   </CTabPane>
                   <CTabPane>
                       <CrudAccount url ="http://127.0.0.1:8080/acc" get="md/106" accUrl="http://127.0.0.1:8080/acc"
-                           headers={[
-                                        { title: t('common.name'), field: 'name' }
-                                        , { title: t('common.surname'), field: 'surname' }
-                                        , { title: t('common.sex'), field: 'sex' }
-                                        , { title: t('common.type'), field: 'type', removable: false }
-                                        , { title: t('common.birthYear'), field: 'birthYear', type: 'numeric' }
-                                        , {title: t('common.birthCity'), field: 'birthCity', lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' }}
-                                        ]}
-                                   initialState={initTree}
+                                   headers = {treeHeaders.h}
+                                   initialState={initAcc}
                                    initAcc={initAcc}
                                    addLabel    = "Add PACB"
                                    updateLabel = "Submit"

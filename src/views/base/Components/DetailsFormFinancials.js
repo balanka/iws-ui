@@ -1,8 +1,10 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import {currencyFormatDE, dateFormat} from "../../../utils/utils";
-import GenericTable from "../../Tables2/GenericTable";
+//import GenericTable from "../../Tables2/GenericTable";
+import  EditableTable from "../../Tables2/EditableTable";
 import EditDetails from "./EditDetails";
 import {accountContext} from "./AccountContext";
+import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 
 export default function DetailsFormFinancials( props) {
   const {current, initialState, lineHeaders, data, accData, setCurrent, getCurrentRow} = props.detailsProps;
@@ -10,14 +12,31 @@ export default function DetailsFormFinancials( props) {
   const t = value.t
   const posted=current.posted
   console.log('current', current);
+  console.log('accData', accData);
   const [state, setState] = useState(initialState);
+  const mapping = item => <option key={item.id} value={item.id}>
+    {item.id+ " ".concat (item.name)}</option>;
+  const accDatax = accData.hits.map(mapping)
+  useEffect(() => { }, [current, setCurrent]);
+
+
+  const columns= [
+     {field:'id', title:t('financials.line.id')}
+    , {field:'account', title:t('financials.line.account'),  lookup: { accDatax }}
+    , {field:'side', title:t('financials.line.side')}
+    , {field:'oaccount', title:t('financials.line.oaccount'), lookup: {accDatax } }
+    , {field:'duedate', title:t('financials.line.duedate')}
+    , {field:'text', title:t('financials.line.text')}
+    , {field:'amount', title:t('financials.line.amount')}
+    , {field:'currency', title:t('common.currency')}
+    , {field:'Actions', title:'Actions'}
+    //, {field:'Actions', title:'Actions'}
+    ]
 
   const getInitState={...value.initialState.hits[0].lines[0], editing:false};
   const initAddLine =()=> {
     const row = getInitState;
     const lines_ = current.lines;
-    console.log('rowN', row);
-    console.log('lines_', lines_);
     const index_ = lines_.findIndex(obj => obj?.lid === row?.lid);
     const index= index_!=-1?index_:lines_.length+1
     lines_[index]= row;
@@ -28,8 +47,7 @@ export default function DetailsFormFinancials( props) {
     //value.editRow(row, false);
     setCurrent(current_);
   };
-  const mapping = item => <option key={item.id} value={item.id}>
-    {item.id+ " ".concat (item.name)}</option>;
+
 
   const editLine =(myCurrent)=> {
     console.log('myCurrent', myCurrent);
@@ -134,13 +152,13 @@ export default function DetailsFormFinancials( props) {
     </>
   }
 
+  console.log('currentXX', current);
+  console.log('current.linesX', current.lines);
+  console.log('valueXXZ', value);
   return (<>
-          <GenericTable data={(current.lines&&current.lines.length) > 0 ? current.lines:[value.initialState.hits[0].lines[0]]}
-                        renderData={renderDetails}
-                        renderTotal={renderTotal}
-                        renderDT = {renderDT}
-                        headers= {lineHeaders}
-                        sortFn={sortFunctionD} disabled={posted}/>
+         <EditableTable data={ (current.lines&&current.lines.length) >0 ? current.lines:[value.initialState.hits[0].lines[0]]}
+          columns={columns} rowStyle={rowStyle}  theme={theme} t={t}
+         />
           <EditDetails props={{value:value, accData:accData, initState:state, title:value.lineTitle, submitEditLine:submitEditLine
             , initAddLine:initAddLine, posted:posted, mapping:mapping, t:t}} />
         </>

@@ -1,9 +1,9 @@
-import React, {useEffect, useState, useContext} from 'react'
+import React, {useEffect, useState, useContext, createRef} from 'react'
 import {CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CButton} from '@coreui/react'
 import {  IoMdMenu} from "react-icons/io";
 import {dateFormat, capitalize} from '../../../utils/utils';
 import EnhancedTable from '../../Tables2/EnhancedTable';
-import DetailsFormFinancials from "./DetailsFormFinancials";
+//import DetailsFormFinancials from "./DetailsFormFinancials";
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import DatePicker from "react-datepicker";
@@ -13,7 +13,15 @@ import Grid from "react-fast-grid";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave} from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDoubleDown,
+  faAngleDoubleUp,
+  faPlusCircle,
+  faPlusSquare,
+  faSave
+} from "@fortawesome/free-solid-svg-icons";
+import EditableTable from "../../Tables2/EditableTable";
+import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -27,16 +35,11 @@ const FinancialsForm = () => {
   const value = useContext(accountContext);
   const t = value.t
   const [url,setUrl] = useState('');
-  console.log('value.headers', value.headers);
+  const tableRef = createRef();
+  //console.log('value.headers', value.headers);
   const HeadersWithLines=value.headers.filter(function(e) { return e.id === 'lines' });
   const lineHeaders=HeadersWithLines[0].title;
-  console.log('HeadersWithLines', HeadersWithLines);
-  console.log('lineHeaders', lineHeaders);
-  console.log('lineTitle', value.lineTitle);
-  var index = value.headers.indexOf('lines');
-  console.log('index_', index);
   const headers = value.headers.filter(function(e) { return e.id !== 'lines' });
-  console.log('headers', headers);
   const res  = useFetch(url, {});
   const [{ res2}] = useFetch(value.accUrl, {});
   const [{ res3}] = useFetch(value.ccUrl, {});
@@ -45,10 +48,6 @@ const FinancialsForm = () => {
   const getData =()=> { return data?.hits?data.hits:init().hits}
   const accData_=  res2?.hits?res2.hits:value.accData;
   const ccData_=  res3?.hits?res3.hits:value.ccData;
-  console.log('data_',data_)
-  console.log('accData_',accData_)
-  console.log('ccData_', ccData_);
-  console.log('value.initialState', value.initialState.hits[0].lines);
   const current_= value.user;
   const id_ = value.user.tid;
   const oid_ = value.user.oid;
@@ -134,41 +133,40 @@ const FinancialsForm = () => {
 
   const submitQuery = (event,modelid) => {
 
-    console.log("modelid", modelid);
 
     accData?.hits?.length<2? value.submitQuery(event, value.accUrl, setAccData, value.initAcc):void(0)
     ccData?.hits?.length<2? value.submitQuery(event, value.ccUrl, setCcData, value.initCc):void(0)
     const url_=value.url.concat('/ftrmd/').concat(modelid);
-    console.log("url_", url_);
+    //console.log("url_", url_);
     value.submitQuery(event, url_, setData, value.initialState);
-    console.log("dataZ", data);
+    //console.log("dataZ", data);
   };
   const handleModuleChange = event => {
     event.preventDefault();
     const { name, value } = event.target
     setFmodule(value);
     submitQuery(event, value);
-    console.log('getFilteredRows', getFilteredRows());
+    //console.log('getFilteredRows', getFilteredRows());
   };
   const  lineReducer = (accumulator, line) => {
-    console.log('accumulator', accumulator);
-    console.log('lineX', line);
+    //console.log('accumulator', accumulator);
+    //console.log('lineX', line);
     const x=accumulator + line.amount
-    console.log('XXX', x);
+    //console.log('XXX', x);
     return x;
   };
 
   const addAmount =(tr)=> {
-    console.log('lineReducerX', tr)
-    console.log('lineReducer', tr.lines.reduce(lineReducer, 0))
+    //console.log('lineReducerX', tr)
+    //console.log('lineReducer', tr.lines.reduce(lineReducer, 0))
     return {...tr, total: tr.lines.reduce(lineReducer, 0)}
   }
-  console.log('initX', init())
+ // console.log('initX', init())
   const dx=(data?.hits?data?.hits:init().hits).map( tr =>addAmount(tr));
-  console.log('lineReducerXdx', dx)
+  //console.log('lineReducerXdx', dx)
   function handleFilter(text) {
     const filtered = dx.filter(function(rc) {
-      console.log('rc.tid', rc)
+      //console.log('rc.tid', rc)
       return (rc.tid.toString().indexOf(text)>-1
         ||rc.oid.toString().indexOf(text)>-1
         ||rc.costcenter.indexOf(text)>-1
@@ -185,7 +183,7 @@ const FinancialsForm = () => {
         ||rc.posted.toString().indexOf(text)>-1
       )});
     const rows_=text?filtered:dx
-    console.log('filteredRows+', rows_);
+    //console.log('filteredRows+', rows_);
     setFilteredRows(rows_);
   }
   const getFilteredRows=()=>{
@@ -193,7 +191,7 @@ const FinancialsForm = () => {
   }
   const edit = id =>{
     const record = dx.find(obj => obj.tid === id);
-    console.log('record', record);
+    //console.log('record', record);
     value.editRow(record);
   }
 
@@ -255,8 +253,8 @@ const FinancialsForm = () => {
   const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
   const submitAdd = event => {
     event.preventDefault();
-    console.log("submitAdd1 current", current);
-    console.log("submitAdd1Parse"+transdate, new Date(transdate));
+    //console.log("submitAdd1 current", current);
+    //console.log("submitAdd1Parse"+transdate, new Date(transdate));
 
     const row = {tid:id, oid:oid, costcenter:costcenter, account:account, transdate:new Date(transdate).toISOString()
       , enterdate:new Date().toISOString(), postingdate:new Date().toISOString(), period:getPeriod(getCurrentDate()), posted:posted
@@ -265,13 +263,76 @@ const FinancialsForm = () => {
     console.log('submitAdd row', row);
     value.submitAdd(row, data);
     setCurrent(row);
-    console.log('submitAdd current', current);
+   // console.log('submitAdd current', current);
   };
 
+  const onNewLine =() => {
+    const ref = tableRef.current
+    ref.dataManager.changeRowEditing();
+    ref.setState({ ...ref.dataManager.getRenderState(),
+      showAddRow: !ref.state.showAddRow,
+    });
+  }
+
+  const oaccountC= ({ value, onChange, rowData, accData }) => (
+      <CSelect
+          value={value}
+          onChange={(event) => {
+            onChange(event.target.value);
+          }}
+      >
+        {accData}
+      </CSelect>
+  )
+
+  const accountC= ({ value, onChange, rowData, accData }) => (
+      <CSelect
+          value={value}
+          onChange={(event) => {
+            console.log('accData', accData);
+            console.log('value', value);
+            console.log('rowData', rowData);
+            onChange(event.target.value);
+          }}
+      >
+        {accData}
+      </CSelect>
+  )
+  const columns= [
+     {field:'lid', title:t('financials.line.id'), hidden:true}
+    , {field:'transid', title:"transid", hidden:true, initialEditValue:current.tid}
+    , {field:'account', title:t('financials.line.account'), editComponent: accountC, width: 10}
+    , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true, width:5
+    , cellStyle: {maxWidth: 10, padding:1},  headerStyle: {maxWidth: 10, padding:1}
+    }
+    , {field:'oaccount', title:t('financials.line.oaccount'), editComponent: oaccountC, width: 20}
+    , {field:'duedate', title:t('financials.line.duedate'), type:"date",
+      initialEditValue:initLine.duedate,
+      editComponent: ({ value, onChange, rowData }) => {
+      return (
+      <CInput bsSize="sm" type="text" id="duedate-id" name="duedate"
+                       className="input-sm" placeholder="date"
+                       onChange={(event, newValue) => {
+                         console.log('eventT', event.target.value);
+                         console.log('newValue',newValue);
+                         console.log('rowData',rowData);
+                         console.log('valueZ',value);
+                         onChange(newValue); // Can just be the value
+                       }}
+                       value={dateFormat(value.duedate, "dd.mm.yyyy")}/>
+
+      )}
+    }
+    , {field:'amount', title:t('financials.line.amount')}
+    , {field:'currency', title:t('common.currency'), initialEditValue:initLine.currency, width: 10}
+    , {field:'text', title:t('financials.line.text'), width: 300}
+  ]
+
   function buildForm(){
-    console.log('current1', current);
+    /*console.log('current1', current);
     console.log('filteredRows', filteredRows);
     console.log('dx_', dx);
+     */
     const addOrEdit = (typeof current.editing==='undefined')?editing:current.editing;
     const submit = addOrEdit ? submitEdit : submitAdd
     const props = { title: value.title, columns:headers, rows:getFilteredRows()
@@ -279,8 +340,8 @@ const FinancialsForm = () => {
       , post:submitPost, cancel: cancelEdit, handleFilter: handleFilter
       , rowsPerPageOptions: [5, 15, 25, 100]
     }
-    const detailsProps={current:current, initialState:initLine, lineHeaders:lineHeaders, data:data
-      , accData:accData, setCurrent:setCurrent, getCurrentRow}
+   // const detailsProps={current:current, initialState:initLine, lineHeaders:lineHeaders, data:data
+   //   , accData:accData, setCurrent:setCurrent, getCurrentRow}
     return <>
       <Grid container spacing={2}  direction="column" style={{...styles.outer}}>
          <CForm  className="form-horizontal" id ="financialsMasterform" onSubmit={ addOrEdit?submitEdit:submitAdd}>
@@ -297,6 +358,11 @@ const FinancialsForm = () => {
                    <option value={fmodule} selected >{fmodule}</option>
                    {modules.map(item => mapping(item))};
                  </CSelect>
+                 <div className="card-header-actions" style={{  align: 'right' }}>
+                   <CButton color="link" className="card-header-action btn-minimize" onClick={onNewLine}>
+                     <FontAwesomeIcon icon={faPlusCircle} />
+                   </CButton>
+                 </div>
                  <div className="card-header-actions" style={{  align: 'right' }}>
                    <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
                      <FontAwesomeIcon icon={faPlusSquare} />
@@ -423,13 +489,13 @@ const FinancialsForm = () => {
                   />
                 </CCol>
               </CFormGroup>
-                <CFormGroup>
-                  <CCol sm="12" md="12">
-                    <CInput disabled={posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
+              <EditableTable data={(current.lines&&current.lines.length) >0 ? current.lines:[value.initialState.hits[0].lines[0]]}
+                             columns={columns} rowStyle={rowStyle}  theme={theme} t={t} tableRef={tableRef}
+              />
+               <CInput disabled={posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
                            placeholder="text" value={text} onChange={handleInputChange} />
-                  </CCol>
-                </CFormGroup>
-                <DetailsFormFinancials detailsProps={detailsProps}/>
+
+
           </CCollapse>
         </CForm>
       </Grid>
@@ -441,4 +507,5 @@ const FinancialsForm = () => {
 
 };
 export default FinancialsForm;
+// <DetailsFormFinancials detailsProps={detailsProps}/>
 

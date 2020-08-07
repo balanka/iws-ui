@@ -11,7 +11,9 @@ export const theme = createMuiTheme({
             main: '#ff9100',
         },
     },
-
+    typography: {
+        fontSize: 10
+    }
 });
 
 
@@ -39,13 +41,17 @@ export const  columns=[
                             color:'black',
                             padding:0.5,
                             height:3,
+                            fontsize:10,
                             backgroundColor:"#EEEE"
                         }:
                        {
                         color:'black',
                         padding:0.5,
                         height:3,
-                        backgroundColor:"#fff9e6"}
+                        fontsize:10,
+                        backgroundColor:"#fff9e6"
+                       }
+
                 }
 
 
