@@ -5,11 +5,7 @@ import {
   CToggler,
   CHeaderBrand,
   CHeaderNav,
-  CHeaderNavItem,
-  CHeaderNavLink,
-  CSubheader,
-  CBreadcrumbRouter,
-  CLink, CSelect, CFormGroup, CInputGroup
+  CLink, CSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {languages} from '../views/pages/login/Login'
