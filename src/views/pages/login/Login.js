@@ -46,8 +46,9 @@ const Login = () => {
   const submit = event => {
     event.preventDefault();
     const url ="http://localhost:8080/users/login"
-    const url2 ="http://localhost:8080/iws/mf"
-    const data={"userName": "bmk", "password": "wuduwali2x"}
+    console.log("username", username);
+    console.log("pwd", pwd);
+    const data={"userName": username, "password": pwd}
     const auth=login(url, data);
     //const auth = useFetch(url,data)
     console.log("auth", auth);
@@ -94,7 +95,7 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm>
+                  <CForm >
                     <h1>Login</h1>
                     <p className="text-muted">{t('login.signIn')}</p>
                     <CInputGroup className="mb-3">
@@ -103,7 +104,8 @@ const Login = () => {
                           <CIcon name="cil-user" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="text" placeholder="Username" id="username" autoComplete="username" onChange={handleInputChange}/>
+                      <CInput type="text" placeholder="Username" id="username" autoComplete="username"
+                              onChange={(event ) =>{setUsername(event.target.value)}}/>
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
@@ -111,7 +113,8 @@ const Login = () => {
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="password" id="pwd" placeholder="Password" autoComplete="current-password" onChange={handleInputChange}/>
+                      <CInput type="password" id="pwd" placeholder="Password" autoComplete="current-password"
+                              onChange={(event ) =>{setPwd(event.target.value)}}/>
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
