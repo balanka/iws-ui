@@ -1,4 +1,36 @@
 {
+  "muitable": {
+  "emptyDataSourceMessage": "Keine Einträge",
+  "addTooltip": "Hinzufügen",
+  "deleteTooltip": "Löschen",
+  "editTooltip": "Bearbeiten",
+  "deleteText": "Diese Zeile wirklich löschen?",
+  "cancelTooltip": "Abbrechen",
+  "saveTooltip": "Speichern",
+  "placeholder": "Spalten ziehen ...",
+  "groupedBy": "Gruppiert nach:",
+  "actions": "Aktionen",
+  "labelDisplayedRows": "{from}-{to} von {count}",
+  "labelRowsSelect": "Zeilen",
+  "labelRowsPerPage": "Zeilen pro Seite:",
+  "firstAriaLabel": "Erste Seite",
+  "firstTooltip": "Erste Seite",
+  "previousAriaLabel": "Vorherige Seite",
+  "previousTooltip": "Vorherige Seite",
+  "nextAriaLabel": "Nächste Seite",
+  "nextTooltip": "Nächste Seite",
+  "lastAriaLabel": "Letzte Seite",
+  "lastTooltip": "Letzte Seite",
+  "addRemoveColumns": "Spalten hinzufügen oder löschen",
+  "nRowsSelected": "{0} Zeile(n) ausgewählt",
+  "showColumnsTitle": "Zeige Spalten",
+  "showColumnsAriaLabel": "Zeige Spalten",
+  "exportTitle": "Export",
+  "exportAriaLabel": "Export",
+  "exportName": "Export als CSV",
+  "searchTooltip": "Suche",
+  "searchPlaceholder": "Suche"
+},
   "common": {
     "title": "Ansprache",
     "name": "Name",
@@ -13,6 +45,7 @@
     "to"        :  "Bis",
     "total"     : "Total",
     "company"   : "Mandant"
+
   },
   "account": {
     "title":"Konto",
