@@ -123,7 +123,7 @@ const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
                          , {id:'modelid', label:'M.Id', minWidth:1, disablePadding: true}, {id:'company', label:t('customer.company')
                            , minWidth:1, disablePadding: true}]}
 
-                       initialState={initVat}
+                       initialState={initCust}
                        initAcc={initAcc}
                        addLabel    = "Add Customer"
                        updateLabel = "Edit Customer"
