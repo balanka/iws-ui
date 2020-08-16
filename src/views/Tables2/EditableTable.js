@@ -1,10 +1,8 @@
 import React, {useEffect, useState, createRef} from 'react';
 import MaterialTable from 'material-table';
-import {rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
 import Add from "@material-ui/icons/Add";
 import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
-import Edit from "@material-ui/icons/Edit";
 import FirstPage from "@material-ui/icons/FirstPage";
 import ChevronRight from "@material-ui/icons/ChevronRight";
 import LastPage from "@material-ui/icons/LastPage";
@@ -12,11 +10,11 @@ import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import Search from "@material-ui/icons/Search";
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import RateReviewIcon from '@material-ui/icons/RateReview';
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+
 
 export default function EditableTable(props) {
     console.log('propsD',props);
-    const {data, columns,  rowStyle,  theme, t , addRow, tableRef} = props
+    const {data, columns,  rowStyle,  theme, t , addRow, tableRef, editable} = props
     console.log('props.data',props.data);
     const dx=data
     console.log('state.dx',dx);
@@ -27,7 +25,7 @@ export default function EditableTable(props) {
 
     return (
         <MaterialTable
-
+            editable={editable}
             tableRef={tableRef}
             //title={props.title}
             columns={columns}
@@ -45,50 +43,8 @@ export default function EditableTable(props) {
                 ResetSearch: () => <Clear />,
                 Search: () => <Search />
             }}
-            editable={{
-               /* onRowAdd: (newData) =>
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve();
-                            setState((prevState) => {
-                                const data_ = [...prevState.data];
-                                data_.push(newData);
-                                return { ...prevState, data:data_ };
-                            });
-                        }, 600);
-                    }),
 
-                */
-                onRowUpdate: (newData, oldData) =>
-
-                    new Promise((resolve) => {
-                        console.log('tableRef.current', tableRef.current);
-                        setTimeout(() => {
-                            resolve();
-
-                            if (oldData) {
-                                setState((prevState) => {
-                                    const datax = [...prevState.data];
-                                    datax[datax.indexOf(oldData)] = newData;
-                                    return { ...prevState, data:datax };
-                                });
-                            }
-                        }, 600);
-                    }),
-                onRowDelete: (oldData) =>
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve();
-                            setState((prevState) => {
-                                const datax = [...prevState.data];
-                                datax.splice(datax.indexOf(oldData), 1);
-                                return { ...prevState, data:datax };
-                            });
-                        }, 600);
-                    }),
-            }}
             options={{
-                //overflowY:false,
                 toolbar:false,
                 draggable:false,
                 header:true,
@@ -100,7 +56,7 @@ export default function EditableTable(props) {
                 filtering: false,
                 search: false,
                 cellStyle: {padding: '0.3em', fontSize: 10,},
-                //headerStyle: {padding: '0.3em', fontSize: 10,},
+                headerStyle: {padding: '0.3em', fontSize: 10,  position: 'sticky'},
                 root: {
                     '&:nth-child(odd)': {
                         backgroundColor: '#fff9e6'//theme.palette.background.default,
