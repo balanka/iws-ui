@@ -22,7 +22,7 @@ import {
 import EditableTable from "../../Tables2/EditableTable";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 
-import  {Linescolumns, editable, styles} from '../../Tables2/LineFinancialsForm'
+import  {Linescolumns, editable, styles} from '../../Tables2/LineFinancialsProps'
 const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
