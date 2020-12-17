@@ -19,7 +19,7 @@ import {
   CInputCheckbox
 } from '@coreui/react'
 const Tabs2 = React.lazy(() => import('../../base/Tabs2/Tabs2'));
-const Tabs = React.lazy(() => import('../../base/tabs/Tabs'));
+//const Tabs = React.lazy(() => import('../../base/tabs/Tabs'));
 const DataTable = React.lazy(() => import('../../tables/data-table/DataTable'));
 
 const renderTab = (show)=> show?<Tabs2/>:<DataTable/>
