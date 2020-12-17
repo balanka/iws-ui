@@ -25,7 +25,7 @@ const styles = {
   }
 };
 const VatForm = () => {
-  const [profile, setProfile] = useGlobalState('profile');
+  const [profile, ] = useGlobalState('profile');
   const [state, setState] = useState({collapse:true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
   const value = useContext(accountContext);
@@ -99,11 +99,11 @@ const VatForm = () => {
 
   const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {handleFilter('')}, [data]);
-
+ const col1="name"
   function handleFilter(text) {
     const  filtered = data.hits.filter(function(rc) {
       return (rc.id.indexOf(text)>-1
-        ||rc.name.indexOf(text)>-1
+        ||`rc.${col1}.indexOf(text)`>-1
         ||rc.description.indexOf(text)>-1
         ||rc.percent.toString().indexOf(text)>-1
         ||rc.inputVatAccount.indexOf(text)>-1

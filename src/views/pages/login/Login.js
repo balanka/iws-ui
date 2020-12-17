@@ -1,4 +1,4 @@
-import React , {useContext, useState} from 'react'
+import React , { useState} from 'react'
 import { Link } from 'react-router-dom'
 import {
   CButton,
@@ -15,7 +15,7 @@ import {
   CRow, CSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {accountContext, useGlobalState} from '../../base/Components/AccountContext';
+import {useGlobalState} from '../../base/Components/AccountContext';
 import axios from "axios";
 import { useTranslation} from 'react-i18next';
 export const languages = {data:[
@@ -27,7 +27,6 @@ export const languages = {data:[
 const Login = () => {
   const { t, i18n } = useTranslation();
   const [profile, setProfile] = useGlobalState('profile');
-  const value = useContext(accountContext);
   const [username, setUsername] = useState();
   const [pwd, setPwd] = useState();
   const [company, setCompany] = useState();
@@ -78,10 +77,10 @@ const Login = () => {
   const handleInputChange = event => {
     event.preventDefault();
     const { name, value } = event.target;
-    if(name =='username') setUsername(value)
-    if(name =='pwd') setPwd(value)
-    if(name =='company') setCompany(value)
-    if(name =='language') {
+    if(name ==='username') setUsername(value)
+    if(name ==='pwd') setPwd(value)
+    if(name ==='company') setCompany(value)
+    if(name ==='language') {
       setLanguage(value)
       changeLanguage(value)
     }

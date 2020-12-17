@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {setDefaultLocale } from  "react-datepicker";
-import de from 'date-fns/locale/de';
 import {Col, Nav, NavItem, NavLink, Row, TabContent, TabPane} from 'reactstrap';
 import {dateFormat} from "../../../utils/utils";
 import {CrudAccount} from '../Components/CrudAccount'
@@ -15,10 +14,6 @@ export default function Tabs2(props){
   const { t, i18n } = useTranslation();
 const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
    setDefaultLocale('de');
-
-  const changeLanguage = lng => {
-    i18n.changeLanguage(lng);
-  };
 
   const toggle = (tabPane, tab) =>{
     const newArray = state.activeTab.slice();

@@ -21,11 +21,11 @@ const styles = {
   }
 };
 export default function TreeTableForm ()  {
-  const [profile, setProfile] = useGlobalState('profile');
-  const { t, i18n } = useTranslation();
+  const [profile, ] = useGlobalState('profile');
+  const { t,  } = useTranslation();
   const value = useContext(accountContext);
-  const { data, isLoading, hasError, errorMessage, updateUrl } = useFetch2(value.url)
-  const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
+  const { data, isLoading, updateUrl } = useFetch2(value.url)
+  const [{ res2 }, ] = useFetch(value.accUrl, {});
   const init = ()=> {return value.initialState}
   console.log("value.accUrl", value.accUrl);
   console.log("data_", data);
@@ -69,10 +69,8 @@ export default function TreeTableForm ()  {
 
     fetchData(value.accUrl, setAccData);
   };
-  const changeLanguage = lng => {
-    i18n.changeLanguage(lng);
-  };
-  const toggle= ()=> {
+
+  const toggle = ()=> {
     console.log("accData", accData)
     accData?.hits?.length<2? submitFetch():
     setState2({...state2, collapse: !state2.collapse });

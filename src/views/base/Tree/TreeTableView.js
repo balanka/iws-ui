@@ -1,6 +1,6 @@
-import React, {useState, createRef, useContext, useEffect} from 'react';
+import React, {useState, createRef} from 'react';
 
-import {capitalize, currencyFormatDE} from "../../../utils/utils"
+import {currencyFormatDE} from "../../../utils/utils"
 import { TreeTable, TreeState } from 'cp-react-tree-table';
 
 //import './index.css';
@@ -11,7 +11,7 @@ import {useTranslation} from "react-i18next";
 
 
 export default function TreeTableView ( props)  {
-  const { t, i18n } = useTranslation();
+  const { t, } = useTranslation();
   const  data  = props.data
   console.log("propsZ", props);
   const treeTableRef = createRef();
