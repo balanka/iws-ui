@@ -105,6 +105,34 @@ export const Linescolumns =(data, line, current, t) => [
        currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     , {field:'text', title:t('financials.line.text'), width: 300}
   ]
+export const Options = ({
+        toolbar:false,
+        draggable:true,
+        header:true,
+        grouping:false,
+        sorting:true,
+        columnsButton:true,
+        addRowPosition: "first",
+        paging:false,
+        showFirstLastPageButtons:false,
+        showTitle:false,
+        padding:"dense",
+        filtering: false,
+        search: false,
+        selection: false,
+        cellStyle: {padding: '0.3em', fontSize: 10,},
+        headerStyle: {padding: '0.3em', fontSize: 10,  position: 'sticky'},
+        root: {
+         '&:nth-child(odd)': {
+            backgroundColor: '#fff9e6'//theme.palette.background.default,
+           },
+        color: '#eee',
+            padding: 0.5,
+            height: 3,
+            hover: true
+        },
 
+    rowStyle: rowStyle
+})
 
 

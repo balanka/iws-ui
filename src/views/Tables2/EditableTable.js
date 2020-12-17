@@ -13,28 +13,20 @@ import RateReviewIcon from '@material-ui/icons/RateReview';
 
 
 export default function EditableTable(props) {
-    const {data, columns,  rowStyle,  theme, t , addRow, tableRef, editable} = props
+    const {Options, flag, data, columns, t , addRow, tableRef, editable} = props
     const [selectedRows, setSelectedRows] = useState([]);
     console.log('props.data',props.data);
     const dx=data
     console.log('state.dx',dx);
-   const [state, setState] = useState({data:dx});
     useEffect(() => {}, [props]);
-
 
     const [components] = useState({
         FilterRow: (props) => <MTableFilterRow {...props} />
     });
-    console.log('state.data',state.data);
-
-    const rowStyle1 = (rowData) => ({ boxShadow: rowData.tableData.checked ? '0px 24px 73px -15px rgba(0,0,0,0.3)' : ''
-        , transform: rowData.tableData.checked ? 'scale(1.01)' : 'scale(1)', transition: rowData.tableData.checked ?
-            'all 0.1s ease' : 'all 0.1s ease', backgroundColor: rowData.tableData.checked ?
-            'rgba(245, 0, 87, 0.06)' : '', })
 
     return (
         <MaterialTable
-            editable={editable}
+            editable={flag?null:editable}
             tableRef={tableRef}
             //title={props.title}
             columns={columns}
@@ -52,42 +44,9 @@ export default function EditableTable(props) {
                 ResetSearch: () => <Clear />,
                 Search: () => <Search />
             }}
-
-            options={{
-                toolbar:false,
-                draggable:true,
-                header:true,
-                grouping:false,
-                sorting:true,
-                columnsButton:true,
-                addRowPosition: "first",
-                paging:false,
-                showFirstLastPageButtons:false,
-                showTitle:false,
-                padding:"dense",
-                filtering: false,
-                search: false,
-                selection: false,
-                cellStyle: {padding: '0.3em', fontSize: 10,},
-                headerStyle: {padding: '0.3em', fontSize: 10,  position: 'sticky'},
-                root: {
-                    '&:nth-child(odd)': {
-                        backgroundColor: '#fff9e6'//theme.palette.background.default,
-                    },
-                    //boxShadow: '2px 2px 2px 1px rgba(0, 0, 0, 0.2)',
-                    color: '#eee',
-                    padding: 0.5,
-                    height: 3,
-                    hover: true
-                },
-
-                rowStyle: rowStyle
-            }}
+            options={Options}
             components={components}
-            onSelectionChange={(rows) => {
-                console.log('rows>>>>>',rows);
-                setSelectedRows(rows);
-            }}
+            onSelectionChange={(rows) =>  setSelectedRows(rows)}
             localization={{
                 body: {
                     emptyDataSourceMessage:t('muitable.emptyDataSourceMessage'),

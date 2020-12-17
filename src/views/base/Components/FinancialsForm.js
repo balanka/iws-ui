@@ -22,7 +22,7 @@ import {
 import EditableTable from "../../Tables2/EditableTable";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 
-import  {Linescolumns, editable, styles} from '../../Tables2/LineFinancialsProps'
+import  {Options, Linescolumns, editable, styles} from '../../Tables2/LineFinancialsProps'
 const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
@@ -428,7 +428,7 @@ const FinancialsForm = () => {
                   />
                 </CCol>
               </CFormGroup>
-              <EditableTable data={(current.lines&&current.lines.length) >0 ? current.lines:[value.initialState.hits[0].lines[0]]}
+              <EditableTable Options ={Options} flag={current.posted} data={(current.lines&&current.lines.length) >0 ? current.lines:[value.initialState.hits[0].lines[0]]}
                              columns={columnsX}  rowStyle={rowStyle}  theme={theme} t={t} tableRef={tableRef} editable={editableX}
               />
                <CInput disabled={posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
