@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -11,16 +11,17 @@ import {StyledTableCell, StyledTableRow, useStyles_} from './EnhancedTableHelper
 
 export default function EnhancedTable( props) {
         const {title, columns, rows, rowsPerPageOptions, edit, editable, submit, cancel
-            , post, useStylesx, handleFilter, reducerFn, renderTotal} = props.props;
+            , post, useStylesx, handleFilter, reducerFn, renderTotal, selected} = props.props;
         const useStyles=useStylesx?useStylesx:useStyles_;
         const classes = useStyles();
         const [order, setOrder] = useState('asc');
         const [orderBy, setOrderBy] = useState('id');
-        const [selected, setSelected] = useState([]);
+        const [selected_, setSelected_] = useState(selected==='undefined'?[]:selected.filter(() => true));
         const [page, setPage] = useState(0);
         const [dense, setDense] = useState(true);
         const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
 
+         useEffect(() => {}, [rows]);
 
         const handleRequestSort = (event, property) => {
             const isAsc = orderBy === property && order === 'asc';
@@ -29,15 +30,15 @@ export default function EnhancedTable( props) {
         };
 
         const handleSelectAllClick = (event) => {
-            setSelected([]);
+            setSelected_([]);
         };
 
   const handleChecked = (id) => {
-    const selectedIndex = selected.indexOf(id);
+    const selectedIndex = selected_.indexOf(id);
     console.log('id', id);
     console.log('selectedIndex', selectedIndex);
     edit(id);
-    setSelected([id]);
+    setSelected_([id]);
 
   }
 
@@ -45,14 +46,14 @@ export default function EnhancedTable( props) {
     const NoData=() => <StyledTableRow><StyledTableCell colSpan={columns.length}/></StyledTableRow>
 
         const handleClick = (event, id) => {
-            const selectedIndex = selected.indexOf(id);
+            const selectedIndex = selected_.indexOf(id);
           const { name, value } = event.target;
           console.log('namez', name );
           console.log('valuez', value );
             console.log('idz', id);
            console.log('selectedIndex', selectedIndex);
             edit(id);
-           setSelected([id]);
+           setSelected_([id]);
         };
         const handleChangeRowsPerPage = (event) => {
             setRowsPerPage(parseInt(event.target.value, 10));
@@ -60,7 +61,7 @@ export default function EnhancedTable( props) {
         };
        const handleChangePage = (event, newPage) => setPage(newPage);
         const handleChangeDense = (event) => setDense(event.target.checked);
-        const isSelected = (name) => selected.indexOf(name) !== -1;
+        const isSelected = (name) => selected_.indexOf(name) !== -1;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
         const renderTableRow =(row, index)=>{
         const id=row?.id?row.id:row.tid
@@ -99,11 +100,11 @@ export default function EnhancedTable( props) {
 
 
         return ( <>
-                    <EnhancedTableToolbar title={title} numSelected={selected.length} submit ={submit}
+                    <EnhancedTableToolbar title={title} numSelected={selected_.length} submit ={submit}
                                           cancel ={cancel}
                                           post   ={post}
-                                          selected={selected}
-                                          setSelected={setSelected}
+                                          selected={selected_}
+                                          setSelected={setSelected_}
                                           handleFilter={handleFilter}
                                           editing={editable ==='undefined'?true:editable}
                                           handleSelectAllClick={handleSelectAllClick} style={{height: 15, padding:0}}/>
@@ -113,7 +114,7 @@ export default function EnhancedTable( props) {
                             aria-labelledby="tableTitle" style={{padding:0}}>
                             <EnhancedTableHead
                                 classes={classes}
-                                numSelected={selected.length}
+                                numSelected={selected_.length}
                                 order={order}
                                 orderBy={orderBy}
                                 onSelectAllClick={handleSelectAllClick}
@@ -124,7 +125,7 @@ export default function EnhancedTable( props) {
                                 style={{height:10, padding:0}}
                             />
                             <TableBody>
-                                { console.log('rowsrowsrowsrowsrowsrows', rows.hits)}
+                                { console.log('rowsrowsrowsrowsrowsrows', rows)}
                                 { console.log('rowsrowsrowsrowsrowsrowsL', rows.length)}
                                 {
                                    rows.length>0?stableSort(rows, getComparator(order, orderBy))

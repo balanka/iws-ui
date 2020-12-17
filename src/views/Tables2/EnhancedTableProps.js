@@ -12,17 +12,17 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
+//import DeleteIcon from '@material-ui/icons/Delete';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import AddIcon from '@material-ui/icons/Add';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import FilterListTwoToneIcon from '@material-ui/icons/FilterListTwoTone';
+//import AddIcon from '@material-ui/icons/Add';
+//import FilterListIcon from '@material-ui/icons/FilterList';
+//import FilterListTwoToneIcon from '@material-ui/icons/FilterListTwoTone';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import FilterListSharpIcon from '@material-ui/icons/FilterListSharp';
 
 import CancelTwoToneIcon from '@material-ui/icons/CancelTwoTone';
-import {CheckBox} from "@material-ui/icons";
-import {Col, Input} from "reactstrap";
+//import {CheckBox} from "@material-ui/icons";
+import {Input} from "reactstrap";
 
 
 const StyledTableCell = withStyles((theme) => ({
