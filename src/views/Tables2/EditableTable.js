@@ -13,7 +13,6 @@ import RateReviewIcon from '@material-ui/icons/RateReview';
 
 
 export default function EditableTable(props) {
-    //console.log('propsD',props);
     const {data, columns,  rowStyle,  theme, t , addRow, tableRef, editable} = props
     const [selectedRows, setSelectedRows] = useState([]);
     console.log('props.data',props.data);
@@ -28,7 +27,10 @@ export default function EditableTable(props) {
     });
     console.log('state.data',state.data);
 
-    const rowStyle1 = (rowData) => ({ boxShadow: rowData.tableData.checked ? '0px 24px 73px -15px rgba(0,0,0,0.3)' : '', transform: rowData.tableData.checked ? 'scale(1.01)' : 'scale(1)', transition: rowData.tableData.checked ? 'all 0.1s ease' : 'all 0.1s ease', backgroundColor: rowData.tableData.checked ? 'rgba(245, 0, 87, 0.06)' : '', })
+    const rowStyle1 = (rowData) => ({ boxShadow: rowData.tableData.checked ? '0px 24px 73px -15px rgba(0,0,0,0.3)' : ''
+        , transform: rowData.tableData.checked ? 'scale(1.01)' : 'scale(1)', transition: rowData.tableData.checked ?
+            'all 0.1s ease' : 'all 0.1s ease', backgroundColor: rowData.tableData.checked ?
+            'rgba(245, 0, 87, 0.06)' : '', })
 
     return (
         <MaterialTable
@@ -72,11 +74,13 @@ export default function EditableTable(props) {
                     '&:nth-child(odd)': {
                         backgroundColor: '#fff9e6'//theme.palette.background.default,
                     },
+                    //boxShadow: '2px 2px 2px 1px rgba(0, 0, 0, 0.2)',
                     color: '#eee',
                     padding: 0.5,
                     height: 3,
                     hover: true
                 },
+
                 rowStyle: rowStyle
             }}
             components={components}

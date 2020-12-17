@@ -21,16 +21,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import EditableTable from "../../Tables2/EditableTable";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-const styles = {
-  outer: {
-    borderRadius: 5,
-    boxShadow: "0 10px 30px #BBB",
-    padding: 10
-  },
-};
 
+import  {Linescolumns, editable, styles} from '../../Tables2/LineFinancialsForm'
 const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
@@ -216,17 +208,6 @@ const FinancialsForm = () => {
     console.log('currentz', current);
     setCurrent(row);
   };
-
-  const mapping2_ = (acc) =>
-      <MenuItem key={acc.id} value={acc.id}>
-        {acc.id.concat( " ").concat(acc.name)}
-      </MenuItem>
-  const mapping2x = (acc) =>
-      <MenuItem key={acc.name.concat(acc.id)} value={acc.name}>
-        {acc.name.concat( " ").concat(acc.id)}
-      </MenuItem>
-
-
   const mapping2 = item => <option key={item.name} value={item.name}>
     {item.name+" ".concat(item.id)}</option>;
 
@@ -286,92 +267,11 @@ const FinancialsForm = () => {
       showAddRow: !ref.state.showAddRow,
     });
   }
-  const accountD=(value, onRowDataChange, rowData) => (
-      <Select
-          value={value}
-          onChange={(event) => {
-            onRowDataChange({
-              ...rowData,
-              account: (event.target.value)
-            });
-          }}
-      >
-        {accData.hits.map(mapping2_)}
-      </Select>
-  )
-const accountC=(value, onRowDataChange, rowData) => (
-      <Select
-          value={value}
-          onChange={(event) => {
-            onRowDataChange({
-              ...rowData,
-              oaccount: (event.target.value)
-            });
-          }}
-      >
-        {accData.hits.map(mapping2_)}
-      </Select>
-  )
 
-
-  const  editable={
-   /* onRowAdd: newData =>
-        new Promise((resolve, reject) => {
-          setTimeout(() => {
-           // setData([...current, newData]);
-
-            resolve();
-          }, 1000)
-        }),
-
-    */
-        onRowUpdate: (newData, oldData) =>
-        new Promise((resolve, reject) => {
-          console.log('newData', newData)
-          console.log('oldData', oldData)
-          setTimeout(() => {
-            const currentx = {...current};
-            const index = currentx.lines.findIndex(obj => obj.lid === newData.lid);
-            currentx.lines[index] = newData;
-            console.log('currentxX', currentx)
-            setCurrent({...currentx});
-            console.log('currentxXX', current)
-            resolve();
-          }, 1000)
-        }),
-        onRowDelete: oldData =>
-        new Promise((resolve, reject) => {
-          setTimeout(() => {
-            const dataDelete = [...current.lines];
-            const index = oldData.tableData.id;
-            dataDelete.splice(index, 1);
-            setData([...dataDelete]);
-
-            resolve()
-          }, 1000)
-        }),
-  }
-  const columns= [
-     {field:'lid', title:t('financials.line.id'), hidden:true}
-    , {field:'transid', title:"transid", hidden:true, initialEditValue:current.tid}
-    , {field:'account', title:t('financials.line.account'), editComponent:({ value, onRowDataChange, rowData }) =>
-          accountD ( value, onRowDataChange, rowData ), width: 20}
-    , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true, width:10
-    //, cellStyle: {maxWidth: 10, padding:1},  headerStyle: {maxWidth: 10, padding:1}
-    }
-    , {field:'oaccount', title:t('financials.line.oaccount'), editComponent:({ value, onRowDataChange, rowData }) =>
-          accountC ( value, onRowDataChange, rowData ), width: 20}
-    , {field:'duedate', title:t('financials.line.duedate'), type:"date",
-      initialEditValue:initLine.duedate,
-      dateSetting: { locale:"de" } }
-    , {field:'amount', title:t('financials.line.amount'), type:"currency",
-      currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
-    //, {field:'currency', title:t('common.currency'), initialEditValue:initLine.currency, width: 10}
-    , {field:'text', title:t('financials.line.text'), width: 300}
-  ]
+  const  editableX = editable(current, setCurrent, setData);
+  const columnsX = Linescolumns(accData.hits, initLine, current, t);
 
   function buildForm(){
-
     const addOrEdit = (typeof current.editing==='undefined')?editing:current.editing;
     const submit = addOrEdit ? submitEdit : submitAdd
     const props = { title: value.title, columns:headers, rows:getFilteredRows()
@@ -529,7 +429,7 @@ const accountC=(value, onRowDataChange, rowData) => (
                 </CCol>
               </CFormGroup>
               <EditableTable data={(current.lines&&current.lines.length) >0 ? current.lines:[value.initialState.hits[0].lines[0]]}
-                             columns={columns} rowStyle={rowStyle}  theme={theme} t={t} tableRef={tableRef} editable={editable}
+                             columns={columnsX}  rowStyle={rowStyle}  theme={theme} t={t} tableRef={tableRef} editable={editableX}
               />
                <CInput disabled={posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
                            placeholder="text" value={text} onChange={handleInputChange} />
