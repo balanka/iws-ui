@@ -6,7 +6,6 @@ import VatForm from "./VatForm";
 import PACBForm  from "./PACBForm";
 import JournalForm from "./JournalForm";
 import FinancialsForm from "./FinancialsForm";
-import GenericMasterfileForm from "./GenericMasterfileForm";
 import BankStatementForm from './BankStatementForm';
 import {AccountContext, useGlobalState} from "./AccountContext";
 import Login from '../../pages/login/Login'
@@ -32,8 +31,7 @@ export  function CrudAccount  (props) {
       balancesheetForm : (<TreeTableForm/>),
       journalForm      : (<JournalForm/>),
       loginForm        : (<Login/>),
-      treeForm        : (<BasicTreeTable/>),
-      masterfileForm   : (<GenericMasterfileForm/>)
+      treeForm        : (<BasicTreeTable/>)
     };
     return (<Fragment>
            {componentLookup[componentName]}
