@@ -22,7 +22,7 @@ import {
 import {useTranslation} from "react-i18next";
 
 const TheHeader = () => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const dispatch = useDispatch()
   const asideShow = useSelector(state => state.asideShow)
   const darkMode = useSelector(state => state.darkMode)

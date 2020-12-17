@@ -6,7 +6,7 @@ const useFetch2 = (initialUrl, skip = false) => {
     const [isLoading, setIsLoading] = useState(false)
     const [hasError, setHasError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-    const [profile, setProfile] = useGlobalState('profile');
+    const [profile, ] = useGlobalState('profile');
 
     useEffect(() => {
         const fetchData = async () => {
