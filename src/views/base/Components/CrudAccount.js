@@ -125,6 +125,7 @@ export  function CrudAccount  (props) {
     };
 
     const deleteUser =() => setEditing(false);
+    
     const editRow = (current_, isNew)  => {
       console.log('isNew', isNew );
       console.log('current_', current_ );
@@ -140,7 +141,7 @@ export  function CrudAccount  (props) {
           <AccountContext  form ={props.form} url={props.url}  get={props.get} title={props.title} lineTitle={props.lineTitle}
                            accUrl={props.accUrl} ccUrl={props.ccUrl} submitAdd={submitAdd} submitGet={submitGet} login={login}
                            editing={editing} setEditing={setEditing} editRow={editRow} current={current}
-                           setCurrent={setCurrent} submitEdit={submitEdit} submitPost={submitPost} initAcc={props.initAcc}
+                           setCurrent={setCurrent} submitEdit={submitEdit} submitPost={submitPost} 
                            initialState={props.initialState} addLabel={props.addLabel} headers={props.headers}
                            initAcc={props.initAcc} initCc={props.initCc} updateLabel={props.updateLabel}
                            deleteUser={deleteUser} submitQuery={submitQuery}>

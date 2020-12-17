@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {CBadge, CButton, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
+import {CBadge, CButton, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect} from '@coreui/react'
 import EnhancedTable from '../../Tables2/EnhancedTable';
 import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelper'
 import {accountContext, useGlobalState} from './AccountContext';
@@ -19,25 +19,20 @@ const styles = {
     }
 };
 const PACBForm = () => {
-  const { t, i18n } = useTranslation();
+  const { t,  } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
-  const [profile, setProfile] = useGlobalState('profile');
-  const [url,setUrl] = useState('');
+  const [profile, ] = useGlobalState('profile');
+  const [ , setUrl] = useState('');
   const value = useContext(accountContext);
-  const [{ res, isLoading, isError }, doFetch]= useFetch(value.url, {});
-  const [{ res2, isLoading2, isError2 }, doFetch2] = useFetch(value.accUrl, {});
+  const [{ res}, ]= useFetch(value.url, {});
+  const [{ res2},] = useFetch(value.accUrl, {});
   const data_ =  res?.hits?res.hits:[value.initialState];
   const init = ()=> {return value.initialState}
   const getData =()=> { return data?.hits?data.hits:init().hits}
   const accData_ =  res2?.hits?res2.hits:value.accData;
 
     console.log("accData_x", accData_);
-
- // const res  = useFetch(url, {});
-  //const data_ = res && res.response?res.response:{hits:[]};
-
-
   const current_= value.user;
   const account_= value.user.account;
   const fromPeriod_ = value.user.period;
@@ -45,32 +40,21 @@ const PACBForm = () => {
   const columns = value.headers
 
   console.log("data_", data_);
-  console.log("value.accData", accData);
+ 
 
-  const [current,setCurrent] = useState(current_);
-  const [account,setAccount] = useState(account_);
-  const [account2,setAccount2] = useState('');
-  const [fromPeriod, setFromPeriod] = useState(fromPeriod_);
+  const [current,] = useState(current_);
+  const [account,] = useState(account_);
+  const [fromPeriod, ] = useState(fromPeriod_);
   const [toPeriod, setToPeriod] = useState(toPeriod_);
-    const [data, setData] = useState(data_);
+  const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
-  /*useEffect(() => {}, [current, setCurrent]);
-  useEffect(() => {setCurrent(current_)}, [ current_,account, fromPeriod, toPeriod]);
-  useEffect(() => { setAccount(account_)}, [account_, current.account ]);
-  useEffect(() => { setFromPeriod(fromPeriod_)}, [fromPeriod_]);
-  useEffect(() => { setToPeriod(toPeriod_)}, [toPeriod_]);
-  useEffect(() => {}, [url]);
-
-   */
 
 
   const toggle= ()=> {
     setState({...state, collapse: !state.collapse });
   }
   const handleToPeriodChange = event => {
-     const { name, value } = event.target;
-     console.log ("event.target.value", event.target.value)
-        setToPeriod(value);
+        setToPeriod(event.target.value);
         submitQuery(event);
         event.preventDefault();
     };

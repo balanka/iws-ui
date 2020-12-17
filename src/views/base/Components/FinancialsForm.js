@@ -3,7 +3,6 @@ import {CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CBu
 import {  IoMdMenu} from "react-icons/io";
 import {dateFormat, capitalize} from '../../../utils/utils';
 import EnhancedTable from '../../Tables2/EnhancedTable';
-//import DetailsFormFinancials from "./DetailsFormFinancials";
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import DatePicker from "react-datepicker";
@@ -29,24 +28,22 @@ const styles = {
     borderRadius: 5,
     boxShadow: "0 10px 30px #BBB",
     padding: 10
-  }
+  },
 };
+
 const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
   const value = useContext(accountContext);
   const t = value.t
-  const [url,setUrl] = useState('');
+  const [url,] = useState('');
   const tableRef = createRef();
-  const HeadersWithLines=value.headers.filter(function(e) { return e.id === 'lines' });
-  const lineHeaders=HeadersWithLines[0].title;
   const headers = value.headers.filter(function(e) { return e.id !== 'lines' });
   const res  = useFetch(url, {});
   const [{ res2}] = useFetch(value.accUrl, {});
   const [{ res3}] = useFetch(value.ccUrl, {});
   const init = ()=> {return value.initialState}
   const data_ = res && res.response?res.response:[value.initialState];
-  const getData =()=> { return data?.hits?data.hits:init().hits}
   const accData_=  res2?res2:value.accData;
   const ccData_=  res3?res3:value.ccData;
 
@@ -150,7 +147,7 @@ const FinancialsForm = () => {
   };
   const handleModuleChange = event => {
     event.preventDefault();
-    const { name, value } = event.target
+    const value = event.target.value
     setFmodule(value);
     submitQuery(event, value);
     //console.log('getFilteredRows', getFilteredRows());
@@ -256,7 +253,6 @@ const FinancialsForm = () => {
     event.preventDefault();
     const row =getCurrentRow
     console.log("submitPost current", row);
-    console.log("submitPostvalue", value);
     setCurrent(row);
     value.submitPost([row]);
     console.log("submitEdit current", current);
@@ -290,31 +286,34 @@ const FinancialsForm = () => {
       showAddRow: !ref.state.showAddRow,
     });
   }
-
-
-  const accountC= (tableData ) => {
-    console.log('tableData', tableData);
-    let v=tableData.value;
-    return (
-      <CSelect
+  const accountD=(value, onRowDataChange, rowData) => (
+      <Select
+          value={value}
           onChange={(event) => {
-            //console.log('newValue', newValue);
-            console.log('newValue.value', value);
-            console.log('newValue.event', event.target.value);
-            console.log('tableData.value', tableData.value);
-            console.log('tableData', tableData.rowData);
-            //tableData.value=event.target.value
-            //tableData.rowData.oaccount=event.target.value;
-            v=event.target.value
-            console.log('tableData', tableData.rowData);
-            tableData.onChange(event.target.value); // Can just be the value
-            console.log('tableData', tableData.rowData);
+            onRowDataChange({
+              ...rowData,
+              account: (event.target.value)
+            });
           }}
-          value={v}
       >
-        {accData.hits.map(mapping)}
-      </CSelect>
-  )}
+        {accData.hits.map(mapping2_)}
+      </Select>
+  )
+const accountC=(value, onRowDataChange, rowData) => (
+      <Select
+          value={value}
+          onChange={(event) => {
+            onRowDataChange({
+              ...rowData,
+              oaccount: (event.target.value)
+            });
+          }}
+      >
+        {accData.hits.map(mapping2_)}
+      </Select>
+  )
+
+
   const  editable={
    /* onRowAdd: newData =>
         new Promise((resolve, reject) => {
@@ -355,59 +354,19 @@ const FinancialsForm = () => {
   const columns= [
      {field:'lid', title:t('financials.line.id'), hidden:true}
     , {field:'transid', title:"transid", hidden:true, initialEditValue:current.tid}
-    , {field:'account', title:t('financials.line.account'), //editComponent: accountC, width: 20}
-      editComponent: ({ value, onRowDataChange, rowData }) => (
-          <Select
-              value={value}
-              onChange={(event) => {
-                onRowDataChange({
-                  ...rowData,
-                  account: (event.target.value)
-              });
-              }}
-          >
-            {accData.hits.map(mapping2_)}
-          </Select>
-      )
-      , width: 10}
-    , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true, width:5
-    , cellStyle: {maxWidth: 10, padding:1},  headerStyle: {maxWidth: 10, padding:1}
+    , {field:'account', title:t('financials.line.account'), editComponent:({ value, onRowDataChange, rowData }) =>
+          accountD ( value, onRowDataChange, rowData ), width: 20}
+    , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true, width:10
+    //, cellStyle: {maxWidth: 10, padding:1},  headerStyle: {maxWidth: 10, padding:1}
     }
-    , {field:'oaccount', title:t('financials.line.oaccount'),   //editComponent: accountC, width: 20}
-      editComponent: ({ value, onRowDataChange, rowData }) => (
-      <Select
-          value={value}
-          onChange={(event) => {
-            onRowDataChange({
-              ...rowData,
-              oaccount: (event.target.value)
-            });
-          }}
-      >
-        {accData.hits.map(mapping2_)}
-      </Select>
-  )
-      , width: 10}
+    , {field:'oaccount', title:t('financials.line.oaccount'), editComponent:({ value, onRowDataChange, rowData }) =>
+          accountC ( value, onRowDataChange, rowData ), width: 20}
     , {field:'duedate', title:t('financials.line.duedate'), type:"date",
       initialEditValue:initLine.duedate,
-
-      editComponent: ( {value, onChange, rowData} ) => {
-      return (
-      <CInput bsSize="sm" type="text" id="duedate-id" name="duedate"
-                       className="input-sm" placeholder="date"
-                       onChange={(event, newValue) => {
-                         console.log('eventT', event.target.value);
-                         console.log('newValue',newValue);
-                         console.log('rowData',rowData);
-                         console.log('valueZ',value);
-                         onChange(newValue); // Can just be the value
-                       }}
-                       value={dateFormat(value.duedate, "dd.mm.yyyy")}/>
-
-      )}
-    }
-    , {field:'amount', title:t('financials.line.amount')}
-    , {field:'currency', title:t('common.currency'), initialEditValue:initLine.currency, width: 10}
+      dateSetting: { locale:"de" } }
+    , {field:'amount', title:t('financials.line.amount'), type:"currency",
+      currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    //, {field:'currency', title:t('common.currency'), initialEditValue:initLine.currency, width: 10}
     , {field:'text', title:t('financials.line.text'), width: 300}
   ]
 
@@ -420,8 +379,7 @@ const FinancialsForm = () => {
       , post:submitPost, cancel: cancelEdit, handleFilter: handleFilter
       , rowsPerPageOptions: [5, 15, 25, 100]
     }
-   // const detailsProps={current:current, initialState:initLine, lineHeaders:lineHeaders, data:data
-   //   , accData:accData, setCurrent:setCurrent, getCurrentRow}
+
     return <>
       <Grid container spacing={2}  direction="column" style={{...styles.outer}}>
          <CForm  className="form-horizontal" id ="financialsMasterform" onSubmit={ addOrEdit?submitEdit:submitAdd}>
@@ -588,5 +546,5 @@ const FinancialsForm = () => {
 
 };
 export default FinancialsForm;
-// <DetailsFormFinancials detailsProps={detailsProps}/>
+
 

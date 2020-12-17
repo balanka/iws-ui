@@ -19,7 +19,7 @@ const styles = {
   }
 };
 const AccountForm = () => {
-  const [profile, setProfile] = useGlobalState('profile');
+  const [profile, ] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
   const value = useContext(accountContext);
@@ -31,56 +31,19 @@ const AccountForm = () => {
   console.log('data_',data_)
   console.log('accData_',accData_)
   const current_= value.user;
-  const id_ = value.user.id;
-  const name_ = value.user.name;
-  const description_ = value.user.description;
-  const account_= value.user.account;
-  const company_= value.user.company;
-  const isDebit_=value.user.isDebit;
-  const balancesheet_=value.user.balancesheet;
-  const postingdate_=value.user.postingdate;
-  const changedate_=value.user.changedate;
-  const enterdate_=value.user.enterdate;
   const editing_ = value.editing;
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [current,setCurrent] = useState(current_);
-  const [id,setId] = useState(id_);
-  const [name,setName] = useState(name_);
-  const [description, setDescription] = useState(description_);
-  const [account,setAccount] = useState(account_);
-  const [company,setCompany] = useState(company_);
-  const [isDebit,setIsDebit] = useState(isDebit_);
-  const [balancesheet,setBalancesheet] = useState(balancesheet_);
-  const [postingdate, setPostingdate] = useState(postingdate_);
-  const [changedate, setChangedate] = useState(changedate_);
-  const [enterdate, setEnterdate] = useState(enterdate_);
   const [editing, setEditing] = useState(editing_);
-
-  useEffect(() => {}, [current, setCurrent, data, setEditing ]);
-  useEffect(() => {setCurrent(current_)}, [ current_, id, name, description,
-        account, company, enterdate, changedate, postingdate, isDebit, balancesheet ]);
-  useEffect(() => { setId(id_)}, [id_, current.id ]);
-  useEffect(() => { setName(name_)}, [name_, current.name ]);
-  useEffect(() => { setDescription(description_)}, [description_, current.description ]);
-  useEffect(() => { setAccount(account_)}, [account_, current.account, data ]);
-  useEffect(() => { setCompany(company_)}, [company_, current.company ]);
-  useEffect(() => { setIsDebit(isDebit_)}, [isDebit_, current.isDebit ]);
-  useEffect(() => { setBalancesheet(balancesheet_)}, [balancesheet_, current.balancesheet ]);
-  useEffect(() => { setPostingdate(postingdate_)}, [postingdate_, current.postingdate ]);
-  useEffect(() => { setChangedate(changedate_)}, [changedate_, current.changedate ]);
-  useEffect(() => { setEnterdate(enterdate_)}, [enterdate_, current.enterdate ]);
-  useEffect(() => { setEditing(editing_)}, [editing_ ]);
-  //useEffect(() => { setData(data_)}, [data_, value.data]);
-
-
-
+  useEffect(() => {setCurrent(current_)}, [current_]);
+  console.log('currentZZZ', current_);
+  console.log('accData_',accData_)
 
   const toggle= ()=> {
     setState({...state, collapse:!state.collapse });
   }
   const initAdd =()=> {
-   // const row = {...value.initialState, editing:false};
     const row = {...value.initialState.hits[0], company:profile.company, editing:false};
      setEditing(false);
     value.editRow(row, false);
@@ -88,11 +51,22 @@ const AccountForm = () => {
     console.log('rowZ', row)
   };
   const cancelEdit = (e) => {
-   // e.preventDefault();
     initAdd();
     setSelected([]);
   };
+  const submitEdit = event => {
+    event.preventDefault();
+    if(current.editing||editing) {
+      console.log("submitEdit1 current", current);
+      value.submitEdit(current, data);
+    } else submitAdd(event)
+  };
 
+  const submitAdd = event => {
+    event.preventDefault();
+    console.log("submitAdd1 current", current);
+    value.submitAdd(current, data);
+  };
 
   const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {handleFilter('')}, [data]);
@@ -119,57 +93,9 @@ const AccountForm = () => {
     const record = filteredRows.find(obj => obj.id === id);
     value.editRow(record);
   }
-  const handleInputChange = event => {
-    event.preventDefault();
-    const { name, value } = event.target;
-    console.log("namea", name);
-    console.log("valuea", value);
-    console.log("event.target.checked", event.target.checked);
-    if(name==='id') setId(value);
-    if(name==='name') setName(value);
-    if(name==='description') setDescription(value);
-    if(name==='account') setAccount(value);
-    if(name==='company') setCompany(value);
-    if(name==='isDebit') {current.isDebit=event.target.checked;setIsDebit(event.target.checked);setCurrent(current);}
-    if(name==='balancesheet') {current.balancesheet=event.target.checked; setBalancesheet(event.target.checked);setCurrent(current);}
-    if(name==='postingdate') setPostingdate(value);
-    if(name==='changedate') setChangedate(value);
-    if(name==='enterdate') setEnterdate(value);
-    console.log('currentz', current);
-  };
+
   const mapping = item => <option key={item.id} value={item.id}>
     {item.id+ " ".concat (item.name)}</option>;
-
-  const submitEdit = event => {
-    event.preventDefault();
-    if(current.editing) {
-      console.log("submitEdit1 current", current);
-      const row = {
-        id: id, name: name, description: description, enterdate: enterdate
-        , postingdate: postingdate, changedate: changedate, company: company, modelid: current.modelid
-        , account: account, isDebit: isDebit, balancesheet: balancesheet, currency: current.currency
-        , idebit: 0.0, icredit: 0.0, debit: 0.0, credit: 0.0, subAccounts: []
-      };
-      console.log("submitEdit1 current", row);
-      setCurrent(row);
-      value.submitEdit(row, data);
-      console.log("submitEdit current", current);
-    } else submitAdd(event)
-  };
-
-  const submitAdd = event => {
-    event.preventDefault();
-    console.log("submitAdd1 current", current);
-    const row = {id:id, name:name, description:description, enterdate:current_.enterdate
-      , postingdate:current_.postingdate, changedate:current_.changedate,  company:company, modelid:current.modelid
-      , account:account, isDebit:isDebit, balancesheet:balancesheet, currency: current.currency
-      , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0, subAccounts:[]};
-
-    console.log('submitAdd row', row);
-    value.submitAdd(row, data);
-    setCurrent(row);
-    console.log('submitAdd current', current);
-  };
 
   function buildForm(current1){
     console.log("editing", editing);
@@ -228,7 +154,7 @@ const AccountForm = () => {
                           </CCol>
                           <CCol sm="4">
                             <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm"
-                                   placeholder="Id" value= {id} onChange={handleInputChange} />
+                                   placeholder="Id" value= {current.id} onChange={(event)  => value.setCurrent({ ...current, id: event.target.value})} />
                           </CCol>
                           <CCol sm="2">
                             <CLabel size="sm" htmlFor="input-small">{t('account.enterdate')}</CLabel>
@@ -246,7 +172,7 @@ const AccountForm = () => {
                           </CCol>
                           <CCol sm="4">
                             <CInput bsSize="sm" type="text" id="name-input" name="name" className="input-sm" placeholder="Name"
-                                   value={name} onChange={handleInputChange} />
+                                   value={current.name} onChange={(event)  => value.setCurrent({ ...current, name: event.target.value})} />
                           </CCol>
                           <CCol sm="2">
                             <CLabel size="sm" htmlFor="input-small">{t('account.changedate')}</CLabel>
@@ -263,7 +189,7 @@ const AccountForm = () => {
                           </CCol>
                           <CCol sm="4">
                             <CSelect className ="flex-row" type="select" name="account" id="account-id"
-                                   value={account} onChange={handleInputChange} >
+                                   value={current.account} onChange={(event)  => value.setCurrent({ ...current, account: event.target.value})} >
                                  {accData.hits.map(item => mapping(item))};
 
                             </CSelect>
@@ -285,17 +211,20 @@ const AccountForm = () => {
                         </CCol>
                         <CCol sm="4">
                           <CInput bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
-                                 placeholder="company" value={company} onChange={handleInputChange} />
+                                 placeholder="company" value={current.company} onChange={(event)  => 
+                                 value.setCurrent({ ...current, company: event.target.value})} />
                         </CCol>
                         <CCol sm="2">
                           <FormControlLabel id="isDebit" name="isDebit"
-                              control={<Switch checked={current.isDebit} onChange={handleInputChange} style={{ 'padding-left':2 }}/>}
+                              control={<Switch checked={current.isDebit} onChange={(event)  => 
+                                value.setCurrent({ ...current, isDebit: event.target.checked})} style={{ 'padding-left':2 }}/>}
                               label={t('account.debit_credit')}
                           />
                         </CCol>
                         <CCol sm="1">
                           <FormControlLabel id="balancesheet" name="balancesheet"
-                                            control={<Switch checked={current.balancesheet} onChange={handleInputChange} style={{ 'padding-left':2 }}/>}
+                                            control={<Switch checked={current.balancesheet} onChange={(event)  => 
+                                              value.setCurrent({ ...current, balancesheet: event.target.checked})} style={{ 'padding-left':2 }}/>}
                                             label={t('account.balancesheet')}
                           />
                         </CCol>
@@ -305,8 +234,9 @@ const AccountForm = () => {
                             <CLabel htmlFor="textarea-input">{t('account.description')}</CLabel>
                           </CCol>
                           <CCol xs="12"   md="9">
-                            <CTextarea type="texarea" name="description" id="description-id" rows="1"
-                                    placeholder="Content..." value={description} onChange={handleInputChange} />
+                            <CTextarea type="textarea" name="description" id="description-id" rows="1"
+                                    placeholder="Content..." value={current.description} onChange={(event)  => 
+                                      value.setCurrent({ ...current, description: event.target.value})} />
                           </CCol>
                         </CFormGroup>
                     </CCollapse>

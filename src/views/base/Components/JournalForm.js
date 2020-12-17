@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react'
-import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
+import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect} from '@coreui/react'
 import {capitalize} from "../../../utils/utils"
 import EnhancedTable from '../../Tables2/EnhancedTable';
 import {accountContext} from './AccountContext';
@@ -7,7 +7,7 @@ import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
 import {IoMdMenu} from "react-icons/io";
 import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelper'
-import {useTranslation} from "react-i18next";
+
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faSpinner} from "@fortawesome/free-solid-svg-icons";
 const styles = {
@@ -23,7 +23,7 @@ const JournalForm = () => {
   const [selected, setSelected] = useState([]);
   const value = useContext(accountContext);
   const t = value.t
-  const [url,setUrl] = useState('');
+  const [url, ] = useState('');
   const res  = useFetch(url, {});
   const init = ()=> {return value.initialState}
   const data_ = res && res.response?res.response:[value.initialState];
@@ -41,13 +41,18 @@ const JournalForm = () => {
 
   console.log("data_", data_);
   const [current,setCurrent] = useState(current_);
-  const [account,setAccount] = useState(account_);
-  const [account2,setAccount2] = useState('');
-  const [fromPeriod, setFromPeriod] = useState(fromPeriod_);
+  const [account, setAccount ] = useState(account_);
+  //const [account2, ] = useState('');
+  const [fromPeriod, setFromPeriod ] = useState(fromPeriod_);
   const [toPeriod, setToPeriod] = useState(toPeriod_);
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [filteredRows, setFilteredRows] = useState(data);
+  useEffect(() => {}, [current, setCurrent]);
+  useEffect(() => {setCurrent(current_)}, [ current_,account, fromPeriod, toPeriod]);
+  useEffect(() => { setAccount(account_)}, [account_, current.account ]);
+  useEffect(() => { setFromPeriod(fromPeriod_)}, [fromPeriod_]);
+  useEffect(() => { setToPeriod(toPeriod_)}, [toPeriod_]);
   useEffect(() => {handleFilter('')}, [data, getData()]);
 
 
@@ -56,8 +61,7 @@ const JournalForm = () => {
   }
 
   const handleToPeriodChange = event => {
-    const { name, value } = event.target;
-    setToPeriod(value);
+    setToPeriod(event.target.value);
     submitQuery(event);
     event.preventDefault();
   };

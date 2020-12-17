@@ -24,7 +24,7 @@ const styles = {
   }
 };
 const CustomerForm = () => {
-  const [profile, setProfile] = useGlobalState('profile');
+  const [profile, ] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
   const value = useContext(accountContext);
@@ -61,7 +61,6 @@ const CustomerForm = () => {
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [vatData, setVatData] = useState(vatData_);
-  const [ibanData, setIbanData] = useState();
   const [current,setCurrent] = useState(current_);
   const [id,setId] = useState(id_);
   const [name,setName] = useState(name_);
@@ -151,7 +150,6 @@ const CustomerForm = () => {
   const handleInputChange = event => {
     event.preventDefault();
     const { name, value } = event.target;
-    const namex=name
     const method="set"+capitalize(name)
     const row = Object.assign(current, {namex:value});
     eval(method)(value);

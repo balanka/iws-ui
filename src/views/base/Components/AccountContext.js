@@ -23,7 +23,7 @@ export  const AccountContext = (props) => {
   console.log('accData', accData );
 
   return (
-    <accountContext.Provider value={{data:data, accData:accData, ccData:ccData,user:props.current, editing:props.editing
+    <accountContext.Provider value={{data:data, accData:accData, ccData:ccData, user:props.current, editing:props.editing
       , editRow:props.editRow, setCurrent:props.setCurrent, submitEdit:props.submitEdit, submitAdd:props.submitAdd
       , submitGet:props.submitGet, login:props.login, submitPost:props.submitPost, initialState:props.initialState
       , addLabel:props.addLabel, updateLabel:props.updateLabel, title:props.title, lineTitle:props.lineTitle

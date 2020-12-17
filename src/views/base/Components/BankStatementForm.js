@@ -23,10 +23,10 @@ const styles = {
 };
 
 const BankStatementForm = () => {
-  const { t, i18n } = useTranslation();
+  const { t,  } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
-  const [profile, setProfile] = useGlobalState('profile');
+  const [profile, ] = useGlobalState('profile');
   const value = useContext(accountContext);
   const init = ()=> {return value.initialState}
   const [{ res}]= useFetch(value.url, {});
@@ -158,7 +158,6 @@ const BankStatementForm = () => {
   const handleInputChange = event => {
     event.preventDefault();
     const { name, value } = event.target;
-    const namex=name
     const method="set"+capitalize(name)
     const row = Object.assign(current, {name:value});
     eval(method)(value);
