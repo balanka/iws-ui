@@ -1,7 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react'
 import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
 import { dateFormat } from '../../../utils/utils';
-import EnhancedTable from '../../Tables2/EnhancedTable';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
@@ -9,6 +8,9 @@ import useFetch from "../../../utils/useFetch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {accountContext, useGlobalState} from './AccountContext';
 import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner, faWindowClose} from "@fortawesome/free-solid-svg-icons";
+import EditableTable from "../../Tables2/EditableTable";
+import {editable, ColumnsM, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -28,12 +30,9 @@ const CostCenterForm = () => {
   const accData_=  res2?.hits?res2.hits:value.accData;
   const current_= value.user;
   console.log('currentZXX', current_);
-  console.log('current', current);
-  const editing_ = value.editing;
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [current, setCurrent] = useState(current_);
- // const [editing, setEditing] = useState(editing_);
 
   useEffect(() => {setCurrent(current_)}, [current_]);
 
@@ -85,13 +84,16 @@ const CostCenterForm = () => {
 
   const edit = id =>{
     const record = filteredRows.find(obj => obj.id === id);
-    value.editRow(record);
+    const row = {...record, editing:true}
+    value.editRow(row);
+    //setCurrent(row);
   }
 
   const mapping = item => <option key={item.id} value={item.id}>
     {item.id+ " ".concat (item.name)}</option>;
 
-
+  const editableX = editable(current, setCurrent, setData);
+  const columnsX = ColumnsM(accData.hits, value.initialState, current, t);
 
   function buildForm(current1) {
     console.log("user1xx", current1);
@@ -221,10 +223,15 @@ const CostCenterForm = () => {
           </CCollapse>
       </CForm>
     </Grid>
-      <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
+    <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
+                   theme={theme} t={t}  edit ={edit}/>
+
     </>
   }
   return buildForm(current);
 
 };
 export default CostCenterForm;
+//<EnhancedTable props={props} style={{padding: 0, height: 50}}/>
+//<EditableTable Options ={OptionsM}  data={res?.hits?data:value.initialState} columns={columnsX}  rowStyle={rowStyle}  theme={theme}
+//               t={t}  editable={editableX}/>

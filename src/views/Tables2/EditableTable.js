@@ -13,8 +13,9 @@ import RateReviewIcon from '@material-ui/icons/RateReview';
 
 
 export default function EditableTable(props) {
-    const {Options, flag, data, columns, t , addRow, tableRef, editable} = props
+    const {Options, flag, data, columns, t, tableRef, addRow, edit, editable} = props
     const [selectedRows, setSelectedRows] = useState([]);
+    //const tableRef = createRef();
     console.log('props.data',props.data);
     const dx=data
     console.log('state.dx',dx);
@@ -46,7 +47,9 @@ export default function EditableTable(props) {
             }}
             options={Options}
             components={components}
-            onSelectionChange={(rows) =>  setSelectedRows(rows)}
+            onSelectionChange={(rows) => { console.log('selectedRows',rows);
+                if(rows.length>0) edit(rows[0].id);
+            setSelectedRows(rows)}}
             localization={{
                 body: {
                     emptyDataSourceMessage:t('muitable.emptyDataSourceMessage'),

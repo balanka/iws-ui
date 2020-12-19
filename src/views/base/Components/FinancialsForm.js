@@ -55,7 +55,7 @@ const FinancialsForm = () => {
   const file_content_= value.user.file_content;
   const editing_ = value.editing;
   const initLine=value.initialState.hits[0].lines[0];
-
+  console.log('initLine:::', initLine);
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [ccData, setCcData] = useState(ccData_);
@@ -186,9 +186,11 @@ const FinancialsForm = () => {
     return filteredRows?filteredRows:dx
   }
   const edit = id =>{
+    console.log('id', id);
     const record = dx.find(obj => obj.tid === id);
-    //console.log('record', record);
-    value.editRow(record);
+    console.log('record', record);
+    const row = {...record, editing:true}
+    value.editRow(row);
   }
 
 
@@ -429,7 +431,7 @@ const FinancialsForm = () => {
                 </CCol>
               </CFormGroup>
               <EditableTable Options ={Options} flag={current.posted} data={(current.lines&&current.lines.length) >0 ? current.lines:[value.initialState.hits[0].lines[0]]}
-                             columns={columnsX}  rowStyle={rowStyle}  theme={theme} t={t} tableRef={tableRef} editable={editableX}
+                             columns={columnsX}  rowStyle={rowStyle}  theme={theme} t={t} tableRef={tableRef} editable={editableX} edit ={edit}
               />
                <CInput disabled={posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
                            placeholder="text" value={text} onChange={handleInputChange} />

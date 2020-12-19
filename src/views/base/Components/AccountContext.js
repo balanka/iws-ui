@@ -11,7 +11,7 @@ export const { useGlobalState } = createGlobalState(initialState);
 export const accountContext = createContext(null);
 
 export  const AccountContext = (props) => {
-    const { t, i18n } = useTranslation();
+    const { t,  } = useTranslation();
     const data = {hits:[]};
     const accData = props.initAcc;
     const ccData = props.initCc

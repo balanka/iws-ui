@@ -131,7 +131,7 @@ export  function CrudAccount  (props) {
       const row = {...current_, editing:flag};
       console.log('row1_', row );
        setCurrent(row);
-       setEditing( row.editing);
+       setEditing(row.editing);
     };
 
     return (

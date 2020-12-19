@@ -188,7 +188,7 @@ const CustomerForm = () => {
       , editable:true, setSelected: setSelected, cancel: cancelEdit, handleFilter: handleFilter, rowsPerPageOptions: [5, 15, 25, 100]
     }
     return <>
-      <Grid container spacing={2} style={{...styles.outer, padding: 20, 'background-color':blue }} direction="column" >
+       <Grid container spacing={2} style={{...styles.outer, padding: 20, 'background-color':blue }} direction="column" >
         <CForm  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
@@ -373,9 +373,9 @@ const CustomerForm = () => {
                         </CFormGroup>
               </CCollapse>
             </CForm>
-           </Grid>
-            <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
-         </>
+      </Grid>
+       <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
+     </>
   }
 
   return buildForm(current);
