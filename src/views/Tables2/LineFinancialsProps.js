@@ -73,8 +73,6 @@ export const  editable = (data, setData, current ) => ({
     onRowAdd: newData =>
         new Promise((resolve, reject) => {
             const datax = JSON.parse(JSON.stringify(data));
-            console.log('newData', JSON.stringify(newData))
-            console.log('datax', datax);
           setTimeout(() => {
               const index=datax.length
               datax[index] = newData;
@@ -82,7 +80,6 @@ export const  editable = (data, setData, current ) => ({
               const currentx = {...current};
               const index1 = currentx.lines.length;
               currentx.lines[index1] = newData;
-              console.log('datacurrent', current);
             resolve();
           }, 600)
         }),
@@ -91,24 +88,14 @@ export const  editable = (data, setData, current ) => ({
         new Promise((resolve) => {
             setTimeout(() => {
                 resolve();
-                console.log("oldData", oldData);
                 const datax = JSON.parse(JSON.stringify(data));
-                const datax1 = JSON.parse(JSON.stringify(data));
-                console.log("datax0", datax);
-                console.log("newData", newData);
-                //const currentx = JSON.parse(JSON.stringify(current));
-                const index = datax1.findIndex(obj => obj.lid === newData.lid);
-                console.log('dataxindex', index);
-                datax1[index] = newData;
-                setData(datax1);
+                const index = datax.findIndex(obj => obj.lid === newData.lid);
+                datax[index] = newData;
+                setData(datax);
                 const currentx = {...current};
                 const index1 = currentx.lines.findIndex(obj => obj.lid === newData.lid);
                 currentx.lines[index1] = newData;
-                console.log('datax1', datax1);
-                console.log('data', data);
-                console.log('datacurrent', current);
-                //const data2x = removeTableData(datax);
-                //console.log("data2x ", data2x);
+
             }, 600);
         }),
         onRowDelete : oldData =>
@@ -117,16 +104,11 @@ export const  editable = (data, setData, current ) => ({
             const dataDelete = JSON.parse(JSON.stringify(data));
             const currentx = {...current};
             const index = currentx.lines.findIndex(obj => obj.lid === oldData.lid);
-           // const index = oldData.tableData.id;
             dataDelete.splice(index, 1);
             setData([...dataDelete]);
-             const deleted = currentx.lines[index];
-              //const index1 = currentx.lines.findIndex(obj => obj.lid === oldData.lid);
-              currentx.lines[index] = {...deleted, transid:-2 };
-              //currentx.lines.splice(index, 1);
-              console.log('datadata', data);
-              console.log('dataDelete', dataDelete);
-              console.log('datacurrent', current);
+            const deleted = currentx.lines[index];
+            currentx.lines[index] = {...deleted, transid:-2 };
+
             resolve()
           }, 1000)
         })
