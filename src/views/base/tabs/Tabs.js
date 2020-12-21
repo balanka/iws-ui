@@ -216,7 +216,7 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/vat" get="md/14" accUrl="http://127.0.0.1:8080/acc/accmd/9"
                                headers = {[{id:'id', label:t('vat.id')}, {id:'name', label:t('vat.name')}, {id:'description', label:t('vat.description')}
-                                 , {id:'percent', label:t('vat.percent')}, {id:'inputVatAccount', label:t('vat.input_account')}, {id:'outputVatAccount', label:t('vat.output-account')}
+                                 , {id:'percent', label:t('vat.percent')}, {id:'inputVatAccount', label:t('vat.input_account')}, {id:'outputVatAccount', label:t('vat.output_account')}
                                  , {id:'enterdate', label:t('vat.enterdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
                                  , {id:'postingdate', label:t('vat.postingdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
                                  , {id:'changedate', label:t('vat.changedate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
