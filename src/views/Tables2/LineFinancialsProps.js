@@ -181,6 +181,36 @@ export const ColumnsM =(data, line, current, t) => [
     , {field:'company', title:t('costcenter.company'), type:"text", initialEditValue:line.company, export:true}
 
 ]
+export const ColumnsACC =(data, line, current, t) => [
+    {field:'id', title:t('account.id'), export:true}
+    , {field:'name', title:t("account.name"), initialEditValue:line.name, type: "text", export:true}
+    , {field:'description', title:t('account.description'), type:"text", initialEditValue:line.description, export:true}
+    , {field:'isDebit', title:t('account.debit_credit'), type:"boolean", export:true}
+    , {field:'balancesheet', title:t('account.balancesheet'), type:"boolean", export:true}
+    , {field:'account', title:t('account.account'), editComponent:({ value, onRowDataChange, rowData }) =>
+            accountD ( data, value, onRowDataChange, rowData ), width: 20, export:true}
+    , {field:'idebit', title:t('account.idebit'), type:"currency", initialEditValue:0,
+        currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    , {field:'debit', title:t('account.debit'), type:"currency", initialEditValue:0,
+        currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    , {field:'icredit', title:t('account.icrebit'), type:"currency", initialEditValue:0,
+        currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    , {field:'credit', title:t('account.crebit'), type:"currency", initialEditValue:0,
+        currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+
+    , {field:'enterdate', title:t('vat.enterdate'), type:"date", align:"right",
+        initialEditValue:line.enterdate,
+        dateSetting: { locale:"de" } , export:true}
+    , {field:'changedate', title:t('vat.changedate'), type:"date", align:"right",
+        initialEditValue:line.changedate,
+        dateSetting: { locale:"de" } , export:true}
+    , {field:'postingdate', title:t('vat.postingdate'), type:"date", align:"right",
+        initialEditValue:line.postingdate,
+        dateSetting: { locale:"de" } , export:true}
+
+    , {field:'company', title:t('vat.company'), type:"text", initialEditValue:line.company, export:true}
+
+]
 export const ColumnsV =(data, line, current, t) => [
     {field:'id', title:t('vat.id'), export:true}
     , {field:'name', title:t("vat.name"), initialEditValue:line.name, type: "text", export:true}

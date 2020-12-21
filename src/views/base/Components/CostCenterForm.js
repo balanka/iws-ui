@@ -220,7 +220,6 @@ const CostCenterForm = () => {
     </Grid>
     <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
                    theme={theme} t={t}  edit ={edit}/>
-
     </>
   }
   return buildForm(current);

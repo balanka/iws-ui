@@ -11,6 +11,9 @@ import Switch from "@material-ui/core/Switch";
 import useFetch from "../../../utils/useFetch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner,faWindowClose} from "@fortawesome/free-solid-svg-icons";
+import {ColumnsACC as columns, OptionsM} from "../../Tables2/LineFinancialsProps";
+import EditableTable from "../../Tables2/EditableTable";
+import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -96,6 +99,8 @@ const AccountForm = () => {
 
   const mapping = item => <option key={item.id} value={item.id}>
     {item.id+ " ".concat (item.name)}</option>;
+
+  const columnsX = columns(accData.hits, value.initialState, current, t);
 
   function buildForm(current1){
     console.log("editing", editing);
@@ -242,7 +247,8 @@ const AccountForm = () => {
                     </CCollapse>
                 </CForm>
                </Grid>
-             <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
+                <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
+                     theme={theme} t={t}  edit ={edit}/>
              </>
   }
 
