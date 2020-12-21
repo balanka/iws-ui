@@ -57,10 +57,10 @@
     "postingdate": "Validé",
     "changedate":  "Modifié",
     "debit_credit": "D/C",
-    "idebit"       : "AB Soll",
-    "debit"        : "SOLL",
-    "icredit"       : "AB Haben",
-    "credit"        : "Credit",
+    "idebit"       : "Débit it.",
+    "debit"        : "Débit",
+    "icredit"       : "Crédit it.",
+    "credit"        : "Crédit",
     "balancesheet": "Bilan"
   },
   "bank": {

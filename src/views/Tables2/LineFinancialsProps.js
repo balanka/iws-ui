@@ -178,7 +178,7 @@ export const ColumnsM =(data, line, current, t) => [
         initialEditValue:line.postingdate,
         dateSetting: { locale:"de" } , export:true}
 
-    , {field:'company', title:t('costcenter.company'), type:"text", initialEditValue:line.company, export:true}
+    , {field:'company', title:t('common.company'), type:"text", initialEditValue:line.company, export:true}
 
 ]
 export const ColumnsACC =(data, line, current, t) => [
@@ -193,22 +193,22 @@ export const ColumnsACC =(data, line, current, t) => [
         currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     , {field:'debit', title:t('account.debit'), type:"currency", initialEditValue:0,
         currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
-    , {field:'icredit', title:t('account.icrebit'), type:"currency", initialEditValue:0,
+    , {field:'icredit', title:t('account.icredit'), type:"currency", initialEditValue:0,
         currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
-    , {field:'credit', title:t('account.crebit'), type:"currency", initialEditValue:0,
+    , {field:'credit', title:t('account.credit'), type:"currency", initialEditValue:0,
         currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
 
-    , {field:'enterdate', title:t('vat.enterdate'), type:"date", align:"right",
+    , {field:'enterdate', title:t('account.enterdate'), type:"date", align:"right",
         initialEditValue:line.enterdate,
         dateSetting: { locale:"de" } , export:true}
-    , {field:'changedate', title:t('vat.changedate'), type:"date", align:"right",
+    , {field:'changedate', title:t('account.changedate'), type:"date", align:"right",
         initialEditValue:line.changedate,
         dateSetting: { locale:"de" } , export:true}
-    , {field:'postingdate', title:t('vat.postingdate'), type:"date", align:"right",
+    , {field:'postingdate', title:t('account.postingdate'), type:"date", align:"right",
         initialEditValue:line.postingdate,
         dateSetting: { locale:"de" } , export:true}
 
-    , {field:'company', title:t('vat.company'), type:"text", initialEditValue:line.company, export:true}
+    , {field:'company', title:t('common.company'), type:"text", initialEditValue:line.company, export:true}
 
 ]
 export const ColumnsV =(data, line, current, t) => [
@@ -231,7 +231,7 @@ export const ColumnsV =(data, line, current, t) => [
         initialEditValue:line.postingdate,
         dateSetting: { locale:"de" } , export:true}
 
-    , {field:'company', title:t('vat.company'), type:"text", initialEditValue:line.company, export:true}
+    , {field:'company', title:t('common.company'), type:"text", initialEditValue:line.company, export:true}
 
 ]
 export const OptionsM = ({
