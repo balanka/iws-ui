@@ -181,6 +181,29 @@ export const ColumnsM =(data, line, current, t) => [
     , {field:'company', title:t('costcenter.company'), type:"text", initialEditValue:line.company, export:true}
 
 ]
+export const ColumnsV =(data, line, current, t) => [
+    {field:'id', title:t('vat.id'), export:true}
+    , {field:'name', title:t("vat.name"), initialEditValue:line.name, type: "text", export:true}
+    , {field:'description', title:t('vat.description'), type:"text", initialEditValue:line.description, export:true}
+    , {field:'percent', title:t('vat.percent'), type:"numeric", initialEditValue:0, minimumFractionDigits: 2
+        , maximumFractionDigits: 2, export:true}
+    , {field:'inputVatAccount', title:t('vat.input_account'), editComponent:({ value, onRowDataChange, rowData }) =>
+            accountD ( data, value, onRowDataChange, rowData ), width: 20, export:true}
+    , {field:'outputVatAccount', title:t('vat.output_account'), editComponent:({ value, onRowDataChange, rowData }) =>
+            accountD ( data, value, onRowDataChange, rowData ), width: 20, export:true}
+    , {field:'enterdate', title:t('vat.enterdate'), type:"date", align:"right",
+        initialEditValue:line.enterdate,
+        dateSetting: { locale:"de" } , export:true}
+    , {field:'changedate', title:t('vat.changedate'), type:"date", align:"right",
+        initialEditValue:line.changedate,
+        dateSetting: { locale:"de" } , export:true}
+    , {field:'postingdate', title:t('vat.postingdate'), type:"date", align:"right",
+        initialEditValue:line.postingdate,
+        dateSetting: { locale:"de" } , export:true}
+
+    , {field:'company', title:t('vat.company'), type:"text", initialEditValue:line.company, export:true}
+
+]
 export const OptionsM = ({
         toolbar:true,
         draggable:true,

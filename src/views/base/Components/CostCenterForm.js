@@ -92,16 +92,11 @@ const CostCenterForm = () => {
   const mapping = item => <option key={item.id} value={item.id}>
     {item.id+ " ".concat (item.name)}</option>;
 
-  const editableX = editable(current, setCurrent, setData);
+
   const columnsX = ColumnsM(accData.hits, value.initialState, current, t);
 
   function buildForm(current1) {
     console.log("user1xx", current1);
-    const submit = current1.editing ? submitEdit : submitAdd
-    const props = {
-      title: value.title, columns: value.headers, rows: filteredRows, edit: edit, submit: submit, selected: selected
-      , editable:true, setSelected: setSelected, cancel: cancelEdit, handleFilter: handleFilter, rowsPerPageOptions: [5, 15, 25, 100]
-    }
     return <>
       <Grid container spacing={2}  style={{...styles.outer, padding: 20, 'background-color':blue }} direction="column" >
         <CForm  className="form-horizontal" onSubmit={ current1.editing?submitEdit:submitAdd} style={{padding:0}}>

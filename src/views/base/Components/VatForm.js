@@ -1,7 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react'
 import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
 import { dateFormat, capitalize } from '../../../utils/utils';
-import EnhancedTable from '../../Tables2/EnhancedTable';
 import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
@@ -17,6 +16,9 @@ import {
   faSpinner,
   faWindowClose
 } from "@fortawesome/free-solid-svg-icons";
+import EditableTable from "../../Tables2/EditableTable";
+import {ColumnsV as columns, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -154,6 +156,8 @@ const VatForm = () => {
     value.submitAdd(row, data);
     setCurrent(row);
   };
+
+  const columnsX = columns(accData.hits, value.initialState, current, t);
 
   function buildForm(current1){
     const addOrEdit = (typeof current1.editing==='undefined')?editing:current1.editing;
@@ -298,7 +302,8 @@ const VatForm = () => {
           </CCollapse>
          </CForm>
       </Grid>
-      <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
+      <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
+                     theme={theme} t={t}  edit ={edit}/>
  </>
   }
 
