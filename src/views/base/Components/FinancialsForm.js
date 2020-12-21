@@ -76,7 +76,12 @@ const FinancialsForm = () => {
   const [editing, setEditing] = useState(editing_);
   const [fmodule, setFmodule] = useState('');
 
+  const lines_=current.lines&&current.lines.length >0 ? current.lines:[value.initialState.hits[0].lines[0]]
+  const [lines, setLines]=useState(lines_);
 
+  const columnsX = Linescolumns(accData.hits, initLine, current, t);
+
+  useEffect(() => {}, [lines]);
   useEffect(() => {}, [current, setCurrent, setEditing ]);
   useEffect(() => {setCurrent(current_)}, [ current_, id, oid, costcenter, account
         , transdate, enterdate, postingdate, period, posted, company, text, typeJournal, file_content ]);
@@ -191,6 +196,7 @@ const FinancialsForm = () => {
     console.log('record', record);
     const row = {...record, editing:true}
     value.editRow(row);
+    setCurrent(row);
   }
 
 
@@ -270,8 +276,7 @@ const FinancialsForm = () => {
     });
   }
 
-  const  editableX = editable(current, setCurrent, setData);
-  const columnsX = Linescolumns(accData.hits, initLine, current, t);
+
 
   function buildForm(){
     const addOrEdit = (typeof current.editing==='undefined')?editing:current.editing;
@@ -281,7 +286,12 @@ const FinancialsForm = () => {
       , post:submitPost, cancel: cancelEdit, handleFilter: handleFilter
       , rowsPerPageOptions: [5, 15, 25, 100]
     }
-
+    const lines_=current.lines&&current.lines.length >0 ? current.lines:[value.initialState.hits[0].lines[0]]
+    const  editableX = editable(lines_, setLines, current);
+    console.log('LinesXXXXXXX', lines);
+    console.log('LinesLinesLines', current.lines);
+    console.log('LinesLinesLines222', lines_);
+    console.log('currentcurrent', current);
     return <>
       <Grid container spacing={2}  direction="column" style={{...styles.outer}}>
          <CForm  className="form-horizontal" id ="financialsMasterform" onSubmit={ addOrEdit?submitEdit:submitAdd}>
@@ -309,7 +319,7 @@ const FinancialsForm = () => {
                    </CButton>
                  </div>
                  <div className="card-header-actions" style={{  align: 'right' }}>
-                   <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                   <CButton color="link" className="card-header-action btn-minimize" onClick={(event) => submitEdit(event)}>
                      <FontAwesomeIcon icon={faSave} />
                    </CButton>
                  </div>
@@ -430,8 +440,8 @@ const FinancialsForm = () => {
                   />
                 </CCol>
               </CFormGroup>
-              <EditableTable Options ={Options} flag={current.posted} data={(current.lines&&current.lines.length) >0 ? current.lines:[value.initialState.hits[0].lines[0]]}
-                             columns={columnsX}  rowStyle={rowStyle}  theme={theme} t={t} tableRef={tableRef} editable={editableX} edit ={edit}
+              <EditableTable Options ={Options} flag={current.posted} data={lines_} columns={columnsX} editable={editableX}
+                             rowStyle={rowStyle}  theme={theme} t={t} tableRef={tableRef} edit ={edit}
               />
                <CInput disabled={posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
                            placeholder="text" value={text} onChange={handleInputChange} />

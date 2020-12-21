@@ -16,10 +16,12 @@ export default function EditableTable(props) {
     const {Options, flag, data, columns, t, tableRef, addRow, edit, editable} = props
     const [selectedRows, setSelectedRows] = useState([]);
     //const tableRef = createRef();
-    console.log('props.data',props.data);
     const dx=data
+    const [datax, setDatax] = useState(dx);
+    console.log('dataxdatax',datax);
+
     console.log('state.dx',dx);
-    useEffect(() => {}, [props]);
+    useEffect(() => {}, [props, datax, data]);
 
     const [components] = useState({
         FilterRow: (props) => <MTableFilterRow {...props} />
@@ -28,7 +30,7 @@ export default function EditableTable(props) {
     return (
         <MaterialTable
             editable={flag?null:editable}
-            tableRef={tableRef}
+           tableRef={tableRef}
             //title={props.title}
             columns={columns}
             data={dx}

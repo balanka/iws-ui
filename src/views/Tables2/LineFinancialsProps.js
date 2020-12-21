@@ -4,7 +4,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import {rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import {string} from "prop-types";
 export const styles = {
   outer: {
     borderRadius: 5,
@@ -61,50 +60,80 @@ export const accountC =(data, value, onRowDataChange, rowData) => (
       </Select>
   )
 
+const removeTableData = (datax) => {
+    const clonex = JSON.parse(JSON.stringify(datax));
+    for (const element of clonex) {
+        //console.log("element", element);
+        delete element.tableData;
+    }
+    return clonex;
+};
 
-export const  editable = (current, setCurrent, setData ) => ({
+export const  editable = (data, setData, current ) => ({
     onRowAdd: newData =>
         new Promise((resolve, reject) => {
+            const datax = JSON.parse(JSON.stringify(data));
             console.log('newData', JSON.stringify(newData))
-            console.log('currentN', current);
+            console.log('datax', datax);
           setTimeout(() => {
+              const index=datax.length
+              datax[index] = newData;
+              setData(datax);
               const currentx = {...current};
-              const index=currentx.lines.length
-              currentx.lines[index] = newData;
-              setCurrent({...currentx});
-              console.log('currentX', currentx);
+              const index1 = currentx.lines.length;
+              currentx.lines[index1] = newData;
+              console.log('datacurrent', current);
             resolve();
-          }, 1000)
+          }, 600)
         }),
 
-        onRowUpdate: (newData, oldData) =>{
-        new Promise((resolve, reject) => {
-          console.log('newData', JSON.stringify(newData))
-          console.log('oldData', JSON.stringify(oldData))
-          setTimeout(() => {
-            const currentx = {...current};
-            const index = currentx.lines.findIndex(obj => obj.lid === newData.lid);
-            currentx.lines[index] = newData;
-            console.log('currentxX', currentx)
-            setCurrent({...currentx});
-            //console.log('currentxXX', current)
-            resolve()
-          }, 1000)
-        })},
+    onRowUpdate: (newData, oldData) =>
+        new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+                console.log("oldData", oldData);
+                const datax = JSON.parse(JSON.stringify(data));
+                const datax1 = JSON.parse(JSON.stringify(data));
+                console.log("datax0", datax);
+                console.log("newData", newData);
+                //const currentx = JSON.parse(JSON.stringify(current));
+                const index = datax1.findIndex(obj => obj.lid === newData.lid);
+                console.log('dataxindex', index);
+                datax1[index] = newData;
+                setData(datax1);
+                const currentx = {...current};
+                const index1 = currentx.lines.findIndex(obj => obj.lid === newData.lid);
+                currentx.lines[index1] = newData;
+                console.log('datax1', datax1);
+                console.log('data', data);
+                console.log('datacurrent', current);
+                //const data2x = removeTableData(datax);
+                //console.log("data2x ", data2x);
+            }, 600);
+        }),
         onRowDelete : oldData =>
         new Promise((resolve, reject) => {
           setTimeout(() => {
-            const dataDelete = [...current.lines];
-            const index = oldData.tableData.id;
+            const dataDelete = JSON.parse(JSON.stringify(data));
+            const currentx = {...current};
+            const index = currentx.lines.findIndex(obj => obj.lid === oldData.lid);
+           // const index = oldData.tableData.id;
             dataDelete.splice(index, 1);
             setData([...dataDelete]);
+             const deleted = currentx.lines[index];
+              //const index1 = currentx.lines.findIndex(obj => obj.lid === oldData.lid);
+              currentx.lines[index] = {...deleted, transid:-2 };
+              //currentx.lines.splice(index, 1);
+              console.log('datadata', data);
+              console.log('dataDelete', dataDelete);
+              console.log('datacurrent', current);
             resolve()
           }, 1000)
         })
 })
 
 export const Linescolumns =(data, line, current, t) => [
-      {field:'lid', title:t('financials.line.id'), hidden:false,  initialEditValue:-1}
+      {field:'lid', title:t('financials.line.id'), hidden:false,  initialEditValue:line.lid}
     , {field:'transid', title:"transid", hidden:false, initialEditValue:current.tid}
     , {field:'account', title:t('financials.line.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
           accountD ( data, value, onRowDataChange, rowData ),  initialEditValue:'', width: 20}
@@ -117,6 +146,8 @@ export const Linescolumns =(data, line, current, t) => [
     , {field:'amount', title:t('financials.line.amount'), type:"currency", initialEditValue:0,
        currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     , {field:'text', title:t('financials.line.text'), initialEditValue:'', hidden:false, width: 300}
+    , {field:'currency', title:t('common.currency'), hidden:false,  initialEditValue:line.currency}
+    , {field:'company', title:t('common.company'), hidden:false,  initialEditValue:line.company}
   ]
 export const Options = ({
     toolbar:false,
