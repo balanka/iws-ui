@@ -13,22 +13,22 @@ import {useTranslation} from "react-i18next";
 export default function TreeTableView ( props)  {
   const { t, } = useTranslation();
   const  data  = props.data
-  console.log("propsZ", props);
+  //console.log("propsZ", props);
   const treeTableRef = createRef();
-  console.log("dataZ", data);
+  //console.log("dataZ", data);
   const [state, setState] = useState({treeValue: TreeState.create(data)});
   const handleOnChange = (newValue) => {
-    console.log('newValueX', newValue)
+    //console.log('newValueX', newValue)
     setState({ treeValue: newValue });
   }
   const { treeValue } = state
-  console.log('treeValue', treeValue)
+  //console.log('treeValue', treeValue)
   const handleOnScroll = (newValue) => {
-    console.log('onScroll', newValue)
+   // console.log('onScroll', newValue)
   }
 
   const handleOnExpandAll = () => {
-    console.log('Expand all');
+    //console.log('Expand all');
     setState((state) => {
       return {
         treeValue: TreeState.expandAll(state.treeValue),
@@ -37,7 +37,7 @@ export default function TreeTableView ( props)  {
   }
 
   const  handleOnCollapseAll = () => {
-    console.log('Collapse all');
+    //console.log('Collapse all');
     setState((state) => {
       return {
         treeValue: TreeState.collapseAll(state.treeValue)
@@ -49,7 +49,7 @@ export default function TreeTableView ( props)  {
 
 
   const renderHeaderCell = (name, alignLeft = true) => {
-    console.log('onScroll', treeValue)
+   // console.log('onScroll', treeValue)
     return () => {
       return (
           <span className={alignLeft ? 'align-left' : 'align-right'}>{name}</span>

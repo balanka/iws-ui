@@ -130,8 +130,9 @@ export  function CrudAccount  (props) {
       const flag = typeof isNew==='undefined' || typeof current_.editing==='undefined' ;
       const row = {...current_, editing:flag};
       console.log('row1_', row );
-       setCurrent(row);
-       setEditing(row.editing);
+       //setCurrent(row);
+       //setEditing(row.editing);
+        console.log('row1_current', current );
     };
 
     return (

@@ -12,16 +12,10 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-//import DeleteIcon from '@material-ui/icons/Delete';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-//import AddIcon from '@material-ui/icons/Add';
-//import FilterListIcon from '@material-ui/icons/FilterList';
-//import FilterListTwoToneIcon from '@material-ui/icons/FilterListTwoTone';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import FilterListSharpIcon from '@material-ui/icons/FilterListSharp';
-
 import CancelTwoToneIcon from '@material-ui/icons/CancelTwoTone';
-//import {CheckBox} from "@material-ui/icons";
 import {Input} from "reactstrap";
 
 
@@ -145,13 +139,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 export const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { title, numSelected, submit, post, cancel, selected, setSelected, handleFilter, editing } = props;
-  const UP="fa fa-angle-double-up";
-  const DOWN="fa fa-angle-double-down";
-  const ADD ="fa fa-plus-square-o";
-  const REMOVE="fa fa-eraser";
-  const SAVE  ="fa fa-save";
-  const EDIT="fa fa-edit";
-    console.log('editing',editing);
+
      const [filterText, setFilterText] =useState('')
     function cancelEdit() {
       setSelected([]);
@@ -161,13 +149,10 @@ export const EnhancedTableToolbar = (props) => {
 
   const handleInputChange = event => {
     //event.preventDefault();
-    console.log('filteringevent!!!!!', event);
-    console.log('filteringevent.keyCode!!!!!', event.keyCode);
-    console.log('filteringevent.which!!!!!', event.which);
+
     const { name, value } = event.target;
      setFilterText(value);
     if (event.which == 13 || event.keyCode == 13) {
-      console.log('filter', value);
      // console.log('filter', handleFilter(value));
       handleFilter(value);
      // console.log('filter', handleFilter(value));

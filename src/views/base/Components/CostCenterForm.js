@@ -9,7 +9,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {accountContext, useGlobalState} from './AccountContext';
 import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner, faWindowClose} from "@fortawesome/free-solid-svg-icons";
 import EditableTable from "../../Tables2/EditableTable";
-import {editable, ColumnsM, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {ColumnsM, OptionsM} from "../../Tables2/LineFinancialsProps";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 const styles = {
   outer: {
@@ -21,7 +21,7 @@ const styles = {
 const CostCenterForm = () => {
   const [profile, ] = useGlobalState('profile');
   const [collapsingState, setCollapsingState]= useState({collapse: true, fadeIn: true, timeout: 300});
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState([-1]);
   const value = useContext(accountContext);
   const t = value.t
   const [{ res },]= useFetch(value.url, {});
@@ -29,11 +29,10 @@ const CostCenterForm = () => {
   const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
   const current_= value.user;
-  console.log('currentZXX', current_);
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [current, setCurrent] = useState(current_);
-
+  useEffect(() => {}, [current, setCurrent, data]);
   useEffect(() => {setCurrent(current_)}, [current_]);
 
   const toggle= ()=> {
@@ -41,65 +40,61 @@ const CostCenterForm = () => {
   }
   const initAdd =()=> {
     const row = {...value.initialState.hits[0], company:profile.company, editing:false};
-    // setEditing(false);
     value.editRow(row, false);
     setCurrent(row);
   };
   const cancelEdit = (e) => {
      initAdd();
       e.preventDefault();
-    setSelected([]);
+     setSelected([-1]);
 
   };
 
-  const submitEdit = event => {
-    event.preventDefault();
-      if(current.editing) {
-          console.log("submitEdit1 current", current);
-          value.submitEdit(current, data);
-      } else submitAdd(event)
-  };
-
-  const submitAdd = event => {
-    event.preventDefault();
-    console.log("submitAdd1 current", current);
-    value.submitAdd(current, data);
-  };
+  const columnsX = ColumnsM(accData.hits, value.initialState, current, t);
+  const getColumnName = ()=>columnsX.map(col =>col.field);
 
   const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {handleFilter('')}, [data]);
   function handleFilter(text) {
     const  filtered = data.hits.filter(function(rc) {
-      return (rc.id.indexOf(text)>-1
-        ||rc.name.indexOf(text)>-1
-        ||rc.description.indexOf(text)>-1
-        ||rc.enterdate.indexOf(text)>-1
-        ||rc.postingdate.indexOf(text)>-1
-        ||rc.changedate.indexOf(text)>-1
-        ||rc.company.indexOf(text)>-1)}
-    );
+        const names = getColumnName();
+        console.log("getColumnNameXX", names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b) );
+        return names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b);
+      });
+
     const rows_=text?filtered:data.hits
     setFilteredRows(rows_);
   }
 
-  const edit = id =>{
-    const record = filteredRows.find(obj => obj.id === id);
+  const edit = editedRow =>{
+    const record = filteredRows.find(obj => obj.id === editedRow.id);
     const row = {...record, editing:true}
-    value.editRow(row);
-    //setCurrent(row);
+    setCurrent(row);
   }
 
   const mapping = item => <option key={item.id} value={item.id}>
-    {item.id+ " ".concat (item.name)}</option>;
+                          {item.id+ " ".concat (item.name)}</option>;
+  const submitEdit = event => {
+        event.preventDefault();
+        if(current.editing) {
+            const row = {...current}
+            setCurrent(row);
+            value.submitEdit(row, data);
+        } else submitAdd(event)
+    };
 
-
-  const columnsX = ColumnsM(accData.hits, value.initialState, current, t);
-
+  const submitAdd = event => {
+        event.preventDefault();
+        const row = {...current};
+        value.submitAdd(row, data);
+        setCurrent(row);
+    };
   function buildForm(current1) {
-    console.log("user1xx", current1);
+      const current = current1;
+    console.log("user1xx", current);
     return <>
       <Grid container spacing={2}  style={{...styles.outer, padding: 20, 'background-color':blue }} direction="column" >
-        <CForm  className="form-horizontal" onSubmit={ current1.editing?submitEdit:submitAdd} style={{padding:0}}>
+        <CForm  className="form-horizontal" onSubmit={ current.editing?submitEdit:submitAdd} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
@@ -151,7 +146,7 @@ const CostCenterForm = () => {
                   <CLabel size="sm" htmlFor="input-small">{t('costcenter.enterdate')}</CLabel>
                 </CCol>
                 <CCol sm="2">
-                  <CInput  bsSize="sm" type="text" id="enterdate-id" name="enterdate" className="input-sm"
+                  <CInput  readOnly bsSize="sm" type="text" id="enterdate-id" name="enterdate" className="input-sm"
                          placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
                          style={{'text-align':'right', padding:2 }}/>
                 </CCol>
@@ -170,7 +165,7 @@ const CostCenterForm = () => {
                 <CCol sm="2">
                   <CInput bsSize="sm" type="text" id="changedate-id" name="changedate" className="input-sm"
                          placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
-                         style={{'text-align':'right', padding:2 }}/>
+                         style={{'text-align':'right', padding:2 }} readonly/>
                 </CCol>
               </CFormGroup>
               <CFormGroup row style={{  height:15 }}>
@@ -191,7 +186,7 @@ const CostCenterForm = () => {
                 <CCol sm="2">
                   <CInput bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                          placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                         style={{'text-align':'right', padding:2 }}/>
+                         style={{'text-align':'right', padding:2 }} readonly />
                 </CCol>
               </CFormGroup>
               <CFormGroup row style={{  height:15 }}>
@@ -202,7 +197,7 @@ const CostCenterForm = () => {
                 <CCol sm="2">
                   <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
                          placeholder="company" value={current.company}
-                         style={{'text-align':'right', padding:2 }}/>
+                         style={{'text-align':'right', padding:2 }} readonly/>
                 </CCol>
               </CFormGroup>
               <CFormGroup row style={{  height:15 }}>
@@ -219,13 +214,11 @@ const CostCenterForm = () => {
       </CForm>
     </Grid>
     <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
-                   theme={theme} t={t}  edit ={edit}/>
+                   selected ={selected} theme={theme} t={t}  edit ={edit}/>
     </>
   }
+    console.log('currentcurrentCostCenterForm', current);
   return buildForm(current);
 
 };
 export default CostCenterForm;
-//<EnhancedTable props={props} style={{padding: 0, height: 50}}/>
-//<EditableTable Options ={OptionsM}  data={res?.hits?data:value.initialState} columns={columnsX}  rowStyle={rowStyle}  theme={theme}
-//               t={t}  editable={editableX}/>

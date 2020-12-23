@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react'
 import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
-import { dateFormat, capitalize } from '../../../utils/utils';
+import { dateFormat } from '../../../utils/utils';
 import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
@@ -36,112 +36,55 @@ const VatForm = () => {
   const [{ res2}] = useFetch(value.accUrl, {});
   const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
-  console.log('data_',data_)
-  console.log('accData_',accData_)
   const current_= value.user;
-  const id_ = value.user.id;
-  const name_ = value.user.name;
-  const description_ = value.user.description;
-  const percent_= value.user.percent
-  const inputaccount_= value.user.inputVatAccount;
-  const outputaccount_= value.user.outputVatAccount;
-  const company_= value.user.company;
-  const postingdate_=value.user.postingdate;
-  const changedate_=value.user.changedate;
-  const enterdate_=value.user.enterdate;
-  const editing_ = value.editing;
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [current,setCurrent] = useState(current_);
-  const [id,setId] = useState(id_);
-  const [name,setName] = useState(name_);
-  const [description, setDescription] = useState(description_);
-  const [percent,setPercent] = useState(percent_);
-  const [inputaccount, setInputaccount] = useState(inputaccount_);
-  const [outputaccount,setOutputaccount] = useState(outputaccount_);
-  const [company,setCompany] = useState(company_);
-  const [postingdate, setPostingdate] = useState(postingdate_);
-  const [changedate, setChangedate] = useState(changedate_);
-  const [enterdate, setEnterdate] = useState(enterdate_);
-  const [editing, setEditing] = useState(editing_);
-  useEffect(() => {}, [current, setCurrent, data, setEditing ]);
-  useEffect(() => {setCurrent(current_)}, [ current_,  id, name, description,
-    percent, inputaccount, outputaccount, company, enterdate, changedate, postingdate]);
-  useEffect(() => { setId(id_)}, [id_, current.id ]);
-  useEffect(() => { setName(name_)}, [name_, current.name ]);
-  useEffect(() => { setDescription(description_)}, [description_, current.description ]);
-  useEffect(() => { setPercent(percent_)}, [percent_, current.percent, data ]);
-  useEffect(() => { setInputaccount(inputaccount_)}, [inputaccount_, current.inputVatAccount, data ]);
-  useEffect(() => { setOutputaccount(outputaccount_)}, [outputaccount_, current.outputVatAccount, data ]);
-  useEffect(() => { setCompany(company_)}, [company_, current.company ]);
-  useEffect(() => { setPostingdate(postingdate_)}, [postingdate_, current.postingdate ]);
-  useEffect(() => { setChangedate(changedate_)}, [changedate_, current.changedate ]);
-  useEffect(() => { setEnterdate(enterdate_)}, [enterdate_, current.enterdate ]);
-  useEffect(() => { setEditing(editing_)}, [editing_ ]);
-  //useEffect(() => { setData(data_)}, [data_, value.data]);
-  //useEffect(() => { setAccData(accData_)}, [accData_, value.accData]);
-
-
+  useEffect(() => {}, [current, setCurrent, data ]);
+  useEffect(() => {setCurrent(current_)}, [ current_]);
 
   const toggle= ()=> {
     setState({ ...state, collapse:!state.collapse });
   }
 
   const initAdd =()=> {
-    const row = {...value.initialState.hits[0], company:profile.company, editing:false};
-     setEditing(false);
-    value.editRow(row, false);
-    setCurrent(row);
+    setCurrent({...value.initialState.hits[0], company:profile.company, editing:false});
   };
   const cancelEdit = (e) => {
-   // e.preventDefault();
+    e.preventDefault();
     initAdd();
-    setSelected([]);
+    //setSelected([]);
   };
+  const columnsX = columns(accData.hits, value.initialState, current, t);
+  const getColumnName =()=>columnsX.map(col =>col.field);
 
   const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {handleFilter('')}, [data]);
- const col1="name"
+
   function handleFilter(text) {
     const  filtered = data.hits.filter(function(rc) {
-      return (rc.id.indexOf(text)>-1
-        ||`rc.${col1}.indexOf(text)`>-1
-        ||rc.description.indexOf(text)>-1
-        ||rc.percent.toString().indexOf(text)>-1
-        ||rc.inputVatAccount.indexOf(text)>-1
-        ||rc.outputVatAccount.indexOf(text)>-1
-        ||rc.enterdate.indexOf(text)>-1
-        ||rc.postingdate.indexOf(text)>-1
-        ||rc.changedate.indexOf(text)>-1
-        ||rc.company.indexOf(text)>-1)}
-        );
-    const rows_=text?filtered:data.hits
-    //console.log('filteredRows+', rows_);
+      const names = getColumnName();
+      console.log("getColumnNameXX", names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b) );
+      return names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b);
+    });
+
+    const rows_=text?filtered:data.hits;
     setFilteredRows(rows_);
   }
 
-  const edit = id =>{
-    const record = filteredRows.find(obj => obj.id === id);
-    value.editRow(record);
+  const edit = editedRow =>{
+    const record = filteredRows.find(obj => obj.id === editedRow.id);
+    setCurrent({...record, editing:true});
   }
-  const handleInputChange = event => {
-    event.preventDefault();
-    const { name, value } = event.target;
-    //const namex=name
-    const method="set"+capitalize(name)
-    const row = Object.assign(current, {namex:value});
-     eval(method)(value);
-    setCurrent(row);
-  };
+
+
   const mapping = item => <option key={item.id} value={item.id}>
     {item.id+ " ".concat (item.name)}</option>;
 
   const submitEdit = event => {
     event.preventDefault();
     if(current.editing) {
-      const row = {id:id, name:name, description:description, percent:percent, inputVatAccount:inputaccount
-        ,   outputVatAccount:outputaccount, enterdate:enterdate, postingdate:postingdate, changedate:changedate
-        ,  company:company, modelid:current.modelid};
+      const row = {...current}
         setCurrent(row);
        value.submitEdit(row, data);
     } else submitAdd(event)
@@ -149,26 +92,18 @@ const VatForm = () => {
 
   const submitAdd = event => {
     event.preventDefault();
-    //console.log("submitAdd1 current", current);
-    const row = {id:id, name:name, description:description, percent:percent, inputVatAccount:inputaccount
-      , outputVatAccount:outputaccount, enterdate:current_.enterdate, postingdate:current_.postingdate
-      , changedate:current_.changedate, company:current_.company, modelid:current.modelid};
+    const row = {...current};
     value.submitAdd(row, data);
     setCurrent(row);
   };
 
-  const columnsX = columns(accData.hits, value.initialState, current, t);
+
 
   function buildForm(current1){
-    const addOrEdit = (typeof current1.editing==='undefined')?editing:current1.editing;
-    const submit = addOrEdit ? submitEdit : submitAdd
-    const props = {
-      title: value.title, columns: value.headers, rows: filteredRows, edit: edit, submit: submit, selected: selected
-      , editable:true, setSelected: setSelected, cancel: cancelEdit, handleFilter: handleFilter, rowsPerPageOptions: [5, 15, 25, 100]
-    }
+    const current =current1
     return <>
       <Grid container spacing={2} style={{...styles.outer, padding: 20, 'background-color':blue }} direction="column" >
-        <CForm  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
+        <CForm  className="form-horizontal" onSubmit={ current.editing?submitEdit:submitAdd} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
@@ -213,7 +148,8 @@ const VatForm = () => {
               </CCol>
               <CCol sm="4">
                 <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm"
-                        placeholder="Id" value= {id} onChange={handleInputChange} />
+                        placeholder="Id" value= {current.id}
+                        onChange={(event)  => value.setCurrent({ ...current, id: event.target.value})} />
               </CCol>
               <CCol sm="2">
                 <CLabel size="sm" htmlFor="input-small">{t('vat.enterdate')}</CLabel>
@@ -231,7 +167,8 @@ const VatForm = () => {
               </CCol>
               <CCol sm="4">
                 <CInput bsSize="sm" type="text" id="name-input" name="name" className="input-sm"
-                        placeholder="Name" value={name} onChange={handleInputChange} />
+                        placeholder="Name" value={current.name}
+                        onChange={(event)  => value.setCurrent({ ...current, name: event.target.value})} />
               </CCol>
               <CCol sm="2">
                 <CLabel size="sm" htmlFor="input-small">{t('vat.changedate')}</CLabel>
@@ -249,7 +186,8 @@ const VatForm = () => {
               </CCol>
               <CCol sm="4">
                 <CSelect className ="flex-row" type="select" name="inputaccount" id="inputaccount-id"
-                        value={inputaccount} onChange={handleInputChange} >
+                        value={current.inputVatAccount}
+                         onChange={(event)  => value.setCurrent({ ...current, inputVatAccount: event.target.value})} >
                   {accData.hits.map(item => mapping(item))};
 
                 </CSelect>
@@ -270,7 +208,8 @@ const VatForm = () => {
               </CCol>
               <CCol sm="4">
                 <CSelect className ="flex-row" type="select" name="outputaccount" id="outputaccount-id"
-                        value={outputaccount} onChange={handleInputChange} >
+                        value={current.outputVatAccount}
+                         onChange={(event)  => value.setCurrent({ ...current, outputVatAccount: event.target.value})} >
                   {accData.hits.map(item => mapping(item))};
                 </CSelect>
               </CCol>
@@ -279,14 +218,15 @@ const VatForm = () => {
               </CCol>
               <CCol sm="1">
                 <CInput  bsSize="sm" type="text" id="percent-id" name="percent"  className="input-sm"
-                         placeholder="percent" value={percent} onChange={handleInputChange} />
+                         placeholder="percent" value={current.percent}
+                         onChange={(event)  => value.setCurrent({ ...current, percent: event.target.value})} />
               </CCol>
               <CCol sm="1">
                 <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
               </CCol>
               <CCol sm="1">
                 <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
-                        placeholder="company" value={company} />
+                        placeholder="company" value={current.company} />
               </CCol>
 
             </CFormGroup>
@@ -296,14 +236,15 @@ const VatForm = () => {
               </CCol>
               <CCol xs="12"   md="9">
                 <CTextarea type="textarea" name="description" id="description-id" rows="1"
-                        placeholder="Content..." value={description} onChange={handleInputChange} />
+                        placeholder="Content..." value={current.description}
+                           onChange={(event)  => value.setCurrent({ ...current, description: event.target.value})} />
               </CCol>
             </CFormGroup>
           </CCollapse>
          </CForm>
       </Grid>
       <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
-                     theme={theme} t={t}  edit ={edit}/>
+                     selected ={[-1]} theme={theme} t={t}  edit ={edit}/>
  </>
   }
 

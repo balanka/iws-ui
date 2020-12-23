@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 export default function BalancesheetTreeView(props) {
     const {title, columns, rows, rowsPerPageOptions, edit, editable, submit, cancel
         , post, useStylesx, handleFilter} = props.props;
-    console.log('rowsXX', rows)
+    //console.log('rowsXX', rows)
     const useStyles=useStylesx?useStylesx:useStyles_;
     const classes = useStyles();
     const [selected, setSelected] = useState([]);
@@ -40,7 +40,7 @@ export default function BalancesheetTreeView(props) {
     const handleChecked = (id) => {
         const selectedIndex = selected.indexOf(id);
         console.log('id', id);
-        console.log('selectedIndex', selectedIndex);
+        //console.log('selectedIndex', selectedIndex);
         //edit(id);
         setSelected([id]);
 

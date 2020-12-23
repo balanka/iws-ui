@@ -69,21 +69,42 @@ const removeTableData = (datax) => {
     return clonex;
 };
 
+const addLine = (data, setData, current , newData) =>{
+    const datax = JSON.parse(JSON.stringify(data));
+    const index=datax.length
+    datax[index] = newData;
+    setData([...datax]);
+    const currentx = {...current};
+    const index1 = currentx.lines.length;
+    currentx.lines[index1] = newData;
+}
+
 export const  editable = (data, setData, current ) => ({
-    onRowAdd: newData =>
-        new Promise((resolve, reject) => {
+    onRowAdd: newData =>{
             const datax = JSON.parse(JSON.stringify(data));
-          setTimeout(() => {
               const index=datax.length
               datax[index] = newData;
-              setData(datax);
+              setData([...datax]);
               const currentx = {...current};
               const index1 = currentx.lines.length;
               currentx.lines[index1] = newData;
-            resolve();
-          }, 600)
+        },
+    /*
+    onBulkUpdate: (changes) =>
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const updatedData = [...this.state.data];
+                Object.keys(changes).map(
+                    (rowId) => (updatedData[rowId] = changes[rowId].newData)
+                );
+                this.setState({
+                    data: updatedData
+                });
+                resolve();
+            }, 1000);
         }),
 
+     */
     onRowUpdate: (newData, oldData) =>
         new Promise((resolve) => {
             setTimeout(() => {
@@ -114,6 +135,29 @@ export const  editable = (data, setData, current ) => ({
         })
 })
 
+export const columnsF =(data, line, current, t) => [
+     {field:'tid', title:t('financials.id'), hidden:false,  initialEditValue:line.id}
+    , {field:'oid', title:t('financials.oiid'), hidden:false, initialEditValue:current.oid}
+    , {field:'account', title:t('financials.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
+            accountD ( data, value, onRowDataChange, rowData ),  initialEditValue:'', width: 20}
+    , {field:'costcenter', title:t('financials.costcenter'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
+            accountD ( data, value, onRowDataChange, rowData ),  initialEditValue:'', width: 20}
+    , {field:'enterdate', title:t('financials.enterdate'), type:"date", align:"right",
+        initialEditValue:line.enterdate, dateSetting: { locale:"de" } }
+    , {field:'postingdate', title:t('financials.postingdate'), type:"date", align:"right",
+        initialEditValue:line.postingdate, dateSetting: { locale:"de" } }
+    , {field:'transdate', title:t('financials.transdate'), type:"date", align:"right",
+        initialEditValue:line.transdate, dateSetting: { locale:"de" } }
+    , {field:'period', title:t('financials.period'), type:"numeric", export:true}
+    , {field:'posted', title:t('financials.posted'), type:"boolean", width:10}
+    , {field:'text', title:t('financials.text'), type:"text", export:true}
+    , {field:'typeJournal', title:t('financials.type'), type:"numeric", export:true}
+    , {field:'model', title:t('common.modelid'), type:"numeric", export:true}
+    , {field:'company', title:t('common.company'), type:"numeric", export:true}
+    //, {field:'amount', title:t('financials.line.amount'), type:"currency", initialEditValue:0,
+    //    currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    //, {field:'currency', title:t('common.currency'), hidden:false,  initialEditValue:line.currency}
+]
 export const Linescolumns =(data, line, current, t) => [
       {field:'lid', title:t('financials.line.id'), hidden:false,  initialEditValue:line.lid}
     , {field:'transid', title:"transid", hidden:false, initialEditValue:current.tid}
@@ -132,8 +176,8 @@ export const Linescolumns =(data, line, current, t) => [
     , {field:'company', title:t('common.company'), hidden:false,  initialEditValue:line.company}
   ]
 export const Options = ({
-    toolbar:false,
-    draggable:true,
+    toolbar:true,
+    draggable:false,
     header:true,
     grouping:false,
     sorting:true,

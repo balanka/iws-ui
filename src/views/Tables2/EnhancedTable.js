@@ -48,10 +48,6 @@ export default function EnhancedTable( props) {
         const handleClick = (event, id) => {
             const selectedIndex = selected_.indexOf(id);
           const { name, value } = event.target;
-          console.log('namez', name );
-          console.log('valuez', value );
-            console.log('idz', id);
-           console.log('selectedIndex', selectedIndex);
             edit(id);
            setSelected_([id]);
         };
@@ -65,7 +61,6 @@ export default function EnhancedTable( props) {
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
         const renderTableRow =(row, index)=>{
         const id=row?.id?row.id:row.tid
-        console.log('id', id)
         const isItemSelected = isSelected(id);
         const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -97,8 +92,6 @@ export default function EnhancedTable( props) {
             </StyledTableRow>
         );
     }
-
-
         return ( <>
                     <EnhancedTableToolbar title={title} numSelected={selected_.length} submit ={submit}
                                           cancel ={cancel}
@@ -125,8 +118,6 @@ export default function EnhancedTable( props) {
                                 style={{height:10, padding:0}}
                             />
                             <TableBody>
-                                { console.log('rowsrowsrowsrowsrowsrows', rows)}
-                                { console.log('rowsrowsrowsrowsrowsrowsL', rows.length)}
                                 {
                                    rows.length>0?stableSort(rows, getComparator(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

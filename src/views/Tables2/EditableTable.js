@@ -15,7 +15,6 @@ import RateReviewIcon from '@material-ui/icons/RateReview';
 export default function EditableTable(props) {
     const {Options, flag, data, columns, t, tableRef, addRow, edit, editable} = props
     const [selectedRows, setSelectedRows] = useState([]);
-    //const tableRef = createRef();
     const dx=data
     const [datax, setDatax] = useState(dx);
     console.log('dataxdatax',datax);
@@ -30,10 +29,10 @@ export default function EditableTable(props) {
     return (
         <MaterialTable
             editable={flag?null:editable}
-           tableRef={tableRef}
+           //tableRef={tableRef}
             //title={props.title}
             columns={columns}
-            data={dx}
+            data={data}
             icons={{
                 Add: () => <Add />,
                 Check: () => <Check />,
@@ -49,8 +48,9 @@ export default function EditableTable(props) {
             }}
             options={Options}
             components={components}
-            onSelectionChange={(rows) => { console.log('selectedRows',rows);
-                if(rows.length>0) edit(rows[0].id);
+            onSelectionChange={(rows) => { console.log('selectedRows',rows); console.log('selectedRowsedit',edit!==null);
+               // if(rows.length>0) edit(rows[0].tid);
+                if(rows.length>0 && edit!==null) edit(rows[0]);
             setSelectedRows(rows)}}
             localization={{
                 body: {

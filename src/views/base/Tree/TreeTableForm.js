@@ -71,7 +71,7 @@ export default function TreeTableForm ()  {
   };
 
   const toggle = ()=> {
-    console.log("accData", accData)
+   // console.log("accData", accData)
     accData?.hits?.length<2? submitFetch():
     setState2({...state2, collapse: !state2.collapse });
   }
