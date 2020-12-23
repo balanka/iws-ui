@@ -43,12 +43,7 @@ const CostCenterForm = () => {
     value.editRow(row, false);
     setCurrent(row);
   };
-  const cancelEdit = (e) => {
-     initAdd();
-      e.preventDefault();
-     setSelected([-1]);
-
-  };
+  const cancelEdit = (e) =>  initAdd();
 
   const columnsX = ColumnsM(accData.hits, value.initialState, current, t);
   const getColumnName = ()=>columnsX.map(col =>col.field);

@@ -1,7 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react'
 import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
 import {dateFormat} from "../../../utils/utils"
-import EnhancedTable from '../../Tables2/EnhancedTable';
 import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
@@ -24,89 +23,70 @@ const styles = {
 const AccountForm = () => {
   const [profile, ] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
-  const [selected, setSelected] = useState([]);
   const value = useContext(accountContext);
   const t = value.t
   const [{ res}, ]= useFetch(value.url, {});
   const [{ res2 }, ] = useFetch(value.accUrl, {});
   const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
-  console.log('data_',data_)
-  console.log('accData_',accData_)
   const current_= value.user;
-  const editing_ = value.editing;
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [current,setCurrent] = useState(current_);
-  const [editing, setEditing] = useState(editing_);
+  useEffect(() => {}, [current, setCurrent, data]);
   useEffect(() => {setCurrent(current_)}, [current_]);
-  console.log('currentZZZ', current_);
-  console.log('accData_',accData_)
 
   const toggle= ()=> {
     setState({...state, collapse:!state.collapse });
   }
   const initAdd =()=> {
     const row = {...value.initialState.hits[0], company:profile.company, editing:false};
-     setEditing(false);
     value.editRow(row, false);
     setCurrent(row);
-    console.log('rowZ', row)
   };
-  const cancelEdit = (e) => {
-    initAdd();
-    setSelected([]);
-  };
-  const submitEdit = event => {
-    event.preventDefault();
-    if(current.editing||editing) {
-      console.log("submitEdit1 current", current);
-      value.submitEdit(current, data);
-    } else submitAdd(event)
-  };
-
-  const submitAdd = event => {
-    event.preventDefault();
-    console.log("submitAdd1 current", current);
-    value.submitAdd(current, data);
-  };
+  const cancelEdit = (e) => initAdd();
+  const columnsX = columns(accData.hits, value.initialState, current, t);
+  const getColumnName = ()=>columnsX.map(col =>col.field);
 
   const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {handleFilter('')}, [data]);
   function handleFilter(text) {
-    const filtered = data.hits.filter(function(rc) {
-      return (rc.id.indexOf(text)>-1
-        ||rc.name.indexOf(text)>-1
-        ||rc.description.indexOf(text)>-1
-        ||rc.account.indexOf(text)>-1
-        ||rc.changedate.indexOf(text)>-1
-        ||rc.enterdate.indexOf(text)>-1
-        ||rc.postingdate.indexOf(text)>-1
-        ||rc.idebit.toString().indexOf(text)>-1
-        ||rc.icredit.toString().indexOf(text)>-1
-        ||rc.debit.toString().indexOf(text)>-1
-        ||rc.credit.toString().indexOf(text)>-1
-        ||rc.balancesheet.toString().indexOf(text)>-1)
+    const  filtered = data.hits.filter(function(rc) {
+      const names = getColumnName();
+      return names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b);
     });
     const rows_=text?filtered:data.hits
-    console.log('filteredRows+', rows_);
     setFilteredRows(rows_);
   }
-  const edit = id =>{
-    const record = filteredRows.find(obj => obj.id === id);
-    value.editRow(record);
+  const edit = editedRow =>{
+    const record = filteredRows.find(obj => obj.id === editedRow.id);
+    const row = {...record, editing:true}
+    setCurrent(row);
   }
 
   const mapping = item => <option key={item.id} value={item.id}>
     {item.id+ " ".concat (item.name)}</option>;
 
-  const columnsX = columns(accData.hits, value.initialState, current, t);
+  const submitEdit = event => {
+    event.preventDefault();
+    if(current.editing) {
+      const row = {...current}
+      setCurrent(row);
+      value.submitEdit(row, data);
+    } else submitAdd(event)
+  };
 
-  function buildForm(current1){
-    const addOrEdit = (typeof current1.editing==='undefined')?editing:current1.editing;
+  const submitAdd = event => {
+    event.preventDefault();
+    const row = {...current};
+    value.submitAdd(row, data);
+    setCurrent(row);
+  };
+
+  function buildForm(current){
     return <>
        <Grid container spacing={2} style={{...styles.outer, padding: 20, 'background-color':blue }} direction="column" >
-        <CForm  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd}>
+        <CForm  className="form-horizontal" onSubmit={  current.editing?submitEdit:submitAdd}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
@@ -157,10 +137,10 @@ const AccountForm = () => {
                             <CLabel size="sm" htmlFor="input-small">{t('account.enterdate')}</CLabel>
                           </CCol>
                           <CCol sm="2">
-                            <CInput disabled bsSize="sm" type="text"  id="enterdate-id" name="enterdate"
+                            <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate"
                                    className="input-sm" placeholder="date"
                                    value={dateFormat(current.enterdate, "dd.mm.yyyy")}
-                                   style={{'text-align':'right', padding:2 }}/>
+                                   style={{'text-align':'right', padding:2 }} readonly />
                           </CCol>
                         </CFormGroup>
                         <CFormGroup row style={{  height:15 }}>
@@ -175,9 +155,9 @@ const AccountForm = () => {
                             <CLabel size="sm" htmlFor="input-small">{t('account.changedate')}</CLabel>
                           </CCol>
                           <CCol sm="2">
-                            <CInput disabled bsSize="sm"  type="text"  id="changedate-id" name="changedate"
+                            <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate"
                                    className="input-sm" placeholder="date" value={dateFormat(current.changedate,
-                              "dd.mm.yyyy")} style={{'text-align':'right', padding:2 }}/>
+                              "dd.mm.yyyy")} style={{'text-align':'right', padding:2 }} readonly />
                           </CCol>
                         </CFormGroup>
                         <CFormGroup row style={{  height:15 }}>
@@ -196,10 +176,10 @@ const AccountForm = () => {
                             <CLabel size="sm" htmlFor="input-small">{t('account.postingdate')}</CLabel>
                           </CCol>
                           <CCol sm="2">
-                            <CInput disabled bsSize="sm" type="text" id="input-small" name="postingdate"
+                            <CInput  bsSize="sm" type="text" id="input-small" name="postingdate"
                                    className="input-sm" placeholder="date"
                                    value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                                   style={{'text-align':'right', padding:2 }}/>
+                                   style={{'text-align':'right', padding:2 }} readonly/>
                           </CCol>
                         </CFormGroup>
                        <CFormGroup row style={{  height:15 }}>
@@ -239,8 +219,8 @@ const AccountForm = () => {
                     </CCollapse>
                 </CForm>
                </Grid>
-                <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
-                     theme={theme} t={t}  edit ={edit}/>
+               <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
+                     selected ={[-1]} theme={theme} t={t}  edit ={edit}/>
              </>
   }
 
