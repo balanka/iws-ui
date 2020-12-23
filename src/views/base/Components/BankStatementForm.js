@@ -14,6 +14,11 @@ import axios from "axios";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
+import {ColumnsBS as columns, OptionsM} from "../../Tables2/LineFinancialsProps";
+import EditableTable from "../../Tables2/EditableTable";
+import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 const styles = {
   outer: {
     borderRadius: 5,
@@ -33,61 +38,12 @@ const BankStatementForm = () => {
   const data_ =  res?.hits?res.hits:[value.initialState];
   const getData =()=> { return data?.hits?data.hits:init().hits}
   const current_= value.user;
-  const id_ = value.user.id;
-  const depositor_ = value.user.depositor;
-  const beneficiary_ = value.user.beneficiary;
-  const postingdate_=value.user.postingdate;
-  const valuedate_ = Date.parse(value.user.valuedate);
-  const postingtext_= value.user.postingText;
-  const purpose_= value.user.purpose;
-  const accountno_= value.user.accountno;
-  const bankCode_= value.user.bankCode;
-  const amount_= value.user.amount;
-  const currency_=value.user.currency;
-  const info_=value.user.info;
-  const company_=value.user.company;
-  const companyIban_=value.user.companyIban;
-  const posted_=value.user.posted;
-  const editing_ = value.editing;
   const [data, setData] = useState(data_);
   const [current,setCurrent] = useState(current_);
-  const [id,setId] = useState(id_);
-  const [depositor,setDepositor] = useState(depositor_);
-  const [postingdate, setPostingdate] = useState(postingdate_);
-  const [valuedate, setValuedate] = useState(valuedate_);
-  const [postingtext, setPostingtext] = useState(postingtext_);
-  const [purpose,setPurpose] = useState(purpose_);
-  const [beneficiary, setBeneficiary] = useState(beneficiary_);
-  const [accountno,setAccountno] = useState(accountno_);
-  const [bankCode,setBankCode] = useState(bankCode_);
-  const [amount,setAmount] = useState(amount_);
-  const [currency,setCurrency] = useState(currency_);
-  const [info,setInfo] = useState(info_);
-  const [company,setCompany] = useState(company_);
-  const [companyIban,setCompanyIban] = useState(companyIban_);
-  const [posted,setPosted] = useState(posted_);
-  const [editing, setEditing] = useState(editing_);
   const [filteredRows, setFilteredRows] = useState(data);
-  useEffect(() => {}, [current, setCurrent, data, setEditing ]);
-  useEffect(() => {setCurrent(current_)}, [ current_, id, depositor, postingdate, valuedate
-        , postingtext, purpose, beneficiary, accountno, bankCode,  amount, currency, info
-        ,  company, companyIban, posted ]);
-  useEffect(() => { setId(id_)}, [id_, current.id ]);
-  useEffect(() => { setDepositor(depositor_)}, [depositor_, current.depositor ]);
-  useEffect(() => { setPostingdate(postingdate_)}, [postingdate_, current.postingdate ]);
-  useEffect(() => { setValuedate(valuedate_)}, [valuedate_, current.valuedate ]);
-  useEffect(() => { setPostingtext(postingtext_)}, [postingtext_, current.postingtext]);
-  useEffect(() => { setPurpose(purpose_)}, [purpose_, current.purpose]);
-  useEffect(() => { setBeneficiary(beneficiary_)}, [beneficiary_, current.beneficiary]);
-  useEffect(() => { setAccountno(accountno_)}, [accountno_, current.accountno]);
-  useEffect(() => { setBankCode(bankCode_)}, [bankCode_, current.bankCode ]);
-  useEffect(() => { setAmount(amount_)}, [amount_, current.amount]);
-  useEffect(() => { setCurrency(currency_)}, [currency_, current.currency]);
-  useEffect(() => { setInfo(info_)}, [info_, current.info]);
-  useEffect(() => { setCompany(company_)}, [company_, current.company]);
-  useEffect(() => { setCompanyIban(companyIban_)}, [companyIban_, current.companyIban]);
-  useEffect(() => { setPosted(posted_)}, [posted_, current.posted]);
-  useEffect(() => { setEditing(editing_)}, [editing_ ]);
+  useEffect(() => {}, [current, setCurrent, data]);
+  useEffect(() => {setCurrent(current_)}, [ current_]);
+
   useEffect(() => {handleFilter('')}, [data]);
 
   const submitGet = (url, func, result) => {
@@ -95,9 +51,7 @@ const BankStatementForm = () => {
       .then(response => {
         const resp = response.data;
         result=response.data;
-        console.log('response.data', resp);
-        console.log('response.headers', response.headers);
-        console.log('result', result);
+
         func(resp);
         result=resp;
         return result;
@@ -122,62 +76,40 @@ const BankStatementForm = () => {
     fetchData(url_, setData, result);
     console.log("result", result);
   };
-
+    const cancelEdit = (e) => {
+        const row = {...current};
+        value.editRow(row, false);
+        setCurrent(row);
+    };
+    const columnsX = columns([], value.initialState, current, t);
+    const getColumnName = ()=>columnsX.map(col =>col.field);
 
   function handleFilter(text) {
-
-    let filteredRows_=!text?getData():getData().filter(function(rc) {
-
-      return (rc.id.toString().indexOf(text)>-1
-        ||rc.depositor.indexOf(text)>-1
-        ||rc.postingdate.indexOf(text)>-1
-        ||rc.valuedate.indexOf(text)>-1
-        ||rc.postingtext.indexOf(text)>-1
-        ||rc.purpose.indexOf(text)>-1
-        ||rc.beneficiary.indexOf(text)>-1
-        ||rc.accountno.indexOf(text)>-1
-        ||rc.amount.indexOf(text)>-1
-        ||rc.info.indexOf(text)>-1
-        ||rc.posted.toString().indexOf(text)>-1
-        ||rc.companyIban.indexOf(text)>-1)});
-    console.log('filteredRows+', filteredRows_);
-        setFilteredRows(filteredRows_);
+      const  filtered = getData().filter(function(rc) {
+          const names = getColumnName();
+          return names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b);
+      });
+      const rows_=text?filtered:data.hits
+      setFilteredRows(rows_);
   }
   const toggle= ()=> {
     setState({...state, collapse:!state.collapse });
   }
 
-  const cancelEdit = (e) => {
-   // e.preventDefault();
-    setSelected([]);
-  };
-  const edit = id =>{
-    const record = data.hits.find(obj => obj.id === id);
-    value.editRow(record);
-  }
-  const handleInputChange = event => {
-    event.preventDefault();
-    const { name, value } = event.target;
-    const method="set"+capitalize(name)
-    const row = Object.assign(current, {name:value});
-    eval(method)(value);
-    console.log('currentz', row);
-    console.log('currentz', current);
-    setCurrent(row);
-  };
+  const edit = editedRow =>{
+        const record = filteredRows.find(obj => obj.id === editedRow.id);
+        const row = {...record, editing:true}
+        setCurrent(row);
+    }
 
 
   const submitEdit = event => {
-    event.preventDefault();
-    console.log("submitEdit1 current", current);
-    const row = { id:current.id, depositor:depositor, postingdate:current.postingdate, valuedate:current.valuedate
-      , postingtext:current.postingtext, purpose:purpose, beneficiary:current.beneficiary, accountno:accountno
-      , bankCode:bankCode, amount:current.amount, currency:current.currency,  info:info
-      , company:current.company, companyIban:companyIban, posted:current.posted, modelid:current.modelid};
-    console.log("submitEdit1 current", row);
-    setCurrent(row);
-    value.submitEdit(row, data);
-    console.log("submitEdit current", current);
+        event.preventDefault();
+        if(current.editing && !current.posted) {
+            const row = {...current}
+            setCurrent(row);
+            value.submitEdit(row, data);
+        }
   };
 
   const submitAdd = event => {
@@ -186,13 +118,9 @@ const BankStatementForm = () => {
 
   function buildForm(current1){
     console.log("user1xx", current1);
-    const addOrEdit = (typeof current1.editing==='undefined')?editing:current1.editing;
-    const submit= addOrEdit?submitEdit:submitAdd
-    const props={title:value.title, columns:value.headers, rows:filteredRows, edit:edit, submit:submit, selected:selected
-      , editable:true, setSelected:setSelected, cancel:cancelEdit, handleFilter:handleFilter,rowsPerPageOptions:[15, 25, 100,500, 1000]}
     return <>
       <Grid container spacing={2} style={{...styles.outer, padding: 20, 'background-color':blue }} direction="column" >
-        <CForm  className="form-horizontal" onSubmit={ addOrEdit?submitEdit:submitAdd} style={{padding:0}}>
+        <CForm  className="form-horizontal" onSubmit={ current1.editing?submitEdit:submitAdd} style={{padding:0}}>
           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
@@ -226,14 +154,14 @@ const BankStatementForm = () => {
                           </CCol>
                           <CCol sm="4">
                             <CInput  bsSize="sm" type="text" id="account-id" name="id" className="input-sm"
-                                    placeholder="Id" value= {id}  />
+                                    placeholder="Id" value= {current.id}  />
                           </CCol>
                           <CCol sm="1">
                             <CLabel size="sm" htmlFor="input-small">{t('bankstatement.postingdate')}</CLabel>
                           </CCol>
                           <CCol sm="1.5">
                             <CInput  bsSize="sm" type="text"  id="postingdate-id" name="postingdate" className="input-sm"
-                                    placeholder="date" value={dateFormat(current1.postingdate, "dd.mm.yyyy")}
+                                    placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
                                     style={{'text-align':'right', padding:2 }}/>
                           </CCol>
                         </CFormGroup>
@@ -243,14 +171,28 @@ const BankStatementForm = () => {
                           </CCol>
                           <CCol sm="4">
                             <CInput  bsSize="sm" type="text" id="depositor-input" name="depositor"
-                                    className="input-sm" placeholder="depositor" value={depositor}  />
+                                    className="input-sm" placeholder="depositor" value={current.depositor}  />
                           </CCol>
                           <CCol sm="1">
-                            <CLabel size="sm" htmlFor="input-small">{t('bankstatement.valuedate')}</CLabel>
                           </CCol>
                           <CCol sm="1.5">
-                            <DatePicker  locale="de-DE" dateFormat='dd.MM.yyyy' selected={valuedate}
-                                         onChange={date => setValuedate(date)} style={{ 'text-align':'right' }}/>
+                              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                  <KeyboardDatePicker
+                                      disabled ={current.posted}
+                                      disableToolbar
+                                      fullWidth
+                                      variant="inline"
+                                      format="dd.MM.yyyy"
+                                      margin="normal"
+                                      id="date-picker-inline"
+                                      label={t('bankstatement.valuedate')}
+                                      value={current.valuedate}
+                                      onChange={(event) => { value.setCurrent({ ...current, valuedate: event.target.value})}}
+                                      KeyboardButtonProps = {{
+                                          'aria-label': t('bankstatement.valuedate'),
+                                      }}
+                                  />
+                              </MuiPickersUtilsProvider>
                           </CCol>
                         </CFormGroup>
                  <CFormGroup row style={{  height:15 }}>
@@ -259,7 +201,7 @@ const BankStatementForm = () => {
                           </CCol>
                           <CCol sm="4">
                             <CInput  bsSize="sm" type="text" id="beneficiary-input" name="beneficiary"
-                                   className="input-sm" placeholder="beneficiary" value={beneficiary}/>
+                                   className="input-sm" placeholder="beneficiary" value={current.beneficiary}/>
                           </CCol>
                           <CCol sm="1">
                             <CLabel size="sm" htmlFor="input-small">{t('bankstatement.postingtext')}</CLabel>
@@ -275,14 +217,14 @@ const BankStatementForm = () => {
                         </CCol>
                         <CCol xs="4">
                           <CInput  bsSize="sm" type="text" id="info-input" name="info" className="input-sm"
-                                 placeholder="info" value={info}  />
+                                 placeholder="info" value={current.info}  />
                         </CCol>
                         <CCol sm="1">
                           <CLabel size="sm" htmlFor="input-small">{t('bankstatement.amount')}</CLabel>
                         </CCol>
                         <CCol sm="1.5">
                           <CInput  bsSize="sm" type="text" id="amount-input" name="amount" className="input-sm"
-                                 placeholder="amount" value={currencyAmountFormatDE(Number(amount),currency)}
+                                 placeholder="amount" value={currencyAmountFormatDE(Number(current.amount),current.currency)}
                                  style={{ 'text-align':'right' }}/>
                         </CCol>
                       </CFormGroup>
@@ -291,15 +233,16 @@ const BankStatementForm = () => {
                           <CLabel size="sm" htmlFor="input-small">{t('bankstatement.companyIban')}</CLabel>
                         </CCol>
                         <CCol sm="4">
-                          <CInput disabled ={posted} bsSize="sm" type="text" id="companyIban-id" name="companyIban"
-                                  className="input-sm" placeholder="companyIban" value={companyIban} onChange={handleInputChange} />
+                          <CInput disabled ={current.posted} bsSize="sm" type="text" id="companyIban-id" name="companyIban"
+                                  className="input-sm" placeholder="companyIban" value={current.companyIban}
+                                  onChange={(event)  => setCurrent({ ...current, accountno: event.target.value})} />
                         </CCol>
                         <CCol sm="1">
                           <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
                         </CCol>
                         <CCol sm="1.5">
                           <CInput  bsSize="sm" type="text" id="company-input" name="company" className="input-sm"
-                                  placeholder="company" value={company} style={{ 'text-align':'right' }}/>
+                                  placeholder="company" value={current.company} style={{ 'text-align':'right' }}/>
                         </CCol>
 
                       </CFormGroup>
@@ -308,15 +251,17 @@ const BankStatementForm = () => {
                           <CLabel size="sm" htmlFor="input-small">{t('bankstatement.accountno')} </CLabel>
                         </CCol>
                         <CCol sm="4">
-                          <CInput disabled ={posted} bsSize="sm" type="text" id="accountno-input" name="accountno"
-                                  className="input-sm" placeholder="accountno" value={accountno} onChange={handleInputChange} />
+                          <CInput disabled ={current.posted} bsSize="sm" type="text" id="accountno-input" name="accountno"
+                                  className="input-sm" placeholder="accountno" value={current.accountno}
+                                  onChange={(event)  => value.setCurrent({ ...current, accountno: event.target.value})} />
                         </CCol>
                         <CCol sm="1">
                              <CLabel size="sm" htmlFor="input-small">{t('bankstatement.bankCode')} </CLabel>
                         </CCol>
                         <CCol sm="1.5">
-                          <CInput disabled ={posted} bsSize="sm" type="text" id="bankCode-input" name="bankCode"
-                                  className="input-sm" placeholder="bankCode" value={bankCode} onChange={handleInputChange}
+                          <CInput disabled ={current.posted} bsSize="sm" type="text" id="bankCode-input" name="bankCode"
+                                  className="input-sm" placeholder="bankCode" value={current.bankCode}
+                                  onChange={(event)  => value.setCurrent({ ...current, bankCode: event.target.value})}
                                   style={{ 'padding-left':0 }}/>
                         </CCol>
                         <CCol sm="1">
@@ -330,14 +275,17 @@ const BankStatementForm = () => {
                           <CLabel size="sm" htmlFor="input-small">{t('bankstatement.purpose')}</CLabel>
                         </CCol>
                         <CCol xs="12"   md="10">
-                          <CTextarea disabled ={posted} bsSize="sm" type="textarea" id="purpose-input" name="purpose" className="input-sm"
-                                 placeholder="purpose" value={purpose} onChange={handleInputChange} rows="2"/>
+                          <CTextarea disabled ={current.posted} bsSize="sm" type="textarea" id="purpose-input" name="purpose" className="input-sm"
+                                 placeholder="purpose" value={current.purpose}
+                                 onChange={(event)  => value.setCurrent({ ...current, purpose: event.target.value})} rows="2"/>
                         </CCol>
                       </CFormGroup>
              </CCollapse>
         </CForm>
       </Grid>
-      <EnhancedTable props={props} style={{padding:0, height:80}}/>
+
+     <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
+                       selected ={[-1]} theme={theme} t={t}  edit ={edit} style={{padding:0, height:80}}/>
     </>;
   }
 
@@ -345,4 +293,5 @@ const BankStatementForm = () => {
 
 };
 export default BankStatementForm;
+//  <EnhancedTable props={props} style={{padding:0, height:80}}/>
 

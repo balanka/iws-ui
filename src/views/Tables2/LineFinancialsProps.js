@@ -4,6 +4,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import {rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import {currencyFormatDE, dateFormat} from "../../utils/utils";
+import {CrudAccount} from "../base/Components/CrudAccount";
 export const styles = {
   outer: {
     borderRadius: 5,
@@ -226,7 +228,7 @@ export const ColumnsM =(data, line, current, t) => [
 
 ]
 export const ColumnsACC =(data, line, current, t) => [
-    {field:'id', title:t('account.id'), export:true}
+      {field:'id', title:t('account.id'), export:true}
     , {field:'name', title:t("account.name"), initialEditValue:line.name, type: "text", export:true}
     , {field:'description', title:t('account.description'), type:"text", initialEditValue:line.description, export:true}
     , {field:'isDebit', title:t('account.debit_credit'), type:"boolean", export:true}
@@ -253,7 +255,6 @@ export const ColumnsACC =(data, line, current, t) => [
         dateSetting: { locale:"de" } , export:true}
 
     , {field:'company', title:t('common.company'), type:"text", initialEditValue:line.company, export:true}
-
 ]
 export const ColumnsV =(data, line, current, t) => [
     {field:'id', title:t('vat.id'), export:true}
@@ -276,7 +277,24 @@ export const ColumnsV =(data, line, current, t) => [
         dateSetting: { locale:"de" } , export:true}
 
     , {field:'company', title:t('common.company'), type:"text", initialEditValue:line.company, export:true}
+]
 
+export const ColumnsBS =(data, line, current, t) => [
+      {field:'id', title:t('bankstatement.title'), type:"numeric", export:true}
+    , {field:'depositor', title:t("bankstatement.depositor"), type: "text", export:true}
+    , {field:'valuedate', title:t('bankstatement.valuedate'), type:"date",  align:"right", export:true}
+    , {field:'postingdate', title:t('bankstatement.postingdate'), type:"date",  align:"right", export:true}
+    , {field:'postingtext', title:t("bankstatement.postingtext"), type: "text", export:true}
+    , {field:'purpose', title:t("bankstatement.purpose"), type: "text", export:true}
+    , {field:'beneficiary', title:t("bankstatement.beneficiary"), type: "text", export:true}
+    , {field:'accountno', title:t("bankstatement.accountno"), type: "text", export:true}
+    , {field:'bankCode', title:t("bankstatement.bankCode"), type: "text", export:true}
+    , {field:'amount', title:t("bankstatement.amount"), type: "currency", export:true}
+    , {field:'currency', title:t("common.currency"), type: "text", export:true}
+    , {field:'info', title:t("bankstatement.info"), type: "text", export:true}
+    , {field:'company', title:t("common.company"), type: "text", export:true}
+    , {field:'companyIban', title:t("bankstatement.companyIban"), type: "text", export:true}
+    , {field:'posted', title:t('bankstatement.posted'), type:"boolean", export:true}
 ]
 export const OptionsM = ({
         toolbar:true,
