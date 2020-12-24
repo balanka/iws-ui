@@ -4,8 +4,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import {rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import {currencyFormatDE, dateFormat} from "../../utils/utils";
-import {CrudAccount} from "../base/Components/CrudAccount";
 export const styles = {
   outer: {
     borderRadius: 5,
@@ -280,7 +278,7 @@ export const ColumnsV =(data, line, current, t) => [
 ]
 
 export const ColumnsBS =(data, line, current, t) => [
-      {field:'id', title:t('bankstatement.title'), type:"numeric", export:true}
+      {field:'bid', title:t('bankstatement.id'), type:'numeric', align:"right", export:true}
     , {field:'depositor', title:t("bankstatement.depositor"), type: "text", export:true}
     , {field:'valuedate', title:t('bankstatement.valuedate'), type:"date",  align:"right", export:true}
     , {field:'postingdate', title:t('bankstatement.postingdate'), type:"date",  align:"right", export:true}
@@ -295,6 +293,26 @@ export const ColumnsBS =(data, line, current, t) => [
     , {field:'company', title:t("common.company"), type: "text", export:true}
     , {field:'companyIban', title:t("bankstatement.companyIban"), type: "text", export:true}
     , {field:'posted', title:t('bankstatement.posted'), type:"boolean", export:true}
+]
+
+export const ColumnsCUST =(data, line, current, t) => [
+  {field:'id', title:t('customer.id'), type:'numeric', align:"right", export:true}
+, {field:'name', title:t('customer.name'), type: "text", export:true}
+, {field:'description', title:t('customer.description'), type: "text", export:true}
+, {field:'street', title:t('customer.street'), type: "text", export:true}
+, {field:'zip', title:t('customer.zip'), type: "text", export:true}
+, {field:'country', title:t('customer.country'), type: "text", export:true}
+, {field:'phone', title:t('customer.phone'), type: "text", export:true}
+, {field:'email', title:t('customer.email'), type: "text", export:true}
+, {field:'account', title:t('customer.account'), type: "text", export:true}
+, {field:'oaccount', title:t('customer.oaccount'), type: "text", export:true}
+, {field:'iban', title:t('customer.iban'), type: "text", export:true}
+, {field:'vatcode', title:t('customer.vat'), type: "text", export:true}
+, {field:'enterdate', title:t('customer.enterdate'), type: "date", export:true}
+, {field:'postingdate', title:t('customer.postingdate'), type: "date", export:true}
+, {field:'changedate', title:t('customer.changedate'), type: "date", export:true}
+, {field:'modelid', title:t('common.modelid'), type:'numeric', align:"right", export:true}
+, {field:'company', title:t('common.company'), export:true}
 ]
 export const OptionsM = ({
         toolbar:true,

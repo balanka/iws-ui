@@ -30,7 +30,6 @@ const styles = {
 const BankStatementForm = () => {
   const { t,  } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
-  const [selected, setSelected] = useState([]);
   const [profile, ] = useGlobalState('profile');
   const value = useContext(accountContext);
   const init = ()=> {return value.initialState}
@@ -97,7 +96,7 @@ const BankStatementForm = () => {
   }
 
   const edit = editedRow =>{
-        const record = filteredRows.find(obj => obj.id === editedRow.id);
+        const record = filteredRows.find(obj => obj.bid === editedRow.bid);
         const row = {...record, editing:true}
         setCurrent(row);
     }
@@ -154,7 +153,7 @@ const BankStatementForm = () => {
                           </CCol>
                           <CCol sm="4">
                             <CInput  bsSize="sm" type="text" id="account-id" name="id" className="input-sm"
-                                    placeholder="Id" value= {current.id}  />
+                                    placeholder="Id" value= {current.bid}  />
                           </CCol>
                           <CCol sm="1">
                             <CLabel size="sm" htmlFor="input-small">{t('bankstatement.postingdate')}</CLabel>

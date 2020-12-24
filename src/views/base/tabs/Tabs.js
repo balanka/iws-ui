@@ -69,7 +69,7 @@ const Tabs = () => {
       {"data" : {"id" : "9902", "name" : "Bilanz Passiva", "isDebit" : false,
           "balancesheet" : true, "idebit" : 0.00, "icredit" : 0.00, "debit" : 7135.58,
           "credit" : 254824.95, "currency" : "", "company" : "1000"}, "children" :[]}]}]}
-  const initBS={hits:[{ id:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
+  const initBS={hits:[{ bid:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
     , beneficiary:'', accountno:'', bankCode:'', amount:'', currency:'', info:'', company:'', companyIban:''
     , posted:'',modelid:18}]}
   const initFrt={hits:[{ tid:-1, oid:0, costcenter:'', account:'', transdate:date
@@ -346,7 +346,7 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/bs" get="md/18" accUrl="http://127.0.0.1:8080/acc"
-                               headers = {[{id:'id', label:t('bankstatement.title'), numeric:true, minWidth:1}, {id:'depositor', label:t('bankstatement.depositor'), minWidth:1}
+                               headers = {[{id:'id', label:t('bankstatement.id'), numeric:true, minWidth:1}, {id:'depositor', label:t('bankstatement.depositor'), minWidth:1}
                                  , {id:'postingdate', label:t('bankstatement.postingdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
                                  , {id:'valuedate', label:t('bankstatement.valuedate') , minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
                                  , {id:'postingtext', label:t('bankstatement.postingtext'), minWidth:10}, {id:'purpose', label:t('bankstatement.purpose'), minWidth:180}
