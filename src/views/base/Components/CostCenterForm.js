@@ -9,7 +9,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {accountContext, useGlobalState} from './AccountContext';
 import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner, faWindowClose} from "@fortawesome/free-solid-svg-icons";
 import EditableTable from "../../Tables2/EditableTable";
-import {ColumnsM, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {ColumnsM, OptionsM, filter} from "../../Tables2/LineFinancialsProps";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 const styles = {
   outer: {
@@ -21,7 +21,6 @@ const styles = {
 const CostCenterForm = () => {
   const [profile, ] = useGlobalState('profile');
   const [collapsingState, setCollapsingState]= useState({collapse: true, fadeIn: true, timeout: 300});
-  const [selected, setSelected] = useState([-1]);
   const value = useContext(accountContext);
   const t = value.t
   const [{ res },]= useFetch(value.url, {});
@@ -51,13 +50,7 @@ const CostCenterForm = () => {
   const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {handleFilter('')}, [data]);
   function handleFilter(text) {
-    const  filtered = data.hits.filter(function(rc) {
-        const names = getColumnName();
-        console.log("getColumnNameXX", names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b) );
-        return names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b);
-      });
-
-    const rows_=text?filtered:data.hits
+    const rows_=text?filter(data.hits, getColumnName(), text):data.hits
     setFilteredRows(rows_);
   }
 
@@ -209,7 +202,7 @@ const CostCenterForm = () => {
       </CForm>
     </Grid>
     <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
-                   selected ={selected} theme={theme} t={t}  edit ={edit}/>
+                   selected ={[-1]}  theme={theme} t={t}  edit ={edit}/>
     </>
   }
     console.log('currentcurrentCostCenterForm', current);

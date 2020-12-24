@@ -24,6 +24,9 @@ const mapping = (acc) =>
         {acc.id.concat( " ").concat(acc.name)}
     </MenuItem>
 
+export const  filter = (rows, cols, txt,) => rows.filter(col =>
+    cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b)
+);
 
 export  const accountD=(data, value, onRowDataChange, rowData) => (
       <Select
@@ -136,27 +139,26 @@ export const  editable = (data, setData, current ) => ({
 })
 
 export const columnsF =(data, line, current, t) => [
-     {field:'tid', title:t('financials.id'), hidden:false,  initialEditValue:line.id}
-    , {field:'oid', title:t('financials.oiid'), hidden:false, initialEditValue:current.oid}
+     {field:'tid', title:t('financials.id'), initialEditValue:line.id, export:true}
+    , {field:'oid', title:t('financials.oid'),initialEditValue:current.oid, export:true}
     , {field:'account', title:t('financials.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            accountD ( data, value, onRowDataChange, rowData ),  initialEditValue:'', width: 20}
+            accountD ( data, value, onRowDataChange, rowData ),  initialEditValue:'', width: 20, export:true}
     , {field:'costcenter', title:t('financials.costcenter'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            accountD ( data, value, onRowDataChange, rowData ),  initialEditValue:'', width: 20}
+            accountD ( data, value, onRowDataChange, rowData ),  initialEditValue:'', width: 20, export:true}
     , {field:'enterdate', title:t('financials.enterdate'), type:"date", align:"right",
-        initialEditValue:line.enterdate, dateSetting: { locale:"de" } }
+        initialEditValue:line.enterdate, dateSetting: { locale:"de" } , export:true}
     , {field:'postingdate', title:t('financials.postingdate'), type:"date", align:"right",
-        initialEditValue:line.postingdate, dateSetting: { locale:"de" } }
+        initialEditValue:line.postingdate, dateSetting: { locale:"de" } , export:true}
     , {field:'transdate', title:t('financials.transdate'), type:"date", align:"right",
-        initialEditValue:line.transdate, dateSetting: { locale:"de" } }
+        initialEditValue:line.transdate, dateSetting: { locale:"de" } , export:true}
     , {field:'period', title:t('financials.period'), type:"numeric", export:true}
-    , {field:'posted', title:t('financials.posted'), type:"boolean", width:10}
+    , {field:'posted', title:t('financials.posted'), type:"boolean", width:10, export:true}
+    , {field:'total', title:t('common.total'), type:"currency",currencySetting: { locale:"de"
+       , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }, export:true}
     , {field:'text', title:t('financials.text'), type:"text", export:true}
     , {field:'typeJournal', title:t('financials.type'), type:"numeric", export:true}
-    , {field:'model', title:t('common.modelid'), type:"numeric", export:true}
+    , {field:'modelid', title:t('common.modelid'), type:"numeric", export:true}
     , {field:'company', title:t('common.company'), type:"numeric", export:true}
-    //, {field:'amount', title:t('financials.line.amount'), type:"currency", initialEditValue:0,
-    //    currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
-    //, {field:'currency', title:t('common.currency'), hidden:false,  initialEditValue:line.currency}
 ]
 export const Linescolumns =(data, line, current, t) => [
       {field:'lid', title:t('financials.line.id'), hidden:false,  initialEditValue:line.lid}

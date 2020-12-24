@@ -10,7 +10,7 @@ import Switch from "@material-ui/core/Switch";
 import useFetch from "../../../utils/useFetch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner,faWindowClose} from "@fortawesome/free-solid-svg-icons";
-import {ColumnsACC as columns, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {ColumnsACC as columns, filter, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 const styles = {
@@ -50,12 +50,9 @@ const AccountForm = () => {
 
   const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {handleFilter('')}, [data]);
+
   function handleFilter(text) {
-    const  filtered = data.hits.filter(function(rc) {
-      const names = getColumnName();
-      return names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b);
-    });
-    const rows_=text?filtered:data.hits
+    const rows_=text?filter(data.hits, getColumnName(), text ):data.hits
     setFilteredRows(rows_);
   }
   const edit = editedRow =>{

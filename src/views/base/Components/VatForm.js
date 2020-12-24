@@ -17,7 +17,7 @@ import {
   faWindowClose
 } from "@fortawesome/free-solid-svg-icons";
 import EditableTable from "../../Tables2/EditableTable";
-import {ColumnsV as columns, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {ColumnsV as columns, filter, OptionsM} from "../../Tables2/LineFinancialsProps";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 const styles = {
   outer: {
@@ -62,13 +62,7 @@ const VatForm = () => {
   useEffect(() => {handleFilter('')}, [data]);
 
   function handleFilter(text) {
-    const  filtered = data.hits.filter(function(rc) {
-      const names = getColumnName();
-      console.log("getColumnNameXX", names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b) );
-      return names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b);
-    });
-
-    const rows_=text?filtered:data.hits;
+    const rows_=text?filter(data.hits, getColumnName(), text ):data.hits
     setFilteredRows(rows_);
   }
 

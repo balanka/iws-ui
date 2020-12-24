@@ -1,10 +1,9 @@
 import React, {useEffect, useState, useContext, createRef} from 'react'
 import {CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CButton} from '@coreui/react'
-import {  IoMdMenu} from "react-icons/io";
+import { IoMdMenu} from "react-icons/io";
 import {dateFormat} from '../../../utils/utils';
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
-import { de } from "date-fns/locale";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 
@@ -22,8 +21,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import EditableTable from "../../Tables2/EditableTable";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
-
-import  {Options, OptionsM,  columnsF, Linescolumns, editable, styles} from '../../Tables2/LineFinancialsProps'
+import {Options, OptionsM, columnsF, Linescolumns, editable, styles, filter} from '../../Tables2/LineFinancialsProps'
 const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [selected, setSelected] = useState([]);
@@ -33,7 +31,6 @@ const FinancialsForm = () => {
   const t = value.t
   const [url,] = useState('');
   const tableRef = createRef();
-  const headers = value.headers.filter(function(e) { return e.id !== 'lines' });
   const res  = useFetch(url, {});
   const [{ res2}] = useFetch(value.accUrl, {});
   const [{ res3}] = useFetch(value.ccUrl, {});
@@ -41,7 +38,6 @@ const FinancialsForm = () => {
   const data_ = res && res.response?res.response:[value.initialState];
   const accData_=  res2?res2:value.accData;
   const ccData_=  res3?res3:value.ccData;
-
   const current_= value.user;
   const initLine=value.initialState.hits[0].lines[0];
   const [data, setData] = useState(data_);
@@ -52,6 +48,7 @@ const FinancialsForm = () => {
   const [lines, setLines]=useState(lines_);
   const columnsX = Linescolumns(accData.hits, initLine, current, t);
   const columns= columnsF(ccData.hits, initLine, current, t);
+  const getColumnName = ()=>columns.map(col =>col.field);
   useEffect(() => {console.log('current_current_current_', current_); setCurrent(current_)}, [ current_]);
 
   const toggle= ()=> {
@@ -93,42 +90,14 @@ const FinancialsForm = () => {
     setFmodule(value);
     submitQuery(event, value);
   };
-  const  lineReducer = (accumulator, line) => {
-    //console.log('accumulator', accumulator);
-    //console.log('lineX', line);
-    const x=accumulator + line.amount
-    //console.log('XXX', x);
-    return x;
-  };
 
-  const addAmount =(tr)=> {
-    //console.log('lineReducerX', tr)
-    //console.log('lineReducer', tr.lines.reduce(lineReducer, 0))
-    return {...tr, total: tr.lines.reduce(lineReducer, 0)}
+  const addAmount =(row)=> {
+    return {...row, total: row.lines.reduce((acc, line) => acc + line.amount, 0)}
   }
- // console.log('initX', init())
-  const dx=(data?.hits?data?.hits:init().hits).map( tr =>addAmount(tr));
-  //console.log('lineReducerXdx', dx)
+
+  const dx=(data?.hits?data?.hits:init().hits).map( row =>addAmount(row));
   function handleFilter(text) {
-    const filtered = dx.filter(function(rc) {
-      //console.log('rc.tid', rc)
-      return (rc.tid.toString().indexOf(text)>-1
-        ||rc.oid.toString().indexOf(text)>-1
-        ||rc.costcenter.indexOf(text)>-1
-        ||rc.account.indexOf(text)>-1
-        ||rc.transdate.indexOf(text)>-1
-        ||rc.enterdate.indexOf(text)>-1
-        ||rc.postingdate.indexOf(text)>-1
-        ||rc.modelid.toString().indexOf(text)>-1
-        ||rc.period.toString().indexOf(text)>-1
-        ||rc.company.indexOf(text)>-1
-        ||rc.text.indexOf(text)>-1
-        ||rc.typeJournal.toString().indexOf(text)>-1
-        ||rc.file_content.toString().indexOf(text)>-1
-        ||rc.posted.toString().indexOf(text)>-1
-      )});
-    const rows_=text?filtered:dx
-    //console.log('filteredRows+', rows_);
+    const rows_=text?filter(dx, getColumnName(), text ):dx
     setFilteredRows(rows_);
   }
   const getFilteredRows=()=>{
@@ -140,11 +109,9 @@ const FinancialsForm = () => {
   }
 
 
-
   const [filteredRows, setFilteredRows] = useState(dx);
   useEffect(() => {handleFilter('')}, [data]);
-
-
+  
   const mapping2 = item => <option key={item.name} value={item.name}>
     {item.name+" ".concat(item.id)}</option>;
 
@@ -279,7 +246,7 @@ const FinancialsForm = () => {
                 </CCol>
                 <CCol sm="2">
                   <CInput  bsSize="sm" type="text" id="id" name="id" className="input-sm" placeholder={t('financials.id')}
-                         value= {current.id}  />
+                         value= {current.tid}  />
                 </CCol>
                 <CCol sm="4"/>
                 <CCol sm="1">

@@ -4,7 +4,6 @@ import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CT
 import {capitalize, dateFormat, currencyAmountFormatDE} from "../../../utils/utils"
 import Switch from "@material-ui/core/Switch";
 import {accountContext, useGlobalState} from './AccountContext';
-import EnhancedTable from '../../Tables2/EnhancedTable';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import {IoMdMenu} from "react-icons/io";
@@ -14,7 +13,7 @@ import axios from "axios";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faSave, faSpinner} from "@fortawesome/free-solid-svg-icons";
-import {ColumnsBS as columns, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {ColumnsBS as columns, OptionsM, filter} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
@@ -84,11 +83,7 @@ const BankStatementForm = () => {
     const getColumnName = ()=>columnsX.map(col =>col.field);
 
   function handleFilter(text) {
-      const  filtered = getData().filter(function(rc) {
-          const names = getColumnName();
-          return names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b);
-      });
-      const rows_=text?filtered:data.hits
+      const rows_=text?filter(data.hits, getColumnName(), text ):data.hits
       setFilteredRows(rows_);
   }
   const toggle= ()=> {
