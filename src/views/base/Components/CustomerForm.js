@@ -15,7 +15,7 @@ import {
   faSpinner,
   faWindowClose
 } from "@fortawesome/free-solid-svg-icons";
-import {ColumnsCUST as columns, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {ColumnsCUST as columns, filter, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
 const styles = {
@@ -67,11 +67,7 @@ const CustomerForm = () => {
   const [filteredRows, setFilteredRows] = useState(data);
   useEffect(() => {handleFilter('')}, [data]);
   function handleFilter(text) {
-    const  filtered = data.hits.filter(function(rc) {
-      const names = getColumnName();
-      return names.map(name => `rc.${name}`.includes(text)).reduce((a, b = false) => a || b);
-    });
-    const rows_=text?filtered:data.hits
+    const rows_=text?filter(data.hits, getColumnName(), text ):data.hits
     setFilteredRows(rows_);
   }
   const edit = editedRow =>{
@@ -230,7 +226,7 @@ const CustomerForm = () => {
                   <CInput  bsSize="sm" type="text" id="street-id" name="company" className="input-sm"
                            placeholder="Street" value={current.street} onChange={(event)  =>
                       value.setCurrent({ ...current, street: event.target.value})}
-                           style={{'text-align':'right', padding:2 }}/>
+                           style={{'text-align':'left', padding:2 }}/>
                 </CCol>
                 <CCol sm="2">
                   <CLabel size="sm" htmlFor="input-small">{t('customer.city')}</CLabel>
