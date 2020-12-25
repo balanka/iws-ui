@@ -41,7 +41,7 @@ const PACBForm = () => {
 
   console.log("data_", data_);
  
-
+  const [record,setRecord] = useState({account:'', account2:'', fromPeriod:'', toPeriod:''});
   const [current,] = useState(current_);
   const [account,] = useState(account_);
   const [fromPeriod, ] = useState(fromPeriod_);
@@ -116,6 +116,7 @@ const PACBForm = () => {
             .then(response => {
                 const resp = response.data;
                 result=response.data;
+                console.log('response.func', func);
                 console.log('response.data', resp);
                 console.log('response.headers', response.headers);
                 console.log('result', result);
@@ -136,19 +137,18 @@ const PACBForm = () => {
     }
     const load = event => {
         event.preventDefault();
-        console.log("Loading !!!!!!", current);
-        let result='xxx'
         accData?.hits?.length<2? fetchData(value.accUrl, setAccData):void(0)
         console.log("result", data);
     };
     const submitQuery = event => {
         event.preventDefault();
         console.log("submitQuery current", current);
+        console.log("submitQuery  record", record);
         let result='xxx'
         const url_=value.url.concat('/')
-            .concat(account).concat('/')
-            .concat(fromPeriod).concat('/')
-            .concat(toPeriod);
+            .concat(record.account).concat('/')
+            .concat(record.fromPeriod).concat('/')
+            .concat(record.toPeriod);
         console.log("url_", url_);
         fetchData(url_, setData, result);
         console.log("result", data);
@@ -251,13 +251,15 @@ const PACBForm = () => {
                    </CCol>
                    <CCol sm="3">
                       <CSelect className ="flex-row" type="select" name="account" id="account-id"
-                            value={account} onChange={handleInputChange} >
+                            value={account} onChange={(event)  =>
+                          setRecord({ ...record, account: event.target.value})} >
                         { console.log('accDataT', accData)}{ accData.hits.map(item => mapping(item))};
                       </CSelect>
                     </CCol>
                     <CCol sm="3">
                     <CSelect className ="flex-row" type="select" name="account2" id="account2-id"
-                         value={account} onChange={handleInputChange} >
+                         value={account} onChange={(event)  =>
+                        setRecord({ ...record, account: event.target.value})} >
                        {accData.hits.map(item => mapping2(item))};
                     </CSelect>
                     </CCol>
@@ -266,14 +268,16 @@ const PACBForm = () => {
                      </CCol>
                     <CCol sm="1.2">
                     <CInput  bsSize="sm" type="text"  id="fromPeriod-id" name="fromPeriod" className="input-sm"
-                          placeholder="fromPeriod" value={fromPeriod} onChange={handleInputChange} />
+                          placeholder="fromPeriod" value={fromPeriod} onChange={(event)  =>
+                        setRecord({ ...record, fromPeriod: event.target.value})} />
                     </CCol>
                     <CCol sm="0.5">
                        <CLabel size="sm" htmlFor="input-small" style={{  align: 'right' }}>{t('common.to')}</CLabel>
                     </CCol>
                     <CCol sm="1.2">
                        <CInput  bsSize="sm" type="text"  id="toPeriod-id" name="toPeriod" className="input-sm"
-                          placeholder="toPeriod" value={toPeriod} onChange={handleToPeriodChange}
+                          placeholder="toPeriod" value={toPeriod} onChange={(event)  =>
+                           setRecord({ ...record, toPeriod: event.target.value})}
                        />
                     </CCol>
                     <CCol sm="1">

@@ -78,15 +78,7 @@ const Tabs = () => {
             , side:true, account:'', oaccount:'', amount:0, duedate:date, text:'', currency:'EUR', company:'1000'
             }]}]}
 const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''}]}
-const initTree={hits:[
-        {id: 1, name: 'a', surname: 'Baran', birthYear: 1987, birthCity: 63, sex: 'Male', type: 'adult'},
-        {id: 2, name: 'b', surname: 'Baran', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'adult', rentId: 1,},
-        {id: 3, name: 'c', surname: 'Baran', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child', parentId: 1,},
-        {id: 4, name: 'd', surname: 'Baran', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child', parentId: 3,},
-        {id: 5, name: 'e', surname: 'Baran', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child',},
-        {id: 6, name: 'f', surname: 'Baran', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child', parentId: 5,},
-        {id: 6, name: 'ff', surname: 'Baranf', birthYear: 1987, birthCity: 34, sex: 'Female', type: 'child', parentId: 4,},
-    ]}
+
  const treeHeaders = {h:[{ title:t('account.id'), field: 'id' }
             ,  { title:t('account.name'), field: 'name' }
             ,  { title:t('account.account'), field: 'account' }

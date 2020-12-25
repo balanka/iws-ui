@@ -138,6 +138,40 @@ export const  editable = (data, setData, current ) => ({
         })
 })
 
+export const columnsJ=(t) => [
+  {field:'id', title:t('journal.id'),  type:"numeric", export:true }
+, {field:'transid', title:t('journal.transid'),   export:true }
+, { field: 'oid', title: t('journal.oid'),  export:true }
+, {field: 'account', title: t('journal.account'), export:true}
+, {field: 'oaccount', title:t('journal.oaccount'), export:true}
+, {field: 'transdate', title:t('journal.transdate'),  type:"date", align:"right",
+        dateSetting: { locale:"de" }, export:true}
+, {field: 'postingdate', title:t('journal.postingdate'), type:"date", align:"right",
+         dateSetting: { locale:"de" }, export:true}
+, {field: 'enterdate', title:t('journal.enterdate'), type:"date", align:"right",
+         dateSetting: { locale:"de" }, export:true}
+, {field: 'period', title:t('journal.period'), minWidth:1,  type:"numeric", export:true},
+, { field: 'amount', title: t('journal.amount'), currencySetting: { locale:"de"
+            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+, { field: 'idebit', title:t('journal.idebit'), currencySetting: { locale:"de"
+    , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+, { field: 'debit', title: t('journal.debit'), currencySetting: { locale:"de"
+            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+, { field: 'icredit', title:t('journal.icredit'), currencySetting: { locale:"de"
+            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+, { field: 'credit', title:t('journal.credit'), currencySetting: { locale:"de"
+            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+, { field: 'side', title:t('journal.side'), type:"boolean", export:true}
+, { field: 'text', title:t('journal.text'), export:true}
+, { field:'month', title:t('journal.month'), minWidth:1}
+, { field: 'year', title:t('journal.year'), minWidth:1}
+, { field:'company', title:t('common.company'), export:true }
+, { field: 'typeJournal', title:t('journal.type'), export:true}
+, { field: 'file_content', title:t('journal.file'), export:true}
+, { field: 'modelid', title:t('common.modelid'), export:true}
+]
+
+
 export const columnsF =(data, line, current, t) => [
      {field:'tid', title:t('financials.id'), initialEditValue:line.id, export:true}
     , {field:'oid', title:t('financials.oid'),initialEditValue:current.oid, export:true}
@@ -162,7 +196,7 @@ export const columnsF =(data, line, current, t) => [
 ]
 export const Linescolumns =(data, line, current, t) => [
       {field:'lid', title:t('financials.line.id'), hidden:false,  initialEditValue:line.lid}
-    , {field:'transid', title:"transid", hidden:false, initialEditValue:current.tid}
+    , {field:'transid', title:t('financials.id'), hidden:false, initialEditValue:current.tid}
     , {field:'account', title:t('financials.line.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
           accountD ( data, value, onRowDataChange, rowData ),  initialEditValue:'', width: 20}
     , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true, width:10}
@@ -178,7 +212,7 @@ export const Linescolumns =(data, line, current, t) => [
     , {field:'company', title:t('common.company'), hidden:false,  initialEditValue:line.company}
   ]
 export const Options = ({
-    toolbar:true,
+    toolbar:false,
     draggable:false,
     header:true,
     grouping:false,
@@ -192,9 +226,11 @@ export const Options = ({
     filtering: false,
     search: false,
     selection: false,
-
     cellStyle: {padding: '0.3em', fontSize: 10,},
-    headerStyle: {padding: '0.3em', fontSize: 10,  position: 'sticky'},
+    headerStyle: {'padding': '0.50em',  fontSize: 10,  position: 'sticky',
+        backgroundColor: theme.palette.background.default, //theme.palette.background.paper theme.palette.common.black,
+        color: theme.palette.common.black//'#fff9e6' //'#eee'
+         },
     root: {
         '&:nth-child(odd)': {
             backgroundColor: '#fff9e6'//theme.palette.background.default,
@@ -331,11 +367,14 @@ export const OptionsM = ({
         filtering: false,
         search: true,
         selection: true,
+        columnResizable: true,
         cellStyle: {padding: '0.3em', fontSize: 10,},
-        headerStyle: {padding: '0.3em', fontSize: 10,  position: 'sticky'},
+        headerStyle: {padding: '0.3em', fontSize: 10,  position: 'sticky',
+            backgroundColor: theme.palette.common.black,
+            color:'#eee'},
         root: {
          '&:nth-child(odd)': {
-            backgroundColor: '#fff9e6'//theme.palette.background.default,
+            backgroundColor: theme.palette.background.default //'#fff9e6'//theme.palette.background.default,
            },
         color: '#eee',
             padding: 0.5,

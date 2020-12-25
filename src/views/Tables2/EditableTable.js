@@ -1,5 +1,5 @@
-import React, {useEffect, useState, createRef} from 'react';
-import MaterialTable, { MTableFilterRow }  from 'material-table';
+import React, {useEffect, useState} from 'react';
+import MaterialTable from 'material-table';
 import Add from "@material-ui/icons/Add";
 import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
@@ -10,8 +10,48 @@ import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import Search from "@material-ui/icons/Search";
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import RateReviewIcon from '@material-ui/icons/RateReview';
+import { createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+import purple from '@material-ui/core/colors/purple';
+import green from '@material-ui/core/colors/green';
 
+const theme0 = createMuiTheme({
+    palette: {
+        primary: {
+            main: '#4caff0',
+        },
+        secondary: {
+            main: '#ff9100',
+        },
+    },
 
+});
+const theme1 = createMuiTheme({
+    palette: {
+        primary: {
+            main: purple[500],
+        },
+        secondary: {
+            main: green[500],
+        },
+    },
+});
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            // light: will be calculated from palette.primary.main,
+            main: '#ff4400',
+            // dark: will be calculated from palette.primary.main,
+            // contrastText: will be calculated to contrast with palette.primary.main
+        },
+        secondary: {
+            light: '#0066ff',
+            main: '#0044ff',
+            // dark: will be calculated from palette.secondary.main,
+            contrastText: '#ffcc00',
+        },
+        // error: will use the default color
+    },
+});
 export default function EditableTable(props) {
     const {Options, flag, data, columns, t, tableRef, addRow, edit, editable} = props
     const [selectedRows, setSelectedRows] = useState([]);
@@ -22,14 +62,11 @@ export default function EditableTable(props) {
     console.log('state.dx',dx);
     useEffect(() => {}, [props, datax, data]);
 
-    const [components] = useState({
-        FilterRow: (props) => <MTableFilterRow {...props} />
-    });
-
     return (
+
         <MaterialTable
             editable={flag?null:editable}
-           //tableRef={tableRef}
+           tableRef={tableRef}
             //title={props.title}
             columns={columns}
             data={data}
@@ -46,8 +83,9 @@ export default function EditableTable(props) {
                 ResetSearch: () => <Clear />,
                 Search: () => <Search />
             }}
+
             options={Options}
-            components={components}
+            //components={components}
             onSelectionChange={(rows) => { console.log('selectedRows',rows); console.log('selectedRowsedit',edit!==null);
                // if(rows.length>0) edit(rows[0].tid);
                 if(rows.length>0 && edit!==null) edit(rows[0]);
@@ -100,5 +138,6 @@ export default function EditableTable(props) {
                 }
             }}
         />
+
     );
 }

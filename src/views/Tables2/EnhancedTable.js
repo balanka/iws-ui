@@ -33,7 +33,7 @@ export default function EnhancedTable( props) {
             setSelected_([]);
         };
 
-  const handleChecked = (id) => {
+        const handleChecked = (id) => {
     const selectedIndex = selected_.indexOf(id);
     console.log('id', id);
     console.log('selectedIndex', selectedIndex);
@@ -41,10 +41,7 @@ export default function EnhancedTable( props) {
     setSelected_([id]);
 
   }
-
-
-    const NoData=() => <StyledTableRow><StyledTableCell colSpan={columns.length}/></StyledTableRow>
-
+        const NoData=() => <StyledTableRow><StyledTableCell colSpan={columns.length}/></StyledTableRow>
         const handleClick = (event, id) => {
             const selectedIndex = selected_.indexOf(id);
           const { name, value } = event.target;
@@ -55,7 +52,7 @@ export default function EnhancedTable( props) {
             setRowsPerPage(parseInt(event.target.value, 10));
             setPage(0);
         };
-       const handleChangePage = (event, newPage) => setPage(newPage);
+        const handleChangePage = (event, newPage) => setPage(newPage);
         const handleChangeDense = (event) => setDense(event.target.checked);
         const isSelected = (name) => selected_.indexOf(name) !== -1;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);

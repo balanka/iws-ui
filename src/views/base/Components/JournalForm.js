@@ -7,10 +7,11 @@ import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
 import {IoMdMenu} from "react-icons/io";
 import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelper'
-
+import {OptionsM, columnsJ,   styles, filter} from '../../Tables2/LineFinancialsProps'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDoubleDown, faAngleDoubleUp, faSpinner} from "@fortawesome/free-solid-svg-icons";
-const styles = {
+import {columnsF} from "../../Tables2/LineFinancialsProps";
+const styles1 = {
   outer: {
     borderRadius: 5,
     boxShadow: "0 10px 30px #BBB",
@@ -55,6 +56,9 @@ const JournalForm = () => {
   useEffect(() => { setToPeriod(toPeriod_)}, [toPeriod_]);
   useEffect(() => {handleFilter('')}, [data, getData()]);
 
+
+  const columnsX= columnsJ(t);
+  const getColumnName = ()=>columnsX.map(col =>col.field);
 
   const toggle= ()=> {
     setState({...state, collapse: !state.collapse });
@@ -103,32 +107,8 @@ const JournalForm = () => {
 
 
   function handleFilter(text) {
-    const filteredRows_ = !text?getData():getData().filter(function(rc) {
-      return (rc.id.toString().indexOf(text)>-1
-        ||rc.transid.toString().indexOf(text)>-1
-        ||rc.account.indexOf(text)>-1
-        ||rc.oaccount.indexOf(text)>-1
-        ||rc.transdate.indexOf(text)>-1
-        ||rc.enterdate.indexOf(text)>-1
-        ||rc.postingdate.indexOf(text)>-1
-        ||rc.period.toString().indexOf(text)>-1
-        ||rc.amount.toString().indexOf(text)>-1
-        ||rc.idebit.toString().indexOf(text)>-1
-        ||rc.debit.toString().indexOf(text)>-1
-        ||rc.icredit.toString().indexOf(text)>-1
-        ||rc.credit.toString().indexOf(text)>-1
-        ||rc.currency.indexOf(text)>-1
-        ||rc.side.toString().indexOf(text)>-1
-        ||rc.year.toString().indexOf(text)>-1
-        ||rc.month.toString().indexOf(text)>-1
-        ||rc.credit.toString().indexOf(text)>-1
-        ||rc.modelid.toString().indexOf(text)>-1
-        ||rc.company.indexOf(text)>-1
-        ||rc.text.indexOf(text)>-1
-        ||rc.typeJournal.toString().indexOf(text)>-1
-        ||rc.file_content.toString().indexOf(text)>-1)});
-    console.log('filteredRows+', filteredRows_);
-    setFilteredRows(filteredRows_);
+      const rows_=text?filter(getData(), getColumnName(), text ):getData()
+      setFilteredRows(rows_);
   }
 
   const getFilteredRows=()=>{

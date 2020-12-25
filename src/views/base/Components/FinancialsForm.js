@@ -21,12 +21,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import EditableTable from "../../Tables2/EditableTable";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
-import {Options, OptionsM, columnsF, Linescolumns, editable, styles, filter} from '../../Tables2/LineFinancialsProps'
+import {Options, OptionsM, columnsF, Linescolumns, styles, filter} from '../../Tables2/LineFinancialsProps'
 const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
-  const [selected, setSelected] = useState([]);
   const [fmodule, setFmodule] = useState('');
-
   const value = useContext(accountContext);
   const t = value.t
   const [url,] = useState('');
@@ -40,19 +38,22 @@ const FinancialsForm = () => {
   const ccData_=  res3?res3:value.ccData;
   const current_= value.user;
   const initLine=value.initialState.hits[0].lines[0];
+  const [toolbar, setToolbar] = useState(true);
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [ccData, setCcData] = useState(ccData_);
   const [current,setCurrent] = useState(current_);
-  const lines_=current.lines&&current.lines.length >0 ? current.lines:[value.initialState.hits[0].lines[0]]
-  const [lines, setLines]=useState(lines_);
   const columnsX = Linescolumns(accData.hits, initLine, current, t);
   const columns= columnsF(ccData.hits, initLine, current, t);
   const getColumnName = ()=>columns.map(col =>col.field);
-  useEffect(() => {console.log('current_current_current_', current_); setCurrent(current_)}, [ current_]);
+  useEffect(() => {setCurrent(current_)}, [ current_]);
 
   const toggle= ()=> {
     setState({...state, collapse: !state.collapse });
+  }
+
+  const toggleToolbar= ()=> {
+    setToolbar(!toolbar );
   }
 
   const modules=[{ id:'112', name:'Supplier invoice'}
@@ -71,18 +72,15 @@ const FinancialsForm = () => {
   const cancelEdit = (e) => {
     e.preventDefault();
     initAdd();
-    setSelected([]);
+    //setSelected([]);
   };
 
 
   const submitQuery = (event,modelid) => {
-
     accData?.hits?.length<2? value.submitQuery(event, value.accUrl, setAccData, accData_):void(0)
     ccData?.hits?.length<2? value.submitQuery(event, value.ccUrl, setCcData, ccData_):void(0)
     const url_=value.url.concat('/ftrmd/').concat(modelid);
-    //console.log("url_", url_);
     value.submitQuery(event, url_, setData, value.initialState);
-    //console.log("dataZ", data);
   };
   const handleModuleChange = event => {
     event.preventDefault();
@@ -111,7 +109,7 @@ const FinancialsForm = () => {
 
   const [filteredRows, setFilteredRows] = useState(dx);
   useEffect(() => {handleFilter('')}, [data]);
-  
+
   const mapping2 = item => <option key={item.name} value={item.name}>
     {item.name+" ".concat(item.id)}</option>;
 
@@ -173,36 +171,38 @@ const FinancialsForm = () => {
     });
   }
 
-
- const  editable = () => ({ onRowAdd: async (newData) =>{
-      if(newData ) {
-        const dx = {...current};
-        dx.lines[dx.lines.length] = newData;
-      }
-    },
-
-   onRowUpdate: async (newData, oldData) => {
-     if (oldData) {
-       const dx = {...current};
-       const index = dx.lines.findIndex(obj => obj.lid === newData.lid);
-       dx.lines[index] = newData;
-     }
-   },
-   onRowDelete: async (oldData) => {
-     if (oldData) {
-       const dx = {...current};
-       const index =dx.lines.findIndex(obj => obj.lid === oldData.lid);
-       const deleted = dx.lines[index];
-       dx.lines[index] = {...deleted, transid:-2 };
-       }
-   }
-  })
+const addRow = (newData) =>{
+    if(newData ) {
+      const dx = {...current};
+      dx.lines[dx.lines.length] = newData;
+    }
+  }
+  const updateRow = (newData, oldData) =>{
+    if (oldData) {
+      const dx = {...current};
+      const index = dx.lines.findIndex(obj => obj.lid === newData.lid);
+      dx.lines[index] = newData;
+    }
+  }
+  const deleteRow = (oldData) =>{
+    if (oldData) {
+      const dx = {...current};
+      const index =dx.lines.findIndex(obj => obj.lid === oldData.lid);
+      const deleted = dx.lines[index];
+      dx.lines[index] = {...deleted, transid:-2 };
+    }
+  }
+ const  editable = () => ({
+   onRowAdd: async (newData) => addRow(newData),
+   onRowUpdate: async (newData, oldData) => updateRow(newData, oldData),
+   onRowDelete: async (oldData) => deleteRow(oldData)
+ })
 
   function buildForm( current){
     const lines_=()=>current.lines&&current.lines.length >0 ? current.lines:[value.initialState.hits[0].lines[0]];
     return <>
       <Grid container spacing={2}  direction="column" style={{...styles.outer}}>
-         <CForm  className="form-horizontal" id ="financialsMasterform" onSubmit={ current.editing?submitEdit:submitAdd}>
+         <CForm  className="form-horizontal"  style={{padding:0}}  onSubmit={ current.editing?submitEdit:submitAdd}>
              <Grid container justify="space-between">
                <Grid container xs spacing={1} justify="flex-start">
                  <Grid item justify="center" alignItems="center">
@@ -216,6 +216,11 @@ const FinancialsForm = () => {
                    <option value={fmodule} selected >{fmodule}</option>
                    {modules.map(item => mapping(item))};
                  </CSelect>
+                 <div className="card-header-actions" style={{  align: 'right' }}>
+                   <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
+                     <FontAwesomeIcon icon={faPlusCircle} />
+                   </CButton>
+                 </div>
                  <div className="card-header-actions" style={{  align: 'right' }}>
                    <CButton color="link" className="card-header-action btn-minimize" onClick={onNewLine}>
                      <FontAwesomeIcon icon={faPlusCircle} />
@@ -306,13 +311,11 @@ const FinancialsForm = () => {
                   <CSelect disabled={current.posted} className ="input-sm" type="select" name="account2" id="account2-id"
                          value={current.account} onChange={(event)  =>
                       setCurrent({ ...current, account: event.target.value})} style={{ height:30}}>
-                    {console.log('accData', accData)};
                     {accData.hits.map(item => mapping2(item))};
-
                   </CSelect>
                 </CCol>
-                <CCol sm="0.5"/>
-                <CCol sm="1" style={{'text-align':'right', 'padding-left':2, padding:1 }}>
+
+                <CCol sm="2" style={{'text-align':'right', 'padding-left':10, padding:1 }}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                         disabled ={current.posted}
@@ -331,9 +334,8 @@ const FinancialsForm = () => {
                     />
                   </MuiPickersUtilsProvider>
                 </CCol>
-
               </CFormGroup>
-              <CFormGroup row style={{  height:15 }}>
+              <CFormGroup row style={{ 'padding-bottom':30, height:15 }}>
                 <CCol sm="1">
                   <CLabel size="sm" htmlFor="input-small">{t('financials.costcenter')}</CLabel>
                 </CCol>
@@ -357,8 +359,9 @@ const FinancialsForm = () => {
                   <FormControlLabel id="posted" name="posted" control={<Switch checked={current.posted} />} label={t('financials.posted')}/>
                 </CCol>
               </CFormGroup>
-              <EditableTable id="LineTable" Options ={Options} flag={current.posted} data={lines_()} columns={columnsX} editable={editable()}
-                                rowStyle={rowStyle} selected ={[-1]} theme={theme} t={t}   edit ={null}/>
+              <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()} columns={columnsX} editable={editable()}
+                                rowStyle={rowStyle} selected ={[-1]} theme={theme} t={t}  tableRef={tableRef} edit ={null}
+                             />
                <CInput disabled={current.posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
                            placeholder="text" value={current.text} onChange={(event)  =>
                    setCurrent({ ...current, text: event.target.value})} />
@@ -366,9 +369,9 @@ const FinancialsForm = () => {
 
           </CCollapse>
         </CForm>
+        <EditableTable id="MTable" Options ={{...OptionsM, toolbar:toolbar}} flag={current.posted} data={getFilteredRows()} columns={columns}
+                         rowStyle={rowStyle} selected ={[-1]} theme={theme} t={t}   edit ={edit} style={{'padding-top':20, height: 50}}/>
       </Grid>
-      <EditableTable id="MTable" Options ={OptionsM} flag={current.posted} data={getFilteredRows()} columns={columns}
-                         rowStyle={rowStyle} selected ={[-1]} theme={theme} t={t}   edit ={edit}/>
 
    </>
   }

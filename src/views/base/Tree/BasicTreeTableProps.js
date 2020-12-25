@@ -18,18 +18,19 @@ export const theme = createMuiTheme({
 export function rowStyle (rowData) {
     return  (rowData.tableData.id % 2===0)?
         {
-            color:'black',
+            //color:'black',
             padding:0.5,
             height:3,
             fontsize:10,
-            backgroundColor:"#EEEE"
+            backgroundColor: '#fff9e6' //"#EEEE"
         }:
         {
             color:'black',
+            //color:'#eee',
             padding:0.5,
             height:3,
             fontsize:10,
-            backgroundColor:"#fff9e6"
+            //backgroundColor:"#fff9e6"
         }
 
 }
