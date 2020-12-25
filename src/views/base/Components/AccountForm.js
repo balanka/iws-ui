@@ -4,21 +4,8 @@ import {dateFormat} from "../../../utils/utils"
 import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
-import {IoMdMenu} from "react-icons/io";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
 import useFetch from "../../../utils/useFetch";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-  faAngleDoubleDown,
-  faAngleDoubleUp,
-  faPlusCircle,
-  faPlusSquare,
-  faSave,
-  faSpinner,
-  faWindowClose
-} from "@fortawesome/free-solid-svg-icons";
-import {ColumnsACC as columns, filter, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {ColumnsACC as columns, filter, OptionsM, FormHead, AccountMainForm} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
 
@@ -86,7 +73,28 @@ const AccountForm = () => {
   function buildForm(current){
     return <>
        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
+        <FormHead styles={styles} title={value.title} state={state} initAdd ={initAdd} setData={setData} setAccData={setAccData}
+                  url={value.url} accUrl={value.accUrl} initialState cancelEdit ={cancelEdit} submitEdit={submitEdit}
+                  submitQuery= {value.submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
+         <Grid container spacing={2} style={{...styles.middle, 'background-color':blue }} direction="column" >
+            <CCollapse show={state.collapse} id="JScollapse" >
+              <AccountMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} />
+            </CCollapse>
+         </Grid>
+         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+            <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
+                           selected ={[-1]} theme={theme} t={t}  edit ={edit}/>
+         </Grid>
+       </Grid>
+    </>
+  }
+
+  return buildForm(current);
+
+};
+export default AccountForm;
+/*
+<Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
            <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
@@ -130,112 +138,5 @@ const AccountForm = () => {
            </Grid>
          </Grid>
          </Grid>
-         <Grid container spacing={2} style={{...styles.middle, 'background-color':blue }} direction="column" >
-            <CCollapse show={state.collapse} id="JScollapse" >
-                        <CFormGroup row style={{  height:15 }}>
-                          <CCol sm="2">
-                            <CLabel size="sm" htmlFor="input-small">{t('account.id')}</CLabel>
-                          </CCol>
-                          <CCol sm="4">
-                            <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm"
-                                   placeholder="Id" value= {current.id} onChange={(event)  => value.setCurrent({ ...current, id: event.target.value})} />
-                          </CCol>
-                          <CCol sm="2">
-                            <CLabel size="sm" htmlFor="input-small">{t('account.enterdate')}</CLabel>
-                          </CCol>
-                          <CCol sm="2">
-                            <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate"
-                                   className="input-sm" placeholder="date"
-                                   value={dateFormat(current.enterdate, "dd.mm.yyyy")}
-                                   style={{'text-align':'right', padding:2 }} readonly />
-                          </CCol>
-                        </CFormGroup>
-                        <CFormGroup row style={{  height:15 }}>
-                          <CCol sm="2">
-                            <CLabel size="sm" htmlFor="input-small">{t('account.name')}</CLabel>
-                          </CCol>
-                          <CCol sm="4">
-                            <CInput bsSize="sm" type="text" id="name-input" name="name" className="input-sm" placeholder="Name"
-                                   value={current.name} onChange={(event)  => value.setCurrent({ ...current, name: event.target.value})} />
-                          </CCol>
-                          <CCol sm="2">
-                            <CLabel size="sm" htmlFor="input-small">{t('account.changedate')}</CLabel>
-                          </CCol>
-                          <CCol sm="2">
-                            <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate"
-                                   className="input-sm" placeholder="date" value={dateFormat(current.changedate,
-                              "dd.mm.yyyy")} style={{'text-align':'right', padding:2 }} readonly />
-                          </CCol>
-                        </CFormGroup>
-                        <CFormGroup row style={{  height:15 }}>
-                          <CCol sm="2">
-                            <CLabel size="sm" htmlFor="input-small">{t('account.account')}</CLabel>
-                          </CCol>
-                          <CCol sm="4">
-                            <CSelect className ="flex-row" type="select" name="account" id="account-id"
-                                   value={current.account} onChange={(event)  => value.setCurrent({ ...current, account: event.target.value})} >
-                                 {accData.hits.map(item => mapping(item))};
-
-                            </CSelect>
-
-                          </CCol>
-                          <CCol sm="2">
-                            <CLabel size="sm" htmlFor="input-small">{t('account.postingdate')}</CLabel>
-                          </CCol>
-                          <CCol sm="2">
-                            <CInput  bsSize="sm" type="text" id="input-small" name="postingdate"
-                                   className="input-sm" placeholder="date"
-                                   value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                                   style={{'text-align':'right', padding:2 }} readonly/>
-                          </CCol>
-                        </CFormGroup>
-                       <CFormGroup row style={{  height:15 }}>
-                        <CCol sm="2">
-                          <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
-                        </CCol>
-                        <CCol sm="4">
-                          <CInput bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
-                                 placeholder="company" value={current.company} onChange={(event)  => 
-                                 value.setCurrent({ ...current, company: event.target.value})} />
-                        </CCol>
-                        <CCol sm="2">
-                          <FormControlLabel id="isDebit" name="isDebit"
-                              control={<Switch checked={current.isDebit} onChange={(event)  => 
-                                value.setCurrent({ ...current, isDebit: event.target.checked})} style={{ 'padding-left':2 }}/>}
-                              label={t('account.debit_credit')}
-                          />
-                        </CCol>
-                        <CCol sm="1">
-                          <FormControlLabel id="balancesheet" name="balancesheet"
-                                            control={<Switch checked={current.balancesheet} onChange={(event)  => 
-                                              value.setCurrent({ ...current, balancesheet: event.target.checked})} style={{ 'padding-left':2 }}/>}
-                                            label={t('account.balancesheet')}
-                          />
-                        </CCol>
-                      </CFormGroup>
-                        <CFormGroup row style={{  height:15 }}>
-                          <CCol md="2">
-                            <CLabel htmlFor="textarea-input">{t('account.description')}</CLabel>
-                          </CCol>
-                          <CCol xs="12"   md="9">
-                            <CTextarea type="textarea" name="description" id="description-id" rows="1"
-                                    placeholder="Content..." value={current.description} onChange={(event)  => 
-                                      value.setCurrent({ ...current, description: event.target.value})} />
-                          </CCol>
-                        </CFormGroup>
-                    </CCollapse>
-         </Grid>
-
-         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
-            <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
-                           selected ={[-1]} theme={theme} t={t}  edit ={edit}/>
-         </Grid>
-       </Grid>
-    </>
-  }
-
-  return buildForm(current);
-
-};
-export default AccountForm;
+ */
 

@@ -18,6 +18,8 @@ import {
     faWindowClose
 } from "@fortawesome/free-solid-svg-icons";
 import {dateFormat} from "../../utils/utils";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 export const styles = {
   outer: {
     borderRadius: 5,
@@ -455,6 +457,104 @@ return (
     </Grid>
 </Grid>)
 }
+
+export const AccountMainForm =(props) => {
+    const {current, setCurrent, t, accData } = props
+    return (
+        <>
+     <CFormGroup row style={{  height:15 }}>
+    <CCol sm="2">
+        <CLabel size="sm" htmlFor="input-small">{t('account.id')}</CLabel>
+    </CCol>
+    <CCol sm="4">
+        <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm"
+                placeholder="Id" value= {current.id} onChange={(event)  => setCurrent({ ...current, id: event.target.value})} />
+    </CCol>
+    <CCol sm="2">
+        <CLabel size="sm" htmlFor="input-small">{t('account.enterdate')}</CLabel>
+    </CCol>
+    <CCol sm="2">
+        <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate"
+                 className="input-sm" placeholder="date"
+                 value={dateFormat(current.enterdate, "dd.mm.yyyy")}
+                 style={{'text-align':'right', padding:2 }} readonly />
+    </CCol>
+</CFormGroup>
+<CFormGroup row style={{  height:15 }}>
+    <CCol sm="2">
+        <CLabel size="sm" htmlFor="input-small">{t('account.name')}</CLabel>
+    </CCol>
+    <CCol sm="4">
+        <CInput bsSize="sm" type="text" id="name-input" name="name" className="input-sm" placeholder="Name"
+                value={current.name} onChange={(event)  => setCurrent({ ...current, name: event.target.value})} />
+    </CCol>
+    <CCol sm="2">
+        <CLabel size="sm" htmlFor="input-small">{t('account.changedate')}</CLabel>
+    </CCol>
+    <CCol sm="2">
+        <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate"
+                 className="input-sm" placeholder="date" value={dateFormat(current.changedate,
+            "dd.mm.yyyy")} style={{'text-align':'right', padding:2 }} readonly />
+    </CCol>
+</CFormGroup>
+<CFormGroup row style={{  height:15 }}>
+    <CCol sm="2">
+        <CLabel size="sm" htmlFor="input-small">{t('account.account')}</CLabel>
+    </CCol>
+    <CCol sm="4">
+        <CSelect className ="flex-row" type="select" name="account" id="account-id"
+                 value={current.account} onChange={(event)  => setCurrent({ ...current, account: event.target.value})} >
+            {accData.hits.map(item => mappingSelect(item))};
+
+        </CSelect>
+
+    </CCol>
+    <CCol sm="2">
+        <CLabel size="sm" htmlFor="input-small">{t('account.postingdate')}</CLabel>
+    </CCol>
+    <CCol sm="2">
+        <CInput  bsSize="sm" type="text" id="input-small" name="postingdate"
+                 className="input-sm" placeholder="date"
+                 value={dateFormat(current.postingdate, "dd.mm.yyyy")}
+                 style={{'text-align':'right', padding:2 }} readonly/>
+    </CCol>
+</CFormGroup>
+<CFormGroup row style={{  height:15 }}>
+    <CCol sm="2">
+        <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
+    </CCol>
+    <CCol sm="4">
+        <CInput bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
+                placeholder="company" value={current.company} onChange={(event)  =>
+            setCurrent({ ...current, company: event.target.value})} />
+    </CCol>
+    <CCol sm="2">
+        <FormControlLabel id="isDebit" name="isDebit"
+                          control={<Switch checked={current.isDebit} onChange={(event)  =>
+                              setCurrent({ ...current, isDebit: event.target.checked})} style={{ 'padding-left':2 }}/>}
+                          label={t('account.debit_credit')}
+        />
+    </CCol>
+    <CCol sm="1">
+        <FormControlLabel id="balancesheet" name="balancesheet"
+                          control={<Switch checked={current.balancesheet} onChange={(event)  =>
+                              setCurrent({ ...current, balancesheet: event.target.checked})} style={{ 'padding-left':2 }}/>}
+                          label={t('account.balancesheet')}
+        />
+    </CCol>
+</CFormGroup>
+<CFormGroup row style={{  height:15 }}>
+    <CCol md="2">
+        <CLabel htmlFor="textarea-input">{t('account.description')}</CLabel>
+    </CCol>
+    <CCol xs="12"   md="9">
+        <CTextarea type="textarea" name="description" id="description-id" rows="1"
+                   placeholder="Content..." value={current.description} onChange={(event)  =>
+            setCurrent({ ...current, description: event.target.value})} />
+    </CCol>
+</CFormGroup>
+</>
+)}
 
 export const VatMainForm =(props) => {
     const {current, setCurrent, t, accData } = props
