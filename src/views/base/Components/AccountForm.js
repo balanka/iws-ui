@@ -20,27 +20,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {ColumnsACC as columns, filter, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
-import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
-const styles = {
-  outer: {
-    borderRadius: 5,
-    boxShadow: "0 10px 30px #BBB",
-    padding: 10,
-  },
-  inner: {
-    borderRadius: 5,
-    boxShadow: "0 10px 30px #BBB",
-    padding: 10,
-    'padding-top': 30
-  },
-  middle: {
-    borderRadius: 5,
-    boxShadow: "0 10px 30px #BBB",
-    padding: 10,
-    'padding-top': 30,
-    'padding-bottom': 30
-  }
-};
+import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
+
 const AccountForm = () => {
   const [profile, ] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
