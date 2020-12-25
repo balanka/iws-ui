@@ -87,12 +87,13 @@ const AccountForm = () => {
     return <>
        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
          <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
+           <Grid container justify="space-between">
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
                 <IoMdMenu />
               </Grid>
               <Grid item><h5><CBadge color="primary">{value.title}</CBadge></h5></Grid>
-              <Grid item justify="flex-end" alignItems="center">
+              <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
               <div className="card-header-actions" style={{  align: 'right' }}>
                 <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
                   <FontAwesomeIcon icon={faWindowClose} />
@@ -127,6 +128,7 @@ const AccountForm = () => {
               </div>
             </Grid>
            </Grid>
+         </Grid>
          </Grid>
          <Grid container spacing={2} style={{...styles.middle, 'background-color':blue }} direction="column" >
             <CCollapse show={state.collapse} id="JScollapse" >
@@ -223,6 +225,7 @@ const AccountForm = () => {
                         </CFormGroup>
                     </CCollapse>
          </Grid>
+
          <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
             <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
                            selected ={[-1]} theme={theme} t={t}  edit ={edit}/>
