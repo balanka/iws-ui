@@ -1,5 +1,6 @@
 
 import {createMuiTheme} from "@material-ui/core/styles";
+import blue from "@material-ui/core/colors/blue";
 
 export const theme = createMuiTheme({
     palette: {
@@ -34,6 +35,27 @@ export function rowStyle (rowData) {
         }
 
 }
+export const styles = {
+    outer: {
+        'background-color':blue,
+        borderRadius: 5,
+        boxShadow: "0 10px 30px #BBB",
+        padding: 10,
+    },
+    inner: {
+        borderRadius: 5,
+        boxShadow: "0 10px 30px #BBB",
+        padding: 10,
+        'padding-top': 30
+    },
+    middle: {
+        borderRadius: 5,
+        boxShadow: "0 10px 30px #BBB",
+        padding: 10,
+        'padding-top': 30,
+        'padding-bottom': 30
+    }
+};
 
 
 
