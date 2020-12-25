@@ -9,7 +9,15 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import useFetch from "../../../utils/useFetch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner,faWindowClose} from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDoubleDown,
+  faAngleDoubleUp,
+  faPlusCircle,
+  faPlusSquare,
+  faSave,
+  faSpinner,
+  faWindowClose
+} from "@fortawesome/free-solid-svg-icons";
 import {ColumnsACC as columns, filter, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
@@ -17,7 +25,20 @@ const styles = {
   outer: {
     borderRadius: 5,
     boxShadow: "0 10px 30px #BBB",
-    padding: 10
+    padding: 10,
+  },
+  inner: {
+    borderRadius: 5,
+    boxShadow: "0 10px 30px #BBB",
+    padding: 10,
+    'padding-top': 30
+  },
+  middle: {
+    borderRadius: 5,
+    boxShadow: "0 10px 30px #BBB",
+    padding: 10,
+    'padding-top': 30,
+    'padding-bottom': 30
   }
 };
 const AccountForm = () => {
@@ -33,12 +54,13 @@ const AccountForm = () => {
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [current,setCurrent] = useState(current_);
+  const [toolbar, setToolbar] = useState(true);
   useEffect(() => {}, [current, setCurrent, data]);
   useEffect(() => {setCurrent(current_)}, [current_]);
 
-  const toggle= ()=> {
-    setState({...state, collapse:!state.collapse });
-  }
+  const toggleToolbar= ()=> setToolbar(!toolbar );
+  const toggle= ()=> setState({...state, collapse:!state.collapse });
+
   const initAdd =()=> {
     const row = {...value.initialState.hits[0], company:profile.company, editing:false};
     value.editRow(row, false);
@@ -82,16 +104,14 @@ const AccountForm = () => {
 
   function buildForm(current){
     return <>
-       <Grid container spacing={2} style={{...styles.outer, padding: 20, 'background-color':blue }} direction="column" >
-        <CForm  className="form-horizontal" onSubmit={  current.editing?submitEdit:submitAdd}>
-          <Grid container justify="space-between">
+       <Grid container spacing={2} style={{...styles.outer, padding:10, 'background-color':blue }} direction="column" >
+         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
                 <IoMdMenu />
               </Grid>
               <Grid item><h5><CBadge color="primary">{value.title}</CBadge></h5></Grid>
-            </Grid>
-            <Grid item justify="flex-end" alignItems="center">
+              <Grid item justify="flex-end" alignItems="center">
               <div className="card-header-actions" style={{  align: 'right' }}>
                 <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
                   <FontAwesomeIcon icon={faWindowClose} />
@@ -119,9 +139,16 @@ const AccountForm = () => {
                   <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
                 </CButton>
               </div>
+              <div className="card-header-actions" style={{  align: 'right' }}>
+                <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </CButton>
+              </div>
             </Grid>
            </Grid>
-                    <CCollapse show={state.collapse} id="JScollapse" style={{padding: 2}}>
+         </Grid>
+         <Grid container spacing={2} style={{...styles.middle, 'background-color':blue }} direction="column" >
+            <CCollapse show={state.collapse} id="JScollapse" >
                         <CFormGroup row style={{  height:15 }}>
                           <CCol sm="2">
                             <CLabel size="sm" htmlFor="input-small">{t('account.id')}</CLabel>
@@ -214,11 +241,13 @@ const AccountForm = () => {
                           </CCol>
                         </CFormGroup>
                     </CCollapse>
-                </CForm>
-               </Grid>
-               <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
-                     selected ={[-1]} theme={theme} t={t}  edit ={edit}/>
-             </>
+         </Grid>
+         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+            <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
+                           selected ={[-1]} theme={theme} t={t}  edit ={edit}/>
+         </Grid>
+       </Grid>
+    </>
   }
 
   return buildForm(current);
