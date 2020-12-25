@@ -85,8 +85,8 @@ const AccountForm = () => {
 
   function buildForm(current){
     return <>
-       <Grid container spacing={2} style={{...styles.outer, padding:10, 'background-color':blue }} direction="column" >
-         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+       <Grid container spacing={2} style={{...styles.outer }} direction="column" >
+         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container xs spacing={1} justify="flex-start">
               <Grid item justify="center" alignItems="center">
                 <IoMdMenu />
