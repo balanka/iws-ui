@@ -7,17 +7,19 @@ import {IoMdMenu} from "react-icons/io";
 import useFetch from "../../../utils/useFetch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {accountContext, useGlobalState} from './AccountContext';
-import {faAngleDoubleDown, faAngleDoubleUp, faPlusSquare, faSave, faSpinner, faWindowClose} from "@fortawesome/free-solid-svg-icons";
+import {
+    faAngleDoubleDown,
+    faAngleDoubleUp,
+    faPlusCircle,
+    faPlusSquare,
+    faSave,
+    faSpinner,
+    faWindowClose
+} from "@fortawesome/free-solid-svg-icons";
 import EditableTable from "../../Tables2/EditableTable";
 import {ColumnsM, OptionsM, filter} from "../../Tables2/LineFinancialsProps";
-import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
-const styles = {
-  outer: {
-    borderRadius: 5,
-    boxShadow: "0 10px 30px #BBB",
-    padding: 10
-  }
-};
+import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
+
 const CostCenterForm = () => {
   const [profile, ] = useGlobalState('profile');
   const [collapsingState, setCollapsingState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -31,12 +33,12 @@ const CostCenterForm = () => {
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [current, setCurrent] = useState(current_);
+  const [toolbar, setToolbar] = useState(true);
   useEffect(() => {}, [current, setCurrent, data]);
   useEffect(() => {setCurrent(current_)}, [current_]);
 
-  const toggle= ()=> {
-    setCollapsingState({...collapsingState, collapse:!collapsingState.collapse });
-  }
+  const toggleToolbar= ()=> setToolbar(!toolbar );
+  const toggle= ()=> setCollapsingState({...collapsingState, collapse:!collapsingState.collapse });
   const initAdd =()=> {
     const row = {...value.initialState.hits[0], company:profile.company, editing:false};
     value.editRow(row, false);
@@ -81,16 +83,14 @@ const CostCenterForm = () => {
       const current = current1;
     console.log("user1xx", current);
     return <>
-      <Grid container spacing={2}  style={{...styles.outer, padding: 20, 'background-color':blue }} direction="column" >
-        <CForm  className="form-horizontal" onSubmit={ current.editing?submitEdit:submitAdd} style={{padding:0}}>
-          <Grid container justify="space-between">
+       <Grid container spacing={2} style={{...styles.outer }} direction="column" >
+         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container xs spacing={1} justify="flex-start">
-              <Grid item justify="center" alignItems="center">
+              <Grid item justify="center" alignItems="left">
                 <IoMdMenu />
               </Grid>
               <Grid item><h5><CBadge color="primary">{t(`${value.title}`)}</CBadge></h5></Grid>
-            </Grid>
-            <Grid item justify="flex-end" alignItems="center">
+              <Grid xs container spacing={1} justify="flex-end" alignItems="right">
                 <div className="card-header-actions" style={{  align: 'right' }}>
                     <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
                         <FontAwesomeIcon icon={faWindowClose} />
@@ -118,9 +118,16 @@ const CostCenterForm = () => {
                         <FontAwesomeIcon icon={collapsingState.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
                     </CButton>
                 </div>
+                <div className="card-header-actions" style={{  align: 'right' }}>
+                    <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
+                        <FontAwesomeIcon icon={faPlusCircle} />
+                    </CButton>
+                </div>
+              </Grid>
             </Grid>
           </Grid>
-          <CCollapse show={collapsingState.collapse} id="JScollapse" style={{padding: 2}}>
+          <Grid container spacing={2} style={{...styles.middle, 'background-color':blue }} direction="column" >
+           <CCollapse show={collapsingState.collapse} id="JScollapse">
               <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
                   <CLabel size="sm" htmlFor="input-small">{t('costcenter.id')}</CLabel>
@@ -199,13 +206,14 @@ const CostCenterForm = () => {
                 </CCol>
               </CFormGroup>
           </CCollapse>
-      </CForm>
     </Grid>
-    <EditableTable Options={OptionsM}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
+    <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+       <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
                    selected ={[-1]}  theme={theme} t={t}  edit ={edit}/>
-    </>
+     </Grid>
+    </Grid>
+  </>
   }
-    console.log('currentcurrentCostCenterForm', current);
   return buildForm(current);
 
 };
