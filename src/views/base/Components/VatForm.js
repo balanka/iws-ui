@@ -13,7 +13,7 @@ import {
   FormHead,
   VatMainForm,
   OptionsM,
-  FormFactory
+  FormFactory, CustomerFormHead
 } from "../../Tables2/LineFinancialsProps";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
 import {formEnum} from "../../../utils/FORMS";
@@ -59,10 +59,6 @@ const VatForm = () => {
     setCurrent({...record, editing:true});
   }
 
-
-  const mapping = item => <option key={item.id} value={item.id}>
-    {item.id+ " ".concat (item.name)}</option>;
-
   const submitEdit = event => {
     event.preventDefault();
     if(current.editing) {
@@ -79,15 +75,12 @@ const VatForm = () => {
     setCurrent(row);
   };
 
-
-
-  function buildForm(current1) {
-    const current =current1
+  function buildForm(current) {
     return <>
        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-         <FormHead styles={styles} title={value.title} state={state} initAdd ={initAdd} setData={setData} setAccData={setAccData}
-                   url={value.url} accUrl={value.accUrl} initialState cancelEdit ={cancelEdit} submitEdit={submitEdit}
-                   submitQuery= {value.submitQuery}  toggle={toggle} toggleToolbar={toggleToolbar}  />
+         <CustomerFormHead styles={styles} title={value.title} state={state} initAdd ={initAdd} setData={setData} setAccData={setAccData}
+                           url={value.url} accUrl={value.accUrl} initialState cancelEdit ={cancelEdit} submitEdit={submitEdit}
+                           submitQuery= {value.submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
          <FormFactory formid ={formEnum.VAT} current={current} setCurrent={setCurrent} t={t} accData={accData}
                       state={state.collapse} styles={styles} />
 

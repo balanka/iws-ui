@@ -195,7 +195,7 @@ export const columnsF =(data, line, current, t) => [
     , {field:'posted', title:t('financials.posted'), type:"boolean", width:10, export:true}
     , {field:'total', title:t('common.total'), type:"currency",currencySetting: { locale:"de"
        , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }, export:true}
-    , {field:'text', title:t('financials.text'), type:"text", export:true}
+    , {field:'text', title:t('financials.text'), type:"string", export:true}
     , {field:'typeJournal', title:t('financials.type'), type:"numeric", export:true}
     , {field:'modelid', title:t('common.modelid'), type:"numeric", export:true}
     , {field:'company', title:t('common.company'), type:"numeric", export:true}
@@ -253,7 +253,7 @@ export const Options = ({
 export const ColumnsM =(data, line, current, t) => [
       {field:'id', title:t('costcenter.id'), export:true}
     , {field:'name', title:t("costcenter.name"), initialEditValue:line.name, type: "text", export:true}
-    , {field:'description', title:t('costcenter.description'), type:"text", initialEditValue:line.description, export:true}
+    , {field:'description', title:t('costcenter.description'), type:"string", initialEditValue:line.description, export:true}
     , {field:'account', title:t('costcenter.account'), editComponent:({ value, onRowDataChange, rowData }) =>
             accountD ( data, value, onRowDataChange, rowData ), width: 20, export:true}
     , {field:'enterdate', title:t('costcenter.enterdate'), type:"date", align:"right",
@@ -266,13 +266,13 @@ export const ColumnsM =(data, line, current, t) => [
         initialEditValue:line.postingdate,
         dateSetting: { locale:"de" } , export:true}
 
-    , {field:'company', title:t('common.company'), type:"text", initialEditValue:line.company, export:true}
+    , {field:'company', title:t('common.company'), type:"string", initialEditValue:line.company, export:true}
 
 ]
 export const ColumnsACC =(data, line, current, t) => [
       {field:'id', title:t('account.id'), export:true}
     , {field:'name', title:t("account.name"), initialEditValue:line.name, type: "text", export:true}
-    , {field:'description', title:t('account.description'), type:"text", initialEditValue:line.description, export:true}
+    , {field:'description', title:t('account.description'), type:"string", initialEditValue:line.description, export:true}
     , {field:'isDebit', title:t('account.debit_credit'), type:"boolean", export:true}
     , {field:'balancesheet', title:t('account.balancesheet'), type:"boolean", export:true}
     , {field:'account', title:t('account.account'), editComponent:({ value, onRowDataChange, rowData }) =>
@@ -296,12 +296,12 @@ export const ColumnsACC =(data, line, current, t) => [
         initialEditValue:line.postingdate,
         dateSetting: { locale:"de" } , export:true}
 
-    , {field:'company', title:t('common.company'), type:"text", initialEditValue:line.company, export:true}
+    , {field:'company', title:t('common.company'), type:"string", initialEditValue:line.company, export:true}
 ]
 export const ColumnsV =(data, line, current, t) => [
     {field:'id', title:t('vat.id'), export:true}
     , {field:'name', title:t("vat.name"), initialEditValue:line.name, type: "text", export:true}
-    , {field:'description', title:t('vat.description'), type:"text", initialEditValue:line.description, export:true}
+    , {field:'description', title:t('vat.description'), type:"string", initialEditValue:line.description, export:true}
     , {field:'percent', title:t('vat.percent'), type:"numeric", initialEditValue:0, minimumFractionDigits: 2
         , maximumFractionDigits: 2, export:true}
     , {field:'inputVatAccount', title:t('vat.input_account'), editComponent:({ value, onRowDataChange, rowData }) =>
@@ -318,7 +318,7 @@ export const ColumnsV =(data, line, current, t) => [
         initialEditValue:line.postingdate,
         dateSetting: { locale:"de" } , export:true}
 
-    , {field:'company', title:t('common.company'), type:"text", initialEditValue:line.company, export:true}
+    , {field:'company', title:t('common.company'), type:"string", initialEditValue:line.company, export:true}
 ]
 
 export const ColumnsBS =(data, line, current, t) => [
@@ -394,8 +394,107 @@ export const OptionsM = ({
     exportDelimiter: ',',
     exportFileName:'Masterfile.csv'
 })
+export const CustomerFormHead = (props) => {
+    const {styles, title, state, url, accUrl, initialState, initAcc, initAdd, setData, setAccData, cancelEdit
+        , submitEdit, submitQuery, toggle, toggleToolbar} = props
+    return (
+        <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
+            <Grid container justify="space-between">
+                <Grid container xs spacing={1} justify="flex-start">
+                    <Grid item justify="center" alignItems="center">
+                        <IoMdMenu />
+                    </Grid>
+                    <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
+                    <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
+                                <FontAwesomeIcon icon={faWindowClose} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
+                                <FontAwesomeIcon icon={faPlusSquare} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
+                                <FontAwesomeIcon icon={faSave} />
+                            </CButton>
+                        </div>
+                        <div>
+                            <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
+                                event.preventDefault(); submitQuery(event, accUrl, setAccData, initAcc);
+                                submitQuery(event, url, setData, initialState);}}>
+                                <FontAwesomeIcon icon={faSpinner} rotation={90}/>
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                                <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
+                                <FontAwesomeIcon icon={faPlusCircle} />
+                            </CButton>
+                        </div>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>);
+}
 
 export const FormHead = (props) => {
+    const {styles, title, state, url, accUrl, initialState, initAcc, initAdd, setData, setAccData, cancelEdit
+        , submitEdit, submitQuery, toggle, toggleToolbar} = props
+
+    return (
+        <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
+            <Grid container justify="space-between">
+                <Grid container xs spacing={1} justify="flex-start">
+                    <Grid item justify="center" alignItems="center">
+                        <IoMdMenu />
+                    </Grid>
+                    <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
+                    <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
+                                <FontAwesomeIcon icon={faWindowClose} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
+                                <FontAwesomeIcon icon={faPlusSquare} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
+                                <FontAwesomeIcon icon={faSave} />
+                            </CButton>
+                        </div>
+                        <div>
+                            <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
+                                event.preventDefault(); submitQuery(event, accUrl, setAccData, initAcc);
+                                submitQuery(event, url, setData, initialState);}}>
+                                <FontAwesomeIcon icon={faSpinner} rotation={90}/>
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                                <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
+                                <FontAwesomeIcon icon={faPlusCircle} />
+                            </CButton>
+                        </div>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>)
+}
+export const FormHeadOLD = (props) => {
     const {styles, title, state, url, accUrl, initialState, initAcc, initAdd, setData, setAccData, cancelEdit
           , submitEdit, submitQuery, toggle, toggleToolbar} = props
 
@@ -476,6 +575,7 @@ export const FormWrapper=(props) => {
      </Grid>
     )
 }
+
 export const AccountMainForm =(props) => {
     const {current, setCurrent, t, accData } = props
     return (
@@ -658,6 +758,7 @@ export const MasterfilesMainForm =(props) => {
 )}
 export const VatMainForm =(props) => {
     const {current, setCurrent, t, accData, style,state } = props
+    console.log('currentVAT', current);
  return (
      <>
     <CFormGroup row style={{height:15 }}>

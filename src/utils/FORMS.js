@@ -2,8 +2,8 @@
     ACCOUNT : 0,
     COSTCENTER :2,
     BANK : 3,
-    SUPPLIER : 2,
-    CUSTOMER : 4,
-    VAT:5,
-    FINANCIALS:6
+    SUPPLIER : 4,
+    CUSTOMER : 5,
+    FINANCIALS:6,
+     VAT:7,
 }

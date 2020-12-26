@@ -10,6 +10,7 @@ import {
     OptionsM,
     filter,
     FormFactory,
+    CustomerFormHead,
     FormHead
 } from "../../Tables2/LineFinancialsProps";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
@@ -75,7 +76,7 @@ const CostCenterForm = () => {
   function buildForm(current) {
     return <>
        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-           <FormHead styles={styles} title={value.title} state={state} initAdd ={initAdd} setData={setData} setAccData={setAccData}
+           <CustomerFormHead styles={styles} title={value.title} state={state} initAdd ={initAdd} setData={setData} setAccData={setAccData}
                      url={value.url} accUrl={value.accUrl} initialState cancelEdit ={cancelEdit} submitEdit={submitEdit}
                      submitQuery= {value.submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
         <FormFactory formid ={formEnum.COSTCENTER} current={current} setCurrent={setCurrent} t={t} accData={accData}
