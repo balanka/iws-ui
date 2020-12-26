@@ -8,7 +8,7 @@ import {
   filter,
   OptionsM,
   FormHead,
-  FormFactory
+  FormFactory, CustomerFormHead
 } from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
@@ -75,9 +75,9 @@ const AccountForm = () => {
   function buildForm(current){
     return <>
        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-        <FormHead styles={styles} title={value.title} state={state} initAdd ={initAdd} setData={setData} setAccData={setAccData}
-                  url={value.url} accUrl={value.accUrl} initialState cancelEdit ={cancelEdit} submitEdit={submitEdit}
-                  submitQuery= {value.submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
+         <CustomerFormHead styles={styles} title={value.title} state={state} initAdd ={initAdd} setData={setData} setAccData={setAccData}
+                           url={value.url} accUrl={value.accUrl} initialState cancelEdit ={cancelEdit} submitEdit={submitEdit}
+                           submitQuery= {value.submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
          <FormFactory formid ={formEnum.ACCOUNT} current={current} setCurrent={setCurrent} t={t} accData={accData}
                       state={state.collapse} styles={styles} />
          <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
