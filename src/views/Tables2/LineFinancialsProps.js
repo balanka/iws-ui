@@ -395,7 +395,7 @@ export const OptionsM = ({
     exportFileName:'Masterfile.csv'
 })
 export const CustomerFormHead = (props) => {
-    const {styles, title, state, url, accUrl, initialState, initAcc, initAdd, setData, setAccData, cancelEdit
+    const {styles, title, collapse, url, accUrl, initialState, initAcc, initAdd, setData, setAccData, cancelEdit
         , submitEdit, submitQuery, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
@@ -423,14 +423,13 @@ export const CustomerFormHead = (props) => {
                         </div>
                         <div>
                             <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
-                                event.preventDefault(); submitQuery(event, accUrl, setAccData, initAcc);
-                                submitQuery(event, url, setData, initialState);}}>
+                                event.preventDefault();submitQuery(event)}}>
                                 <FontAwesomeIcon icon={faSpinner} rotation={90}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                                <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
+                                <FontAwesomeIcon icon={collapse?faAngleDoubleUp:faAngleDoubleDown} />
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
@@ -494,56 +493,6 @@ export const FormHead = (props) => {
             </Grid>
         </Grid>)
 }
-export const FormHeadOLD = (props) => {
-    const {styles, title, state, url, accUrl, initialState, initAcc, initAdd, setData, setAccData, cancelEdit
-          , submitEdit, submitQuery, toggle, toggleToolbar} = props
-
-return (
-    <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
-    <Grid container justify="space-between">
-        <Grid container xs spacing={1} justify="flex-start">
-            <Grid item justify="center" alignItems="center">
-                <IoMdMenu />
-            </Grid>
-            <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
-            <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                    <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
-                        <FontAwesomeIcon icon={faWindowClose} />
-                    </CButton>
-                </div>
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                    <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
-                        <FontAwesomeIcon icon={faPlusSquare} />
-                    </CButton>
-                </div>
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                    <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
-                        <FontAwesomeIcon icon={faSave} />
-                    </CButton>
-                </div>
-                <div>
-                    <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
-                        event.preventDefault(); submitQuery(event, accUrl, setAccData, initAcc);
-                        submitQuery(event, url, setData, initialState);}}>
-                        <FontAwesomeIcon icon={faSpinner} rotation={90}/>
-                    </CButton>
-                </div>
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                    <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                        <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
-                    </CButton>
-                </div>
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                    <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
-                        <FontAwesomeIcon icon={faPlusCircle} />
-                    </CButton>
-                </div>
-            </Grid>
-        </Grid>
-    </Grid>
-</Grid>)
-}
 
 export const FormFactory =(props)=> {
 const {formid} = props
@@ -554,6 +503,10 @@ const {formid} = props
         case formEnum.COSTCENTER:
         case formEnum.BANK:
             return <FormWrapper {...props} form = {MasterfilesMainForm}/>;
+            break;
+        case formEnum.CUSTOMER:
+        case formEnum.SUPPLIER:
+            return <FormWrapper {...props} form = {CustomerMainForm}/>;
             break;
        // case formEnum.FINANCIALS:
       //      return <FormWrapper {...props} form = {FinancialsFormMainForm(props)}/>;
@@ -566,10 +519,10 @@ const {formid} = props
     }
 }
 export const FormWrapper=(props) => {
-    const {form, state, styles} = props
+    const {form, collapse, styles} = props
     return (
         <Grid container spacing={2} style={{...styles.middle, 'background-color':blue }} direction="column" >
-            <CCollapse show={state} id="JScollapse" >
+            <CCollapse show={collapse} id="JScollapse" >
                 {form(props)}
             </CCollapse>
      </Grid>
@@ -675,10 +628,8 @@ export const AccountMainForm =(props) => {
 )}
 export const MasterfilesMainForm =(props) => {
     const {current, setCurrent, t, accData , state, styles} = props
-    return (
-  <Grid container spacing={2} style={{...styles.middle, 'background-color':blue }} direction="column" >
-    <CCollapse show={state} id="JScollapse" >
-        <CFormGroup row style={{  height:15 }}>
+    return (<>
+    <CFormGroup row style={{  height:15 }}>
     <CCol sm="2">
         <CLabel size="sm" htmlFor="input-small">{t('costcenter.id')}</CLabel>
     </CCol>
@@ -752,12 +703,173 @@ export const MasterfilesMainForm =(props) => {
                    placeholder="Content..." value={current.description}
                    onChange={(event)  => setCurrent({ ...current, description: event.target.value})}/>
     </CCol>
-</CFormGroup>
-    </CCollapse>
-  </Grid>
+    </CFormGroup>
+</>
 )}
+export const CustomerMainForm =(props) => {
+    const {current, setCurrent, t, accData, vatData,  state, styles} = props
+
+    return (
+                <>
+                <CFormGroup row style={{  height:15 }}>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.id')}</CLabel>
+                    </CCol>
+                    <CCol sm="4">
+                        <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm" placeholder="Id"
+                                value= {current.id} onChange={(event)  =>
+                            setCurrent({ ...current, id: event.target.value})} />
+                    </CCol>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.enterdate')}</CLabel>
+                    </CCol>
+                    <CCol sm="2">
+                        <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
+                                 placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
+                                 style={{'text-align':'right', padding:2 }}/>
+                    </CCol>
+                </CFormGroup>
+                <CFormGroup row style={{  height:15 }}>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.name')}</CLabel>
+                    </CCol>
+                    <CCol sm="4">
+                        <CInput bsSize="sm" type="text" id="name-input" name="name" className="input-sm" placeholder="Name"
+                                value={current.name} onChange={(event)  =>
+                            setCurrent({ ...current, name: event.target.value})} />
+                    </CCol>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.changedate')}</CLabel>
+                    </CCol>
+                    <CCol sm="2">
+                        <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
+                                 placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
+                                 style={{'text-align':'right', padding:2 }}/>
+                    </CCol>
+                </CFormGroup>
+                <CFormGroup row style={{  height:15 }}>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.account')}</CLabel>
+                    </CCol>
+                    <CCol sm="4">
+                        <CSelect className ="flex-row" type="select" name="account" id="account-id"
+                                 value={current.account} onChange={(event)  =>
+                            setCurrent({ ...current, account: event.target.value})} >
+                            {accData.hits.map(item => mappingSelect(item))};
+
+                        </CSelect>
+
+                    </CCol>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.postingdate')}</CLabel>
+                    </CCol>
+                    <CCol sm="2">
+                        <CInput  bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
+                                 placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
+                                 style={{'text-align':'right', padding:2 }}/>
+                    </CCol>
+                </CFormGroup>
+                <CFormGroup row style={{  height:15 }}>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.oaccount')}</CLabel>
+                    </CCol>
+                    <CCol sm="4">
+                        <CSelect className ="flex-row" type="select" name="oaccount" id="oaccount-id"
+                                 value={current.oaccount} onChange={(event)  =>
+                            setCurrent({ ...current, oaccount: event.target.value})} >
+                            {accData.hits.map(item => mappingSelect(item))};
+                        </CSelect>
+                    </CCol>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
+                    </CCol>
+                    <CCol sm="2">
+                        <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
+                                 placeholder="company" value={current.company} onChange={(event)  =>
+                            setCurrent({ ...current, company: event.target.value})}
+                                 style={{'text-align':'right', padding:2 }}/>
+                    </CCol>
+                </CFormGroup>
+                <CFormGroup row style={{  height:15 }}>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.street')}</CLabel>
+                    </CCol>
+                    <CCol sm="4">
+                        <CInput  bsSize="sm" type="text" id="street-id" name="company" className="input-sm"
+                                 placeholder="Street" value={current.street} onChange={(event)  =>
+                            setCurrent({ ...current, street: event.target.value})}
+                                 style={{'text-align':'left', padding:2 }}/>
+                    </CCol>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.city')}</CLabel>
+                    </CCol>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.zip')}</CLabel>
+                    </CCol>
+                    <CCol sm="2">
+                        <CInput  bsSize="sm" type="text" id="zip-id" name="zip" className="input-sm"
+                                 placeholder="zip" value={current.zip} onChange={(event)  =>
+                            setCurrent({ ...current, zip: event.target.value})}
+                                 style={{'text-align':'right', padding:2 }}/>
+                    </CCol>
+                    <CCol sm="2">
+                        <CInput  bsSize="sm" type="text" id="city-id" name="city" className="input-sm"
+                                 placeholder="city" value={current.city} onChange={(event)  =>
+                            setCurrent({ ...current, city: event.target.value})}
+                                 style={{'text-align':'right', padding:2 }}/>
+                    </CCol>
+                </CFormGroup>
+                <CFormGroup row style={{  height:15 }}>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.country')}</CLabel>
+                    </CCol>
+                    <CCol sm="4">
+                        <CInput  bsSize="sm" type="text" id="country-id" name="country" className="input-sm"
+                                 placeholder="country" value={current.country} onChange={(event)  =>
+                            setCurrent({ ...current, country: event.target.value})}
+                                 style={{'text-align':'right', padding:2 }}/>
+                    </CCol>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.phone')}</CLabel>
+                    </CCol>
+                    <CCol sm="2">
+                        <CInput  bsSize="sm" type="text" id="phone-id" name="phone" className="input-sm"
+                                 placeholder="phone" value={current.phone} onChange={(event)  =>
+                            setCurrent({ ...current, phone: event.target.value})}
+                                 style={{'text-align':'right', padding:2 }}/>
+                    </CCol>
+                </CFormGroup>
+                <CFormGroup row style={{  height:15 }}>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.vat')}</CLabel>
+                    </CCol>
+                    <CCol sm="4">
+                        <CSelect className ="flex-row" type="select" name="vatcode" id="vatcode-id"
+                                 value={current.vatcode} onChange={(event)  =>
+                            setCurrent({ ...current, vatcode: event.target.value})} >
+                            {vatData.hits.map(item => mappingSelect(item))};
+                        </CSelect>
+                    </CCol>
+                    <CCol sm="2">
+                        <CLabel size="sm" htmlFor="input-small">{t('customer.iban')}</CLabel>
+                    </CCol>
+
+                </CFormGroup>
+                <CFormGroup row style={{  height:15 }}>
+                    <CCol md="2">
+                        <CLabel htmlFor="textarea-input">{t('customer.description')}</CLabel>
+                    </CCol>
+                    <CCol xs="12"   md="9">
+                        <CTextarea type="texarea" name="description" id="description-id" rows="1"
+                                   placeholder="Content..." value={current.description}
+                                   onChange={(event)  =>
+                                       setCurrent({ ...current, description: event.target.value})} />
+                    </CCol>
+                </CFormGroup>
+       </>
+    )}
 export const VatMainForm =(props) => {
-    const {current, setCurrent, t, accData, style,state } = props
+    const {current, setCurrent, t, accData } = props
     console.log('currentVAT', current);
  return (
      <>
@@ -799,10 +911,10 @@ export const VatMainForm =(props) => {
                  style={{'text-align':'right', padding:2 }}/>
     </CCol>
   </CFormGroup>
- <CFormGroup row style={{  height:15 }}>
-    <CCol sm="2">
+    <CFormGroup row style={{  height:15 }}>
+      <CCol sm="2">
         <CLabel size="sm" htmlFor="input-small">{t('vat.input_account')}</CLabel>
-    </CCol>
+      </CCol>
     <CCol sm="4">
         <CSelect className ="flex-row" type="select" name="inputaccount" id="inputaccount-id"
                  value={current.inputVatAccount}
@@ -821,10 +933,10 @@ export const VatMainForm =(props) => {
                  style={{'text-align':'right', padding:2 }}/>
     </CCol>
 </CFormGroup>
-<CFormGroup row style={{  height:15 }}>
-    <CCol sm="2">
+    <CFormGroup row style={{  height:15 }}>
+      <CCol sm="2">
         <CLabel size="sm" htmlFor="input-small">{t('vat.output_account')}</CLabel>
-    </CCol>
+     </CCol>
     <CCol sm="4">
         <CSelect className ="flex-row" type="select" name="outputaccount" id="outputaccount-id"
                  value={current.outputVatAccount}
@@ -849,15 +961,15 @@ export const VatMainForm =(props) => {
     </CCol>
 
  </CFormGroup>
- <CFormGroup row style={{  height:15 }}>
-    <CCol md="2">
+    <CFormGroup row style={{  height:15 }}>
+      <CCol md="2">
         <CLabel htmlFor="textarea-input">{t('vat.description')}</CLabel>
     </CCol>
-    <CCol xs="12"   md="9">
+      <CCol xs="12"   md="9">
         <CTextarea type="textarea" name="description" id="description-id" rows="1"
                    placeholder="Content..." value={current.description}
                    onChange={(event)  => setCurrent({ ...current, description: event.target.value})} />
-    </CCol>
- </CFormGroup>
+     </CCol>
+  </CFormGroup>
 </>
 )}

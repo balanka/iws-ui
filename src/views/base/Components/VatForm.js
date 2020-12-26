@@ -1,6 +1,4 @@
-import React, {useEffect, useState, useContext} from 'react'
-import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
-import { dateFormat } from '../../../utils/utils';
+import React, {useEffect, useState, useContext} from 'react';
 import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
@@ -74,15 +72,19 @@ const VatForm = () => {
     value.submitAdd(row, data);
     setCurrent(row);
   };
-
+  const submitQuery=event => {
+    event.preventDefault();
+    value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
+    value.submitQuery(event, value.url, setData, value.initialState);
+  }
   function buildForm(current) {
     return <>
        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-         <CustomerFormHead styles={styles} title={value.title} state={state} initAdd ={initAdd} setData={setData} setAccData={setAccData}
-                           url={value.url} accUrl={value.accUrl} initialState cancelEdit ={cancelEdit} submitEdit={submitEdit}
-                           submitQuery= {value.submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
+         <CustomerFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd} setData={setData} setAccData={setAccData}
+                           url={value.url} accUrl={value.accUrl} initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
+                           submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
          <FormFactory formid ={formEnum.VAT} current={current} setCurrent={setCurrent} t={t} accData={accData}
-                      state={state.collapse} styles={styles} />
+                      collapse={state.collapse} styles={styles} />
 
       <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
         <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
