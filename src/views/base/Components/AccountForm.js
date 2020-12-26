@@ -1,13 +1,18 @@
 import React, {useEffect, useState, useContext} from 'react'
-import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
-import {dateFormat} from "../../../utils/utils"
 import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import useFetch from "../../../utils/useFetch";
-import {ColumnsACC as columns, filter, OptionsM, FormHead, AccountMainForm} from "../../Tables2/LineFinancialsProps";
+import {
+  ColumnsACC as columns,
+  filter,
+  OptionsM,
+  FormHead,
+  FormFactory
+} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
+import {formEnum} from "../../../utils/FORMS";
 
 const AccountForm = () => {
   const [profile, ] = useGlobalState('profile');
@@ -51,9 +56,6 @@ const AccountForm = () => {
     setCurrent(row);
   }
 
-  const mapping = item => <option key={item.id} value={item.id}>
-    {item.id+ " ".concat (item.name)}</option>;
-
   const submitEdit = event => {
     event.preventDefault();
     if(current.editing) {
@@ -76,11 +78,8 @@ const AccountForm = () => {
         <FormHead styles={styles} title={value.title} state={state} initAdd ={initAdd} setData={setData} setAccData={setAccData}
                   url={value.url} accUrl={value.accUrl} initialState cancelEdit ={cancelEdit} submitEdit={submitEdit}
                   submitQuery= {value.submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
-         <Grid container spacing={2} style={{...styles.middle, 'background-color':blue }} direction="column" >
-            <CCollapse show={state.collapse} id="JScollapse" >
-              <AccountMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} />
-            </CCollapse>
-         </Grid>
+         <FormFactory formid ={formEnum.ACCOUNT} current={current} setCurrent={setCurrent} t={t} accData={accData}
+                      state={state.collapse} styles={styles} />
          <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
             <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
                            selected ={[-1]} theme={theme} t={t}  edit ={edit}/>
@@ -93,50 +92,5 @@ const AccountForm = () => {
 
 };
 export default AccountForm;
-/*
-<Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
-           <Grid container justify="space-between">
-            <Grid container xs spacing={1} justify="flex-start">
-              <Grid item justify="center" alignItems="center">
-                <IoMdMenu />
-              </Grid>
-              <Grid item><h5><CBadge color="primary">{value.title}</CBadge></h5></Grid>
-              <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
-              <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
-                  <FontAwesomeIcon icon={faWindowClose} />
-                </CButton>
-              </div>
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                  <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
-                    <FontAwesomeIcon icon={faPlusSquare} />
-                  </CButton>
-                </div>
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                  <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
-                    <FontAwesomeIcon icon={faSave} />
-                  </CButton>
-                </div>
-                <div>
-                <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
-                  event.preventDefault(); value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
-                  value.submitQuery(event, value.url, setData, value.initialState);}}>
-                  <FontAwesomeIcon icon={faSpinner} rotation={90}/>
-                </CButton>
-              </div>
-              <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                  <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
-                </CButton>
-              </div>
-              <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
-                  <FontAwesomeIcon icon={faPlusCircle} />
-                </CButton>
-              </div>
-            </Grid>
-           </Grid>
-         </Grid>
-         </Grid>
- */
+
 

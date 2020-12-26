@@ -1,28 +1,23 @@
 import React, {useEffect, useState, useContext} from 'react'
-import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CTextarea} from '@coreui/react'
-import { dateFormat } from '../../../utils/utils';
+import { CCollapse} from '@coreui/react'
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
-import {IoMdMenu} from "react-icons/io";
 import useFetch from "../../../utils/useFetch";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {accountContext, useGlobalState} from './AccountContext';
-import {
-    faAngleDoubleDown,
-    faAngleDoubleUp,
-    faPlusCircle,
-    faPlusSquare,
-    faSave,
-    faSpinner,
-    faWindowClose
-} from "@fortawesome/free-solid-svg-icons";
 import EditableTable from "../../Tables2/EditableTable";
-import {ColumnsM, OptionsM, filter} from "../../Tables2/LineFinancialsProps";
+import {
+    ColumnsM,
+    OptionsM,
+    filter,
+    FormFactory,
+    FormHead
+} from "../../Tables2/LineFinancialsProps";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
+import {formEnum} from "../../../utils/FORMS";
 
 const CostCenterForm = () => {
   const [profile, ] = useGlobalState('profile');
-  const [collapsingState, setCollapsingState]= useState({collapse: true, fadeIn: true, timeout: 300});
+  const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const value = useContext(accountContext);
   const t = value.t
   const [{ res },]= useFetch(value.url, {});
@@ -38,7 +33,7 @@ const CostCenterForm = () => {
   useEffect(() => {setCurrent(current_)}, [current_]);
 
   const toggleToolbar= ()=> setToolbar(!toolbar );
-  const toggle= ()=> setCollapsingState({...collapsingState, collapse:!collapsingState.collapse });
+  const toggle= ()=> setState({...state, collapse:!state.collapse });
   const initAdd =()=> {
     const row = {...value.initialState.hits[0], company:profile.company, editing:false};
     value.editRow(row, false);
@@ -62,8 +57,6 @@ const CostCenterForm = () => {
     setCurrent(row);
   }
 
-  const mapping = item => <option key={item.id} value={item.id}>
-                          {item.id+ " ".concat (item.name)}</option>;
   const submitEdit = event => {
         event.preventDefault();
         if(current.editing) {
@@ -79,140 +72,21 @@ const CostCenterForm = () => {
         value.submitAdd(row, data);
         setCurrent(row);
     };
-  function buildForm(current1) {
-      const current = current1;
-    console.log("user1xx", current);
+  function buildForm(current) {
     return <>
        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
-            <Grid container xs spacing={1} justify="flex-start">
-              <Grid item justify="center" alignItems="left">
-                <IoMdMenu />
-              </Grid>
-              <Grid item><h5><CBadge color="primary">{t(`${value.title}`)}</CBadge></h5></Grid>
-              <Grid xs container spacing={1} justify="flex-end" alignItems="right">
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                    <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
-                        <FontAwesomeIcon icon={faWindowClose} />
-                    </CButton>
-                </div>
-                    <div className="card-header-actions" style={{  align: 'right' }}>
-                        <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
-                            <FontAwesomeIcon icon={faPlusSquare} />
-                        </CButton>
-                    </div>
-                    <div className="card-header-actions" style={{  align: 'right' }}>
-                        <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
-                            <FontAwesomeIcon icon={faSave} />
-                        </CButton>
-                    </div>
-                   <div>
-                    <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
-                        event.preventDefault(); value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
-                        value.submitQuery(event, value.url, setData, value.initialState);}}>
-                        <FontAwesomeIcon icon={faSpinner} rotation={90}/>
-                    </CButton>
-                </div>
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                    <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                        <FontAwesomeIcon icon={collapsingState.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
-                    </CButton>
-                </div>
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                    <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
-                        <FontAwesomeIcon icon={faPlusCircle} />
-                    </CButton>
-                </div>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid container spacing={2} style={{...styles.middle, 'background-color':blue }} direction="column" >
-           <CCollapse show={collapsingState.collapse} id="JScollapse">
-              <CFormGroup row style={{  height:15 }}>
-                <CCol sm="2">
-                  <CLabel size="sm" htmlFor="input-small">{t('costcenter.id')}</CLabel>
-                </CCol>
-                <CCol sm="4">
-                  <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm" placeholder="Id"
-                         value={current.id} onChange= {(event)  => value.setCurrent({ ...current, id: event.target.value})}
-                        />
-                </CCol>
-                <CCol sm="2">
-                  <CLabel size="sm" htmlFor="input-small">{t('costcenter.enterdate')}</CLabel>
-                </CCol>
-                <CCol sm="2">
-                  <CInput  readOnly bsSize="sm" type="text" id="enterdate-id" name="enterdate" className="input-sm"
-                         placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
-                         style={{'text-align':'right', padding:2 }}/>
-                </CCol>
-              </CFormGroup>
-              <CFormGroup row style={{  height:15 }}>
-                <CCol sm="2">
-                  <CLabel size="sm" htmlFor="input-small">{t("costcenter.name")}</CLabel>
-                </CCol>
-                <CCol sm="4">
-                  <CInput bsSize="sm" type="text" id="name-input" name="name" className="input-sm" placeholder="Name"
-                         value={current.name} onChange={(event)  => value.setCurrent({ ...current, name: event.target.value})}/>
-                </CCol>
-                <CCol sm="2">
-                  <CLabel size="sm" htmlFor="input-small">{t('costcenter.changedate')}</CLabel>
-                </CCol>
-                <CCol sm="2">
-                  <CInput bsSize="sm" type="text" id="changedate-id" name="changedate" className="input-sm"
-                         placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
-                         style={{'text-align':'right', padding:2 }} readonly/>
-                </CCol>
-              </CFormGroup>
-              <CFormGroup row style={{  height:15 }}>
-                <CCol sm="2">
-                  <CLabel size="sm" htmlFor="input-small">{t('costcenter.account')}</CLabel>
-                </CCol>
-                <CCol sm="4">
-                  <CSelect className="flex-row" type="select" name="account" id="account-id"
-                         value={current.account} onChange={(event)  => value.setCurrent({ ...current, account: event.target.value})}>
-                    { accData.hits.map(item => mapping(item))};
+           <FormHead styles={styles} title={value.title} state={state} initAdd ={initAdd} setData={setData} setAccData={setAccData}
+                     url={value.url} accUrl={value.accUrl} initialState cancelEdit ={cancelEdit} submitEdit={submitEdit}
+                     submitQuery= {value.submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
+        <FormFactory formid ={formEnum.COSTCENTER} current={current} setCurrent={setCurrent} t={t} accData={accData}
+                     state={state.collapse} styles={styles} />
 
-                  </CSelect>
-
-                </CCol>
-                <CCol sm="2">
-                  <CLabel size="sm" htmlFor="input-small">{t("costcenter.postingdate")}</CLabel>
-                </CCol>
-                <CCol sm="2">
-                  <CInput bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
-                         placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                         style={{'text-align':'right', padding:2 }} readonly />
-                </CCol>
-              </CFormGroup>
-              <CFormGroup row style={{  height:15 }}>
-                <CCol sm="6"/>
-                <CCol sm="2">
-                  <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
-                </CCol>
-                <CCol sm="2">
-                  <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
-                         placeholder="company" value={current.company}
-                         style={{'text-align':'right', padding:2 }} readonly/>
-                </CCol>
-              </CFormGroup>
-              <CFormGroup row style={{  height:15 }}>
-                <CCol md="2">
-                  <CLabel htmlFor="textarea-input">{t('costcenter.description')}</CLabel>
-                </CCol>
-                <CCol xs="12" md="9">
-                  <CTextarea type="texarea" name="description" id="description-id" rows="1"
-                         placeholder="Content..." value={current.description} 
-                         onChange={(event)  => value.setCurrent({ ...current, description: event.target.value})}/>
-                </CCol>
-              </CFormGroup>
-          </CCollapse>
-    </Grid>
-    <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
-       <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
+         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+          <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
                    selected ={[-1]}  theme={theme} t={t}  edit ={edit}/>
      </Grid>
     </Grid>
-  </>
+      </>
   }
   return buildForm(current);
 
