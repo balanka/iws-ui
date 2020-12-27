@@ -3,21 +3,14 @@ import {CBadge, CButton, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSe
 import EnhancedTable from '../../Tables2/EnhancedTable';
 import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelper'
 import {accountContext, useGlobalState} from './AccountContext';
-import {capitalize} from "../../../utils/utils";
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
-import {IoMdMenu} from "react-icons/io";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAngleDoubleDown, faAngleDoubleUp, faSpinner} from "@fortawesome/free-solid-svg-icons";
 import {useTranslation} from "react-i18next";
 import axios from "axios";
-const styles = {
-    outer: {
-        borderRadius: 5,
-        boxShadow: "0 10px 30px #BBB",
-        padding: 10
-    }
-};
+import {columnsPACB, filter, FormFactory, JournalFormHead} from "../../Tables2/LineFinancialsProps";
+import {formEnum} from "../../../utils/FORMS";
+import blue from "@material-ui/core/colors/blue";
+import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
 const PACBForm = () => {
   const { t,  } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -31,84 +24,41 @@ const PACBForm = () => {
   const init = ()=> {return value.initialState}
   const getData =()=> { return data?.hits?data.hits:init().hits}
   const accData_ =  res2?.hits?res2.hits:value.accData;
-
-    console.log("accData_x", accData_);
-  const current_= value.user;
-  const account_= value.user.account;
-  const fromPeriod_ = value.user.period;
-  const toPeriod_ = value.user.period;
+  //const current_= value.user;
+  const current_= init().hits[0].query;
   const columns = value.headers
-
-  console.log("data_", data_);
- 
-  const [record,setRecord] = useState({account:'', account2:'', fromPeriod:'', toPeriod:''});
-  const [current,] = useState(current_);
-  const [account,] = useState(account_);
-  const [fromPeriod, ] = useState(fromPeriod_);
-  const [toPeriod, setToPeriod] = useState(toPeriod_);
+  const [current,setCurrent] = useState(current_);
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
+  const [toolbar, setToolbar] = useState(true);
 
+  const columnsX= columnsPACB(t);
+  const getColumnName = ()=>columnsX.map(col =>col.field);
+  const toggleToolbar= ()=> setToolbar(!toolbar );
+  const toggle= ()=> setState({...state, collapse:!state.collapse });
 
-  const toggle= ()=> {
-    setState({...state, collapse: !state.collapse });
-  }
-  const handleToPeriodChange = event => {
-        setToPeriod(event.target.value);
-        submitQuery(event);
-        event.preventDefault();
-    };
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    const method="set"+capitalize(name)
-    eval(method)(value);
-      event.preventDefault();
-  };
-  const mapping = item => <option key={item.id} value={item.id}>
-    {item.id+ " ".concat (item.name)}</option>;
-
-  const mapping2 = item => <option key={item.name} value={item.name}>
-    {item.name+" ".concat(item.id)}</option>;
+  const url_=() =>value.url.concat('/')
+        .concat(current.account).concat('/')
+        .concat(current.fromPeriod).concat('/')
+        .concat(current.toPeriod);
 
     const dx=data?.hits?data?.hits:value.initialState
     const [filteredRows, setFilteredRows] = useState(dx);
     useEffect(() => {handleFilter()}, [data]);
+
     function handleFilter(text) {
-        console.log('getData()', getData())
-        console.log('dx.tidP', dx)
-        console.log('dx.tidP', dx.hits)
-        console.log('dx.tidP.length', dx?.hits?.length)
-        const datax = getData()
-        const filtered = datax.length<=1?datax:datax.filter(function(rc) {
-            console.log('rc.tidP', rc)
-            return (rc.id.indexOf(text)>-1
-                ||rc.account.indexOf(text)>-1
-                ||rc.period.toString().indexOf(text)>-1
-                ||rc.idebit.toString().indexOf(text)>-1
-                ||rc.debit.toString().indexOf(text)>-1
-                ||rc.icredit.toString().indexOf(text)>-1
-                ||rc.credit.toString().indexOf(text)>-1
-                ||rc.currency.indexOf(text)>-1)
-        });
-        const filteredRows_ = !text?getData():filtered
-        console.log('filteredRows+', filteredRows_);
-        setFilteredRows(filteredRows_);
+       const rows_=text?filter(getData(), getColumnName(), text ):getData()
+       setFilteredRows(rows_);
     }
 
     const getFilteredRows=()=>{
-        console.log('getData()', getData());
-        console.log('filteredRows', filteredRows);
-        console.log('filteredRows+', dx.hits);
-        console.log('row.slice+', dx?.hits?.slice());
-        const row=filteredRows?filteredRows:getData();
-        console.log('row+', row.hits);
-        var rowx = row?.hits?row?.hits?.slice():row.slice();
-        for(var i = 0, len = row.length-1; i <= len; ++i) {
-            console.log('row.', rowx[i]);
-            rowx[i] = {...rowx[i], balance: rowx[i].idebit + rowx[i].debit - (rowx[i].icredit + rowx[i].credit)};
+        const row_=filteredRows?filteredRows:getData();
+        const row = row_?.hits?row_?.hits?.slice():row_.slice();
+        for(let i = 0, len = row.length-1; i <= len; ++i) {
+            row[i] = {...row[i], balance: row[i].idebit + row[i].debit - (row[i].icredit + row[i].credit)};
          }
-        console.log('rowx', rowx);
-        return rowx
+        console.log('rowx', row);
+        return row;
     }
 
     const submitGet = (url, func, result) => {
@@ -116,10 +66,6 @@ const PACBForm = () => {
             .then(response => {
                 const resp = response.data;
                 result=response.data;
-                console.log('response.func', func);
-                console.log('response.data', resp);
-                console.log('response.headers', response.headers);
-                console.log('result', result);
                 func(resp);
                 result=resp;
                 return result;
@@ -137,31 +83,25 @@ const PACBForm = () => {
     }
     const load = event => {
         event.preventDefault();
-        accData?.hits?.length<2? fetchData(value.accUrl, setAccData):void(0)
-        console.log("result", data);
+        accData?.hits?.length<2?
+            value.submitQuery(event, value.accUrl, setAccData, value.initAcc):
+            current.account&&current.fromPeriod&&current.toPeriod?
+                value.submitQuery(event, url_(), setData, value.initialState): void(0)
     };
+
+
     const submitQuery = event => {
         event.preventDefault();
-        console.log("submitQuery current", current);
-        console.log("submitQuery  record", record);
-        let result='xxx'
-        const url_=value.url.concat('/')
-            .concat(record.account).concat('/')
-            .concat(record.fromPeriod).concat('/')
-            .concat(record.toPeriod);
-        console.log("url_", url_);
-        fetchData(url_, setData, result);
-        console.log("result", data);
+        accData?.hits?.length<2?
+            value.submitQuery(event, value.accUrl, setAccData,value.initAcc):
+            value.submitQuery(event, url_(), setData, value.initialState)
     };
+
 
   const submitEdit = event => {
     event.preventDefault();
     console.log("submitEdit1 current", current);
-    const url_=value.url.concat('/')
-                     .concat(account).concat('/')
-                     .concat(fromPeriod).concat('/')
-                     .concat(toPeriod);
-    setUrl(url_);
+    setUrl(url_());
   };
 
 
@@ -169,16 +109,11 @@ const PACBForm = () => {
       console.log('a', a);
       console.log('init', init().hits[0]);
       return (
-          {
-              period: ""
-              , idebit: Number(b.idebit)
-              , debit: Number(a.debit) + Number(b.debit)
-              , icredit: Number(b.icredit)
+          {period: "", idebit: Number(b.idebit), debit: Number(a.debit) + Number(b.debit), icredit: Number(b.icredit)
               , credit: Number(a.credit) + Number(b.credit)
               , balance: Number(a.debit) + Number(b.debit) + Number(a.idebit) + Number(b.idebit)
                   - Number(a.credit) - Number(b.credit) - Number(a.icredit) - Number(b.icredit)
-              , currency: b.currency, company: b.company
-          })
+              , currency: b.currency, company: b.company})
   };
 
   const  addRunningTotal = (data) => data.length>0?data.reduce(reducerFn, init().hits[0]):init().hits[0];
@@ -221,76 +156,19 @@ const PACBForm = () => {
           , rowsPerPageOptions: [15, 25, 100]
       }
     return <>
-      <Grid container spacing={2} direction="column" style={{...styles.outer}}>
-        <CForm  className="form-horizontal" onSubmit={submitEdit} style={{padding:0}}>
-          <Grid container justify="space-between">
-            <Grid container xs spacing={1} justify="flex-start">
-              <Grid item justify="center" alignItems="center">
-                <IoMdMenu />
-              </Grid>
-              <Grid item><h5><CBadge color="primary">{value.title}</CBadge></h5></Grid>
+        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
+            <JournalFormHead styles={styles} title={value.title} collapse={state.collapse}  initialState={value.initialState}
+                             setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
+                               submitQuery= {submitQuery} toggle={toggle}
+                             load = {load} toggleToolbar={toggleToolbar}  />
+            <FormFactory formid ={formEnum.PACB} current={current} setCurrent={setCurrent} t={t} accData={accData}
+                         collapse={state.collapse} styles={styles} />
+
+            <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+                <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
             </Grid>
-            <Grid item justify="flex-end" alignItems="center">
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                    <CButton block color="link" type="submit"  className="card-header-action btn-minimize"
-                      onClick={event => {   event.preventDefault(); load(event)}}>
-                        <FontAwesomeIcon icon={faSpinner} rotation={90}/>
-                    </CButton>
-                </div>
-                <div className="card-header-actions" style={{  align: 'right' }}>
-                    <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                        <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
-                    </CButton>
-                </div>
-            </Grid>
-          </Grid>
-            <CCollapse show={state.collapse} id="JScollapse" style={{height:70,padding:2}}>
-              <CFormGroup row>
-                 <CCol sm="1">
-                       <CLabel size="sm" htmlFor="input-small">{t('common.account')}</CLabel>
-                   </CCol>
-                   <CCol sm="3">
-                      <CSelect className ="flex-row" type="select" name="account" id="account-id"
-                            value={account} onChange={(event)  =>
-                          setRecord({ ...record, account: event.target.value})} >
-                        { console.log('accDataT', accData)}{ accData.hits.map(item => mapping(item))};
-                      </CSelect>
-                    </CCol>
-                    <CCol sm="3">
-                    <CSelect className ="flex-row" type="select" name="account2" id="account2-id"
-                         value={account} onChange={(event)  =>
-                        setRecord({ ...record, account: event.target.value})} >
-                       {accData.hits.map(item => mapping2(item))};
-                    </CSelect>
-                    </CCol>
-                    <CCol sm="0.5">
-                        <CLabel size="sm" htmlFor="input-small" style={{  align: 'right' }}>{t('common.from')}</CLabel>
-                     </CCol>
-                    <CCol sm="1.2">
-                    <CInput  bsSize="sm" type="text"  id="fromPeriod-id" name="fromPeriod" className="input-sm"
-                          placeholder="fromPeriod" value={fromPeriod} onChange={(event)  =>
-                        setRecord({ ...record, fromPeriod: event.target.value})} />
-                    </CCol>
-                    <CCol sm="0.5">
-                       <CLabel size="sm" htmlFor="input-small" style={{  align: 'right' }}>{t('common.to')}</CLabel>
-                    </CCol>
-                    <CCol sm="1.2">
-                       <CInput  bsSize="sm" type="text"  id="toPeriod-id" name="toPeriod" className="input-sm"
-                          placeholder="toPeriod" value={toPeriod} onChange={(event)  =>
-                           setRecord({ ...record, toPeriod: event.target.value})}
-                       />
-                    </CCol>
-                    <CCol sm="1">
-                      <CButton type="submit" size="sm" color="primary" onClick={submitQuery}>
-                          <i className="fa fa-dot-circle-o"></i>
-                      </CButton>
-                     </CCol>
-                    </CFormGroup>
-             </CCollapse>
-           </CForm>
-         </Grid>
-          <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
-         </>;
+        </Grid>
+         </>
   }
 
   return buildForm();
