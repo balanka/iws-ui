@@ -78,7 +78,8 @@ const Tabs = () => {
             , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{lid:-1, transid:0
             , side:true, account:'', oaccount:'', amount:0, duedate:date, text:'', currency:'EUR', company:'1000'
             }]}]}
-const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''}]}
+const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''
+            , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]}
 
  const treeHeaders = {h:[{ title:t('account.id'), field: 'id' }
             ,  { title:t('account.name'), field: 'name' }
