@@ -5,7 +5,7 @@ import blue from "@material-ui/core/colors/blue";
 import useFetch from "../../../utils/useFetch";
 import {
   ColumnsCUST as columns,
-  CustomerFormHead,
+  CommonFormHead,
   filter,
   FormFactory,
   OptionsM
@@ -91,10 +91,10 @@ const CustomerForm = () => {
   function buildForm(current){
     return <>
       <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-        <CustomerFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd} initialState={value.initialState}
-                          setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
-                          cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {submitQuery} toggle={toggle}
-                         toggleToolbar={toggleToolbar}  />
+        <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd} initialState={value.initialState}
+                        setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
+                        cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {submitQuery} toggle={toggle}
+                        toggleToolbar={toggleToolbar}  />
         <FormFactory formid ={formEnum.CUSTOMER} current={current} setCurrent={setCurrent} t={t} accData={accData}
                      vatData={vatData} collapse={state.collapse} styles={styles} />
 

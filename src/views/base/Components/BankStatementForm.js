@@ -5,7 +5,7 @@ import blue from "@material-ui/core/colors/blue";
 import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
 import axios from "axios";
-import {ColumnsBS as columns, OptionsM, filter, CustomerFormHead, FormFactory} from "../../Tables2/LineFinancialsProps";
+import {ColumnsBS as columns, OptionsM, filter, CommonFormHead, FormFactory} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {formEnum} from "../../../utils/FORMS";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
@@ -99,10 +99,10 @@ const BankStatementForm = () => {
     console.log("user1xx", current);
     return <>
         <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-            <CustomerFormHead styles={styles} title={value.title} collapse={state.collapse}
-                              setData={setData} url={value.url} accUrl={value.accUrl}
-                               initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
-                              submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
+            <CommonFormHead styles={styles} title={value.title} collapse={state.collapse}
+                            setData={setData} url={value.url} accUrl={value.accUrl}
+                            initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
+                            submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
             <FormFactory formid ={formEnum.BANKSTATEMENT} current={current} setCurrent={setCurrent} t={t}
                           collapse={state.collapse} styles={styles} />
             <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >

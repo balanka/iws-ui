@@ -11,7 +11,7 @@ import {
   FormHead,
   VatMainForm,
   OptionsM,
-  FormFactory, CustomerFormHead
+  FormFactory, CommonFormHead
 } from "../../Tables2/LineFinancialsProps";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
 import {formEnum} from "../../../utils/FORMS";
@@ -80,9 +80,9 @@ const VatForm = () => {
   function buildForm(current) {
     return <>
        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-         <CustomerFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd} setData={setData} setAccData={setAccData}
-                           url={value.url} accUrl={value.accUrl} initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
-                           submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
+         <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd} setData={setData} setAccData={setAccData}
+                         url={value.url} accUrl={value.accUrl} initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
+                         submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
          <FormFactory formid ={formEnum.VAT} current={current} setCurrent={setCurrent} t={t} accData={accData}
                       collapse={state.collapse} styles={styles} />
 

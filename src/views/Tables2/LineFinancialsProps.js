@@ -44,9 +44,12 @@ const mapping = (acc) =>
     <MenuItem key={acc.id} value={acc.id}>
         {acc.id.concat( " ").concat(acc.name)}
     </MenuItem>
+
   const mappingSelect = (item) => <option key={item.id} value={item.id}>
     {item.id+ " ".concat (item.name)}</option>;
 
+const mappingSelectName = (item) => <option key={item.id} value={item.id}>
+    {item.name+ " ".concat (item.id)}</option>;
 export const  filter = (rows, cols, txt,) => rows.filter(col =>
     cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b)
 );
@@ -81,15 +84,7 @@ const removeTableData = (datax) => {
     return clonex;
 };
 
-const addLine = (data, setData, current , newData) =>{
-    const datax = JSON.parse(JSON.stringify(data));
-    const index=datax.length
-    datax[index] = newData;
-    setData([...datax]);
-    const currentx = {...current};
-    const index1 = currentx.lines.length;
-    currentx.lines[index1] = newData;
-}
+
 
 export const  editable = (data, setData, current ) => ({
     onRowAdd: newData =>{
@@ -397,9 +392,8 @@ export const OptionsM = ({
     exportDelimiter: ',',
     exportFileName:'Masterfile.csv'
 })
-export const CustomerFormHead = (props) => {
-    const {styles, title, collapse, url, accUrl, initialState, initAcc, initAdd, setData, setAccData, cancelEdit
-        , submitEdit, submitQuery, toggle, toggleToolbar} = props
+export const CommonFormHead = (props) => {
+    const {styles, title, collapse,  initAdd,cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -445,7 +439,38 @@ export const CustomerFormHead = (props) => {
             </Grid>
         </Grid>);
 }
-
+export const JournalFormHead = (props) => {
+    const {styles, title, collapse,  load, cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
+    return (
+        <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
+            <Grid container justify="space-between">
+                <Grid container xs spacing={1} justify="flex-start">
+                    <Grid item justify="center" alignItems="center">
+                        <IoMdMenu />
+                    </Grid>
+                    <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
+                    <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton block color="link"  className="card-header-action btn-minimize"
+                                     onClick={event => {event.preventDefault(); load(event)}}>
+                                <FontAwesomeIcon icon={faSpinner} rotation={90}/>
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                                <FontAwesomeIcon icon={collapse?faAngleDoubleUp:faAngleDoubleDown} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
+                                <FontAwesomeIcon icon={faPlusCircle} />
+                            </CButton>
+                        </div>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>);
+}
 export const FormHead = (props) => {
     const {styles, title, state, url, accUrl, initialState, initAcc, initAdd, setData, setAccData, cancelEdit
         , submitEdit, submitQuery, toggle, toggleToolbar} = props
@@ -510,13 +535,18 @@ const {formid} = props
         case formEnum.BANK:
             return <FormWrapper {...props} form = {MasterfilesMainForm}/>;
             break;
+
         case formEnum.CUSTOMER:
         case formEnum.SUPPLIER:
             return <FormWrapper {...props} form = {CustomerMainForm}/>;
             break;
-       // case formEnum.FINANCIALS:
-      //      return <FormWrapper {...props} form = {FinancialsFormMainForm(props)}/>;
-       //     break;
+       /* case formEnum.FINANCIALS:
+            return <FormWrapper {...props} form = {FinancialsFormMainForm(props)}/>;
+            break;
+        */
+        case formEnum.JOURNAL:
+            return <FormWrapper {...props} form = {JournalMainForm}/>;
+            break;
         case formEnum.VAT:
             return <FormWrapper {...props} form = {VatMainForm}/>;
             break;
@@ -540,9 +570,9 @@ export const AccountMainForm =(props) => {
     return (
         <>
      <CFormGroup row style={{  height:15 }}>
-    <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t('account.id')}</CLabel>
-    </CCol>
+         <CCol sm="2">
+            <CLabel size="sm" htmlFor="input-small">{t('account.id')}</CLabel>
+        </CCol>
     <CCol sm="4">
         <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm"
                 placeholder="Id" value= {current.id} onChange={(event)  => setCurrent({ ...current, id: event.target.value})} />
@@ -557,7 +587,7 @@ export const AccountMainForm =(props) => {
                  style={{'text-align':'right', padding:2 }} readonly />
     </CCol>
 </CFormGroup>
-<CFormGroup row style={{  height:15 }}>
+     <CFormGroup row style={{  height:15 }}>
     <CCol sm="2">
         <CLabel size="sm" htmlFor="input-small">{t('account.name')}</CLabel>
     </CCol>
@@ -574,7 +604,7 @@ export const AccountMainForm =(props) => {
             "dd.mm.yyyy")} style={{'text-align':'right', padding:2 }} readonly />
     </CCol>
 </CFormGroup>
-<CFormGroup row style={{  height:15 }}>
+     <CFormGroup row style={{  height:15 }}>
     <CCol sm="2">
         <CLabel size="sm" htmlFor="input-small">{t('account.account')}</CLabel>
     </CCol>
@@ -596,7 +626,7 @@ export const AccountMainForm =(props) => {
                  style={{'text-align':'right', padding:2 }} readonly/>
     </CCol>
 </CFormGroup>
-<CFormGroup row style={{  height:15 }}>
+     <CFormGroup row style={{  height:15 }}>
     <CCol sm="2">
         <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
     </CCol>
@@ -620,7 +650,7 @@ export const AccountMainForm =(props) => {
         />
     </CCol>
 </CFormGroup>
-<CFormGroup row style={{  height:15 }}>
+     <CFormGroup row style={{  height:15 }}>
     <CCol md="2">
         <CLabel htmlFor="textarea-input">{t('account.description')}</CLabel>
     </CCol>
@@ -1011,6 +1041,56 @@ export const CustomerMainForm =(props) => {
                     </CCol>
                 </CFormGroup>
        </>
+    )}
+export const JournalMainForm =(props) => {
+    const {current, setCurrent, t, accData, submitQuery } = props
+    console.log('currentJournal', current);
+    return (
+        <>
+          <CFormGroup row style={{  height:15 }} >
+                <CCol sm="1">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.account')}</CLabel>
+                </CCol>
+                <CCol sm="3">
+                    <CSelect className ="flex-row" type="select" name="account" id="account-id"
+                             value={current.account} onChange={(event)  =>
+                        setCurrent({ ...current, account: event.target.value})} style={{ height: 30, padding:2 }}>
+                        {accData.hits.map(item => mappingSelect(item))};
+
+                    </CSelect>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="account2" id="account2-id"
+                             value={current.account} onChange={(event)  =>
+                        setCurrent({ ...current, account: event.target.value})} style={{ height: 30, padding:2 }}>
+                        {accData.hits.map(item => mappingSelectName(item))};
+
+                    </CSelect>
+                </CCol>
+                <CCol sm="0.5" style={{ align: 'right' , padding:2}}>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.from')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                    <CInput  bsSize="sm" type="text"  id="fromPeriod-id" name="fromPeriod" className="input-sm"
+                             placeholder="fromPeriod" value={current.fromPeriod} onChange={(event)  =>
+                        setCurrent({ ...current, fromPeriod: event.target.value})} style={{ height: 30, padding:1 }}/>
+                </CCol>
+                <CCol sm="0.5" style={{ align: 'right' , padding:2}}>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.to')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                    <CInput  bsSize="sm" type="text"  id="toPeriod-id" name="toPeriod" className="input-sm"
+                             placeholder="toPeriod" value={current.toPeriod} onChange={(event)  =>
+                        setCurrent({ ...current, toPeriod: event.target.value})}
+                             style={{ height: 30, padding:1, align: 'right'}}/>
+                </CCol>
+                <CCol sm="1" style={{ align: 'right' }}>
+                    <CButton type="submit" size="sm" color="primary" style={{ align: 'right' }} onClick={submitQuery}>
+                        <i className="fa fa-dot-circle-o"></i>
+                    </CButton>
+                </CCol>
+            </CFormGroup>
+        </>
     )}
 export const VatMainForm =(props) => {
     const {current, setCurrent, t, accData } = props

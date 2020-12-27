@@ -10,9 +10,7 @@ import {
     OptionsM,
     filter,
     FormFactory,
-    CustomerFormHead,
-    FormHead
-} from "../../Tables2/LineFinancialsProps";
+    CommonFormHead} from "../../Tables2/LineFinancialsProps";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
 import {formEnum} from "../../../utils/FORMS";
 
@@ -81,10 +79,10 @@ const CostCenterForm = () => {
   function buildForm(current) {
     return <>
        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-           <CustomerFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd}
-                             setData={setData} setAccData={setAccData}
-                     url={value.url} accUrl={value.accUrl} initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
-                     submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
+           <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd}
+                           setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
+                           initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
+                           submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
         <FormFactory formid ={formEnum.COSTCENTER} current={current} setCurrent={setCurrent} t={t} accData={accData}
                      collapse={state.collapse} styles={styles} />
          <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
