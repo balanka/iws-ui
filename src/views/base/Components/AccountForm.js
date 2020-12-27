@@ -4,7 +4,7 @@ import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import useFetch from "../../../utils/useFetch";
 import {
-  ColumnsACC as columns,
+  ColumnsACC,
   filter,
   OptionsM,
   FormFactory, CommonFormHead
@@ -38,19 +38,11 @@ const AccountForm = () => {
     value.editRow(row, false);
     setCurrent(row);
   };
-  const cancelEdit = (e) => initAdd();
-  const columnsX = columns(accData.hits, value.initialState, current, t);
-  const getColumnName = ()=>columnsX.map(col =>col.field);
+  const cancelEdit = (e) =>  initAdd();
+  const columns = ColumnsACC(data, t);
 
-  const [filteredRows, setFilteredRows] = useState(data);
-  useEffect(() => {handleFilter('')}, [data]);
-
-  function handleFilter(text) {
-    const rows_=text?filter(data.hits, getColumnName(), text ):data.hits
-    setFilteredRows(rows_);
-  }
   const edit = editedRow =>{
-    const record = filteredRows.find(obj => obj.id === editedRow.id);
+      const record = data.hits.find(obj => obj.id === editedRow.id);
     const row = {...record, editing:true}
     setCurrent(row);
   }
@@ -79,14 +71,15 @@ const AccountForm = () => {
   function buildForm(current){
     return <>
        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-         <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd} setData={setData} setAccData={setAccData}
-                         url={value.url} accUrl={value.accUrl} initialState cancelEdit ={cancelEdit} submitEdit={submitEdit}
+         <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd}
+                         setData={setData} setAccData={setAccData}  url={value.url} accUrl={value.accUrl}
+                         cancelEdit ={cancelEdit} submitEdit={submitEdit}
                          submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
          <FormFactory formid ={formEnum.ACCOUNT} current={current} setCurrent={setCurrent} t={t} accData={accData}
                       collapse={state.collapse} styles={styles} />
          <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
-            <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
-                           selected ={[-1]} theme={theme} t={t}  edit ={edit}/>
+            <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}
+                   columns={columns} rowStyle={rowStyle} theme={theme} t={t}  edit ={edit}/>
          </Grid>
        </Grid>
     </>

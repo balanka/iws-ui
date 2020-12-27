@@ -50,7 +50,7 @@ const CustomerForm = () => {
   };
 
   const cancelEdit = (e) => initAdd();
-  const columnsX = columns(accData.hits, value.initialState, current, t);
+  const columnsX = columns(data,t);
   const getColumnName = ()=>columnsX.map(col =>col.field);
 
   const [filteredRows, setFilteredRows] = useState(data);

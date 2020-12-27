@@ -9,7 +9,7 @@ import {IoMdMenu} from "react-icons/io/index";
 import {CBadge, CButton, CCol, CCollapse, CFormGroup, CInput, CLabel, CSelect, CTextarea} from "@coreui/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {formEnum} from "../../utils/FORMS";
-import {currencyAmountFormatDE} from '../../utils/utils'
+import {currencyAmountFormatDE, currencyFormatDE} from '../../utils/utils'
 import {
     faAngleDoubleDown,
     faAngleDoubleUp, faPlusCircle,
@@ -25,6 +25,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import blue from "@material-ui/core/colors/blue";
 import FinancialsForm from "../base/Components/FinancialsForm";
+import {CrudAccount} from "../base/Components/CrudAccount";
 export const styles = {
   outer: {
     borderRadius: 5,
@@ -141,8 +142,22 @@ export const  editable = (data, setData, current ) => ({
           }, 1000)
         })
 })
-
-export const columnsJ=(t) => [
+export const columnsPACB = (t) => [
+      {field:'period', title:t('pac.period'),  type:"numeric", export:true }
+    , {field:'idebit', title:t('common.idebit'), type:"currency", currencySetting: { locale:"de"
+            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+    , {field:'debit', title:t('common.debit'), type:"currency", currencySetting: { locale:"de"
+            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+    , {field:'icredit', title:t('common.icredit'), type:"currency", currencySetting: { locale:"de"
+            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+    , {field:'credit', title:t('common.credit'), type:"currency", currencySetting: { locale:"de"
+            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+    , {field:'balance', title:t('common.balance'), type:"currency", currencySetting: { locale:"de"
+            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+    , {field:'currency', title:t('common.currency'),   export:true }
+    , { field:'company', title:t('common.company'), export:true }
+]
+export const columnsJ =(t) => [
   {field:'id', title:t('journal.id'),  type:"numeric", export:true }
 , {field:'transid', title:t('journal.transid'),   export:true }
 , { field: 'oid', title: t('journal.oid'),  export:true }
@@ -157,13 +172,13 @@ export const columnsJ=(t) => [
 , {field: 'period', title:t('journal.period'), minWidth:1,  type:"numeric", export:true},
 , { field: 'amount', title: t('journal.amount'), currencySetting: { locale:"de"
             , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-, { field: 'idebit', title:t('journal.idebit'), currencySetting: { locale:"de"
+, { field: 'idebit', title:t('common.idebit'), currencySetting: { locale:"de"
     , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-, { field: 'debit', title: t('journal.debit'), currencySetting: { locale:"de"
+, { field: 'debit', title: t('common.debit'), currencySetting: { locale:"de"
             , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-, { field: 'icredit', title:t('journal.icredit'), currencySetting: { locale:"de"
+, { field: 'icredit', title:t('common.icredit'), currencySetting: { locale:"de"
             , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-, { field: 'credit', title:t('journal.credit'), currencySetting: { locale:"de"
+, { field: 'credit', title:t('common.credit'), currencySetting: { locale:"de"
             , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
 , { field: 'side', title:t('journal.side'), type:"boolean", export:true}
 , { field: 'text', title:t('journal.text'), export:true}
@@ -174,8 +189,6 @@ export const columnsJ=(t) => [
 , { field: 'file_content', title:t('journal.file'), export:true}
 , { field: 'modelid', title:t('common.modelid'), export:true}
 ]
-
-
 export const columnsF =(data, line, current, t) => [
      {field:'tid', title:t('financials.id'), initialEditValue:line.id, export:true}
     , {field:'oid', title:t('financials.oid'),initialEditValue:current.oid, export:true}
@@ -248,33 +261,27 @@ export const Options = ({
     rowStyle: rowStyle
 })
 
-export const ColumnsM =(data, line, current, t) => [
+export const ColumnsM =(data, t) => [
       {field:'id', title:t('costcenter.id'), export:true}
-    , {field:'name', title:t("costcenter.name"), initialEditValue:line.name, type: "text", export:true}
-    , {field:'description', title:t('costcenter.description'), type:"string", initialEditValue:line.description, export:true}
-    , {field:'account', title:t('costcenter.account'), editComponent:({ value, onRowDataChange, rowData }) =>
-            accountD ( data, value, onRowDataChange, rowData ), width: 20, export:true}
-    , {field:'enterdate', title:t('costcenter.enterdate'), type:"date", align:"right",
-        initialEditValue:line.enterdate,
-        dateSetting: { locale:"de" } , export:true}
-    , {field:'changedate', title:t('costcenter.changedate'), type:"date", align:"right",
-        initialEditValue:line.changedate,
-        dateSetting: { locale:"de" } , export:true}
-    , {field:'postingdate', title:t('costcenter.postingdate'), type:"date", align:"right",
-        initialEditValue:line.postingdate,
-        dateSetting: { locale:"de" } , export:true}
-
-    , {field:'company', title:t('common.company'), type:"string", initialEditValue:line.company, export:true}
+    , {field:'name', title:t("costcenter.name"),  type:"text", export:true}
+    , {field:'description', title:t('costcenter.description'), type:"string", export:true}
+    , {field:'account', title:t('costcenter.account') ,editComponent:({ value, onRowDataChange, rowData }) => accountD ( data, value, onRowDataChange, rowData )
+        , width: 20, export:true}
+    , {field:'enterdate', title:t('costcenter.enterdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'changedate', title:t('costcenter.changedate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
+    , {field:'postingdate', title:t('costcenter.postingdate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
+    , {field:'company', title:t('common.company'), type:"string",  export:true}
 
 ]
-export const ColumnsACC =(data, line, current, t) => [
+export const ColumnsACC =(data, t) => [
       {field:'id', title:t('account.id'), export:true}
-    , {field:'name', title:t("account.name"), initialEditValue:line.name, type: "text", export:true}
-    , {field:'description', title:t('account.description'), type:"string", initialEditValue:line.description, export:true}
+    , {field:'name', title:t("account.name"),  type:"string", export:true}
+    , {field:'description', title:t('account.description'), type:"string",  export:true}
     , {field:'isDebit', title:t('account.debit_credit'), type:"boolean", export:true}
     , {field:'balancesheet', title:t('account.balancesheet'), type:"boolean", export:true}
-    , {field:'account', title:t('account.account'), editComponent:({ value, onRowDataChange, rowData }) =>
-            accountD ( data, value, onRowDataChange, rowData ), width: 20, export:true}
+    , {field:'account', title:t('account.account'),
+        editComponent:({ value, onRowDataChange, rowData }) => accountD ( data, value, onRowDataChange, rowData )
+        , width: 20, export:true}
     , {field:'idebit', title:t('account.idebit'), type:"currency", initialEditValue:0,
         currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     , {field:'debit', title:t('account.debit'), type:"currency", initialEditValue:0,
@@ -283,73 +290,59 @@ export const ColumnsACC =(data, line, current, t) => [
         currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     , {field:'credit', title:t('account.credit'), type:"currency", initialEditValue:0,
         currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
-
-    , {field:'enterdate', title:t('account.enterdate'), type:"date", align:"right",
-        initialEditValue:line.enterdate,
-        dateSetting: { locale:"de" } , export:true}
-    , {field:'changedate', title:t('account.changedate'), type:"date", align:"right",
-        initialEditValue:line.changedate,
-        dateSetting: { locale:"de" } , export:true}
-    , {field:'postingdate', title:t('account.postingdate'), type:"date", align:"right",
-        initialEditValue:line.postingdate,
-        dateSetting: { locale:"de" } , export:true}
-
-    , {field:'company', title:t('common.company'), type:"string", initialEditValue:line.company, export:true}
+    , {field:'enterdate', title:t('account.enterdate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
+    , {field:'changedate', title:t('account.changedate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'postingdate', title:t('account.postingdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'company', title:t('common.company'), type:"string",  export:true}
 ]
-export const ColumnsV =(data, line, current, t) => [
+export const ColumnsV = (data, t) => [
     {field:'id', title:t('vat.id'), export:true}
-    , {field:'name', title:t("vat.name"), initialEditValue:line.name, type: "text", export:true}
-    , {field:'description', title:t('vat.description'), type:"string", initialEditValue:line.description, export:true}
+    , {field:'name', title:t("vat.name"),  type:"string", export:true}
+    , {field:'description', title:t('vat.description'), type:"string",  export:true}
     , {field:'percent', title:t('vat.percent'), type:"numeric", initialEditValue:0, minimumFractionDigits: 2
         , maximumFractionDigits: 2, export:true}
-    , {field:'inputVatAccount', title:t('vat.input_account'), editComponent:({ value, onRowDataChange, rowData }) =>
-            accountD ( data, value, onRowDataChange, rowData ), width: 20, export:true}
-    , {field:'outputVatAccount', title:t('vat.output_account'), editComponent:({ value, onRowDataChange, rowData }) =>
-            accountD ( data, value, onRowDataChange, rowData ), width: 20, export:true}
-    , {field:'enterdate', title:t('vat.enterdate'), type:"date", align:"right",
-        initialEditValue:line.enterdate,
-        dateSetting: { locale:"de" } , export:true}
-    , {field:'changedate', title:t('vat.changedate'), type:"date", align:"right",
-        initialEditValue:line.changedate,
-        dateSetting: { locale:"de" } , export:true}
-    , {field:'postingdate', title:t('vat.postingdate'), type:"date", align:"right",
-        initialEditValue:line.postingdate,
-        dateSetting: { locale:"de" } , export:true}
-
-    , {field:'company', title:t('common.company'), type:"string", initialEditValue:line.company, export:true}
+    , {field:'inputVatAccount', title:t('vat.input_account'),
+        editComponent:({ value, onRowDataChange, rowData }) =>accountD ( data, value, onRowDataChange, rowData )
+            , width: 20, export:true}
+    , {field:'outputVatAccount', title:t('vat.output_account') //,editComponent:({ value, onRowDataChange, rowData }) =>accountD ( data, value, onRowDataChange, rowData )
+        , width: 20, export:true}
+    , {field:'enterdate', title:t('vat.enterdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'changedate', title:t('vat.changedate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'postingdate', title:t('vat.postingdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'company', title:t('common.company'), type:"string", export:true}
 ]
 
 export const ColumnsBS =(data, line, current, t) => [
       {field:'bid', title:t('bankstatement.id'), type:'numeric', align:"right", export:true}
-    , {field:'depositor', title:t("bankstatement.depositor"), type: "text", export:true}
+    , {field:'depositor', title:t("bankstatement.depositor"), type:"string", export:true}
     , {field:'valuedate', title:t('bankstatement.valuedate'), type:"date",  align:"right", export:true}
     , {field:'postingdate', title:t('bankstatement.postingdate'), type:"date",  align:"right", export:true}
-    , {field:'postingtext', title:t("bankstatement.postingtext"), type: "text", export:true}
-    , {field:'purpose', title:t("bankstatement.purpose"), type: "text", export:true}
-    , {field:'beneficiary', title:t("bankstatement.beneficiary"), type: "text", export:true}
-    , {field:'accountno', title:t("bankstatement.accountno"), type: "text", export:true}
-    , {field:'bankCode', title:t("bankstatement.bankCode"), type: "text", export:true}
+    , {field:'postingtext', title:t("bankstatement.postingtext"), type:"string", export:true}
+    , {field:'purpose', title:t("bankstatement.purpose"), type:"string", export:true}
+    , {field:'beneficiary', title:t("bankstatement.beneficiary"), type:"string", export:true}
+    , {field:'accountno', title:t("bankstatement.accountno"), type:"string", export:true}
+    , {field:'bankCode', title:t("bankstatement.bankCode"), type:"string", export:true}
     , {field:'amount', title:t("bankstatement.amount"), type: "currency", export:true}
-    , {field:'currency', title:t("common.currency"), type: "text", export:true}
-    , {field:'info', title:t("bankstatement.info"), type: "text", export:true}
-    , {field:'company', title:t("common.company"), type: "text", export:true}
-    , {field:'companyIban', title:t("bankstatement.companyIban"), type: "text", export:true}
+    , {field:'currency', title:t("common.currency"), type:"string", export:true}
+    , {field:'info', title:t("bankstatement.info"), type:"string", export:true}
+    , {field:'company', title:t("common.company"), type:"string", export:true}
+    , {field:'companyIban', title:t("bankstatement.companyIban"), type:"string", export:true}
     , {field:'posted', title:t('bankstatement.posted'), type:"boolean", export:true}
 ]
 
-export const ColumnsCUST =(data, line, current, t) => [
+export const ColumnsCUST =(data, t) => [
   {field:'id', title:t('customer.id'), type:'numeric', align:"right", export:true}
-, {field:'name', title:t('customer.name'), type: "text", export:true}
-, {field:'description', title:t('customer.description'), type: "text", export:true}
-, {field:'street', title:t('customer.street'), type: "text", export:true}
-, {field:'zip', title:t('customer.zip'), type: "text", export:true}
-, {field:'country', title:t('customer.country'), type: "text", export:true}
-, {field:'phone', title:t('customer.phone'), type: "text", export:true}
-, {field:'email', title:t('customer.email'), type: "text", export:true}
-, {field:'account', title:t('customer.account'), type: "text", export:true}
-, {field:'oaccount', title:t('customer.oaccount'), type: "text", export:true}
-, {field:'iban', title:t('customer.iban'), type: "text", export:true}
-, {field:'vatcode', title:t('customer.vat'), type: "text", export:true}
+, {field:'name', title:t('customer.name'), type:"string", export:true}
+, {field:'description', title:t('customer.description'), type:"string", export:true}
+, {field:'street', title:t('customer.street'), type:"string", export:true}
+, {field:'zip', title:t('customer.zip'), type:"string", export:true}
+, {field:'country', title:t('customer.country'), type:"string", export:true}
+, {field:'phone', title:t('customer.phone'), type:"string", export:true}
+, {field:'email', title:t('customer.email'), type:"string", export:true}
+, {field:'account', title:t('customer.account'), type:"string", export:true}
+, {field:'oaccount', title:t('customer.oaccount'), type:"string", export:true}
+, {field:'iban', title:t('customer.iban'), type:"string", export:true}
+, {field:'vatcode', title:t('customer.vat'), type:"string", export:true}
 , {field:'enterdate', title:t('customer.enterdate'), type: "date", export:true}
 , {field:'postingdate', title:t('customer.postingdate'), type: "date", export:true}
 , {field:'changedate', title:t('customer.changedate'), type: "date", export:true}
@@ -545,6 +538,7 @@ const {formid} = props
             break;
         */
         case formEnum.JOURNAL:
+        case formEnum.PACB:
             return <FormWrapper {...props} form = {JournalMainForm}/>;
             break;
         case formEnum.VAT:
@@ -1044,7 +1038,6 @@ export const CustomerMainForm =(props) => {
     )}
 export const JournalMainForm =(props) => {
     const {current, setCurrent, t, accData, submitQuery } = props
-    console.log('currentJournal', current);
     return (
         <>
           <CFormGroup row style={{  height:15 }} >
@@ -1094,7 +1087,6 @@ export const JournalMainForm =(props) => {
     )}
 export const VatMainForm =(props) => {
     const {current, setCurrent, t, accData } = props
-    console.log('currentVAT', current);
  return (
      <>
     <CFormGroup row style={{height:15 }}>
