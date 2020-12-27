@@ -23,8 +23,8 @@ const JournalForm = () => {
 
   const [{ res2}] = useFetch(value.accUrl, {});
   const accData_=  res2?.hits?res2.hits:value.accData;
-  console.log('data_',data_)
-  console.log('accData_',accData_)
+  console.log('data_J',data_)
+  console.log('accData_J',accData_)
   const current_= value.user;
   const account_= value.user.account;
   const fromPeriod_ = value.user.period;
@@ -32,21 +32,20 @@ const JournalForm = () => {
   const columns = value.headers
 
   console.log("data_", data_);
+  console.log("current_ZZ", current_);
   const [current,setCurrent] = useState(current_);
   const [account, setAccount ] = useState(account_);
-  //const [account2, ] = useState('');
   const [fromPeriod, setFromPeriod ] = useState(fromPeriod_);
   const [toPeriod, setToPeriod] = useState(toPeriod_);
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [filteredRows, setFilteredRows] = useState(data);
   const [toolbar, setToolbar] = useState(true);
-  const [record,setRecord] = useState({account:'', account2:'', fromPeriod:'', toPeriod:''});
-  useEffect(() => {}, [current, setCurrent]);
-  useEffect(() => {setCurrent(current_)}, [ current_,account, fromPeriod, toPeriod]);
-  useEffect(() => { setAccount(account_)}, [account_, current.account ]);
-  useEffect(() => { setFromPeriod(fromPeriod_)}, [fromPeriod_]);
-  useEffect(() => { setToPeriod(toPeriod_)}, [toPeriod_]);
+  //useEffect(() => {}, [current]);
+  useEffect(() => {setCurrent(current_)}, [current_]);
+  //useEffect(() => { setAccount(account_)}, [account_, current.account ]);
+  //useEffect(() => { setFromPeriod(fromPeriod_)}, [fromPeriod_]);
+  //useEffect(() => { setToPeriod(toPeriod_)}, [toPeriod_]);
   useEffect(() => {handleFilter('')}, [data, getData()]);
 
 
@@ -61,25 +60,25 @@ const JournalForm = () => {
     submitQuery(event);
     event.preventDefault();
   };
+  const url_=() =>value.url.concat('/')
+      .concat(current.account).concat('/')
+      .concat(current.fromPeriod).concat('/')
+      .concat(current.toPeriod);
 
   const load = event => {
-    console.log("loading", event);
     event.preventDefault();
     accData?.hits?.length<2?
-        value.submitQuery(event, value.accUrl, setAccData, value.initAcc):void(0)
+        value.submitQuery(event, value.accUrl, setAccData, value.initAcc):
+        current.account&&current.fromPeriod&&current.toPeriod?
+         value.submitQuery(event, url_(), setData, value.initialState): void(0)
   };
+
 
   const submitQuery = event => {
     event.preventDefault();
     accData?.hits?.length<2?
-        value.submitQuery(event, value.accUrl, setAccData,value.initAcc):void(0)
-    const url_=value.url.concat('/')
-      .concat(account).concat('/')
-      .concat(fromPeriod).concat('/')
-      .concat(toPeriod);
-    console.log("url_", url_);
-    value.submitQuery(event, url_, setData, value.initialState)
-
+        value.submitQuery(event, value.accUrl, setAccData,value.initAcc):
+        value.submitQuery(event, url_(), setData, value.initialState)
   };
 
 
