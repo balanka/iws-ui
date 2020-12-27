@@ -6,5 +6,6 @@
     SUPPLIER : 5,
     CUSTOMER : 6,
     FINANCIALS:7,
-     VAT:8,
+     JOURNAL:8,
+    VAT:9,
 }

@@ -1,23 +1,14 @@
 import React, {useEffect, useState, useContext} from 'react'
-import { CButton, CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect} from '@coreui/react'
-import {capitalize} from "../../../utils/utils"
 import EnhancedTable from '../../Tables2/EnhancedTable';
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
-import {IoMdMenu} from "react-icons/io";
 import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelper'
-import {OptionsM, columnsJ,   styles, filter} from '../../Tables2/LineFinancialsProps'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faAngleDoubleDown, faAngleDoubleUp, faSpinner} from "@fortawesome/free-solid-svg-icons";
-import {columnsF} from "../../Tables2/LineFinancialsProps";
-const styles1 = {
-  outer: {
-    borderRadius: 5,
-    boxShadow: "0 10px 30px #BBB",
-    padding: 10
-  }
-};
+import {OptionsM, columnsJ, filter, JournalFormHead, FormFactory} from '../../Tables2/LineFinancialsProps';
+import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
+import {formEnum} from "../../../utils/FORMS";
+import blue from "@material-ui/core/colors/blue";
+
 const JournalForm = () => {
 
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -49,6 +40,8 @@ const JournalForm = () => {
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [filteredRows, setFilteredRows] = useState(data);
+  const [toolbar, setToolbar] = useState(true);
+  const [record,setRecord] = useState({account:'', account2:'', fromPeriod:'', toPeriod:''});
   useEffect(() => {}, [current, setCurrent]);
   useEffect(() => {setCurrent(current_)}, [ current_,account, fromPeriod, toPeriod]);
   useEffect(() => { setAccount(account_)}, [account_, current.account ]);
@@ -59,10 +52,9 @@ const JournalForm = () => {
 
   const columnsX= columnsJ(t);
   const getColumnName = ()=>columnsX.map(col =>col.field);
+  const toggleToolbar= ()=> setToolbar(!toolbar );
+  const toggle= ()=> setState({...state, collapse:!state.collapse });
 
-  const toggle= ()=> {
-    setState({...state, collapse: !state.collapse });
-  }
 
   const handleToPeriodChange = event => {
     setToPeriod(event.target.value);
@@ -71,26 +63,11 @@ const JournalForm = () => {
   };
 
   const load = event => {
+    console.log("loading", event);
     event.preventDefault();
     accData?.hits?.length<2?
         value.submitQuery(event, value.accUrl, setAccData, value.initAcc):void(0)
   };
-  const handleInputChange = event => {
-    event.preventDefault();
-    const { name, value } = event.target;
-    const method="set"+capitalize(name)
-    const row = Object.assign(current, {name:value});
-     eval(method)(value);
-    setCurrent(row);
-  };
-
-  const mapping = item => <option key={item.id} value={item.id}>
-    {item.id+ " ".concat (item.name)}</option>;
-
-  const mapping2 = item => <option key={item.name} value={item.name}>
-    {item.name+" ".concat(item.id)}</option>;
-
-
 
   const submitQuery = event => {
     event.preventDefault();
@@ -141,9 +118,9 @@ const JournalForm = () => {
     )
   }
 
-  function buildForm(current1){
+  function buildForm(current){
    // console.log("editing", editing);
-    console.log("user1xxz", current1);
+    console.log("user1xxz", current);
 
     const props = { title: value.title, columns:value.headers, rows:getFilteredRows(), edit:edit, editable:false
       ,  submit:submitQuery, selected:selected, colId:10, initialState:value.initialState, renderDT:renderDT
@@ -151,74 +128,19 @@ const JournalForm = () => {
       ,  handleFilter: handleFilter, rowsPerPageOptions: [15, 25, 100]
     }
     return <>
-      <Grid container spacing={2}  direction="column"  style={{...styles.outer}}>
-        <CForm  className="form-horizontal"  style={{padding:0}}>
-          <Grid container justify="space-between">
-            <Grid container xs spacing={1} justify="flex-start">
-              <Grid item justify="center" alignItems="center">
-                <IoMdMenu />
-              </Grid>
-              <Grid item><h5><CBadge color="primary">{t('journal.title')}</CBadge></h5></Grid>
-            </Grid>
-            <Grid item justify="flex-end" alignItems="center">
-              <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton block color="link" type="submit"  className="card-header-action btn-minimize"
-                         onClick={event => {event.preventDefault(); load(event)}}>
-                  <FontAwesomeIcon icon={faSpinner} rotation={90}/>
-                </CButton>
-              </div>
-              <div className="card-header-actions" style={{  align: 'right' }}>
-                <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                  <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
-                </CButton>
-              </div>
-            </Grid>
-          </Grid>
-            <CCollapse show={state.collapse} id="JScollapse" style={{height:40,padding:2}}>
-              <CFormGroup row >
-                <CCol sm="1">
-                  <CLabel size="sm" htmlFor="input-small">{t('common.account')}</CLabel>
-                </CCol>
-                <CCol sm="3">
-                  <CSelect className ="flex-row" type="select" name="account" id="account-id"
-                         value={account} onChange={handleInputChange} style={{ height: 30, padding:2 }}>
-                    {accData.hits.map(item => mapping(item))};
+      <Grid container spacing={2} style={{...styles.outer }} direction="column" >
+        <JournalFormHead styles={styles} title={value.title} collapse={state.collapse}  initialState={value.initialState}
+                        setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
+                        cancelEdit ={cancelEdit}  submitQuery= {submitQuery} toggle={toggle}
+                        load = {load} toggleToolbar={toggleToolbar}  />
+        <FormFactory formid ={formEnum.JOURNAL} current={current} setCurrent={setCurrent} t={t} accData={accData}
+                     collapse={state.collapse} styles={styles} />
 
-                  </CSelect>
-                </CCol>
-                <CCol sm="4">
-                  <CSelect className ="flex-row" type="select" name="account2" id="account2-id"
-                         value={account} onChange={handleInputChange} style={{ height: 30, padding:2 }}>
-                    {accData.hits.map(item => mapping2(item))};
-
-                  </CSelect>
-                </CCol>
-                <CCol sm="0.5" style={{ align: 'right' , padding:2}}>
-                  <CLabel size="sm" htmlFor="input-small">{t('common.from')}</CLabel>
-                </CCol>
-                <CCol sm="1">
-                  <CInput  bsSize="sm" type="text"  id="fromPeriod-id" name="fromPeriod" className="input-sm"
-                          placeholder="fromPeriod" value={fromPeriod} onChange={handleInputChange} style={{ height: 30, padding:1 }}/>
-                </CCol>
-                <CCol sm="0.5" style={{ align: 'right' , padding:2}}>
-                  <CLabel size="sm" htmlFor="input-small">{t('common.to')}</CLabel>
-                </CCol>
-                <CCol sm="1">
-                  <CInput  bsSize="sm" type="text"  id="toPeriod-id" name="toPeriod" className="input-sm"
-                          placeholder="toPeriod" value={toPeriod} onChange={handleToPeriodChange}
-                           style={{ height: 30, padding:1, align: 'right'}}/>
-                </CCol>
-                <CCol sm="1" style={{ align: 'right' }}>
-                  <CButton type="submit" size="sm" color="primary" style={{ align: 'right' }} onClick={submitQuery}>
-                    <i className="fa fa-dot-circle-o"></i>
-                  </CButton>
-                </CCol>
-              </CFormGroup>
-           </CCollapse>
-        </CForm>
+        <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+         <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
+        </Grid>
       </Grid>
-      <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
-  </>
+    </>
   }
 
   return buildForm(current);
