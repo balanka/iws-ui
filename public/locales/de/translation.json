@@ -44,7 +44,12 @@
     "from"       :  "Von",
     "to"        :  "Bis",
     "total"     : "Total",
-    "company"   : "Mandant"
+    "company"   : "Mandant",
+    "idebit": "AB Soll",
+    "debit": "Soll",
+    "icredit": "AB Haben",
+    "credit": "Haben",
+    "balance": "Saldo"
 
   },
   "account": {
@@ -193,10 +198,6 @@
     "transdate":  "Belegdatum",
     "period":       "Periode",
     "amount":       "Betrag",
-    "idebit":     "AB Soll",
-    "debit":      "Soll",
-    "icredit":     "AB Haben",
-    "credit":      "Haben",
     "side" :       "S/H",
     "text" :       "Text",
     "Month":        "Monat",
@@ -211,11 +212,6 @@
     "name":         "Bilanz",
     "account":     "Konto",
     "period":      "Periode",
-    "idebit":      "AB Soll",
-    "debit":       "Soll",
-    "icredit":     "AB Haben",
-    "credit":      "Haben",
-    "balance":     "Saldo",
     "currency"    : "Währung",
     "from"       :  "Von",
     "to"        :  "Bis"

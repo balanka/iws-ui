@@ -44,7 +44,12 @@
     "from"       :  "From",
     "to"        :  "To",
     "total"     : "Total",
-    "company":      "Company"
+    "company":      "Company",
+    "idebit": "Init Debit",
+    "debit": "Debit",
+    "icredit": "Init credit",
+    "credit": "Credit",
+    "balance": "Balance"
   },
   "account": {
     "title":      "Account",
@@ -165,12 +170,7 @@
   "pac": {
     "title":      "P.Account Balance",
     "id":         "Id",
-    "period":      "Period",
-    "idebit":     "Init.Debit",
-    "debit":      "Debit",
-    "icredit":     "Init. Credit",
-    "credit":      "Credit",
-    "balance"     : "Balance"
+    "period":      "Period"
   },
   "financials": {
     "title":      "Financials",
@@ -210,17 +210,12 @@
     "transdate":  "Transdate",
     "period":       "Period",
     "amount":       "Amount",
-    "idebit":     "IDébit",
-    "debit":      "Débit",
-    "icredit":     "ICredit",
-    "credit":      "Credit",
     "side" :       "D/C?",
     "text" :       "Text",
     "Month":        "Mth.",
     "year":        "Year",
     "type":         "Typ",
     "file":         "File",
-    "company"     : "Comp.",
     "modelid"     : "Model"
   },
   "balancesheet": {
@@ -229,12 +224,6 @@
     "name":         "Name",
     "account":     "Account",
     "period":      "Period",
-    "idebit":      "Init debit",
-    "debit":       "Debit",
-    "icredit":     "Init Credit",
-    "credit":      "Credit",
-    "balance":     "Balance",
-    "currency"    : "Currency",
     "from"       :  "From",
     "to"        :  "To"
   },

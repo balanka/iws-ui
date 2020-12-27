@@ -45,7 +45,12 @@
     "to"        :  "A",
     "total"     : "Total",
     "company":      "Société",
-    "modelid"     : "Model"
+    "modelid"     : "Model",
+    "idebit": "Debit.Init",
+    "debit": "Debit",
+    "icredit": "Crédit.Init",
+    "credit": "Crédit",
+    "balance": "Balance"
   },
   "account": {
     "title":      "Comptes",
@@ -153,17 +158,12 @@
     "input_account": "TVA per.",
     "output_account": "TVA rec.",
     "percent":     "Pourcent"
-  },
+     },
   "pac": {
     "title":      "Balance périodique",
     "id":         "Nº",
-    "period":      "Periode",
-    "idebit":     "Débit init.",
-    "debit":      "Débit",
-    "icredit":     "Crédit init.",
-    "credit":      "Crédit",
-    "balance"     : "Balance"
-  },
+    "period":      "Periode"
+    },
 
   "financials": {
     "title":      "Pièce comptable",
@@ -202,10 +202,6 @@
     "transdate":   "Valeur",
     "period":       "Periode",
     "amount":       "Montant",
-    "idebit":     "Débit init.",
-    "debit":      "Débit",
-    "icredit":     "Crédit init.",
-    "credit":      "Crédit",
     "side" :       "D/C?",
     "text" :       "Texte",
     "Month":        "Mois",
@@ -219,12 +215,6 @@
     "name":         "Bilan",
     "account":     "Compte",
     "period":      "Period",
-    "idebit":     "Débit init.",
-    "debit":       "Débit",
-    "icredit":     "Credit init.",
-    "credit":      "Credit",
-    "balance"     : "Balance",
-    "currency"    : "Monaie",
     "from"       :  "De",
     "to"        :  "A"
   },
