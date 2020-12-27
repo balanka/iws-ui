@@ -24,12 +24,7 @@ const JournalForm = () => {
   const [{ res2}] = useFetch(value.accUrl, {});
   const accData_=  res2?.hits?res2.hits:value.accData;
   const current_= init().hits[0].query;
-
   const columns = value.headers
-  //console.log('columns', columns)
-  //Object.values(columns).foreach(obj => console.log('objX', obj));
-  //console.log('indexOf1', Object.values(columns).findIndex(obj => obj.id ==='amount'));
-  //console.log('indexOf', columns[0].findIndex(obj => obj.id ==='amount'));
   const [current,setCurrent] = useState(current_);
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
@@ -71,23 +66,11 @@ const JournalForm = () => {
       setFilteredRows(rows_);
   }
 
-  const getFilteredRows=()=>{
-    console.log('data+', filteredRows)
-    console.log('filteredRows+', filteredRows)
-    return filteredRows?filteredRows:data
-  }
-  const edit = id =>{
-    const record = data.hits.find(obj => obj.id === id);
-    value.editRow(record);
-  }
-  const cancelEdit = (e) => {
-    setSelected([]);
-  };
+  const getFilteredRows=()=>filteredRows?filteredRows:data
+  const cancelEdit = (e) => setSelected([]);
   const  addRunningTotal = (data) => data.length>0?data.reduce(reducerFn, init().hits[0]):init().hits[0];
-  const renderDT=(data)=> {console.log('dataR', data.forEach(n =>console.log('nnn',n))); const datax=addRunningTotal(data);
-    console.log('dataRx', datax);
-       return datax;
-  };
+  const renderDT =(data)=> addRunningTotal(data);
+
   const reducerFn =(a,b)  =>({id:'', transid:'', account:"", oaccount:"", transdate:"", enterdate:""
     , postingdate:"", period:"", amount:Number(a.amount)+Number(b.amount), idebit:"", icredit:"", debit:""
     , credit:"", currency:b.currency, side:"", year:"", month: "", company:"", text:""
