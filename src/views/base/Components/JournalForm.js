@@ -23,29 +23,19 @@ const JournalForm = () => {
 
   const [{ res2}] = useFetch(value.accUrl, {});
   const accData_=  res2?.hits?res2.hits:value.accData;
-  console.log('data_J',data_)
-  console.log('accData_J',accData_)
-  const current_= value.user;
-  const account_= value.user.account;
-  const fromPeriod_ = value.user.period;
-  const toPeriod_ = value.user.period;
-  const columns = value.headers
+  const current_= init().hits[0].query;
 
-  console.log("data_", data_);
-  console.log("current_ZZ", current_);
+  const columns = value.headers
+  //console.log('columns', columns)
+  //Object.values(columns).foreach(obj => console.log('objX', obj));
+  //console.log('indexOf1', Object.values(columns).findIndex(obj => obj.id ==='amount'));
+  //console.log('indexOf', columns[0].findIndex(obj => obj.id ==='amount'));
   const [current,setCurrent] = useState(current_);
-  const [account, setAccount ] = useState(account_);
-  const [fromPeriod, setFromPeriod ] = useState(fromPeriod_);
-  const [toPeriod, setToPeriod] = useState(toPeriod_);
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [filteredRows, setFilteredRows] = useState(data);
   const [toolbar, setToolbar] = useState(true);
-  //useEffect(() => {}, [current]);
   useEffect(() => {setCurrent(current_)}, [current_]);
-  //useEffect(() => { setAccount(account_)}, [account_, current.account ]);
-  //useEffect(() => { setFromPeriod(fromPeriod_)}, [fromPeriod_]);
-  //useEffect(() => { setToPeriod(toPeriod_)}, [toPeriod_]);
   useEffect(() => {handleFilter('')}, [data, getData()]);
 
 
@@ -54,12 +44,6 @@ const JournalForm = () => {
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
 
-
-  const handleToPeriodChange = event => {
-    setToPeriod(event.target.value);
-    submitQuery(event);
-    event.preventDefault();
-  };
   const url_=() =>value.url.concat('/')
       .concat(current.account).concat('/')
       .concat(current.fromPeriod).concat('/')
@@ -99,8 +83,11 @@ const JournalForm = () => {
   const cancelEdit = (e) => {
     setSelected([]);
   };
-  const  addRunningTotal = (data) => data.length>0?data.reduce(reducerFn, init):init;
-  const renderDT=(data)=> addRunningTotal(data);
+  const  addRunningTotal = (data) => data.length>0?data.reduce(reducerFn, init().hits[0]):init().hits[0];
+  const renderDT=(data)=> {console.log('dataR', data.forEach(n =>console.log('nnn',n))); const datax=addRunningTotal(data);
+    console.log('dataRx', datax);
+       return datax;
+  };
   const reducerFn =(a,b)  =>({id:'', transid:'', account:"", oaccount:"", transdate:"", enterdate:""
     , postingdate:"", period:"", amount:Number(a.amount)+Number(b.amount), idebit:"", icredit:"", debit:""
     , credit:"", currency:b.currency, side:"", year:"", month: "", company:"", text:""
@@ -118,10 +105,7 @@ const JournalForm = () => {
   }
 
   function buildForm(current){
-   // console.log("editing", editing);
-    console.log("user1xxz", current);
-
-    const props = { title: value.title, columns:value.headers, rows:getFilteredRows(), edit:edit, editable:false
+    const props = { title: value.title, columns:value.headers, rows:getFilteredRows(), editable:false
       ,  submit:submitQuery, selected:selected, colId:10, initialState:value.initialState, renderDT:renderDT
       ,  reducerFn:reducerFn, renderTotal:renderTotal, setSelected: setSelected, cancel: cancelEdit
       ,  handleFilter: handleFilter, rowsPerPageOptions: [15, 25, 100]

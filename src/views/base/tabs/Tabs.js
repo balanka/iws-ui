@@ -43,7 +43,11 @@ const Tabs = () => {
       , country:'', phone:'', email:'', account:'-1', oaccount:'-1', iban:'-1', vatcode:'-1'
       , enterdate:date, postingdate:date, changedate:date, company:'', modelid:1}]}
 
-  const initJour={hits:[{account:'', account2:'', fromPeriod:'', toPeriod:''}]}
+  const initJour={hits:[{ id:'', transid:'', oid:'', account:'', oaccount:'', transdate:''
+          , postingdate:'', enterdate:'', period:'', amount:'', idebit:'', debit:'', icredit:''
+          , credit:'', currency:'',  side:'', text:'', month:'', year:'', company:'', typeJournal:''
+          , file_content:'', modelid:''
+          , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]}
 
   const initBalanceSheet= {"data":[{
     "data" : {"id" : "9900", "name" : "Bilanz", "isDebit" : true, "balancesheet" : false,
