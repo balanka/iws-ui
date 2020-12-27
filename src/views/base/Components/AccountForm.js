@@ -7,7 +7,6 @@ import {
   ColumnsACC as columns,
   filter,
   OptionsM,
-  FormHead,
   FormFactory, CustomerFormHead
 } from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
