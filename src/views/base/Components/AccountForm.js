@@ -3,11 +3,7 @@ import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import useFetch from "../../../utils/useFetch";
-import {
-  ColumnsACC,
-  OptionsM,
-  FormFactory, CommonFormHead
-} from "../../Tables2/LineFinancialsProps";
+import {ColumnsACC, OptionsM, FormFactory, CommonFormHead} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
 import {formEnum} from "../../../utils/FORMS";

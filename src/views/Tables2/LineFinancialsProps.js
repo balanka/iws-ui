@@ -386,7 +386,7 @@ export const OptionsM = ({
     exportFileName:'Masterfile.csv'
 })
 export const CommonFormHead = (props) => {
-    const {styles, title, collapse,  initAdd,cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
+    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">

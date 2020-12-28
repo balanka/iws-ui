@@ -5,7 +5,7 @@ import blue from "@material-ui/core/colors/blue";
 import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
 import axios from "axios";
-import {ColumnsBS as columns, OptionsM, filter, CommonFormHead, FormFactory} from "../../Tables2/LineFinancialsProps";
+import {ColumnsBS , OptionsM,  CommonFormHead, FormFactory} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {formEnum} from "../../../utils/FORMS";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
@@ -22,15 +22,13 @@ const BankStatementForm = () => {
   const current_= value.user;
   const [data, setData] = useState(data_);
   const [current,setCurrent] = useState(current_);
-  const [filteredRows, setFilteredRows] = useState(data);
   const [toolbar, setToolbar] = useState(true);
   useEffect(() => {}, [current, setCurrent, data]);
   useEffect(() => {setCurrent(current_)}, [ current_]);
-  useEffect(() => {handleFilter('')}, [data]);
 
-  const toggleToolbar= ()=> {
-        setToolbar(!toolbar );
-    }
+  const toggleToolbar= ()=> setToolbar(!toolbar );
+  const toggle= ()=> setState({...state, collapse:!state.collapse });
+  const columns = ColumnsBS([], value.initialState, current, t);
 
   const submitGet = (url, func, result) => {
     axios.get( url, {headers: {'authorization':profile.token}})
@@ -67,21 +65,12 @@ const BankStatementForm = () => {
         value.editRow(row, false);
         setCurrent(row);
     };
-    const columnsX = columns([], value.initialState, current, t);
-    const getColumnName = ()=>columnsX.map(col =>col.field);
 
-  function handleFilter(text) {
-      const rows_=text?filter(data.hits, getColumnName(), text ):data.hits
-      setFilteredRows(rows_);
-  }
-  const toggle= ()=> {
-    setState({...state, collapse:!state.collapse });
-  }
+
 
   const edit = editedRow =>{
-        const record = filteredRows.find(obj => obj.bid === editedRow.bid);
-        const row = {...record, editing:true}
-        setCurrent(row);
+        const record = data.hits.find(obj => obj.bid === editedRow.bid);
+        setCurrent({...record, editing:true});
     }
 
 
@@ -96,18 +85,17 @@ const BankStatementForm = () => {
 
 
   function buildForm(current){
-    console.log("user1xx", current);
     return <>
         <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-            <CommonFormHead styles={styles} title={value.title} collapse={state.collapse}
-                            setData={setData} url={value.url} accUrl={value.accUrl}
-                            initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
+            <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} setData={setData}
+                             url={value.url} accUrl={value.accUrl} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                             submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
             <FormFactory formid ={formEnum.BANKSTATEMENT} current={current} setCurrent={setCurrent} t={t}
                           collapse={state.collapse} styles={styles} />
             <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
-               <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
-                        theme={theme} t={t}  edit ={edit} style={{padding:0, height:80}}/>
+               <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}
+                  columns={columns}  theme={theme} t={t}  edit ={edit}/>
+
             </Grid>
         </Grid>
    </>;
