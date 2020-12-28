@@ -5,7 +5,6 @@ import blue from "@material-ui/core/colors/blue";
 import useFetch from "../../../utils/useFetch";
 import {
   ColumnsACC,
-  filter,
   OptionsM,
   FormFactory, CommonFormHead
 } from "../../Tables2/LineFinancialsProps";
