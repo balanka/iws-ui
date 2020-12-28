@@ -41,8 +41,7 @@ const CostCenterForm = () => {
 
   const edit = editedRow =>{
       const record = data.hits.find(obj => obj.id === editedRow.id);
-    const row = {...record, editing:true}
-    setCurrent(row);
+    setCurrent({...record, editing:true});
   }
 
   const submitEdit = event => {
@@ -68,9 +67,9 @@ const CostCenterForm = () => {
   function buildForm(current) {
     return <>
        <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-           <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd}
-                           setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
-                           initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
+           <CommonFormHead styles={styles} title={value.title}  collapse={state.collapse} initAdd ={initAdd}
+                           initialState={value.initialState} setData={setData} setAccData={setAccData} url={value.url}
+                           accUrl={value.accUrl} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                            submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
         <FormFactory formid ={formEnum.COSTCENTER} current={current} setCurrent={setCurrent} t={t} accData={accData}
                      collapse={state.collapse} styles={styles} />

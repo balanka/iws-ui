@@ -386,7 +386,7 @@ export const OptionsM = ({
     exportFileName:'Masterfile.csv'
 })
 export const CommonFormHead = (props) => {
-    const {styles, title, collapse, module, accdata,  initAdd,cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
+    const {styles, title, collapse,  initAdd,cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -435,6 +435,7 @@ export const CommonFormHead = (props) => {
 export const FinancialsFormHead = (props) => {
     const {styles, title, collapse, module, modules, initAdd, onNewLine, cancelEdit, submitEdit, submitQuery, toggle
         , handleModuleChange, toggleToolbar} = props
+      console.log('propsZZ', props);
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -444,11 +445,13 @@ export const FinancialsFormHead = (props) => {
                     </Grid>
                     <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
                     <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
-                        <CSelect className ="input-sm" type="select" name="module" id="module-id"
-                                 value={module}  onChange ={handleModuleChange} style={{ height: 30, padding:1, align: 'right' }}>
-                            <option value={module} selected >{module}</option>
-                            {modules.map(item => mappingSelect(item))};
-                        </CSelect>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                           <CSelect className ="input-sm" type="select" name="module" id="module-id"
+                                 value={module}  onChange ={handleModuleChange} style={{ height:30}}>
+                               <option value={module} selected >{module}</option>
+                                {modules.map(item => mappingSelect(item))};
+                           </CSelect>
+                        </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={onNewLine}>
                                 <FontAwesomeIcon icon={faPlusCircle} />
@@ -467,12 +470,6 @@ export const FinancialsFormHead = (props) => {
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
                                 <FontAwesomeIcon icon={faSave} />
-                            </CButton>
-                        </div>
-                        <div>
-                            <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
-                                event.preventDefault();submitQuery(event)}}>
-                                <FontAwesomeIcon icon={faSpinner} rotation={90}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>

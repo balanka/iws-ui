@@ -32,7 +32,7 @@ const FinancialsForm = () => {
   const ccData_=  res3?res3:value.ccData;
   const current_= value.user;
   const initLine=value.initialState.hits[0].lines[0];
-  const [toolbar, setToolbar] = useState(true);
+  const [toolbar, setToolbar] = useState(false);
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [ccData, setCcData] = useState(ccData_);
@@ -42,13 +42,8 @@ const FinancialsForm = () => {
   const getColumnName = ()=>columns.map(col =>col.field);
   useEffect(() => {setCurrent(current_)}, [ current_]);
 
-  const toggle= ()=> {
-    setState({...state, collapse: !state.collapse });
-  }
-
-  const toggleToolbar= ()=> {
-    setToolbar(!toolbar );
-  }
+  const toggleToolbar = ()=> setToolbar(!toolbar );
+  const toggle = ()=> setState({...state, collapse:!state.collapse });
 
   const modules=[{ id:'112', name:'Supplier invoice'}
                 ,{ id:'114', name:'Payment'}
@@ -207,13 +202,16 @@ const addRow = (newData) =>{
     return <>
 
       <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-        <FinancialsFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd}
+        <FinancialsFormHead styles={styles} title={value.title}  collapse={state.collapse} initAdd ={initAdd}
                         setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
                         initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                         module ={module}  modules ={modules} handleModuleChange={handleModuleChange}
+                        onNewLine={onNewLine}
                         submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
         <FormFactory formid ={formEnum.FINANCIALS} current={current} setCurrent={setCurrent} t={t} accData={accData}
-                     ccData={ccData} collapse={state.collapse} styles={styles}  table={LinesFinancials} onNewLine={onNewLine}/>
+                     ccData={ccData}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
+                     collapse={state.collapse}
+         />
         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar}} flag={current.posted} data={getFilteredRows()}
                          columns={columns} rowStyle={rowStyle}  theme={theme} t={t}  edit ={edit}

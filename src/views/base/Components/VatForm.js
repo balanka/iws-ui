@@ -1,15 +1,11 @@
 import React, {useEffect, useState, useContext} from 'react';
-import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import useFetch from "../../../utils/useFetch";
-
+import {accountContext, useGlobalState} from './AccountContext';
 import EditableTable from "../../Tables2/EditableTable";
 import {
-  ColumnsV as columns,
-  filter,
-  FormHead,
-  VatMainForm,
+  ColumnsV,
   OptionsM,
   FormFactory, CommonFormHead
 } from "../../Tables2/LineFinancialsProps";
@@ -39,21 +35,11 @@ const VatForm = () => {
   const cancelEdit = (e) => {
     e.preventDefault();
     initAdd();
-    //setSelected([]);
   };
-  const columnsX = columns(accData.hits,  t);
-  const getColumnName =()=>columnsX.map(col =>col.field);
-
-  const [filteredRows, setFilteredRows] = useState(data);
-  useEffect(() => {handleFilter('')}, [data]);
-
-  function handleFilter(text) {
-    const rows_=text?filter(data.hits, getColumnName(), text ):data.hits
-    setFilteredRows(rows_);
-  }
+  const columns = ColumnsV(data,  t);
 
   const edit = editedRow =>{
-    const record = filteredRows.find(obj => obj.id === editedRow.id);
+    const record = data.hits.find(obj => obj.id === editedRow.id);
     setCurrent({...record, editing:true});
   }
 
@@ -87,8 +73,8 @@ const VatForm = () => {
                       collapse={state.collapse} styles={styles} />
 
       <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
-        <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX} rowStyle={rowStyle}
-                     selected ={[-1]} theme={theme} t={t}  edit ={edit}/>
+        <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}
+                       columns={columns} rowStyle={rowStyle} theme={theme} t={t}  edit ={edit}/>
      </Grid>
    </Grid>
     </>
