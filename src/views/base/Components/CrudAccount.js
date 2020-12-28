@@ -141,8 +141,8 @@ export  function CrudAccount  (props) {
                            accUrl={props.accUrl} ccUrl={props.ccUrl} submitAdd={submitAdd} submitGet={submitGet} login={login}
                            editing={editing} setEditing={setEditing} editRow={editRow} current={current}
                            setCurrent={setCurrent} submitEdit={submitEdit} submitPost={submitPost} 
-                           initialState={props.initialState} addLabel={props.addLabel} headers={props.headers}
-                           initAcc={props.initAcc} initCc={props.initCc} updateLabel={props.updateLabel}
+                           initialState={props.initialState} headers={props.headers}
+                           initAcc={props.initAcc} initCc={props.initCc}
                            deleteUser={deleteUser} submitQuery={submitQuery}>
 
             <div className="flex-row">
