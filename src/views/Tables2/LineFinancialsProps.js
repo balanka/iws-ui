@@ -1,7 +1,7 @@
 import React from 'react'
 
 import "react-datepicker/dist/react-datepicker.css";
-import {rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
+import {styles, rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "react-fast-grid";
@@ -26,7 +26,7 @@ import Switch from "@material-ui/core/Switch";
 import blue from "@material-ui/core/colors/blue";
 import FinancialsForm from "../base/Components/FinancialsForm";
 import {CrudAccount} from "../base/Components/CrudAccount";
-export const styles = {
+export const styles1 = {
   outer: {
     borderRadius: 5,
     boxShadow: "0 10px 30px #BBB",
@@ -386,7 +386,7 @@ export const OptionsM = ({
     exportFileName:'Masterfile.csv'
 })
 export const CommonFormHead = (props) => {
-    const {styles, title, collapse,  initAdd,cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
+    const {styles, title, collapse, module, accdata,  initAdd,cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -396,6 +396,64 @@ export const CommonFormHead = (props) => {
                     </Grid>
                     <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
                     <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
+                                <FontAwesomeIcon icon={faWindowClose} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
+                                <FontAwesomeIcon icon={faPlusSquare} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
+                                <FontAwesomeIcon icon={faSave} />
+                            </CButton>
+                        </div>
+                        <div>
+                            <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
+                                event.preventDefault();submitQuery(event)}}>
+                                <FontAwesomeIcon icon={faSpinner} rotation={90}/>
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                                <FontAwesomeIcon icon={collapse?faAngleDoubleUp:faAngleDoubleDown} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
+                                <FontAwesomeIcon icon={faPlusCircle} />
+                            </CButton>
+                        </div>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>);
+}
+export const FinancialsFormHead = (props) => {
+    const {styles, title, collapse, module, modules, initAdd, onNewLine, cancelEdit, submitEdit, submitQuery, toggle
+        , handleModuleChange, toggleToolbar} = props
+    return (
+        <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
+            <Grid container justify="space-between">
+                <Grid container xs spacing={1} justify="flex-start">
+                    <Grid item justify="center" alignItems="center">
+                        <IoMdMenu />
+                    </Grid>
+                    <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
+                    <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
+                        <CSelect className ="input-sm" type="select" name="module" id="module-id"
+                                 value={module}  onChange ={handleModuleChange} style={{ height: 30, padding:1, align: 'right' }}>
+                            <option value={module} selected >{module}</option>
+                            {modules.map(item => mappingSelect(item))};
+                        </CSelect>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={onNewLine}>
+                                <FontAwesomeIcon icon={faPlusCircle} />
+                            </CButton>
+                        </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
                                 <FontAwesomeIcon icon={faWindowClose} />
@@ -533,10 +591,10 @@ const {formid} = props
         case formEnum.SUPPLIER:
             return <FormWrapper {...props} form = {CustomerMainForm}/>;
             break;
-       /* case formEnum.FINANCIALS:
-            return <FormWrapper {...props} form = {FinancialsFormMainForm(props)}/>;
+        case formEnum.FINANCIALS:
+            return <FormWrapper {...props} form = {FinancialsMainForm}/>;
             break;
-        */
+
         case formEnum.JOURNAL:
         case formEnum.PACB:
             return <FormWrapper {...props} form = {JournalMainForm}/>;
@@ -549,11 +607,16 @@ const {formid} = props
     }
 }
 export const FormWrapper=(props) => {
-    const {form, collapse, styles} = props
+    const {form, table, collapse, styles} = props
     return (
         <Grid container spacing={2} style={{...styles.middle, 'background-color':blue }} direction="column" >
             <CCollapse show={collapse} id="JScollapse" >
-                {form(props)}
+                {
+                    form(props)
+                }
+                {
+                    table&&table(props)
+                }
             </CCollapse>
      </Grid>
     )
@@ -1036,6 +1099,127 @@ export const CustomerMainForm =(props) => {
                 </CFormGroup>
        </>
     )}
+export const FinancialsMainForm =(props) => {
+    const {current, setCurrent, t, accData,ccData } = props
+    return (
+        <>
+            <CFormGroup row style={{  height:15}}>
+                <CCol sm="1">
+                    <CLabel size="sm" htmlFor="input-small">{t('financials.id')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm" type="text" id="id" name="id" className="input-sm" placeholder={t('financials.id')}
+                             value= {current.tid}  />
+                </CCol>
+                <CCol sm="4"/>
+                <CCol sm="1">
+                    <CLabel size="sm" htmlFor="input-small" style={{padding:2}}>{t('financials.postingdate')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                    <CInput  bsSize="sm"  type="text"  id="postingdate-id" name="postingdate" className="input-sm"
+                             placeholder={t('financials.postingdate')} value={dateFormat(current.postingdate, "dd mm yy")}
+                             style={{'text-align':'right', 'padding-left':400,'padding-right':0, padding:2 }}/>
+                </CCol>
+                <CCol sm="1">
+                    <CLabel size="sm" htmlFor="input-small" style={{  'padding-right':1 }}>{t('financials.period')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                    <CInput  bsSize="sm" className="input-sm" type="text" id="period" name="period" value={current.period}
+                             style={{'text-align':'right',padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="1">
+                    <CLabel size="sm" htmlFor="input-small">{t('financials.oid')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput disabled={current.posted} bsSize="sm" type="text" id="oid-input" name="oid" className="input-sm"
+                            placeholder="o" value={current.oid} onChange={(event)  =>
+                        setCurrent({ ...current, oid: event.target.value})} />
+                </CCol>
+                <CCol sm="4"/>
+                <CCol sm="1">
+                    <CLabel size="sm" htmlFor="input-small" style={{ padding:2 }}>{t('financials.enterdate')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                    <CInput  bsSize="sm"  type="text"  id="enterdate-id" name="enterdate" className="input-sm"
+                             placeholder="enterdate" value={dateFormat(current.enterdate, "dd.mm.yy")}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+                <CCol sm="1">
+                    <CLabel size="sm" htmlFor="input-small" style={{  padding:2 }}>{t('common.company')}</CLabel>
+                </CCol>
+                <CCol sm="1">
+                    <CInput  bsSize="sm" type="text" id="company-input" name="company" className="input-sm"
+                             placeholder={t('common.company')} value={current.company}  style={{'text-align':'right',  padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="1">
+                    <CLabel size="sm" htmlFor="input-small">{t('financials.account')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CSelect  disabled={current.posted} className ="input-sm" type="select" name="account" id="account-id"
+                              value={current.account} onChange={(event)  =>
+                        setCurrent({ ...current, account: event.target.value})} style={{ height:30}}>
+                        {accData.hits.map(item => mappingSelect(item))};
+                    </CSelect>
+                </CCol>
+                <CCol sm="3">
+                    <CSelect disabled={current.posted} className ="input-sm" type="select" name="account2" id="account2-id"
+                             value={current.account} onChange={(event)  =>
+                        setCurrent({ ...current, account: event.target.value})} style={{ height:30}}>
+                        {accData.hits.map(item => mappingSelectName(item))};
+                    </CSelect>
+                </CCol>
+
+                <CCol sm="2" style={{'text-align':'right', 'padding-left':10, padding:1 }}>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                            disabled ={current.posted}
+                            disableToolbar
+                            fullWidth
+                            variant="inline"
+                            format="dd.MM.yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label={t('financials.transdate')}
+                            value={current.transdate}
+                            onChange={(event) => { console.log('datedate',event.target.value)}}
+                            KeyboardButtonProps = {{
+                                'aria-label': t('financials.transdate'),
+                            }}
+                        />
+                    </MuiPickersUtilsProvider>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{ 'padding-bottom':30, height:15 }}>
+                <CCol sm="1">
+                    <CLabel size="sm" htmlFor="input-small">{t('financials.costcenter')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CSelect disabled={current.posted} className ="input-sm" type="select" name="costcenter" id="costcenter-id"
+                             value={current.costcenter}  onChange={(event)  =>
+                        setCurrent({ ...current, costcenter: event.target.value})} style={{ height:30}}>
+                        {ccData.hits.map(item => mappingSelect(item))};
+
+                    </CSelect>
+                </CCol>
+                <CCol sm="3">
+                    <CSelect disabled={current.posted}  className ="input-sm" type="select" name="costcenter2" id="costcenter2-id"
+                             value={current.costcenter} onChange={(event)  =>
+                        setCurrent({ ...current, costcenter: event.target.value})} style={{ height:30}}>
+                        {ccData.hits.map(item => mappingSelectName(item))};
+
+                    </CSelect>
+                </CCol>
+                <CCol sm="1">
+                    <FormControlLabel id="posted" name="posted" control={<Switch checked={current.posted} />} label={t('financials.posted')}/>
+                </CCol>
+            </CFormGroup>
+        </>
+    )}
+
 export const JournalMainForm =(props) => {
     const {current, setCurrent, t, accData, submitQuery } = props
     return (

@@ -1,30 +1,24 @@
 import React, {useEffect, useState, useContext, createRef} from 'react'
-import {CBadge, CCollapse, CCol, CForm, CLabel, CFormGroup, CInput, CSelect, CButton} from '@coreui/react'
-import { IoMdMenu} from "react-icons/io";
-import {dateFormat} from '../../../utils/utils';
+import { CInput} from '@coreui/react'
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-
 import "react-datepicker/dist/react-datepicker.css";
 import Grid from "react-fast-grid";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-  faAngleDoubleDown,
-  faAngleDoubleUp,
-  faPlusCircle,
-  faPlusSquare,
-  faSave
-} from "@fortawesome/free-solid-svg-icons";
 import EditableTable from "../../Tables2/EditableTable";
-import {rowStyle, theme} from "../Tree/BasicTreeTableProps";
-import {Options, OptionsM, columnsF, Linescolumns, styles, filter} from '../../Tables2/LineFinancialsProps'
+import {rowStyle, styles, theme} from "../Tree/BasicTreeTableProps";
+import {
+  Options,
+  OptionsM,
+  columnsF,
+  Linescolumns,
+  filter,
+  FinancialsFormHead, FormFactory
+} from '../../Tables2/LineFinancialsProps'
+import {formEnum} from "../../../utils/FORMS";
+import blue from "@material-ui/core/colors/blue";
 const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
-  const [fmodule, setFmodule] = useState('');
+  const [module, setModule] = useState('');
   const value = useContext(accountContext);
   const t = value.t
   const [url,] = useState('');
@@ -85,7 +79,7 @@ const FinancialsForm = () => {
   const handleModuleChange = event => {
     event.preventDefault();
     const value = event.target.value
-    setFmodule(value);
+    setModule(value);
     submitQuery(event, value);
   };
 
@@ -200,180 +194,34 @@ const addRow = (newData) =>{
 
   function buildForm( current){
     const lines_=()=>current.lines&&current.lines.length >0 ? current.lines:[value.initialState.hits[0].lines[0]];
+    const LinesFinancials = () =>  (<>
+      <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()} columns={columnsX} editable={editable()}
+                     rowStyle={rowStyle} selected ={[-1]} theme={theme} t={t}  tableRef={tableRef} edit ={null}
+      />
+      <CInput disabled={current.posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
+              placeholder="text" value={current.text} onChange={(event)  =>
+          setCurrent({ ...current, text: event.target.value})} />
+       </>
+      )
+
     return <>
-      <Grid container spacing={2}  direction="column" style={{...styles.outer}}>
-         <CForm  className="form-horizontal"  style={{padding:0}}  onSubmit={ current.editing?submitEdit:submitAdd}>
-             <Grid container justify="space-between">
-               <Grid container xs spacing={1} justify="flex-start">
-                 <Grid item justify="center" alignItems="center">
-                   <IoMdMenu />
-                 </Grid>
-                 <Grid item><h5><CBadge color="primary">{value.title}</CBadge></h5></Grid>
-               </Grid>
-               <Grid item justify="flex-end" alignItems="center">
-                 <CSelect className ="input-sm" type="select" name="module" id="module-id"
-                        value={fmodule}  onChange ={handleModuleChange} style={{ height: 30, padding:1, align: 'right' }}>
-                   <option value={fmodule} selected >{fmodule}</option>
-                   {modules.map(item => mapping(item))};
-                 </CSelect>
-                 <div className="card-header-actions" style={{  align: 'right' }}>
-                   <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
-                     <FontAwesomeIcon icon={faPlusCircle} />
-                   </CButton>
-                 </div>
-                 <div className="card-header-actions" style={{  align: 'right' }}>
-                   <CButton color="link" className="card-header-action btn-minimize" onClick={onNewLine}>
-                     <FontAwesomeIcon icon={faPlusCircle} />
-                   </CButton>
-                 </div>
-                 <div className="card-header-actions" style={{  align: 'right' }}>
-                   <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                     <FontAwesomeIcon icon={faPlusSquare} />
-                   </CButton>
-                 </div>
-                 <div className="card-header-actions" style={{  align: 'right' }}>
-                   <CButton color="link" className="card-header-action btn-minimize" onClick={(event) => submitEdit(event)}>
-                     <FontAwesomeIcon icon={faSave} />
-                   </CButton>
-                 </div>
-                 <div className="card-header-actions" style={{  align: 'right' }}>
-                   <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                     <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
-                   </CButton>
-                 </div>
-               </Grid>
-             </Grid>
 
-            <CCollapse show={state.collapse} id="FScollapse" style={{'min-height':200}}>
-              <CFormGroup row style={{  height:15}}>
-                <CCol sm="1">
-                  <CLabel size="sm" htmlFor="input-small">{t('financials.id')}</CLabel>
-                </CCol>
-                <CCol sm="2">
-                  <CInput  bsSize="sm" type="text" id="id" name="id" className="input-sm" placeholder={t('financials.id')}
-                         value= {current.tid}  />
-                </CCol>
-                <CCol sm="4"/>
-                <CCol sm="1">
-                  <CLabel size="sm" htmlFor="input-small" style={{padding:2}}>{t('financials.postingdate')}</CLabel>
-                </CCol>
-                <CCol sm="1">
-                  <CInput  bsSize="sm"  type="text"  id="postingdate-id" name="postingdate" className="input-sm"
-                         placeholder={t('financials.postingdate')} value={dateFormat(current.postingdate, "dd mm yy")}
-                         style={{'text-align':'right', 'padding-left':400,'padding-right':0, padding:2 }}/>
-                </CCol>
-                  <CCol sm="1">
-                  <CLabel size="sm" htmlFor="input-small" style={{  'padding-right':1 }}>{t('financials.period')}</CLabel>
-                </CCol>
-                <CCol sm="1">
-                  <CInput  bsSize="sm" className="input-sm" type="text" id="period" name="period" value={current.period}
-                         style={{'text-align':'right',padding:2 }}/>
-                </CCol>
-              </CFormGroup>
-              <CFormGroup row style={{  height:15 }}>
-                <CCol sm="1">
-                  <CLabel size="sm" htmlFor="input-small">{t('financials.oid')}</CLabel>
-                </CCol>
-                <CCol sm="2">
-                  <CInput disabled={current.posted} bsSize="sm" type="text" id="oid-input" name="oid" className="input-sm"
-                         placeholder="o" value={current.oid} onChange={(event)  =>
-                        setCurrent({ ...current, oid: event.target.value})} />
-                </CCol>
-                <CCol sm="4"/>
-                <CCol sm="1">
-                  <CLabel size="sm" htmlFor="input-small" style={{ padding:2 }}>{t('financials.enterdate')}</CLabel>
-                </CCol>
-                <CCol sm="1">
-                  <CInput  bsSize="sm"  type="text"  id="enterdate-id" name="enterdate" className="input-sm"
-                         placeholder="enterdate" value={dateFormat(current.enterdate, "dd.mm.yy")}
-                         style={{'text-align':'right', padding:2 }}/>
-                </CCol>
-                <CCol sm="1">
-                  <CLabel size="sm" htmlFor="input-small" style={{  padding:2 }}>{t('common.company')}</CLabel>
-                </CCol>
-                <CCol sm="1">
-                  <CInput  bsSize="sm" type="text" id="company-input" name="company" className="input-sm"
-                         placeholder={t('common.company')} value={current.company}  style={{'text-align':'right',  padding:2 }}/>
-                </CCol>
-              </CFormGroup>
-              <CFormGroup row style={{  height:15 }}>
-                <CCol sm="1">
-                  <CLabel size="sm" htmlFor="input-small">{t('financials.account')}</CLabel>
-                </CCol>
-                <CCol sm="2">
-                <CSelect  disabled={current.posted} className ="input-sm" type="select" name="account" id="account-id"
-                       value={current.account} onChange={(event)  =>
-                  setCurrent({ ...current, account: event.target.value})} style={{ height:30}}>
-                  {accData.hits.map(item => mapping(item))};
-                </CSelect>
-                </CCol>
-                <CCol sm="3">
-                  <CSelect disabled={current.posted} className ="input-sm" type="select" name="account2" id="account2-id"
-                         value={current.account} onChange={(event)  =>
-                      setCurrent({ ...current, account: event.target.value})} style={{ height:30}}>
-                    {accData.hits.map(item => mapping2(item))};
-                  </CSelect>
-                </CCol>
-
-                <CCol sm="2" style={{'text-align':'right', 'padding-left':10, padding:1 }}>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                        disabled ={current.posted}
-                        disableToolbar
-                        fullWidth
-                        variant="inline"
-                        format="dd.MM.yyyy"
-                        margin="normal"
-                        id="date-picker-inline"
-                        label={t('financials.transdate')}
-                        value={current.transdate}
-                        onChange={(event) => { console.log('datedate',event.target.value)}}
-                        KeyboardButtonProps = {{
-                          'aria-label': t('financials.transdate'),
-                        }}
-                    />
-                  </MuiPickersUtilsProvider>
-                </CCol>
-              </CFormGroup>
-              <CFormGroup row style={{ 'padding-bottom':30, height:15 }}>
-                <CCol sm="1">
-                  <CLabel size="sm" htmlFor="input-small">{t('financials.costcenter')}</CLabel>
-                </CCol>
-                <CCol sm="2">
-                  <CSelect disabled={current.posted} className ="input-sm" type="select" name="costcenter" id="costcenter-id"
-                         value={current.costcenter}  onChange={(event)  =>
-                         setCurrent({ ...current, costcenter: event.target.value})} style={{ height:30}}>
-                    {ccData.hits.map(item => mapping(item))};
-
-                  </CSelect>
-                </CCol>
-                <CCol sm="3">
-                  <CSelect disabled={current.posted}  className ="input-sm" type="select" name="costcenter2" id="costcenter2-id"
-                         value={current.costcenter} onChange={(event)  =>
-                      setCurrent({ ...current, costcenter: event.target.value})} style={{ height:30}}>
-                    {ccData.hits.map(item => mapping2(item))};
-
-                  </CSelect>
-                </CCol>
-                <CCol sm="1">
-                  <FormControlLabel id="posted" name="posted" control={<Switch checked={current.posted} />} label={t('financials.posted')}/>
-                </CCol>
-              </CFormGroup>
-              <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()} columns={columnsX} editable={editable()}
-                                rowStyle={rowStyle} selected ={[-1]} theme={theme} t={t}  tableRef={tableRef} edit ={null}
-                             />
-               <CInput disabled={current.posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
-                           placeholder="text" value={current.text} onChange={(event)  =>
-                   setCurrent({ ...current, text: event.target.value})} />
-
-
-          </CCollapse>
-        </CForm>
-        <EditableTable id="MTable" Options ={{...OptionsM, toolbar:toolbar}} flag={current.posted} data={getFilteredRows()} columns={columns}
-                         rowStyle={rowStyle} selected ={[-1]} theme={theme} t={t}   edit ={edit} style={{'padding-top':20, height: 50}}/>
+      <Grid container spacing={2} style={{...styles.outer }} direction="column" >
+        <FinancialsFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd}
+                        setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
+                        initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
+                        module ={module}  modules ={modules} handleModuleChange={handleModuleChange}
+                        submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
+        <FormFactory formid ={formEnum.FINANCIALS} current={current} setCurrent={setCurrent} t={t} accData={accData}
+                     ccData={ccData} collapse={state.collapse} styles={styles}  table={LinesFinancials} onNewLine={onNewLine}/>
+        <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+          <EditableTable Options={{...OptionsM, toolbar:toolbar}} flag={current.posted} data={getFilteredRows()}
+                         columns={columns} rowStyle={rowStyle}  theme={theme} t={t}  edit ={edit}
+                         style={{'padding-top':20, height: 50}}/>
+        </Grid>
       </Grid>
+    </>
 
-   </>
   }
 
   return buildForm( current);
