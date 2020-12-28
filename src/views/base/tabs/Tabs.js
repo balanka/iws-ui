@@ -5,8 +5,11 @@ import {setDefaultLocale} from "react-datepicker";
 import {CrudAccount} from "../Components/CrudAccount";
 import {currencyFormatDE, dateFormat} from "../../../utils/utils";
 import Login from "../../pages/login/Login";
-
+//`
 const Tabs = () => {
+   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+    console.log('process.env', process.env);
+   console.log('SERVER_URL', SERVER_URL);
   const [active, setActive] = useState(1)
   const { t, i18n } = useTranslation();
   const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
@@ -28,7 +31,7 @@ const Tabs = () => {
   const initAcc = {hits:[{id:'', name: '', description: '', enterdate:date, postingdate:date
       , changedate:date, company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false, currency:''
       , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0 }]}
-  const initbank = { hits:[ {id:'', name: '', description: '', enterdate:date, postingdate:date
+  const initBank = { hits:[ {id:'', name: '', description: '', enterdate:date, postingdate:date
       , changedate:date, modelid:11, account:'-1', company:''}]}
   const initCC = { hits:[ {id:'', name: '', description: '', enterdate:new Date().toISOString()
           , postingdate:new Date().toISOString(),changedate:new Date().toISOString()
@@ -101,6 +104,26 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
     , {id:'postingdate', label:t('account.postingdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
     , {id:'changedate', label:t('account.changedate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
     ]}
+
+    const modules =[
+        , {id:1, name:"Supplier", ctx:"/sup", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/1", form:"customerForm"
+            , state:initSup, state1:initAcc ,state2:initVat}
+        , {id:3, name:"Customer", ctx:"/cust", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/4", form:"customerForm"
+        , state:initCust, state1:initAcc ,state2:initVat}
+        , {id:6, name:"CostCenter", ctx:"/cc", ctx1:"/acc/accmd/9", get:"md/6", form:"costCenterForm"
+        , state:initCC, state1:initAcc ,state2:''}
+        , {id:9, name:"Account", ctx:"/acc", ctx1:"/acc/accmd/9", get:"md/9", form:"accountForm"
+            , state:initCC, state1:initAcc ,state2:''}
+        , {id:11, name:"Bank", ctx:"/bank", ctx1:"/acc", ctx2:"", get:"md/11", form:"costCenterForm"
+            , state:initBank, state1:initAcc ,state2:''}
+        , {id:14, name:"Vat", ctx:"/vat", ctx1:"/acc/accmd/9", ctx2:"", get:"md/14", form:"vatForm"
+            , state:initVat, state1:initAcc ,state2:''}
+        , {id:18, name:"Bankstatement", ctx:"/bs", ctx1:"/acc/accmd/9", ctx2:"", get:"md/18", form:"bankStmtForm"
+            , state:initBS, state1:initAcc ,state2:''}
+        , {id:112, name:"Journal", ctx:"/jou", ctx1:"/acc/accmd/9", ctx2:"", get:"md/112", form:"journalForm"
+            , state:initJour, state1:initAcc,state2:''   }
+
+    ]
 
     return (
     <CRow>
@@ -180,7 +203,7 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
                 <Login/>
                </CTabPane>
                 <CTabPane>
-                  <CrudAccount url ="http://127.0.0.1:8080/cc" get="md/6" accUrl="http://127.0.0.1:8080/acc/accmd/9"
+                  <CrudAccount url ={SERVER_URL.concat('/cc')} get="md/6" accUrl="http://127.0.0.1:8080/acc/accmd/9"
                                initialState={initCC}
                                initAcc={initAcc}
                                title       = {t('costcenter.title')}
@@ -188,21 +211,21 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
 
                 </CTabPane>
                 <CTabPane>
-                  <CrudAccount url ="http://127.0.0.1:8080/acc" get="md/9" accUrl="http://127.0.0.1:8080/acc/accmd/9"
+                  <CrudAccount url ={SERVER_URL.concat('/acc')} get="md/9" accUrl="http://127.0.0.1:8080/acc/accmd/9"
                                initialState={initAcc}
                                initAcc={initAcc}
                                title       = {t('account.title')}
                                form        = 'accountForm'/>
                 </CTabPane>
                 <CTabPane>
-                  <CrudAccount url ="http://127.0.0.1:8080/vat" get="md/14" accUrl="http://127.0.0.1:8080/acc/accmd/9"
+                  <CrudAccount url ={SERVER_URL.concat('/vat')} get="md/14" accUrl="http://127.0.0.1:8080/acc/accmd/9"
                                initialState={initVat}
                                initAcc={initAcc}
                                title       = {t('vat.title')}
                                form        = 'vatForm'/>
                 </CTabPane>
                 <CTabPane>
-                  <CrudAccount url ="http://127.0.0.1:8080/cust" get="md/3" accUrl="http://127.0.0.1:8080/acc/accmd/9"
+                  <CrudAccount url ={SERVER_URL.concat('/cust')} get="md/3" accUrl="http://127.0.0.1:8080/acc/accmd/9"
                                ccUrl="http://127.0.0.1:8080/vat"
                                initialState={initCust}
                                initAcc={initAcc}
@@ -211,7 +234,7 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
                                form        = 'customerForm'/>
                 </CTabPane>
                 <CTabPane>
-                  <CrudAccount url ="http://127.0.0.1:8080/sup" get="md/3" accUrl="http://127.0.0.1:8080/acc/accmd/9"
+                  <CrudAccount url ={SERVER_URL.concat('/sup')} get="md/1" accUrl="http://127.0.0.1:8080/acc/accmd/9"
                                ccUrl="http://127.0.0.1:8080/vat"
                                initialState={initSup}
                                initAcc={initAcc}
@@ -220,8 +243,8 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
                                form        = 'supplierForm'/>
                 </CTabPane>
                 <CTabPane>
-                  <CrudAccount url ="http://127.0.0.1:8080/bank" get="md/11" accUrl="http://127.0.0.1:8080/acc/accmd/9"
-                               initialState={initbank}
+                  <CrudAccount url ={SERVER_URL.concat('/bank')} get="md/11" accUrl="http://127.0.0.1:8080/acc/accmd/9"
+                               initialState={initBank}
                                initAcc={initAcc}
                                title       = {t('bank.title')}
                                form        = 'costCenterForm'/>
