@@ -30,8 +30,10 @@ const Tabs = () => {
       , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0 }]}
   const initbank = { hits:[ {id:'', name: '', description: '', enterdate:date, postingdate:date
       , changedate:date, modelid:11, account:'-1', company:''}]}
-  const initCC = { hits:[ {id:'', name: '', description: '', enterdate:date, postingdate:date
-      , changedate:date, modelid:6, account:'-1', company:''}]}
+  const initCC = { hits:[ {id:'', name: '', description: '', enterdate:new Date().toISOString()
+          , postingdate:new Date().toISOString(),changedate:new Date().toISOString()
+          , modelid:6, account:'-1', company:''}]}
+
   const initVat={ hits:[{ id:'', name:'', description:'', percent:'', inputVatAccount:'', outputVatAccount:''
       , enterdate:date, postingdate:date, changedate:date, company:'', modelid:14}]}
 
@@ -81,7 +83,7 @@ const Tabs = () => {
 const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''
             , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]}
 
- const treeHeaders = {h:[{ title:t('account.id'), field: 'id' }
+const treeHeaders = {h:[{ title:t('account.id'), field: 'id' }
             ,  { title:t('account.name'), field: 'name' }
             ,  { title:t('account.account'), field: 'account' }
             ,  { title:t('balancesheet.idebit'), field: 'idebit', type: 'numeric', minWidth:3 }
@@ -157,17 +159,17 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
                     {t('bankstatement.title')}
                   </CNavLink>
                 </CNavItem>
-                  <CNavItem>
+                <CNavItem>
                       <CNavLink>
                           {t('financials.title')}
                       </CNavLink>
                   </CNavItem>
-                  <CNavItem>
+                <CNavItem>
                       <CNavLink>
                           {t('pac.title')}
                       </CNavLink>
                   </CNavItem>
-                  <CNavItem>
+                <CNavItem>
                       <CNavLink>
                           {t('common.title')}
                       </CNavLink>
@@ -179,115 +181,50 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
                </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/cc" get="md/6" accUrl="http://127.0.0.1:8080/acc/accmd/9"
-                               headers = {[{id:'id', label:t('costcenter.id'), minWidth: 5}, {id:'name', label:t('costcenter.name'), minWidth: 10},
-                                 {id:'description', label:t('costcenter.description'), minWidth: 15},
-                                 , {id:'enterdate', label:t('costcenter.enterdate'), minWidth: 5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'postingdate', label:t('costcenter.postingdate'), minWidth: 5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")},
-                                 ,  {id:'changedate', label:t('costcenter.changedate'), minWidth: 5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 ,  {id:'modelid', label:'MId', minWidth: 2, format: (value) => value.toLocaleString('de-DE')},
-                                 ,  {id:'account', label:t('costcenter.account'), minWidth: 5}
-                                 , {id:'company', label:t('common.company'), minWidth: 2, format: (value) => value.toLocaleString('de-DE')}]}
-
                                initialState={initCC}
                                initAcc={initAcc}
-                               addLabel    = "Add Cost center"
-                               updateLabel ="Edit Cost center"
                                title       = {t('costcenter.title')}
-                               form        = 'costCenterForm'>
-                  </CrudAccount>
+                               form        = 'costCenterForm'/>
+
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/acc" get="md/9" accUrl="http://127.0.0.1:8080/acc/accmd/9"
-                               headers = {accHeaders.h}
                                initialState={initAcc}
                                initAcc={initAcc}
-                               addLabel    = "Add Account"
-                               updateLabel = "Edit Account"
                                title       = {t('account.title')}
-                               form        = 'accountForm'>
-                  </CrudAccount>
+                               form        = 'accountForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/vat" get="md/14" accUrl="http://127.0.0.1:8080/acc/accmd/9"
-                               headers = {[{id:'id', label:t('vat.id')}, {id:'name', label:t('vat.name')}, {id:'description', label:t('vat.description')}
-                                 , {id:'percent', label:t('vat.percent')}, {id:'inputVatAccount', label:t('vat.input_account')}, {id:'outputVatAccount', label:t('vat.output_account')}
-                                 , {id:'enterdate', label:t('vat.enterdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'postingdate', label:t('vat.postingdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'changedate', label:t('vat.changedate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'company', label:t('common.company')}, {id:'modelid', label:'M.Id'}]}
                                initialState={initVat}
                                initAcc={initAcc}
-                               addLabel    = "Add Vat"
-                               updateLabel = "Edit Vat"
                                title       = {t('vat.title')}
-                               form        = 'vatForm'>
-                  </CrudAccount>
+                               form        = 'vatForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/cust" get="md/3" accUrl="http://127.0.0.1:8080/acc/accmd/9"
                                ccUrl="http://127.0.0.1:8080/vat"
-                               headers = {[{id:'id', label:t('customer.id'), minWidth: 1}, {id:'name', label:t('customer.name'), minWidth: 8}
-                                 , {id:'description', label:t('customer.description'), minWidth:8}, {id:'street', label:t('customer.street'), minWidth: 15}
-                                 , {id:'zip', label:t('customer.zip'), minWidth:1}, {id:'country', label:t('customer.country'), minWidth:1}
-                                 , {id:'phone', label:t('customer.phone'), minWidth:2}, {id:'email', label:t('customer.email'), minWidth: 1}
-                                 , {id:'account', label:t('customer.account'), minWidth:2}, {id:'oaccount', label:t('customer.oaccount'), minWidth:2}
-                                 , {id:'iban', label:t('customer.iban'), minWidth: 2}, {id:'vatcode', label:t('customer.vat'), minWidth:1, disablePadding: true}
-                                 , {id:'enterdate', label:t('customer.enterdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'postingdate', label:t('customer.postingdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'changedate', label:t('customer.changedate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'modelid', label:'M.Id', minWidth:1, disablePadding: true}, {id:'company', label:t('common.company')
-                                   , minWidth:1, disablePadding: true}]}
-
                                initialState={initCust}
                                initAcc={initAcc}
                                initCc={initVat}
-                               addLabel    = "Add Customer"
-                               updateLabel = "Edit Customer"
                                title       = {t('customer.title')}
-                               form        = 'customerForm'>
-                  </CrudAccount>
+                               form        = 'customerForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/sup" get="md/3" accUrl="http://127.0.0.1:8080/acc/accmd/9"
                                ccUrl="http://127.0.0.1:8080/vat"
-                               headers = {[{id:'id', label:t('supplier.id'), minWidth: 1}, {id:'name', label:t('supplier.name'), minWidth: 8}
-                                 , {id:'description', label:t('supplier.description'), minWidth:8}, {id:'street', label:t('supplier.street'), minWidth: 15}
-                                 , {id:'zip', label:t('supplier.zip'), minWidth:1}, {id:'city', label:t('supplier.city'), minWidth:1}
-                                 , {id:'country', label:t('supplier.country'), minWidth:1}
-                                 , {id:'phone', label:t('supplier.phone'), minWidth:2}, {id:'email', label:t('supplier.email'), minWidth: 1}
-                                 , {id:'account', label:t('customer.account'), minWidth:2}, {id:'oaccount', label:t('supplier.oaccount'), minWidth:2}
-                                 , {id:'iban', label:t('supplier.iban'), minWidth: 2}, {id:'vatcode', label:t('supplier.vat'), minWidth:1, disablePadding: true}
-                                 , {id:'enterdate', label:t('supplier.enterdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'postingdate', label:t('supplier.postingdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'changedate', label:t('supplier.changedate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'modelid', label:'M.Id', minWidth:1, disablePadding: true}, {id:'company', label:t('common.company')
-                                   , minWidth:1, disablePadding: true}]}
-
                                initialState={initSup}
                                initAcc={initAcc}
                                initCc={initVat}
-                               addLabel    = "Add Customer"
-                               updateLabel = "Edit Customer"
                                title       = {t('supplier.title')}
-                               form        = 'supplierForm'>
-                  </CrudAccount>
+                               form        = 'supplierForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/bank" get="md/11" accUrl="http://127.0.0.1:8080/acc/accmd/9"
-                               headers = {[{id:'id', label:t('bank.id'), minWidth: 5}, {id:'name', label:t('bank.name'), minWidth: 10},
-                                 {id:'description', label:t('bank.description'), minWidth: 15},
-                                 , {id:'enterdate', label:t('bank.enterdate'), minWidth: 5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'postingdate', label:t('bank.postingdate'), minWidth: 5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")},
-                                 ,  {id:'changedate', label:t('bank.changedate'), minWidth: 5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 ,  {id:'modelid', label:'MId', minWidth: 2, format: (value) => value.toLocaleString('de-DE')}
-                                 , {id:'company', label:t('common.company'), minWidth: 2, format: (value) => value.toLocaleString('de-DE')}]}
                                initialState={initbank}
                                initAcc={initAcc}
-                               addLabel    = "Add Bank"
-                               updateLabel ="Edit Bank"
                                title       = {t('bank.title')}
-                               form        = 'costCenterForm'>
-                  </CrudAccount>
+                               form        = 'costCenterForm'/>
                 </CTabPane>
                 <CTabPane >
                   <CrudAccount url ="http://127.0.0.1:8080/acc/balance" get="md/9" accUrl="http://127.0.0.1:8080/acc"
@@ -303,13 +240,9 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
 
                                initialState={initBalanceSheet}
                                initAcc={initAcc}
-                               addLabel    = "Add Balancesheet"
-                               updateLabel = "Edt Balancesheet"
                                title       = {t('balancesheet.title')}
-                               form        = 'balancesheetForm'>
-                  </CrudAccount>
+                               form        = 'balancesheetForm'/>
                 </CTabPane>
-
                 <CTabPane>
                   <CrudAccount  url ="http://127.0.0.1:8080/jou" get="md/112" accUrl="http://127.0.0.1:8080/acc"
                                 headers = {[ {id:'id', label:t('journal.id'), minWidth:2, numeric:true }, {id:'transid', label:t('journal.transid'), minWidth:1, numeric:true }
@@ -332,65 +265,25 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
 
                                 initialState={initJour}
                                 initAcc={initAcc}
-                                addLabel    = "Add Journal"
-                                updateLabel = "Edit Journal"
                                 title       = {t('journal.title')}
-                                form        = 'journalForm'>
-                  </CrudAccount>
+                                form        = 'journalForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/bs" get="md/18" accUrl="http://127.0.0.1:8080/acc"
-                               headers = {[{id:'id', label:t('bankstatement.id'), numeric:true, minWidth:1}, {id:'depositor', label:t('bankstatement.depositor'), minWidth:1}
-                                 , {id:'postingdate', label:t('bankstatement.postingdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'valuedate', label:t('bankstatement.valuedate') , minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                 , {id:'postingtext', label:t('bankstatement.postingtext'), minWidth:10}, {id:'purpose', label:t('bankstatement.purpose'), minWidth:180}
-                                 , {id:'beneficiary', label:t('bankstatement.beneficiary'), minWidth:2}, {id:'accountno', label:t('bankstatement.accountno'), minWidth:2}
-                                 , {id:'bankCode', label:t('bankstatement.bankCode'), minWidth:1}, {id:'amount', label:t('bankstatement.amount'), numeric:true
-                                   , format:(value) => currencyFormatDE(Number(value)), minWidth:2}
-                                 , {id:'currency', label:t('common.currency'), minWidth:1}, {id:'info', label:t('bankstatement.info'), minWidth:30}
-                                 , {id:'company', label:t('common.company')}, {id:'companyIban', label:t('bankstatement.companyIban'), minWidth:2}
-                                 , {id:'posted', label:t('bankstatement.posted'), numeric:true, format:(value) => String(value), minWidth:1}]}
                                initialState={initBS}
                                initAcc={initAcc}
-                               addLabel    = "Add Bank statement"
-                               updateLabel = "Edit Bank statement"
                                title       = {t('bankstatement.title')}
-                               form        = 'bankStmtForm'>
-                  </CrudAccount>
+                               form        = 'bankStmtForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/ftr" get="md/112" accUrl="http://127.0.0.1:8080/acc"
                                ccUrl="http://127.0.0.1:8080/cc"
-                               headers = {[{id:'tid', label:t('financials.id'), numeric: false, disablePadding: true, minWidth:1, format:(value) => value}
-                                   , {id:'oid', label:t('financials.oid'), numeric:false, disablePadding: true, minWidth:1, format:(value) => value}
-                                   ,  {id:'costcenter', label:t('financials.costcenter'), numeric:false, disablePadding: false, minWidth:2}
-                                   , {id:'account', label:t('financials.account'), numeric:false, disablePadding: false, minWidth:2}
-                                   , {id:'transdate', label:t('financials.transdate'), numeric:true, disablePadding: false, minWidth:1, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                   , {id:'enterdate', label:t('financials.enterdate'), numeric:true, disablePadding: false, minWidth:1, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                   , {id:'postingdate', label:t('financials.postingdate'), numeric:true, disablePadding: false, minWidth:2, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                   , {id:'period', label:t('financials.period'), numeric:true, disablePadding: false, minWidth:2, format:(value) => value}
-                                   , {id:'posted', label:t('financials.posted'), numeric:true, disablePadding: false, minWidth:1, format:(value) => String(value)}
-                                   , {id:'total', label:t('common.total'), numeric:true, disablePadding: false, minWidth:1, format:(value) => currencyFormatDE(Number(value))}
-                                   , {id:'text', label:t('financials.text'), numeric:false, disablePadding: false, minWidth:15}
-                                   , {id:'typeJournal', label:t('financials.type'), numeric:true, disablePadding: false, minWidth:1, format:(value) => value}
-                                   , {id:'modelid', label:t('common.modelid'), numeric:true, disablePadding: false, minWidth:1, format:(value) => value}
-                                   , {id:'company', label:t('common.company'), numeric:false, disablePadding: false, minWidth:2}
-                                   , {id:'file_content', label:'F.Content', numeric:true, disablePadding: true, minWidth:2, format:(value) => value}
-                                   , {id:'lines', title:[{id:'lid', title:t('financials.line.id')}
-                                           , {id:'account', title:t('financials.line.account')}, {id:'side', title:t('financials.line.side')}
-                                           , {name:'oaccount', title:t('financials.line.oaccount')}
-                                           , {name:'duedate', title:t('financials.line.duedate')}, {id:'text', title:t('financials.line.text')}
-                                           , {name:'amount', title:t('financials.line.amount')}, {id:'currency', title:t('common.currency')}
-                                           , {name:'Actions', title:'Actions'}]}]}
                                initialState={initFrt}
                                initAcc={initAcc}
                                initCc={initCC}
-                               addLabel    = "Add Financials"
-                               updateLabel = "Edit Financials"
                                title       =  {t('financials.title')}
                                lineTitle   = {t('financials.line.title')}
-                               form        = 'financialsForm'>
-                  </CrudAccount>
+                               form        = 'financialsForm'/>
               </CTabPane>
                   <CTabPane>
                       <CrudAccount url ="http://127.0.0.1:8080/pac" get="md/106" accUrl="http://127.0.0.1:8080/acc"
@@ -404,22 +297,16 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
                                    ]}
                                    initialState={initPac}
                                    initAcc={initAcc}
-                                   addLabel    = "Add PACB"
-                                   updateLabel = "Submit"
                                    title       = {t('pac.title')}
-                                   form        = 'pacForm'>
-                      </CrudAccount>
+                                   form        = 'pacForm'/>
                   </CTabPane>
                   <CTabPane>
                       <CrudAccount url ="http://127.0.0.1:8080/acc" get="md/106" accUrl="http://127.0.0.1:8080/acc"
                                    headers = {treeHeaders.h}
                                    initialState={initAcc}
                                    initAcc={initAcc}
-                                   addLabel    = "Add PACB"
-                                   updateLabel = "Submit"
                                    title       = {t('common.title')}
-                                   form        = 'treeForm'>
-                      </CrudAccount>
+                                   form        = 'treeForm'/>
                   </CTabPane>
               </CTabContent>
             </CTabs>

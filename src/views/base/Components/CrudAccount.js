@@ -20,18 +20,18 @@ export  function CrudAccount  (props) {
 
   const renderComponent =(componentName)=> {
     const componentLookup = {
-      accountForm      : (<AccountForm/>),
-      costCenterForm   : (<CostCenterForm/>),
-      customerForm     : (<CustomerForm/>),
-      supplierForm     : (<CustomerForm/>),
-      bankStmtForm     : (<BankStatementForm/>),
-      vatForm          : (<VatForm/>),
-      pacForm          : (<PACBForm/>),
-      financialsForm   : (<FinancialsForm/>),
-      balancesheetForm : (<TreeTableForm/>),
-      journalForm      : (<JournalForm/>),
-      loginForm        : (<Login/>),
-      treeForm        : (<BasicTreeTable/>)
+      accountForm      : <AccountForm/>,
+      costCenterForm   : <CostCenterForm/>,
+      customerForm     : <CustomerForm/>,
+      supplierForm     : <CustomerForm/>,
+      bankStmtForm     : <BankStatementForm/>,
+      vatForm          : <VatForm/>,
+      pacForm          : <PACBForm/>,
+      financialsForm   : <FinancialsForm/>,
+      balancesheetForm : <TreeTableForm/>,
+      journalForm      : <JournalForm/>,
+      loginForm        : <Login/>,
+      treeForm        :  <BasicTreeTable/>
     };
     return (<Fragment>
            {componentLookup[componentName]}
