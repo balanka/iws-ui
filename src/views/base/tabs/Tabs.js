@@ -1,10 +1,11 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CCard, CCardBody, CTabs} from '@coreui/react'
 import {useTranslation} from "react-i18next";
 import {CrudAccount} from "../Components/CrudAccount";
 import Login from "../../pages/login/Login";
 import {currencyFormatDE, dateFormat} from "../../../utils/utils";
 import {createGlobalState} from "react-hooks-global-state";
+import {setDefaultLocale} from "react-datepicker";
 
 const initialState = {profile:{
         token:'noTOken'
@@ -96,9 +97,17 @@ export const Tabs = () => {
         , {id:1300, name:"BalanceTree", title:t('common.title'), ctx:"/acc", ctx1:"/acc", ctx2:"", get:"md/106"
             , form:"treeForm", state:initAcc, state1:initAcc, state2:'', columns:treeHeaders(t).h }
     ]
+  /*
+    const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
+    setDefaultLocale('de');
 
-    //const [active, setActive] = useState(1)
-    //const [state, setState] = useState({activeTab: new Array(1).fill('1')})
+    const toggle = (tabPane, tab) =>{
+        const newArray = state.activeTab.slice();
+        newArray[tabPane] = tab;
+        setState({activeTab: newArray,});
+    }
+   */
+
     //setDefaultLocale('de');
     const initAcc = {hits:[{id:'', name: '', description: '', enterdate:date, postingdate:date
             , changedate:date, company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false, currency:''
