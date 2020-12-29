@@ -148,7 +148,6 @@ export  function CrudAccount  (props) {
             <div className="flex-row">
                 <div className="flex-large">
                   <Fragment>
-                     {  console.log("propsT", props)};
                       {   renderComponent(props.form)}
                  </Fragment>
                 </div>

@@ -5,7 +5,6 @@ import {setDefaultLocale} from "react-datepicker";
 import {CrudAccount} from "../Components/CrudAccount";
 import Login from "../../pages/login/Login";
 import {currencyFormatDE, dateFormat} from "../../../utils/utils";
-import {accountContext} from "../Components/AccountContext";
 import {createGlobalState} from "react-hooks-global-state";
 
 const initialState = {profile:{
@@ -24,11 +23,11 @@ export const Tabs = () => {
     const date=new Date().toISOString()
     const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
     const pacHeaders =(t) => [ {id:'period', label:t('pac.period'), minWidth:1, numeric:true }
-        , { id: 'idebit', label:t('pac.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-        , { id: 'debit', label:t('pac.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-        , { id: 'icredit', label:t('pac.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-        , { id: 'credit', label:t('pac.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-        , { id: 'balance', label:t('pac.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'idebit', label:t('common.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'debit', label:t('common.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'icredit', label:t('common.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'credit', label:t('common.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'balance', label:t('common.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
         , { id: 'currency', label:t('common.currency'), minWidth:1}
     ]
     const JournalHeaders =(t) =>[ {id:'id', label:t('journal.id'), minWidth:2, numeric:true }, {id:'transid', label:t('journal.transid'), minWidth:1, numeric:true }
@@ -39,10 +38,10 @@ export const Tabs = () => {
         , {id: 'enterdate', label:t('journal.enterdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
         , {id: 'period', label:t('journal.period'), minWidth:1, numeric:true},
         , { id: 'amount', label: t('journal.amount'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-        , { id: 'idebit', label:t('journal.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-        , { id: 'debit', label: t('journal.debit'), minWidth:2,  numeric:true, format: (value) => currencyFormatDE(Number(value))}
-        , { id: 'icredit', label:t('journal.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-        , { id: 'credit', label:t('journal.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'idebit', label:t('common.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'debit', label: t('common.debit'), minWidth:2,  numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'icredit', label:t('common.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'credit', label:t('common.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
         , { id: 'side', label:t('journal.side'), numeric:true, format:(value) => String(value), minWidth:1}
         , { id: 'text', label:t('journal.text'), minWidth:15}, { id:'month', label:t('journal.month'), minWidth:1}
         , { id: 'year', label:t('journal.year'), minWidth:1}, { id:'company', label:t('common.company'), minWidth:1 }
@@ -50,39 +49,29 @@ export const Tabs = () => {
         , { id: 'modelid', label:t('common.modelid'), minWidth:1}]
 
     const balanceHeaders=(t) =>[ {id:'id', label:t('balancesheet.id'), minWidth:1}
-        , {id:'name', label:t('balancesheet.name'), minWidth:8}
-        , {id:'account', label:t('balancesheet.account')}
-        , { id: 'idebit', label: t('balancesheet.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-        , { id: 'debit', label: t('balancesheet.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-        , { id: 'icredit', label: t('balancesheet.icedit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-        , { id: 'credit', label:t('balancesheet.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-    ]
-   /* const treeHeaders=(t) =>[{ title:t('account.id'), field: 'id' }
-        ,  { title:t('account.name'), field: 'name' }
-        ,  { title:t('account.account'), field: 'account' }
-        ,  { title:t('balancesheet.idebit'), field: 'idebit', type: 'numeric', minWidth:3 }
-        ,  { title:t('balancesheet.debit'), field: 'debit' , type: 'numeric', minWidth:3}
-        ,  { title:t('balancesheet.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
-        ,  { title:t('balancesheet.credit'), field: 'credit' , type: 'numeric', minWidth:3}
-    ]
+        , {id:'name', title:t('balancesheet.name'), minWidth:8}
+        , {id:'account', title:t('balancesheet.account')}
+        , { id: 'idebit', title: t('common.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'debit', title: t('common.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'icredit', title: t('common.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'credit', title:t('common.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+        , { id: 'currency', label:t('common.currency'), minWidth:1}
+        ]
 
-    */
     const treeHeaders =(t) =>( {h:[{ title:t('account.id'), field: 'id' }
             ,  { title:t('account.name'), field: 'name' }
             ,  { title:t('account.account'), field: 'account' }
-            ,  { title:t('balancesheet.idebit'), field: 'idebit', type: 'numeric', minWidth:3 }
-            ,  { title:t('balancesheet.debit'), field: 'debit' , type: 'numeric', minWidth:3}
-            ,  { title:t('balancesheet.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
-            ,  { title:t('balancesheet.credit'), field: 'credit' , type: 'numeric', minWidth:3}
+            ,  { title:t('common.idebit'), field: 'idebit', type: 'numeric', minWidth:3 }
+            ,  { title:t('common.debit'), field: 'debit' , type: 'numeric', minWidth:3}
+            ,  { title:t('common.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
+            ,  { title:t('common.credit'), field: 'credit' , type: 'numeric', minWidth:3}
+            , { title: 'currency', label:t('common.currency'), minWidth:1}
         ]})
     const modules  = (t) =>[
         {id:0, name:'Login', title:t('login.title'), ctx:"/login", ctx1:"", get:""
         , ctx2:"/", form:'loginForm', state:initCC, state1:initAcc ,state2:'', columns:[]}
-        /*
         , {id:6, name:'CostCenter', title:t('costcenter.title'), ctx:"/cc", ctx1:"/acc/accmd/9", get:"md/6"
             , ctx2:"/", form:'costCenterForm', state:initCC, state1:initAcc ,state2:'', columns:[]}
-         */
-
         , {id:1, name:"Supplier", title:t('supplier.title'), ctx:"/sup", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/1"
             , form:'customerForm' , state:initSup, state1:initAcc ,state2:initVat, columns:[]}
         , {id:3, name:'Customer', title:t('customer.title'), ctx:"/cust", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/3"
@@ -103,13 +92,12 @@ export const Tabs = () => {
     , {id:1120, name:"Financials", title:t('financials.title'), ctx:"/ftr", ctx1:"/acc", ctx2:"/cc", get:"md/112"
         , form:'financialsForm', state:initFrt, state1:initAcc, state2:initCC }
 
-        //, {id:1000, name:"Balance", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", get:"md/112"
-       //     , form:"balancesheetForm", state:initBalanceSheet, state1:initAcc, state2:'', columns:balanceHeaders(t) }
-       // , {id:1300, name:"BalanceTree", title:t('balancesheet.title'), ctx:"/acc", ctx1:"/acc", ctx2:"", get:"md/106"
-       //     , form:"treeForm", state:initBalanceSheet, state1:initAcc, state2:'', columns:treeHeaders(t).h }
+        , {id:1000, name:"Balance", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", get:"md/112"
+            , form:"balancesheetForm", state:initBalanceSheet, state1:initAcc, state2:'', columns:balanceHeaders(t) }
+        , {id:1300, name:"BalanceTree", title:t('common.title'), ctx:"/acc", ctx1:"/acc", ctx2:"", get:"md/106"
+           , form:"treeForm", state:initAcc, state1:initAcc, state2:'', columns:treeHeaders(t).h }
     ]
-    console.log('process.env', process.env);
-    console.log('SERVER_URL', SERVER_URL);
+
     const [active, setActive] = useState(1)
     const [state, setState] = useState({activeTab: new Array(1).fill('1')})
     setDefaultLocale('de');
@@ -184,22 +172,21 @@ export const Tabs = () => {
         return  <>
         <CTabPane>
          <CrudAccount url={SERVER_URL.concat(module.ctx)} get={module.get} accUrl={SERVER_URL.concat(module.ctx1)}
-                        ccUrl={module.ctx2}
-                         initialState={module.state} initAcc={module.state1} initCc={module.state2} title={module.title}
-                         form={module.form} headers={module.columns}/>
+                        ccUrl={module.ctx2}  initialState={module.state} initAcc={module.state1} initCc={module.state2}
+                         title={module.title} form={module.form} headers={module.columns}/>
         </CTabPane>
        </>
        }
 
     const getContent = ( items) =>{
-        return (<>
+        return <>
             <CNav variant="tabs">
                 {items.map(item => getNavLink(item))}
             </CNav>
             <CTabContent fade={false}>
                 {items.map(item => getTabPane(item))}
             </CTabContent>
-        </>)
+        </>
     }
 
     const TabsComponent = (items) => {
@@ -218,6 +205,6 @@ export const Tabs = () => {
         )
     }
 
-    return (TabsComponent(modules(t)));
+    return TabsComponent(modules(t));
 }
 export default Tabs

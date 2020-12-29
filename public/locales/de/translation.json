@@ -150,7 +150,7 @@
     "changedate":  "Geaendert am"
   },
   "vat": {
-    "title":      "Mehrwertsteuer",
+    "title":      "MwSt.",
     "id":"Nummer",
     "name":       "Name",
     "description": "Beschreibung",
@@ -160,6 +160,11 @@
     "input_account": "Vorsteuerkonto",
     "output_account": "Umsatsteuerkonto",
     "percent":     "Prozent"
+  },
+  "pac": {
+    "title":      "Salden",
+    "id":         "Nr.",
+    "period":      "Periode"
   },
   "financials": {
     "title":      "Beleg",

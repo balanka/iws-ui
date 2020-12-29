@@ -90,21 +90,21 @@ const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0
 const treeHeaders = {h:[{ title:t('account.id'), field: 'id' }
             ,  { title:t('account.name'), field: 'name' }
             ,  { title:t('account.account'), field: 'account' }
-            ,  { title:t('balancesheet.idebit'), field: 'idebit', type: 'numeric', minWidth:3 }
-            ,  { title:t('balancesheet.debit'), field: 'debit' , type: 'numeric', minWidth:3}
-            ,  { title:t('balancesheet.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
-            ,  { title:t('balancesheet.credit'), field: 'credit' , type: 'numeric', minWidth:3}
+            ,  { title:t('common.idebit'), field: 'idebit', type: 'numeric', minWidth:3 }
+            ,  { title:t('common.debit'), field: 'debit' , type: 'numeric', minWidth:3}
+            ,  { title:t('common.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
+            ,  { title:t('common.credit'), field: 'credit' , type: 'numeric', minWidth:3}
         ]}
-const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name', label:t('account.name'), minWidth:8}
-    , {id:'description', label:t('account.description'), minWidth:30}
-    , {id:'modelid', label:'MId.', numeric:true, disablePadding:false, minWidth:1, format:(value) => value}
-    , {id:'account', label:t('account.account')}, {id:'company', label:t('common.company')}
-    , {id:'isDebit', label:t('account.debit_credit'), numeric:true, format:(value) => String(value)}
-    , {id:'balancesheet', label:t('account.balancesheet'), numeric:true, format:(value) => String(value)}
-    , {id:'enterdate', label:t('account.enterdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-    , {id:'postingdate', label:t('account.postingdate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-    , {id:'changedate', label:t('account.changedate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-    ]}
+const balancesheetHeaders = [
+    {id:'id', label:t('balancesheet.id'), minWidth:1}
+    , {id:'name', label:t('balancesheet.name'), minWidth:8}
+   , {id:'account', label:t('balancesheet.account')}
+   , { id: 'idebit', label: t('common.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+   , { id: 'debit', label: t('common.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+   , { id: 'icredit', label: t('common.icedit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+   , { id: 'credit', label:t('common.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+
+]
 
 const modules =[
         , {id:1, name:"Supplier", ctx:"/sup", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/1", form:"customerForm"
@@ -252,16 +252,7 @@ const modules =[
                 </CTabPane>
                 <CTabPane >
                   <CrudAccount url ="http://127.0.0.1:8080/acc/balance" get="md/9" accUrl="http://127.0.0.1:8080/acc"
-                               headers = {[ {id:'id', label:t('balancesheet.id'), minWidth:1}
-                                 , {id:'name', label:t('balancesheet.name'), minWidth:8}
-                                 , {id:'account', label:t('balancesheet.account')}
-                                 , { id: 'idebit', label: t('balancesheet.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                 , { id: 'debit', label: t('balancesheet.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                 , { id: 'icredit', label: t('balancesheet.icedit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                 , { id: 'credit', label:t('balancesheet.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-
-                               ]}
-
+                               headers ={balancesheetHeaders}
                                initialState={initBalanceSheet}
                                initAcc={initAcc}
                                title       = {t('balancesheet.title')}
