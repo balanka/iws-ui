@@ -178,7 +178,7 @@ export const Tabs = () => {
        </>
        }
 
-    const getContent = ( items) =>{
+    const getContent = ( items) => {
         return <>
             <CNav variant="tabs">
                 {items.map(item => getNavLink(item))}
