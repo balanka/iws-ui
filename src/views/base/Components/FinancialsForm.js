@@ -82,29 +82,12 @@ const FinancialsForm = () => {
     return {...row, total: row.lines.reduce((acc, line) => acc + line.amount, 0)}
   }
 
-  const dx=(data?.hits?data?.hits:init().hits).map( row =>addAmount(row));
-  function handleFilter(text) {
-    const rows_=text?filter(dx, getColumnName(), text ):dx
-    setFilteredRows(rows_);
-  }
-  const getFilteredRows=()=>{
-    return filteredRows?filteredRows:dx
-  }
+  const datax=() =>(data?.hits?data?.hits:init().hits).map( row =>addAmount(row));
+
   const edit = editedRow =>{
-    const record = filteredRows.find(obj => obj.tid === editedRow.tid);
+    const record = data.hits.find(obj => obj.tid === editedRow.tid);
     setCurrent({...record, editing:true});
   }
-
-
-  const [filteredRows, setFilteredRows] = useState(dx);
-  useEffect(() => {handleFilter('')}, [data]);
-
-  const mapping2 = item => <option key={item.name} value={item.name}>
-    {item.name+" ".concat(item.id)}</option>;
-
-  const mapping = item => <option key={item.id} value={item.id}>
-                        {item.id+ " ".concat (item.name)}</option>;
-
 
   const getCurrentRow =
     {tid:current_.id, oid:current_.oid, costcenter:current_.costcenter, account:current_.account
@@ -164,13 +147,22 @@ const addRow = (newData) =>{
     if(newData ) {
       const dx = {...current};
       dx.lines[dx.lines.length] = newData;
+      setCurrent({...dx});
+      console.log('currentDX1', current);
+      console.log('currentDX2', dx);
     }
   }
   const updateRow = (newData, oldData) =>{
     if (oldData) {
       const dx = {...current};
       const index = dx.lines.findIndex(obj => obj.lid === newData.lid);
-      dx.lines[index] = newData;
+      dx.lines[index] = {...newData};
+      setCurrent({...dx});
+      console.log('DXindex', index);
+      console.log('currentDX1', current);
+      console.log('currentDX2', dx);
+      //const index = dx.lines.findIndex(obj => obj.lid === newData.lid);
+      //dx.lines[index] = newData;
     }
   }
   const deleteRow = (oldData) =>{
@@ -179,6 +171,7 @@ const addRow = (newData) =>{
       const index =dx.lines.findIndex(obj => obj.lid === oldData.lid);
       const deleted = dx.lines[index];
       dx.lines[index] = {...deleted, transid:-2 };
+      setCurrent({...dx, editing:true});
     }
   }
  const  editable = () => ({
@@ -213,7 +206,7 @@ const addRow = (newData) =>{
                      collapse={state.collapse}
          />
         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
-          <EditableTable Options={{...OptionsM, toolbar:toolbar}} flag={current.posted} data={getFilteredRows()}
+          <EditableTable Options={{...OptionsM, toolbar:toolbar}} flag={current.posted} data={datax()}
                          columns={columns} rowStyle={rowStyle}  theme={theme} t={t}  edit ={edit}
                          style={{'padding-top':20, height: 50}}/>
         </Grid>
@@ -226,12 +219,7 @@ const addRow = (newData) =>{
 
 };
 export default FinancialsForm;
-//<EditableTable id="MTable" Options ={OptionsM} flag={current.posted} data={getFilteredRows()} columns={columns}
-//               rowStyle={rowStyle} selected ={[-1]} theme={theme} t={t} tableRef={tableRef} edit ={edit}/>
-// <EnhancedTable props={props} style={{padding:0, 'padding-top':2, height: 50}}/>
-//<EditableTableK id="LineTable" Options ={Options} flag={current.posted} data={lines_()} columns={columnsX} editable={editableX}
-//                rowStyle={rowStyle} selected ={[-1]} theme={theme} t={t}  tableRef={tableRef} edit ={editLine}
-///>
+
 
 
 

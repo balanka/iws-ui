@@ -565,56 +565,6 @@ export const JournalFormHead = (props) => {
             </Grid>
         </Grid>);
 }
-export const FormHead = (props) => {
-    const {styles, title, state, url, accUrl, initialState, initAcc, initAdd, setData, setAccData, cancelEdit
-        , submitEdit, submitQuery, toggle, toggleToolbar} = props
-
-    return (
-        <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
-            <Grid container justify="space-between">
-                <Grid container xs spacing={1} justify="flex-start">
-                    <Grid item justify="center" alignItems="center">
-                        <IoMdMenu />
-                    </Grid>
-                    <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
-                    <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
-                        <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
-                                <FontAwesomeIcon icon={faWindowClose} />
-                            </CButton>
-                        </div>
-                        <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
-                                <FontAwesomeIcon icon={faPlusSquare} />
-                            </CButton>
-                        </div>
-                        <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
-                                <FontAwesomeIcon icon={faSave} />
-                            </CButton>
-                        </div>
-                        <div>
-                            <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
-                                event.preventDefault(); submitQuery(event, accUrl, setAccData, initAcc);
-                                submitQuery(event, url, setData, initialState);}}>
-                                <FontAwesomeIcon icon={faSpinner} rotation={90}/>
-                            </CButton>
-                        </div>
-                        <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
-                                <FontAwesomeIcon icon={state.collapse ?faAngleDoubleUp:faAngleDoubleDown} />
-                            </CButton>
-                        </div>
-                        <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
-                                <FontAwesomeIcon icon={faPlusCircle} />
-                            </CButton>
-                        </div>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Grid>)
-}
 
 export const FormFactory =(props)=> {
 const {formid} = props
@@ -1226,7 +1176,7 @@ export const FinancialsMainForm =(props) => {
                             format="dd.MM.yyyy"
                             margin="normal"
                             id="date-picker-inline"
-                            label={t('financials.transdate')}
+                            label=""//{t('financials.transdate')}
                             value={current.transdate}
                             onChange={(event) => { console.log('datedate',event.target.value)}}
                             KeyboardButtonProps = {{
