@@ -35,7 +35,7 @@ export const Tabs = () => {
   const initBank = { hits:[ {id:'', name: '', description: '', enterdate:date, postingdate:date
       , changedate:date, modelid:11, account:'-1', company:''}]}
   const initCC = { hits:[ {id:'', name: '', description: '', enterdate:new Date().toISOString()
-          , postingdate:new Date().toISOString(),changedate:new Date().toISOString()
+          , postingdate:new Date().toISOString(), changedate:new Date().toISOString()
           , modelid:6, account:'-1', company:''}]}
 
   const initVat={ hits:[{ id:'', name:'', description:'', percent:'', inputVatAccount:'', outputVatAccount:''
@@ -103,9 +103,33 @@ const balancesheetHeaders = [
    , { id: 'debit', label: t('common.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
    , { id: 'icredit', label: t('common.icedit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
    , { id: 'credit', label:t('common.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-
-]
-
+  ]
+const pacHeaders=[ {id:'period', label:t('pac.period'), minWidth:1, numeric:true }
+    , { id: 'idebit', label:t('pac.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'debit', label:t('pac.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'icredit', label:t('pac.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'credit', label:t('pac.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'balance', label:t('pac.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'currency', label:t('common.currency'), minWidth:1}
+   ]
+const journalHeaders=[ {id:'id', label:t('journal.id'), minWidth:2, numeric:true }, {id:'transid', label:t('journal.transid'), minWidth:1, numeric:true }
+    , { id: 'oid', label: t('journal.oid'), minWidth:1, numeric:true }, {id: 'account', label: t('journal.account'), minWidth:1}
+    , {id: 'oaccount', label:t('journal.oaccount'), minWidth:2}
+    , {id: 'transdate', label:t('journal.transdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id: 'postingdate', label:t('journal.postingdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id: 'enterdate', label:t('journal.enterdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id: 'period', label:t('journal.period'), minWidth:1, numeric:true},
+    , { id: 'amount', label: t('journal.amount'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'idebit', label:t('journal.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'debit', label: t('journal.debit'), minWidth:2,  numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'icredit', label:t('journal.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'credit', label:t('journal.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'side', label:t('journal.side'), numeric:true, format:(value) => String(value), minWidth:1}
+    , { id: 'text', label:t('journal.text'), minWidth:15}, { id:'month', label:t('journal.month'), minWidth:1}
+    , { id: 'year', label:t('journal.year'), minWidth:1}, { id:'company', label:t('common.company'), minWidth:1 }
+    , { id: 'typeJournal', label:t('journal.type'), minWidth:1}, { id: 'file_content', label:t('journal.file'), minWidth:1}
+    , { id: 'modelid', label:t('common.modelid'), minWidth:1}
+    ]
 const modules =[
         , {id:1, name:"Supplier", ctx:"/sup", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/1", form:"customerForm"
             , state:initSup, state1:initAcc ,state2:initVat}
@@ -205,43 +229,25 @@ const modules =[
                </CTabPane>
                 <CTabPane>
                   <CrudAccount url ={SERVER_URL.concat('/cc')} get="md/6" accUrl="http://127.0.0.1:8080/acc/accmd/9"
-                               initialState={initCC}
-                               initAcc={initAcc}
-                               title       = {t('costcenter.title')}
-                               form        = 'costCenterForm'/>
-
+                      initialState={initCC} initAcc={initAcc} title = {t('costcenter.title')} form = 'costCenterForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ={SERVER_URL.concat('/acc')} get="md/9" accUrl="http://127.0.0.1:8080/acc/accmd/9"
-                               initialState={initAcc}
-                               initAcc={initAcc}
-                               title       = {t('account.title')}
-                               form        = 'accountForm'/>
+                          initialState={initAcc} initAcc={initAcc} title = {t('account.title')} form = 'accountForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ={SERVER_URL.concat('/vat')} get="md/14" accUrl="http://127.0.0.1:8080/acc/accmd/9"
-                               initialState={initVat}
-                               initAcc={initAcc}
-                               title       = {t('vat.title')}
-                               form        = 'vatForm'/>
+                               initialState={initVat} initAcc={initAcc} title = {t('vat.title')} form = 'vatForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ={SERVER_URL.concat('/cust')} get="md/3" accUrl="http://127.0.0.1:8080/acc/accmd/9"
-                               ccUrl="http://127.0.0.1:8080/vat"
-                               initialState={initCust}
-                               initAcc={initAcc}
-                               initCc={initVat}
-                               title       = {t('customer.title')}
-                               form        = 'customerForm'/>
+                               ccUrl="http://127.0.0.1:8080/vat" initialState={initCust} initAcc={initAcc}
+                               initCc={initVat}  title = {t('customer.title')} form = 'customerForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ={SERVER_URL.concat('/sup')} get="md/1" accUrl="http://127.0.0.1:8080/acc/accmd/9"
-                               ccUrl="http://127.0.0.1:8080/vat"
-                               initialState={initSup}
-                               initAcc={initAcc}
-                               initCc={initVat}
-                               title       = {t('supplier.title')}
-                               form        = 'supplierForm'/>
+                               ccUrl="http://127.0.0.1:8080/vat" initialState={initSup} initAcc={initAcc}
+                               initCc={initVat} title = {t('supplier.title')} form = 'supplierForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ={SERVER_URL.concat('/bank')} get="md/11" accUrl="http://127.0.0.1:8080/acc/accmd/9"
@@ -252,76 +258,34 @@ const modules =[
                 </CTabPane>
                 <CTabPane >
                   <CrudAccount url ="http://127.0.0.1:8080/acc/balance" get="md/9" accUrl="http://127.0.0.1:8080/acc"
-                               headers ={balancesheetHeaders}
-                               initialState={initBalanceSheet}
-                               initAcc={initAcc}
-                               title       = {t('balancesheet.title')}
-                               form        = 'balancesheetForm'/>
+                               headers ={balancesheetHeaders} initialState={initBalanceSheet}
+                               initAcc={initAcc} title = {t('balancesheet.title')} form ='balancesheetForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount  url ="http://127.0.0.1:8080/jou" get="md/112" accUrl="http://127.0.0.1:8080/acc"
-                                headers = {[ {id:'id', label:t('journal.id'), minWidth:2, numeric:true }, {id:'transid', label:t('journal.transid'), minWidth:1, numeric:true }
-                                  , { id: 'oid', label: t('journal.oid'), minWidth:1, numeric:true }, {id: 'account', label: t('journal.account'), minWidth:1}
-                                  , {id: 'oaccount', label:t('journal.oaccount'), minWidth:2}
-                                  , {id: 'transdate', label:t('journal.transdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                  , {id: 'postingdate', label:t('journal.postingdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                  , {id: 'enterdate', label:t('journal.enterdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-                                  , {id: 'period', label:t('journal.period'), minWidth:1, numeric:true},
-                                  , { id: 'amount', label: t('journal.amount'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                  , { id: 'idebit', label:t('journal.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                  , { id: 'debit', label: t('journal.debit'), minWidth:2,  numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                  , { id: 'icredit', label:t('journal.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                  , { id: 'credit', label:t('journal.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                  , { id: 'side', label:t('journal.side'), numeric:true, format:(value) => String(value), minWidth:1}
-                                  , { id: 'text', label:t('journal.text'), minWidth:15}, { id:'month', label:t('journal.month'), minWidth:1}
-                                  , { id: 'year', label:t('journal.year'), minWidth:1}, { id:'company', label:t('common.company'), minWidth:1 }
-                                  , { id: 'typeJournal', label:t('journal.type'), minWidth:1}, { id: 'file_content', label:t('journal.file'), minWidth:1}
-                                  , { id: 'modelid', label:t('common.modelid'), minWidth:1}]}
-
-                                initialState={initJour}
-                                initAcc={initAcc}
-                                title       = {t('journal.title')}
-                                form        = 'journalForm'/>
+                                headers = {journalHeaders} initialState={initJour} initAcc={initAcc}
+                                title = {t('journal.title')} form = 'journalForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/bs" get="md/18" accUrl="http://127.0.0.1:8080/acc"
-                               initialState={initBS}
-                               initAcc={initAcc}
-                               title       = {t('bankstatement.title')}
-                               form        = 'bankStmtForm'/>
+                               initialState={initBS} initAcc={initAcc} title = {t('bankstatement.title')}
+                                form = 'bankStmtForm'/>
                 </CTabPane>
                 <CTabPane>
                   <CrudAccount url ="http://127.0.0.1:8080/ftr" get="md/112" accUrl="http://127.0.0.1:8080/acc"
                                ccUrl="http://127.0.0.1:8080/cc"
-                               initialState={initFrt}
-                               initAcc={initAcc}
-                               initCc={initCC}
-                               title       =  {t('financials.title')}
-                               lineTitle   = {t('financials.line.title')}
-                               form        = 'financialsForm'/>
+                               initialState={initFrt} initAcc={initAcc} initCc={initCC} title =  {t('financials.title')}
+                                lineTitle = {t('financials.line.title')} form = 'financialsForm'/>
               </CTabPane>
                   <CTabPane>
                       <CrudAccount url ="http://127.0.0.1:8080/pac" get="md/106" accUrl="http://127.0.0.1:8080/acc"
-                                   headers = {[ {id:'period', label:t('pac.period'), minWidth:1, numeric:true }
-                                       , { id: 'idebit', label:t('pac.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                       , { id: 'debit', label:t('pac.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                       , { id: 'icredit', label:t('pac.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                       , { id: 'credit', label:t('pac.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                       , { id: 'balance', label:t('pac.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-                                       , { id: 'currency', label:t('common.currency'), minWidth:1}
-                                   ]}
-                                   initialState={initPac}
-                                   initAcc={initAcc}
-                                   title       = {t('pac.title')}
-                                   form        = 'pacForm'/>
+                                   headers = {pacHeaders} initialState={initPac} initAcc={initAcc}
+                                   title = {t('pac.title')} form = 'pacForm'/>
                   </CTabPane>
                   <CTabPane>
                       <CrudAccount url ="http://127.0.0.1:8080/acc" get="md/106" accUrl="http://127.0.0.1:8080/acc"
-                                   headers = {treeHeaders.h}
-                                   initialState={initAcc}
-                                   initAcc={initAcc}
-                                   title       = {t('common.title')}
-                                   form        = 'treeForm'/>
+                                   headers = {treeHeaders.h} initialState={initAcc}
+                                   initAcc={initAcc} title = {t('common.title')} form = 'treeForm'/>
                   </CTabPane>
               </CTabContent>
             </CTabs>

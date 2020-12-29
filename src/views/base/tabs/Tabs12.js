@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React from 'react'
 import {CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CCard, CCardBody, CTabs} from '@coreui/react'
 import {useTranslation} from "react-i18next";
 import {setDefaultLocale} from "react-datepicker";
@@ -98,9 +98,9 @@ export const Tabs = () => {
            , form:"treeForm", state:initAcc, state1:initAcc, state2:'', columns:treeHeaders(t).h }
     ]
 
-    const [active, setActive] = useState(1)
-    const [state, setState] = useState({activeTab: new Array(1).fill('1')})
-    setDefaultLocale('de');
+    //const [active, setActive] = useState(1)
+    //const [state, setState] = useState({activeTab: new Array(1).fill('1')})
+    //setDefaultLocale('de');
     const initAcc = {hits:[{id:'', name: '', description: '', enterdate:date, postingdate:date
             , changedate:date, company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false, currency:''
             , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0 }]}
