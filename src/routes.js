@@ -1,10 +1,7 @@
 import React from 'react';
-//import {Tabs} from './views/base/tabs/Tabs12';
 const CodeEditors = React.lazy(() => import('./views/editors/code-editors/CodeEditors'));
 const TextEditors = React.lazy(() => import('./views/editors/text-editors/TextEditors'));
-
 const Invoice = React.lazy(() => import('./views/apps/invoicing/Invoice'));
-
 const AdvancedForms = React.lazy(() => import('./views/forms/advanced-forms/AdvancedForms'));
 const BasicForms = React.lazy(() => import('./views/forms/basic-forms/BasicForms'));
 const ValidationForms = React.lazy(() => import('./views/forms/validation-forms/ValidationForms'));
@@ -30,10 +27,7 @@ const Paginations = React.lazy(() => import('./views/base/paginations/Pagnations
 const Popovers = React.lazy(() => import('./views/base/popovers/Popovers'));
 const ProgressBar = React.lazy(() => import('./views/base/progress-bar/ProgressBar'));
 const Switches = React.lazy(() => import('./views/base/switches/Switches'));
-
-//import {Tabs} from './views/base/tabs/Tabs12'
-const Tabs = React.lazy(() => import('./views/base/tabs/Tabs12'));
-//const Tabs2 = React.lazy(() => import('./views/base/Tabs2/Tabs2'));
+const Tabs = React.lazy(() => import('./views/base/tabs/Tabs'));
 const Tooltips = React.lazy(() => import('./views/base/tooltips/Tooltips'));
 const BrandButtons = React.lazy(() => import('./views/buttons/brand-buttons/BrandButtons'));
 const ButtonDropdowns = React.lazy(() => import('./views/buttons/button-dropdowns/ButtonDropdowns'));
@@ -73,7 +67,6 @@ const routes = [
   { path: '/base/progress-bar', name: 'Progress Bar', component: ProgressBar },
   { path: '/base/switches', name: 'Switches', component: Switches },
   { path: '/base/tabs', name: 'Tabs', component: Tabs },
-  //{ path: '/base/tabs2', name: 'Tabs2', component: Tabs2 },
   { path: '/base/tooltips', name: 'Tooltips', component: Tooltips },
   { path: '/buttons', name: 'Buttons', component: Buttons, exact: true },
   { path: '/buttons/buttons', name: 'Buttons', component: Buttons },
