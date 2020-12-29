@@ -5,8 +5,9 @@ import {setDefaultLocale} from "react-datepicker";
 import {CrudAccount} from "../Components/CrudAccount";
 import {currencyFormatDE, dateFormat} from "../../../utils/utils";
 import Login from "../../pages/login/Login";
-//`
-const Tabs = () => {
+
+
+export const Tabs = () => {
    const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     console.log('process.env', process.env);
    console.log('SERVER_URL', SERVER_URL);
@@ -75,10 +76,10 @@ const Tabs = () => {
       {"data" : {"id" : "9902", "name" : "Bilanz Passiva", "isDebit" : false,
           "balancesheet" : true, "idebit" : 0.00, "icredit" : 0.00, "debit" : 7135.58,
           "credit" : 254824.95, "currency" : "", "company" : "1000"}, "children" :[]}]}]}
-  const initBS={hits:[{ bid:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
+const initBS={hits:[{ bid:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
     , beneficiary:'', accountno:'', bankCode:'', amount:'', currency:'', info:'', company:'', companyIban:''
     , posted:'',modelid:18}]}
-  const initFrt={hits:[{ tid:-1, oid:0, costcenter:'', account:'', transdate:date
+const initFrt={hits:[{ tid:-1, oid:0, costcenter:'', account:'', transdate:date
             , enterdate:date, postingdate:date, period:getPeriod(new Date())
             , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{lid:-1, transid:0
             , side:true, account:'', oaccount:'', amount:0, duedate:date, text:'', currency:'EUR', company:'1000'
@@ -105,7 +106,7 @@ const accHeaders = {h:[ {id:'id', label:t('account.id'), minWidth:1}, {id:'name'
     , {id:'changedate', label:t('account.changedate'), minWidth:1, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
     ]}
 
-    const modules =[
+const modules =[
         , {id:1, name:"Supplier", ctx:"/sup", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/1", form:"customerForm"
             , state:initSup, state1:initAcc ,state2:initVat}
         , {id:3, name:"Customer", ctx:"/cust", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/4", form:"customerForm"

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext} from 'react'
 
 import "react-datepicker/dist/react-datepicker.css";
 import {styles, rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
@@ -26,6 +26,7 @@ import Switch from "@material-ui/core/Switch";
 import blue from "@material-ui/core/colors/blue";
 import FinancialsForm from "../base/Components/FinancialsForm";
 import {CrudAccount} from "../base/Components/CrudAccount";
+import {accountContext} from "../base/Components/AccountContext";
 export const styles1 = {
   outer: {
     borderRadius: 5,
@@ -40,6 +41,9 @@ export const styles1 = {
     paddingRight: theme.spacing(1),
   }
 };
+
+//const value = useContext(accountContext);
+//const t = value.t
 
 const mapping = (acc) =>
     <MenuItem key={acc.id} value={acc.id}>
@@ -349,6 +353,48 @@ export const ColumnsCUST =(data, t) => [
 , {field:'modelid', title:t('common.modelid'), type:'numeric', align:"right", export:true}
 , {field:'company', title:t('common.company'), export:true}
 ]
+export const pacHeaders = (t) =>[ {id:'period', label:t('pac.period'), minWidth:1, numeric:true }
+, { id: 'idebit', label:t('pac.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+, { id: 'debit', label:t('pac.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+, { id: 'icredit', label:t('pac.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+, { id: 'credit', label:t('pac.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+, { id: 'balance', label:t('pac.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+, { id: 'currency', label:t('common.currency'), minWidth:1}
+]
+export const JournalHeaders=(t) =>[ {id:'id', label:t('journal.id'), minWidth:2, numeric:true }, {id:'transid', label:t('journal.transid'), minWidth:1, numeric:true }
+    , { id: 'oid', label: t('journal.oid'), minWidth:1, numeric:true }, {id: 'account', label: t('journal.account'), minWidth:1}
+    , {id: 'oaccount', label:t('journal.oaccount'), minWidth:2}
+    , {id: 'transdate', label:t('journal.transdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id: 'postingdate', label:t('journal.postingdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id: 'enterdate', label:t('journal.enterdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id: 'period', label:t('journal.period'), minWidth:1, numeric:true},
+    , { id: 'amount', label: t('journal.amount'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'idebit', label:t('journal.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'debit', label: t('journal.debit'), minWidth:2,  numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'icredit', label:t('journal.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'credit', label:t('journal.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'side', label:t('journal.side'), numeric:true, format:(value) => String(value), minWidth:1}
+    , { id: 'text', label:t('journal.text'), minWidth:15}, { id:'month', label:t('journal.month'), minWidth:1}
+    , { id: 'year', label:t('journal.year'), minWidth:1}, { id:'company', label:t('common.company'), minWidth:1 }
+    , { id: 'typeJournal', label:t('journal.type'), minWidth:1}, { id: 'file_content', label:t('journal.file'), minWidth:1}
+    , { id: 'modelid', label:t('common.modelid'), minWidth:1}]
+
+export const balanceHeaders=(t) =>[ {id:'id', label:t('balancesheet.id'), minWidth:1}
+    , {id:'name', label:t('balancesheet.name'), minWidth:8}
+    , {id:'account', label:t('balancesheet.account')}
+    , { id: 'idebit', label: t('balancesheet.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'debit', label: t('balancesheet.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'icredit', label: t('balancesheet.icedit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    , { id: 'credit', label:t('balancesheet.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
+    ]
+export const treeHeaders=(t) =>[{ title:t('account.id'), field: 'id' }
+    ,  { title:t('account.name'), field: 'name' }
+    ,  { title:t('account.account'), field: 'account' }
+    ,  { title:t('balancesheet.idebit'), field: 'idebit', type: 'numeric', minWidth:3 }
+    ,  { title:t('balancesheet.debit'), field: 'debit' , type: 'numeric', minWidth:3}
+    ,  { title:t('balancesheet.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
+    ,  { title:t('balancesheet.credit'), field: 'credit' , type: 'numeric', minWidth:3}
+   ]
 export const OptionsM = ({
         toolbar:true,
         draggable:true,
