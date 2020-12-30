@@ -37,38 +37,11 @@ export const  filter = (rows, cols, txt,) => rows.filter(col =>
     cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b)
 );
 
-export  const accountD=(data, value, onRowDataChange, rowData) => (
-      <Select
-          value={value}
-          onChange ={(event) =>
-            onRowDataChange({...rowData, account: event.target.value})
-          }
-      >
+export  const ACCOUNT=(data, value, onRowDataChange, rowData, fieldName) =>
+    <Select value={value} onChange ={(event) =>
+            onRowDataChange({...rowData, fieldName: event.target.value})}>
         {data.map(mapping)}
-      </Select>
-  )
-export const accountC =(data, value, onRowDataChange, rowData) => (
-      <Select
-          value={value}
-          onChange={(event) =>
-            onRowDataChange({...rowData, oaccount: event.target.value})
-          }
-      >
-        {data.map(mapping)}
-      </Select>
-  )
-
-const removeTableData = (datax) => {
-    const clonex = JSON.parse(JSON.stringify(datax));
-    for (const element of clonex) {
-        //console.log("element", element);
-        delete element.tableData;
-    }
-    return clonex;
-};
-
-
-
+    </Select>
 export const  editable = (data, setData, current ) => ({
     onRowAdd: newData =>{
             const datax = JSON.parse(JSON.stringify(data));
@@ -139,8 +112,7 @@ export const columnsPACB = (t) => [
     , {field:'currency', title:t('common.currency'),   export:true }
     , { field:'company', title:t('common.company'), export:true }
 ]
-export const columnsJ =(t) => [
-  {field:'id', title:t('journal.id'),  type:"numeric", export:true }
+export const columnsJ =(t) => [{field:"id", title:t('journal.id'),  type:"numeric", export:true }
 , {field:'transid', title:t('journal.transid'),   export:true }
 , { field: 'oid', title: t('journal.oid'),  export:true }
 , {field: 'account', title: t('journal.account'), export:true}
@@ -175,9 +147,9 @@ export const columnsF =(data, line, current, t) => [
      {field:'tid', title:t('financials.id'), initialEditValue:line.id, export:true}
     , {field:'oid', title:t('financials.oid'),initialEditValue:current.oid, export:true}
     , {field:'account', title:t('financials.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            accountD ( data, value, onRowDataChange, rowData ),  initialEditValue:'', width: 20, export:true}
+            ACCOUNT ( data, value, onRowDataChange, rowData, "account" ),  initialEditValue:'', width: 20, export:true}
     , {field:'costcenter', title:t('financials.costcenter'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            accountD ( data, value, onRowDataChange, rowData ),  initialEditValue:'', width: 20, export:true}
+            ACCOUNT ( data, value, onRowDataChange, rowData,"costcenter" ),  initialEditValue:'', width: 20, export:true}
     , {field:'enterdate', title:t('financials.enterdate'), type:"date", align:"right",
         initialEditValue:line.enterdate, dateSetting: { locale:"de" } , export:true}
     , {field:'postingdate', title:t('financials.postingdate'), type:"date", align:"right",
@@ -197,10 +169,10 @@ export const Linescolumns =(data, line, current, t) => [
       {field:'lid', title:t('financials.line.id'), hidden:false,  initialEditValue:line.lid}
     , {field:'transid', title:t('financials.id'), hidden:false, initialEditValue:current.tid}
     , {field:'account', title:t('financials.line.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-          accountD ( data, value, onRowDataChange, rowData ),  initialEditValue:'', width: 20}
+            ACCOUNT ( data, value, onRowDataChange, rowData,"account" ),  initialEditValue:'', width: 20}
     , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true, width:10}
     , {field:'oaccount', title:t('financials.line.oaccount'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-          accountC ( data, value, onRowDataChange, rowData ), initialEditValue:'', width: 20}
+          ACCOUNT ( data, value, onRowDataChange, rowData, "oaccount"), initialEditValue:'', width: 20}
     , {field:'duedate', title:t('financials.line.duedate'), type:"date", align:"right",
       initialEditValue:line.duedate,
       dateSetting: { locale:"de" } }
@@ -227,12 +199,12 @@ export const Options = ({
     selection: false,
     cellStyle: {padding: '0.3em', fontSize: 10,},
     headerStyle: {'padding': '0.3em',  fontSize: 10,  position: 'sticky',
-        backgroundColor: theme.palette.background.default, //theme.palette.background.paper theme.palette.common.black,
-        color: theme.palette.common.black//'#fff9e6' //'#eee'
+        backgroundColor: theme.palette.common.black, //theme.palette.background.default, //theme.palette.background.paper,
+        color: '#eee' //theme.palette.common.black//'#fff9e6'
          },
     root: {
         '&:nth-child(odd)': {
-            backgroundColor: '#fff9e6'//theme.palette.background.default,
+            backgroundColor: theme.palette.background.default //'#fff9e6'//theme.palette.background.default,
         },
         color: '#eee',
         padding: 0.5,
@@ -243,11 +215,48 @@ export const Options = ({
     rowStyle: rowStyle
 })
 
+export const OptionsM = ({
+    toolbar:true,
+    draggable:true,
+    header:true,
+    grouping:false,
+    sorting:true,
+    columnsButton:true,
+    addRowPosition: "first",
+    paging:true,
+    showFirstLastPageButtons:false,
+    showTitle:false,
+    padding:"dense",
+    filtering: false,
+    search: true,
+    selection: true,
+    columnResizable: true,
+    cellStyle: {padding: '0.3em', fontSize: 10,},
+    headerStyle: {padding: '0.3em', fontSize: 10,  position: 'sticky',
+        backgroundColor: theme.palette.common.black,
+        color:'#eee'},
+    root: {
+        '&:nth-child(odd)': {
+            backgroundColor: theme.palette.background.default //'#fff9e6'//theme.palette.background.default,
+        },
+        color: '#eee',
+        padding: 0.5,
+        height: 3,
+        hover: true
+    },
+
+    rowStyle: rowStyle,
+    exportAllData: true,
+    exportButton: true,
+    exportDelimiter: ',',
+    exportFileName:'Masterfile.csv'
+})
 export const ColumnsM =(data, t) => [
       {field:'id', title:t('costcenter.id'), export:true}
     , {field:'name', title:t("costcenter.name"),  type:"text", export:true}
     , {field:'description', title:t('costcenter.description'), type:"string", export:true}
-    , {field:'account', title:t('costcenter.account') ,editComponent:({ value, onRowDataChange, rowData }) => accountD ( data, value, onRowDataChange, rowData )
+    , {field:'account', title:t('costcenter.account')
+    ,  editComponent:({ value, onRowDataChange, rowData }) => ACCOUNT ( data, value, onRowDataChange, rowData, "account" )
         , width: 20, export:true}
     , {field:'enterdate', title:t('costcenter.enterdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
     , {field:'changedate', title:t('costcenter.changedate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
@@ -262,7 +271,7 @@ export const ColumnsACC =(data, t) => [
     , {field:'isDebit', title:t('account.debit_credit'), type:"boolean", export:true}
     , {field:'balancesheet', title:t('account.balancesheet'), type:"boolean", export:true}
     , {field:'account', title:t('account.account'),
-        editComponent:({ value, onRowDataChange, rowData }) => accountD ( data, value, onRowDataChange, rowData )
+        editComponent:({ value, onRowDataChange, rowData }) => ACCOUNT ( data, value, onRowDataChange, rowData, "account" )
         , width: 20, export:true}
     , {field:'idebit', title:t('account.idebit'), type:"currency", initialEditValue:0,
         currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
@@ -283,10 +292,11 @@ export const ColumnsV = (data, t) => [
     , {field:'description', title:t('vat.description'), type:"string",  export:true}
     , {field:'percent', title:t('vat.percent'), type:"numeric", initialEditValue:0, minimumFractionDigits: 2
         , maximumFractionDigits: 2, export:true}
-    , {field:'inputVatAccount', title:t('vat.input_account'),
-        editComponent:({ value, onRowDataChange, rowData }) =>accountD ( data, value, onRowDataChange, rowData )
-            , width: 20, export:true}
-    , {field:'outputVatAccount', title:t('vat.output_account') //,editComponent:({ value, onRowDataChange, rowData }) =>accountD ( data, value, onRowDataChange, rowData )
+    , {field:'inputVatAccount', title:t('vat.input_account')
+    ,    editComponent:({ value, onRowDataChange, rowData }) =>ACCOUNT ( data, value, onRowDataChange, rowData,"inputVatAccount" )
+    , width: 20, export:true}
+    , {field:'outputVatAccount', title:t('vat.output_account')
+    //,editComponent:({ value, onRowDataChange, rowData }) =>ACCOUNT ( data, value, onRowDataChange, rowData, "outputVatAccount" )
         , width: 20, export:true}
     , {field:'enterdate', title:t('vat.enterdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
     , {field:'changedate', title:t('vat.changedate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
@@ -339,12 +349,14 @@ export const pacHeaders = (t) =>[ {id:'period', label:t('pac.period'), minWidth:
 , { id: 'balance', label:t('pac.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
 , { id: 'currency', label:t('common.currency'), minWidth:1}
 ]
-export const JournalHeaders=(t) =>[ {id:'id', label:t('journal.id'), minWidth:2, numeric:true }, {id:'transid', label:t('journal.transid'), minWidth:1, numeric:true }
-    , { id: 'oid', label: t('journal.oid'), minWidth:1, numeric:true }, {id: 'account', label: t('journal.account'), minWidth:1}
-    , {id: 'oaccount', label:t('journal.oaccount'), minWidth:2}
-    , {id: 'transdate', label:t('journal.transdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-    , {id: 'postingdate', label:t('journal.postingdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-    , {id: 'enterdate', label:t('journal.enterdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+export const JournalHeaders=(t) =>[ {id:"id", label:t('journal.id'), minWidth:2, numeric:true }
+    , {id:"transid", label:t('journal.transid'), minWidth:1, numeric:true }
+    , { id: "oid", label: t('journal.oid'), minWidth:1, numeric:true }
+    , {id: "account", label: t('journal.account'), minWidth:1}
+    , {id: "oaccount", label:t('journal.oaccount'), minWidth:2}
+    , {id: "transdate", label:t('journal.transdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id: "postingdate", label:t('journal.postingdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id: "enterdate", label:t('journal.enterdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
     , {id: 'period', label:t('journal.period'), minWidth:1, numeric:true},
     , { id: 'amount', label: t('journal.amount'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
     , { id: 'idebit', label:t('journal.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
@@ -373,42 +385,7 @@ export const treeHeaders=(t) =>[{ title:t('account.id'), field: 'id' }
     ,  { title:t('balancesheet.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
     ,  { title:t('balancesheet.credit'), field: 'credit' , type: 'numeric', minWidth:3}
    ]
-export const OptionsM = ({
-        toolbar:true,
-        draggable:true,
-        header:true,
-        grouping:false,
-        sorting:true,
-        columnsButton:true,
-        addRowPosition: "first",
-        paging:true,
-        showFirstLastPageButtons:false,
-        showTitle:false,
-        padding:"dense",
-        filtering: false,
-        search: true,
-        selection: true,
-        columnResizable: true,
-        cellStyle: {padding: '0.3em', fontSize: 10,},
-        headerStyle: {padding: '0.3em', fontSize: 10,  position: 'sticky',
-            backgroundColor: theme.palette.common.black,
-            color:'#eee'},
-        root: {
-         '&:nth-child(odd)': {
-            backgroundColor: theme.palette.background.default //'#fff9e6'//theme.palette.background.default,
-           },
-        color: '#eee',
-            padding: 0.5,
-            height: 3,
-            hover: true
-        },
 
-    rowStyle: rowStyle,
-    exportAllData: true,
-    exportButton: true,
-    exportDelimiter: ',',
-    exportFileName:'Masterfile.csv'
-})
 export const CommonFormHead = (props) => {
     const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
     return (
@@ -725,8 +702,8 @@ export const BankStatementMainForm =(props) => {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                         format='dd.MM.yyyy'
-                        inputValue={current.duedate}
-                        onChange={(_, newValue) => setCurrent({ ...current, valuedate: newValue} )}
+                        inputValue={new Date(current.valuedate)}
+                        onChange={(newValue) => setCurrent({ ...current, valuedate: newValue} )}
                         />
                     </MuiPickersUtilsProvider>
                 </CCol>
@@ -1061,7 +1038,8 @@ export const CustomerMainForm =(props) => {
        </>
     )}
 export const FinancialsMainForm =(props) => {
-    const {current, setCurrent, t, accData,ccData } = props
+    const {current, setCurrent, t, accData, ccData } = props
+    console.log('ccData::::',ccData);
     return (
         <>
             <CFormGroup row style={{  height:15}}>
@@ -1135,7 +1113,7 @@ export const FinancialsMainForm =(props) => {
                 </CCol>
 
                 <CCol sm="2" style={{'text-align':'right', 'padding-left':10, padding:1 }}>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                         format='dd.MM.yyyy'
                         inputValue={current.transdate}

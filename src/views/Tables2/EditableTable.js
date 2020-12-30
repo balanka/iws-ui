@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable from '@material-table/core';
 import Add from "@material-ui/icons/Add";
 import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
@@ -10,60 +10,17 @@ import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import Search from "@material-ui/icons/Search";
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import RateReviewIcon from '@material-ui/icons/RateReview';
-import { createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-import green from '@material-ui/core/colors/green';
 
-const theme0 = createMuiTheme({
-    palette: {
-        primary: {
-            main: '#4caff0',
-        },
-        secondary: {
-            main: '#ff9100',
-        },
-    },
 
-});
-const theme1 = createMuiTheme({
-    palette: {
-        primary: {
-            main: purple[500],
-        },
-        secondary: {
-            main: green[500],
-        },
-    },
-});
-const theme = createMuiTheme({
-    palette: {
-        primary: {
-            // light: will be calculated from palette.primary.main,
-            main: '#ff4400',
-            // dark: will be calculated from palette.primary.main,
-            // contrastText: will be calculated to contrast with palette.primary.main
-        },
-        secondary: {
-            light: '#0066ff',
-            main: '#0044ff',
-            // dark: will be calculated from palette.secondary.main,
-            contrastText: '#ffcc00',
-        },
-        // error: will use the default color
-    },
-});
 export default function EditableTable(props) {
     const {Options, flag, data, columns, t, tableRef, addRow, edit, editable} = props
     const [selectedRows, setSelectedRows] = useState([]);
     const dx=data
     const [datax, setDatax] = useState(dx);
-    console.log('dataxdatax',datax);
 
-    console.log('state.dx',dx);
     useEffect(() => {}, [props, datax, data]);
 
     return (
-
         <MaterialTable
             editable={flag?null:editable}
            tableRef={tableRef}

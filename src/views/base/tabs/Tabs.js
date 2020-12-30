@@ -155,10 +155,10 @@ export const Tabs = () => {
                 {"data" : {"id" : "9902", "name" : "Bilanz Passiva", "isDebit" : false,
                         "balancesheet" : true, "idebit" : 0.00, "icredit" : 0.00, "debit" : 7135.58,
                         "credit" : 254824.95, "currency" : "", "company" : "1000"}, "children" :[]}]}]}
-    const initBS={hits:[{ bid:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
+    const initBS={hits:[{ bid:'', depositor:'', postingdate:date, valuedate:new Date(), postingtext:'', purpose:''
             , beneficiary:'', accountno:'', bankCode:'', amount:'', currency:'', info:'', company:'', companyIban:''
             , posted:'',modelid:18}]}
-    const initFrt={hits:[{ tid:-1, oid:0, costcenter:'', account:'', transdate:date
+    const initFrt={hits:[{ tid:-1, oid:0, costcenter:'', account:'', transdate:new Date()
             , enterdate:date, postingdate:date, period:getPeriod(new Date())
             , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{lid:-1, transid:0
                 , side:true, account:'', oaccount:'', amount:0, duedate:date, text:'', currency:'EUR', company:'1000'
@@ -179,8 +179,8 @@ export const Tabs = () => {
         return  <>
             <CTabPane>
                 <CrudAccount url={SERVER_URL.concat(module.ctx)} get={module.get} accUrl={SERVER_URL.concat(module.ctx1)}
-                             ccUrl={module.ctx2}  initialState={module.state} initAcc={module.state1} initCc={module.state2}
-                             title={module.title} form={module.form} headers={module.columns}/>
+                             ccUrl={SERVER_URL.concat(module.ctx2)}  initialState={module.state} initAcc={module.state1}
+                             initCc={module.state2} title={module.title} form={module.form} headers={module.columns}/>
             </CTabPane>
         </>
     }

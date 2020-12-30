@@ -25,6 +25,8 @@ const FinancialsForm = () => {
   const res  = useFetch(url, {});
   const [{ res2}] = useFetch(value.accUrl, {});
   const [{ res3}] = useFetch(value.ccUrl, {});
+  console.log('value.accUrl',value.accUrl);
+  console.log('value.ccUrl',value.ccUrl);
   const init = ()=> {return value.initialState}
   const data_ = res && res.response?res.response:[value.initialState];
   const accData_=  res2?res2:value.accData;
@@ -175,9 +177,9 @@ const addRow = (newData) =>{
   function buildForm( current){
     const lines_=()=>current.lines&&current.lines.length >0 ? current.lines:[value.initialState.hits[0].lines[0]];
     const LinesFinancials = () =>  (<>
-      <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()} columns={columnsX} editable={editable()}
-                     rowStyle={rowStyle} selected ={[-1]} theme={theme} t={t}  tableRef={tableRef} edit ={null}
-      />
+      <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()}
+                     columns={columnsX} editable={editable()} rowStyle={rowStyle}  theme={theme} t={t}
+                     tableRef={tableRef} edit ={null}/>
       <CInput disabled={current.posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
               placeholder="text" value={current.text} onChange={(event)  =>
           setCurrent({ ...current, text: event.target.value})} />
