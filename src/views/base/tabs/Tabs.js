@@ -5,7 +5,6 @@ import {CrudAccount} from "../Components/CrudAccount";
 import Login from "../../pages/login/Login";
 import {currencyFormatDE, dateFormat} from "../../../utils/utils";
 import {createGlobalState} from "react-hooks-global-state";
-import {setDefaultLocale} from "react-datepicker";
 
 const initialState = {profile:{
         token:'noTOken'

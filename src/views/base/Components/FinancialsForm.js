@@ -2,7 +2,7 @@ import React, {useEffect, useState, useContext, createRef} from 'react'
 import { CInput} from '@coreui/react'
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
-import "react-datepicker/dist/react-datepicker.css";
+//import "react-datepicker/dist/react-datepicker.css";
 import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
 import {rowStyle, styles, theme} from "../Tree/BasicTreeTableProps";
@@ -11,7 +11,6 @@ import {
   OptionsM,
   columnsF,
   Linescolumns,
-  filter,
   FinancialsFormHead, FormFactory
 } from '../../Tables2/LineFinancialsProps'
 import {formEnum} from "../../../utils/FORMS";
@@ -148,8 +147,6 @@ const addRow = (newData) =>{
       const dx = {...current};
       dx.lines[dx.lines.length] = newData;
       setCurrent({...dx});
-      console.log('currentDX1', current);
-      console.log('currentDX2', dx);
     }
   }
   const updateRow = (newData, oldData) =>{
@@ -158,11 +155,6 @@ const addRow = (newData) =>{
       const index = dx.lines.findIndex(obj => obj.lid === newData.lid);
       dx.lines[index] = {...newData};
       setCurrent({...dx});
-      console.log('DXindex', index);
-      console.log('currentDX1', current);
-      console.log('currentDX2', dx);
-      //const index = dx.lines.findIndex(obj => obj.lid === newData.lid);
-      //dx.lines[index] = newData;
     }
   }
   const deleteRow = (oldData) =>{
@@ -171,7 +163,7 @@ const addRow = (newData) =>{
       const index =dx.lines.findIndex(obj => obj.lid === oldData.lid);
       const deleted = dx.lines[index];
       dx.lines[index] = {...deleted, transid:-2 };
-      setCurrent({...dx, editing:true});
+      setCurrent({...dx});
     }
   }
  const  editable = () => ({

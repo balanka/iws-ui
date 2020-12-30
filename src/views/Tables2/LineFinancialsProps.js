@@ -1,6 +1,5 @@
-import React, {useContext} from 'react'
+import React from 'react'
 
-import "react-datepicker/dist/react-datepicker.css";
 import {styles, rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -24,26 +23,6 @@ import DateFnsUtils from "@date-io/date-fns";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import blue from "@material-ui/core/colors/blue";
-import FinancialsForm from "../base/Components/FinancialsForm";
-import {CrudAccount} from "../base/Components/CrudAccount";
-import {accountContext} from "../base/Components/AccountContext";
-export const styles1 = {
-  outer: {
-    borderRadius: 5,
-    boxShadow: "0 10px 30px #BBB",
-    padding: 10
-  },
-  spacer: {
-    flex: '1 1 10%',
-  },
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  }
-};
-
-//const value = useContext(accountContext);
-//const t = value.t
 
 const mapping = (acc) =>
     <MenuItem key={acc.id} value={acc.id}>
@@ -248,7 +227,7 @@ export const Options = ({
     search: false,
     selection: false,
     cellStyle: {padding: '0.3em', fontSize: 10,},
-    headerStyle: {'padding': '0.50em',  fontSize: 10,  position: 'sticky',
+    headerStyle: {'padding': '0.3em',  fontSize: 10,  position: 'sticky',
         backgroundColor: theme.palette.background.default, //theme.palette.background.paper theme.palette.common.black,
         color: theme.palette.common.black//'#fff9e6' //'#eee'
          },
@@ -745,20 +724,10 @@ export const BankStatementMainForm =(props) => {
                 </CCol>
                 <CCol sm="1.5">
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                            disabled ={current.posted}
-                            disableToolbar
-                            fullWidth
-                            variant="inline"
-                            format="dd.MM.yyyy"
-                            margin="normal"
-                            id="date-picker-inline"
-                            label={t('bankstatement.valuedate')}
-                            value={current.valuedate}
-                            onChange={(event) => { setCurrent({ ...current, valuedate: event.target.value})}}
-                            KeyboardButtonProps = {{
-                                'aria-label': t('bankstatement.valuedate'),
-                            }}
+                    <KeyboardDatePicker
+                        format='d.MM.yy'
+                        inputValue={current.duedate}
+                        onChange={(_, newValue) => setCurrent({ ...current, valuedate: newValue} )}
                         />
                     </MuiPickersUtilsProvider>
                 </CCol>
@@ -1168,22 +1137,12 @@ export const FinancialsMainForm =(props) => {
 
                 <CCol sm="2" style={{'text-align':'right', 'padding-left':10, padding:1 }}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                            disabled ={current.posted}
-                            disableToolbar
-                            fullWidth
-                            variant="inline"
-                            format="dd.MM.yyyy"
-                            margin="normal"
-                            id="date-picker-inline"
-                            label=""//{t('financials.transdate')}
-                            value={current.transdate}
-                            onChange={(event) => { console.log('datedate',event.target.value)}}
-                            KeyboardButtonProps = {{
-                                'aria-label': t('financials.transdate'),
-                            }}
-                        />
-                    </MuiPickersUtilsProvider>
+                    <KeyboardDatePicker
+                        format='dd.MM.yyyy'
+                        inputValue={current.transdate}
+                        onChange={(date) => setCurrent({ ...current, transdate: date} )}
+                    />
+                </MuiPickersUtilsProvider>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{ 'padding-bottom':30, height:15 }}>
