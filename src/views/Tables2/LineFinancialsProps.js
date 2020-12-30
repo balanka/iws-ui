@@ -1,5 +1,4 @@
 import React from 'react'
-
 import {styles, rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -725,14 +724,14 @@ export const BankStatementMainForm =(props) => {
                 <CCol sm="1.5">
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
-                        format='d.MM.yy'
+                        format='dd.MM.yyyy'
                         inputValue={current.duedate}
                         onChange={(_, newValue) => setCurrent({ ...current, valuedate: newValue} )}
                         />
                     </MuiPickersUtilsProvider>
                 </CCol>
             </CFormGroup>
-            <CFormGroup row style={{  height:15 }}>
+            <CFormGroup row style={{ height:15 }}>
                 <CCol sm="2">
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.beneficiary')}</CLabel>
                 </CCol>
@@ -748,7 +747,7 @@ export const BankStatementMainForm =(props) => {
                              className="input-sm" placeholder="postingtext" value={current.postingtext} />
                 </CCol>
             </CFormGroup>
-            <CFormGroup row style={{  height:15 }}>
+            <CFormGroup row style={{ height:15 }}>
                 <CCol sm="2">
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.info')}</CLabel>
                 </CCol>
