@@ -3,13 +3,7 @@ import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import useFetch from "../../../utils/useFetch";
-import {
-  ColumnsCUST as columns,
-  CommonFormHead,
-  filter,
-  FormFactory,
-  OptionsM
-} from "../../Tables2/LineFinancialsProps";
+import {ColumnsCUST, CommonFormHead, FormFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
 import {formEnum} from "../../../utils/FORMS";
@@ -37,12 +31,9 @@ const CustomerForm = () => {
   useEffect(() => {}, [current, setCurrent, data ]);
   useEffect(() => {setCurrent(current_)}, [ current_]);
 
-  const toggleToolbar= ()=> {
-    setToolbar(!toolbar );
-  }
-  const toggle= ()=> {
-    setState({...state, collapse:!state.collapse });
-  }
+  const toggleToolbar= ()=> setToolbar(!toolbar );
+  const toggle= ()=> setState({...state, collapse:!state.collapse });
+
   const initAdd =()=> {
     const row = {...value.initialState.hits[0], company:profile.company, editing:false};
     value.editRow(row, false);
@@ -50,17 +41,9 @@ const CustomerForm = () => {
   };
 
   const cancelEdit = (e) => initAdd();
-  const columnsX = columns(data,t);
-  const getColumnName = ()=>columnsX.map(col =>col.field);
-
-  const [filteredRows, setFilteredRows] = useState(data);
-  useEffect(() => {handleFilter('')}, [data]);
-  function handleFilter(text) {
-    const rows_=text?filter(data.hits, getColumnName(), text ):data.hits
-    setFilteredRows(rows_);
-  }
+  const columns = ColumnsCUST(data,t);
   const edit = editedRow =>{
-    const record = filteredRows.find(obj => obj.id === editedRow.id);
+    const record = data.hits.find(obj => obj.id === editedRow.id);
     const row = {...record, editing:true}
     setCurrent(row);
   }
@@ -99,8 +82,8 @@ const CustomerForm = () => {
                      vatData={vatData} collapse={state.collapse} styles={styles} />
 
         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
-          <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={filteredRows} columns={columnsX}
-                         rowStyle={rowStyle}  theme={theme} t={t}  edit ={edit}/>
+          <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}
+                         columns={columns} rowStyle={rowStyle}  theme={theme} t={t}  edit ={edit}/>
         </Grid>
       </Grid>
     </>

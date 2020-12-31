@@ -249,7 +249,7 @@ export const OptionsM = ({
     exportAllData: true,
     exportButton: true,
     exportDelimiter: ',',
-    exportFileName:'Masterfile.csv'
+    //exportFileName:'Masterfile.csv'
 })
 export const ColumnsM =(data, t) => [
       {field:'id', title:t('costcenter.id'), export:true}
@@ -436,7 +436,6 @@ export const CommonFormHead = (props) => {
 export const FinancialsFormHead = (props) => {
     const {styles, title, collapse, module, modules, initAdd, onNewLine, cancelEdit, submitEdit, submitQuery, toggle
         , handleModuleChange, toggleToolbar} = props
-      console.log('propsZZ', props);
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -1039,7 +1038,6 @@ export const CustomerMainForm =(props) => {
     )}
 export const FinancialsMainForm =(props) => {
     const {current, setCurrent, t, accData, ccData } = props
-    console.log('ccData::::',ccData);
     return (
         <>
             <CFormGroup row style={{  height:15}}>
