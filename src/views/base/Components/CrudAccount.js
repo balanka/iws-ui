@@ -21,11 +21,11 @@ export  function CrudAccount  (props) {
   const renderComponent =(componentName)=> {
     const componentLookup = {
       accountForm      : <AccountForm/>,
-      costCenterForm   : <CostCenterForm/>,
+      costCenterForm   : <AccountForm/>,
       customerForm     : <CustomerForm/>,
       supplierForm     : <CustomerForm/>,
       bankStmtForm     : <BankStatementForm/>,
-      vatForm          : <VatForm/>,
+      vatForm          : <AccountForm/>,
       pacForm          : <PACBForm/>,
       financialsForm   : <FinancialsForm/>,
       balancesheetForm : <TreeTableForm/>,
@@ -142,7 +142,7 @@ export  function CrudAccount  (props) {
                            editing={editing} setEditing={setEditing} editRow={editRow} current={current}
                            setCurrent={setCurrent} submitEdit={submitEdit} submitPost={submitPost} 
                            initialState={props.initialState} headers={props.headers}
-                           initAcc={props.initAcc} initCc={props.initCc}
+                           initAcc={props.initAcc} initCc={props.initCc} modelid={props.modelid}
                            deleteUser={deleteUser} submitQuery={submitQuery}>
 
             <div className="flex-row">

@@ -9,4 +9,6 @@
     JOURNAL:8,
     PACB:9,
     VAT:10,
+    BALANCESHEET:1000,
+     BALANCETREE:1300
 }

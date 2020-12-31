@@ -286,7 +286,7 @@ export const ColumnsACC =(data, t) => [
     , {field:'postingdate', title:t('account.postingdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
     , {field:'company', title:t('common.company'), type:"string",  export:true}
 ]
-export const ColumnsV = (data, t) => [
+export const ColumnsVAT = (data, t) => [
     {field:'id', title:t('vat.id'), export:true}
     , {field:'name', title:t("vat.name"),  type:"string", export:true}
     , {field:'description', title:t('vat.description'), type:"string",  export:true}
@@ -519,7 +519,39 @@ export const JournalFormHead = (props) => {
             </Grid>
         </Grid>);
 }
+export const ColumnFactory =(formid, data, t)=> {
+    switch(formid) {
+        case formEnum.ACCOUNT:
+            return ColumnsACC(data, t);
+            break;
+        //case formEnum.BANKSTATEMENT:
+       //     return <FormWrapper {...props} form = {BankStatementMainForm}/>;
+       //     break;
+        case formEnum.COSTCENTER:
+        case formEnum.BANK:
+            return ColumnsM(data, t);
+            break;
 
+        case formEnum.CUSTOMER:
+        case formEnum.SUPPLIER:
+            return ColumnsCUST(data, t);
+            break;
+        //case formEnum.FINANCIALS:
+        //    return <FormWrapper {...props} form = {FinancialsMainForm}/>;
+       //     break;
+
+        case formEnum.JOURNAL:
+            return JournalHeaders(t);
+        case formEnum.PACB:
+            return pacHeaders(t);
+            break;
+        case formEnum.VAT:
+            return ColumnsVAT(data, t);
+            break;
+        default:
+        // code block
+    }
+}
 export const FormFactory =(props)=> {
 const {formid} = props
     switch(formid) {

@@ -3,10 +3,10 @@ import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import useFetch from "../../../utils/useFetch";
-import {ColumnsACC, OptionsM, FormFactory, CommonFormHead} from "../../Tables2/LineFinancialsProps";
+import {OptionsM, FormFactory, CommonFormHead, ColumnFactory} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
-import {formEnum} from "../../../utils/FORMS";
+
 
 const AccountForm = () => {
   const [profile, ] = useGlobalState('profile');
@@ -18,6 +18,7 @@ const AccountForm = () => {
   const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
   const current_= value.user;
+  const modelid_ = value.modelid;
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [current,setCurrent] = useState(current_);
@@ -34,7 +35,7 @@ const AccountForm = () => {
     setCurrent(row);
   };
   const cancelEdit = (e) =>  initAdd();
-  const columns = ColumnsACC(data, t);
+  const columns = ColumnFactory(modelid_,data, t);
 
   const edit = editedRow =>{
       const record = data.hits.find(obj => obj.id === editedRow.id);
@@ -70,7 +71,7 @@ const AccountForm = () => {
                          setData={setData} setAccData={setAccData}  url={value.url} accUrl={value.accUrl}
                          cancelEdit ={cancelEdit} submitEdit={submitEdit}
                          submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
-         <FormFactory formid ={formEnum.ACCOUNT} current={current} setCurrent={setCurrent} t={t} accData={accData}
+         <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t} accData={accData}
                       collapse={state.collapse} styles={styles} />
          <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
             <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}

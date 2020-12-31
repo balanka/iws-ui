@@ -5,7 +5,7 @@ import useFetch from "../../../utils/useFetch";
 import {accountContext, useGlobalState} from './AccountContext';
 import EditableTable from "../../Tables2/EditableTable";
 import {
-  ColumnsV,
+  ColumnsVAT,
   OptionsM,
   FormFactory, CommonFormHead
 } from "../../Tables2/LineFinancialsProps";
@@ -22,6 +22,7 @@ const VatForm = () => {
   const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
   const current_= value.user;
+  const modelid_ = value.modelid;
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [current,setCurrent] = useState(current_);
@@ -36,7 +37,7 @@ const VatForm = () => {
     e.preventDefault();
     initAdd();
   };
-  const columns = ColumnsV(data,  t);
+  const columns = ColumnsVAT(modelid_, data,  t);
 
   const edit = editedRow =>{
     const record = data.hits.find(obj => obj.id === editedRow.id);

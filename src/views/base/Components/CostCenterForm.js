@@ -71,7 +71,7 @@ const CostCenterForm = () => {
                            initialState={value.initialState} setData={setData} setAccData={setAccData} url={value.url}
                            accUrl={value.accUrl} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                            submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
-        <FormFactory formid ={formEnum.COSTCENTER} current={current} setCurrent={setCurrent} t={t} accData={accData}
+        <FormFactory formid ={value.modelid} current={current} setCurrent={setCurrent} t={t} accData={accData}
                      collapse={state.collapse} styles={styles} />
          <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}

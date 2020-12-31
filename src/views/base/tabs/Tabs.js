@@ -5,6 +5,7 @@ import {CrudAccount} from "../Components/CrudAccount";
 import Login from "../../pages/login/Login";
 import {currencyFormatDE, dateFormat} from "../../../utils/utils";
 import {createGlobalState} from "react-hooks-global-state";
+import {formEnum} from "../../../utils/FORMS";
 
 const initialState = {profile:{
         token:'noTOken'
@@ -68,33 +69,33 @@ export const Tabs = () => {
         ]})
     const modules  = (t) =>[
         {id:0, name:'Login', title:t('login.title'), ctx:"/login", ctx1:"", get:""
-            , ctx2:"/", form:'loginForm', state:initCC, state1:initAcc ,state2:'', columns:[]}
+            , ctx2:"/", form:'loginForm', state:initCC, state1:initAcc ,state2:'',  columns:[]}
         , {id:6, name:'CostCenter', title:t('costcenter.title'), ctx:"/cc", ctx1:"/acc/accmd/9", get:"md/6"
-            , ctx2:"/", form:'costCenterForm', state:initCC, state1:initAcc ,state2:'', columns:[]}
+            , ctx2:"/", form:'costCenterForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.COSTCENTER, columns:[]}
         , {id:1, name:"Supplier", title:t('supplier.title'), ctx:"/sup", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/1"
-            , form:'customerForm' , state:initSup, state1:initAcc ,state2:initVat, columns:[]}
+            , form:'customerForm' , state:initSup, state1:initAcc ,state2:initVat, modelid:formEnum.CUSTOMER, columns:[]}
         , {id:3, name:'Customer', title:t('customer.title'), ctx:"/cust", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/3"
-            , form:'customerForm' , state:initCust, state1:initAcc, state2:initVat, columns:[]}
+            , form:'customerForm' , state:initCust, state1:initAcc, state2:initVat, modelid:formEnum.CUSTOMER, columns:[]}
 
         , {id:9, name:"Account", title:t('account.title'), ctx:"/acc", ctx1:"/acc/accmd/9", get:"md/9"
-            , form:'accountForm', state:initCC, state1:initAcc ,state2:'', columns:[]}
+            , form:'accountForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.ACCOUNT, columns:[]}
         , {id:11, name:"Bank", title:t('bank.title'), ctx:"/bank", ctx1:"/acc", ctx2:"", get:"md/11"
-            , form:'costCenterForm', state:initBank, state1:initAcc ,state2:'', columns:[]}
+            , form:'costCenterForm', state:initBank, state1:initAcc ,state2:'', modelid:formEnum.BANK, columns:[]}
         , {id:14, name:"Vat", title:t('vat.title'), ctx:"/vat", ctx1:"/acc/accmd/9", ctx2:"", get:"md/14"
-            , form:'vatForm', state:initVat, state1:initAcc ,state2:'', columns:[]}
+            , form:'vatForm', state:initVat, state1:initAcc ,state2:'', modelid:formEnum.VAT, columns:[]}
         , {id:18, name:"Bankstatement", title:t('bankstatement.title'), ctx:"/bs", ctx1:"/acc/accmd/9", ctx2:"", get:"md/18"
-            , form:'bankStmtForm', state:initBS, state1:initAcc ,state2:'', columns:[]}
+            , form:'bankStmtForm', state:initBS, state1:initAcc ,state2:'', modelid:formEnum.BANKSTATEMENT, columns:[]}
         , {id:106, name:"PAC", title:t('pac.title'), ctx:"/pac", ctx1:"/acc", ctx2:"", get:"md/106"
-            , form:'pacForm', state:initPac, state1:initAcc, state2:'', columns:pacHeaders(t) }
+            , form:'pacForm', state:initPac, state1:initAcc, state2:'', modelid:formEnum.PACB, columns:pacHeaders(t) }
         , {id:112, name:"Journal", title:t('journal.title'), ctx:"/jou", ctx1:"/acc/accmd/9", ctx2:"", get:"md/112"
-            , form:'journalForm', state:initJour, state1:initAcc, state2:'', columns:JournalHeaders(t)  }
+            , form:'journalForm', state:initJour, state1:initAcc, state2:'', modelid:formEnum.JOURNAL, columns:JournalHeaders(t)  }
         , {id:1120, name:"Financials", title:t('financials.title'), ctx:"/ftr", ctx1:"/acc", ctx2:"/cc", get:"md/112"
-            , form:'financialsForm', state:initFrt, state1:initAcc, state2:initCC }
+            , form:'financialsForm', state:initFrt, state1:initAcc, state2:initCC , modelid:formEnum.FINANCIALS}
 
-        , {id:1000, name:"Balance", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", get:"md/112"
-            , form:"balancesheetForm", state:initBalanceSheet, state1:initAcc, state2:'', columns:balanceHeaders(t) }
+        , {id:1000, name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", get:"md/112"
+            , form:"balancesheetForm", state:initBalanceSheet, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET, columns:balanceHeaders(t) }
         , {id:1300, name:"BalanceTree", title:t('common.title'), ctx:"/acc", ctx1:"/acc", ctx2:"", get:"md/106"
-            , form:"treeForm", state:initAcc, state1:initAcc, state2:'', columns:treeHeaders(t).h }
+            , form:"treeForm", state:initAcc, state1:initAcc, state2:'', modelid:formEnum.BALANCETREE, columns:treeHeaders(t).h }
     ]
   /*
     const [state,setState] = useState( {activeTab: new Array(1).fill('1')})
@@ -180,7 +181,9 @@ export const Tabs = () => {
             <CTabPane>
                 <CrudAccount url={SERVER_URL.concat(module.ctx)} get={module.get} accUrl={SERVER_URL.concat(module.ctx1)}
                              ccUrl={SERVER_URL.concat(module.ctx2)}  initialState={module.state} initAcc={module.state1}
-                             initCc={module.state2} title={module.title} form={module.form} headers={module.columns}/>
+                             initCc={module.state2} title={module.title} form={module.form} headers={module.columns}
+                             modelid={module.modelid}
+                 />
             </CTabPane>
         </>
     }
