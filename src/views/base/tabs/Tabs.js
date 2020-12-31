@@ -7,10 +7,7 @@ import {currencyFormatDE, dateFormat} from "../../../utils/utils";
 import {createGlobalState} from "react-hooks-global-state";
 import {formEnum} from "../../../utils/FORMS";
 
-const initialState = {profile:{
-        token:'noTOken'
-        , company:''
-    }}
+const initialState = {profile:{token:'noTOken', company:''}}
 
 export const { useGlobalState } = createGlobalState(initialState);
 export const Tabs = () => {
@@ -71,18 +68,17 @@ export const Tabs = () => {
         {id:0, name:'Login', title:t('login.title'), ctx:"/login", ctx1:"", get:""
             , ctx2:"/", form:'loginForm', state:initCC, state1:initAcc ,state2:'',  columns:[]}
         , {id:6, name:'CostCenter', title:t('costcenter.title'), ctx:"/cc", ctx1:"/acc/accmd/9", get:"md/6"
-            , ctx2:"/", form:'costCenterForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.COSTCENTER, columns:[]}
+            , ctx2:"/", form:'accountForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.COSTCENTER, columns:[]}
         , {id:1, name:"Supplier", title:t('supplier.title'), ctx:"/sup", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/1"
             , form:'customerForm' , state:initSup, state1:initAcc ,state2:initVat, modelid:formEnum.CUSTOMER, columns:[]}
         , {id:3, name:'Customer', title:t('customer.title'), ctx:"/cust", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/3"
             , form:'customerForm' , state:initCust, state1:initAcc, state2:initVat, modelid:formEnum.CUSTOMER, columns:[]}
-
         , {id:9, name:"Account", title:t('account.title'), ctx:"/acc", ctx1:"/acc/accmd/9", get:"md/9"
-            , form:'accountForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.ACCOUNT, columns:[]}
+            , form:'customerForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.ACCOUNT, columns:[]}
         , {id:11, name:"Bank", title:t('bank.title'), ctx:"/bank", ctx1:"/acc", ctx2:"", get:"md/11"
-            , form:'costCenterForm', state:initBank, state1:initAcc ,state2:'', modelid:formEnum.BANK, columns:[]}
+            , form:'customerForm', state:initBank, state1:initAcc ,state2:'', modelid:formEnum.BANK, columns:[]}
         , {id:14, name:"Vat", title:t('vat.title'), ctx:"/vat", ctx1:"/acc/accmd/9", ctx2:"", get:"md/14"
-            , form:'vatForm', state:initVat, state1:initAcc ,state2:'', modelid:formEnum.VAT, columns:[]}
+            , form:'customerForm', state:initVat, state1:initAcc ,state2:'', modelid:formEnum.VAT, columns:[]}
         , {id:18, name:"Bankstatement", title:t('bankstatement.title'), ctx:"/bs", ctx1:"/acc/accmd/9", ctx2:"", get:"md/18"
             , form:'bankStmtForm', state:initBS, state1:initAcc ,state2:'', modelid:formEnum.BANKSTATEMENT, columns:[]}
         , {id:106, name:"PAC", title:t('pac.title'), ctx:"/pac", ctx1:"/acc", ctx2:"", get:"md/106"

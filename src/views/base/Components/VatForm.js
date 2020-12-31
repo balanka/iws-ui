@@ -10,7 +10,6 @@ import {
   FormFactory, CommonFormHead
 } from "../../Tables2/LineFinancialsProps";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
-import {formEnum} from "../../../utils/FORMS";
 
 const VatForm = () => {
   const [profile, ] = useGlobalState('profile');

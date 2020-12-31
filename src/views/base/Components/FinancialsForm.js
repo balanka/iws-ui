@@ -2,7 +2,6 @@ import React, {useEffect, useState, useContext, createRef} from 'react'
 import { CInput} from '@coreui/react'
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
-//import "react-datepicker/dist/react-datepicker.css";
 import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
 import {rowStyle, styles, theme} from "../Tree/BasicTreeTableProps";
@@ -25,8 +24,6 @@ const FinancialsForm = () => {
   const res  = useFetch(url, {});
   const [{ res2}] = useFetch(value.accUrl, {});
   const [{ res3}] = useFetch(value.ccUrl, {});
-  console.log('value.accUrl',value.accUrl);
-  console.log('value.ccUrl',value.ccUrl);
   const init = ()=> {return value.initialState}
   const data_ = res && res.response?res.response:[value.initialState];
   const accData_=  res2?res2:value.accData;
@@ -40,7 +37,6 @@ const FinancialsForm = () => {
   const [current,setCurrent] = useState(current_);
   const columnsX = Linescolumns(accData.hits, initLine, current, t);
   const columns= columnsF(ccData.hits, initLine, current, t);
-  const getColumnName = ()=>columns.map(col =>col.field);
   useEffect(() => {setCurrent(current_)}, [ current_]);
 
   const toggleToolbar = ()=> setToolbar(!toolbar );
@@ -79,10 +75,7 @@ const FinancialsForm = () => {
     submitQuery(event, value);
   };
 
-  const addAmount =(row)=> {
-    return {...row, total: row.lines.reduce((acc, line) => acc + line.amount, 0)}
-  }
-
+  const addAmount = row => ({...row, total: row.lines.reduce((acc, line) => acc + line.amount, 0)})
   const datax=() =>(data?.hits?data?.hits:init().hits).map( row =>addAmount(row));
 
   const edit = editedRow =>{

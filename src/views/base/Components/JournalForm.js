@@ -4,8 +4,8 @@ import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
 import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelper'
-import {OptionsM, columnsJ, filter, JournalFormHead, FormFactory} from '../../Tables2/LineFinancialsProps';
-import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
+import {columnsJ, filter, JournalFormHead, FormFactory} from '../../Tables2/LineFinancialsProps';
+import {styles} from "../Tree/BasicTreeTableProps";
 import {formEnum} from "../../../utils/FORMS";
 import blue from "@material-ui/core/colors/blue";
 
@@ -60,7 +60,6 @@ const JournalForm = () => {
         value.submitQuery(event, url_(), setData, value.initialState)
   };
 
-
   function handleFilter(text) {
       const rows_=text?filter(getData(), getColumnName(), text ):getData()
       setFilteredRows(rows_);
@@ -101,7 +100,6 @@ const JournalForm = () => {
                         load = {load} toggleToolbar={toggleToolbar}  />
         <FormFactory formid ={formEnum.JOURNAL} current={current} setCurrent={setCurrent} t={t} accData={accData}
                      collapse={state.collapse} styles={styles} />
-
         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
          <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
         </Grid>

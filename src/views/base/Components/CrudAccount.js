@@ -1,8 +1,5 @@
 import React, {useState, Fragment} from 'react'
-import AccountForm from "./AccountForm";
-import CostCenterForm from "./CostCenterForm";
 import CustomerForm from "./CustomerForm";
-import VatForm from "./VatForm";
 import PACBForm  from "./PACBForm";
 import JournalForm from "./JournalForm";
 import FinancialsForm from "./FinancialsForm";
@@ -20,12 +17,9 @@ export  function CrudAccount  (props) {
 
   const renderComponent =(componentName)=> {
     const componentLookup = {
-      accountForm      : <AccountForm/>,
-      costCenterForm   : <AccountForm/>,
+      accountForm      : <CustomerForm/>,
       customerForm     : <CustomerForm/>,
-      supplierForm     : <CustomerForm/>,
       bankStmtForm     : <BankStatementForm/>,
-      vatForm          : <AccountForm/>,
       pacForm          : <PACBForm/>,
       financialsForm   : <FinancialsForm/>,
       balancesheetForm : <TreeTableForm/>,

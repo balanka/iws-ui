@@ -3,23 +3,21 @@ import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import blue from "@material-ui/core/colors/blue";
 import useFetch from "../../../utils/useFetch";
-import {ColumnsCUST, CommonFormHead, FormFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {ColumnFactory,  CommonFormHead, FormFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
-import {formEnum} from "../../../utils/FORMS";
 const CustomerForm = () => {
   const [profile, ] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const value = useContext(accountContext);
   const t = value.t
+  const modelid_ = value.modelid;
   const [{ res},] = useFetch(value.url, {});
   const [{ res2},] = useFetch(value.accUrl, {});
   const [{ res3},] = useFetch(value.ccUrl, {});
   const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
   const vatData_=  res3?.hits?res3.hits:value.ccData;
-  console.log('data_',data_)
-  console.log('accData_',accData_)
 
   const current_= value.user;
 
@@ -41,7 +39,7 @@ const CustomerForm = () => {
   };
 
   const cancelEdit = (e) => initAdd();
-  const columns = ColumnsCUST(data,t);
+  const columns = ColumnFactory(modelid_,data, t);
   const edit = editedRow =>{
     const record = data.hits.find(obj => obj.id === editedRow.id);
     const row = {...record, editing:true}
@@ -78,7 +76,7 @@ const CustomerForm = () => {
                         setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
                         cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {submitQuery} toggle={toggle}
                         toggleToolbar={toggleToolbar}  />
-        <FormFactory formid ={formEnum.CUSTOMER} current={current} setCurrent={setCurrent} t={t} accData={accData}
+        <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t} accData={accData}
                      vatData={vatData} collapse={state.collapse} styles={styles} />
 
         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
