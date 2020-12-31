@@ -5,7 +5,7 @@ import useFetch from "../../../utils/useFetch";
 import {accountContext, useGlobalState} from './AccountContext';
 import EditableTable from "../../Tables2/EditableTable";
 import {
-  ColumnsVAT,
+ ColumnFactory,
   OptionsM,
   FormFactory, CommonFormHead
 } from "../../Tables2/LineFinancialsProps";
@@ -37,7 +37,7 @@ const VatForm = () => {
     e.preventDefault();
     initAdd();
   };
-  const columns = ColumnsVAT(modelid_, data,  t);
+  const columns = ColumnFactory(modelid_, data,  t);
 
   const edit = editedRow =>{
     const record = data.hits.find(obj => obj.id === editedRow.id);
@@ -70,7 +70,7 @@ const VatForm = () => {
          <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd} setData={setData} setAccData={setAccData}
                          url={value.url} accUrl={value.accUrl} initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                          submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
-         <FormFactory formid ={formEnum.VAT} current={current} setCurrent={setCurrent} t={t} accData={accData}
+         <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t} accData={accData}
                       collapse={state.collapse} styles={styles} />
 
       <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
