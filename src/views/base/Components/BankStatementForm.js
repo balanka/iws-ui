@@ -5,20 +5,19 @@ import blue from "@material-ui/core/colors/blue";
 import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
 import axios from "axios";
-import {ColumnsBS , OptionsM,  CommonFormHead, FormFactory} from "../../Tables2/LineFinancialsProps";
+import {OptionsM, CommonFormHead, FormFactory, ColumnFactory} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
-import {formEnum} from "../../../utils/FORMS";
-import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
+import {styles,  theme} from "../Tree/BasicTreeTableProps";
 
 const BankStatementForm = () => {
   const { t,  } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [profile, ] = useGlobalState('profile');
   const value = useContext(accountContext);
+  const modelid_ = value.modelid;
   const init = ()=> {return value.initialState}
   const [{ res}]= useFetch(value.url, {});
   const data_ =  res?.hits?res.hits:[value.initialState];
-  const getData =()=> { return data?.hits?data.hits:init().hits}
   const current_= value.user;
   const [data, setData] = useState(data_);
   const [current,setCurrent] = useState(current_);
@@ -28,14 +27,13 @@ const BankStatementForm = () => {
 
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
-  const columns = ColumnsBS([], value.initialState, current, t);
+  const columns = ColumnFactory(modelid_, data, t);
 
   const submitGet = (url, func, result) => {
     axios.get( url, {headers: {'authorization':profile.token}})
       .then(response => {
         const resp = response.data;
         result=response.data;
-
         func(resp);
         result=resp;
         return result;
@@ -85,12 +83,13 @@ const BankStatementForm = () => {
 
 
   function buildForm(current){
+      {console.log('current.valuedate', current.valuedate)}
     return <>
         <Grid container spacing={2} style={{...styles.outer }} direction="column" >
             <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} setData={setData}
                              url={value.url} accUrl={value.accUrl} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                             submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
-            <FormFactory formid ={formEnum.BANKSTATEMENT} current={current} setCurrent={setCurrent} t={t}
+            <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t}
                           collapse={state.collapse} styles={styles} />
             <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
                <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{Suspense} from 'react'
 import {CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CCard, CCardBody, CTabs} from '@coreui/react'
 import {useTranslation} from "react-i18next";
 import {CrudAccount} from "../Components/CrudAccount";
@@ -8,6 +8,12 @@ import {createGlobalState} from "react-hooks-global-state";
 import {formEnum} from "../../../utils/FORMS";
 
 const initialState = {profile:{token:'noTOken', company:''}}
+const loading = (
+    <div className="pt-3 text-center">
+      <div className="sk-spinner sk-spinner-pulse"></div>
+    </div>
+  )
+  
 
 export const { useGlobalState } = createGlobalState(initialState);
 export const Tabs = () => {
@@ -202,7 +208,9 @@ export const Tabs = () => {
                     <CCard>
                         <CCardBody>
                             <CTabs>
-                                {getContent (items)}
+                               <Suspense fallback={loading}>
+                                  {getContent (items)}
+                                </Suspense>    
                             </CTabs>
                         </CCardBody>
                     </CCard>

@@ -11,7 +11,6 @@ import Search from "@material-ui/icons/Search";
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 
-
 export default function EditableTable(props) {
     const {Options, flag, data, columns, t, tableRef, addRow, edit, editable} = props
     const [selectedRows, setSelectedRows] = useState([]);

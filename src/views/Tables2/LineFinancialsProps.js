@@ -23,6 +23,14 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import blue from "@material-ui/core/colors/blue";
 
+const mappingMenu = (acc) =>
+    <MenuItem key={acc.id} value={acc.id}>
+        {acc.id.concat( " ").concat(acc.name)}
+    </MenuItem>
+const mappingMenuName = (acc) =>
+    <MenuItem key={acc.id} value={acc.id}>
+        {acc.name.concat( " ").concat(acc.id)}
+    </MenuItem>
 const mapping = (acc) =>
     <MenuItem key={acc.id} value={acc.id}>
         {acc.id.concat( " ").concat(acc.name)}
@@ -37,11 +45,36 @@ export const  filter = (rows, cols, txt,) => rows.filter(col =>
     cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b)
 );
 
-export  const ACCOUNT=(data, value, onRowDataChange, rowData, fieldName) =>
-    <Select value={value} onChange ={(event) =>
-            onRowDataChange({...rowData, fieldName: event.target.value})}>
-        {data.map(mapping)}
-    </Select>
+export  const ACCOUNT=(data, value, onRowDataChange, rowData, fieldName) => {
+    return (<Select value={value} onChange={(event) =>
+        onRowDataChange({...rowData, account: event.target.value})}>
+        {data.map(mapping)} id={"cb".concat(fieldName)}
+    </Select>)
+}
+
+export  const ACCOUNT2=(data, value, onRowDataChange, rowData, fieldName) => {
+    return (<Select value={value} onChange={(event) =>
+        onRowDataChange({...rowData, oaccount: event.target.value})}>
+        {data.map(mapping)} id={"cb".concat(fieldName)}
+    </Select>)
+}
+/*
+<Select
+    labelId="demo-customized-select-label"
+    id="demo-customized-select"
+    value={age}
+    onChange={handleChange}
+    input={<BootstrapInput />}
+>
+    <MenuItem value="">
+        <em>None</em>
+    </MenuItem>
+    <MenuItem value={10}>Ten</MenuItem>
+    <MenuItem value={20}>Twenty</MenuItem>
+    <MenuItem value={30}>Thirty</MenuItem>
+</Select>
+
+ */
 export const  editable = (data, setData, current ) => ({
     onRowAdd: newData =>{
             const datax = JSON.parse(JSON.stringify(data));
@@ -166,21 +199,24 @@ export const columnsF =(data, line, current, t) => [
     , {field:'company', title:t('common.company'), type:"numeric", export:true}
 ]
 export const Linescolumns =(data, line, current, t) => [
-      {field:'lid', title:t('financials.line.id'), hidden:false,  initialEditValue:line.lid}
-    , {field:'transid', title:t('financials.id'), hidden:false, initialEditValue:current.tid}
-    , {field:'account', title:t('financials.line.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            ACCOUNT ( data, value, onRowDataChange, rowData,"account" ),  initialEditValue:'', width: 20}
-    , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true, width:10}
-    , {field:'oaccount', title:t('financials.line.oaccount'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-          ACCOUNT ( data, value, onRowDataChange, rowData, "oaccount"), initialEditValue:'', width: 20}
+      {field:'lid', title:t('financials.line.id'), type:'numeric', hidden:true,  initialEditValue:line.lid, editable:'never'
+      ,  cellStyle: {maxWidth:5}, headerStyle: {maxWidth:5}}
+    , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current.tid,  editable:'never'
+    ,  cellStyle: {maxWidth:5}, headerStyle: {maxWidth:5}}
+    , {field:'account', title:t('financials.line.account'), type:'string', hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
+            ACCOUNT ( data, value, onRowDataChange, rowData,"account" ),  initialEditValue:''
+      , cellStyle: {maxWidth: 40}, headerStyle: {maxWidth: 40}}
+    , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true,  cellStyle: {maxWidth:2}, headerStyle: {maxWidth:2}}
+    , {field:'oaccount', title:t('financials.line.oaccount'), type:'string', hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
+          ACCOUNT2 ( data, value, onRowDataChange, rowData, "oaccount"), initialEditValue:'',  cellStyle: {
+            maxWidth: 20}, headerStyle: {maxWidth: 20}}
     , {field:'duedate', title:t('financials.line.duedate'), type:"date", align:"right",
-      initialEditValue:line.duedate,
-      dateSetting: { locale:"de" } }
+      initialEditValue:line.duedate, dateSetting: { locale:"de" }, cellStyle: {maxWidth: 20}, headerStyle: {maxWidth: 20} }
     , {field:'amount', title:t('financials.line.amount'), type:"currency", initialEditValue:0,
-       currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+       currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 } , width: 20}
     , {field:'text', title:t('financials.line.text'), initialEditValue:'', hidden:false, width: 300}
-    , {field:'currency', title:t('common.currency'), hidden:false,  initialEditValue:line.currency}
-    , {field:'company', title:t('common.company'), hidden:false,  initialEditValue:line.company}
+    , {field:'currency', title:t('common.currency'), hidden:true,  initialEditValue:line.currency, width:5, editable:'never'}
+    , {field:'company', title:t('common.company'), hidden:true,  initialEditValue:line.company, width: 10, editable:'never'}
   ]
 export const Options = ({
     toolbar:false,
@@ -296,7 +332,7 @@ export const ColumnsVAT = (data, t) => [
     ,    editComponent:({ value, onRowDataChange, rowData }) =>ACCOUNT ( data, value, onRowDataChange, rowData,"inputVatAccount" )
     , width: 20, export:true}
     , {field:'outputVatAccount', title:t('vat.output_account')
-    //,editComponent:({ value, onRowDataChange, rowData }) =>ACCOUNT ( data, value, onRowDataChange, rowData, "outputVatAccount" )
+    , editComponent:({ value, onRowDataChange, rowData }) =>ACCOUNT ( data, value, onRowDataChange, rowData, "outputVatAccount" )
         , width: 20, export:true}
     , {field:'enterdate', title:t('vat.enterdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
     , {field:'changedate', title:t('vat.changedate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
@@ -304,7 +340,7 @@ export const ColumnsVAT = (data, t) => [
     , {field:'company', title:t('common.company'), type:"string", export:true}
 ]
 
-export const ColumnsBS =(data, line, current, t) => [
+export const ColumnsBS =( data, t) => [
       {field:'bid', title:t('bankstatement.id'), type:'numeric', align:"right", export:true}
     , {field:'depositor', title:t("bankstatement.depositor"), type:"string", export:true}
     , {field:'valuedate', title:t('bankstatement.valuedate'), type:"date",  align:"right", export:true}
@@ -524,9 +560,9 @@ export const ColumnFactory =(formid, data, t)=> {
         case formEnum.ACCOUNT:
             return ColumnsACC(data, t);
             break;
-        //case formEnum.BANKSTATEMENT:
-       //     return <FormWrapper {...props} form = {BankStatementMainForm}/>;
-       //     break;
+        case formEnum.BANKSTATEMENT:
+            return ColumnsBS(data, t);
+            break;
         case formEnum.COSTCENTER:
         case formEnum.BANK:
             return ColumnsM(data, t);
@@ -546,7 +582,7 @@ export const ColumnFactory =(formid, data, t)=> {
             return pacHeaders(t);
             break;
         case formEnum.VAT:
-            return ColumnsVAT(data, t);
+            return ColumnsVAT(data,t);
             break;
         default:
         // code block
@@ -727,14 +763,22 @@ export const BankStatementMainForm =(props) => {
                     <CInput  bsSize="sm" type="text" id="depositor-input" name="depositor"
                              className="input-sm" placeholder="depositor" value={current.depositor}  />
                 </CCol>
-                <CCol sm="1">
+                <CCol sm="1.5">
+                    <CLabel size="sm" htmlFor="input-small">{t('bankstatement.valuedate')}</CLabel>
                 </CCol>
                 <CCol sm="1.5">
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                        format='dd.MM.yyyy'
-                        inputValue={new Date(current.valuedate)}
-                        onChange={(newValue) => setCurrent({ ...current, valuedate: newValue} )}
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="dd.MM.yyyy"
+                            margin="normal"
+                            //label ={t('bankstatement.valuedate')}
+                            id="date-picker-valuedate"
+                            value={new Date(current.valuedate)}
+                            onChange={(newValue) => setCurrent({ ...current, valuedate: newValue} )}
+                            InputLabelProps={{ shrink: true }}
+                            InputAdornmentProps={{position: 'end','align-text':'right'}}
                         />
                     </MuiPickersUtilsProvider>
                 </CCol>
@@ -744,7 +788,7 @@ export const BankStatementMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.beneficiary')}</CLabel>
                 </CCol>
                 <CCol sm="4">
-                    <CInput  bsSize="sm" type="text" id="beneficiary-input" name="beneficiary"
+                    <CInput  readonly type="text" id="beneficiary-input" name="beneficiary"
                              className="input-sm" placeholder="beneficiary" value={current.beneficiary}/>
                 </CCol>
                 <CCol sm="1">
@@ -777,9 +821,9 @@ export const BankStatementMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.companyIban')}</CLabel>
                 </CCol>
                 <CCol sm="4">
-                    <CInput disabled ={current.posted} bsSize="sm" type="text" id="companyIban-id" name="companyIban"
+                    <CInput  bsSize="sm" type="text" id="companyIban-id" name="companyIban"
                             className="input-sm" placeholder="companyIban" value={current.companyIban}
-                            onChange={(event)  => setCurrent({ ...current, accountno: event.target.value})} />
+                            onChange={(event)  => setCurrent({ ...current, accountno: event.target.value})}/>
                 </CCol>
                 <CCol sm="1">
                     <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
@@ -795,7 +839,7 @@ export const BankStatementMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.accountno')} </CLabel>
                 </CCol>
                 <CCol sm="4">
-                    <CInput disabled ={current.posted} bsSize="sm" type="text" id="accountno-input" name="accountno"
+                    <CInput  bsSize="sm" type="text" id="accountno-input" name="accountno"
                             className="input-sm" placeholder="accountno" value={current.accountno}
                             onChange={(event)  => setCurrent({ ...current, accountno: event.target.value})} />
                 </CCol>
@@ -1142,14 +1186,24 @@ export const FinancialsMainForm =(props) => {
                     </CSelect>
                 </CCol>
 
-                <CCol sm="2" style={{'text-align':'right', 'padding-left':10, padding:1 }}>
+                <CCol sm="2" style={{'text-align':'right', 'padding-left':10, 'padding-bottom':15 }}>
                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                        format='dd.MM.yyyy'
-                        inputValue={current.transdate}
-                        onChange={(date) => setCurrent({ ...current, transdate: date} )}
+                   <KeyboardDatePicker disabled={current.posted}
+                     disableToolbar
+                     variant="inline"
+                     format="dd.MM.yyyy"
+                     margin="normal"
+                     label ={t('financials.transdate')}
+                     id="date-picker-financials"
+                     value={new Date(current.transdate)}
+                     onChange={(newValue) => setCurrent({ ...current, transdate: newValue} )}
+                     InputLabelProps={{ shrink: true }}
+                     InputAdornmentProps={{position: 'end','align-text':'right'}}
                     />
                 </MuiPickersUtilsProvider>
+                </CCol>
+                <CCol sm="1">
+                    <FormControlLabel id="posted" name="posted" control={<Switch checked={current.posted} />} label={t('financials.posted')}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{ 'padding-bottom':30, height:15 }}>
@@ -1172,9 +1226,7 @@ export const FinancialsMainForm =(props) => {
 
                     </CSelect>
                 </CCol>
-                <CCol sm="1">
-                    <FormControlLabel id="posted" name="posted" control={<Switch checked={current.posted} />} label={t('financials.posted')}/>
-                </CCol>
+
             </CFormGroup>
         </>
     )}

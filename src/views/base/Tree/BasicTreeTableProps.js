@@ -54,6 +54,14 @@ export const styles = {
         padding: 10,
         'padding-top': 30,
         'padding-bottom': 30
+    },
+    cellStyle: {
+        width: 20,
+        maxWidth: 20
+    },
+    headerStyle: {
+        width:20,
+        maxWidth: 20
     }
 };
 

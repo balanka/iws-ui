@@ -146,10 +146,13 @@ const addRow = (newData) =>{
   }
   const updateRow = (newData, oldData) =>{
     if (oldData) {
+      console.log('newDataX',newData);
       const dx = {...current};
       const index = dx.lines.findIndex(obj => obj.lid === newData.lid);
       dx.lines[index] = {...newData};
       setCurrent({...dx});
+      console.log('dxdx',dx);
+      console.log('currentcurrentX',current);
     }
   }
   const deleteRow = (oldData) =>{
