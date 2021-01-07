@@ -18,7 +18,19 @@ export default function EditableTable(props) {
     const [datax, setDatax] = useState(dx);
 
     useEffect(() => {}, [props, datax, data]);
-
+    const icons ={
+        Add: () => <Add />,
+            Check: () => <Check />,
+            Clear: () => <Clear />,
+            Delete: () => <IndeterminateCheckBoxIcon />,
+            Edit: () => <RateReviewIcon />,
+            FirstPage: () => <FirstPage />,
+            NextPage: () => <ChevronRight />,
+            LastPage: () => <LastPage />,
+            PreviousPage: () => <ChevronLeft />,
+            ResetSearch: () => <Clear />,
+            Search: () => <Search />
+    }
     return (
         <MaterialTable
             editable={flag?null:editable}
@@ -26,20 +38,7 @@ export default function EditableTable(props) {
             //title={props.title}
             columns={columns}
             data={data}
-            icons={{
-                Add: () => <Add />,
-                Check: () => <Check />,
-                Clear: () => <Clear />,
-                Delete: () => <IndeterminateCheckBoxIcon />,
-                Edit: () => <RateReviewIcon />,
-                FirstPage: () => <FirstPage />,
-                NextPage: () => <ChevronRight />,
-                LastPage: () => <LastPage />,
-                PreviousPage: () => <ChevronLeft />,
-                ResetSearch: () => <Clear />,
-                Search: () => <Search />
-            }}
-
+            icons={icons}
             options={Options}
             //components={components}
             onSelectionChange={(rows) => { console.log('selectedRows',rows); console.log('selectedRowsedit',edit!==null);

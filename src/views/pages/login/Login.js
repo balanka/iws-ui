@@ -25,6 +25,7 @@ export const languages = {data:[
   ]
 }
 const Login = () => {
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL
   const { t, i18n } = useTranslation();
   const [profile, setProfile] = useGlobalState('profile');
   const [username, setUsername] = useState();
@@ -61,9 +62,13 @@ const Login = () => {
         const {authorization} =  response.headers
         const tken = response.data.hash
         setProfile({token:authorization, company:response.data.company})
-        console.log('tken', tken)
-        console.log('authorization', authorization);
-        console.log('profile', profile)
+        const [{ res},] = axios.get(SERVER_URL.concat('/md'), {headers: {'authorization':authorization}})
+            .then(response => {
+                   const data_ =  response.data.hits?response.data.hits:[]
+                   setProfile({token:authorization, company:response.data.company, modules:data_});
+      }).catch(function (error) {
+              console.log('error1', error);
+            });
         return authorization
       }).catch(function (error) {
       console.log('error', error);

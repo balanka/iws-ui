@@ -269,8 +269,11 @@ export const OptionsM = ({
     columnResizable: true,
     cellStyle: {padding: '0.3em', fontSize: 10,},
     headerStyle: {padding: '0.3em', fontSize: 10,  position: 'sticky',
-        backgroundColor: theme.palette.common.black,
-        color:'#eee'},
+        //backgroundColor: theme.palette.common.black,
+          backgroundColor: "#cce6ff",
+        //backgroundColor: "#66ccff",
+        //color:'#eee'
+        color:'#000000'},
     root: {
         '&:nth-child(odd)': {
             backgroundColor: theme.palette.background.default //'#fff9e6'//theme.palette.background.default,
@@ -427,7 +430,7 @@ export const CommonFormHead = (props) => {
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
-                <Grid container xs spacing={1} justify="flex-start">
+                <Grid container xs spacing={1} justify="flex-start" >
                     <Grid item justify="center" alignItems="center">
                         <IoMdMenu />
                     </Grid>
@@ -439,7 +442,7 @@ export const CommonFormHead = (props) => {
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
+                            <CButton color="link" className = "card-header-action btn-minimize" onClick={initAdd}>
                                 <FontAwesomeIcon icon={faPlusSquare} />
                             </CButton>
                         </div>

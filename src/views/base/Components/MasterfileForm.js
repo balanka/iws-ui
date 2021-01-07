@@ -79,9 +79,9 @@ const MasterfileForm = () => {
         <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t} accData={accData}
                      vatData={vatData} collapse={state.collapse} styles={styles} />
 
-        <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+        <Grid container spacing={2} style={{...styles.inner, backgroundColor:blue }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}
-                         columns={columns} rowStyle={rowStyle}  theme={theme} t={t}  edit ={edit}/>
+                         columns={columns}   theme={theme} t={t}  edit ={edit}/>
         </Grid>
       </Grid>
     </>

@@ -2,7 +2,7 @@ import React, {createContext} from 'react'
 import {createGlobalState} from "react-hooks-global-state";
 import {useTranslation} from "react-i18next";
 
-const initialState = {profile:{token:'noTOken', company:''}}
+const initialState = {profile:{token:'noTOken', company:'', modules:[]}}
 
 export const { useGlobalState } = createGlobalState(initialState);
 export const accountContext = createContext(null);

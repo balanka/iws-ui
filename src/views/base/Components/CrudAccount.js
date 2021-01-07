@@ -45,8 +45,6 @@ export  function CrudAccount  (props) {
   };
     const submitAdd = (record, data) => {
       console.log("Record", record);
-      console.log("props.url", props.url);
-        console.log("profile.token", profile.token);
     axios.post( props.url, record, {headers: {'authorization':profile.token}})
       .then(response => {
         console.log('responsex', response.data);
@@ -87,12 +85,9 @@ export  function CrudAccount  (props) {
     }
 
     const submitGet = (url, func) => {
-        console.log('authorization2', profile.token);
         let res=null
         axios.get( url, {headers: {'authorization':profile.token}})
             .then(response => {
-                console.log('response.data', response.data);
-                console.log('response.headers', response.headers);
                 const resp = response.data
                 res=resp
                 func(resp)

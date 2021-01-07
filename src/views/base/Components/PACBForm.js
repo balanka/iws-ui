@@ -163,7 +163,7 @@ const PACBForm = () => {
             <FormFactory formid ={formEnum.PACB} current={current} setCurrent={setCurrent} t={t} accData={accData}
                          collapse={state.collapse} styles={styles} />
 
-            <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+            <Grid container spacing={2} style={{...styles.inner, backgroundColor:blue }} direction="column" >
                 <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
             </Grid>
         </Grid>

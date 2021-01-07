@@ -13,7 +13,7 @@ import {
   FinancialsFormHead, FormFactory
 } from '../../Tables2/LineFinancialsProps'
 import {formEnum} from "../../../utils/FORMS";
-import blue from "@material-ui/core/colors/blue";
+
 const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [module, setModule] = useState('');
@@ -174,7 +174,7 @@ const addRow = (newData) =>{
     const lines_=()=>current.lines&&current.lines.length >0 ? current.lines:[value.initialState.hits[0].lines[0]];
     const LinesFinancials = () =>  (<>
       <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()}
-                     columns={columnsX} editable={editable()} rowStyle={rowStyle}  theme={theme} t={t}
+                     columns={columnsX} editable={editable()}  t={t}
                      tableRef={tableRef} edit ={null}/>
       <CInput disabled={current.posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
               placeholder="text" value={current.text} onChange={(event)  =>
@@ -195,10 +195,10 @@ const addRow = (newData) =>{
                      ccData={ccData}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
                      collapse={state.collapse}
          />
-        <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+        <Grid container justify ="flex-start"  style={{...styles.inner, backgroundColor:'cce6ff' }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar}} flag={current.posted} data={datax()}
-                         columns={columns} rowStyle={rowStyle}  theme={theme} t={t}  edit ={edit}
-                         style={{'padding-top':20, height: 50}}/>
+                         columns={columns}  t={t}  edit ={edit}
+                         style={{ maxWidth:300, height: 50}}/>
         </Grid>
       </Grid>
     </>

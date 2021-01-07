@@ -98,7 +98,7 @@ export default function EnhancedTable( props) {
                                           handleFilter={handleFilter}
                                           editing={editable ==='undefined'?true:editable}
                                           handleSelectAllClick={handleSelectAllClick} style={{height: 15, padding:0}}/>
-                      <TableContainer className={classes.container} style={{padding:0}}>
+                    <TableContainer className={classes.container} style={{padding:0}}>
                         <Table aria-label="sticky table"  size={dense ? 'small' : 'medium'}
                             className={classes.table}
                             aria-labelledby="tableTitle" style={{padding:0}}>
