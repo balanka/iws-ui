@@ -56,7 +56,7 @@ export const treeHeaders =(t) =>( {h:[{ title:t('account.id'), field: 'id' }
             , { title: 'currency', label:t('common.currency'), minWidth:1}
         ]})
 export const modules  = (t) =>[
-        {id:"0", name:'Login', title:t('login.title'), ctx:"/login", ctx1:"", get:""
+        {id:"0", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:""
             , ctx2:"/", form:'loginForm', state:initCC, state1:initAcc ,state2:'',  columns:[]}
         , {id:"6", name:'CostCenter', title:t('costcenter.title'), ctx:"/cc", ctx1:"/acc/accmd/9", get:"md/6"
             , ctx2:"/", form:'masterfileForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.COSTCENTER, columns:[]}

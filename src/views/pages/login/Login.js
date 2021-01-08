@@ -1,4 +1,4 @@
-import React , { useState} from 'react'
+import React, {useContext, useState} from 'react'
 import { Link } from 'react-router-dom'
 import {
   CButton,
@@ -15,7 +15,7 @@ import {
   CRow, CSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {useGlobalState} from '../../base/Components/AccountContext';
+import {accountContext, useGlobalState} from '../../base/Components/AccountContext';
 import axios from "axios";
 import { useTranslation} from 'react-i18next';
 export const languages = {data:[
@@ -26,7 +26,10 @@ export const languages = {data:[
 }
 const Login = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL
+  const value = useContext(accountContext);
+  console.log('valueXZ', value );
   const { t, i18n } = useTranslation();
+
   const [profile, setProfile] = useGlobalState('profile');
   const [username, setUsername] = useState();
   const [pwd, setPwd] = useState();
@@ -45,11 +48,8 @@ const Login = () => {
   };
   const submit = event => {
     event.preventDefault();
-    const url ="http://localhost:8080/users/login"
-    console.log("username", username);
-    console.log("pwd", pwd);
     const data={"userName": username, "password": pwd}
-    const auth=login(url, data);
+    const auth=login(value.url, data);
     //const auth = useFetch(url,data)
     console.log("auth", auth);
 
@@ -60,9 +60,8 @@ const Login = () => {
       .then(response => {
         console.log('responsex', response.data);
         const {authorization} =  response.headers
-        const tken = response.data.hash
         setProfile({token:authorization, company:response.data.company})
-        const [{ res},] = axios.get(SERVER_URL.concat('/md'), {headers: {'authorization':authorization}})
+         axios.get(value.accUrl, {headers: {'authorization':authorization}})
             .then(response => {
                    const data_ =  response.data.hits?response.data.hits:[]
                    setProfile({token:authorization, company:response.data.company, modules:data_});
