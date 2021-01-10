@@ -17,7 +17,7 @@ export const Tabs = () => {
     const { t,  } = useTranslation();
     const data_ =  profile?.modules?profile.modules:[];
     const [data, setData] = useState(data_);
-    const mdx = data_.map(d=> d.id);
+    const mdx = data_;
     const modules_=modules(t).filter(m=> mdx.includes(m.id)|| m.id==="0")
 
     const getNavLink= ( module) =>{
@@ -69,7 +69,6 @@ export const Tabs = () => {
             </CRow>
         )
     }
-    //return TabsComponent(modules(t));
     return TabsComponent(modules_);
 }
 export default Tabs

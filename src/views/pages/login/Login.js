@@ -15,8 +15,7 @@ import {
   CRow, CSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {accountContext, useGlobalState} from '../../base/Components/AccountContext';
-import axios from "axios";
+import {accountContext} from '../../base/Components/AccountContext';
 import { useTranslation} from 'react-i18next';
 export const languages = {data:[
     {id:'en', name:'English'},
@@ -25,12 +24,9 @@ export const languages = {data:[
   ]
 }
 const Login = () => {
-  const SERVER_URL = process.env.REACT_APP_SERVER_URL
-  const value = useContext(accountContext);
-  console.log('valueXZ', value );
-  const { t, i18n } = useTranslation();
 
-  const [profile, setProfile] = useGlobalState('profile');
+  const value = useContext(accountContext);
+  const { t, i18n } = useTranslation();
   const [username, setUsername] = useState();
   const [pwd, setPwd] = useState();
   const [company, setCompany] = useState();
@@ -49,31 +45,8 @@ const Login = () => {
   const submit = event => {
     event.preventDefault();
     const data={"userName": username, "password": pwd}
-    const auth=login(value.url, data);
-    //const auth = useFetch(url,data)
-    console.log("auth", auth);
-
+    value.login(value.url, data);
   }
-
-  const login = (url, data) => {
-    axios.post( url, data)
-      .then(response => {
-        console.log('responsex', response.data);
-        const {authorization} =  response.headers
-        setProfile({token:authorization, company:response.data.company})
-         axios.get(value.accUrl, {headers: {'authorization':authorization}})
-            .then(response => {
-                   const data_ =  response.data.hits?response.data.hits:[]
-                   setProfile({token:authorization, company:response.data.company, modules:data_});
-      }).catch(function (error) {
-              console.log('error1', error);
-            });
-        return authorization
-      }).catch(function (error) {
-      console.log('error', error);
-    });
-  }
-
 
   const mapping = item => <option key={item.id} value={item.id}>
     {item.id+ " ".concat (item.name)}</option>
