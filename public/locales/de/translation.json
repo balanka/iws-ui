@@ -92,6 +92,16 @@
     "companyIban" : "IBAN Mandant",
     "posted"      : "Gebucht?"
   },
+  "company": {
+    "title":      "Mandant",
+    "id":"Nr",
+    "name":       "Name",
+    "description": "Bescreibung",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Gebucht",
+    "changedate": "Geander",
+    "companyIban" : "IBAN"
+  },
   "customer": {
     "title":      "Kunde",
     "id":"Nummer",

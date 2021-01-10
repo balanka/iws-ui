@@ -90,6 +90,16 @@
     "companyIban" : "Réf. société",
     "posted"      : "Validé?"
   },
+  "company": {
+    "title":      "Société",
+    "id":"Nº",
+    "name":       "Nom",
+    "description": "Description",
+    "enterdate"  : "Date saisie",
+    "postingdate": "Validé",
+    "changedate": "Modif.",
+    "companyIban" : "Réf. Banc."
+  },
   "customer": {
     "title":      "Client",
     "id":         "Nº",

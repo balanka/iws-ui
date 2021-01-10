@@ -94,6 +94,16 @@
     "companyIban" : "IBAN comp.",
     "posted"      : "Posted?"
   },
+  "company": {
+    "title":      "Company",
+    "id":"Id",
+    "name":       "Name",
+    "description": "Description",
+    "enterdate"  : "Created",
+    "postingdate": "Posted",
+    "changedate": "Modified",
+    "companyIban" : "IBAN comp."
+  },
   "customer": {
     "title":      "Customer",
     "id":"Id",
