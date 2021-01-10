@@ -17,6 +17,7 @@ export  function CrudAccount  (props) {
 
   const renderComponent =(componentName)=> {
     const componentLookup = {
+      companyForm      : <MasterfileForm/>,
       masterfileForm   : <MasterfileForm/>,
       bankStmtForm     : <BankStatementForm/>,
       pacForm          : <PACBForm/>,
@@ -24,7 +25,7 @@ export  function CrudAccount  (props) {
       balancesheetForm : <TreeTableForm/>,
       journalForm      : <JournalForm/>,
       loginForm        : <Login/>,
-      treeForm        :  <BasicTreeTable/>
+      treeForm         : <BasicTreeTable/>
     };
     return (<Fragment>
            {componentLookup[componentName]}
@@ -76,7 +77,7 @@ export  function CrudAccount  (props) {
                 console.log('responsex', response.data);
                 const {authorization} = response.headers
                 const tken= response.data.hash
-                setProfile({token:authorization, company:response.data.company})
+                setProfile({token:authorization, company:response.data.company, modules:response.data.menu})
                 console.log('tken', tken)
                 console.log('token', profile.token);
             }).catch(function (error) {
@@ -99,7 +100,7 @@ export  function CrudAccount  (props) {
     }
 
     const submitQuery = (event, url, func, init) => {
-
+      console.log("url", url);
         const fetchData =(url_, func)=>{
             const res = submitGet(url_, func);
             console.log("resx", res);

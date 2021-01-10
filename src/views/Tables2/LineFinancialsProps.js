@@ -568,6 +568,7 @@ export const ColumnFactory =(formid, data, t)=> {
             break;
         case formEnum.COSTCENTER:
         case formEnum.BANK:
+        case formEnum.COMPANY:
             return ColumnsM(data, t);
             break;
 
@@ -600,6 +601,7 @@ const {formid} = props
         case formEnum.BANKSTATEMENT:
             return <FormWrapper {...props} form = {BankStatementMainForm}/>;
             break;
+        case formEnum.COMPANY:
         case formEnum.COSTCENTER:
         case formEnum.BANK:
             return <FormWrapper {...props} form = {MasterfilesMainForm}/>;

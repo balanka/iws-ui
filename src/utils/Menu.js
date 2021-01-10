@@ -66,6 +66,8 @@ export const modules  = (t) =>[
             , form:'masterfileForm' , state:initCust, state1:initAcc, state2:initVat, modelid:formEnum.CUSTOMER, columns:[]}
         , {id:"9", name:"Account", title:t('account.title'), ctx:"/acc", ctx1:"/acc/accmd/9", get:"md/9"
             , form:'masterfileForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.ACCOUNT, columns:[]}
+        , {id:"10", name:"Company", title:t('company.title'), ctx:"/comp", ctx1:"/acc/accmd/9", get:"md/10"
+            , form:'companyForm', state:initComp, state1:initAcc ,state2:'', modelid:formEnum.COMPANY, columns:[]}
         , {id:"11", name:"Bank", title:t('bank.title'), ctx:"/bank", ctx1:"/acc", ctx2:"", get:"md/11"
             , form:'masterfileForm', state:initBank, state1:initAcc ,state2:'', modelid:formEnum.BANK, columns:[]}
         , {id:"14", name:"Vat", title:t('vat.title'), ctx:"/vat", ctx1:"/acc/accmd/9", ctx2:"", get:"md/14"
@@ -93,6 +95,10 @@ export const initBank = { hits:[ {id:'', name: '', description: '', enterdate:da
 export const initCC = { hits:[ {id:'', name: '', description: '', enterdate:new Date().toISOString()
             , postingdate:new Date().toISOString(),changedate:new Date().toISOString()
             , modelid:6, account:'-1', company:''}]}
+
+export const initComp = { hits:[ {id:'', name: '', description: '', enterdate:new Date().toISOString()
+            , postingdate:new Date().toISOString(),changedate:new Date().toISOString()
+            , modelid:10, account:'-1', company:''}]}           
 
 export const initVat={ hits:[{ id:'', name:'', description:'', percent:'', inputVatAccount:'', outputVatAccount:''
             , enterdate:date, postingdate:date, changedate:date, company:'', modelid:14}]}
