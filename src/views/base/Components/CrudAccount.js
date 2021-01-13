@@ -76,10 +76,7 @@ export  function CrudAccount  (props) {
             .then(response => {
                 console.log('responsex', response.data);
                 const {authorization} = response.headers
-                const tken= response.data.hash
                 setProfile({token:authorization, company:response.data.company, modules:response.data.menu})
-                console.log('tken', tken)
-                console.log('token', profile.token);
             }).catch(function (error) {
             console.log('error', error);
         });

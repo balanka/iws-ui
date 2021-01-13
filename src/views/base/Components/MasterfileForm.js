@@ -18,9 +18,7 @@ const MasterfileForm = () => {
   const data_ =  res?.hits?res.hits:value.initialState;
   const accData_=  res2?.hits?res2.hits:value.accData;
   const vatData_=  res3?.hits?res3.hits:value.ccData;
-
   const current_= value.user;
-
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [vatData, setVatData] = useState(vatData_);
@@ -57,9 +55,9 @@ const MasterfileForm = () => {
 
   const submitQuery =(event)=>{
     event.preventDefault();
-    value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
-    value.submitQuery(event, value.ccUrl, setVatData, value.initCc);
-    value.submitQuery(event, value.url, setData, value.initialState);
+    value.accUrl&&value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
+    value.ccUrl&&value.submitQuery(event, value.ccUrl, setVatData, value.initCc);
+    value.url&&value.submitQuery(event, value.url, setData, value.initialState);
   }
 
   const submitAdd = event => {
