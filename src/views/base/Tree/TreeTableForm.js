@@ -49,8 +49,6 @@ export default function TreeTableForm ()  {
     let res=null
     axios.get( url, {headers: {'authorization':profile.token}})
       .then(response => {
-        console.log('response.data', response.data);
-        console.log('response.headers', response.headers);
         const resp = response.data
         res=resp
         func(resp)
