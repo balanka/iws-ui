@@ -39,18 +39,31 @@
     "type": "Type",
     "birthYear": "Ann.naissance",
     "birthCity": "Lieu de naissance",
-    "account":      "Comptes",
+    "account":  "Comptes",
     "currency"    : "Monaie",
     "from"       :  "De",
     "to"        :  "A",
     "total"     : "Total",
-    "company":      "Société",
+    "company": "Société",
     "modelid"     : "Model",
     "idebit": "Debit.Init",
     "debit": "Debit",
     "icredit": "Crédit.Init",
     "credit": "Crédit",
-    "balance": "Balance"
+    "balance": "Balance",
+    "street"      : "Rue",
+    "zip"        : "Code P.",
+    "city"       : "Ville",
+    "country"       : "Région",
+    "state"        : "Pays",
+    "phone"       : "Tel",
+    "fax"       : "Fax",
+    "email"       : "Email",
+    "enterdate"  : "Date saisie",
+    "postingdate": "Date validation",
+    "changedate":  "Date mod.",
+    "taxCode":"NºImpots",
+    "vatCode": "Réf TVA"
   },
   "account": {
     "title":      "Comptes",
@@ -98,8 +111,9 @@
     "enterdate"  : "Date saisie",
     "postingdate": "Validé",
     "changedate": "Modif.",
-    "companyIban" : "Réf. Banc."
+    "companyIban" : "IBAN"
   },
+
   "customer": {
     "title":      "Client",
     "id":         "Nº",
@@ -129,12 +143,7 @@
     "changedate":  "Date mod.",
     "account"    : "Compte Four.",
     "oaccount"    : "Compte charge",
-    "street"      : "Rue",
-    "zip"        : "Code P.",
-    "city"       : "Ville",
-    "country"       : "Pays",
-    "phone"       : "Tel",
-    "email"       : "Email",
+
     "iban"       : "IBAN",
     "vat"       : "Code TVA"
   },

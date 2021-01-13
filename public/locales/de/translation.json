@@ -49,8 +49,28 @@
     "debit": "Soll",
     "icredit": "AB Haben",
     "credit": "Haben",
-    "balance": "Saldo"
-
+    "balance": "Saldo",
+    "street"      : "Strasse",
+    "zip"         : "PLZ",
+    "city"       : "Stadt",
+    "country"       : "Bundesland",
+    "state"        : "Land",
+    "phone"       : "Tel",
+    "fax"       : "Fax",
+    "email"       : "Email",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Gebucht am",
+    "changedate":  "Geaendert",
+    "bankAcc": "Bankkonto",
+    "cashAcc": "Kassenkonto",
+    "balanceSheetAcc":"Bilanzkonto",
+    "incomeStmtAcc": "G.u.V. Konto",
+    "purchasingClearingAcc": "WERE Konto",
+    "salesClearingAcc":"WARA-Konto.",
+    "paymentClearingAcc":"ZE Clearing",
+    "settlementClearingAcc": "ZA Clearing.",
+    "taxCode":"Steuernummer",
+    "vatCode": "VAT-ID"
   },
   "account": {
     "title":"Konto",
@@ -101,6 +121,7 @@
     "postingdate": "Gebucht",
     "changedate": "Geander",
     "companyIban" : "IBAN"
+
   },
   "customer": {
     "title":      "Kunde",
@@ -112,12 +133,6 @@
     "changedate":  "Geaendert",
     "account"    : "Verb. Kto.",
     "oaccount"    : "Aufwand Kto.",
-    "street"      : "Strasse",
-    "zip"         : "PLZ",
-    "city"       : "Stadt",
-    "country"       : "Land",
-    "phone"       : "Tel",
-    "email"       : "Email",
     "iban"       : "IBAN",
     "vat"       : "UST"
   },
@@ -131,12 +146,6 @@
     "changedate":  "Geaendert",
     "account"    : "Verb. Kto.",
     "oaccount"    : "Aufwand Kto.",
-    "street"      : "Strasse",
-    "zip"         : "PLZ",
-    "city"       : "Stadt",
-    "country"       : "Land",
-    "phone"       : "Tel",
-    "email"       : "Email",
     "iban"       : "IBAN",
     "vat"       : "UST"
   },
