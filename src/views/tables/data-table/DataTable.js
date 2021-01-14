@@ -9,7 +9,7 @@ import {
   CDataTable
 } from '@coreui/react'
 import usersData from '../../users/UsersData.js'
-import { useTranslation, withTranslation, Trans } from 'react-i18next';
+import { useTranslation} from 'react-i18next';
 
 const DataTable = () => {
   const [details, setDetails] = useState([])

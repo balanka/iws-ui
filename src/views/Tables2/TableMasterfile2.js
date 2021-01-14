@@ -2,9 +2,6 @@ import React from 'react';
 import {  Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 export default function TableMasterfile2(props) {
   const [data, renderTableBody, headers] = [ props.data, props.renderTableBody, props.headers];
-   console.log(data);
-   console.log(renderTableBody);
-   console.log(headers);
     return (
       <div className="animated fadeIn">
         <Row>

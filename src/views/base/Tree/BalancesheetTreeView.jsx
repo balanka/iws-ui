@@ -59,7 +59,7 @@ export default function BalancesheetTreeView(props) {
         selected={isItemSelected}>
         {columns.map((column) => {
             const value = row[column.id];
-            console.log("valued", value)
+           // console.log("valued", value)
             return (
                 <StyledTableCell component="th" scope="row" align={column.numeric?"right":"left"}>
                     {column.format && (column.numeric)
@@ -71,7 +71,7 @@ export default function BalancesheetTreeView(props) {
 )
 }
     function renderTreeItem (id, item, columns, isItemSelected, labelId) {
-        console.log('itemC', item)
+        //console.log('itemC', item)
         return (
               <StyledTreeItem nodeId={id} label={item.name}>
                  {item.subAccounts.size>0? item.subAccounts.map( row=>renderTableRow(id,row, columns, isItemSelected, labelId)):
@@ -95,7 +95,7 @@ export default function BalancesheetTreeView(props) {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                         const id=row?.id?row.id:row.tid
-                        console.log('idx', id)
+                        //console.log('idx', id)
                         const isItemSelected = isSelected(id);
                         const labelId = `enhanced-table-checkbox-${index}`;
                         return (

@@ -27,8 +27,7 @@ export default function TreeTableForm ()  {
   const { data, isLoading, updateUrl } = useFetch2(value.url)
   const [{ res2 }, ] = useFetch(value.accUrl, {});
   const init = ()=> {return value.initialState}
-  console.log("value.accUrl", value.accUrl);
-  console.log("data_", data);
+
   const getData =()=> { return data?.data?data.data:init().data}
   const accData_=  res2?.hits?res2.hits:value.accData;
   const [state2, setState2]= useState({collapse: false, fadeIn: true, timeout: 300});
@@ -45,7 +44,7 @@ export default function TreeTableForm ()  {
   useEffect(() => {}, [updateUrl, data, getData()]);
 
   const submitGet = (url, func) => {
-    console.log('authorization2', profile.token);
+   // console.log('authorization2', profile.token);
     let res=null
     axios.get( url, {headers: {'authorization':profile.token}})
       .then(response => {
