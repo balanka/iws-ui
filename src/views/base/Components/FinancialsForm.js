@@ -18,7 +18,7 @@ const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [module, setModule] = useState('');
   const value = useContext(accountContext);
-  let rows =[];
+  let rows = [];
   const t = value.t
   const [url,] = useState('');
   const tableRef = createRef();
