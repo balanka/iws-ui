@@ -9,7 +9,7 @@ import axios from "axios";
 import {columnsPACB, filter, FormFactory, JournalFormHead} from "../../Tables2/LineFinancialsProps";
 import {formEnum} from "../../../utils/FORMS";
 import blue from "@material-ui/core/colors/blue";
-import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
+import {styles} from "../Tree/BasicTreeTableProps";
 const PACBForm = () => {
   const { t,  } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -56,7 +56,7 @@ const PACBForm = () => {
         for(let i = 0, len = row.length-1; i <= len; ++i) {
             row[i] = {...row[i], balance: row[i].idebit + row[i].debit - (row[i].icredit + row[i].credit)};
          }
-        console.log('rowx', row);
+        //console.log('rowx', row);
         return row;
     }
 
@@ -76,7 +76,7 @@ const PACBForm = () => {
     const fetchData =(url_, func)=>{
         let result='xxx';
         const res = submitGet(url_, func, result);
-        console.log("res", res);
+       // console.log("res", res);
         const datax = res?.hits ? res.hits : value.initialState;
         return datax;
     }
@@ -99,14 +99,12 @@ const PACBForm = () => {
 
   const submitEdit = event => {
     event.preventDefault();
-    console.log("submitEdit1 current", current);
+    //console.log("submitEdit1 current", current);
     setUrl(url_());
   };
 
 
   const reducerFn =(a,b)  => {
-      console.log('a', a);
-      console.log('init', init().hits[0]);
       return (
           {period: "", idebit: Number(b.idebit), debit: Number(a.debit) + Number(b.debit), icredit: Number(b.icredit)
               , credit: Number(a.credit) + Number(b.credit)
@@ -119,9 +117,6 @@ const PACBForm = () => {
   const renderDT=(data)=> addRunningTotal(data);
 
     const renderTotal = (rows)=>{
-        console.log('rowsZ1',renderDT(rows).debit)
-        console.log('rowsZ2',renderDT(rows).credit)
-        console.log('rowsZ3',rows)
         return(
             <StyledTableRow>
                 <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder" }}>
