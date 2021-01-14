@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import MaterialTable from '@material-table/core';
 import Add from "@material-ui/icons/Add";
 import Clear from "@material-ui/icons/Clear";
@@ -12,12 +12,7 @@ import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox'
 import RateReviewIcon from '@material-ui/icons/RateReview';
 
 export default function EditableTable(props) {
-    const {Options, flag, data, columns, t, tableRef, addRow, edit, editable} = props
-    const [selectedRows, setSelectedRows] = useState([]);
-    const dx=data
-    const [datax, setDatax] = useState(dx);
-
-    useEffect(() => {}, [props, datax, data]);
+    const {Options, flag, data, columns, t, tableRef, edit, editable, setSelectedRows} = props
     const icons ={
         Add: () => <Add />,
             Check: () => <Check />,
@@ -41,10 +36,11 @@ export default function EditableTable(props) {
             icons={icons}
             options={Options}
             //components={components}
-            onSelectionChange={(rows) => { console.log('selectedRows',rows); console.log('selectedRowsedit',edit!==null);
-               // if(rows.length>0) edit(rows[0].tid);
-                if(rows.length>0 && edit!==null) edit(rows[0]);
-            setSelectedRows(rows)}}
+            onSelectionChange={(rows) => {
+                setSelectedRows(rows);
+                if(rows.length>0 && edit!==null)
+                    edit(rows[0]);
+            }}
             localization={{
                 body: {
                     emptyDataSourceMessage:t('muitable.emptyDataSourceMessage'),
