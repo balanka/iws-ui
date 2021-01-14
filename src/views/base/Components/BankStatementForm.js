@@ -82,7 +82,6 @@ const BankStatementForm = () => {
         setCurrent({...record, editing:true});
     }
 
-
   const submitEdit = event => {
         event.preventDefault();
         if(current.editing && !current.posted) {
@@ -94,7 +93,6 @@ const BankStatementForm = () => {
 
 
   function buildForm(current){
-     // {console.log('current.valuedate', current.valuedate)}
     return <>
         <Grid container spacing={2} style={{...styles.outer }} direction="column" >
             <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} setData={setData}
@@ -102,7 +100,7 @@ const BankStatementForm = () => {
                             submitQuery= {submitQuery} submitPost= {submitPost} toggle={toggle} toggleToolbar={toggleToolbar}  />
             <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t}
                           collapse={state.collapse} styles={styles} />
-            <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
+            <Grid container spacing={2} style={{...styles.inner, display:'block'}} direction="column" >
                <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}
                   columns={columns}  theme={theme} t={t}  edit ={edit} setSelectedRows ={setSelectedRows}/>
 

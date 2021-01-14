@@ -185,7 +185,7 @@ const addRow = (newData) =>{
 
     return <>
 
-      <Grid container spacing={2} style={{...styles.outer }} direction="column" >
+      <Grid container spacing={2} style={{...styles.outer , display:'block'}} direction="column" >
         <FinancialsFormHead styles={styles} title={value.title}  collapse={state.collapse} initAdd ={initAdd}
                         setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
                         initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
@@ -196,11 +196,9 @@ const addRow = (newData) =>{
                      ccData={ccData}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
                      collapse={state.collapse}
          />
-        <Grid container justify ="flex-start"  style={{...styles.inner, backgroundColor:'cce6ff' }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar}} flag={current.posted} data={datax()}
-                         columns={columns}  t={t}  edit ={edit} setSelectedRows ={setSelectedRows}
-                         style={{ maxWidth:300, height: 50}} />
-        </Grid>
+                         columns={columns}  t={t}  edit ={edit} setSelectedRows ={setSelectedRows}/>
+
       </Grid>
     </>
 
