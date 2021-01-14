@@ -1,4 +1,4 @@
-import React, {Suspense, useState} from 'react'
+import React, {Suspense} from 'react'
 import {CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CCard, CCardBody, CTabs} from '@coreui/react'
 import {useTranslation} from "react-i18next";
 import {CrudAccount} from "../Components/CrudAccount";
@@ -15,10 +15,8 @@ export const Tabs = () => {
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const [profile, setProfile] = useGlobalState('profile');
     const { t,  } = useTranslation();
-    const data_ =  profile?.modules?profile.modules:[];
-    const [data, setData] = useState(data_);
-    const mdx = data_;
-    const modules_=modules(t).filter(m=> mdx.includes(m.id)|| m.id==="0")
+    const data =  profile?.modules?profile.modules:[];
+    const modules_=modules(t).filter(m=> data.includes(m.id)|| m.id==="0")
 
     const getNavLink= ( module) =>{
         return (<>
