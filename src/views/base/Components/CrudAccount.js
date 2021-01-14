@@ -33,10 +33,10 @@ export  function CrudAccount  (props) {
     }
 
     const submitEdit = (newRecord, data) => {
-     console.log("newRecord", newRecord);
+     //console.log("newRecord", newRecord);
      axios.patch( props.url, newRecord, {headers: {'authorization':profile.token}})
       .then(response => {
-        console.log('response.data.', response.data);
+         console.log('response.data.', response.data);
         const index = data.hits.findIndex(obj => obj.id === newRecord.id);
         data.hits[index]= newRecord;
         setCurrent(newRecord);
@@ -45,25 +45,25 @@ export  function CrudAccount  (props) {
        });
   };
     const submitAdd = (record, data) => {
-      console.log("Record", record);
+      //console.log("Record", record);
     axios.post( props.url, record, {headers: {'authorization':profile.token}})
       .then(response => {
-        console.log('responsex', response.data);
+        //console.log('responsex', response.data);
         const i = data.hits.findIndex(obj => obj.id === record.id);
         const index = i === -1? data.hits.length+1:i;
-        console.log(' index', index);
+        //console.log(' index', index);
         data.hits[index]=record;
         const row = {...props.initialState, editing:false};
         setEditing(false);
         setCurrent(row);
-        console.log(' row', row);
+        //console.log(' row', row);
       }).catch(function (error) {
         console.log('error', error);
       });
   };
     const submitPost = (record) => {
-    console.log("Record", record);
-    console.log("props.url", props.url);
+   // console.log("Record", record);
+   // console.log("props.url", props.url);
     axios.patch(props.url.concat("/post"), record, {headers: {'authorization':profile.token}})
       .then(response => {
         console.log('responsex', response.data);
@@ -74,7 +74,7 @@ export  function CrudAccount  (props) {
     const login = (url, data) => {
         axios.post( url, data)
             .then(response => {
-                console.log('responsex', response.data);
+                //console.log('responsex', response.data);
                 const {authorization} = response.headers
                 setProfile({token:authorization, company:response.data.company, modules:response.data.menu})
             }).catch(function (error) {
@@ -111,14 +111,10 @@ export  function CrudAccount  (props) {
     const deleteUser =() => setEditing(false);
     
     const editRow = (current_, isNew)  => {
-      console.log('isNew', isNew );
-      console.log('current_', current_ );
       const flag = typeof isNew==='undefined' || typeof current_.editing==='undefined' ;
       const row = {...current_, editing:flag};
-      console.log('row1_', row );
        //setCurrent(row);
        //setEditing(row.editing);
-        console.log('row1_current', current );
     };
 
     return (
