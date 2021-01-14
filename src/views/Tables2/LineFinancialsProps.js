@@ -393,20 +393,21 @@ export const ColumnsVAT = (data, t) => [
 
 export const ColumnsBS =( data, t) => [
       {field:'bid', title:t('bankstatement.id'), type:'numeric', align:"right", export:true}
+    , {field:'posted', title:t('bankstatement.posted'), type:"boolean", export:true}
     , {field:'depositor', title:t("bankstatement.depositor"), type:"string", export:true}
     , {field:'valuedate', title:t('bankstatement.valuedate'), type:"date",  align:"right", export:true}
     , {field:'postingdate', title:t('bankstatement.postingdate'), type:"date",  align:"right", export:true}
+    , {field:'amount', title:t("bankstatement.amount"), type: "currency", export:true
+        , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    , {field:'currency', title:t("common.currency"), type:"string", hidden:true, export:true}
     , {field:'postingtext', title:t("bankstatement.postingtext"), type:"string", export:true}
     , {field:'purpose', title:t("bankstatement.purpose"), type:"string", export:true}
     , {field:'beneficiary', title:t("bankstatement.beneficiary"), type:"string", export:true}
     , {field:'accountno', title:t("bankstatement.accountno"), type:"string", export:true}
-    , {field:'bankCode', title:t("bankstatement.bankCode"), type:"string", export:true}
-    , {field:'amount', title:t("bankstatement.amount"), type: "currency", export:true}
-    , {field:'currency', title:t("common.currency"), type:"string", export:true}
-    , {field:'info', title:t("bankstatement.info"), type:"string", export:true}
-    , {field:'company', title:t("common.company"), type:"string", export:true}
-    , {field:'companyIban', title:t("bankstatement.companyIban"), type:"string", export:true}
-    , {field:'posted', title:t('bankstatement.posted'), type:"boolean", export:true}
+    , {field:'bankCode', title:t("bankstatement.bankCode"), type:"string", hidden:true, export:true}
+    , {field:'info', title:t("bankstatement.info"), type:"string", hidden:true, export:true}
+    , {field:'company', title:t("common.company"), type:"string", hidden:true, export:true}
+    , {field:'companyIban', title:t("bankstatement.companyIban"), type:"string", hidden:true, export:true}
 ]
 
 export const ColumnsCUST =(data, t) => [
