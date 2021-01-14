@@ -474,7 +474,7 @@ export const treeHeaders=(t) =>[{ title:t('account.id'), field: 'id' }
    ]
 
 export const CommonFormHead = (props) => {
-    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
+    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, submitPost, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -485,7 +485,7 @@ export const CommonFormHead = (props) => {
                     <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
                     <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitPost(e)}>
                                 <FontAwesomeIcon icon={faWindowClose} />
                             </CButton>
                         </div>
