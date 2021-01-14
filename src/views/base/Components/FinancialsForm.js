@@ -18,6 +18,7 @@ const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [module, setModule] = useState('');
   const value = useContext(accountContext);
+  let rows =[];
   const t = value.t
   const [url,] = useState('');
   const tableRef = createRef();
@@ -41,13 +42,13 @@ const FinancialsForm = () => {
 
   const toggleToolbar = ()=> setToolbar(!toolbar );
   const toggle = ()=> setState({...state, collapse:!state.collapse });
+  const setSelectedRows = (rows_)=>rows=rows_.map( item =>item.tid);
 
   const modules=[{ id:'112', name:'Supplier invoice'}
                 ,{ id:'114', name:'Payment'}
                 ,{ id:'122', name:'Receivables'}
                 ,{ id:'124', name:'Settlement'}
                 ,{ id:'134', name:'General ledger'}]
-
 
   const initAdd =()=> {
     const row = {...value.initialState, editing:false};
@@ -92,10 +93,10 @@ const FinancialsForm = () => {
   const submitPost = event => {
     event.preventDefault();
     const row =getCurrentRow
-    console.log("submitPost current", row);
+    //console.log("submitPost current", row);
     setCurrent(row);
     value.submitPost([row]);
-    console.log("submitEdit current", current);
+    //console.log("submitEdit current", current);
   };
 
   const getCurrentMonth = (date)=>{
@@ -123,7 +124,7 @@ const FinancialsForm = () => {
       , modelid:current_.modelid, company:current_.company, text:current_.text, typeJournal:current_.typeJournal
       , file_content:current_.file_content, lines:[] };
 
-    console.log('submitAdd row', row);
+    //console.log('submitAdd row', row);
     value.submitAdd(row, data);
     setCurrent(row);
    // console.log('submitAdd current', current);
@@ -146,13 +147,13 @@ const addRow = (newData) =>{
   }
   const updateRow = (newData, oldData) =>{
     if (oldData) {
-      console.log('newDataX',newData);
+     // console.log('newDataX',newData);
       const dx = {...current};
       const index = dx.lines.findIndex(obj => obj.lid === newData.lid);
       dx.lines[index] = {...newData};
       setCurrent({...dx});
-      console.log('dxdx',dx);
-      console.log('currentcurrentX',current);
+      //console.log('dxdx',dx);
+     // console.log('currentcurrentX',current);
     }
   }
   const deleteRow = (oldData) =>{
@@ -197,8 +198,8 @@ const addRow = (newData) =>{
          />
         <Grid container justify ="flex-start"  style={{...styles.inner, backgroundColor:'cce6ff' }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar}} flag={current.posted} data={datax()}
-                         columns={columns}  t={t}  edit ={edit}
-                         style={{ maxWidth:300, height: 50}}/>
+                         columns={columns}  t={t}  edit ={edit} setSelectedRows ={setSelectedRows}
+                         style={{ maxWidth:300, height: 50}} />
         </Grid>
       </Grid>
     </>
