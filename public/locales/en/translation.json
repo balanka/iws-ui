@@ -242,7 +242,7 @@
     "amount":       "Amount",
     "side" :       "D/C?",
     "text" :       "Text",
-    "Month":        "Mth.",
+    "month":        "Mth.",
     "year":        "Year",
     "type":         "Typ",
     "file":         "File",

@@ -224,7 +224,7 @@
     "amount":       "Betrag",
     "side" :       "S/H",
     "text" :       "Text",
-    "Month":        "Monat",
+    "month":        "Monat",
     "year":        "Jahr",
     "type":         "Typ",
     "file":         "Datei",
