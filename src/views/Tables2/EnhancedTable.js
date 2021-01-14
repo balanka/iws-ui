@@ -35,8 +35,8 @@ export default function EnhancedTable( props) {
 
         const handleChecked = (id) => {
     const selectedIndex = selected_.indexOf(id);
-    console.log('id', id);
-    console.log('selectedIndex', selectedIndex);
+    //console.log('id', id);
+    //console.log('selectedIndex', selectedIndex);
     edit(id);
     setSelected_([id]);
 
