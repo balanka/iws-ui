@@ -24,10 +24,14 @@ const BankStatementForm = () => {
   const [toolbar, setToolbar] = useState(true);
   useEffect(() => {}, [current, setCurrent, data]);
   useEffect(() => {setCurrent(current_)}, [ current_]);
-
+  let rows =[];
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
   const columns = ColumnFactory(modelid_, data, t);
+  const setSelectedRows = (rows_)=>{
+      rows=rows_.map( item =>item.bid);
+      console.log("Rows_", rows );
+  }
 
   const submitGet = (url, func, result) => {
     axios.get( url, {headers: {'authorization':profile.token}})
@@ -45,7 +49,7 @@ const BankStatementForm = () => {
   const fetchData =(url_, func)=>{
     let result='xxx';
     const res = submitGet(url_, func, result);
-    console.log("res", res);
+    //console.log("res", res);
     const datax = res?.hits ? res.hits : value.initialState;
     return datax;
   }
@@ -54,7 +58,7 @@ const BankStatementForm = () => {
     console.log("submitQuery current", current);
     let result='xxx';
     const url_=value.url //.concat('/')
-    console.log("url_", url_);
+
     fetchData(url_, setData, result);
     console.log("result", result);
   };
@@ -64,7 +68,14 @@ const BankStatementForm = () => {
         setCurrent(row);
     };
 
-
+    const submitPost = event => {
+        event.preventDefault();
+        //const row =getCurrentRow
+        console.log("submitPost current", rows);
+        //setCurrent(row);
+        value.submitPost(rows);
+        console.log("submitEdit current", current);
+    };
 
   const edit = editedRow =>{
         const record = data.hits.find(obj => obj.bid === editedRow.bid);
@@ -83,17 +94,17 @@ const BankStatementForm = () => {
 
 
   function buildForm(current){
-      {console.log('current.valuedate', current.valuedate)}
+     // {console.log('current.valuedate', current.valuedate)}
     return <>
         <Grid container spacing={2} style={{...styles.outer }} direction="column" >
             <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} setData={setData}
                              url={value.url} accUrl={value.accUrl} cancelEdit ={cancelEdit} submitEdit={submitEdit}
-                            submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
+                            submitQuery= {submitQuery} submitPost= {submitPost} toggle={toggle} toggleToolbar={toggleToolbar}  />
             <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t}
                           collapse={state.collapse} styles={styles} />
             <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
                <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}
-                  columns={columns}  theme={theme} t={t}  edit ={edit}/>
+                  columns={columns}  theme={theme} t={t}  edit ={edit} setSelectedRows ={setSelectedRows}/>
 
             </Grid>
         </Grid>
