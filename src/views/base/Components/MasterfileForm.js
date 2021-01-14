@@ -12,6 +12,7 @@ const MasterfileForm = () => {
   const value = useContext(accountContext);
   const t = value.t
   const modelid_ = value.modelid;
+  let rows = [];
   const [{ res},] = useFetch(value.url, {});
   const [{ res2},] = useFetch(value.accUrl, {});
   const [{ res3},] = useFetch(value.ccUrl, {});
@@ -29,6 +30,7 @@ const MasterfileForm = () => {
 
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
+  const setSelectedRows = (rows_)=>rows=rows_.map( item =>item.tid);
 
   const initAdd =()=> {
     const row = {...value.initialState.hits[0], company:profile.company, editing:false};
@@ -79,7 +81,7 @@ const MasterfileForm = () => {
 
         <Grid container spacing={2} style={{...styles.inner, backgroundColor:blue }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}
-                         columns={columns}   theme={theme} t={t}  edit ={edit}/>
+                         columns={columns}   theme={theme} t={t}  edit ={edit} setSelectedRows ={setSelectedRows}/>
         </Grid>
       </Grid>
     </>
