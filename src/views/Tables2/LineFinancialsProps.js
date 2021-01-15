@@ -473,8 +473,54 @@ export const treeHeaders=(t) =>[{ title:t('account.id'), field: 'id' }
     ,  { title:t('balancesheet.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
     ,  { title:t('balancesheet.credit'), field: 'credit' , type: 'numeric', minWidth:3}
    ]
-
 export const CommonFormHead = (props) => {
+    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, submitPost, toggle, toggleToolbar} = props
+    return (
+        <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
+            <Grid container justify="space-between">
+                <Grid container xs spacing={1} justify="flex-start" >
+                    <Grid item justify="center" alignItems="center">
+                        <IoMdMenu />
+                    </Grid>
+                    <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
+                    <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
+                                <FontAwesomeIcon icon={faWindowClose} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className = "card-header-action btn-minimize" onClick={initAdd}>
+                                <FontAwesomeIcon icon={faPlusSquare} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
+                                <FontAwesomeIcon icon={faSave} />
+                            </CButton>
+                        </div>
+                        <div>
+                            <CButton block color="link" type="submit"  className="card-header-action btn-minimize" onClick={event => {
+                                event.preventDefault();submitQuery(event)}}>
+                                <FontAwesomeIcon icon={faSpinner} rotation={90}/>
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                                <FontAwesomeIcon icon={collapse?faAngleDoubleUp:faAngleDoubleDown} />
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
+                                <FontAwesomeIcon icon={faPlusCircle} />
+                            </CButton>
+                        </div>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>);
+}
+export const BSFormHead = (props) => {
     const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, submitPost, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
@@ -611,22 +657,17 @@ export const ColumnFactory =(formid, data, t)=> {
     switch(formid) {
         case formEnum.ACCOUNT:
             return ColumnsACC(data, t);
-            break;
         case formEnum.BANKSTATEMENT:
             return ColumnsBS(data, t);
-            break;
         case formEnum.COSTCENTER:
         case formEnum.BANK:
             return  ColumnsM(data, t);
-            break;
         case formEnum.COMPANY:
             return ColumnsComp (data, t);
-            break;
 
         case formEnum.CUSTOMER:
         case formEnum.SUPPLIER:
             return ColumnsCUST(data, t);
-            break;
         //case formEnum.FINANCIALS:
         //    return <FormWrapper {...props} form = {FinancialsMainForm}/>;
        //     break;
@@ -635,10 +676,8 @@ export const ColumnFactory =(formid, data, t)=> {
             return JournalHeaders(t);
         case formEnum.PACB:
             return pacHeaders(t);
-            break;
         case formEnum.VAT:
             return ColumnsVAT(data,t);
-            break;
         default:
         // code block
     }
@@ -648,33 +687,23 @@ const {formid} = props
     switch(formid) {
         case formEnum.ACCOUNT:
             return <FormWrapper {...props} form = {AccountMainForm}/>;
-            break;
         case formEnum.BANKSTATEMENT:
             return <FormWrapper {...props} form = {BankStatementMainForm}/>;
-            break;
         case formEnum.COMPANY:
             return <FormWrapper {...props} form = {CompanyMainForm}/>;
-            break;
         case formEnum.COSTCENTER:
         case formEnum.BANK:
             return <FormWrapper {...props} form = {MasterfilesMainForm}/>;
-            break;
-
         case formEnum.CUSTOMER:
         case formEnum.SUPPLIER:
             return <FormWrapper {...props} form = {CustomerMainForm}/>;
-            break;
         case formEnum.FINANCIALS:
             return <FormWrapper {...props} form = {FinancialsMainForm}/>;
-            break;
-
         case formEnum.JOURNAL:
         case formEnum.PACB:
             return <FormWrapper {...props} form = {JournalMainForm}/>;
-            break;
         case formEnum.VAT:
             return <FormWrapper {...props} form = {VatMainForm}/>;
-            break;
         default:
         // code block
     }
