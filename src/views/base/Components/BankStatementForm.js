@@ -1,17 +1,17 @@
 import React, {useEffect, useState, useContext} from 'react'
 import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
-import blue from "@material-ui/core/colors/blue";
 import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
 import axios from "axios";
-import {OptionsM, CommonFormHead, FormFactory, ColumnFactory} from "../../Tables2/LineFinancialsProps";
+import {OptionsM, BSFormHead, FormFactory, ColumnFactory} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles,  theme} from "../Tree/BasicTreeTableProps";
 
 const BankStatementForm = () => {
   const { t,  } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
+  const [rows, setRows] =useState([])
   const [profile, ] = useGlobalState('profile');
   const value = useContext(accountContext);
   const modelid_ = value.modelid;
@@ -24,12 +24,13 @@ const BankStatementForm = () => {
   const [toolbar, setToolbar] = useState(true);
   useEffect(() => {}, [current, setCurrent, data]);
   useEffect(() => {setCurrent(current_)}, [ current_]);
-  let rows =[];
+  let rows_ =[];
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
   const columns = ColumnFactory(modelid_, data, t);
-  const setSelectedRows = (rows_)=>{
-      rows=rows_.map( item =>item.bid);
+  const setSelectedRows = (Rows_)=>{
+      rows_=Rows_.map( item =>item.bid);
+      setRows(rows_);
       console.log("Rows_", rows );
   }
 
@@ -69,7 +70,7 @@ const BankStatementForm = () => {
     };
 
     const submitPost = event => {
-        event.preventDefault();
+       // event.preventDefault();
         //const row =getCurrentRow
         console.log("submitPost current", rows);
         //setCurrent(row);
@@ -95,7 +96,7 @@ const BankStatementForm = () => {
   function buildForm(current){
     return <>
         <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-            <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} setData={setData}
+            <BSFormHead styles={styles} title={value.title} collapse={state.collapse} setData={setData}
                              url={value.url} accUrl={value.accUrl} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                             submitQuery= {submitQuery} submitPost= {submitPost} toggle={toggle} toggleToolbar={toggleToolbar}  />
             <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t}
