@@ -16,9 +16,9 @@ import {formEnum} from "../../../utils/FORMS";
 
 const FinancialsForm = () => {
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
+  const [rows, setRows] =useState([])
   const [module, setModule] = useState('');
   const value = useContext(accountContext);
-  let rows = [];
   const t = value.t
   const [url,] = useState('');
   const tableRef = createRef();
@@ -42,7 +42,8 @@ const FinancialsForm = () => {
 
   const toggleToolbar = ()=> setToolbar(!toolbar );
   const toggle = ()=> setState({...state, collapse:!state.collapse });
-  const setSelectedRows = (rows_)=>rows=rows_.map( item =>item.tid);
+  const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.tid));
+  //const setSelectedRows = (rows_)=>rows=rows_.map( item =>item.tid);
 
   const modules=[{ id:'112', name:'Supplier invoice'}
                 ,{ id:'114', name:'Payment'}
@@ -92,11 +93,15 @@ const FinancialsForm = () => {
 
   const submitPost = event => {
     event.preventDefault();
-    const row =getCurrentRow
-    //console.log("submitPost current", row);
+    const row = getCurrentRow
     setCurrent(row);
-    value.submitPost([row]);
+    value.submitPost([row], "/post");
     //console.log("submitEdit current", current);
+  };
+
+  const submitCopy = event => {
+    event.preventDefault();
+    value.submitPost(rows, "/copy");
   };
 
   const getCurrentMonth = (date)=>{
@@ -190,7 +195,7 @@ const addRow = (newData) =>{
                         setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
                         initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                         module ={module}  modules ={modules} handleModuleChange={handleModuleChange}
-                        onNewLine={onNewLine}
+                        onNewLine={onNewLine} submitPost={submitPost} submitCopy={submitCopy}
                         submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
         <FormFactory formid ={formEnum.FINANCIALS} current={current} setCurrent={setCurrent} t={t} accData={accData}
                      ccData={ccData}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}

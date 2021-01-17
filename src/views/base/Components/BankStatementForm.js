@@ -24,15 +24,10 @@ const BankStatementForm = () => {
   const [toolbar, setToolbar] = useState(true);
   useEffect(() => {}, [current, setCurrent, data]);
   useEffect(() => {setCurrent(current_)}, [ current_]);
-  let rows_ =[];
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
   const columns = ColumnFactory(modelid_, data, t);
-  const setSelectedRows = (Rows_)=>{
-      rows_=Rows_.map( item =>item.bid);
-      setRows(rows_);
-      console.log("Rows_", rows );
-  }
+  const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.bid));
 
   const submitGet = (url, func, result) => {
     axios.get( url, {headers: {'authorization':profile.token}})
@@ -74,7 +69,7 @@ const BankStatementForm = () => {
         //const row =getCurrentRow
         console.log("submitPost current", rows);
         //setCurrent(row);
-        value.submitPost(rows);
+        value.submitPost(rows, "/post");
         console.log("submitEdit current", current);
     };
 

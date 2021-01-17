@@ -9,10 +9,11 @@ import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
 const MasterfileForm = () => {
   const [profile, ] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
+  const [rows, setRows] =useState([])
   const value = useContext(accountContext);
   const t = value.t
   const modelid_ = value.modelid;
-  let rows = [];
+  //let rows = [];
   const [{ res},] = useFetch(value.url, {});
   const [{ res2},] = useFetch(value.accUrl, {});
   const [{ res3},] = useFetch(value.ccUrl, {});
@@ -30,7 +31,7 @@ const MasterfileForm = () => {
 
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
-  const setSelectedRows = (rows_)=>rows=rows_.map( item =>item.tid);
+  const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.tid))
 
   const initAdd =()=> {
     const row = {...value.initialState.hits[0], company:profile.company, editing:false};

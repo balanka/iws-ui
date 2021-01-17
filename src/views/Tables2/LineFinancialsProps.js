@@ -21,9 +21,40 @@ import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers"
 import DateFnsUtils from "@date-io/date-fns";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import blue from "@material-ui/core/colors/blue";
+import { blue, green } from "@material-ui/core/colors";
+import Icon from '@material-ui/core/Icon';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
-const mappingMenu = (acc) =>
+
+const svgIcons= {
+     plus:"M38 6H10c-2.21 0-4 1.79-4 4v28c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4zm-4 20h-8v8h-4v-8h-8v-4h8v-8h4v8h8v4z"
+    , delete:"M12 38c0 2.21 1.79 4 4 4h16c2.21 0 4-1.79 4-4V14H12v24zM38 8h-7l-2-2H19l-2 2h-7v4h28V8z"
+    , delete4ever:"M12 38c0 2.2 1.8 4 4 4h16c2.2 0 4-1.8 4-4V14H12v24zm4.93-14.24l2.83-2.83L24 25.17l4.24-4.24 2.83 2.83L26.83 28l4.24 4.24-2.83 2.83L24 30.83l-4.24 4.24-2.83-2.83L21.17 28l-4.24-4.24zM31 8l-2-2H19l-2 2h-7v4h28V8z"
+    , copyRight:"M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 36c-8.82 0-16-7.18-16-16S15.18 8 24 8s16 7.18 16 16-7.18 16-16 16zm-3.84-18.27c.11-.65.31-1.23.6-1.74s.69-.92 1.18-1.23c.47-.29 1.06-.45 1.79-.46.48.01.92.09 1.3.26.41.18.75.42 1.04.72s.51.66.67 1.06.25.83.27 1.28h3.58c-.03-.94-.22-1.8-.55-2.58s-.81-1.45-1.41-2.02-1.32-1-2.16-1.31-1.77-.47-2.79-.47c-1.3 0-2.43.22-3.39.67s-1.76 1.06-2.4 1.84-1.12 1.68-1.43 2.71-.46 2.12-.46 3.27v.55c0 1.16.16 2.25.47 3.28s.79 1.93 1.43 2.7 1.44 1.38 2.41 1.83 2.1.67 3.4.67c.94 0 1.82-.15 2.64-.46s1.54-.73 2.16-1.27 1.12-1.16 1.48-1.88.57-1.48.6-2.3h-3.58c-.02.42-.12.8-.3 1.16s-.42.66-.72.91-.65.45-1.05.59c-.38.13-.78.2-1.21.2-.72-.02-1.31-.17-1.79-.47-.5-.32-.9-.73-1.19-1.24s-.49-1.09-.6-1.75-.15-1.3-.15-1.97v-.55c0-.68.05-1.35.16-2z"
+    , copyContent:"M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+    , clearAll:"M10 26h28v-4H10v4zm-4 8h28v-4H6v4zm8-20v4h28v-4H14z"
+    , libraryAdd:"M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"
+    , checkCircle:"M24 4C12.95 4 4 12.95 4 24c0 11.04 8.95 20 20 20 11.04 0 20-8.96 20-20 0-11.05-8.96-20-20-20zm-4 30L10 24l2.83-2.83L20 28.34l15.17-15.17L38 16 20 34z"
+    , highlightRemove:"M29.17 16L24 21.17 18.83 16 16 18.83 21.17 24 16 29.17 18.83 32 24 26.83 29.17 32 32 29.17 26.83 24 32 18.83 29.17 16zM24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 36c-8.82 0-16-7.18-16-16S15.18 8 24 8s16 7.18 16 16-7.18 16-16 16z"
+    , highlightOff:"M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+    , doneAll:"M36 14l-2.83-2.83-12.68 12.69 2.83 2.83L36 14zm8.49-2.83L23.31 32.34 14.97 24l-2.83 2.83L23.31 38l24-24-2.82-2.83zM.83 26.83L12 38l2.83-2.83L3.66 24 .83 26.83z"
+    , done:"M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"
+    , swapVertCircle:"M16 17.01V10h-2v7.01h-3L15 21l4-3.99h-3zM9 3L5 6.99h3V14h2V6.99h3L9 3z"
+    , addCircleOutline:"M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+    , addBox:"M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+    , save:"M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"
+}
+
+function IwsIcon(props) {
+    return (
+        <SvgIcon {...props}>
+            <path d={props.d} />
+        </SvgIcon>
+    );
+}
+
+
+    const mappingMenu = (acc) =>
     <MenuItem key={acc.id} value={acc.id}>
         {acc.id.concat( " ").concat(acc.name)}
     </MenuItem>
@@ -177,19 +208,21 @@ export const columnsJ =(t) => [{field:"id", title:t('journal.id'),  type:"numeri
 , { field: 'modelid', title:t('common.modelid'), export:true}
 ]
 export const columnsF =(data, line, current, t) => [
-     {field:'tid', title:t('financials.id'), initialEditValue:line.id, export:true}
-    , {field:'oid', title:t('financials.oid'),initialEditValue:current.oid, export:true}
+     {field:'tid', title:t('financials.id'), initialEditValue:line.id, align:"right", export:true}
+    , {field:'oid', title:t('financials.oid'),initialEditValue:current.oid, align:"right", export:true}
     , {field:'account', title:t('financials.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            ACCOUNT ( data, value, onRowDataChange, rowData, "account" ),  initialEditValue:'', width: 20, export:true}
+            ACCOUNT ( data, value, onRowDataChange, rowData, "account" ),  initialEditValue:'', width: 20
+      , align:"right", export:true}
     , {field:'costcenter', title:t('financials.costcenter'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            ACCOUNT ( data, value, onRowDataChange, rowData,"costcenter" ),  initialEditValue:'', width: 20, export:true}
+            ACCOUNT ( data, value, onRowDataChange, rowData,"costcenter" ),  initialEditValue:'', width: 20
+      , align:"right", export:true}
     , {field:'enterdate', title:t('financials.enterdate'), type:"date", align:"right",
         initialEditValue:line.enterdate, dateSetting: { locale:"de" } , export:true}
     , {field:'postingdate', title:t('financials.postingdate'), type:"date", align:"right",
         initialEditValue:line.postingdate, dateSetting: { locale:"de" } , export:true}
     , {field:'transdate', title:t('financials.transdate'), type:"date", align:"right",
         initialEditValue:line.transdate, dateSetting: { locale:"de" } , export:true}
-    , {field:'period', title:t('financials.period'), type:"numeric", export:true}
+    , {field:'period', title:t('financials.period'), type:"numeric", align:"right", export:true}
     , {field:'posted', title:t('financials.posted'), type:"boolean", width:10, export:true}
     , {field:'total', title:t('common.total'), type:"currency",currencySetting: { locale:"de"
        , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }, export:true}
@@ -204,12 +237,12 @@ export const Linescolumns =(data, line, current, t) => [
     , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current.tid,  editable:'never'
     ,  cellStyle: {maxWidth:5}, headerStyle: {maxWidth:5}}
     , {field:'account', title:t('financials.line.account'), type:'string', hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            ACCOUNT ( data, value, onRowDataChange, rowData,"account" ),  initialEditValue:''
+            ACCOUNT ( data, value, onRowDataChange, rowData,"account" ),  initialEditValue:'', align:"right"
       , cellStyle: {maxWidth: 40}, headerStyle: {maxWidth: 40}}
     , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true,  cellStyle: {maxWidth:2}, headerStyle: {maxWidth:2}}
     , {field:'oaccount', title:t('financials.line.oaccount'), type:'string', hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
           ACCOUNT2 ( data, value, onRowDataChange, rowData, "oaccount"), initialEditValue:'',  cellStyle: {
-            maxWidth: 20}, headerStyle: {maxWidth: 20}}
+            maxWidth: 20}, headerStyle: {maxWidth: 20} , align:"right"}
     , {field:'duedate', title:t('financials.line.duedate'), type:"date", align:"right",
       initialEditValue:line.duedate, dateSetting: { locale:"de" }, cellStyle: {maxWidth: 20}, headerStyle: {maxWidth: 20} }
     , {field:'amount', title:t('financials.line.amount'), type:"currency", initialEditValue:0,
@@ -569,7 +602,7 @@ export const BSFormHead = (props) => {
 }
 export const FinancialsFormHead = (props) => {
     const {styles, title, collapse, module, modules, initAdd, onNewLine, cancelEdit, submitEdit, submitQuery, toggle
-        , handleModuleChange, toggleToolbar} = props
+        , submitCopy, submitPost, handleModuleChange, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -587,23 +620,33 @@ export const FinancialsFormHead = (props) => {
                            </CSelect>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={onNewLine}>
-                                <FontAwesomeIcon icon={faPlusCircle} />
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
+                                <IwsIcon  style ={{...styles.imageIcon}} d={svgIcons.swapVertCircle} style={{ color: green[500] }}/>
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton  className="card-header-action btn-minimize" onClick={submitCopy}>
+                                <IwsIcon  style ={{...styles.imageIcon}} d={svgIcons.copyContent} style={{ color: green[500] }}/>
+                            </CButton>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton  className="card-header-action btn-minimize" onClick={onNewLine}>
+                                <IwsIcon  style ={{...styles.imageIcon}} d={svgIcons.libraryAdd} style={{ color: green[500] }}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
-                                <FontAwesomeIcon icon={faWindowClose} />
+                                <IwsIcon  style ={{...styles.imageIcon}} d={svgIcons.highlightOff} style={{ color: green[500] }}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
-                                <FontAwesomeIcon icon={faPlusSquare} />
+                                <IwsIcon  style ={{...styles.imageIcon}} d={svgIcons.addCircleOutline} style={{ color: green[500] }}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
-                                <FontAwesomeIcon icon={faSave} />
+                                <IwsIcon  style ={{...styles.imageIcon}} d={svgIcons.save} style={{ color: green[500] }}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
@@ -612,8 +655,8 @@ export const FinancialsFormHead = (props) => {
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
-                                <FontAwesomeIcon icon={faPlusCircle} />
+                            <CButton  className="card-header-action btn-minimize" onClick={submitPost}>
+                                <IwsIcon  style ={{...styles.imageIcon}} d={svgIcons.done} style={{ color: green[500] }}/>
                             </CButton>
                         </div>
                     </Grid>

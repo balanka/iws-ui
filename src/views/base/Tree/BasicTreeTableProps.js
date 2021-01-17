@@ -62,6 +62,11 @@ export const styles = {
     headerStyle: {
         width:20,
         maxWidth: 20
+    },
+    imageIcon: {
+        display: 'flex',
+        height: 'inherit',
+        width: 'inherit'
     }
 };
 

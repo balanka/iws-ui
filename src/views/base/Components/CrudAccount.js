@@ -61,10 +61,12 @@ export  function CrudAccount  (props) {
         console.log('error', error);
       });
   };
-    const submitPost = (record) => {
+    const submitPost = (record, ctx) => {
    // console.log("Record", record);
+    console.log("Context", ctx);
    // console.log("props.url", props.url);
-    axios.patch(props.url.concat("/post"), record, {headers: {'authorization':profile.token}})
+  //axios.patch(props.url.concat("/post"), record, {headers: {'authorization':profile.token}})
+    axios.patch(props.url.concat(ctx), record, {headers: {'authorization':profile.token}})
       .then(response => {
         console.log('responsex', response.data);
       }).catch(function (error) {
