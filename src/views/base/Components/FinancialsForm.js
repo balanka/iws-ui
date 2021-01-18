@@ -94,9 +94,9 @@ const FinancialsForm = () => {
 
   const submitPost = event => {
     event.preventDefault();
-    const row = getCurrentRow
-    setCurrent(row);
-    value.submitPost([row], "/post");
+   // const row = getCurrentRow
+    //setCurrent(row);
+    value.submitPost([current.id], "/post");
     //console.log("submitEdit current", current);
   };
 
