@@ -62,11 +62,7 @@ export  function CrudAccount  (props) {
       });
   };
     const submitPost = (record, ctx) => {
-   // console.log("Record", record);
-    console.log("Context", ctx);
-   // console.log("props.url", props.url);
-  //axios.patch(props.url.concat("/post"), record, {headers: {'authorization':profile.token}})
-    axios.patch(props.url.concat(ctx), record, {headers: {'authorization':profile.token}})
+     axios.patch(props.url.concat(ctx), record, {headers: {'authorization':profile.token}})
       .then(response => {
         console.log('responsex', response.data);
       }).catch(function (error) {
@@ -76,7 +72,6 @@ export  function CrudAccount  (props) {
     const login = (url, data) => {
         axios.post( url, data)
             .then(response => {
-                //console.log('responsex', response.data);
                 const {authorization} = response.headers
                 setProfile({token:authorization, company:response.data.company, modules:response.data.menu})
             }).catch(function (error) {
@@ -85,17 +80,15 @@ export  function CrudAccount  (props) {
     }
 
     const submitGet = (url, func) => {
-        let res=null
         axios.get( url, {headers: {'authorization':profile.token}})
             .then(response => {
                 const resp = response.data
-                res=resp
                 func(resp)
                 return resp;
             }).catch(function (error) {
             console.log('error', error);
         });
-        return res;
+      //  return res;
     }
 
     const submitQuery = (event, url, func, init) => {
@@ -111,19 +104,12 @@ export  function CrudAccount  (props) {
     };
 
     const deleteUser =() => setEditing(false);
-    
-    const editRow = (current_, isNew)  => {
-      const flag = typeof isNew==='undefined' || typeof current_.editing==='undefined' ;
-      const row = {...current_, editing:flag};
-       //setCurrent(row);
-       //setEditing(row.editing);
-    };
 
     return (
       <div className="animated fadeIn">
           <AccountContext  form ={props.form} url={props.url}  get={props.get} title={props.title} lineTitle={props.lineTitle}
                            accUrl={props.accUrl} ccUrl={props.ccUrl} submitAdd={submitAdd} submitGet={submitGet} login={login}
-                           editing={editing} setEditing={setEditing} editRow={editRow} current={current}
+                           editing={editing} setEditing={setEditing}  current={current}
                            setCurrent={setCurrent} submitEdit={submitEdit} submitPost={submitPost} 
                            initialState={props.initialState} headers={props.headers}
                            initAcc={props.initAcc} initCc={props.initCc} modelid={props.modelid}

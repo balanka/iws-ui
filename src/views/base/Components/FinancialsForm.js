@@ -42,8 +42,7 @@ const FinancialsForm = () => {
 
   const toggleToolbar = ()=> setToolbar(!toolbar );
   const toggle = ()=> setState({...state, collapse:!state.collapse });
-  const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.tid));
-  //const setSelectedRows = (rows_)=>rows=rows_.map( item =>item.tid);
+  const setSelectedRows = (rows_)=>setRows(rows_.map( (item) =>({id:item.tid,  modelid:item.modelid})))
 
   const modules=[{ id:'112', name:'Supplier invoice'}
                 ,{ id:'114', name:'Payment'}
@@ -69,11 +68,13 @@ const FinancialsForm = () => {
     ccData?.hits?.length<2? value.submitQuery(event, value.ccUrl, setCcData, ccData_):void(0)
     const url_=value.url.concat('/ftrmd/').concat(modelid);
     value.submitQuery(event, url_, setData, value.initialState);
+    console.log('dataxX', datax())
   };
   const handleModuleChange = event => {
     event.preventDefault();
     const value = event.target.value
     setModule(value);
+    console.log('modulXX', value)
     submitQuery(event, value);
   };
 
