@@ -32,6 +32,7 @@
   "searchPlaceholder": "Suche"
 },
   "common": {
+    "id":"Nr.",
     "title": "Ansprache",
     "name": "Name",
     "surname": "Familienname",
@@ -90,7 +91,6 @@
   },
   "bank": {
     "title":      "Bank",
-    "id":"Nummer",
     "name":       "Name",
     "description": "Beschreibung",
     "enterdate"  : "Eingabedatum",
@@ -99,7 +99,6 @@
   },
   "bankstatement": {
     "title":      "Bankauszug",
-    "id":         "Nr.",
     "depositor":  "Auftrag.",
     "postingdate": "Gebucht",
     "valuedate"  : "Valuta",
@@ -115,7 +114,6 @@
   },
   "company": {
     "title":      "Mandant",
-    "id":"Nr",
     "name":       "Name",
     "description": "Bescreibung",
     "enterdate"  : "Eingabedatum",
@@ -132,7 +130,6 @@
   },
   "costcenter": {
     "title":"Kostenstelle",
-    "id":"Nummer",
     "name":"Name",
     "description":"Beschreibung",
     "enterdate":"Enterdate",
@@ -142,7 +139,6 @@
   },
   "article": {
     "title":      "Article",
-    "id":"Nummer",
     "name":       "Name",
     "description": "Beschreibung",
     "enterdate"  : "Enterdate",
@@ -151,7 +147,6 @@
   },
   "vat": {
     "title":      "MwSt.",
-    "id":"Nummer",
     "name":       "Name",
     "description": "Beschreibung",
     "enterdate"  : "Eingabedatum",
@@ -163,7 +158,6 @@
   },
   "pac": {
     "title":      "Salden",
-    "id":         "Nr.",
     "period":      "Periode"
   },
   "financials": {
@@ -193,7 +187,6 @@
   },
   "journal": {
     "title":      "Journal",
-    "id":         "Nr",
     "transid":    "BelegNr",
     "oid":        "Ref.",
     "account":      "Konto",
@@ -213,7 +206,6 @@
   },
   "balancesheet": {
     "title":      "Bilanz",
-    "id":          "Nr.",
     "name":         "Bilanz",
     "account":     "Konto",
     "period":      "Periode",

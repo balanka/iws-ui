@@ -32,6 +32,7 @@
     "searchPlaceholder": "search Placeholder"
   },
   "common": {
+    "id": "Id",
     "title": "Title",
     "name": "Name",
     "surname": "Surname",
@@ -78,7 +79,6 @@
   },
   "account": {
     "title":      "Account",
-    "id":"Id",
     "name":       "Name",
     "description": "Description",
     "account"    : "H. Konto",
@@ -95,7 +95,6 @@
   },
   "bank": {
     "title":      "Bank",
-    "id":"Id",
     "name":       "Name",
     "description": "Description",
     "enterdate"  : "Created",
@@ -105,7 +104,6 @@
   },
   "bankstatement": {
     "title":      "Bank statement",
-    "id":         "Id",
     "depositor":  "Depositor",
     "postingdate": "Posted on",
     "valuedate"  : "Valuedate",
@@ -121,7 +119,6 @@
   },
   "company": {
     "title":      "Company",
-    "id":"Id",
     "name":       "Name",
     "description": "Description",
     "bankAccount": "Bank Acc.",
@@ -138,11 +135,10 @@
     "title":      "Customer"
   },
   "supplier": {
-    "title":      "Supplier"
+    "title": "Supplier"
   },
   "costcenter": {
     "title":      "Cost Center",
-    "id":         "Id",
     "name":       "Name",
     "description": "Description",
     "enterdate"  : "Created",
@@ -153,7 +149,6 @@
   },
   "article": {
     "title":      "Article",
-    "id":          "Id",
     "name":       "Name",
     "description": "Description",
     "enterdate"  : "Enterdate",
@@ -162,7 +157,6 @@
   },
   "vat": {
     "title":      "VAT",
-    "id":         "Id",
     "name":       "Name",
     "description": "Description",
     "enterdate"  : "Enterdare",
@@ -175,7 +169,6 @@
   },
   "pac": {
     "title":      "P.Account Balance",
-    "id":         "Id",
     "period":      "Period"
   },
   "financials": {
@@ -206,7 +199,6 @@
 
   "journal": {
     "title":      "Journal",
-    "id":         "Id",
     "transid":    "TransId",
     "oid":        "Oid",
     "account":      "Account",

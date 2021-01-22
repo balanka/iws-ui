@@ -1,5 +1,5 @@
 import React from 'react'
-import {styles, rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
+import {rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "react-fast-grid";
@@ -152,16 +152,16 @@ export const columnsPACB = (t) => [
     , {field:'currency', title:t('common.currency'),   export:true }
     , { field:'company', title:t('common.company'), export:true }
 ]
-export const columnsJ =(t) => [{field:"id", title:t('journal.id'),  type:"numeric", export:true }
+export const columnsJ =(t) => [{field:"id", title:t('common.id'),  type:"numeric", export:true }
 , {field:'transid', title:t('journal.transid'),   export:true }
 , { field: 'oid', title: t('journal.oid'),  export:true }
-, {field: 'account', title: t('journal.account'), export:true}
+, {field: 'account', title: t('common.account'), export:true}
 , {field: 'oaccount', title:t('journal.oaccount'), export:true}
-, {field: 'transdate', title:t('journal.transdate'),  type:"date", align:"right",
+, {field: 'transdate', title:t('common.transdate'),  type:"date", align:"right",
         dateSetting: { locale:"de" }, export:true}
-, {field: 'postingdate', title:t('journal.postingdate'), type:"date", align:"right",
+, {field: 'postingdate', title:t('common.postingdate'), type:"date", align:"right",
          dateSetting: { locale:"de" }, export:true}
-, {field: 'enterdate', title:t('journal.enterdate'), type:"date", align:"right",
+, {field: 'enterdate', title:t('common.enterdate'), type:"date", align:"right",
          dateSetting: { locale:"de" }, export:true}
 , {field: 'period', title:t('journal.period'), minWidth:1,  type:"numeric", export:true},
 , { field: 'amount', title: t('journal.amount'), currencySetting: { locale:"de"
@@ -300,22 +300,22 @@ export const OptionsM = ({
     //exportFileName:'Masterfile.csv'
 })
 export const ColumnsM =(data, t) => [
-      {field:'id', title:t('costcenter.id'), export:true}
-    , {field:'name', title:t("costcenter.name"),  type:"text", export:true}
-    , {field:'description', title:t('costcenter.description'), type:"string", export:true}
-    , {field:'account', title:t('costcenter.account')
+      {field:'id', title:t('common.id'), export:true}
+    , {field:'name', title:t("common.name"),  type:"text", export:true}
+    , {field:'description', title:t('common.description'), type:"string", export:true}
+    , {field:'account', title:t('common.account')
     ,  editComponent:({ value, onRowDataChange, rowData }) => ACCOUNT ( data, value, onRowDataChange, rowData, "account" )
         , width: 20, export:true}
-    , {field:'enterdate', title:t('costcenter.enterdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
-    , {field:'changedate', title:t('costcenter.changedate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
-    , {field:'postingdate', title:t('costcenter.postingdate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
+    , {field:'enterdate', title:t('common.enterdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'changedate', title:t('common.changedate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
+    , {field:'postingdate', title:t('common.postingdate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
     , {field:'company', title:t('common.company'), type:"string",  export:true}
 
 ]
 export const ColumnsComp =(data, t) => [
-     {field:'id', title:t('company.id'), export:true}
-    , {field:'name', title:t("company.name"),  type:"text", export:true}
-    , {field:'description', title:t('company.description'), type:"string", export:true}
+     {field:'id', title:t('common.id'), export:true}
+    , {field:'name', title:t("common.name"),  type:"text", export:true}
+    , {field:'description', title:t('common.description'), type:"string", export:true}
     , {field:'street', title:t('common.street'), type:"string", export:true}
     , {field:'zip', title:t('common.zip'), type:"string", export:true}
     , {field:'city', title:t('common.city'), type:"string", export:true}
@@ -361,9 +361,9 @@ export const ColumnsComp =(data, t) => [
  ]
 
 export const ColumnsACC =(data, t) => [
-      {field:'id', title:t('account.id'), export:true}
-    , {field:'name', title:t("account.name"),  type:"string", export:true}
-    , {field:'description', title:t('account.description'), type:"string",  export:true}
+      {field:'id', title:t('common.id'), export:true}
+    , {field:'name', title:t("common.name"),  type:"string", export:true}
+    , {field:'description', title:t('common.description'), type:"string",  export:true}
     , {field:'isDebit', title:t('account.debit_credit'), type:"boolean", export:true}
     , {field:'balancesheet', title:t('account.balancesheet'), type:"boolean", export:true}
     , {field:'account', title:t('account.account'),
@@ -377,15 +377,15 @@ export const ColumnsACC =(data, t) => [
         currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     , {field:'credit', title:t('account.credit'), type:"currency", initialEditValue:0,
         currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
-    , {field:'enterdate', title:t('account.enterdate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
-    , {field:'changedate', title:t('account.changedate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
-    , {field:'postingdate', title:t('account.postingdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'enterdate', title:t('common.enterdate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
+    , {field:'changedate', title:t('common.changedate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'postingdate', title:t('common.postingdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
     , {field:'company', title:t('common.company'), type:"string",  export:true}
 ]
 export const ColumnsVAT = (data, t) => [
-    {field:'id', title:t('vat.id'), export:true}
-    , {field:'name', title:t("vat.name"),  type:"string", export:true}
-    , {field:'description', title:t('vat.description'), type:"string",  export:true}
+    {field:'id', title:t('common.id'), export:true}
+    , {field:'name', title:t("common.name"),  type:"string", export:true}
+    , {field:'description', title:t('common.description'), type:"string",  export:true}
     , {field:'percent', title:t('vat.percent'), type:"numeric", initialEditValue:0, minimumFractionDigits: 2
         , maximumFractionDigits: 2, export:true}
     , {field:'inputVatAccount', title:t('vat.input_account')
@@ -394,18 +394,18 @@ export const ColumnsVAT = (data, t) => [
     , {field:'outputVatAccount', title:t('vat.output_account')
     , editComponent:({ value, onRowDataChange, rowData }) =>ACCOUNT ( data, value, onRowDataChange, rowData, "outputVatAccount" )
         , width: 20, export:true}
-    , {field:'enterdate', title:t('vat.enterdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
-    , {field:'changedate', title:t('vat.changedate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
-    , {field:'postingdate', title:t('vat.postingdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'enterdate', title:t('common.enterdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'changedate', title:t('common.changedate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'postingdate', title:t('common.postingdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
     , {field:'company', title:t('common.company'), type:"string", export:true}
 ]
 
 export const ColumnsBS =( data, t) => [
-      {field:'bid', title:t('bankstatement.id'), type:'numeric', align:"right", export:true}
+      {field:'bid', title:t('common.id'), type:'numeric', align:"right", export:true}
     , {field:'posted', title:t('bankstatement.posted'), type:"boolean", export:true}
     , {field:'depositor', title:t("bankstatement.depositor"), type:"string", export:true}
     , {field:'valuedate', title:t('bankstatement.valuedate'), type:"date",  align:"right", export:true}
-    , {field:'postingdate', title:t('bankstatement.postingdate'), type:"date",  align:"right", export:true}
+    , {field:'postingdate', title:t('common.postingdate'), type:"date",  align:"right", export:true}
     , {field:'amount', title:t("bankstatement.amount"), type: "currency", export:true
         , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     , {field:'currency', title:t("common.currency"), type:"string", hidden:true, export:true}
@@ -446,14 +446,14 @@ export const pacHeaders = (t) =>[ {id:'period', label:t('pac.period'), minWidth:
 , { id: 'balance', label:t('pac.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
 , { id: 'currency', label:t('common.currency'), minWidth:1}
 ]
-export const JournalHeaders=(t) =>[ {id:"id", label:t('journal.id'), minWidth:2, numeric:true }
+export const JournalHeaders=(t) =>[ {id:"id", label:t('common.id'), minWidth:2, numeric:true }
     , {id:"transid", label:t('journal.transid'), minWidth:1, numeric:true }
     , { id: "oid", label: t('journal.oid'), minWidth:1, numeric:true }
     , {id: "account", label: t('journal.account'), minWidth:1}
     , {id: "oaccount", label:t('journal.oaccount'), minWidth:2}
-    , {id: "transdate", label:t('journal.transdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-    , {id: "postingdate", label:t('journal.postingdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-    , {id: "enterdate", label:t('journal.enterdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id: "transdate", label:t('common.transdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id: "postingdate", label:t('common.postingdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
+    , {id: "enterdate", label:t('common.enterdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
     , {id: 'period', label:t('journal.period'), minWidth:1, numeric:true},
     , { id: 'amount', label: t('journal.amount'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
     , { id: 'idebit', label:t('journal.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
@@ -475,7 +475,7 @@ export const balanceHeaders=(t) =>[ {id:'id', label:t('balancesheet.id'), minWid
     , { id: 'credit', label:t('balancesheet.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
     ]
 export const treeHeaders=(t) =>[{ title:t('account.id'), field: 'id' }
-    ,  { title:t('account.name'), field: 'name' }
+    ,  { title:t('common.name'), field: 'name' }
     ,  { title:t('account.account'), field: 'account' }
     ,  { title:t('balancesheet.idebit'), field: 'idebit', type: 'numeric', minWidth:3 }
     ,  { title:t('balancesheet.debit'), field: 'debit' , type: 'numeric', minWidth:3}
@@ -748,14 +748,14 @@ export const AccountMainForm =(props) => {
         <>
      <CFormGroup row style={{  height:15 }}>
          <CCol sm="2">
-            <CLabel size="sm" htmlFor="input-small">{t('account.id')}</CLabel>
+            <CLabel size="sm" htmlFor="input-small">{t('common.id')}</CLabel>
         </CCol>
     <CCol sm="4">
         <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm"
                 placeholder="Id" value= {current.id} onChange={(event)  => setCurrent({ ...current, id: event.target.value})} />
     </CCol>
     <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t('account.enterdate')}</CLabel>
+        <CLabel size="sm" htmlFor="input-small">{t('common.enterdate')}</CLabel>
     </CCol>
     <CCol sm="2">
         <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate"
@@ -766,14 +766,14 @@ export const AccountMainForm =(props) => {
 </CFormGroup>
      <CFormGroup row style={{  height:15 }}>
     <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t('account.name')}</CLabel>
+        <CLabel size="sm" htmlFor="input-small">{t('common.name')}</CLabel>
     </CCol>
     <CCol sm="4">
         <CInput bsSize="sm" type="text" id="name-input" name="name" className="input-sm" placeholder="Name"
                 value={current.name} onChange={(event)  => setCurrent({ ...current, name: event.target.value})} />
     </CCol>
     <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t('account.changedate')}</CLabel>
+        <CLabel size="sm" htmlFor="input-small">{t('common.changedate')}</CLabel>
     </CCol>
     <CCol sm="2">
         <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate"
@@ -783,7 +783,7 @@ export const AccountMainForm =(props) => {
 </CFormGroup>
      <CFormGroup row style={{  height:15 }}>
     <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t('account.account')}</CLabel>
+        <CLabel size="sm" htmlFor="input-small">{t('common.account')}</CLabel>
     </CCol>
     <CCol sm="4">
         <CSelect className ="flex-row" type="select" name="account" id="account-id"
@@ -794,7 +794,7 @@ export const AccountMainForm =(props) => {
 
     </CCol>
     <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t('account.postingdate')}</CLabel>
+        <CLabel size="sm" htmlFor="input-small">{t('common.postingdate')}</CLabel>
     </CCol>
     <CCol sm="2">
         <CInput  bsSize="sm" type="text" id="input-small" name="postingdate"
@@ -829,7 +829,7 @@ export const AccountMainForm =(props) => {
 </CFormGroup>
      <CFormGroup row style={{  height:15 }}>
     <CCol md="2">
-        <CLabel htmlFor="textarea-input">{t('account.description')}</CLabel>
+        <CLabel htmlFor="textarea-input">{t('common.description')}</CLabel>
     </CCol>
     <CCol xs="12"   md="9">
         <CTextarea type="textarea" name="description" id="description-id" rows="1"
@@ -845,14 +845,14 @@ export const BankStatementMainForm =(props) => {
         <>
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('bankstatement.id')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.id')}</CLabel>
                 </CCol>
                 <CCol sm="4">
                     <CInput  bsSize="sm" type="text" id="account-id" name="id" className="input-sm"
                              placeholder="Id" value= {current.bid}  />
                 </CCol>
                 <CCol sm="1">
-                    <CLabel size="sm" htmlFor="input-small">{t('bankstatement.postingdate')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.postingdate')}</CLabel>
                 </CCol>
                 <CCol sm="1.5">
                     <CInput  bsSize="sm" type="text"  id="postingdate-id" name="postingdate" className="input-sm"
@@ -980,7 +980,7 @@ export const MasterfilesMainForm =(props) => {
     return (<>
     <CFormGroup row style={{  height:15 }}>
     <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t('costcenter.id')}</CLabel>
+        <CLabel size="sm" htmlFor="input-small">{t('common.id')}</CLabel>
     </CCol>
     <CCol sm="4">
         <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm" placeholder="Id"
@@ -988,7 +988,7 @@ export const MasterfilesMainForm =(props) => {
         />
     </CCol>
     <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t('costcenter.enterdate')}</CLabel>
+        <CLabel size="sm" htmlFor="input-small">{t('common.enterdate')}</CLabel>
     </CCol>
     <CCol sm="2">
         <CInput  readOnly bsSize="sm" type="text" id="enterdate-id" name="enterdate" className="input-sm"
@@ -1005,7 +1005,7 @@ export const MasterfilesMainForm =(props) => {
                 value={current.name} onChange={(event)  => setCurrent({ ...current, name: event.target.value})}/>
     </CCol>
     <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t('costcenter.changedate')}</CLabel>
+        <CLabel size="sm" htmlFor="input-small">{t('common.changedate')}</CLabel>
     </CCol>
     <CCol sm="2">
         <CInput bsSize="sm" type="text" id="changedate-id" name="changedate" className="input-sm"
@@ -1015,7 +1015,7 @@ export const MasterfilesMainForm =(props) => {
 </CFormGroup>
          <CFormGroup row style={{  height:15 }}>
     <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t('costcenter.account')}</CLabel>
+        <CLabel size="sm" htmlFor="input-small">{t('common.account')}</CLabel>
     </CCol>
     <CCol sm="4">
         <CSelect className="flex-row" type="select" name="account" id="account-id"
@@ -1024,7 +1024,7 @@ export const MasterfilesMainForm =(props) => {
         </CSelect>
     </CCol>
     <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t("costcenter.postingdate")}</CLabel>
+        <CLabel size="sm" htmlFor="input-small">{t("common.postingdate")}</CLabel>
     </CCol>
     <CCol sm="2">
         <CInput bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
@@ -1045,7 +1045,7 @@ export const MasterfilesMainForm =(props) => {
 </CFormGroup>
         <CFormGroup row style={{  height:15 }}>
     <CCol md="2">
-        <CLabel htmlFor="textarea-input">{t('costcenter.description')}</CLabel>
+        <CLabel htmlFor="textarea-input">{t('common.description')}</CLabel>
     </CCol>
     <CCol xs="12" md="9">
         <CTextarea type="texarea" name="description" id="description-id" rows="1"
@@ -1620,12 +1620,12 @@ export const CompanyGeneralForm =(props) => {
     )}
 export const CompanyAccountForm =(props) => {
     const {current, setCurrent, t, accData, vatData} = props
-
+ console.log('currentWW', current);
     return (
         <>
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('company.bankAccount')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.bankAcc')}</CLabel>
                 </CCol>
                 <CCol sm="4">
                     <CSelect className ="flex-row" type="select" name="bankAcc" id="bankAcc-id"
@@ -1647,7 +1647,29 @@ export const CompanyAccountForm =(props) => {
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('company.cashAccount')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.paymentClearingAcc')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="paymentClearingAcc" id="paymentClearingAcc-id"
+                             value={current.paymentClearingAcc} onChange={(event)  =>
+                        setCurrent({ ...current, paymentClearingAcc: event.target.value})} >
+                        {accData.hits.map(item => mappingSelect(item))};
+                    </CSelect>
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.settlementClearingAcc')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="settlementClearingAcc" id="settlementClearingAcc-id"
+                             value={current.settlementClearingAcc} onChange={(event)  =>
+                        setCurrent({ ...current, settlementClearingAcc: event.target.value})} >
+                        {accData.hits.map(item => mappingSelect(item))};
+                    </CSelect>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.cashAcc')}</CLabel>
                 </CCol>
                 <CCol sm="4">
                     <CSelect className ="flex-row" type="select" name="cashAcc" id="cashAcc-id"
@@ -1656,7 +1678,38 @@ export const CompanyAccountForm =(props) => {
                         {accData.hits.map(item => mappingSelect(item))};
                     </CSelect>
                 </CCol>
-
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.purchasingClearingAcc')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="purchasingClearingAcc" id="purchasingClearingAcc-id"
+                             value={current.purchasingClearingAcc} onChange={(event)  =>
+                        setCurrent({ ...current, purchasingClearingAcc: event.target.value})} >
+                        {accData.hits.map(item => mappingSelect(item))};
+                    </CSelect>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.balanceSheetAcc')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="balanceSheetAcc" id="balanceSheetAcc-id"
+                             value={current.balanceSheetAcc} onChange={(event)  =>
+                        setCurrent({ ...current, balanceSheetAcc: event.target.value})} >
+                        {accData.hits.map(item => mappingSelect(item))};
+                    </CSelect>
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.incomeStmtAcc')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="incomeStmtAcc" id="incomeStmtAcc-id"
+                             value={current.incomeStmtAcc} onChange={(event)  =>
+                        setCurrent({ ...current, incomeStmtAcc: event.target.value})} >
+                        {accData.hits.map(item => mappingSelect(item))};
+                    </CSelect>
+                </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
@@ -1664,13 +1717,18 @@ export const CompanyAccountForm =(props) => {
                 </CCol>
                 <CCol sm="4">
                     <CSelect className ="flex-row" type="select" name="vatcode" id="vatcode-id"
-                             value={current.vatcode} onChange={(event)  =>
-                        setCurrent({ ...current, vatcode: event.target.value})} >
+                             value={current.vatCode} onChange={(event)  =>
+                        setCurrent({ ...current, vatCode: event.target.value})} >
                         {vatData.hits.map(item => mappingSelect(item))};
                     </CSelect>
                 </CCol>
                 <CCol sm="2">
                     <CLabel size="sm" htmlFor="input-small">{t('common.iban')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CInput bsSize="sm" type="text" id="iban-id" name="ibanid" className="input-sm" placeholder="Id"
+                            value= {current.iban} onChange={(event)  =>
+                        setCurrent({ ...current, iban: event.target.value})} />
                 </CCol>
             </CFormGroup>
         </>
@@ -1849,7 +1907,7 @@ export const VatMainForm =(props) => {
      <>
     <CFormGroup row style={{height:15 }}>
         <CCol sm="2">
-            <CLabel size="sm" htmlFor="input-small">{t('vat.id')}</CLabel>
+            <CLabel size="sm" htmlFor="input-small">{t('common.id')}</CLabel>
         </CCol>
         <CCol sm="4">
             <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm"

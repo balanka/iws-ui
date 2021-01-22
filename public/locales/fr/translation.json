@@ -32,6 +32,7 @@
     "searchPlaceholder": "Recherche"
   },
   "common": {
+    "id":  "Nº",
     "title": "Titre",
     "name": "Nom",
     "surname": "Nom de Famille",
@@ -82,7 +83,6 @@
   },
   "account": {
     "title":      "Comptes",
-    "id":         "Nº",
     "name":       "Nom",
     "description": "Description",
     "account"    : "Compte",
@@ -104,7 +104,6 @@
   },
   "bankstatement": {
     "title":      "Rélevé bancaire",
-    "id":         "Nº",
     "depositor":  "Client",
     "postingdate": "Validé",
     "valuedate"  : "Valeur",
@@ -120,7 +119,6 @@
   },
   "company": {
     "title":      "Société",
-    "id":"Nº",
     "name":       "Nom",
     "description": "Description",
     "enterdate"  : "Date saisie",
@@ -137,7 +135,6 @@
   },
   "costcenter": {
     "title":      "Center de coût",
-    "id":         "Nº",
     "name":       "Nom",
     "description": "Description",
     "enterdate"  : "Date saisie",
@@ -147,7 +144,6 @@
   },
   "article": {
     "title":      "Article",
-    "id":         "Nº",
     "name":       "Nom",
     "description": "Description",
     "enterdate"  : "Date saisie",
@@ -156,7 +152,6 @@
   },
   "vat": {
     "title":      "TVA",
-    "id":         "Nº",
     "name":       "Nom",
     "description": "Description",
     "enterdate"  : "Saisie",
@@ -168,7 +163,6 @@
      },
   "pac": {
     "title":      "Balance périodique",
-    "id":         "Nº",
     "period":      "Periode"
     },
 
@@ -218,7 +212,6 @@
   },
   "balancesheet": {
     "title":      "Bilan",
-    "id":         "Nº",
     "name":         "Bilan",
     "account":     "Compte",
     "period":      "Period",

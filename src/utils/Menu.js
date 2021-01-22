@@ -96,7 +96,7 @@ export const initCC = { hits:[ {id:'', name: '', description: '', enterdate:new 
             , modelid:6, account:'-1', company:''}]}
 export const initComp = { hits:[ {id:'', name:'', description:'', street:'', city:'', state:'', zip:'', bankAcc:''
     , purchasingClearingAcc:'', salesClearingAcc:'', paymentClearingAcc:'', settlementClearingAcc:'', balanceSheetAcc:''
-    , incomeStmtAcc:'', cashAcc:'', taxCode:'', vatCode:'', currency:'', enterdate:new Date().toISOString()
+    , incomeStmtAcc:'', cashAcc:'', taxCode:'-1', vatCode:'-1', currency:'', enterdate:new Date().toISOString()
     , postingdate:new Date().toISOString(), changedate:new Date().toISOString(), modelid:10, pageHeaderText:''
     , pageFooterText:'', headerText:'', footerText:'', logoContent:'', logoName:'', contentType:'', partner:''
     , phone:'', fax:'', email:'', locale:'de'}]}
