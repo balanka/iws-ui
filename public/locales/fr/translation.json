@@ -35,11 +35,13 @@
     "title": "Titre",
     "name": "Nom",
     "surname": "Nom de Famille",
+    "description": "Description",
     "sex": "Sexe",
     "type": "Type",
     "birthYear": "Ann.naissance",
     "birthCity": "Lieu de naissance",
     "account":  "Comptes",
+    "oaccount": "Comptes produit/charge",
     "currency"    : "Monaie",
     "from"       :  "De",
     "to"        :  "A",
@@ -62,8 +64,21 @@
     "enterdate"  : "Date saisie",
     "postingdate": "Date validation",
     "changedate":  "Date mod.",
+    "bankAcc": "Cpte banque",
+    "cashAcc": "Cpte caisse",
+    "balanceSheetAcc":"Cpte Bilan",
+    "incomeStmtAcc": "Cpte résultat",
+    "purchasingClearingAcc": "Cpte reg. achat/fac",
+    "salesClearingAcc":"Cpte reg. ventes/fac",
+    "paymentClearingAcc":"Cpte reg. paiement",
+    "settlementClearingAcc": "Cpte reg. reglement",
     "taxCode":"NºImpots",
-    "vatCode": "Réf TVA"
+    "vatCode": "Réf TVA",
+    "iban"       : "IBAN",
+    "general": "Inf. générale",
+    "address": "Adresse",
+    "accounts": "Comptes"
+
   },
   "account": {
     "title":      "Comptes",
@@ -115,37 +130,10 @@
   },
 
   "customer": {
-    "title":      "Client",
-    "id":         "Nº",
-    "name":       "Nom",
-    "description": "Description",
-    "enterdate"  : "Date saisie",
-    "postingdate": "Date validation",
-    "changedate":  "Date modif.",
-    "account"    : "Compte Client",
-    "oaccount"    : "Compte Prod.",
-    "street"      : "Rue",
-    "zip"        : "Code P.",
-    "city"       : "Ville",
-    "country"       : "Pays",
-    "phone"       : "Tel",
-    "email"       : "Email",
-    "iban"       : "IBAN",
-    "vat"       : "Code TVA"
+    "title":      "Client"
   },
   "supplier": {
-    "title":      "Fournisseur",
-    "id":         "Nº",
-    "name":       "Nom",
-    "description": "Description",
-    "enterdate"  : "Date saisie",
-    "postingdate": "Date validation",
-    "changedate":  "Date mod.",
-    "account"    : "Compte Four.",
-    "oaccount"    : "Compte charge",
-
-    "iban"       : "IBAN",
-    "vat"       : "Code TVA"
+    "title":      "Fournisseur"
   },
   "costcenter": {
     "title":      "Center de coût",

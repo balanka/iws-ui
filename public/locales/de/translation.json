@@ -40,6 +40,7 @@
     "birthYear": "Jahrgang",
     "birthCity": "Geburtsort",
     "account":      "Konto",
+    "oaccount"    : "Debitor-/Kreditorkonto",
     "currency"    : "Währung",
     "from"       :  "Von",
     "to"        :  "Bis",
@@ -124,30 +125,10 @@
 
   },
   "customer": {
-    "title":      "Kunde",
-    "id":"Nummer",
-    "name":       "Firma",
-    "description": "Beschreibung",
-    "enterdate"  : "Eingabedatum",
-    "postingdate": "Gebucht am",
-    "changedate":  "Geaendert",
-    "account"    : "Verb. Kto.",
-    "oaccount"    : "Aufwand Kto.",
-    "iban"       : "IBAN",
-    "vat"       : "UST"
+    "title":      "Kunde"
   },
   "supplier": {
-    "title":      "Lieferant",
-    "id":          "Nummer",
-    "name":       "Firma",
-    "description": "Beschreibung",
-    "enterdate"  : "Eingabedatum",
-    "postingdate": "Gebucht am",
-    "changedate":  "Geaendert",
-    "account"    : "Verb. Kto.",
-    "oaccount"    : "Aufwand Kto.",
-    "iban"       : "IBAN",
-    "vat"       : "UST"
+    "title":      "Lieferant"
   },
   "costcenter": {
     "title":"Kostenstelle",

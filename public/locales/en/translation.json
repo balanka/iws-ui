@@ -37,9 +37,10 @@
     "surname": "Surname",
     "sex": "Sex",
     "type": "Type",
-    "birthYear": "B. yearear",
+    "birthYear": "B. year",
     "birthCity": "B. City",
     "account":      "Account",
+    "oaccount"    : "Expence/Revenue acc",
     "currency"    : "Currency",
     "from"       :  "From",
     "to"        :  "To",
@@ -70,7 +71,10 @@
     "paymentClearingAcc":"Paiement cl Acc.",
     "settlementClearingAcc": "Settlement cl. Acc.",
     "taxCode":"Tax code",
-    "vatCode": "VAT"
+    "vatCode": "VAT",
+    "general": "Générale Info",
+    "address": "Address",
+    "accounts": "Accounts"
   },
   "account": {
     "title":      "Account",
@@ -131,38 +135,10 @@
     "companyIban" : "IBAN comp."
   },
   "customer": {
-    "title":      "Customer",
-    "id":"Id",
-    "name":       "Name",
-    "description": "Description",
-    "enterdate"  : "Created",
-    "postingdate": "Posted",
-    "changedate": "Modified",
-    "account"    : "Acc. Rec.",
-    "oaccount"    : "Rev. Acc.",
-    "iban"       : "IBAN",
-    "vat"       : "VAT",
-    "company"    : "Company"
+    "title":      "Customer"
   },
   "supplier": {
-    "title":      "Supplier",
-    "id":         "Id",
-    "name":       "Name",
-    "description": "Description",
-    "enterdate"  : "Created",
-    "postingdate": "Posted",
-    "changedate": "Modified",
-    "account"    : "Acc. Pay..",
-    "oaccount"    : "Exp. Acc.",
-    "street"      : "Street",
-    "zip"        : "Zip",
-    "city"       : "City",
-    "country"       : "Country",
-    "phone"       : "Tel",
-    "email"       : "Email",
-    "iban"       : "IBAN",
-    "vat"       : "VAT",
-    "company"    : "Company"
+    "title":      "Supplier"
   },
   "costcenter": {
     "title":      "Cost Center",
