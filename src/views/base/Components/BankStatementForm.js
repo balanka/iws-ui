@@ -65,7 +65,7 @@ const BankStatementForm = () => {
     };
 
     const submitPost = event => {
-       // event.preventDefault();
+        event.preventDefault();
         //const row =getCurrentRow
         console.log("submitPost current", rows);
         //setCurrent(row);

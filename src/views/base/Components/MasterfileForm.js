@@ -5,7 +5,7 @@ import blue from "@material-ui/core/colors/blue";
 import useFetch from "../../../utils/useFetch";
 import {ColumnFactory,  CommonFormHead, FormFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
-import {styles, rowStyle, theme} from "../Tree/BasicTreeTableProps";
+import {styles, theme} from "../Tree/BasicTreeTableProps";
 const MasterfileForm = () => {
   const [profile, ] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -13,7 +13,6 @@ const MasterfileForm = () => {
   const value = useContext(accountContext);
   const t = value.t
   const modelid_ = value.modelid;
-  //let rows = [];
   const [{ res},] = useFetch(value.url, {});
   const [{ res2},] = useFetch(value.accUrl, {});
   const [{ res3},] = useFetch(value.ccUrl, {});
