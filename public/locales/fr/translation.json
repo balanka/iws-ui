@@ -119,11 +119,8 @@
   },
   "company": {
     "title":      "Société",
-    "name":       "Nom",
-    "description": "Description",
-    "enterdate"  : "Date saisie",
-    "postingdate": "Validé",
-    "changedate": "Modif.",
+    "locale":      "Locale",
+
     "companyIban" : "IBAN"
   },
 
