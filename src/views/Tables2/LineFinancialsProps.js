@@ -24,6 +24,8 @@ import Switch from "@material-ui/core/Switch";
 import { blue, green } from "@material-ui/core/colors";
 import SvgIcon from '@material-ui/core/SvgIcon';
 import CustomerTabs from "../base/Components/CustomerTabs";
+import CompanyTabs from "../base/Components/CompanyTabs";
+
 
 
 const svgIcons= {
@@ -706,12 +708,12 @@ export const FormFactory =(props)=> {
         case formEnum.BANKSTATEMENT:
             return <FormWrapper {...props} form = {BankStatementMainForm}/>;
         case formEnum.COMPANY:
-            return <FormWrapper {...props} form = {CompanyMainForm}/>;
+            return <FormWrapper {...props} form = {CompanyTabs}/>;
         case formEnum.COSTCENTER:
         case formEnum.BANK:
             return <FormWrapper {...props} form = {MasterfilesMainForm}/>;
         case formEnum.CUSTOMER:
-        case formEnum.SUPPLIER: //
+        case formEnum.SUPPLIER:
             return <FormWrapper {...props} form = {CustomerTabs}/>;
         case formEnum.FINANCIALS:
             return <FormWrapper {...props} form = {FinancialsMainForm}/>;
@@ -1563,8 +1565,61 @@ export const CompanyMainForm =(props) => {
             </CFormGroup>
         </>
     )}
+export const CompanyGeneralForm =(props) => {
+    const {current, setCurrent, t} = props
+    return (
+        <>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.id')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm" placeholder="Id"
+                            value= {current.id} onChange={(event)  =>
+                        setCurrent({ ...current, id: event.target.value})} />
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.enterdate')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
+                             placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('company.name')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CInput bsSize="sm" type="text" id="name-input" name="name" className="input-sm" placeholder="Name"
+                            value={current.name} onChange={(event)  =>
+                        setCurrent({ ...current, name: event.target.value})} />
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.changedate')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
+                             placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol md="2">
+                    <CLabel htmlFor="textarea-input">{t('common.description')}</CLabel>
+                </CCol>
+                <CCol xs="12"   md="9">
+                    <CTextarea type="texarea" name="description" id="description-id" rows="1"
+                               placeholder="Content..." value={current.description}
+                               onChange={(event)  =>
+                                   setCurrent({ ...current, description: event.target.value})} />
+                </CCol>
+            </CFormGroup>
+        </>
+    )}
 export const CompanyAccountForm =(props) => {
-    const {current, setCurrent, t, accData, vatData,  state, styles} = props
+    const {current, setCurrent, t, accData, vatData} = props
 
     return (
         <>

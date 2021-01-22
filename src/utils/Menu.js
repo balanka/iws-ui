@@ -99,7 +99,7 @@ export const initComp = { hits:[ {id:'', name:'', description:'', street:'', cit
     , incomeStmtAcc:'', cashAcc:'', taxCode:'', vatCode:'', currency:'', enterdate:new Date().toISOString()
     , postingdate:new Date().toISOString(), changedate:new Date().toISOString(), modelid:10, pageHeaderText:''
     , pageFooterText:'', headerText:'', footerText:'', logoContent:'', logoName:'', contentType:'', partner:''
-    , tel:'', fax:'', email:'', locale:'de'}]}
+    , phone:'', fax:'', email:'', locale:'de'}]}
 
 
 export const initVat={ hits:[{ id:'', name:'', description:'', percent:'', inputVatAccount:'', outputVatAccount:''
