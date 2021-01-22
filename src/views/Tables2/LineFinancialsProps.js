@@ -22,8 +22,8 @@ import DateFnsUtils from "@date-io/date-fns";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import { blue, green } from "@material-ui/core/colors";
-import Icon from '@material-ui/core/Icon';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import CustomerTabs from "../base/Components/CustomerTabs";
 
 
 const svgIcons= {
@@ -43,6 +43,11 @@ const svgIcons= {
     , addCircleOutline:"M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
     , addBox:"M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
     , save:"M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"
+    , doubleAngleUp:"M177 255.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 351.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 425.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1zm-34-192L7 199.7c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l96.4-96.4 96.4 96.4c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9l-136-136c-9.2-9.4-24.4-9.4-33.8 0z"
+    , doubleAngleDown:"M1523 1440q0 13-10 23l-50 50q-10 10-23 10t-23-10l-393-393-393 393q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l466-466q10-10 23-10t23 10l466 466q10 10 10 23zm0-384q0 13-10 23l-50 50q-10 10-23 10t-23-10l-393-393-393 393q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l466-466q10-10 23-10t23 10l466 466q10 10 10 23z"
+    , arrowUpSolid:"M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"
+    , arrowDownSolid:"M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"
+    , checkBox:"M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
 }
 
 function IwsIcon(props) {
@@ -89,23 +94,7 @@ export  const ACCOUNT2=(data, value, onRowDataChange, rowData, fieldName) => {
         {data.map(mapping)} id={"cb".concat(fieldName)}
     </Select>)
 }
-/*
-<Select
-    labelId="demo-customized-select-label"
-    id="demo-customized-select"
-    value={age}
-    onChange={handleChange}
-    input={<BootstrapInput />}
->
-    <MenuItem value="">
-        <em>None</em>
-    </MenuItem>
-    <MenuItem value={10}>Ten</MenuItem>
-    <MenuItem value={20}>Twenty</MenuItem>
-    <MenuItem value={30}>Thirty</MenuItem>
-</Select>
 
- */
 export const  editable = (data, setData, current ) => ({
     onRowAdd: newData =>{
             const datax = JSON.parse(JSON.stringify(data));
@@ -116,22 +105,7 @@ export const  editable = (data, setData, current ) => ({
               const index1 = currentx.lines.length;
               currentx.lines[index1] = newData;
         },
-    /*
-    onBulkUpdate: (changes) =>
-        new Promise((resolve, reject) => {
-            setTimeout(() => {
-                const updatedData = [...this.state.data];
-                Object.keys(changes).map(
-                    (rowId) => (updatedData[rowId] = changes[rowId].newData)
-                );
-                this.setState({
-                    data: updatedData
-                });
-                resolve();
-            }, 1000);
-        }),
 
-     */
     onRowUpdate: (newData, oldData) =>
         new Promise((resolve) => {
             setTimeout(() => {
@@ -444,21 +418,21 @@ export const ColumnsBS =( data, t) => [
 ]
 
 export const ColumnsCUST =(data, t) => [
-  {field:'id', title:t('customer.id'), type:'numeric', align:"right", export:true}
-, {field:'name', title:t('customer.name'), type:"string", export:true}
-, {field:'description', title:t('customer.description'), type:"string", export:true}
-, {field:'street', title:t('customer.street'), type:"string", export:true}
-, {field:'zip', title:t('customer.zip'), type:"string", export:true}
-, {field:'country', title:t('customer.country'), type:"string", export:true}
-, {field:'phone', title:t('customer.phone'), type:"string", export:true}
-, {field:'email', title:t('customer.email'), type:"string", export:true}
-, {field:'account', title:t('customer.account'), type:"string", export:true}
-, {field:'oaccount', title:t('customer.oaccount'), type:"string", export:true}
-, {field:'iban', title:t('customer.iban'), type:"string", export:true}
-, {field:'vatcode', title:t('customer.vat'), type:"string", export:true}
-, {field:'enterdate', title:t('customer.enterdate'), type: "date", export:true}
-, {field:'postingdate', title:t('customer.postingdate'), type: "date", export:true}
-, {field:'changedate', title:t('customer.changedate'), type: "date", export:true}
+  {field:'id', title:t('common.id'), type:'numeric', align:"right", export:true}
+, {field:'name', title:t('common.name'), type:"string", export:true}
+, {field:'description', title:t('common.description'), type:"string", export:true}
+, {field:'street', title:t('common.street'), type:"string", export:true}
+, {field:'zip', title:t('common.zip'), type:"string", export:true}
+, {field:'country', title:t('common.country'), type:"string", export:true}
+, {field:'phone', title:t('common.phone'), type:"string", export:true}
+, {field:'email', title:t('common.email'), type:"string", export:true}
+, {field:'account', title:t('common.account'), type:"string", export:true}
+, {field:'oaccount', title:t('common.oaccount'), type:"string", export:true}
+, {field:'iban', title:t('common.iban'), type:"string", export:true}
+, {field:'vatcode', title:t('common.vatCode'), type:"string", export:true}
+, {field:'enterdate', title:t('common.enterdate'), type: "date", export:true}
+, {field:'postingdate', title:t('common.postingdate'), type: "date", export:true}
+, {field:'changedate', title:t('common.changedate'), type: "date", export:true}
 , {field:'modelid', title:t('common.modelid'), type:'numeric', align:"right", export:true}
 , {field:'company', title:t('common.company'), export:true}
 ]
@@ -722,12 +696,11 @@ export const ColumnFactory =(formid, data, t)=> {
         case formEnum.VAT:
             return ColumnsVAT(data,t);
         default:
-        // code block
+            return <>NODATA</>
     }
 }
 export const FormFactory =(props)=> {
-const {formid} = props
-    switch(formid) {
+    switch(props.formid) {
         case formEnum.ACCOUNT:
             return <FormWrapper {...props} form = {AccountMainForm}/>;
         case formEnum.BANKSTATEMENT:
@@ -738,8 +711,8 @@ const {formid} = props
         case formEnum.BANK:
             return <FormWrapper {...props} form = {MasterfilesMainForm}/>;
         case formEnum.CUSTOMER:
-        case formEnum.SUPPLIER:
-            return <FormWrapper {...props} form = {CustomerMainForm}/>;
+        case formEnum.SUPPLIER: //
+            return <FormWrapper {...props} form = {CustomerTabs}/>;
         case formEnum.FINANCIALS:
             return <FormWrapper {...props} form = {FinancialsMainForm}/>;
         case formEnum.JOURNAL:
@@ -748,7 +721,7 @@ const {formid} = props
         case formEnum.VAT:
             return <FormWrapper {...props} form = {VatMainForm}/>;
         default:
-        // code block
+            return <>NODATA</>
     }
 }
 export const FormWrapper=(props) => {
@@ -1080,8 +1053,194 @@ export const MasterfilesMainForm =(props) => {
     </CFormGroup>
 </>
 )}
+export const AddressForm =(props) => {
+    const {current, setCurrent, t} = props
+    return (
+        <>
+            <CFormGroup row style={{ height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.street')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CInput  bsSize="sm" type="text" id="street-id" name="company" className="input-sm"
+                             placeholder="Street" value={current.street} onChange={(event)  =>
+                        setCurrent({ ...current, street: event.target.value})}
+                             style={{'text-align':'left', padding:2 }}/>
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.city')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.zip')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm" type="text" id="zip-id" name="zip" className="input-sm"
+                             placeholder="zip" value={current.zip} onChange={(event)  =>
+                        setCurrent({ ...current, zip: event.target.value})}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm" type="text" id="city-id" name="city" className="input-sm"
+                             placeholder="city" value={current.city} onChange={(event)  =>
+                        setCurrent({ ...current, city: event.target.value})}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.country')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CInput  bsSize="sm" type="text" id="country-id" name="country" className="input-sm"
+                             placeholder="country" value={current.country} onChange={(event)  =>
+                        setCurrent({ ...current, country: event.target.value})}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+        </>
+    )}
+export const CustomerGeneralForm =(props) => {
+    const {current, setCurrent, t} = props
+    return (
+        <>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.id')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm" placeholder="Id"
+                            value= {current.id} onChange={(event)  =>
+                        setCurrent({ ...current, id: event.target.value})} />
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.enterdate')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
+                             placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.name')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CInput bsSize="sm" type="text" id="name-input" name="name" className="input-sm" placeholder="Name"
+                            value={current.name} onChange={(event)  =>
+                        setCurrent({ ...current, name: event.target.value})} />
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.changedate')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
+                             placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
+                             placeholder="company" value={current.company} onChange={(event)  =>
+                        setCurrent({ ...current, company: event.target.value})}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.phone')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm" type="text" id="phone-id" name="phone" className="input-sm"
+                             placeholder="phone" value={current.phone} onChange={(event)  =>
+                        setCurrent({ ...current, phone: event.target.value})}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol md="2">
+                    <CLabel htmlFor="textarea-input">{t('common.description')}</CLabel>
+                </CCol>
+                <CCol xs="12"   md="9">
+                    <CTextarea type="texarea" name="description" id="description-id" rows="1"
+                               placeholder="Content..." value={current.description}
+                               onChange={(event)  =>
+                                   setCurrent({ ...current, description: event.target.value})} />
+                </CCol>
+            </CFormGroup>
+        </>
+    )
+  }
+export const CustomerAccountForm =(props) => {
+    const {current, setCurrent, t, accData, vatData} = props
+
+    return (
+        <>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.account')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="account" id="account-id"
+                             value={current.account} onChange={(event)  =>
+                        setCurrent({ ...current, account: event.target.value})} >
+                        {accData.hits.map(item => mappingSelect(item))};
+
+                    </CSelect>
+
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.postingdate')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
+                             placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{ height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.oaccount')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="oaccount" id="oaccount-id"
+                             value={current.oaccount} onChange={(event)  =>
+                        setCurrent({ ...current, oaccount: event.target.value})} >
+                        {accData.hits.map(item => mappingSelect(item))};
+                    </CSelect>
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
+                             placeholder="company" value={current.company} onChange={(event)  =>
+                        setCurrent({ ...current, company: event.target.value})}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.vatCode')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="vatcode" id="vatcode-id"
+                             value={current.vatcode} onChange={(event)  =>
+                        setCurrent({ ...current, vatcode: event.target.value})} >
+                        {vatData.hits.map(item => mappingSelect(item))};
+                    </CSelect>
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.iban')}</CLabel>
+                </CCol>
+            </CFormGroup>
+        </>
+    )}
 export const CustomerMainForm =(props) => {
-    const {current, setCurrent, t, accData, vatData,  state, styles} = props
+    const {current, setCurrent, t, accData, vatData} = props
 
     return (
                 <>
@@ -1249,7 +1408,7 @@ export const CompanyMainForm =(props) => {
         <>
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('customer.id')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.id')}</CLabel>
                 </CCol>
                 <CCol sm="4">
                     <CInput bsSize="sm" type="text" id="account-id" name="id" className="input-sm" placeholder="Id"
@@ -1328,7 +1487,7 @@ export const CompanyMainForm =(props) => {
             </CFormGroup>
             <CFormGroup row style={{height:15 }}>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('customer.street')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.street')}</CLabel>
                 </CCol>
                 <CCol sm="4">
                     <CInput  bsSize="sm" type="text" id="street-id" name="company" className="input-sm"
@@ -1337,10 +1496,10 @@ export const CompanyMainForm =(props) => {
                              style={{'text-align':'left', padding:2 }}/>
                 </CCol>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('customer.city')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.city')}</CLabel>
                 </CCol>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('customer.zip')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.zip')}</CLabel>
                 </CCol>
                 <CCol sm="2">
                     <CInput  bsSize="sm" type="text" id="zip-id" name="zip" className="input-sm"
@@ -1357,7 +1516,7 @@ export const CompanyMainForm =(props) => {
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('customer.country')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.country')}</CLabel>
                 </CCol>
                 <CCol sm="4">
                     <CInput  bsSize="sm" type="text" id="country-id" name="country" className="input-sm"
@@ -1366,7 +1525,7 @@ export const CompanyMainForm =(props) => {
                              style={{'text-align':'right', padding:2 }}/>
                 </CCol>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('customer.phone')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.phone')}</CLabel>
                 </CCol>
                 <CCol sm="2">
                     <CInput  bsSize="sm" type="text" id="phone-id" name="phone" className="input-sm"
@@ -1377,7 +1536,7 @@ export const CompanyMainForm =(props) => {
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('customer.vat')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.vatCode')}</CLabel>
                 </CCol>
                 <CCol sm="4">
                     <CSelect className ="flex-row" type="select" name="vatcode" id="vatcode-id"
@@ -1387,19 +1546,76 @@ export const CompanyMainForm =(props) => {
                     </CSelect>
                 </CCol>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('customer.iban')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.iban')}</CLabel>
                 </CCol>
 
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
                 <CCol md="2">
-                    <CLabel htmlFor="textarea-input">{t('customer.description')}</CLabel>
+                    <CLabel htmlFor="textarea-input">{t('common.description')}</CLabel>
                 </CCol>
                 <CCol xs="12"   md="9">
                     <CTextarea type="texarea" name="description" id="description-id" rows="1"
                                placeholder="Content..." value={current.description}
                                onChange={(event)  =>
                                    setCurrent({ ...current, description: event.target.value})} />
+                </CCol>
+            </CFormGroup>
+        </>
+    )}
+export const CompanyAccountForm =(props) => {
+    const {current, setCurrent, t, accData, vatData,  state, styles} = props
+
+    return (
+        <>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('company.bankAccount')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="bankAcc" id="bankAcc-id"
+                             value={current.bankAcc} onChange={(event)  =>
+                        setCurrent({ ...current, bankAcc: event.target.value})} >
+                        {accData.hits.map(item => mappingSelect(item))};
+
+                    </CSelect>
+
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.postingdate')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput  bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
+                             placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
+                             style={{'text-align':'right', padding:2 }}/>
+                </CCol>
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('company.cashAccount')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="cashAcc" id="cashAcc-id"
+                             value={current.cashAcc} onChange={(event)  =>
+                        setCurrent({ ...current, cashAcc: event.target.value})} >
+                        {accData.hits.map(item => mappingSelect(item))};
+                    </CSelect>
+                </CCol>
+
+            </CFormGroup>
+            <CFormGroup row style={{  height:15 }}>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.vatCode')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CSelect className ="flex-row" type="select" name="vatcode" id="vatcode-id"
+                             value={current.vatcode} onChange={(event)  =>
+                        setCurrent({ ...current, vatcode: event.target.value})} >
+                        {vatData.hits.map(item => mappingSelect(item))};
+                    </CSelect>
+                </CCol>
+                <CCol sm="2">
+                    <CLabel size="sm" htmlFor="input-small">{t('common.iban')}</CLabel>
                 </CCol>
             </CFormGroup>
         </>
@@ -1523,7 +1739,7 @@ export const FinancialsMainForm =(props) => {
         </>
     )}
 
-export const JournalMainForm =(props) => {
+export const JournalMainForm = (props) => {
     const {current, setCurrent, t, accData, submitQuery } = props
     return (
         <>
@@ -1676,3 +1892,5 @@ export const VatMainForm =(props) => {
   </CFormGroup>
 </>
 )}
+
+

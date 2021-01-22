@@ -27,7 +27,7 @@ const Paginations = React.lazy(() => import('./views/base/paginations/Pagnations
 const Popovers = React.lazy(() => import('./views/base/popovers/Popovers'));
 const ProgressBar = React.lazy(() => import('./views/base/progress-bar/ProgressBar'));
 const Switches = React.lazy(() => import('./views/base/switches/Switches'));
-const Tabs = React.lazy(() => import('./views/base/tabs/Tabs'));
+const Tabs = React.lazy(() => import('./views/base/Components/MenuTabs'));
 const Tooltips = React.lazy(() => import('./views/base/tooltips/Tooltips'));
 const BrandButtons = React.lazy(() => import('./views/buttons/brand-buttons/BrandButtons'));
 const ButtonDropdowns = React.lazy(() => import('./views/buttons/button-dropdowns/ButtonDropdowns'));

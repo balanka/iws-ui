@@ -10,7 +10,7 @@ import TreeTableForm from "../Tree/TreeTableForm";
 import BasicTreeTable from "../Tree/BasicTreeTable";
 import axios from "axios";
 
-export  function CrudAccount  (props) {
+const CrudAccount =  (props)=> {
     const [ current, setCurrent ] = useState(props.initialState);
     const [ editing, setEditing ] = useState(false);
     const [profile, setProfile] = useGlobalState('profile');
@@ -33,7 +33,7 @@ export  function CrudAccount  (props) {
     }
 
     const submitEdit = (newRecord, data) => {
-     //console.log("newRecord", newRecord);
+     //console.log("newRecordX", newRecord);
      axios.patch( props.url, newRecord, {headers: {'authorization':profile.token}})
       .then(response => {
          console.log('response.data.', response.data);
@@ -125,5 +125,6 @@ export  function CrudAccount  (props) {
          </AccountContext>
         </div>
     )
-}
+};
+export default CrudAccount
 
