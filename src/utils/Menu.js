@@ -17,7 +17,8 @@ import {formEnum} from "./FORMS";
         , { id: 'balance', label:t('common.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
         , { id: 'currency', label:t('common.currency'), minWidth:1}
     ]
-export const JournalHeaders =(t) =>[ {id:'id', label:t('journal.id'), minWidth:2, numeric:true }, {id:'transid', label:t('journal.transid'), minWidth:1, numeric:true }
+export const JournalHeaders =(t) =>[ {id:'id', label:t('common.id'), minWidth:2, numeric:true }
+        , {id:'transid', label:t('journal.transid'), minWidth:1, numeric:true }
         , { id: 'oid', label: t('journal.oid'), minWidth:1, numeric:true }, {id: 'account', label: t('journal.account'), minWidth:1}
         , {id: 'oaccount', label:t('journal.oaccount'), minWidth:2}
         , {id: 'transdate', label:t('journal.transdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
@@ -65,8 +66,8 @@ export const modules  = (t) =>[
             , form:'masterfileForm' , state:initCust, state1:initAcc, state2:initVat, modelid:formEnum.CUSTOMER, columns:[]}
         , {id:"9", name:"Account", title:t('account.title'), ctx:"/acc", ctx1:"/acc/accmd/9", get:"md/9"
             , form:'masterfileForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.ACCOUNT, columns:[]}
-        , {id:"10", name:"Company", title:t('company.title'), ctx:"/comp", ctx1:"/acc/accmd/9", get:"md/10"
-            , form:'companyForm', state:initComp, state1:initAcc ,state2:initVat, modelid:formEnum.COMPANY, columns:[]}
+        , {id:"10", name:"Company", title:t('company.title'), ctx:"/comp", ctx1:"/acc/accmd/9", ctx2:"/vat", get:"md/10"
+            , form:'masterfileForm', state:initComp, state1:initAcc ,state2:initVat, modelid:formEnum.COMPANY, columns:[]}
         , {id:"11", name:"Bank", title:t('bank.title'), ctx:"/bank", ctx1:"/acc", ctx2:"", get:"md/11"
             , form:'masterfileForm', state:initBank, state1:initAcc ,state2:'', modelid:formEnum.BANK, columns:[]}
         , {id:"14", name:"Vat", title:t('vat.title'), ctx:"/vat", ctx1:"/acc/accmd/9", ctx2:"", get:"md/14"

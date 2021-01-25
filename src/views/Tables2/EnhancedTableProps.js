@@ -152,7 +152,7 @@ export const EnhancedTableToolbar = (props) => {
 
     const { name, value } = event.target;
      setFilterText(value);
-    if (event.which == 13 || event.keyCode == 13) {
+    if (event.which ===13 || event.keyCode ===13) {
      // console.log('filter', handleFilter(value));
       handleFilter(value);
      // console.log('filter', handleFilter(value));

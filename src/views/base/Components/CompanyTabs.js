@@ -1,7 +1,7 @@
 import React from 'react'
 import {useTranslation} from "react-i18next";
 import Tabs from "../tabs/Tabs";
-import { AddressForm, CompanyAccountForm, CompanyGeneralForm} from "../../Tables2/LineFinancialsProps";
+import { AddressForm, CompanyAccountForm, CompanyGeneralForm} from "./FormsProps";
 import {CTabPane} from "@coreui/react";
 
  const CompanyTabs = (props) => {

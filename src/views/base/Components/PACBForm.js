@@ -6,7 +6,8 @@ import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
 import axios from "axios";
-import {columnsPACB, filter, FormFactory, JournalFormHead} from "../../Tables2/LineFinancialsProps";
+import {FormFactory,JournalFormHead} from './FormsProps'
+import {columnsPACB, filter} from "../../Tables2/LineFinancialsProps";
 import {formEnum} from "../../../utils/FORMS";
 import blue from "@material-ui/core/colors/blue";
 import {styles} from "../Tree/BasicTreeTableProps";
@@ -43,7 +44,7 @@ const PACBForm = () => {
 
     const dx=data?.hits?data?.hits:value.initialState
     const [filteredRows, setFilteredRows] = useState(dx);
-    useEffect(() => {handleFilter()}, [data]);
+    useEffect(() => {handleFilter()}, [data, handleFilter]);
 
     function handleFilter(text) {
        const rows_=text?filter(getData(), getColumnName(), text ):getData()
@@ -73,6 +74,7 @@ const PACBForm = () => {
         });
         return result;
     }
+    /*
     const fetchData =(url_, func)=>{
         let result='xxx';
         const res = submitGet(url_, func, result);
@@ -80,6 +82,7 @@ const PACBForm = () => {
         const datax = res?.hits ? res.hits : value.initialState;
         return datax;
     }
+    */
     const load = event => {
         event.preventDefault();
         accData?.hits?.length<2?

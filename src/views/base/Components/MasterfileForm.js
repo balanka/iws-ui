@@ -1,9 +1,9 @@
 import React, {useEffect, useState, useContext} from 'react'
 import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
-import blue from "@material-ui/core/colors/blue";
 import useFetch from "../../../utils/useFetch";
-import {ColumnFactory,  CommonFormHead, FormFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {CommonFormHead, FormFactory} from './FormsProps'
+import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 const MasterfileForm = () => {

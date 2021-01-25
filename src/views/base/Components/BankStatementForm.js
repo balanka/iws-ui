@@ -4,7 +4,8 @@ import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
 import axios from "axios";
-import {OptionsM, BSFormHead, FormFactory, ColumnFactory} from "../../Tables2/LineFinancialsProps";
+import {OptionsM, ColumnFactory} from "../../Tables2/LineFinancialsProps";
+import {BSFormHead, FormFactory} from "./FormsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles,  theme} from "../Tree/BasicTreeTableProps";
 

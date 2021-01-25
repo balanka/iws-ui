@@ -4,14 +4,14 @@ import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
-import {rowStyle, styles, theme} from "../Tree/BasicTreeTableProps";
+import {styles} from "../Tree/BasicTreeTableProps";
 import {
   Options,
   OptionsM,
   columnsF,
-  Linescolumns,
-  FinancialsFormHead, FormFactory
+  Linescolumns
 } from '../../Tables2/LineFinancialsProps'
+import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
 
 const FinancialsForm = () => {
@@ -85,12 +85,6 @@ const FinancialsForm = () => {
     const record = data.hits.find(obj => obj.tid === editedRow.tid);
     setCurrent({...record, editing:true});
   }
-
-  const getCurrentRow =
-    {tid:current_.id, oid:current_.oid, costcenter:current_.costcenter, account:current_.account
-      , transdate:new Date(current_.transdate), enterdate:current_.enterdate, postingdate:current_.postingdate
-      , period:current_.period, posted:current_.posted, modelid:current_.modelid, company:current_.company, text:current_.text
-      , typeJournal:current_.typeJournal, file_content:current_.file_content, lines:current_.lines};
 
   const submitPost = event => {
     event.preventDefault();

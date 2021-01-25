@@ -4,7 +4,8 @@ import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
 import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelper'
-import {columnsJ, filter, JournalFormHead, FormFactory} from '../../Tables2/LineFinancialsProps';
+import {columnsJ, filter} from '../../Tables2/LineFinancialsProps';
+import {JournalFormHead, FormFactory} from './FormsProps'
 import {styles} from "../Tree/BasicTreeTableProps";
 import {formEnum} from "../../../utils/FORMS";
 import blue from "@material-ui/core/colors/blue";
