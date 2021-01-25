@@ -3,6 +3,8 @@ import {useTranslation} from "react-i18next";
 import Tabs from "../tabs/Tabs";
 import { AddressForm, CompanyAccountForm, CompanyGeneralForm} from "./FormsProps";
 import {CTabPane} from "@coreui/react";
+import Grid from "react-fast-grid";
+import {styles} from "../Tree/BasicTreeTableProps";
 
  const CompanyTabs = (props) => {
     const {current, setCurrent, accData, vatData}= props
@@ -23,20 +25,26 @@ import {CTabPane} from "@coreui/react";
                    case "0":
                  return (<>
                      <CTabPane>
-                       <CompanyGeneralForm current={current} setCurrent={setCurrent} t={t}/>
+                       <Grid container spacing={2} justify="space-between" style={{...styles.middle}} direction="column" >
+                          <CompanyGeneralForm current={current} setCurrent={setCurrent} t={t}/>
+                        </Grid>  
                      </CTabPane>
                     </>)
                case "1":
                  return (<>
                     <CTabPane>
-                       <AddressForm current={current} setCurrent={setCurrent} t={t}/>
+                       <Grid container spacing={2} justify="space-between" style={{...styles.middle}} direction="column" >
+                         <AddressForm current={current} setCurrent={setCurrent} t={t}/>
+                      </Grid>     
                     </CTabPane>
                  </>)
               case "2":
                  return (<>
                     <CTabPane>
-                      <CompanyAccountForm current={current} setCurrent={setCurrent}  t={t}  accData={accData}
+                      <Grid container spacing={2} justify="space-between" style={{...styles.middle}} direction="column" >
+                        <CompanyAccountForm current={current} setCurrent={setCurrent}  t={t}  accData={accData}
                                            vatData={vatData}/>
+                     </Grid>                       
                     </CTabPane>
                  </>)
                default:

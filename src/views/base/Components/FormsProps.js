@@ -24,6 +24,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import { blue, green } from "@material-ui/core/colors";
 import SvgIcon from '@material-ui/core/SvgIcon';
+import {styles} from "../Tree/BasicTreeTableProps";
 
 
 const svgIcons= {
@@ -51,9 +52,10 @@ const svgIcons= {
 }
 
 function IwsIcon(props) {
+    const {style, color, d} = props
     return (
-        <SvgIcon {...props}>
-            <path d={props.d} />
+        <SvgIcon style ={{...style}}>
+            <path d={d} />
         </SvgIcon>
     );
 }
@@ -203,7 +205,7 @@ export const FinancialsFormHead = (props) => {
                     </Grid>
                     <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
                     <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
-                        <div className="card-header-actions" style={{  align: 'right' }}>
+                        <div className="card-header-actions" style={{align: 'right' }}>
                            <CSelect className ="input-sm" type="select" name="module" id="module-id"
                                  value={module}  onChange ={handleModuleChange} style={{ height:30}}>
                                <option value={module} selected >{module}</option>
@@ -212,32 +214,32 @@ export const FinancialsFormHead = (props) => {
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
-                                <IwsIcon  style={{...styles.imageIcon, color: green[500] }} d={svgIcons.swapVertCircle}/>
+                                <IwsIcon style={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.swapVertCircle}/>
                             </CButton>
                         </div>
-                        <div className="card-header-actions" style={{  align: 'right' }}>
+                        <div className="card-header-actions" style={{ align:'right' }}>
                             <CButton  className="card-header-action btn-minimize" onClick={submitCopy}>
-                                <IwsIcon  style ={{...styles.imageIcon, color: green[500]}} d={svgIcons.copyContent}/>
+                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.copyContent}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton  className="card-header-action btn-minimize" onClick={onNewLine}>
-                                <IwsIcon  style ={{...styles.imageIcon, color: green[500]}} d={svgIcons.libraryAdd}/>
+                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.libraryAdd}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
-                                <IwsIcon  style ={{...styles.imageIcon, color: green[500]}} d={svgIcons.highlightOff} />
+                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.highlightOff} />
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
-                                <IwsIcon  style ={{...styles.imageIcon, color: green[500]}} d={svgIcons.addCircleOutline}/>
+                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.addCircleOutline}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
-                                <IwsIcon  style ={{...styles.imageIcon, color: green[500]}} d={svgIcons.save}/>
+                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.save}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
@@ -247,7 +249,7 @@ export const FinancialsFormHead = (props) => {
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton  className="card-header-action btn-minimize" onClick={submitPost}>
-                                <IwsIcon  style ={{...styles.imageIcon, color: green[500]}} d={svgIcons.done}/>
+                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }} d={svgIcons.done}/>
                             </CButton>
                         </div>
                     </Grid>
@@ -645,8 +647,8 @@ export const MasterfilesMainForm =(props) => {
 export const AddressForm =(props) => {
     const {current, setCurrent, t} = props
     return (
-        <>
-       <CFormGroup row style={{  height:15 }}>
+          <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
+             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
                     <CLabel size="sm" htmlFor="input-small">{t('common.street')}</CLabel>
                 </CCol>
@@ -683,14 +685,13 @@ export const AddressForm =(props) => {
                         setCurrent({ ...current, country: event.target.value})}
                              style={{padding:2 }}/>
                 </CCol>
-            </CFormGroup>
-
-        </>
-    )}
+            </CFormGroup>   
+   </Grid>);
+}
 export const CustomerGeneralForm =(props) => {
     const {current, setCurrent, t} = props
     return (
-        <>
+        <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
                     <CLabel size="sm" htmlFor="input-small">{t('common.id')}</CLabel>
@@ -761,14 +762,13 @@ export const CustomerGeneralForm =(props) => {
                                    setCurrent({ ...current, description: event.target.value})} />
                 </CCol>
             </CFormGroup>
-        </>
-    )
+        </Grid>);
   }
 export const CustomerAccountForm =(props) => {
     const {current, setCurrent, t, accData, vatData} = props
 
     return (
-        <>
+        <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
                     <CLabel size="sm" htmlFor="input-small">{t('common.account')}</CLabel>
@@ -827,8 +827,8 @@ export const CustomerAccountForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('common.iban')}</CLabel>
                 </CCol>
             </CFormGroup>
-        </>
-    )}
+        </Grid>);
+    }
 export const CustomerMainForm =(props) => {
     const {current, setCurrent, t, accData, vatData} = props
 

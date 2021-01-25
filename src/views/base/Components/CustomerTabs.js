@@ -3,6 +3,8 @@ import {useTranslation} from "react-i18next";
 import Tabs from "../tabs/Tabs";
 import { AddressForm, CustomerGeneralForm,  CustomerAccountForm} from "./FormsProps";
 import {CTabPane} from "@coreui/react";
+import Grid from "react-fast-grid";
+import {styles} from "../Tree/BasicTreeTableProps";
 
  const CustomerTabs = (props) => {
     const {current, setCurrent, accData, vatData}= props
@@ -21,22 +23,28 @@ import {CTabPane} from "@coreui/react";
      const GetTabContent = (props) => {
            switch(props.id) {
                    case "0":
-                 return (<>
+                     return (
                      <CTabPane>
-                       <CustomerGeneralForm current={current} setCurrent={setCurrent} t={t}/>
+                        <Grid container spacing={2} justify="space-between" style={{...styles.middle}} direction="column" >
+                          <CustomerGeneralForm current={current} setCurrent={setCurrent} t={t}/>
+                       </Grid>
                      </CTabPane>
-                    </>)
+                    )
                case "1":
-                 return (<>
+                 return ( <>
                     <CTabPane>
+                    <Grid container spacing={2} justify="space-between" style={{...styles.middle}} direction="column" >
                        <AddressForm current={current} setCurrent={setCurrent} t={t}/>
+                     </Grid>  
                     </CTabPane>
-                 </>)
+                  </>)
               case "2":
                  return (<>
                     <CTabPane>
+                    <Grid container spacing={2} justify="space-between" style={{...styles.middle}} direction="column" >
                       <CustomerAccountForm current={current} setCurrent={setCurrent}  t={t}  accData={accData}
                                            vatData={vatData}/>
+                    </Grid>                        
                     </CTabPane>
                  </>)
                default:
