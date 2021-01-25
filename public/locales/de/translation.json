@@ -72,7 +72,10 @@
     "paymentClearingAcc":"ZE Clearing",
     "settlementClearingAcc": "ZA Clearing.",
     "taxCode":"Steuernummer",
-    "vatCode": "VAT-ID"
+    "vatCode": "VAT-ID",
+    "general": "Allg. Info",
+    "address": "Addresse",
+    "accounts": "Konten"
   },
   "account": {
     "title":"Konto",
