@@ -80,7 +80,7 @@ const JournalForm = () => {
     <StyledTableRow>
       <StyledTableCell colSpan={10} style={{ height: 33, 'font-size': 15, 'font-weight':"bolder" }}>{t('common.total')}</StyledTableCell>
       <StyledTableCell style={{ height: 33, 'font-size': 15, 'font-weight':"bolder"
-        , 'text-align':"right" }}>
+        , 'textAlign':"right" }}>
         {columns[10].format(renderDT(rows).amount)}
       </StyledTableCell>
     </StyledTableRow>

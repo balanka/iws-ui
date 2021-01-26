@@ -52,7 +52,7 @@ const svgIcons= {
 }
 
 function IwsIcon(props) {
-    const {style, color, d} = props
+    const {style, d} = props
     return (
         <SvgIcon style ={{...style}}>
             <path d={d} />
@@ -350,7 +350,7 @@ export const AccountMainForm =(props) => {
         <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate"
                  className="input-sm" placeholder="date"
                  value={dateFormat(current.enterdate, "dd.mm.yyyy")}
-                 style={{'text-align':'right', padding:2 }} readonly />
+                 style={{'textAlign':'right', padding:2 }} readonly />
     </CCol>
 </CFormGroup>
      <CFormGroup row style={{  height:15 }}>
@@ -367,7 +367,7 @@ export const AccountMainForm =(props) => {
     <CCol sm="2">
         <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate"
                  className="input-sm" placeholder="date" value={dateFormat(current.changedate,
-            "dd.mm.yyyy")} style={{'text-align':'right', padding:2 }} readonly />
+            "dd.mm.yyyy")} style={{'textAlign':'right', padding:2 }} readonly />
     </CCol>
 </CFormGroup>
      <CFormGroup row style={{  height:15 }}>
@@ -389,7 +389,7 @@ export const AccountMainForm =(props) => {
         <CInput  bsSize="sm" type="text" id="input-small" name="postingdate"
                  className="input-sm" placeholder="date"
                  value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                 style={{'text-align':'right', padding:2 }} readonly/>
+                 style={{'textAlign':'right', padding:2 }} readonly/>
     </CCol>
 </CFormGroup>
      <CFormGroup row style={{  height:15 }}>
@@ -446,7 +446,7 @@ export const BankStatementMainForm =(props) => {
                 <CCol sm="1.5">
                     <CInput  bsSize="sm" type="text"  id="postingdate-id" name="postingdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -507,7 +507,7 @@ export const BankStatementMainForm =(props) => {
                 <CCol sm="1.5">
                     <CInput  bsSize="sm" type="text" id="amount-input" name="amount" className="input-sm"
                              placeholder="amount" value={currencyAmountFormatDE(Number(current.amount),current.currency)}
-                             style={{ 'text-align':'right' }}/>
+                             style={{ 'textAlign':'right' }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -524,7 +524,7 @@ export const BankStatementMainForm =(props) => {
                 </CCol>
                 <CCol sm="1.5">
                     <CInput  bsSize="sm" type="text" id="company-input" name="company" className="input-sm"
-                             placeholder="company" value={current.company} style={{ 'text-align':'right' }}/>
+                             placeholder="company" value={current.company} style={{ 'textAlign':'right' }}/>
                 </CCol>
 
             </CFormGroup>
@@ -582,7 +582,7 @@ export const MasterfilesMainForm =(props) => {
     <CCol sm="2">
         <CInput  readOnly bsSize="sm" type="text" id="enterdate-id" name="enterdate" className="input-sm"
                  placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
-                 style={{'text-align':'right', padding:2 }}/>
+                 style={{'textAlign':'right', padding:2 }}/>
     </CCol>
 </CFormGroup>
  <CFormGroup row style={{  height:15 }}>
@@ -599,7 +599,7 @@ export const MasterfilesMainForm =(props) => {
     <CCol sm="2">
         <CInput bsSize="sm" type="text" id="changedate-id" name="changedate" className="input-sm"
                 placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
-                style={{'text-align':'right', padding:2 }} readonly/>
+                style={{'textAlign':'right', padding:2 }} readonly/>
     </CCol>
 </CFormGroup>
          <CFormGroup row style={{  height:15 }}>
@@ -618,7 +618,7 @@ export const MasterfilesMainForm =(props) => {
     <CCol sm="2">
         <CInput bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                 placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                style={{'text-align':'right', padding:2 }} readonly />
+                style={{'textAlign':'right', padding:2 }} readonly />
     </CCol>
 </CFormGroup>
         <CFormGroup row style={{  height:15 }}>
@@ -629,7 +629,7 @@ export const MasterfilesMainForm =(props) => {
     <CCol sm="2">
         <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
                  placeholder="company" value={current.company}
-                 style={{'text-align':'right', padding:2 }} readonly/>
+                 style={{'textAlign':'right', padding:2 }} readonly/>
     </CCol>
 </CFormGroup>
  <CFormGroup row style={{  height:15 }}>
@@ -664,7 +664,7 @@ export const AddressForm =(props) => {
                 <CInput  bsSize="sm" type="text" id="zip-id" name="zip" className="input-sm"
                              placeholder="zip" value={current.zip} onChange={(event)  =>
                         setCurrent({ ...current, zip: event.target.value})}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -707,7 +707,7 @@ export const CustomerGeneralForm =(props) => {
                 <CCol sm="2">
                     <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -725,7 +725,7 @@ export const CustomerGeneralForm =(props) => {
                 <CCol sm="2">
                     <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
                              placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -737,7 +737,7 @@ export const CustomerGeneralForm =(props) => {
                     <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
                              placeholder="company" value={current.company} onChange={(event)  =>
                         setCurrent({ ...current, company: event.target.value})}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -748,10 +748,10 @@ export const CustomerGeneralForm =(props) => {
                     <CInput  bsSize="sm" type="text" id="phone-id" name="phone" className="input-sm"
                              placeholder="phone" value={current.phone} onChange={(event)  =>
                         setCurrent({ ...current, phone: event.target.value})}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
-            <CFormGroup row style={{  height:15 }}>
+            <CFormGroup row style={{ height:15 }}>
                 <CCol md="2">
                     <CLabel htmlFor="textarea-input">{t('common.description')}</CLabel>
                 </CCol>
@@ -766,12 +766,13 @@ export const CustomerGeneralForm =(props) => {
   }
 export const CustomerAccountForm =(props) => {
     const {current, setCurrent, t, accData, vatData} = props
-
+    const accountLabel=current.modelid===1?t('supplier.account'):t('customer.account')
+     const oaccountLabel=current.modelid===1?t('supplier.oaccount'):t('customer.oaccount')
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('common.account')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{accountLabel}</CLabel>
                 </CCol>
                 <CCol sm="4">
                     <CSelect className ="flex-row" type="select" name="account" id="account-id"
@@ -788,12 +789,12 @@ export const CustomerAccountForm =(props) => {
                 <CCol sm="2">
                     <CInput  bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{ height:15 }}>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('common.oaccount')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{oaccountLabel}</CLabel>
                 </CCol>
                 <CCol sm="4">
                     <CSelect className ="flex-row" type="select" name="oaccount" id="oaccount-id"
@@ -809,7 +810,7 @@ export const CustomerAccountForm =(props) => {
                     <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
                              placeholder="company" value={current.company} onChange={(event)  =>
                         setCurrent({ ...current, company: event.target.value})}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -849,7 +850,7 @@ export const CustomerMainForm =(props) => {
                     <CCol sm="2">
                         <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
                                  placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
-                                 style={{'text-align':'right', padding:2 }}/>
+                                 style={{'textAlign':'right', padding:2 }}/>
                     </CCol>
                 </CFormGroup>
                 <CFormGroup row style={{  height:15 }}>
@@ -867,7 +868,7 @@ export const CustomerMainForm =(props) => {
                     <CCol sm="2">
                         <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
                                  placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
-                                 style={{'text-align':'right', padding:2 }}/>
+                                 style={{'textAlign':'right', padding:2 }}/>
                     </CCol>
                 </CFormGroup>
                 <CFormGroup row style={{  height:15 }}>
@@ -889,7 +890,7 @@ export const CustomerMainForm =(props) => {
                     <CCol sm="2">
                         <CInput  bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                                  placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                                 style={{'text-align':'right', padding:2 }}/>
+                                 style={{'textAlign':'right', padding:2 }}/>
                     </CCol>
                 </CFormGroup>
                 <CFormGroup row style={{  height:15 }}>
@@ -910,7 +911,7 @@ export const CustomerMainForm =(props) => {
                         <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
                                  placeholder="company" value={current.company} onChange={(event)  =>
                             setCurrent({ ...current, company: event.target.value})}
-                                 style={{'text-align':'right', padding:2 }}/>
+                                 style={{'textAlign':'right', padding:2 }}/>
                     </CCol>
                 </CFormGroup>
                 <CFormGroup row style={{  height:15 }}>
@@ -921,7 +922,7 @@ export const CustomerMainForm =(props) => {
                         <CInput  bsSize="sm" type="text" id="street-id" name="company" className="input-sm"
                                  placeholder="Street" value={current.street} onChange={(event)  =>
                             setCurrent({ ...current, street: event.target.value})}
-                                 style={{'text-align':'left', padding:2 }}/>
+                                 style={{'textAlign':'left', padding:2 }}/>
                     </CCol>
                     <CCol sm="2">
                         <CLabel size="sm" htmlFor="input-small">{t('customer.city')}</CLabel>
@@ -933,13 +934,13 @@ export const CustomerMainForm =(props) => {
                         <CInput  bsSize="sm" type="text" id="zip-id" name="zip" className="input-sm"
                                  placeholder="zip" value={current.zip} onChange={(event)  =>
                             setCurrent({ ...current, zip: event.target.value})}
-                                 style={{'text-align':'right', padding:2 }}/>
+                                 style={{'textAlign':'right', padding:2 }}/>
                     </CCol>
                     <CCol sm="2">
                         <CInput  bsSize="sm" type="text" id="city-id" name="city" className="input-sm"
                                  placeholder="city" value={current.city} onChange={(event)  =>
                             setCurrent({ ...current, city: event.target.value})}
-                                 style={{'text-align':'right', padding:2 }}/>
+                                 style={{'textAlign':'right', padding:2 }}/>
                     </CCol>
                 </CFormGroup>
                 <CFormGroup row style={{  height:15 }}>
@@ -950,7 +951,7 @@ export const CustomerMainForm =(props) => {
                         <CInput  bsSize="sm" type="text" id="country-id" name="country" className="input-sm"
                                  placeholder="country" value={current.country} onChange={(event)  =>
                             setCurrent({ ...current, country: event.target.value})}
-                                 style={{'text-align':'right', padding:2 }}/>
+                                 style={{'textAlign':'right', padding:2 }}/>
                     </CCol>
                     <CCol sm="2">
                         <CLabel size="sm" htmlFor="input-small">{t('customer.phone')}</CLabel>
@@ -959,7 +960,7 @@ export const CustomerMainForm =(props) => {
                         <CInput  bsSize="sm" type="text" id="phone-id" name="phone" className="input-sm"
                                  placeholder="phone" value={current.phone} onChange={(event)  =>
                             setCurrent({ ...current, phone: event.target.value})}
-                                 style={{'text-align':'right', padding:2 }}/>
+                                 style={{'textAlign':'right', padding:2 }}/>
                     </CCol>
                 </CFormGroup>
                 <CFormGroup row style={{  height:15 }}>
@@ -1011,7 +1012,7 @@ export const CompanyMainForm =(props) => {
                 <CCol sm="2">
                     <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -1029,7 +1030,7 @@ export const CompanyMainForm =(props) => {
                 <CCol sm="2">
                     <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
                              placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -1051,7 +1052,7 @@ export const CompanyMainForm =(props) => {
                 <CCol sm="2">
                     <CInput  bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -1072,7 +1073,7 @@ export const CompanyMainForm =(props) => {
                     <CInput  bsSize="sm" type="text" id="company-id" name="company" className="input-sm"
                              placeholder="company" value={current.company} onChange={(event)  =>
                         setCurrent({ ...current, company: event.target.value})}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{height:15 }}>
@@ -1083,7 +1084,7 @@ export const CompanyMainForm =(props) => {
                     <CInput  bsSize="sm" type="text" id="street-id" name="company" className="input-sm"
                              placeholder="Street" value={current.street} onChange={(event)  =>
                         setCurrent({ ...current, street: event.target.value})}
-                             style={{'text-align':'left', padding:2 }}/>
+                             style={{'textAlign':'left', padding:2 }}/>
                 </CCol>
                 <CCol sm="2">
                     <CLabel size="sm" htmlFor="input-small">{t('common.city')}</CLabel>
@@ -1095,13 +1096,13 @@ export const CompanyMainForm =(props) => {
                     <CInput  bsSize="sm" type="text" id="zip-id" name="zip" className="input-sm"
                              placeholder="zip" value={current.zip} onChange={(event)  =>
                         setCurrent({ ...current, zip: event.target.value})}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
                 <CCol sm="2">
                     <CInput  bsSize="sm" type="text" id="city-id" name="city" className="input-sm"
                              placeholder="city" value={current.city} onChange={(event)  =>
                         setCurrent({ ...current, city: event.target.value})}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -1112,7 +1113,7 @@ export const CompanyMainForm =(props) => {
                     <CInput  bsSize="sm" type="text" id="country-id" name="country" className="input-sm"
                              placeholder="country" value={current.country} onChange={(event)  =>
                         setCurrent({ ...current, country: event.target.value})}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
                 <CCol sm="2">
                     <CLabel size="sm" htmlFor="input-small">{t('common.phone')}</CLabel>
@@ -1121,7 +1122,7 @@ export const CompanyMainForm =(props) => {
                     <CInput  bsSize="sm" type="text" id="phone-id" name="phone" className="input-sm"
                              placeholder="phone" value={current.phone} onChange={(event)  =>
                         setCurrent({ ...current, phone: event.target.value})}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -1172,7 +1173,7 @@ export const CompanyGeneralForm =(props) => {
                 <CCol sm="2">
                     <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -1190,7 +1191,7 @@ export const CompanyGeneralForm =(props) => {
                 <CCol sm="2">
                     <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
                              placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -1230,7 +1231,7 @@ export const CompanyAccountForm =(props) => {
                 <CCol sm="2">
                     <CInput  bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -1340,14 +1341,14 @@ export const FinancialsMainForm =(props) => {
                 <CCol sm="1">
                     <CInput  bsSize="sm"  type="text"  id="postingdate-id" name="postingdate" className="input-sm"
                              placeholder={t('financials.postingdate')} value={dateFormat(current.postingdate, "dd mm yy")}
-                             style={{'text-align':'right', 'padding-left':400,'padding-right':0, padding:2 }}/>
+                             style={{'textAlign':'right', 'padding-left':400,'padding-right':0, padding:2 }}/>
                 </CCol>
                 <CCol sm="1">
                     <CLabel size="sm" htmlFor="input-small" style={{  'padding-right':1 }}>{t('financials.period')}</CLabel>
                 </CCol>
                 <CCol sm="1">
                     <CInput  bsSize="sm" className="input-sm" type="text" id="period" name="period" value={current.period}
-                             style={{'text-align':'right',padding:2 }}/>
+                             style={{'textAlign':'right',padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -1366,14 +1367,14 @@ export const FinancialsMainForm =(props) => {
                 <CCol sm="1">
                     <CInput  bsSize="sm"  type="text"  id="enterdate-id" name="enterdate" className="input-sm"
                              placeholder="enterdate" value={dateFormat(current.enterdate, "dd.mm.yy")}
-                             style={{'text-align':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
                 <CCol sm="1">
                     <CLabel size="sm" htmlFor="input-small" style={{  padding:2 }}>{t('common.company')}</CLabel>
                 </CCol>
                 <CCol sm="1">
                     <CInput  bsSize="sm" type="text" id="company-input" name="company" className="input-sm"
-                             placeholder={t('common.company')} value={current.company}  style={{'text-align':'right',  padding:2 }}/>
+                             placeholder={t('common.company')} value={current.company}  style={{'textAlign':'right',  padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -1395,7 +1396,7 @@ export const FinancialsMainForm =(props) => {
                     </CSelect>
                 </CCol>
 
-                <CCol sm="2" style={{'text-align':'right', 'padding-left':10, 'padding-bottom':15 }}>
+                <CCol sm="2" style={{'textAlign':'right', 'padding-left':10, 'padding-bottom':15 }}>
                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
                    <KeyboardDatePicker disabled={current.posted}
                      disableToolbar
@@ -1509,7 +1510,7 @@ export const VatMainForm =(props) => {
             <CInput  bsSize="sm" type="text"  id="enterdate-id" name="enterdate"
                      className="input-sm" placeholder="date"
                      value={dateFormat(current.enterdate, "dd.mm.yyyy")}
-                     style={{'text-align':'right', padding:2 }}/>
+                     style={{'textAlign':'right', padding:2 }}/>
         </CCol>
     </CFormGroup>
     <CFormGroup row style={{  height:15 }}>
@@ -1528,7 +1529,7 @@ export const VatMainForm =(props) => {
         <CInput  bsSize="sm"  type="text"  id="changedate-id" name="changedate"
                  className="input-sm" placeholder="date"
                  value={dateFormat(current.changedate, "dd.mm.yyyy")}
-                 style={{'text-align':'right', padding:2 }}/>
+                 style={{'textAlign':'right', padding:2 }}/>
     </CCol>
   </CFormGroup>
     <CFormGroup row style={{  height:15 }}>
@@ -1550,7 +1551,7 @@ export const VatMainForm =(props) => {
     <CCol sm="2">
         <CInput  bsSize="sm" type="text" id="input-small" name="postingdate" className="input-sm" placeholder="date"
                  value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                 style={{'text-align':'right', padding:2 }}/>
+                 style={{'textAlign':'right', padding:2 }}/>
     </CCol>
 </CFormGroup>
     <CFormGroup row style={{  height:15 }}>

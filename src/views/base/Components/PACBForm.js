@@ -126,19 +126,19 @@ const PACBForm = () => {
                     {t('common.total')}
                 </StyledTableCell>
                 <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
-                    , 'text-align':"right" }}>
+                    , 'textAlign':"right" }}>
                     {columns[3].format(renderDT(rows).debit)}
                 </StyledTableCell>
                 <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
-                    , 'text-align':"right" }}>
+                    , 'textAlign':"right" }}>
                     {columns[2].format(renderDT(rows).credit)}
                 </StyledTableCell>
                 <StyledTableCell  colSpan={1} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
-                    , 'text-align':"right" }}>
+                    , 'textAlign':"right" }}>
                     {columns[3].format(renderDT(rows).debit - renderDT(rows).credit)}
                 </StyledTableCell>
                 <StyledTableCell  colSpan={1} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
-                    , 'text-align':"left" }}>
+                    , 'textAlign':"left" }}>
                     {renderDT(rows).currency}
                 </StyledTableCell>
             </StyledTableRow>

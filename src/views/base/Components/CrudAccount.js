@@ -86,6 +86,7 @@ const CrudAccount =  (props)=> {
                 func(resp)
                 return resp;
             }).catch(function (error) {
+            console.log('authorization', profile.token);
             console.log('error', error);
         });
       //  return res;
