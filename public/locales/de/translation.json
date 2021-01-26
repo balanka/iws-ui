@@ -75,7 +75,11 @@
     "vatCode": "VAT-ID",
     "general": "Allg. Info",
     "address": "Addresse",
-    "accounts": "Konten"
+    "accounts": "Konten",
+    "bankaccounts":"Bankverbingungen",
+    "iban":"IBAN",
+    "bank":"Bank",
+    "owner":"Inhaber"
   },
   "account": {
     "title":"Konto",

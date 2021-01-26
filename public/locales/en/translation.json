@@ -75,7 +75,11 @@
     "vatCode": "VAT",
     "general": "General info",
     "address": "Address",
-    "accounts": "Accounts"
+    "accounts": "Accounts",
+    "bankaccounts":"Bank accounts",
+    "iban":"IBAN",
+    "bank":"Bank",
+    "owner":"Owner"
   },
   "account": {
     "title":      "Account",

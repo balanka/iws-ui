@@ -75,9 +75,9 @@ const MasterfileForm = () => {
         <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd} initialState={value.initialState}
                         setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
                         cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {submitQuery} toggle={toggle}
-                        toggleToolbar={toggleToolbar}  />
+                        toggleToolbar={toggleToolbar}  style={{...styles.inner}}/>
         <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t} accData={accData}
-                     vatData={vatData} collapse={state.collapse} styles={styles} />
+                     vatData={vatData} collapse={state.collapse} styles={styles} style={{...styles.middleSmall}}/>
 
         <Grid container spacing={2} style={{...styles.inner, display:'block' }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}

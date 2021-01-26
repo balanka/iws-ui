@@ -54,6 +54,12 @@ export const styles = {
         padding: 10,
         'padding-top': 30,
         'padding-bottom': 30
+    },   
+    middleSmall: {
+        borderRadius: 5,
+        boxShadow: "0 10px 20px #BBB",
+        padding: 10,
+        'padding-bottom':5
     },
     cellStyle: {
         width: 20,

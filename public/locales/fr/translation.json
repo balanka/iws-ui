@@ -75,10 +75,13 @@
     "settlementClearingAcc": "Cpte reg. reglement",
     "taxCode":"NºImpots",
     "vatCode": "Réf TVA",
-    "iban"       : "IBAN",
     "general": "Inf. générale",
     "address": "Adresse",
-    "accounts": "Comptes"
+    "accounts": "Comptes",
+    "bankaccounts":"Références bancaires",
+    "iban":"IBAN",
+    "bank":"Banque",
+    "owner":"Titulaire"
 
   },
   "account": {
