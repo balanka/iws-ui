@@ -132,10 +132,14 @@
     "companyIban" : "IBAN comp."
   },
   "customer": {
-    "title":      "Customer"
+    "title":    "Customer",
+    "account":  "Receivable",
+    "oaccount": "Revenue acc."
   },
   "supplier": {
-    "title": "Supplier"
+    "title": "Supplier",
+    "account":  "Payables",
+    "oaccount": "charge acc."
   },
   "costcenter": {
     "title":      "Cost Center",

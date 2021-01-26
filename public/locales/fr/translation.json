@@ -120,15 +120,18 @@
   "company": {
     "title":      "Société",
     "locale":      "Locale",
-
     "companyIban" : "IBAN"
   },
 
   "customer": {
-    "title":      "Client"
+    "title":      "Client",
+    "account":  "Compte Client",
+    "oaccount": "Compte produit"
   },
   "supplier": {
-    "title":      "Fournisseur"
+    "title":      "Fournisseur",
+    "account":  "Compte Fournisseur",
+    "oaccount": "Compte charge"
   },
   "costcenter": {
     "title":      "Center de coût",

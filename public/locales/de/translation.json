@@ -126,10 +126,14 @@
 
   },
   "customer": {
-    "title":      "Kunde"
+    "title":    "Kunde",
+    "account":  "Debitor",
+    "oaccount": "Erlös"
   },
   "supplier": {
-    "title":      "Lieferant"
+    "title":    "Lieferant",
+    "account":  "Kreditor",
+    "oaccount": "Aufwand"
   },
   "costcenter": {
     "title":"Kostenstelle",
