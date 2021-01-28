@@ -1,38 +1,34 @@
-import React, {createRef} from 'react'
-import {useTranslation} from "react-i18next";
+import React, {createRef, useContext} from 'react'
 import Tabs from "../tabs/Tabs";
 import { AddressForm, CustomerGeneralForm,  CustomerAccountForm} from "./FormsProps";
+import {accountContext} from './AccountContext'
 import {CTabPane} from "@coreui/react";
 import Grid from "react-fast-grid";
 import {styles} from "../Tree/BasicTreeTableProps";
 import {ACCOUNT} from './FormsProps';
 import {Options} from '../../Tables2/LineFinancialsProps';
 import EditableTable from "../../Tables2/EditableTable";
-import useFetch from "../../../utils/useFetch";
-import {initBank} from "../../../utils/Menu"
 
  const CustomerTabs = (props) => {
-    const {current, setCurrent, accData, vatData}= props
-    console.log('bankDataprops', props);
-    console.log('bankcurrent', current);
-    const { t,  } = useTranslation();
-    const res  = useFetch("http:localhost:8080/bankacc", {});
-    const resBank  = useFetch("http:localhost:8080/bank", {});
-    const initBankAcc=[{iban:'', bic:'', owner:current.id, modelid:12, company:current.company }]
-    const data_ = res && res.response?res.response:initBankAcc;
-    const bankData = res && resBank.response?resBank.response:initBank;
-    console.log('data_', data_);
-    console.log('bankData', bankData);
+    const {current, setCurrent, accData, vatData, bankData}= props
+    const value = useContext(accountContext);
+    const t= value.t
+    const isArray = Array.isArray (current);
+    const initBankAcc=current.bankaccounts;
+
+   
+
     const tableRef = createRef();
-    const columns=(data) => [
+    const columns=(data, t) => [
       {field:'iban', title:t('common.iban'), initialEditValue:'', export:true}
-     
      , {field:'bic', title:t('common.bank'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-             ACCOUNT ( data, value, onRowDataChange, rowData, "bic" ),  initialEditValue:'', width: 20
+             ACCOUNT ( data.hits, value, onRowDataChange, rowData, "bic" ),  initialEditValue:'', width: 20
        , align:"right", export:true}
-    , {field:'owner', title:t('common.owner'),initialEditValue:'',  export:true}  
+    , {field:'owner', title:t('common.owner'),initialEditValue:current.id,  export:true}  
+    , {field:'modelid', title:t('common.modelid'),initialEditValue:12, hidden:true, export:true}
+    , {field:'company', title:t('common.company'),initialEditValue:current.company,  export:true} 
     ]
-    const columnsX = columns(bankData);
+    const columnsX = columns(bankData, t);
 
     const modules= [
        {id:"0", name:'main', title:t('common.general'), ctx:"", ctx1:"", get:""
@@ -42,7 +38,7 @@ import {initBank} from "../../../utils/Menu"
        {id:"2", name:'account', title:t('common.account'), ctx:"", ctx1:"", get:""
           , ctx2:"", form:'accountForm', state:'', state1:'' ,state2:'',  columns:[]},
           {id:"3", name:'bankAccounts', title:t('common.bankaccounts'), ctx:"/bankacc", ctx1:"", get:""
-          , ctx2:"", form:'bankAccountTable', state:data_, state1:'' ,state2:'',  columns:columns}          
+          , ctx2:"", form:'bankAccountTable', state:initBankAcc, state1:'' ,state2:'',  columns:columns}          
      ]
 
 
@@ -57,26 +53,26 @@ import {initBank} from "../../../utils/Menu"
 const addRow = (newData) =>{
    if(newData ) {
      const dx = {...current};
-     data_[data_.length] = newData;
-    // setCurrent({...dx});
+     dx.bankaccounts[dx.length] = newData;
+     setCurrent({...dx});
    }
  }
  const updateRow = (newData, oldData) =>{
    if (oldData) {
     // console.log('newDataX',newData);
      const dx = {...current};
-     const index = data_.findIndex(obj => obj.iban === newData.iban);
-     data_[index] = {...newData};
+     const index = dx.bankaccounts.findIndex(obj => obj.iban === newData.iban);
+     dx.bankaccounts[index] = {...newData};
      //setCurrent({...dx});
    }
  }
  const deleteRow = (oldData) =>{
    if (oldData) {
      const dx = {...current};
-     const index =data_.findIndex(obj => obj.lid === oldData.lid);
-     const deleted = data_[index];
-     data_[index] = {...deleted, iban:-2 };
-     //setCurrent({...dx});
+     const index =dx.bankaccounts.findIndex(obj => obj.lid === oldData.lid);
+     const deleted = dx.bankaccounts[index];
+     dx.bankaccounts[index] = {...deleted, iban:-2 };
+     setCurrent({...dx});
    }
  }
      const  editable = () => ({
@@ -119,8 +115,8 @@ const addRow = (newData) =>{
                   return (
                      <CTabPane>
                         <Grid container spacing={2} justify="space-between" style={{...styles.middleSmall}} direction="column" >                     
-                           <EditableTable id="LineTable" Options ={{...Options, paging:data_.length>5}} flag={true} 
-                             data = {data_} columns={columnsX} editable={editable()}  t={t}
+                           <EditableTable id="bankaccouts" Options ={{...Options, paging:false}} flag={false} 
+                             data = {current?current.bankaccounts:[]} columns={columnsX} editable={editable()}  t={t}
                              tableRef={tableRef} edit ={null}/>
                         </Grid>                        
                     </CTabPane>                    

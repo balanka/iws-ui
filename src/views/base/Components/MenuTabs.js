@@ -18,7 +18,7 @@ import CrudAccount from "./CrudAccount";
        return  <>
           <CTabPane>
              <CrudAccount url={SERVER_URL.concat(module.ctx)} get={module.get} accUrl={SERVER_URL.concat(module.ctx1)}
-                          ccUrl={SERVER_URL.concat(module.ctx2)}  initialState={module.state} initAcc={module.state1}
+                          ccUrl={SERVER_URL.concat(module.ctx2)} bankUrl={SERVER_URL.concat(module.ctx3)}   initialState={module.state} initAcc={module.state1}
                           initCc={module.state2} title={module.title} form={module.form} headers={module.columns}
                           modelid={module.modelid}
              />

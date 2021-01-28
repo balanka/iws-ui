@@ -9,20 +9,23 @@ import {styles, theme} from "../Tree/BasicTreeTableProps";
 const MasterfileForm = () => {
   const [profile, ] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
-  const [rows, setRows] =useState([])
+  const [rows, setRows] = useState([])
   const value = useContext(accountContext);
   const t = value.t
   const modelid_ = value.modelid;
   const [{ res},] = useFetch(value.url, {});
   const [{ res2},] = useFetch(value.accUrl, {});
   const [{ res3},] = useFetch(value.ccUrl, {});
-  const data_ =  res?.hits?res.hits:value.initialState;
+  const [{ res4},] = useFetch(value.bankUrl, {});
+  const data_ =  res?.hits?res.hits:value.initialState.hits;
   const accData_=  res2?.hits?res2.hits:value.accData;
   const vatData_=  res3?.hits?res3.hits:value.ccData;
+  const bankData_=  res4?.hits?res4.hits:[];
   const current_= value.user;
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [vatData, setVatData] = useState(vatData_);
+  const [bankData, setBankData] = useState(bankData_);
   const [current,setCurrent] = useState(current_);
   const [toolbar, setToolbar] = useState(true);
   useEffect(() => {}, [current, setCurrent, data ]);
@@ -59,6 +62,7 @@ const MasterfileForm = () => {
     event.preventDefault();
     value.accUrl&&value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
     value.ccUrl&&value.submitQuery(event, value.ccUrl, setVatData, value.initCc);
+    value.bankUrl&&value.submitQuery(event, value.bankUrl, setBankData, []);
     value.url&&value.submitQuery(event, value.url, setData, value.initialState);
   }
 
@@ -73,11 +77,11 @@ const MasterfileForm = () => {
     return <>
       <Grid container spacing={2} style={{...styles.outer }} direction="column" >
         <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd} initialState={value.initialState}
-                        setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
+                        setData={setData} setAccData={setAccData} setBankData={setBankData}  url={value.url} accUrl={value.accUrl}
                         cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {submitQuery} toggle={toggle}
                         toggleToolbar={toggleToolbar}  style={{...styles.inner}}/>
-        <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t} accData={accData}
-                     vatData={vatData} collapse={state.collapse} styles={styles} style={{...styles.middleSmall}}/>
+        <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t} accData={accData} vatData={vatData}
+                     bankData={bankData} collapse={state.collapse} styles={styles} style={{...styles.middleSmall}}/>
 
         <Grid container spacing={2} style={{...styles.inner, display:'block' }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}

@@ -1,27 +1,14 @@
-import  {useState,  useEffect} from 'react'
+import  {useState,  useEffect, useContext} from 'react'
 import axios from "axios";
-import {useGlobalState} from '../views/base/Components/AccountContext'
+import {accountContext, useGlobalState} from '../views/base/Components/AccountContext'
 
 const useFetch = (url, data, options) => {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [profile, setProfile] = useGlobalState('profile');
-
-    const login = (url, data) => {
-        axios.post( url, data)
-            .then(response => {
-                console.log('responsex', response.data);
-                const {authorization} =  response.headers
-                const tken = response.data.hash
-                setProfile({token:authorization, company:response.data.company})
-                console.log('tken', tken)
-                console.log('authorization', authorization);
-                return authorization
-            }).catch(function (error) {
-            console.log('error', error);
-        });
-    }
+    const value = useContext(accountContext);
+    console.log('urlX', url);
 
     const submitGet = (url) => {
         console.log('authorization2', profile.token);
@@ -45,16 +32,18 @@ const useFetch = (url, data, options) => {
               console.log('setLoading',loading);
               console.log('options', options)
             try {
-                if(!loading){
+                //if(!loading){
                     //const res = await fetch(url, options);
                     //const json = await res.json();
-                    const json = data? login(url,data):submitGet(url)
-                  console.log('FetchedData',json);
-                    setResponse(json);
+                    const json = profile.token==='noTOken'? value.login(url,{}):value.submitGet(url, setResponse)
+                  console.log('FetchedDataX',json);
+                  console.log('response',response);
+                  if(json) setResponse(json);
                     setLoading(false);
-                }
+               // }
             } catch (error) {
                 console.log('errorX',error);
+                console.log('profile.token',profile.token);
                 setError(error);
                 setLoading(false);
             }

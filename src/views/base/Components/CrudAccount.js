@@ -36,7 +36,7 @@ const CrudAccount =  (props)=> {
      //console.log("newRecordX", newRecord);
      axios.patch( props.url, newRecord, {headers: {'authorization':profile.token}})
       .then(response => {
-         console.log('response.data.', response.data);
+         //console.log('response.data.', response.data);
         const index = data.hits.findIndex(obj => obj.id === newRecord.id);
         data.hits[index]= newRecord;
         setCurrent(newRecord);
@@ -45,18 +45,14 @@ const CrudAccount =  (props)=> {
        });
   };
     const submitAdd = (record, data) => {
-      //console.log("Record", record);
     axios.post( props.url, record, {headers: {'authorization':profile.token}})
       .then(response => {
-        //console.log('responsex', response.data);
         const i = data.hits.findIndex(obj => obj.id === record.id);
         const index = i === -1? data.hits.length+1:i;
-        //console.log(' index', index);
         data.hits[index]=record;
         const row = {...props.initialState, editing:false};
         setEditing(false);
         setCurrent(row);
-        //console.log(' row', row);
       }).catch(function (error) {
         console.log('error', error);
       });
@@ -80,23 +76,25 @@ const CrudAccount =  (props)=> {
     }
 
     const submitGet = (url, func) => {
-        axios.get( url, {headers: {'authorization':profile.token}})
+      let result=
+          axios.get( url, {headers: {'authorization':profile.token}})
             .then(response => {
                 const resp = response.data
-                func(resp)
+                func(resp);
+                result=resp;
                 return resp;
             }).catch(function (error) {
             console.log('authorization', profile.token);
             console.log('error', error);
-        });
-      //  return res;
+        }).then(resp=>resp);
+        console.log('result', result);
+        return result;
     }
 
     const submitQuery = (event, url, func, init) => {
-      console.log("url", url);
         const fetchData =(url_, func)=>{
             const res = submitGet(url_, func);
-            console.log("resx", res);
+            //console.log("resx", res);
             const datax = res?.hits ? res.hits : init;
             return datax;
         }
@@ -110,7 +108,7 @@ const CrudAccount =  (props)=> {
       <div className="animated fadeIn">
           <AccountContext  form ={props.form} url={props.url}  get={props.get} title={props.title} lineTitle={props.lineTitle}
                            accUrl={props.accUrl} ccUrl={props.ccUrl} submitAdd={submitAdd} submitGet={submitGet} login={login}
-                           editing={editing} setEditing={setEditing}  current={current}
+                           bankUrl={props.bankUrl} editing={editing} setEditing={setEditing}  current={current}
                            setCurrent={setCurrent} submitEdit={submitEdit} submitPost={submitPost} 
                            initialState={props.initialState} headers={props.headers}
                            initAcc={props.initAcc} initCc={props.initCc} modelid={props.modelid}

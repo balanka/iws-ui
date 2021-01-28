@@ -7,7 +7,7 @@ import Grid from "react-fast-grid";
 import {styles} from "../Tree/BasicTreeTableProps";
 
  const CompanyTabs = (props) => {
-    const {current, setCurrent, accData, vatData}= props
+    const {current, setCurrent, accData, vatData, bankData}= props
     const { t,  } = useTranslation();
     const modules= [
        {id:"0", name:'main', title:t('common.general'), ctx:"", ctx1:"", get:""
