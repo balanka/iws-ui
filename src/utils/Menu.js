@@ -57,33 +57,33 @@ export const treeHeaders =(t) =>( {h:[{ title:t('account.id'), field: 'id' }
         ]})
 export const modules  = (t) =>[
         {id:"0", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:""
-            , ctx2:"/", form:'loginForm', state:initCC, state1:initAcc ,state2:'',  columns:[]}
-        , {id:"6", name:'CostCenter', title:t('costcenter.title'), ctx:"/cc", ctx1:"/acc/accmd/9", get:"md/6"
-            , ctx2:"/", form:'masterfileForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.COSTCENTER, columns:[]}
-        , {id:"1", name:"Supplier", title:t('supplier.title'), ctx:"/sup", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/1"
+            , ctx2:"/", ctx3:'', form:'loginForm', state:initCC, state1:initAcc ,state2:'',  columns:[]} 
+         , {id:"1", name:"Supplier", title:t('supplier.title'), ctx:"/sup", ctx1:"/acc/accmd/9", ctx2:"/vat",  ctx3:"/bank", get:"md/1"
             , form:'masterfileForm' , state:initSup, state1:initAcc ,state2:initVat, modelid:formEnum.CUSTOMER, columns:[]}
-        , {id:"3", name:'Customer', title:t('customer.title'), ctx:"/cust", ctx1:"/acc/accmd/9", ctx2:"/vat",get:"md/3"
+        , {id:"3", name:'Customer', title:t('customer.title'), ctx:"/cust", ctx1:"/acc/accmd/9", ctx2:"/vat", ctx3:"/bank", get:"md/3"
             , form:'masterfileForm' , state:initCust, state1:initAcc, state2:initVat, modelid:formEnum.CUSTOMER, columns:[]}
-        , {id:"9", name:"Account", title:t('account.title'), ctx:"/acc", ctx1:"/acc/accmd/9", get:"md/9"
+        , {id:"6", name:'CostCenter', title:t('costcenter.title'), ctx:"/cc", ctx1:"/acc/accmd/9", ctx2:'/', ctx3:'', get:"md/6"
+            , form:'masterfileForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.COSTCENTER, columns:[]}       
+        , {id:"9", name:"Account", title:t('account.title'), ctx:"/acc", ctx1:"/acc/accmd/9", ctx2:'', ctx3:'', get:"md/9"
             , form:'masterfileForm', state:initCC, state1:initAcc ,state2:'', modelid:formEnum.ACCOUNT, columns:[]}
-        , {id:"10", name:"Company", title:t('company.title'), ctx:"/comp", ctx1:"/acc/accmd/9", ctx2:"/vat", get:"md/10"
+        , {id:"10", name:"Company", title:t('company.title'), ctx:"/comp", ctx1:"/acc/accmd/9", ctx2:"/vat", ctx3:"/bank", get:"md/10"
             , form:'masterfileForm', state:initComp, state1:initAcc ,state2:initVat, modelid:formEnum.COMPANY, columns:[]}
-        , {id:"11", name:"Bank", title:t('bank.title'), ctx:"/bank", ctx1:"/acc", ctx2:"", get:"md/11"
+        , {id:"11", name:"Bank", title:t('bank.title'), ctx:"/bank", ctx1:"", ctx2:"", ctx3:'', get:"md/11"
             , form:'masterfileForm', state:initBank, state1:initAcc ,state2:'', modelid:formEnum.BANK, columns:[]}
-        , {id:"14", name:"Vat", title:t('vat.title'), ctx:"/vat", ctx1:"/acc/accmd/9", ctx2:"", get:"md/14"
+        , {id:"14", name:"Vat", title:t('vat.title'), ctx:"/vat", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/14"
             , form:'masterfileForm', state:initVat, state1:initAcc ,state2:'', modelid:formEnum.VAT, columns:[]}
-        , {id:"18", name:"Bankstatement", title:t('bankstatement.title'), ctx:"/bs", ctx1:"/acc/accmd/9", ctx2:"", get:"md/18"
+        , {id:"18", name:"Bankstatement", title:t('bankstatement.title'), ctx:"/bs", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/18"
             , form:'bankStmtForm', state:initBS, state1:initAcc ,state2:'', modelid:formEnum.BANKSTATEMENT, columns:[]}
-        , {id:"106", name:"PAC", title:t('pac.title'), ctx:"/pac", ctx1:"/acc", ctx2:"", get:"md/106"
+        , {id:"106", name:"PAC", title:t('pac.title'), ctx:"/pac", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/106"
             , form:'pacForm', state:initPac, state1:initAcc, state2:'', modelid:formEnum.PACB, columns:pacHeaders(t) }
-        , {id:"112", name:"Journal", title:t('journal.title'), ctx:"/jou", ctx1:"/acc/accmd/9", ctx2:"", get:"md/112"
+        , {id:"112", name:"Journal", title:t('journal.title'), ctx:"/jou", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/112"
             , form:'journalForm', state:initJour, state1:initAcc, state2:'', modelid:formEnum.JOURNAL, columns:JournalHeaders(t)  }
-        , {id:"1120", name:"Financials", title:t('financials.title'), ctx:"/ftr", ctx1:"/acc", ctx2:"/cc", get:"md/112"
+        , {id:"1120", name:"Financials", title:t('financials.title'), ctx:"/ftr", ctx1:"/acc", ctx2:"/cc", ctx3:'', get:"md/112"
             , form:'financialsForm', state:initFrt, state1:initAcc, state2:initCC , modelid:formEnum.FINANCIALS}
 
-        , {id:"1000", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", get:"md/112"
+        , {id:"1000", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
             , form:"balancesheetForm", state:initBalanceSheet, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET, columns:balanceHeaders(t) }
-        , {id:"1300", name:"BalanceTree", title:t('common.title'), ctx:"/acc", ctx1:"/acc", ctx2:"", get:"md/106"
+        , {id:"1300", name:"BalanceTree", title:t('common.title'), ctx:"/acc", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/106"
             , form:"treeForm", state:initAcc, state1:initAcc, state2:'', modelid:formEnum.BALANCETREE, columns:treeHeaders(t).h }
     ]
 
@@ -108,11 +108,15 @@ export const initVat={ hits:[{ id:'', name:'', description:'', percent:'', input
 
 export const initCust={hits:[{ id:'', name:'', description:'', street:'', city:'', state:'', zip:''
             , country:'', phone:'', email:'', account:'-1', oaccount:'-1', iban:'-1', vatcode:'-1'
-            , enterdate:date, postingdate:date, changedate:date, company:'', modelid:3}]}
+            , company:'', modelid:3 ,enterdate:date, postingdate:date, changedate:date
+            , bankaccounts:[{iban:'', bic:'', owner:'', modelid:12, company:'1000'}]
+            }]}
 
 export const initSup={hits:[{ id:'', name:'', description:'', street:'', city:'', state:'', zip:''
             , country:'', phone:'', email:'', account:'-1', oaccount:'-1', iban:'-1', vatcode:'-1'
-            , enterdate:date, postingdate:date, changedate:date, company:'', modelid:1}]}
+            , company:'', modelid:1,enterdate:date, postingdate:date, changedate:date
+            , bankaccounts:[{iban:'', bic:'', owner:'', modelid:12, company:'1000'}]
+            }]}
 
 export const initJour={hits:[{ id:'', transid:'', oid:'', account:'', oaccount:'', transdate:''
             , postingdate:'', enterdate:'', period:'', amount:'', idebit:'', debit:'', icredit:''
@@ -141,7 +145,7 @@ export const initBalanceSheet= {"data":[{
                 {"data" : {"id" : "9902", "name" : "Bilanz Passiva", "isDebit" : false,
                         "balancesheet" : true, "idebit" : 0.00, "icredit" : 0.00, "debit" : 7135.58,
                         "credit" : 254824.95, "currency" : "", "company" : "1000"}, "children" :[]}]}]}
-export const initBS={hits:[{ bid:'', depositor:'', postingdate:date, valuedate:new Date(), postingtext:'', purpose:''
+export const initBS={hits:[{ bid:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
             , beneficiary:'', accountno:'', bankCode:'', amount:'', currency:'', info:'', company:'', companyIban:''
             , posted:'',modelid:18}]}
 export const initFrt={hits:[{ tid:-1, oid:0, costcenter:'', account:'', transdate:new Date()

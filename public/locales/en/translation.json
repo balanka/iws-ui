@@ -47,6 +47,7 @@
     "to"        :  "To",
     "total"     : "Total",
     "company":      "Company",
+    "modelid"     : "ModelId",
     "idebit": "Init Debit",
     "debit": "Debit",
     "icredit": "Init credit",

@@ -47,6 +47,7 @@
     "to"        :  "Bis",
     "total"     : "Total",
     "company"   : "Mandant",
+    "modelid"     : "Model",
     "idebit": "AB Soll",
     "debit": "Soll",
     "icredit": "AB Haben",
