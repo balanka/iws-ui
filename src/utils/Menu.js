@@ -17,14 +17,14 @@ import {formEnum} from "./FORMS";
         , { id: 'balance', label:t('common.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
         , { id: 'currency', label:t('common.currency'), minWidth:1}
     ]
-export const JournalHeaders =(t) =>[ {id:'id', label:t('common.id'), minWidth:2, numeric:true }
+export const JournalHeaders =(t) =>[ {id:'id', label:t('common.id'), minWidth:2, numeric:true}
         , {id:'transid', label:t('journal.transid'), minWidth:1, numeric:true }
         , { id: 'oid', label: t('journal.oid'), minWidth:1, numeric:true }, {id: 'account', label: t('journal.account'), minWidth:1}
         , {id: 'oaccount', label:t('journal.oaccount'), minWidth:2}
         , {id: 'transdate', label:t('journal.transdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
         , {id: 'postingdate', label:t('journal.postingdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
         , {id: 'enterdate', label:t('journal.enterdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-        , {id: 'period', label:t('journal.period'), minWidth:1, numeric:true},
+        , {id: 'period', label:t('journal.period'), minWidth:1, numeric:true}
         , { id: 'amount', label: t('journal.amount'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
         , { id: 'idebit', label:t('common.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
         , { id: 'debit', label: t('common.debit'), minWidth:2,  numeric:true, format: (value) => currencyFormatDE(Number(value))}
