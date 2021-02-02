@@ -3,13 +3,13 @@ import {currencyFormatDE, dateFormat} from "./utils";
 import {formEnum} from "./FORMS";
 
 
-    export const getCurrentMonth = (date)=>{
+export const getCurrentMonth = (date)=>{
         const p=date.getUTCMonth()+1;
         return p<=10?"0".concat(p.toString()):p.toString();
     }
-    export const date=new Date().toISOString()
-    export const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
-    export const pacHeaders =(t) => [ {id:'period', label:t('pac.period'), minWidth:1, numeric:true }
+export const date=new Date().toISOString()
+export const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
+export const pacHeaders =(t) => [ {id:'period', label:t('pac.period'), minWidth:1, numeric:true }
         , { id: 'idebit', label:t('common.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
         , { id: 'debit', label:t('common.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
         , { id: 'icredit', label:t('common.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
@@ -36,7 +36,7 @@ export const JournalHeaders =(t) =>[ {id:'id', label:t('common.id'), minWidth:2,
         , { id: 'typeJournal', label:t('journal.type'), minWidth:1}, { id: 'file_content', label:t('journal.file'), minWidth:1}
         , { id: 'modelid', label:t('common.modelid'), minWidth:1}]
 
-export const balanceHeaders=(t) =>[ {id:'id', label:t('balancesheet.id'), minWidth:1}
+export const balanceHeaders=(t) =>[ {id:'id', label:t('common.id'), minWidth:1}
         , {id:'name', title:t('balancesheet.name'), minWidth:8}
         , {id:'account', title:t('balancesheet.account')}
         , { id: 'idebit', title: t('common.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
@@ -46,7 +46,7 @@ export const balanceHeaders=(t) =>[ {id:'id', label:t('balancesheet.id'), minWid
         , { id: 'currency', label:t('common.currency'), minWidth:1}
     ]
 
-export const treeHeaders =(t) =>( {h:[{ title:t('account.id'), field: 'id' }
+export const treeHeaders =(t) =>[{ title:t('common.id'), field: 'id' }
             ,  { title:t('account.name'), field: 'name' }
             ,  { title:t('account.account'), field: 'account' }
             ,  { title:t('common.idebit'), field: 'idebit', type: 'numeric', minWidth:3 }
@@ -54,7 +54,7 @@ export const treeHeaders =(t) =>( {h:[{ title:t('account.id'), field: 'id' }
             ,  { title:t('common.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
             ,  { title:t('common.credit'), field: 'credit' , type: 'numeric', minWidth:3}
             , { title: 'currency', label:t('common.currency'), minWidth:1}
-        ]})
+        ]
 export const modules  = (t) =>[
         {id:"0", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:""
             , ctx2:"/", ctx3:'', form:'loginForm', state:initCC, state1:initAcc ,state2:'',  columns:[]} 
@@ -83,8 +83,8 @@ export const modules  = (t) =>[
 
         , {id:"1000", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
             , form:"balancesheetForm", state:initBalanceSheet, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET, columns:balanceHeaders(t) }
-        , {id:"1300", name:"BalanceTree", title:t('common.title'), ctx:"/acc", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/106"
-            , form:"treeForm", state:initAcc, state1:initAcc, state2:'', modelid:formEnum.BALANCETREE, columns:treeHeaders(t).h }
+        , {id:"1300", name:"BalanceTree", title:t('common.title'), ctx:"/acc/balance", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/106"
+            , form:"treeForm", state:initAcc, state1:initAcc, state2:'', modelid:formEnum.BALANCETREE, columns:treeHeaders(t) }
     ]
 
 export const initAcc = {hits:[{id:'', name: '', description: '', enterdate:date, postingdate:date
