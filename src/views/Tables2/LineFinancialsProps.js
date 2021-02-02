@@ -400,7 +400,7 @@ export const JournalHeaders=(t) =>[ {id:"id", label:t('common.id'), minWidth:2, 
     , {id: "transdate", label:t('common.transdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
     , {id: "postingdate", label:t('common.postingdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
     , {id: "enterdate", label:t('common.enterdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-    , {id: 'period', label:t('journal.period'), minWidth:1, numeric:true},
+    , {id: 'period', label:t('journal.period'), minWidth:1, numeric:true}
     , { id: 'amount', label: t('journal.amount'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
     , { id: 'idebit', label:t('journal.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
     , { id: 'debit', label: t('journal.debit'), minWidth:2,  numeric:true, format: (value) => currencyFormatDE(Number(value))}
@@ -420,13 +420,18 @@ export const balanceHeaders=(t) =>[ {id:'id', label:t('balancesheet.id'), minWid
     , { id: 'icredit', label: t('balancesheet.icedit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
     , { id: 'credit', label:t('balancesheet.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
     ]
-export const treeHeaders=(t) =>[{ title:t('account.id'), field: 'id' }
-    ,  { title:t('common.name'), field: 'name' }
-    ,  { title:t('account.account'), field: 'account' }
-    ,  { title:t('balancesheet.idebit'), field: 'idebit', type: 'numeric', minWidth:3 }
-    ,  { title:t('balancesheet.debit'), field: 'debit' , type: 'numeric', minWidth:3}
-    ,  { title:t('balancesheet.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
-    ,  { title:t('balancesheet.credit'), field: 'credit' , type: 'numeric', minWidth:3}
+
+export const treeHeaders=(t) =>[{ title:t('common.id'), field: 'id', type: 'text', export:true }
+    ,  { title:t('common.name'), field: 'name',type: 'text', export:true}
+    ,  { title:t('account.account'), field: 'account',type: 'text',  export:true}
+    ,  { title:t('common.idebit'), field: 'idebit', type: 'currency', minWidth:3, export:true
+    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    ,  { title:t('common.debit'), field: 'debit' , type: 'currency', minWidth:3, export:true
+    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    ,  { title:t('common.icredit'), field: 'icredit', type: 'currency', minWidth:3, export:true 
+    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    ,  { title:t('common.credit'), field: 'credit' , type: 'currency', minWidth:3, export:true
+    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
    ]
 
 export const ColumnFactory =(formid, data, t)=> {

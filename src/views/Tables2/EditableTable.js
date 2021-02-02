@@ -3,8 +3,8 @@ import MaterialTable from 'material-table';
 import tableIcons from "./TableIcons.js";
 
 export default function EditableTable(props) {
-    const {Options, flag, data, columns, t, tableRef, edit, editable, setSelectedRows} = props
-
+    const {Options, flag, data, columns, t, tableRef, edit, editable, setSelectedRows
+    , parentChildData} = props
     return (
         <MaterialTable
             editable={flag?null:editable}
@@ -14,6 +14,7 @@ export default function EditableTable(props) {
             data={data}
             icons={tableIcons}
             options={Options}
+            parentChildData ={parentChildData}
             //components={components}
             onSelectionChange={(rows) => {
                 setSelectedRows(rows);
