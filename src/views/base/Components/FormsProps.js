@@ -214,32 +214,32 @@ export const FinancialsFormHead = (props) => {
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
-                                <IwsIcon style={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.swapVertCircle}/>
+                                <IwsIcon style={{style:styles.imageIcon }}  d={svgIcons.swapVertCircle}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{ align:'right' }}>
                             <CButton  className="card-header-action btn-minimize" onClick={submitCopy}>
-                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.copyContent}/>
+                                <IwsIcon  style ={{style:styles.imageIcon }}  d={svgIcons.copyContent}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton  className="card-header-action btn-minimize" onClick={onNewLine}>
-                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.libraryAdd}/>
+                                <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.libraryAdd}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
-                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.highlightOff} />
+                                <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.highlightOff} />
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
-                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.addCircleOutline}/>
+                                <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.addCircleOutline}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
-                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }}  d={svgIcons.save}/>
+                                <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.save}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
@@ -249,7 +249,7 @@ export const FinancialsFormHead = (props) => {
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton  className="card-header-action btn-minimize" onClick={submitPost}>
-                                <IwsIcon  style ={{style:styles.imageIcon, color: green[500] }} d={svgIcons.done}/>
+                                <IwsIcon  style ={{style:styles.imageIcon}} d={svgIcons.done}/>
                             </CButton>
                         </div>
                     </Grid>
@@ -258,7 +258,7 @@ export const FinancialsFormHead = (props) => {
         </Grid>);
 }
 export const JournalFormHead = (props) => {
-    const {styles, title, collapse,  load, cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
+    const {styles, title, collapse,  load, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -307,7 +307,8 @@ export const FormFactory =(props)=> {
         case formEnum.FINANCIALS:
             return <FormWrapper {...props} form = {FinancialsMainForm}/>;
         case formEnum.JOURNAL:
-        case formEnum.PACB:
+        case formEnum.PACB:           
+            case formEnum.BALANCETREE:    
             return <FormWrapper {...props} form = {JournalMainForm}/>;
         case formEnum.VAT:
             return <FormWrapper {...props} form = {VatMainForm}/>;

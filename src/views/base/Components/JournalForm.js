@@ -68,8 +68,8 @@ const JournalForm = () => {
 
   const getFilteredRows=()=>filteredRows?filteredRows:data
   const cancelEdit = (e) => setSelected([]);
-  const  addRunningTotal = (data) => data.length>0?data.reduce(reducerFn, init().hits[0]):init().hits[0];
-  const renderDT =(data)=> addRunningTotal(data);
+  const  addRunningTotal = (datax) => datax.length>0?datax.reduce(reducerFn, init().hits[0]):init().hits[0];
+  const renderDT =(datax)=> addRunningTotal(datax);
 
   const reducerFn =(a,b)  =>({id:'', transid:'', account:"", oaccount:"", transdate:"", enterdate:""
     , postingdate:"", period:"", amount:Number(a.amount)+Number(b.amount), idebit:"", icredit:"", debit:""
@@ -87,7 +87,7 @@ const JournalForm = () => {
     )
   }
 
-  function buildForm(current){
+  function buildForm(){
     const props = { title: value.title, columns:value.headers, rows:getFilteredRows(), editable:false
       ,  submit:submitQuery, selected:selected, colId:10, initialState:value.initialState, renderDT:renderDT
       ,  reducerFn:reducerFn, renderTotal:renderTotal, setSelected: setSelected, cancel: cancelEdit
@@ -97,10 +97,10 @@ const JournalForm = () => {
       <Grid container spacing={2} style={{...styles.outer }} direction="column" >
         <JournalFormHead styles={styles} title={value.title} collapse={state.collapse}  initialState={value.initialState}
                         setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
-                        cancelEdit ={cancelEdit}  submitQuery= {submitQuery} toggle={toggle}
-                        load = {load} toggleToolbar={toggleToolbar}  />
+                         toggle={toggle} load = {load} toggleToolbar={toggleToolbar}  />
+                        
         <FormFactory formid ={formEnum.JOURNAL} current={current} setCurrent={setCurrent} t={t} accData={accData}
-                     collapse={state.collapse} styles={styles} />
+                     collapse={state.collapse} styles={styles} submitQuery= {submitQuery}  />
         <Grid container spacing={2} style={{...styles.inner, 'background-color':blue }} direction="column" >
          <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
         </Grid>
@@ -108,7 +108,7 @@ const JournalForm = () => {
     </>
   }
 
-  return buildForm(current);
+  return buildForm();
 
 };
 export default JournalForm;

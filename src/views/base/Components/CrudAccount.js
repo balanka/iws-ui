@@ -7,7 +7,7 @@ import BankStatementForm from './BankStatementForm';
 import {AccountContext, useGlobalState} from "./AccountContext";
 import Login from '../../pages/login/Login'
 import TreeTableForm from "../Tree/TreeTableForm";
-import BasicTreeTable from "../Tree/BasicTreeTable";
+import BasicTreeTable from "./BasicTreeTable";
 import axios from "axios";
 
 const CrudAccount =  (props)=> {
@@ -60,7 +60,7 @@ const CrudAccount =  (props)=> {
     const submitPost = (record, ctx) => {
      axios.patch(props.url.concat(ctx), record, {headers: {'authorization':profile.token}})
       .then(response => {
-        console.log('responsex', response.data);
+        //console.log('responsex', response.data);
       }).catch(function (error) {
       console.log('error', error);
     });
@@ -76,7 +76,7 @@ const CrudAccount =  (props)=> {
     }
 
     const submitGet = (url, func) => {
-      let result=
+      let result
           axios.get( url, {headers: {'authorization':profile.token}})
             .then(response => {
                 const resp = response.data
@@ -84,17 +84,16 @@ const CrudAccount =  (props)=> {
                 result=resp;
                 return resp;
             }).catch(function (error) {
-            console.log('authorization', profile.token);
+            //console.log('authorization', profile.token);
             console.log('error', error);
-        }).then(resp=>resp);
-        console.log('result', result);
+        })
         return result;
     }
 
     const submitQuery = (event, url, func, init) => {
-        const fetchData =(url_, func)=>{
-            const res = submitGet(url_, func);
-            //console.log("resx", res);
+        const fetchData =(url_, call)=>{
+            const res = submitGet(url_, call);
+            console.log("resx"+url_, res);
             const datax = res?.hits ? res.hits : init;
             return datax;
         }

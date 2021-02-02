@@ -5,7 +5,6 @@ import {accountContext, useGlobalState} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
-import axios from "axios";
 import {FormFactory,JournalFormHead} from './FormsProps'
 import {columnsPACB, filter} from "../../Tables2/LineFinancialsProps";
 import {formEnum} from "../../../utils/FORMS";
@@ -60,35 +59,12 @@ const PACBForm = () => {
         //console.log('rowx', row);
         return row;
     }
-
-    const submitGet = (url, func, result) => {
-        axios.get( url, {headers: {'authorization':profile.token}})
-            .then(response => {
-                const resp = response.data;
-                result=response.data;
-                func(resp);
-                result=resp;
-                return result;
-            }).catch(function (error) {
-            console.log('error', error);
-        });
-        return result;
-    }
-    /*
-    const fetchData =(url_, func)=>{
-        let result='xxx';
-        const res = submitGet(url_, func, result);
-       // console.log("res", res);
-        const datax = res?.hits ? res.hits : value.initialState;
-        return datax;
-    }
-    */
     const load = event => {
         event.preventDefault();
         accData?.hits?.length<2?
             value.submitQuery(event, value.accUrl, setAccData, value.initAcc):
             current.account&&current.fromPeriod&&current.toPeriod?
-                value.submitQuery(event, url_(), setData, value.initialState): void(0)
+            value.submitQuery(event, url_(), setData, value.initialState): void(0)
     };
 
 
@@ -116,8 +92,8 @@ const PACBForm = () => {
               , currency: b.currency, company: b.company})
   };
 
-  const  addRunningTotal = (data) => data.length>0?data.reduce(reducerFn, init().hits[0]):init().hits[0];
-  const renderDT=(data)=> addRunningTotal(data);
+  const  addRunningTotal = (datax) => datax.length>0?datax.reduce(reducerFn, init().hits[0]):init().hits[0];
+  const renderDT=(datax)=> addRunningTotal(datax);
 
     const renderTotal = (rows)=>{
         return(
@@ -156,10 +132,10 @@ const PACBForm = () => {
         <Grid container spacing={2} style={{...styles.outer }} direction="column" >
             <JournalFormHead styles={styles} title={value.title} collapse={state.collapse}  initialState={value.initialState}
                              setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
-                               submitQuery= {submitQuery} toggle={toggle}
+                                toggle={toggle}
                              load = {load} toggleToolbar={toggleToolbar}  />
             <FormFactory formid ={formEnum.PACB} current={current} setCurrent={setCurrent} t={t} accData={accData}
-                         collapse={state.collapse} styles={styles} />
+                         collapse={state.collapse} styles={styles} submitQuery= {submitQuery}/>
 
             <Grid container spacing={2} style={{...styles.inner, backgroundColor:blue }} direction="column" >
                 <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
