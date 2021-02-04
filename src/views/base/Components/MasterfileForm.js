@@ -9,7 +9,7 @@ import {styles, theme} from "../Tree/BasicTreeTableProps";
 const MasterfileForm = () => {
   const [profile, ] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
-  const [rows, setRows] = useState([])
+  const [, setRows] = useState([])
   const value = useContext(accountContext);
   const t = value.t
   const modelid_ = value.modelid;

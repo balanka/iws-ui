@@ -1,7 +1,7 @@
 import React, {useState, Fragment} from 'react'
 import MasterfileForm from "./MasterfileForm";
-import PACBForm  from "./PACBForm";
-import JournalForm from "./JournalForm";
+import JForm  from "./JForm";
+//import JForm from "./JForm";
 import FinancialsForm from "./FinancialsForm";
 import BankStatementForm from './BankStatementForm';
 import {AccountContext, useGlobalState} from "./AccountContext";
@@ -20,10 +20,10 @@ const CrudAccount =  (props)=> {
       companyForm      : <MasterfileForm/>,
       masterfileForm   : <MasterfileForm/>,
       bankStmtForm     : <BankStatementForm/>,
-      pacForm          : <PACBForm/>,
+      pacForm          : <JForm/>,
       financialsForm   : <FinancialsForm/>,
       balancesheetForm : <TreeTableForm/>,
-      journalForm      : <JournalForm/>,
+      journalForm      : <JForm/>,
       loginForm        : <Login/>,
       treeForm         : <BasicTreeTable/>
     };

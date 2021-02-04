@@ -480,7 +480,10 @@ export const ColumnFactory =(formid, data, t)=> {
             return  ColumnsM(data, t);
         case formEnum.COMPANY:
             return ColumnsComp (data, t);
-
+        case formEnum.PACB:
+            return columnsPACB (t)
+        case formEnum.JOURNAL:
+            return ColumnJournal (t)
         case formEnum.CUSTOMER:
         case formEnum.SUPPLIER:
             return ColumnsCUST(data, t);
