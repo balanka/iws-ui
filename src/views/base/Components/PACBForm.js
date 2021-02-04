@@ -6,7 +6,6 @@ import {useTranslation} from "react-i18next";
 import {FormFactory,JournalFormHead} from './FormsProps'
 import {columnsPACB, OptionsM} from "../../Tables2/LineFinancialsProps";
 import {formEnum} from "../../../utils/FORMS";
-import blue from "@material-ui/core/colors/blue";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
 const PACBForm = () => {
@@ -19,7 +18,6 @@ const PACBForm = () => {
   const [{ res2},] = useFetch(value.accUrl, {});
   const data_ =  res?.hits?res.hits:[value.initialState];
   const init = ()=> {return value.initialState}
-  //const getData =()=> { return data?.hits?data.hits:init().hits}
   const accData_ =  res2?.hits?res2.hits:value.accData;
   const current_= init().hits[0].query;
 
@@ -58,8 +56,7 @@ const PACBForm = () => {
         const len=row.length
         const idebit = available?row[0].idebit:0
         const icredit = available?row[0].icredit:0
-        const balance_=isDebit?idebit-icredit:icredit-idebit
-        row[len] = {period:"Total", idebit:idebit, debit:debit, icredit:icredit
+        row[len] = {period:t('common.total'), idebit:idebit, debit:debit, icredit:icredit
             , credit:credit, balance:row[len-1].balance, currency:currency,company:company  }
         return row
     }
@@ -71,31 +68,26 @@ const PACBForm = () => {
             current.account&&current.fromPeriod&&current.toPeriod?
             value.submitQuery(event, url_(), setData, value.initialState): void(0)
         setIsDebit(accData.hits.find(x=>x.id===current.account).isDebit)
-        console.log("accDataX", isDebit);
     };
-
 
     const submitQuery = event => {
         event.preventDefault();
         accData?.hits?.length<2?
             value.submitQuery(event, value.accUrl, setAccData,value.initAcc):
             value.submitQuery(event, url_(), setData, value.initialState)
-        console.log("accDataX", accData);
     };
 
 
   function buildForm(){
-
     return <>
         <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-            <JournalFormHead styles={styles} title={value.title} collapse={state.collapse}  initialState={value.initialState}
-                             setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
-                                toggle={toggle}
-                             load = {load} toggleToolbar={toggleToolbar}  />
+            <JournalFormHead styles={styles} title={value.title} collapse={state.collapse}
+                 initialState={value.initialState}  setData={setData} setAccData={setAccData} url={value.url}
+                accUrl={value.accUrl} toggle={toggle} load = {load} toggleToolbar={toggleToolbar}  />
             <FormFactory formid ={formEnum.PACB} current={current} setCurrent={setCurrent} t={t} accData={accData}
                          collapse={state.collapse} styles={styles} submitQuery= {submitQuery}/>
 
-            <Grid container spacing={2} style={{...styles.inner, backgroundColor:blue }} direction="column" >
+            <Grid container spacing={2} style={{...styles.inner, display:'block'}} direction="column" >
                 <EditableTable Options={{...OptionsM, selection:false, toolbar:toolbar}}
                                data={data?summary(data):value.initialState.hits} columns={columnsX}
                                theme={theme} t={t} setSelectedRows ={()=>void(0)}/>
