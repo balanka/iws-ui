@@ -53,6 +53,7 @@ export const treeHeaders =(t) =>[{ title:t('common.id'), field: 'id' }
             ,  { title:t('common.debit'), field: 'debit' , type: 'numeric', minWidth:3}
             ,  { title:t('common.icredit'), field: 'icredit', type: 'numeric', minWidth:3 }
             ,  { title:t('common.credit'), field: 'credit' , type: 'numeric', minWidth:3}
+            ,  { title:t('common.balance'), field: 'credit' , type: 'numeric', minWidth:3}
             , { title: 'currency', label:t('common.currency'), minWidth:1}
         ]
 export const modules  = (t) =>[
