@@ -53,6 +53,7 @@
     "icredit": "AB Haben",
     "credit": "Haben",
     "balance": "Saldo",
+    "amount"      : "Betrag",
     "street"      : "Strasse",
     "zip"         : "PLZ",
     "city"       : "Stadt",

@@ -53,6 +53,7 @@
     "icredit": "Init credit",
     "credit": "Credit",
     "balance": "Balance",
+    "amount"      : "Amount",
     "street"      : "Street",
     "zip"        : "Zip",
     "city"       : "City",

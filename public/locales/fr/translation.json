@@ -54,6 +54,7 @@
     "icredit": "Crédit.Init",
     "credit": "Crédit",
     "balance": "Balance",
+    "amount"      : "Montant",
     "street"      : "Rue",
     "zip"        : "Code P.",
     "city"       : "Ville",
