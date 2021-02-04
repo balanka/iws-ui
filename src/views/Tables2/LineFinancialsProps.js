@@ -391,6 +391,37 @@ export const pacHeaders = (t) =>[ {id:'period', label:t('pac.period'), minWidth:
 , { id: 'balance', label:t('pac.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
 , { id: 'currency', label:t('common.currency'), minWidth:1}
 ]
+export const ColumnJournal=(t) =>[ {field:"id", title:t('common.id'), minWidth:2, type:"numeric", export:true }
+    , {field:"transid", title:t('journal.transid'), minWidth:1, type:"numeric", export:true }
+    , { field: "oid", title: t('journal.oid'), minWidth:1, type:"numeric", export:true }
+    , {field: "account", title: t('journal.account'), minWidth:1, export:true}
+    , {field: "oaccount", title:t('journal.oaccount'), minWidth:2, export:true}
+    , {field: "transdate", title:t('journal.transdate'), minWidth:5, type:"date"
+        , format:(value) =>  dateFormat(value, "dd mm yy"), numeric:true}
+    , {field: "postingdate", title:t('common.postingdate'), minWidth:5, type:"date"
+        , format:(value) =>  dateFormat(value, "dd mm yy"), export:true}
+    , {field: "enterdate", title:t('common.enterdate'), minWidth:5, type:"date"
+        , format:(value) =>  dateFormat(value, "dd mm yy"), export:true}
+    , {field: 'period', title:t('journal.period'), minWidth:1, type:"numeric", export:true}
+    , { field: 'amount', title: t('common.amount'), minWidth:2, type:"currency", export:true
+        , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
+    , { field: 'idebit', title:t('common.idebit'), minWidth:2, type:"currency", export:true
+        , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
+    , { field: 'debit', title: t('common.debit'), minWidth:2,  type:"currency", export:true
+    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
+    , { field: 'icredit', title:t('common.icredit'), minWidth:2, type:"currency", export:true
+    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
+    , { field: 'credit', title:t('common.credit'), minWidth:2, type:"currency", export:true
+    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
+    , { field: 'side', title:t('journal.side'), type:"boolean", format:(value) => String(value), minWidth:1}
+    , { field: 'text', title:t('journal.text'), minWidth:15, export:true}
+    , { id:'month', label:t('journal.month'), minWidth:1, export:true}
+    , { field: 'year', title:t('journal.year'), minWidth:1, export:true}
+    , { id:'company', label:t('common.company'), minWidth:1, export:true }
+    , { field: 'typeJournal', title:t('journal.type'), minWidth:1, export:true}
+    , { id: 'file_content', label:t('journal.file'), minWidth:1, export:true}
+    , { field: 'modelid', title:t('common.modelid'), minWidth:1, export:true}]
+
 export const JournalHeaders=(t) =>[ {id:"id", label:t('common.id'), minWidth:2, numeric:true }
     , {id:"transid", label:t('journal.transid'), minWidth:1, numeric:true }
     , { id: "oid", label: t('journal.oid'), minWidth:1, numeric:true }
