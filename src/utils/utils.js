@@ -12,6 +12,11 @@
  * The mask defaults to dateFormat.masks.default.
  */
 
+const formatterDE = new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'EUR',
+});
+
  var dateFormat = function () {
   var	token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
     timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
@@ -150,4 +155,4 @@ function currencyAmountFormatDE(num, symbol) {
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.').concat(' ').concat(symbol)
   ) // use . as a separator
 }
-export {dateFormat, capitalize, currencyFormatDE, currencyAmountFormatDE, currencyFormatUS};
+export {dateFormat, capitalize, formatterDE,  currencyFormatDE, currencyAmountFormatDE, currencyFormatUS};
