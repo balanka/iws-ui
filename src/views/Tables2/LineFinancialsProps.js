@@ -3,8 +3,7 @@ import {rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import {formEnum} from "../../utils/FORMS";
-import { currencyFormatDE} from '../../utils/utils'
-import {dateFormat} from "../../utils/utils";
+import {dateFormat, formatterDE, currencyFormatDE} from "../../utils/utils";
 
 
 const mappingMenu = (acc) =>
@@ -432,6 +431,11 @@ export const treeHeaders=(t) =>[{ title:t('common.id'), field: 'id', type: 'text
     , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     ,  { title:t('common.credit'), field: 'credit' , type: 'currency', minWidth:3, export:true
     , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    , { title: t('common.balance'), field: 'balance', type: 'currency', minWidth:3, export:true
+    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}
+    , render: rowData =>rowData.isDebit?
+     formatterDE.format(Number(rowData.idebit+rowData.debit-rowData.icredit-rowData.credit)):
+     formatterDE.format(Number(rowData.icredit+rowData.credit-rowData.idebit-rowData.debit))}
    ]
 
 export const ColumnFactory =(formid, data, t)=> {
