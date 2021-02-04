@@ -1,15 +1,14 @@
 import React, {useEffect, useState, useContext} from 'react'
-import EnhancedTable from '../../Tables2/EnhancedTable';
-import { StyledTableRow, StyledTableCell} from '../../Tables2/EnhancedTableHelper'
 import {accountContext, useGlobalState} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
 import {FormFactory,JournalFormHead} from './FormsProps'
-import {columnsPACB, filter} from "../../Tables2/LineFinancialsProps";
+import {columnsPACB, filter, OptionsM} from "../../Tables2/LineFinancialsProps";
 import {formEnum} from "../../../utils/FORMS";
 import blue from "@material-ui/core/colors/blue";
-import {styles} from "../Tree/BasicTreeTableProps";
+import {styles, theme} from "../Tree/BasicTreeTableProps";
+import EditableTable from "../../Tables2/EditableTable";
 const PACBForm = () => {
   const { t,  } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -23,9 +22,8 @@ const PACBForm = () => {
   const init = ()=> {return value.initialState}
   const getData =()=> { return data?.hits?data.hits:init().hits}
   const accData_ =  res2?.hits?res2.hits:value.accData;
-  //const current_= value.user;
   const current_= init().hits[0].query;
-  const columns = value.headers
+
   const [current,setCurrent] = useState(current_);
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
@@ -49,7 +47,25 @@ const PACBForm = () => {
        const rows_=text?filter(getData(), getColumnName(), text ):getData()
        setFilteredRows(rows_);
     }
-
+    const summary =(data)=> {
+        const row_=data;
+        const row = row_?.hits?row_?.hits?.slice():row_.slice();
+        let debit=0, credit=0, balance=0
+        let currency=''
+        let company=''
+        const available=row.length>0
+        for(let i = 0, len = row.length-1; i <= len; ++i) {
+            debit=debit+row[i].debit
+            credit=credit+row[i].credit
+            balance=row[i].isDebit? (balance + debit-credit):(balance+credit-debit)
+            currency = row[i].currency
+            company = row[i].company
+        }
+        const len=row.length
+        row[len] = {period:"Total", idebit:available?row[0].idebit:0, debit:debit, icredit:available?row[0].icredit:0
+            , credit:credit, balance:balance, currency:currency,company:company  }
+        return row
+    }
     const getFilteredRows=()=>{
         const row_=filteredRows?filteredRows:getData();
         const row = row_?.hits?row_?.hits?.slice():row_.slice();
@@ -83,51 +99,8 @@ const PACBForm = () => {
   };
 
 
-  const reducerFn =(a,b)  => {
-      return (
-          {period: "", idebit: Number(b.idebit), debit: Number(a.debit) + Number(b.debit), icredit: Number(b.icredit)
-              , credit: Number(a.credit) + Number(b.credit)
-              , balance: Number(a.debit) + Number(b.debit) + Number(a.idebit) + Number(b.idebit)
-                  - Number(a.credit) - Number(b.credit) - Number(a.icredit) - Number(b.icredit)
-              , currency: b.currency, company: b.company})
-  };
-
-  const  addRunningTotal = (datax) => datax.length>0?datax.reduce(reducerFn, init().hits[0]):init().hits[0];
-  const renderDT=(datax)=> addRunningTotal(datax);
-
-    const renderTotal = (rows)=>{
-        return(
-            <StyledTableRow>
-                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder" }}>
-                    {t('common.total')}
-                </StyledTableCell>
-                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
-                    , 'textAlign':"right" }}>
-                    {columns[3].format(renderDT(rows).debit)}
-                </StyledTableCell>
-                <StyledTableCell colSpan={2} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
-                    , 'textAlign':"right" }}>
-                    {columns[2].format(renderDT(rows).credit)}
-                </StyledTableCell>
-                <StyledTableCell  colSpan={1} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
-                    , 'textAlign':"right" }}>
-                    {columns[3].format(renderDT(rows).debit - renderDT(rows).credit)}
-                </StyledTableCell>
-                <StyledTableCell  colSpan={1} style={{ height: 33, 'font-size': 14, 'font-weight':"bolder"
-                    , 'textAlign':"left" }}>
-                    {renderDT(rows).currency}
-                </StyledTableCell>
-            </StyledTableRow>
-        )
-    }
-
   function buildForm(){
 
-      const props = { title: value.title, columns:value.headers, rows:getFilteredRows(),  editable:false
-          ,  submit:submitEdit, selected:selected, colId:3, initialState:init, renderDT:renderDT
-          ,  reducerFn:reducerFn, renderTotal:renderTotal, setSelected: setSelected, handleFilter:handleFilter
-          , rowsPerPageOptions: [15, 25, 100]
-      }
     return <>
         <Grid container spacing={2} style={{...styles.outer }} direction="column" >
             <JournalFormHead styles={styles} title={value.title} collapse={state.collapse}  initialState={value.initialState}
@@ -138,7 +111,9 @@ const PACBForm = () => {
                          collapse={state.collapse} styles={styles} submitQuery= {submitQuery}/>
 
             <Grid container spacing={2} style={{...styles.inner, backgroundColor:blue }} direction="column" >
-                <EnhancedTable props={props} style={{padding: 0, height: 50}}/>
+                <EditableTable Options={{...OptionsM, selection:false, toolbar:toolbar}}
+                               data={data?summary(data):value.initialState.hits} columns={columnsX}
+                               theme={theme} t={t} setSelectedRows ={()=>void(0)}/>
             </Grid>
         </Grid>
          </>
@@ -148,4 +123,8 @@ const PACBForm = () => {
 
 };
 export default PACBForm;
-
+//<EnhancedTable props={props} style={{padding: 0, height: 50}}/>
+//<EditableTable Options={{...OptionsM, selection:false, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}
+//               columns={columns}   theme={theme} t={t}  reducerFn ={reducerFn} renderTotal={renderSummaryRow}
+//               setSelectedRows ={()=>void(0)}/>
+//
