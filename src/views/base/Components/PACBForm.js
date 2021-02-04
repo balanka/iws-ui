@@ -19,7 +19,7 @@ const PACBForm = () => {
   const [{ res2},] = useFetch(value.accUrl, {});
   const data_ =  res?.hits?res.hits:[value.initialState];
   const init = ()=> {return value.initialState}
-  const getData =()=> { return data?.hits?data.hits:init().hits}
+  //const getData =()=> { return data?.hits?data.hits:init().hits}
   const accData_ =  res2?.hits?res2.hits:value.accData;
   const current_= init().hits[0].query;
 
@@ -56,8 +56,11 @@ const PACBForm = () => {
             row[i] = {...row[i], balance:runningBalance}
         }
         const len=row.length
-        row[len] = {period:"Total", idebit:available?row[0].idebit:0, debit:debit, icredit:available?row[0].icredit:0
-            , credit:credit, balance:balance, currency:currency,company:company  }
+        const idebit = available?row[0].idebit:0
+        const icredit = available?row[0].icredit:0
+        const balance_=isDebit?idebit-icredit:icredit-idebit
+        row[len] = {period:"Total", idebit:idebit, debit:debit, icredit:icredit
+            , credit:credit, balance:row[len-1].balance, currency:currency,company:company  }
         return row
     }
 
