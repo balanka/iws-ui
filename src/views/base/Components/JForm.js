@@ -112,7 +112,7 @@ const JForm = () => {
                          collapse={state.collapse} styles={styles} submitQuery= {submitQuery}/>
 
             <Grid container spacing={2} style={{...styles.inner, display:'block'}} direction="column" >
-                <EditableTable Options={{...OptionsM, selection:false, toolbar:toolbar}}
+                <EditableTable Options={{...OptionsM, toolbar:toolbar}}
                                data={data?summary(data):value.initialState.hits} columns={columnsX}
                                theme={theme} t={t} setSelectedRows ={()=>void(0)}/>
             </Grid>

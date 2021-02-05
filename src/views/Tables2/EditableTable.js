@@ -18,7 +18,7 @@ export default function EditableTable(props) {
             //components={components}
             onSelectionChange={(rows) => {
                 setSelectedRows(rows);
-                if(rows.length>0 && edit!==null)
+                if(Options.selection&&edit&&rows.length>0)
                     edit(rows[0]);
             }}
             localization={{
