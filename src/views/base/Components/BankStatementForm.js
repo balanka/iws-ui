@@ -1,9 +1,8 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {accountContext, useGlobalState} from './AccountContext';
+import {accountContext} from './AccountContext';
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
 import useFetch from "../../../utils/useFetch";
-import axios from "axios";
 import {OptionsM, ColumnFactory} from "../../Tables2/LineFinancialsProps";
 import {BSFormHead, FormFactory} from "./FormsProps";
 import EditableTable from "../../Tables2/EditableTable";
@@ -13,10 +12,8 @@ const BankStatementForm = () => {
   const { t,  } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [rows, setRows] =useState([])
-  const [profile, ] = useGlobalState('profile');
   const value = useContext(accountContext);
   const modelid_ = value.modelid;
-  const init = ()=> {return value.initialState}
   const [{ res}]= useFetch(value.url, {});
   const data_ =  res?.hits?res.hits:[value.initialState];
   const current_= value.user;
@@ -30,35 +27,11 @@ const BankStatementForm = () => {
   const columns = ColumnFactory(modelid_, data, t);
   const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.bid));
 
-  const submitGet = (url, func, result) => {
-    axios.get( url, {headers: {'authorization':profile.token}})
-      .then(response => {
-        const resp = response.data;
-        result=response.data;
-        func(resp);
-        result=resp;
-        return result;
-      }).catch(function (error) {
-      console.log('error', error);
-    });
-    return result;
-  }
-  const fetchData =(url_, func)=>{
-    let result='xxx';
-    const res = submitGet(url_, func, result);
-    //console.log("res", res);
-    const datax = res?.hits ? res.hits : value.initialState;
-    return datax;
-  }
-  const submitQuery = event => {
-    event.preventDefault();
-    console.log("submitQuery current", current);
-    let result='xxx';
-    const url_=value.url //.concat('/')
 
-    fetchData(url_, setData, result);
-    console.log("result", result);
-  };
+    const submitQuery = event => {
+        event.preventDefault();
+        value.submitQuery(event, value.url, setData, value.initialState)
+    };
     const cancelEdit = (e) => {
         const row = {...current};
         value.editRow(row, false);
@@ -67,11 +40,8 @@ const BankStatementForm = () => {
 
     const submitPost = event => {
         event.preventDefault();
-        //const row =getCurrentRow
-        console.log("submitPost current", rows);
-        //setCurrent(row);
         value.submitPost(rows, "/post");
-        console.log("submitEdit current", current);
+        //console.log("submitEdit current", current);
     };
 
   const edit = editedRow =>{
