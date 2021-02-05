@@ -176,7 +176,7 @@ const addRow = (newData) =>{
     const LinesFinancials = () =>  (<>
       <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()}
                      columns={columnsX} editable={editable()}  t={t}
-                     tableRef={tableRef} edit ={null}/>
+                     tableRef={tableRef} />
       <CInput disabled={current.posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
               placeholder="text" value={current.text} onChange={(event)  =>
           setCurrent({ ...current, text: event.target.value})} />
