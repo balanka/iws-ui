@@ -6,7 +6,7 @@ import {formEnum} from "../../../utils/FORMS";
 import {JournalFormHead, FormFactory} from './FormsProps';
 import {styles} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
-import {OptionsM, filter, treeHeaders as columns} from '../../Tables2/LineFinancialsProps';
+import {OptionsM, filter, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
 
 export default function BasicTreeTable() {
 
@@ -29,7 +29,7 @@ export default function BasicTreeTable() {
     const [current,setCurrent] = useState(current_);
     const [data, setData] = useState(data_);
     const [accData, setAccData] = useState(accData_);
-    const [filteredRows, setFilteredRows] = useState(data);
+    const [, setFilteredRows] = useState(data);
     const [toolbar, setToolbar] = useState(true);
     useEffect(() => {setCurrent(current_)}, [current_]);
     useEffect(() => {handleFilter('')}, [data]);

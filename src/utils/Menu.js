@@ -1,7 +1,5 @@
-import React from 'react'
 import {currencyFormatDE, dateFormat} from "./utils";
 import {formEnum} from "./FORMS";
-
 
 export const getCurrentMonth = (date)=>{
         const p=date.getUTCMonth()+1;
@@ -76,16 +74,16 @@ export const modules  = (t) =>[
         , {id:"18", name:"Bankstatement", title:t('bankstatement.title'), ctx:"/bs", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/18"
             , form:'bankStmtForm', state:initBS, state1:initAcc ,state2:'', modelid:formEnum.BANKSTATEMENT, columns:[]}
         , {id:"106", name:"PAC", title:t('pac.title'), ctx:"/pac", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/106"
-            , form:'pacForm', state:initPac, state1:initAcc, state2:'', modelid:formEnum.PACB, columns:pacHeaders(t) }
+            , form:'jForm', state:initPac, state1:initAcc, state2:'', modelid:formEnum.PACB, columns:pacHeaders(t) }
         , {id:"112", name:"Journal", title:t('journal.title'), ctx:"/jou", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/112"
-            , form:'journalForm', state:initJour, state1:initAcc, state2:'', modelid:formEnum.JOURNAL, columns:JournalHeaders(t)  }
+            , form:'jForm', state:initJour, state1:initAcc, state2:'', modelid:formEnum.JOURNAL, columns:JournalHeaders(t)  }
         , {id:"1120", name:"Financials", title:t('financials.title'), ctx:"/ftr", ctx1:"/acc", ctx2:"/cc", ctx3:'', get:"md/112"
             , form:'financialsForm', state:initFrt, state1:initAcc, state2:initCC , modelid:formEnum.FINANCIALS}
 
-        , {id:"1000", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
-            , form:"balancesheetForm", state:initBalanceSheet, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET, columns:balanceHeaders(t) }
-        , {id:"1300", name:"BalanceTree", title:t('common.title'), ctx:"/acc/balance", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/106"
-            , form:"treeForm", state:initAcc, state1:initAcc, state2:'', modelid:formEnum.BALANCETREE, columns:treeHeaders(t) }
+        //, {id:"1000", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
+         //   , form:"balancesheetForm", state:initBalanceSheet, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET, columns:balanceHeaders(t) }
+        , {id:"1300", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
+            , form:"balancesheetForm", state:initAcc, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET, columns:balanceHeaders(t) }
     ]
 
 export const initAcc = {hits:[{id:'', name: '', description: '', enterdate:date, postingdate:date

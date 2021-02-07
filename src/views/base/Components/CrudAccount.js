@@ -1,12 +1,10 @@
 import React, {useState, Fragment} from 'react'
 import MasterfileForm from "./MasterfileForm";
 import JForm  from "./JForm";
-//import JForm from "./JForm";
 import FinancialsForm from "./FinancialsForm";
 import BankStatementForm from './BankStatementForm';
 import {AccountContext, useGlobalState} from "./AccountContext";
 import Login from '../../pages/login/Login'
-import TreeTableForm from "../Tree/TreeTableForm";
 import BasicTreeTable from "./BasicTreeTable";
 import axios from "axios";
 
@@ -20,12 +18,11 @@ const CrudAccount =  (props)=> {
       companyForm      : <MasterfileForm/>,
       masterfileForm   : <MasterfileForm/>,
       bankStmtForm     : <BankStatementForm/>,
-      pacForm          : <JForm/>,
       financialsForm   : <FinancialsForm/>,
-      balancesheetForm : <TreeTableForm/>,
-      journalForm      : <JForm/>,
-      loginForm        : <Login/>,
-      treeForm         : <BasicTreeTable/>
+      balancesheetForm : <BasicTreeTable/>,
+      jForm            : <JForm/>,
+      loginForm        : <Login/>
+      //treeForm         : <BasicTreeTable/>
     };
     return (<Fragment>
            {componentLookup[componentName]}
@@ -85,6 +82,8 @@ const CrudAccount =  (props)=> {
                 return resp;
             }).catch(function (error) {
             //console.log('authorization', profile.token);
+              if(JSON.stringify(error).includes("401"))
+                  console.log('error', "Session expired!!!!! Login again!!!!");
             console.log('error', error);
         })
         return result;

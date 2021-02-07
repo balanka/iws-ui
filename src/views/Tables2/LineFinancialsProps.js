@@ -451,7 +451,7 @@ export const balanceHeaders=(t) =>[ {id:'id', label:t('balancesheet.id'), minWid
     , { id: 'credit', label:t('balancesheet.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
     ]
 
-export const treeHeaders=(t) =>[{ title:t('common.id'), field: 'id', type: 'text', export:true }
+export const ColumnsBalancesheet=(t) =>[{ title:t('common.id'), field: 'id', type: 'text', export:true }
     ,  { title:t('common.name'), field: 'name',type: 'text', export:true}
     ,  { title:t('account.account'), field: 'account',type: 'text',  export:true}
     ,  { title:t('common.idebit'), field: 'idebit', type: 'currency', minWidth:3, export:true
