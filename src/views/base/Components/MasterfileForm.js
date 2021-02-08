@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from 'react'
+import React, {useEffect, useState, useContext, memo} from 'react'
 import {accountContext, useGlobalState} from './AccountContext';
 import Grid from "react-fast-grid";
 import useFetch from "../../../utils/useFetch";
@@ -6,7 +6,7 @@ import {CommonFormHead, FormFactory} from './FormsProps'
 import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
-const MasterfileForm = () => {
+const MasterfileForm = memo(() => {
   const [profile, ] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [, setRows] = useState([])
@@ -93,5 +93,5 @@ const MasterfileForm = () => {
 
   return buildForm(current);
 
-}
+})
 export default MasterfileForm

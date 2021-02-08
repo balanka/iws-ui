@@ -13,8 +13,7 @@ import CrudAccount from "./CrudAccount";
     const data =  profile?.modules?profile.modules:[];
     const modules_= modules(t).filter(m=> data.includes(m.id)|| m.id==="0")
     const  getTabContent= (module) => <GetCrudTabContent module ={module} SERVER_URL ={SERVER_URL}/>
-    const GetCrudTabContent = (props) => {
-       const {module, SERVER_URL}=props
+    const GetCrudTabContent = ({module, SERVER_URL}) => {
        return  <>
           <CTabPane>
              <CrudAccount url={SERVER_URL.concat(module.ctx)} get={module.get} accUrl={SERVER_URL.concat(module.ctx1)}

@@ -18,7 +18,6 @@ export default function BasicTreeTable() {
     const init = ()=> {return value.initialState}
     const data_ = res && res.response?res.response:[value.initialState];
     const getData =()=> { return data?.hits?data.hits:init().hits}
-
     const [{ res2}] = useFetch(value.accUrl, {});
     const accData_=  res2?.hits?res2.hits:value.accData;
     const current_= getData()[0]//init().hits[0].query;

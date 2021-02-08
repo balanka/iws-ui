@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, memo} from 'react'
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
@@ -8,7 +8,7 @@ import {columnsPACB, ColumnJournal, OptionsM} from "../../Tables2/LineFinancials
 import {formEnum} from "../../../utils/FORMS";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
-const JForm = () => {
+const JForm = memo(() => {
   const { t,  } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
 
@@ -126,6 +126,6 @@ const JForm = () => {
 
   return buildForm();
 
-};
+});
 export default JForm;
 

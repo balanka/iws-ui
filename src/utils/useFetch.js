@@ -8,10 +8,10 @@ const useFetch = (url, data, options) => {
     const [loading, setLoading] = useState(false);
     const [profile, setProfile] = useGlobalState('profile');
     const value = useContext(accountContext);
-    console.log('urlX', url);
+   // console.log('urlX', url);
 
     const submitGet = (url) => {
-        console.log('authorization2', profile.token);
+        //console.log('authorization2', profile.token);
         axios.get( url, {headers: {'authorization':profile.token}})
             .then(response => {
                 console.log('response.data', response.data);
@@ -24,7 +24,7 @@ const useFetch = (url, data, options) => {
     }
 
     useEffect(() => {
-          const fetchData = async () => {
+          const fetchData =  () => {
             console.log('Fetching data for ',url);
               setLoading(true);
               setResponse(null);
