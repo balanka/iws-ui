@@ -6,7 +6,7 @@ import {formEnum} from "../../../utils/FORMS";
 import {JournalFormHead, FormFactory} from './FormsProps';
 import {styles} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
-import {OptionsM, filter, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
+import {OptionsM, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
 
 export default function BasicTreeTable() {
 
@@ -15,7 +15,6 @@ export default function BasicTreeTable() {
     const value = useContext(accountContext);
     const t = value.t
     const [{ res}, ]= useFetch(value.url, {});
-    //console.log('res__', res);
     const init = ()=> {return value.initialState}
     const data_ = res && res.response?res.response:[value.initialState];
     const getData =()=> { return data?.hits?data.hits:init().hits}
@@ -23,16 +22,11 @@ export default function BasicTreeTable() {
     const [{ res2}] = useFetch(value.accUrl, {});
     const accData_=  res2?.hits?res2.hits:value.accData;
     const current_= getData()[0]//init().hits[0].query;
-    //console.log('current_', current_);
-    //console.log('accData_', accData_);
-    //console.log('getData()', getData());
     const [current,setCurrent] = useState(current_);
     const [data, setData] = useState(data_);
     const [accData, setAccData] = useState(accData_);
-    const [, setFilteredRows] = useState(data);
     const [toolbar, setToolbar] = useState(true);
     useEffect(() => {setCurrent(current_)}, [current_]);
-    useEffect(() => {handleFilter('')}, [data]);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle= ()=> setState({...state, collapse:!state.collapse });
     const columnsX = columns(t);
@@ -41,15 +35,7 @@ export default function BasicTreeTable() {
         .concat(current.account).concat('/')
         .concat(current.fromPeriod).concat('/')
         .concat(current.toPeriod);
-    /*const submitQuery = event => {
-        console.log('accDataZZZ', accData);
-        event.preventDefault();
-        accData?.hits?.length<2?
-            value.submitQuery(event, value.accUrl, setAccData,value.initAcc):
-            value.submitQuery(event, url_(), setData, value.initialState)
-      };
 
-     */
       const load = event => {
         event.preventDefault();
         accData?.hits?.length<2?
@@ -58,12 +44,6 @@ export default function BasicTreeTable() {
              value.submitQuery(event, url_(), setData, value.initialState): void(0)
       };
 
-      const getColumnName = ()=>columnsX.map(col =>col.field);
-
-      function handleFilter(text) {
-        const rows_=text?filter(getData(), getColumnName(), text ):getData()
-        setFilteredRows(rows_);
-    }
     const parentChildData =(row, rows) => rows.find(a => a.id === row.account)
     function buildForm(){
         return <>

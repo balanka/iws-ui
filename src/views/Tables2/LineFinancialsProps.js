@@ -3,30 +3,14 @@ import {rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import {formEnum} from "../../utils/FORMS";
-import {dateFormat, formatterDE, currencyFormatDE} from "../../utils/utils";
+import {dateFormat, formatterDE} from "../../utils/utils";
 
 
-const mappingMenu = (acc) =>
-    <MenuItem key={acc.id} value={acc.id}>
-        {acc.id.concat( " ").concat(acc.name)}
-    </MenuItem>
-const mappingMenuName = (acc) =>
-    <MenuItem key={acc.id} value={acc.id}>
-        {acc.name.concat( " ").concat(acc.id)}
-    </MenuItem>
 const mapping = (acc) =>
     <MenuItem key={acc.id} value={acc.id}>
         {acc.id.concat( " ").concat(acc.name)}
     </MenuItem>
 
-const mappingSelect = (item) => <option key={item.id} value={item.id}>
-    {item.id+ " ".concat (item.name)}</option>;
-
-const mappingSelectName = (item) => <option key={item.id} value={item.id}>
-    {item.name+ " ".concat (item.id)}</option>;
-export const  filter = (rows, cols, txt,) => rows.filter(col =>
-    cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b)
-);
 
 export  const ACCOUNT=(data, value, onRowDataChange, rowData, fieldName) => {
     return (<Select value={value} onChange={(event) =>
@@ -328,7 +312,7 @@ export const ColumnsACC =(data, t) => [
     , {field:'company', title:t('common.company'), type:"string",  export:true}
 ]
 export const ColumnsVAT = (data, t) => [
-    {field:'id', title:t('common.id'), export:true}
+     {field:'id', title:t('common.id'), export:true}
     , {field:'name', title:t("common.name"),  type:"string", export:true}
     , {field:'description', title:t('common.description'), type:"string",  export:true}
     , {field:'percent', title:t('vat.percent'), type:"numeric", initialEditValue:0, minimumFractionDigits: 2
@@ -383,14 +367,7 @@ export const ColumnsCUST =(data, t) => [
 , {field:'modelid', title:t('common.modelid'), type:'numeric', align:"right", export:true}
 , {field:'company', title:t('common.company'), export:true}
 ]
-export const pacHeaders = (t) =>[ {id:'period', label:t('pac.period'), minWidth:1, numeric:true }
-, { id: 'idebit', label:t('pac.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-, { id: 'debit', label:t('pac.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-, { id: 'icredit', label:t('pac.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-, { id: 'credit', label:t('pac.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-, { id: 'balance', label:t('pac.balance'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-, { id: 'currency', label:t('common.currency'), minWidth:1}
-]
+
 export const ColumnJournal=(t) =>[ {field:"id", title:t('common.id'), minWidth:2, type:"numeric", export:true }
     , {field:"transid", title:t('journal.transid'), minWidth:1, type:"numeric", export:true }
     , { field: "oid", title: t('journal.oid'), minWidth:1, type:"numeric", export:true }
@@ -421,35 +398,6 @@ export const ColumnJournal=(t) =>[ {field:"id", title:t('common.id'), minWidth:2
     , { field: 'typeJournal', title:t('journal.type'), minWidth:1, export:true}
     , { id: 'file_content', label:t('journal.file'), minWidth:1, export:true}
     , { field: 'modelid', title:t('common.modelid'), minWidth:1, export:true}]
-
-export const JournalHeaders=(t) =>[ {id:"id", label:t('common.id'), minWidth:2, numeric:true }
-    , {id:"transid", label:t('journal.transid'), minWidth:1, numeric:true }
-    , { id: "oid", label: t('journal.oid'), minWidth:1, numeric:true }
-    , {id: "account", label: t('journal.account'), minWidth:1}
-    , {id: "oaccount", label:t('journal.oaccount'), minWidth:2}
-    , {id: "transdate", label:t('common.transdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-    , {id: "postingdate", label:t('common.postingdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-    , {id: "enterdate", label:t('common.enterdate'), minWidth:5, numeric:true, format:(value) =>  dateFormat(value, "dd mm yy")}
-    , {id: 'period', label:t('journal.period'), minWidth:1, numeric:true}
-    , { id: 'amount', label: t('journal.amount'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-    , { id: 'idebit', label:t('journal.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-    , { id: 'debit', label: t('journal.debit'), minWidth:2,  numeric:true, format: (value) => currencyFormatDE(Number(value))}
-    , { id: 'icredit', label:t('journal.icredit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-    , { id: 'credit', label:t('journal.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-    , { id: 'side', label:t('journal.side'), numeric:true, format:(value) => String(value), minWidth:1}
-    , { id: 'text', label:t('journal.text'), minWidth:15}, { id:'month', label:t('journal.month'), minWidth:1}
-    , { id: 'year', label:t('journal.year'), minWidth:1}, { id:'company', label:t('common.company'), minWidth:1 }
-    , { id: 'typeJournal', label:t('journal.type'), minWidth:1}, { id: 'file_content', label:t('journal.file'), minWidth:1}
-    , { id: 'modelid', label:t('common.modelid'), minWidth:1}]
-
-export const balanceHeaders=(t) =>[ {id:'id', label:t('balancesheet.id'), minWidth:1}
-    , {id:'name', label:t('balancesheet.name'), minWidth:8}
-    , {id:'account', label:t('balancesheet.account')}
-    , { id: 'idebit', label: t('balancesheet.idebit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-    , { id: 'debit', label: t('balancesheet.debit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-    , { id: 'icredit', label: t('balancesheet.icedit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-    , { id: 'credit', label:t('balancesheet.credit'), minWidth:2, numeric:true, format: (value) => currencyFormatDE(Number(value))}
-    ]
 
 export const ColumnsBalancesheet=(t) =>[{ title:t('common.id'), field: 'id', type: 'text', export:true }
     ,  { title:t('common.name'), field: 'name',type: 'text', export:true}
@@ -491,10 +439,6 @@ export const ColumnFactory =(formid, data, t)=> {
         //    return <FormWrapper {...props} form = {FinancialsMainForm}/>;
        //     break;
 
-        case formEnum.JOURNAL:
-            return JournalHeaders(t);
-        case formEnum.PACB:
-            return pacHeaders(t);
         case formEnum.VAT:
             return ColumnsVAT(data,t);
         default:
