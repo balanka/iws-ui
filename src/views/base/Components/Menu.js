@@ -41,8 +41,6 @@ export const modules  = (t) =>[
         , {id:"1120", name:"Financials", title:t('financials.title'), ctx:"/ftr", ctx1:"/acc", ctx2:"/cc", ctx3:'', get:"md/112"
             , form:<FinancialsForm/>, state:initFrt, state1:initAcc, state2:initCC , modelid:formEnum.FINANCIALS}
 
-        //, {id:"1000", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
-         //   , form:"balancesheetForm", state:initBalanceSheet, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET, columns:balanceHeaders(t) }
         , {id:"1300", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
             , form:<BasicTreeTable/>, state:initAcc, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET
         , columns:ColumnsBalancesheet(t) }
