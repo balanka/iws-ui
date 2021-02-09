@@ -8,7 +8,7 @@ import {columnsPACB, ColumnJournal, OptionsM} from "../../Tables2/LineFinancials
 import {formEnum} from "../../../utils/FORMS";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
-const JForm = memo(() => {
+const JForm = () => {
   const { t,  } = useTranslation();
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
 
@@ -126,6 +126,6 @@ const JForm = memo(() => {
 
   return buildForm();
 
-});
+};
 export default JForm;
 

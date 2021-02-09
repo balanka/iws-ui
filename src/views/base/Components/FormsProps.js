@@ -293,7 +293,7 @@ export const JournalFormHead = (props) => {
 export const FormFactory =(props)=> {
     switch(props.formid) {
         case formEnum.ACCOUNT:
-            return <FormWrapper {...props} form = {AccountMainForm}/>;
+            return <FormWrapper {...props} form = {AccountMainForm} />;
         case formEnum.BANKSTATEMENT:
             return <FormWrapper {...props} form = {BankStatementMainForm}/>;
         case formEnum.COMPANY:
@@ -322,10 +322,9 @@ export const FormWrapper=(props) => {
         <Grid container spacing={2} style={{...styles.middle, 'background-color':blue }} direction="column" >
             <CCollapse show={collapse} id="JScollapse" >
                 {
-                    form(props)
+                    form&&form(props)
                 }
-                {
-                    table&&table(props)
+                {    table&&table(props)
                 }
             </CCollapse>
      </Grid>

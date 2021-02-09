@@ -6,7 +6,7 @@ import {CommonFormHead, FormFactory} from './FormsProps'
 import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
-const MasterfileForm = memo(() => {
+const MasterfileForm = () => {
   const [profile, ] = useGlobalState('profile');
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [, setRows] = useState([])
@@ -93,5 +93,5 @@ const MasterfileForm = memo(() => {
 
   return buildForm(current);
 
-})
+};
 export default MasterfileForm

@@ -1,4 +1,4 @@
-import React, {createRef, useContext} from 'react'
+import React, {createRef, memo, useContext} from 'react'
 import Tabs from "../tabs/Tabs";
 import { AddressForm, CustomerGeneralForm,  CustomerAccountForm} from "./FormsProps";
 import {accountContext} from './AccountContext'
@@ -9,15 +9,11 @@ import {ACCOUNT} from './FormsProps';
 import {Options} from '../../Tables2/LineFinancialsProps';
 import EditableTable from "../../Tables2/EditableTable";
 
- const CustomerTabs = (props) => {
+ const CustomerTabs =  (props) => {
     const {current, setCurrent, accData, vatData, bankData}= props
     const value = useContext(accountContext);
-    const t= value.t
-    const isArray = Array.isArray (current);
+    const t = value.t
     const initBankAcc=current.bankaccounts;
-
-   
-
     const tableRef = createRef();
     const columns=(data, t) => [
       {field:'iban', title:t('common.iban'), initialEditValue:'', export:true}

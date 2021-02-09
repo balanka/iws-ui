@@ -1,121 +1,32 @@
 import React, {useState, Fragment} from 'react'
-import MasterfileForm from "./MasterfileForm";
-import JForm  from "./JForm";
-import FinancialsForm from "./FinancialsForm";
-import BankStatementForm from './BankStatementForm';
 import {AccountContext, useGlobalState} from "./AccountContext";
-import Login from '../../pages/login/Login'
-import BasicTreeTable from "./BasicTreeTable";
-import axios from "axios";
+import { Query, Get, Post,  login,  Add, Edit} from './CrudController';
 
 const CrudAccount =  (props)=> {
-    const [ current, setCurrent ] = useState(props.initialState);
+    const { form, initialState, initAcc, initCc, url, accUrl, ccUrl, bankUrl, modelid, get, title, headers} = props
+    const [ current, setCurrent ] = useState(initialState);
     const [ editing, setEditing ] = useState(false);
     const [profile, setProfile] = useGlobalState('profile');
 
-  const renderComponent =(componentName)=> {
-    const componentLookup = {
-      companyForm      : <MasterfileForm/>,
-      masterfileForm   : <MasterfileForm/>,
-      bankStmtForm     : <BankStatementForm/>,
-      financialsForm   : <FinancialsForm/>,
-      balancesheetForm : <BasicTreeTable/>,
-      jForm            : <JForm/>,
-      loginForm        : <Login/>
-      //treeForm         : <BasicTreeTable/>
-    };
-    return (<Fragment>
-           {componentLookup[componentName]}
-          </Fragment>);
-    }
-
-    const submitEdit = (newRecord, data) => {
-     //console.log("newRecordX", newRecord);
-     axios.patch( props.url, newRecord, {headers: {'authorization':profile.token}})
-      .then(response => {
-         //console.log('response.data.', response.data);
-        const index = data.hits.findIndex(obj => obj.id === newRecord.id);
-        data.hits[index]= newRecord;
-        setCurrent(newRecord);
-      }).catch(function (error) {
-         console.log('error', error);
-       });
-  };
-    const submitAdd = (record, data) => {
-    axios.post( props.url, record, {headers: {'authorization':profile.token}})
-      .then(response => {
-        const i = data.hits.findIndex(obj => obj.id === record.id);
-        const index = i === -1? data.hits.length+1:i;
-        data.hits[index]=record;
-        const row = {...props.initialState, editing:false};
-        setEditing(false);
-        setCurrent(row);
-      }).catch(function (error) {
-        console.log('error', error);
-      });
-  };
-    const submitPost = (record, ctx) => {
-     axios.patch(props.url.concat(ctx), record, {headers: {'authorization':profile.token}})
-      .then(response => {
-        //console.log('responsex', response.data);
-      }).catch(function (error) {
-      console.log('error', error);
-    });
-  };
-    const login = (url, data) => {
-        axios.post( url, data)
-            .then(response => {
-                const {authorization} = response.headers
-                setProfile({token:authorization, company:response.data.company, modules:response.data.menu})
-            }).catch(function (error) {
-            console.log('error', error);
-        });
-    }
-
-    const submitGet = (url, func) => {
-      let result
-          axios.get( url, {headers: {'authorization':profile.token}})
-            .then(response => {
-                const resp = response.data
-                func(resp);
-                result=resp;
-                return resp;
-            }).catch(function (error) {
-            //console.log('authorization', profile.token);
-              if(JSON.stringify(error).includes("401"))
-                  console.log('error', "Session expired!!!!! Login again!!!!");
-            console.log('error', error);
-        })
-        return result;
-    }
-
-    const submitQuery = (event, url, func, init) => {
-        const fetchData =(url_, call)=>{
-            const res = submitGet(url_, call);
-            console.log("resx"+url_, res);
-            const datax = res?.hits ? res.hits : init;
-            return datax;
-        }
-        fetchData(url, func);
-        event.preventDefault();
-    };
-
+    const submitEdit = (record, data) =>Edit(url, profile, record, data, setCurrent);
+    const submitAdd = (record, data) => Add(url, profile, record, data, initialState, setCurrent);
+    const submitPost = (record, ctx) =>  Post(url, profile, record, ctx);
+    const submitLogin = (url, data) => login(url, data, setProfile);
+    const submitGet = (url, func) => Get(url, profile, func);
+    const submitQuery = (event, url, func, init) =>Query(event, url, profile, func, init);
     const deleteUser =() => setEditing(false);
 
     return (
-      <div className="animated fadeIn">
-          <AccountContext  form ={props.form} url={props.url}  get={props.get} title={props.title} lineTitle={props.lineTitle}
-                           accUrl={props.accUrl} ccUrl={props.ccUrl} submitAdd={submitAdd} submitGet={submitGet} login={login}
-                           bankUrl={props.bankUrl} editing={editing} setEditing={setEditing}  current={current}
-                           setCurrent={setCurrent} submitEdit={submitEdit} submitPost={submitPost} 
-                           initialState={props.initialState} headers={props.headers}
-                           initAcc={props.initAcc} initCc={props.initCc} modelid={props.modelid}
-                           deleteUser={deleteUser} submitQuery={submitQuery}>
-
+     <div className="animated fadeIn">
+        <AccountContext  form ={form} url={url}  get={get} title={title} accUrl={accUrl} ccUrl={ccUrl} bankUrl={bankUrl}
+                         submitAdd={submitAdd} submitGet={submitGet} l submitEdit={submitEdit} submitPost={submitPost}
+                         login={submitLogin} editing={editing} setEditing={setEditing}  current={current}
+                         setCurrent={setCurrent} initialState={initialState} initAcc={initAcc} initCc={initCc}
+                         headers={headers} modelid={modelid} deleteUser={deleteUser} submitQuery={submitQuery}>
             <div className="flex-row">
                 <div className="flex-large">
                   <Fragment>
-                      {   renderComponent(props.form)}
+                      { form }
                  </Fragment>
                 </div>
             </div>

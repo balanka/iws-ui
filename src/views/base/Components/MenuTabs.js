@@ -1,6 +1,6 @@
 import React from 'react'
 import {useTranslation} from "react-i18next";
-import {modules} from '../../../utils/Menu';
+import {modules} from './Menu';
 import {useGlobalState} from './AccountContext';
 import Tabs from "../tabs/Tabs";
 import {CTabPane} from "@coreui/react";
