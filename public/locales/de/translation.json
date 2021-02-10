@@ -250,5 +250,13 @@
     "to": "bis",
     "part1": "Um loszulegen, ändere <1>src/App(DE).js</1> speicheren und neuladen.",
     "part2": "Ändere die Sprachen zwischen deutsch und englisch mit Hilfe der beiden Schalter."
+  },
+  "user": {
+    "title": "Benutzer",
+    "userName": "Benutzername",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "role": "Role",
+    "menu": "Menü"
   }
 }

@@ -247,5 +247,13 @@
     "to": "a",
     "part1": "Pour commencer, editer <1>src/App.js</1> et sauvegader pour le relancer.",
     "part2": "Changer de langue entre l'englais, l'allemand et le francais en cliquant sur le boutton correspondants ci desus."
+  },
+  "user": {
+    "title": "Utilisateur",
+    "userName": "Nom utilisateur",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "role": "Role",
+    "menu": "Menu"
   }
 }
