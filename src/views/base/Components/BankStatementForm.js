@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from 'react'
+import React, {useEffect, useState, useContext, memo} from 'react'
 import {accountContext} from './AccountContext';
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
@@ -79,6 +79,6 @@ const BankStatementForm = () => {
   return buildForm(current);
 
 };
-export default BankStatementForm;
+export default memo(BankStatementForm);
 
 

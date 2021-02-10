@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from "react";
+import React, {useContext, useState, useEffect, memo} from "react";
 import {accountContext} from "../Components/AccountContext";
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
@@ -8,10 +8,9 @@ import {styles} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {OptionsM, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
 
-export default function BasicTreeTable() {
+const  BasicTreeTable =()=> {
 
     const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
-
     const value = useContext(accountContext);
     const t = value.t
     const [ res, loading, error ]= useFetch(value.url, {});
@@ -61,4 +60,5 @@ export default function BasicTreeTable() {
         </>
       }
       return buildForm();
-}
+};
+export default  memo(BasicTreeTable)

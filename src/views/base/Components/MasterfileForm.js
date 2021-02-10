@@ -97,4 +97,4 @@ const MasterfileForm = () => {
   return buildForm(current);
 
 };
-export default MasterfileForm
+export default memo(MasterfileForm)

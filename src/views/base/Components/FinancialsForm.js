@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext, createRef} from 'react'
+import React, {useEffect, useState, useContext, createRef, memo} from 'react'
 import { CInput} from '@coreui/react'
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
@@ -208,7 +208,7 @@ const addRow = (newData) =>{
   return buildForm( current);
 
 };
-export default FinancialsForm;
+export default memo(FinancialsForm);
 
 
 

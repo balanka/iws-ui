@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, memo} from 'react'
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
@@ -127,5 +127,5 @@ const JForm = () => {
   return buildForm();
 
 };
-export default JForm;
+export default memo(JForm);
 

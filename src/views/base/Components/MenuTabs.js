@@ -10,6 +10,7 @@ import CrudAccount from "./CrudAccount";
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const [profile, setProfile] = useGlobalState('profile');
     const { t,  } = useTranslation();
+    //const [menu, setMenu] = useState()
     const data =  profile?.modules?profile.modules:[];
     const modules_= modules(t).filter(m=> data.includes(m.id)|| m.id==="0")
     const  getTabContent= (module) => <GetCrudTabContent module ={module} SERVER_URL ={SERVER_URL}/>
