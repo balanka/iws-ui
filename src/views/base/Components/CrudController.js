@@ -1,10 +1,8 @@
 import axios from "axios";
 
  const Edit = (url, profile, record, data, setCurrent) => {
-     //console.log("newRecordX", record);
      axios.patch( url, record, {headers: {'authorization':profile.token}})
       .then(response => {
-         //console.log('response.data.', response.data);
         const index = data.findIndex(obj => obj.id === record.id);
         data[index]= record;
         setCurrent(record);
