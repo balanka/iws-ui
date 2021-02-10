@@ -14,18 +14,15 @@ const MasterfileForm = () => {
   const t = value.t
   const modelid_ = value.modelid;
   const [ res, loading, error] = useFetch(value.url, {});
-  console.log('resKKK', res)
   const [res2, loading2, error2] = useFetch(value.accUrl, {});
   const [res3 , loading3, error3] = useFetch(value.ccUrl, {});
   const [res4, loading4, error4] = useFetch(value.bankUrl, {});
   const data_ =  res?.response?res.response:value.initialState;
-  console.log('data_', data_)
   const accData_=  res2?.response?res2.response:value.accData;
   const vatData_=  res3?.response?res3.response:value.ccData;
   const bankData_=  res4?.response?res4.response:[];
   const current_= value.user;
   const [data, setData] = useState(data_);
-  console.log('data_X', data);
   const [accData, setAccData] = useState(accData_);
   const [vatData, setVatData] = useState(vatData_);
   const [bankData, setBankData] = useState(bankData_);
