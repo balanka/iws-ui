@@ -14,17 +14,17 @@ export default function BasicTreeTable() {
 
     const value = useContext(accountContext);
     const t = value.t
-    const [{ res}, ]= useFetch(value.url, {});
+    const [ res, loading, error ]= useFetch(value.url, {});
     const init = ()=> {return value.initialState}
-    const data_ = res && res.response?res.response:[value.initialState];
-    const getData =()=> { return data?.hits?data.hits:init().hits}
-    const [{ res2}] = useFetch(value.accUrl, {});
-    const accData_=  res2?.hits?res2.hits:value.accData;
-    const current_= getData()[0]//init().hits[0].query;
+    const data_ = res && res.response?res.response:value.initialState;
+    const getData =()=>  data?data:init()
+    const [res2, loading2, error2] = useFetch(value.accUrl, {});
+    const accData_=  res2 && res2.response?res2.response:value.accData;
+    const current_= getData()[0]
     const [current,setCurrent] = useState(current_);
     const [data, setData] = useState(data_);
     const [accData, setAccData] = useState(accData_);
-    const [toolbar, setToolbar] = useState(true);
+    const [toolbar, setToolbar] = useState(false);
     useEffect(() => {setCurrent(current_)}, [current_]);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle= ()=> setState({...state, collapse:!state.collapse });
@@ -37,7 +37,7 @@ export default function BasicTreeTable() {
 
       const load = event => {
         event.preventDefault();
-        accData?.hits?.length<2?
+        accData?.length<2?
             value.submitQuery(event, value.accUrl, setAccData, value.initAcc):
             current.account&&current.fromPeriod&&current.toPeriod?
              value.submitQuery(event, url_(), setData, value.initialState): void(0)

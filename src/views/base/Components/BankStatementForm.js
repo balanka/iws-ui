@@ -14,8 +14,8 @@ const BankStatementForm = () => {
   const [rows, setRows] =useState([])
   const value = useContext(accountContext);
   const modelid_ = value.modelid;
-  const [{ res}]= useFetch(value.url, {});
-  const data_ =  res?.hits?res.hits:[value.initialState];
+  const [ res, loading, error]= useFetch(value.url, {});
+  const data_ =  res?.response?res.response:value.initialState;
   const current_= value.user;
   const [data, setData] = useState(data_);
   const [current,setCurrent] = useState(current_);
@@ -45,7 +45,7 @@ const BankStatementForm = () => {
     };
 
   const edit = editedRow =>{
-        const record = data.hits.find(obj => obj.bid === editedRow.bid);
+        const record = data.find(obj => obj.bid === editedRow.bid);
         setCurrent({...record, editing:true});
     }
 
@@ -68,7 +68,7 @@ const BankStatementForm = () => {
             <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t}
                           collapse={state.collapse} styles={styles} />
             <Grid container spacing={2} style={{...styles.inner, display:'block'}} direction="column" >
-               <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}
+               <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?data:value.initialState}
                   columns={columns}  theme={theme} t={t}  edit ={edit} setSelectedRows ={setSelectedRows}/>
 
             </Grid>

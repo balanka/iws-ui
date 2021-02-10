@@ -367,7 +367,19 @@ export const ColumnsCUST =(data, t) => [
 , {field:'modelid', title:t('common.modelid'), type:'numeric', align:"right", export:true}
 , {field:'company', title:t('common.company'), export:true}
 ]
-
+export const ColumnsUSER =(t) => [
+      {field:'id', title:t('common.id'), type:'numeric', align:"right", export:true}
+    , {field:'userName', title:t('user.userName'), type:"string", export:true}
+    , {field:'firstName', title:t('user.firstName'), type:"string", export:true}
+    , {field:'lastName', title:t('user.lastName'), type:"string", export:true}
+    , {field:'hash', title:t('user.hash'), type:"string", hidden:true, export:true}
+    , {field:'phone', title:t('common.phone'), type:"string", export:true}
+    , {field:'email', title:t('common.email'), type:"string", export:true}
+    , {field:'role', title:t('user.role'), type:"string", export:true}
+    , {field:'menu', title:t('user.menu'), type:"string", export:true}
+    , {field:'modelid', title:t('common.modelid'), type:'numeric', align:"right", export:true}
+    , {field:'company', title:t('common.company'), export:true}
+]
 export const ColumnJournal=(t) =>[ {field:"id", title:t('common.id'), minWidth:2, type:"numeric", export:true }
     , {field:"transid", title:t('journal.transid'), minWidth:1, type:"numeric", export:true }
     , { field: "oid", title: t('journal.oid'), minWidth:1, type:"numeric", export:true }
@@ -438,7 +450,8 @@ export const ColumnFactory =(formid, data, t)=> {
         //case formEnum.FINANCIALS:
         //    return <FormWrapper {...props} form = {FinancialsMainForm}/>;
        //     break;
-
+        case formEnum.USER:
+            return ColumnsUSER(t);
         case formEnum.VAT:
             return ColumnsVAT(data,t);
         default:

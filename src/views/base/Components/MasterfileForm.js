@@ -13,16 +13,19 @@ const MasterfileForm = () => {
   const value = useContext(accountContext);
   const t = value.t
   const modelid_ = value.modelid;
-  const [{ res},] = useFetch(value.url, {});
-  const [{ res2},] = useFetch(value.accUrl, {});
-  const [{ res3},] = useFetch(value.ccUrl, {});
-  const [{ res4},] = useFetch(value.bankUrl, {});
-  const data_ =  res?.hits?res.hits:value.initialState.hits;
-  const accData_=  res2?.hits?res2.hits:value.accData;
-  const vatData_=  res3?.hits?res3.hits:value.ccData;
-  const bankData_=  res4?.hits?res4.hits:[];
+  const [ res, loading, error] = useFetch(value.url, {});
+  console.log('resKKK', res)
+  const [res2, loading2, error2] = useFetch(value.accUrl, {});
+  const [res3 , loading3, error3] = useFetch(value.ccUrl, {});
+  const [res4, loading4, error4] = useFetch(value.bankUrl, {});
+  const data_ =  res?.response?res.response:value.initialState;
+  console.log('data_', data_)
+  const accData_=  res2?.response?res2.response:value.accData;
+  const vatData_=  res3?.response?res3.response:value.ccData;
+  const bankData_=  res4?.response?res4.response:[];
   const current_= value.user;
   const [data, setData] = useState(data_);
+  console.log('data_X', data);
   const [accData, setAccData] = useState(accData_);
   const [vatData, setVatData] = useState(vatData_);
   const [bankData, setBankData] = useState(bankData_);
@@ -33,7 +36,7 @@ const MasterfileForm = () => {
 
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
-  const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.tid))
+  const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id))
 
   const initAdd =()=> {
     const row = {...value.initialState.hits[0], company:profile.company, editing:false};
@@ -44,7 +47,7 @@ const MasterfileForm = () => {
   const cancelEdit = (e) => initAdd();
   const columns = ColumnFactory(modelid_,data, t);
   const edit = editedRow =>{
-    const record = data.hits.find(obj => obj.id === editedRow.id);
+    const record = data.find(obj => obj.id === editedRow.id);
     const row = {...record, editing:true}
     setCurrent(row);
   }
@@ -84,7 +87,7 @@ const MasterfileForm = () => {
                      bankData={bankData} collapse={state.collapse} styles={styles} style={{...styles.middleSmall}}/>
 
         <Grid container spacing={2} style={{...styles.inner, display:'block' }} direction="column" >
-          <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data?.hits?data.hits:value.initialState.hits}
+          <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data}
                          columns={columns}   theme={theme} t={t}  edit ={edit} setSelectedRows ={setSelectedRows}/>
         </Grid>
       </Grid>

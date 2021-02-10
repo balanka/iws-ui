@@ -22,22 +22,23 @@ const FinancialsForm = () => {
   const t = value.t
   const [url,] = useState('');
   const tableRef = createRef();
-  const res  = useFetch(url, {});
-  const [{ res2}] = useFetch(value.accUrl, {});
-  const [{ res3}] = useFetch(value.ccUrl, {});
+  const [res, loading, error ]= useFetch(url, {});
+  const [res2, loading2, error2] = useFetch(value.accUrl, {});
+  const [res3, loading3, error3] = useFetch(value.ccUrl, {});
   const init = ()=> {return value.initialState}
-  const data_ = res && res.response?res.response:[value.initialState];
-  const accData_=  res2?res2:value.accData;
-  const ccData_=  res3?res3:value.ccData;
+  const data_ = res && res.response?res.response:value.initialState;
+  const accData_=  res2&&res2.response?res2.response:value.accData;
+  const ccData_=  res3&&res3.response?res3.response:value.ccData;
   const current_= value.user;
-  const initLine=value.initialState.hits[0].lines[0];
+  const initLine=value.initialState[0].lines[0];
   const [toolbar, setToolbar] = useState(false);
   const [data, setData] = useState(data_);
+  console.log('transData', data)
   const [accData, setAccData] = useState(accData_);
   const [ccData, setCcData] = useState(ccData_);
   const [current,setCurrent] = useState(current_);
-  const columnsX = Linescolumns(accData.hits, initLine, current, t);
-  const columns= columnsF(ccData.hits, initLine, current, t);
+  const columnsX = Linescolumns(accData, initLine, current, t);
+  const columns= columnsF(ccData, initLine, current, t);
   useEffect(() => {setCurrent(current_)}, [ current_]);
 
   const toggleToolbar = ()=> setToolbar(!toolbar );
@@ -64,8 +65,8 @@ const FinancialsForm = () => {
 
 
   const submitQuery = (event,modelid) => {
-    accData?.hits?.length<2? value.submitQuery(event, value.accUrl, setAccData, accData_):void(0)
-    ccData?.hits?.length<2? value.submitQuery(event, value.ccUrl, setCcData, ccData_):void(0)
+    accData?.length<2? value.submitQuery(event, value.accUrl, setAccData, accData_):void(0)
+    ccData?.length<2? value.submitQuery(event, value.ccUrl, setCcData, ccData_):void(0)
     const url_=value.url.concat('/ftrmd/').concat(modelid);
     value.submitQuery(event, url_, setData, value.initialState);
     console.log('dataxX', datax())
@@ -74,15 +75,15 @@ const FinancialsForm = () => {
     event.preventDefault();
     const value = event.target.value
     setModule(value);
-    console.log('modulXX', value)
+    //console.log('modulXX', value)
     submitQuery(event, value);
   };
 
   const addAmount = row => ({...row, total: row.lines.reduce((acc, line) => acc + line.amount, 0)})
-  const datax=() =>(data?.hits?data?.hits:init().hits).map( row =>addAmount(row));
+  const datax=() =>(data?data:init()).map( row =>addAmount(row));
 
   const edit = editedRow =>{
-    const record = data.hits.find(obj => obj.tid === editedRow.tid);
+    const record = data.find(obj => obj.tid === editedRow.tid);
     setCurrent({...record, editing:true});
   }
 
@@ -172,7 +173,7 @@ const addRow = (newData) =>{
  })
 
   function buildForm( current){
-    const lines_=()=>current.lines&&current.lines.length >0 ? current.lines:[value.initialState.hits[0].lines[0]];
+    const lines_=()=>current.lines&&current.lines.length >0 ? current.lines:[value.initialState[0].lines[0]];
     const LinesFinancials = () =>  (<>
       <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()}
                      columns={columnsX} editable={editable()}  t={t}

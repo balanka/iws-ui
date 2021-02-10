@@ -1,4 +1,4 @@
-import React, {createRef, memo, useContext} from 'react'
+import React, {createRef, useContext} from 'react'
 import Tabs from "../tabs/Tabs";
 import { AddressForm, CustomerGeneralForm,  CustomerAccountForm} from "./FormsProps";
 import {accountContext} from './AccountContext'

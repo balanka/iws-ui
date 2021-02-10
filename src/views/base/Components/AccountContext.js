@@ -9,10 +9,10 @@ export const accountContext = createContext(null);
 
 export  const AccountContext = (props) => {
     const { t,  } = useTranslation();
-    const data = {hits:[]};
+    const data = [];
     const accData = props.initAcc;
     const ccData = props.initCc;
-    const bankData ={hits:[]};
+    const bankData =[];
 
   return (
     <accountContext.Provider value={{data:data, accData:accData, ccData:ccData, bankData:bankData, user:props.current

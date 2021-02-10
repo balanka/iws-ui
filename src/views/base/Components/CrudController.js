@@ -1,4 +1,3 @@
-import React from 'react'
 import axios from "axios";
 
  const Edit = (url, profile, record, data, setCurrent) => {
@@ -6,8 +5,8 @@ import axios from "axios";
      axios.patch( url, record, {headers: {'authorization':profile.token}})
       .then(response => {
          //console.log('response.data.', response.data);
-        const index = data.hits.findIndex(obj => obj.id === record.id);
-        data.hits[index]= record;
+        const index = data.findIndex(obj => obj.id === record.id);
+        data[index]= record;
         setCurrent(record);
       }).catch(function (error) {
          console.log('error', error);
@@ -16,9 +15,9 @@ import axios from "axios";
     const Add = (url, profile, record, data, initialState, setCurrent) => {
     axios.post(url, record, {headers: {'authorization':profile.token}})
       .then(response => {
-        const i = data.hits.findIndex(obj => obj.id === record.id);
-        const index = i === -1? data.hits.length+1:i;
-        data.hits[index]=record;
+        const i = data.findIndex(obj => obj.id === record.id);
+        const index = i === -1? data.length+1:i;
+        data[index]=record;
         const row = {...initialState, editing:false};
         //setEditing(false);
         setCurrent(row);
@@ -38,6 +37,7 @@ import axios from "axios";
         axios.post( url, data)
             .then(response => {
                 const {authorization} = response.headers
+               // console.log('response', response);
                 setProfile({token:authorization, company:response.data.company, modules:response.data.menu})
             }).catch(function (error) {
             console.log('error', error);
@@ -50,7 +50,8 @@ import axios from "axios";
             .then(response => {
                 const resp = response.data
                 func(resp);
-                result=resp;
+                result={...resp};
+                console.log('resp', resp);
                 return resp;
             }).catch(function (error) {
             //console.log('authorization', profile.token);
@@ -66,15 +67,14 @@ import axios from "axios";
     const Query = (event, url, profile, func, init) => {
         const fetchData =(url_, profile, call)=>{
             const res = Get(url_, profile, call);
-            console.log("resx"+url_, res);
-            const datax = res?.hits ? res.hits : init;
+            console.log("resx"+url_);
+            const datax = res?res : init;
             return datax;
         }
         fetchData(url, profile, func);
         event.preventDefault();
     };
 
-//const deleteUser =() => setEditing(false);
 
 
 export  { Query,Get, Post, login,  Add, Edit}

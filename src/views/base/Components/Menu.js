@@ -1,6 +1,6 @@
 import {formEnum} from "../../../utils/FORMS";
 import {ColumnsACC, columnsPACB, ColumnJournal, ColumnsBalancesheet, ColumnsVAT, ColumnsBS, ColumnsM, columnsJ
-    , ColumnsComp, ColumnsCUST  } from "../../Tables2/LineFinancialsProps";
+    , ColumnsComp, ColumnsCUST, ColumnsUSER  } from "../../Tables2/LineFinancialsProps";
 import MasterfileForm from "./MasterfileForm";
 import React from "react";
 import BankStatementForm from "./BankStatementForm";
@@ -36,61 +36,67 @@ export const modules  = (t) =>[
             , form:<BankStatementForm />, state:initBS, state1:initAcc ,state2:'', modelid:formEnum.BANKSTATEMENT, columns:ColumnsBS(initAcc, t)}
         , {id:"106", name:"PAC", title:t('pac.title'), ctx:"/pac", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/106"
             , form:<JForm/>, state:initPac, state1:initAcc, state2:'', modelid:formEnum.PACB, columns:columnsPACB(t) }
+        , {id:"111", name:"User", title:t('user.title'), ctx:"/users", ctx1:'', ctx2:"", ctx3:'', get:"md/111"
+            , form:<MasterfileForm/>, state:initUser, state1:'', state2:'', modelid:formEnum.USER, columns:ColumnsUSER(t)  }
         , {id:"112", name:"Journal", title:t('journal.title'), ctx:"/jou", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/112"
-            , form:<JForm/>, state:initJour, state1:initAcc, state2:'', modelid:formEnum.JOURNAL, columns:ColumnJournal(t)  }
-        , {id:"1120", name:"Financials", title:t('financials.title'), ctx:"/ftr", ctx1:"/acc", ctx2:"/cc", ctx3:'', get:"md/112"
-            , form:<FinancialsForm/>, state:initFrt, state1:initAcc, state2:initCC , modelid:formEnum.FINANCIALS}
+         , form:<JForm/>, state:initJour, state1:initAcc, state2:'', modelid:formEnum.JOURNAL, columns:ColumnJournal(t)  }
 
-        , {id:"1300", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
+       , {id:"1120", name:"Financials", title:t('financials.title'), ctx:"/ftr", ctx1:"/acc", ctx2:"/cc", ctx3:'', get:"md/112"
+       , form:<FinancialsForm/>, state:initFrt, state1:initAcc, state2:initCC , modelid:formEnum.FINANCIALS}
+
+     , {id:"1300", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
             , form:<BasicTreeTable/>, state:initAcc, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET
         , columns:ColumnsBalancesheet(t) }
     ]
 
-export const initAcc = {hits:[{id:'', name: '', description: '', enterdate:date, postingdate:date
+export const initAcc = [{id:'', name: '', description: '', enterdate:date, postingdate:date
             , changedate:date, company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false, currency:''
-            , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0 }]}
-export const initBank = { hits:[ {id:'', name: '', description: '', enterdate:date, postingdate:date
-            , changedate:date, modelid:11, account:'-1', company:''}]}
-export const initCC = { hits:[ {id:'', name: '', description: '', enterdate:new Date().toISOString()
+            , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0 }]
+export const initBank = [ {id:'', name: '', description: '', enterdate:date, postingdate:date
+            , changedate:date, modelid:11, account:'-1', company:''}]
+export const initCC = [ {id:'', name: '', description: '', enterdate:new Date().toISOString()
             , postingdate:new Date().toISOString(),changedate:new Date().toISOString()
-            , modelid:6, account:'-1', company:''}]}
-export const initComp = { hits:[ {id:'', name:'', description:'', street:'', city:'', state:'', zip:'', bankAcc:''
+            , modelid:6, account:'-1', company:''}]
+export const initComp = [ {id:'', name:'', description:'', street:'', city:'', state:'', zip:'', bankAcc:''
     , purchasingClearingAcc:'', salesClearingAcc:'', paymentClearingAcc:'', settlementClearingAcc:'', balanceSheetAcc:''
     , incomeStmtAcc:'', cashAcc:'', taxCode:'-1', vatCode:'-1', currency:'', enterdate:new Date().toISOString()
     , postingdate:new Date().toISOString(), changedate:new Date().toISOString(), modelid:10, pageHeaderText:''
     , pageFooterText:'', headerText:'', footerText:'', logoContent:'', logoName:'', contentType:'', partner:''
-    , phone:'', fax:'', email:'', locale:'de'}]}
+    , phone:'', fax:'', email:'', locale:'de'}]
 
 
-export const initVat={ hits:[{ id:'', name:'', description:'', percent:'', inputVatAccount:'', outputVatAccount:''
-            , enterdate:date, postingdate:date, changedate:date, company:'', modelid:14}]}
+export const initVat=[{ id:'', name:'', description:'', percent:'', inputVatAccount:'', outputVatAccount:''
+            , enterdate:date, postingdate:date, changedate:date, company:'', modelid:14}]
 
-export const initCust={hits:[{ id:'', name:'', description:'', street:'', city:'', state:'', zip:''
+export const initCust=[{ id:'', name:'', description:'', street:'', city:'', state:'', zip:''
             , country:'', phone:'', email:'', account:'-1', oaccount:'-1', iban:'-1', vatcode:'-1'
             , company:'', modelid:3 ,enterdate:date, postingdate:date, changedate:date
             , bankaccounts:[{iban:'', bic:'', owner:'', modelid:12, company:'1000'}]
-            }]}
+            }]
 
-export const initSup={hits:[{ id:'', name:'', description:'', street:'', city:'', state:'', zip:''
+export const initSup=[{ id:'', name:'', description:'', street:'', city:'', state:'', zip:''
             , country:'', phone:'', email:'', account:'-1', oaccount:'-1', iban:'-1', vatcode:'-1'
             , company:'', modelid:1,enterdate:date, postingdate:date, changedate:date
             , bankaccounts:[{iban:'', bic:'', owner:'', modelid:12, company:'1000'}]
-            }]}
+            }]
 
-export const initJour={hits:[{ id:'', transid:'', oid:'', account:'', oaccount:'', transdate:''
+export const initJour=[{ id:'', transid:'', oid:'', account:'', oaccount:'', transdate:''
             , postingdate:'', enterdate:'', period:'', amount:'', idebit:'', debit:'', icredit:''
             , credit:'', currency:'',  side:'', text:'', month:'', year:'', company:'', typeJournal:''
             , file_content:'', modelid:''
-            , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]}
-export const initBS={hits:[{ bid:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
+            , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]
+export const initBS=[{ bid:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
             , beneficiary:'', accountno:'', bankCode:'', amount:'', currency:'', info:'', company:'', companyIban:''
-            , posted:'',modelid:18}]}
-export const initFrt={hits:[{ tid:-1, oid:0, costcenter:'', account:'', transdate:new Date()
+            , posted:'',modelid:18}]
+export const initFrt=[{ tid:-1, oid:0, costcenter:'', account:'', transdate:new Date()
             , enterdate:date, postingdate:date, period:getPeriod(new Date())
             , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{lid:-1, transid:0
                 , side:true, account:'', oaccount:'', amount:0, duedate:date, text:'', currency:'EUR', company:'1000'
-            }]}]}
-export const initPac={hits:[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''
-            , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]}
+            }]}]
+export const initPac=[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''
+            , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]
+export const initUser=[{ userName:'', firstName:'', lastName:'', email:'', hash:'', phone:'', company:'', id:0
+        , role:'', modelid:111, menu:''}]
+
 
 

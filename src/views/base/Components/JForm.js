@@ -1,4 +1,4 @@
-import React, {useState, useContext, memo} from 'react'
+import React, {useState, useContext} from 'react'
 import {accountContext} from './AccountContext';
 import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
@@ -14,12 +14,12 @@ const JForm = () => {
 
   const [isDebit, setIsDebit ] = useState(true);
   const value = useContext(accountContext);
-  const [{ res}, ]= useFetch(value.url, {});
-  const [{ res2},] = useFetch(value.accUrl, {});
-  const data_ =  res?.hits?res.hits:[value.initialState];
-  const init = ()=> {return value.initialState}
-  const accData_ =  res2?.hits?res2.hits:value.accData;
-  const current_= init().hits[0].query;
+  const [ res, loading, error ]= useFetch(value.url, {});
+  const [res2, loading2, error2] = useFetch(value.accUrl, {});
+  const data_ =  res?.response?res.response:value.initialState;
+  const init = ()=>  value.initialState
+  const accData_ =  res2?.response?res2.response:value.accData;
+  const current_= init()[0].query;
   const modelid = value.modelid;
   const [current,setCurrent] = useState(current_);
   const [data, setData] = useState(data_);
@@ -37,7 +37,7 @@ const JForm = () => {
 
     const summaryPCB =(data)=> {
         const row_=data;
-        const row = row_?.hits?row_?.hits?.slice():row_.slice();
+        const row = row_?row_?.slice():row_.slice();
         let debit=0, credit=0, balance=0;
         let currency='';
         let company='';
@@ -65,9 +65,9 @@ const JForm = () => {
     }
     const summaryJ =(data)=> {
         const row_=data;
-        const row = row_?.hits?row_?.hits?.slice():row_.slice();
+        const row = row_.slice();
         let debit=0, credit=0, amount=0;
-        let currency='';
+        let currency=''
         let company='';
         const available=row.length>0;
         for(let i = 0, len = row.length-1; i <= len; ++i) {
@@ -91,16 +91,16 @@ const JForm = () => {
     const summary =(data)=>modelid===formEnum.PACB? summaryPCB(data):summaryJ(data)
     const load = event => {
         event.preventDefault();
-        accData?.hits?.length<2?
+        accData?.length<2?
             value.submitQuery(event, value.accUrl, setAccData, value.initAcc):
             current.account&&current.fromPeriod&&current.toPeriod?
             value.submitQuery(event, url_(), setData, value.initialState): void(0)
-        setIsDebit(accData.hits.find(x=>x.id===current.account).isDebit)
+        setIsDebit(accData.find(x=>x.id===current.account).isDebit)
     };
 
     const submitQuery = event => {
         event.preventDefault();
-        accData?.hits?.length<2?
+        accData?.length<2?
             value.submitQuery(event, value.accUrl, setAccData,value.initAcc):
             value.submitQuery(event, url_(), setData, value.initialState)
     };
@@ -117,7 +117,7 @@ const JForm = () => {
 
             <Grid container spacing={2} style={{...styles.inner, display:'block'}} direction="column" >
                 <EditableTable Options={{...OptionsM, toolbar:toolbar}}
-                               data={data?summary(data):value.initialState.hits} columns={columnsX}
+                               data={data?summary(data):value.initialState} columns={columnsX}
                                theme={theme} t={t} setSelectedRows ={()=>void(0)}/>
             </Grid>
         </Grid>
