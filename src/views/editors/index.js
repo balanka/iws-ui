@@ -1,4 +1,4 @@
-import CodeEditors from './CodeEditors';
-import TextEditors from './TextEditors';
+import CodeEditors from './code-editors/CodeEditors';
+import TextEditors from './text-editors/TextEditors';
 
 export { CodeEditors, TextEditors };

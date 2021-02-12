@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Tabs from '../Tabs';
+import Tabs from './Tabs';
 import {mount} from 'enzyme/build';
 
 it('renders without crashing', () => {

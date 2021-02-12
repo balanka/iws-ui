@@ -7,9 +7,8 @@ const loading = (
     </div>
 )
 
-export const Tabs = (props) => {
-    const { tabContent, modules} = props
-   // console.log('modulesAA', modules);
+export const Tabs = ({ tabContent, modules}) => {
+
     //const [state, setState] = useState(modules?modules:[])
     const getNavLink= ( module) =>{
         return (<>
@@ -20,14 +19,14 @@ export const Tabs = (props) => {
                 </CNavItem>
             </>
         )}
-    const  getTabPane = (props) => tabContent(props)
+    const  getTabPane = (items) => tabContent(items)
 
     const getContent = ( items) => {
         return <>
             <CNav variant="tabs">
                 {items.map(item => getNavLink(item))}
             </CNav>
-            <CTabContent fade={false}>
+            <CTabContent fade={true}>
                 {items.map(item => getTabPane(item))}
             </CTabContent>
         </>

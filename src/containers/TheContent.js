@@ -28,7 +28,7 @@ const TheContent = () => {
                   path={route.path}
                   exact={route.exact}
                   name={route.name}
-                  render={props => (
+                  render={ props => (
                     <CFade>
                       <route.component {...props} />
                     </CFade>
