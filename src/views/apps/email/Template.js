@@ -15,7 +15,7 @@ import {
   TheAside,
   TheFooter,
   TheHeader
-} from '../../../containers'
+} from '../../../common/containers'
 
 const EmailNav = ({children}) => {
   return (
