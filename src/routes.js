@@ -3,9 +3,12 @@ import React from 'react';
 const importFn =(str)=>React.lazy(() => import(`./${str}`))
 
 const routes_=[
-   {path: '/dashboard', name: 'Dashboard', cp: 'views/dashboard/Dashboard'},
+  { path: '/base/tabs', name: 'Tabs', cp:'views/base/Components/MenuTabs' },
+
+  {path: '/dashboard', name: 'Dashboard', cp: 'views/dashboard/Dashboard'},
   { path: '/theme', name: 'Theme', cp:'views/theme/colors/Colors', exact: true },
-  { path: '/theme/colors', name: 'Colors', cp:'views/theme/colors/Colors' },
+  { path: '/theme/colors', name: 'Colors', cp:'views/theme/colors/Colors' }
+  /*,
   { path: '/theme/typography', name: 'Typography', cp:'views/theme/typography/Typography' },
   { path: '/base', name: 'Base', cp:'views/base/cards/Cards', exact: true },
   { path: '/base/breadcrumbs', name: 'Breadcrumbs', cp:'views/base/breadcrumbs/Breadcrumbs'   },
@@ -20,7 +23,7 @@ const routes_=[
   { path: '/base/popovers', name: 'Popovers', cp:'views/base/popovers/Popovers' },
   { path: '/base/progress-bar', name: 'Progress Bar', cp:'views/base/progress-bar/ProgressBar' },
   { path: '/base/switches', name: 'Switches', cp:'views/base/switches/Switches' },
-  { path: '/base/tabs', name: 'Tabs', cp:'views/base/Components/MenuTabs' },
+
   { path: '/base/tooltips', name: 'Tooltips', cp:'views/base/tooltips/Tooltips' },
   { path: '/buttons', name: 'Buttons', cp:'views/buttons/buttons/Buttons', exact: true },
   { path: '/buttons/buttons', name: 'Buttons', cp:'views/buttons/buttons/Buttons' },
@@ -58,6 +61,8 @@ const routes_=[
   { path: '/apps/invoicing/invoice', name: 'Invoice', cp:'views/apps/invoicing/Invoice' },
   { path: '/users', exact: true,  name: 'Users', cp:'views/users/Users'},
   { path: '/users/:id', exact: true, name: 'User Details', cp:'views/users/User' }
+
+   */
 ];
 
 const routes =routes_.map(record=> ({...record, component: importFn(record.cp) }));

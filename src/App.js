@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React  from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import './scss/style.scss';
+//import { RecoilRoot as GlobalState } from 'recoil';
+import ErrorFallback from './utils/ErrorFallback';
+import {ErrorBoundary} from 'react-error-boundary';
 
 const loading = (
   <div className="pt-3 text-center">
@@ -9,7 +12,7 @@ const loading = (
 )
 
 // Containers
-const TheLayout = React.lazy(() => import('./containers/TheLayout'));
+const TheLayout = React.lazy(() => import('./common/containers/TheLayout'));
 
 // Email App
 const TheEmailApp = React.lazy(() => import('./views/apps/email/TheEmailApp'));
@@ -20,11 +23,12 @@ const Register = React.lazy(() => import('./views/pages/register/Register'));
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'));
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'));
 
-//class App extends Component {
-const App= ()=>{
-  //render() {
+
+const App = ()=>{
+
     return (
-      <HashRouter>
+       <ErrorBoundary FallbackComponent={ErrorFallback}>
+         <HashRouter>
           <React.Suspense fallback={loading}>
             <Switch>
               <Route exact path="/login" name="Login Page" render={props => <Login {...props}/>} />
@@ -35,7 +39,9 @@ const App= ()=>{
               <Route path="/" name="Home" render={props => <TheLayout {...props}/>} />
             </Switch>
           </React.Suspense>
-      </HashRouter>
+         </HashRouter>
+    </ErrorBoundary>
+
     );
  // }
 }

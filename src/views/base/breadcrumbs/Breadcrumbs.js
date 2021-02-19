@@ -32,7 +32,6 @@ const Breadcrumbs = () => {
           </CCardHeader>
           <CCardBody>
             <h6>CBreadcrumbRouter wrapper component</h6>
-            <CBreadcrumbRouter routes={routes}/>
             <h6>Manual</h6>
             <CBreadcrumb>
               <CBreadcrumbItem>
