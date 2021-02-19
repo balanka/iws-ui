@@ -35,6 +35,7 @@
     "id":"Nr.",
     "title": "Ansprache",
     "name": "Name",
+    "description": "Beschreibung",
     "surname": "Familienname",
     "sex": "Sex",
     "type": "Typ",

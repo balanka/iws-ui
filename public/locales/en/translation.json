@@ -35,6 +35,7 @@
     "id": "Id",
     "title": "Title",
     "name": "Name",
+    "description": "Description",
     "surname": "Surname",
     "sex": "Sex",
     "type": "Type",
