@@ -53,7 +53,7 @@ const  BasicTreeTable =()=> {
             <FormFactory formid ={formEnum.BALANCETREE} current={current} setCurrent={setCurrent} t={t} accData={accData}
                          collapse={state.collapse} styles={styles} submitQuery= {load}  />
             <Grid container spacing={2} style={{...styles.inner}} direction="column" >
-              <EditableTable Options={{...OptionsM, selection:false, toolbar:toolbar}} flag={false} data={getData()}
+              <EditableTable Options={{...OptionsM, selection:false, grouping:true, toolbar:toolbar}} flag={false} data={getData()}
                          columns={columnsX}  t={t}   parentChildData={parentChildData}/>
             </Grid>
           </Grid>

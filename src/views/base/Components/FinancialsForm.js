@@ -33,7 +33,7 @@ const FinancialsForm = () => {
   const initLine=value.initialState[0].lines[0];
   const [toolbar, setToolbar] = useState(false);
   const [data, setData] = useState(data_);
-  console.log('transData', data)
+  //console.log('transData', data)
   const [accData, setAccData] = useState(accData_);
   const [ccData, setCcData] = useState(ccData_);
   const [current,setCurrent] = useState(current_);
@@ -184,6 +184,7 @@ const addRow = (newData) =>{
        </>
       )
 
+    const parentChildData =(row, rows) => rows.find(a => a.tid === row.transid)
     return <>
 
       <Grid container spacing={2} style={{...styles.outer , display:'block'}} direction="column" >
@@ -198,7 +199,8 @@ const addRow = (newData) =>{
                      collapse={state.collapse}
          />
           <EditableTable Options={{...OptionsM, toolbar:toolbar}} flag={current.posted} data={datax()}
-                         columns={columns}  t={t}  edit ={edit} setSelectedRows ={setSelectedRows}/>
+                         columns={columns}  t={t}  edit ={edit} setSelectedRows ={setSelectedRows}
+                         parentChildData={parentChildData}/>
 
       </Grid>
     </>

@@ -5,10 +5,13 @@ import {useGlobalState} from './AccountContext';
 import Tabs from "../tabs/Tabs";
 import {CTabPane} from "@coreui/react";
 import CrudAccount from "./CrudAccount";
+import {useRecoilState} from "recoil";
+import {PROFILE} from "../../../common/api/state";
 
  const MenuTabs = () => {
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const [profile, setProfile] = useGlobalState('profile');
+    //const [profile, setProfile] = useRecoilState(PROFILE);
     const { t,  } = useTranslation();
     //const [menu, setMenu] = useState()
     const data =  profile?.modules?profile.modules:[];

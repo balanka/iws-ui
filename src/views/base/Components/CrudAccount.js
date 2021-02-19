@@ -7,11 +7,10 @@ const CrudAccount =  (props)=> {
     const [ current, setCurrent ] = useState(initialState);
     const [ editing, setEditing ] = useState(false);
     const [profile, setProfile] = useGlobalState('profile');
-
     const submitEdit = (record, data) =>Edit(url, profile, record, data, setCurrent);
     const submitAdd = (record, data) => Add(url, profile, record, data, initialState, setCurrent);
     const submitPost = (record, ctx) =>  Post(url, profile, record, ctx);
-    const submitLogin = (url, data) => login(url, data, setProfile);
+    const submitLogin = (history, url, data) => login(history, url, data, setProfile);
     const submitGet = (url, func) => Get(url, profile, func);
     const submitQuery = (event, url, func, init) =>Query(event, url, profile, func, init);
     const deleteUser =() => setEditing(false);
@@ -23,16 +22,12 @@ const CrudAccount =  (props)=> {
                          login={submitLogin} editing={editing} setEditing={setEditing}  current={current}
                          setCurrent={setCurrent} initialState={initialState} initAcc={initAcc} initCc={initCc}
                          headers={headers} modelid={modelid} deleteUser={deleteUser} submitQuery={submitQuery}>
-            <div className="flex-row">
-                <div className="flex-large">
-                  <Fragment>
+                  <>
                       { form }
-                 </Fragment>
-                </div>
-            </div>
+                 </>
          </AccountContext>
         </div>
     )
 };
-export default CrudAccount
+export default  CrudAccount
 

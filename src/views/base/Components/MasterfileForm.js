@@ -36,7 +36,7 @@ const MasterfileForm = () => {
   const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id))
 
   const initAdd =()=> {
-    const row = {...value.initialState.hits[0], company:profile.company, editing:false};
+    const row = {...value.initialState[0], company:profile.company, editing:false};
     value.editRow(row, false);
     setCurrent(row);
   };
@@ -81,7 +81,7 @@ const MasterfileForm = () => {
                         cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {submitQuery} toggle={toggle}
                         toggleToolbar={toggleToolbar}  style={{...styles.inner}}/>
         <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t} accData={accData} vatData={vatData}
-                     bankData={bankData} collapse={state.collapse} styles={styles} style={{...styles.middleSmall}}/>
+                     bankData={bankData} collapse={state.collapse} styles={styles} style={{...styles.inner}}/>
 
         <Grid container spacing={2} style={{...styles.inner, display:'block' }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data}

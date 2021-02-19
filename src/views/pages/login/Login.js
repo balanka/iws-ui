@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -24,8 +24,11 @@ export const languages = {data:[
   ]
 }
 const Login = () => {
-
+  let history = useHistory()
   const value = useContext(accountContext);
+  //const [state, setState] = useRecoilState(CRUDSTATE);
+  //console.log('stateX', state);
+  //console.log('value', value);
   const { t, i18n } = useTranslation();
   const [username, setUsername] = useState();
   const [pwd, setPwd] = useState();
@@ -45,7 +48,7 @@ const Login = () => {
   const submit = event => {
     event.preventDefault();
     const data={"userName": username, "password": pwd}
-    value.login(value.url, data);
+    value.login(history, value.url, data);
   }
 
   const mapping = item => <option key={item.id} value={item.id}>

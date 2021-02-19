@@ -1,6 +1,6 @@
 
 import {createMuiTheme} from "@material-ui/core/styles";
-import blue from "@material-ui/core/colors/blue";
+import { blue, green } from "@material-ui/core/colors";
 
 export const theme = createMuiTheme({
     palette: {
@@ -49,6 +49,7 @@ export const styles = {
         'padding-top': 30
     },
     middle: {
+        'background-color':green,
         borderRadius: 5,
         boxShadow: "0 10px 30px #BBB",
         padding: 10,

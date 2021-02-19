@@ -31,14 +31,20 @@ import axios from "axios";
       console.log('error', error);
     });
   };
-  const login = (url, data, setProfile) => {
+  const login = (history, url, data, setProfile) => {
         axios.post( url, data)
             .then(response => {
                 const {authorization} = response.headers
-               // console.log('response', response);
-                setProfile({token:authorization, company:response.data.company, modules:response.data.menu})
+                //console.log('response', response);
+                //console.log('history', history);
+                const profile = {token:authorization, company:response.data.company
+                    , modules:response.data.menu};
+                setProfile(profile);
+                //setProfile(previous => (profile));
+                //loginSet(profile);
             }).catch(function (error) {
             console.log('error', error);
+           // history.push(routes.user.login)
         });
     }
 
@@ -74,6 +80,18 @@ import axios from "axios";
     };
 
 
+// login set localStorage
+export const loginSet = (profile) => {
+    // HTTP header
+    axios.defaults.headers['Authentication'] = `Bearer ${profile.token}`
+    window.localStorage.setItem('profile', JSON.stringify(profile))
+}
 
+// logout remove localStorage
+export const logoutUnset = () => {
+    // HTTP header
+    delete axios.defaults.headers['Authentication']
+    window.localStorage.removeItem('profile')
+}
 export  { Query,Get, Post, login,  Add, Edit}
 
