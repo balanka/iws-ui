@@ -4,7 +4,7 @@ import tableIcons from "./TableIcons.js";
 
 export default function EditableTable(props) {
     const {Options, flag, data, columns, t, tableRef, edit, editable, setSelectedRows
-    , parentChildData} = props
+     , parentChildData } = props
     return (
         <MaterialTable
             editable={flag?null:editable}
@@ -13,7 +13,7 @@ export default function EditableTable(props) {
             columns={columns}
             data={data}
             icons={tableIcons}
-            options={Options}
+            options={Options} //, columnResizable:true, doubleHorizontalScroll:true, padding:'dense'
             parentChildData ={parentChildData}
             //components={components}
             onSelectionChange={(rows) => {
@@ -68,7 +68,5 @@ export default function EditableTable(props) {
                     searchPlaceholder: t('muitable.searchPlaceholder'),
                 }
             }}
-        />
-
-    );
+        />);
 }
