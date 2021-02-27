@@ -1,4 +1,4 @@
-
+import {menu} from '../../views/base/Components/Menu';
 export default [
   {
     _tag: 'CSidebarNavItem',
@@ -10,11 +10,6 @@ export default [
       text: 'NEW',
     }
   },
-  /*{
-    _tag: 'CSidebarNavTitle',
-    _children: ['Theme']
-  },
-   */
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Accounting',
@@ -73,7 +68,11 @@ export default [
       }
     ]
   }
-  /*,
+  /*
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Theme']
+  },
   {
     _tag: 'CSidebarNavItem',
     name: 'Colors',
