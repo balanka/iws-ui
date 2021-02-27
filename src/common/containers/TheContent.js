@@ -8,6 +8,7 @@ import { CContainer, CFade } from '@coreui/react'
 
 // routes config
 import routes from '../../routes'
+import {useTranslation} from "react-i18next";
   
 const loading = (
   <div className="pt-3 text-center">
@@ -16,12 +17,13 @@ const loading = (
 )
 
 const TheContent = () => {
+    const { t,  } = useTranslation();
   return (
     <main className="c-main">
       <CContainer fluid>
         <Suspense fallback={loading}>
           <Switch>
-            {routes.map((route, idx) => {
+            {routes(t).map((route, idx) => {
               return route.component && (
                 <Route
                   key={idx}

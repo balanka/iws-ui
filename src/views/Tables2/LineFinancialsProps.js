@@ -329,7 +329,7 @@ export const ColumnsVAT = (data, t) => [
     , {field:'company', title:t('common.company'), type:"string", export:true}
 ]
 
-export const ColumnsBS =( data, t) => [
+export const ColumnsBS =(t) => [
       {field:'bid', title:t('common.id'), type:'numeric', align:"right", export:true}
     , {field:'posted', title:t('bankstatement.posted'), type:"boolean", export:true}
     , {field:'depositor', title:t("bankstatement.depositor"), type:"string", export:true}
@@ -434,7 +434,7 @@ export const ColumnFactory =(formid, data, t)=> {
         case formEnum.ACCOUNT:
             return ColumnsACC(data, t);
         case formEnum.BANKSTATEMENT:
-            return ColumnsBS(data, t);
+            return ColumnsBS(t);
         case formEnum.COSTCENTER:
         case formEnum.BANK:
             return  ColumnsM(data, t);

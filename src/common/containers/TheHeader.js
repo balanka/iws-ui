@@ -8,7 +8,7 @@ import {
   CLink, CSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {languages} from '../../views/pages/login/Login'
+import {languages} from '../../views/base/Components/Login'
 
 
 import {

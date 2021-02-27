@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import {useGlobalState} from "../views/base/Components/AccountContext";
+import {useGlobalState} from "../views/base/Components/Menu";
 const useFetch2 = (initialUrl, skip = false) => {
     const [url, updateUrl] = useState(initialUrl)
     const [data, setData] = useState(null)

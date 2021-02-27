@@ -1,15 +1,25 @@
 import React from 'react';
+const importFn =(str)=>  React.lazy(() => import(`./${str}`));
 
-const importFn =(str)=>React.lazy(() => import(`./${str}`))
-
-const routes_=[
-  { path: '/base/tabs', name: 'Tabs', cp:'views/base/Components/MenuTabs' },
-
-  {path: '/dashboard', name: 'Dashboard', cp: 'views/dashboard/Dashboard'},
-  { path: '/theme', name: 'Theme', cp:'views/theme/colors/Colors', exact: true },
-  { path: '/theme/colors', name: 'Colors', cp:'views/theme/colors/Colors' }
+const routes_=(t)=>[
+  { path: '/login', name: 'Login', cp:'views/base/Components/Login' },
+  { path: '/base/tabs', name: 'Tabs2', cp:'views/base/Components/MenuTabs'},
+  { path: '/dashboard', name:t('menu.dashboard'), cp: 'views/dashboard/Dashboard'},
+  { path: '/accounting', name: t('menu.accounting'), /*cp:'views/base/Components/MenuTabs4'*/ },
+  { path: '/journal', name: t('menu.journal'), cp:'views/base/Components/JForm2'},
+  { path: '/pacb', name: t('menu.pacb'), cp:'views/base/Components/JForm2'},
+  { path: '/acc', name: t('menu.account'), cp:'views/base/Components/MasterfileForm2'},
+  { path: '/cc', name: t('menu.costcenter'), cp:'views/base/Components/MasterfileForm2'},
+  { path: '/bank', name: t('menu.bank'), cp:'views/base/Components/MasterfileForm2'},
+  { path: '/customer', name: t('menu.customer'), cp:'views/base/Components/MasterfileForm2'},
+  { path: '/supplier', name: t('menu.supplier'), cp:'views/base/Components/MasterfileForm2'},
+  { path: '/vat', name: t('menu.vat'), cp:'views/base/Components/MasterfileForm2'},
+  { path: '/company', name: t('menu.company'), cp:'views/base/Components/MasterfileForm2'},
+  { path: '/user', name: t('menu.user'), cp:'views/base/Components/MasterfileForm2'},
+  { path: '/balance', name: t('menu.balancesheet'), cp:'views/base/Components/BasicTreeTable2'},
+  { path: '/bs', name: t('menu.bankstatement'), cp:'views/base/Components/BankStatementForm2'},
+  { path: '/ftr', name: t('menu.financials'), cp:'views/base/Components/FinancialsForm2'},
   /*,
-  { path: '/theme/typography', name: 'Typography', cp:'views/theme/typography/Typography' },
   { path: '/base', name: 'Base', cp:'views/base/cards/Cards', exact: true },
   { path: '/base/breadcrumbs', name: 'Breadcrumbs', cp:'views/base/breadcrumbs/Breadcrumbs'   },
   { path: '/base/cards', name: 'Cards', cp:'views/base/cards/Cards' },
@@ -65,6 +75,6 @@ const routes_=[
    */
 ];
 
-const routes =routes_.map(record=> ({...record, component: importFn(record.cp) }));
+const routes =(t)=> routes_(t).map(route=> ({...route, component: importFn(route.cp) }));
 
 export default routes;

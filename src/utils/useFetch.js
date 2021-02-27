@@ -1,6 +1,7 @@
 import  {useState,  useEffect, useContext} from 'react'
 import axios from "axios";
-import {accountContext, useGlobalState} from '../views/base/Components/AccountContext'
+import {accountContext} from '../views/base/Components/AccountContext'
+import {useGlobalState} from '../views/base/Components/Menu'
 
 const useFetch = (url, data, options) => {
     const [response, setResponse] = useState(null);
