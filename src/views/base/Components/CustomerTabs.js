@@ -1,4 +1,4 @@
-import React, {createRef, useContext} from 'react'
+import React, {createRef} from 'react'
 import Tabs from "../tabs/Tabs";
 import {
     AddressForm,
@@ -8,7 +8,6 @@ import {
     CompanyAccountForm,
     CompanyGeneralForm
 } from "./FormsProps";
-import {accountContext} from './AccountContext'
 import {CTabPane} from "@coreui/react";
 import {Options} from '../../Tables2/LineFinancialsProps';
 import EditableTable from "../../Tables2/EditableTable";
@@ -16,9 +15,7 @@ import {styles} from "../Tree/BasicTreeTableProps";
 import {formEnum} from "../../../utils/FORMS";
 
  const CustomerTabs =  (props) => {
-    const {current, setCurrent, accData, vatData, bankData}= props
-    const value = useContext(accountContext);
-    const t = value.t
+    const {formid, current, setCurrent, accData, vatData, bankData, t}= props
     const initBankAcc=current.bankaccounts;
     const tableRef = createRef();
     const columns=(data, t) => [
@@ -83,8 +80,8 @@ const addRow = (newData) =>{
 
   const  getTabContent= (module) => <GetTabContent id ={module.id}/>
   const wrapIt =(component) => <CTabPane style ={{...styles.middle, 'padding-top':5}}>{component}</CTabPane>
-  const getForm =(modelid)=>{
-      switch(modelid) {
+  const getForm =(formid)=>{
+      switch(formid) {
          case formEnum.CUSTOMER:
         case formEnum.SUPPLIER:
               return wrapIt(<CustomerGeneralForm current={current} setCurrent={setCurrent} t={t}/>);
@@ -92,8 +89,8 @@ const addRow = (newData) =>{
               return wrapIt(<CompanyGeneralForm current={current} setCurrent={setCurrent} t={t}/>);
       }
   }
-     const getAccountForm =(modelid)=>{
-         switch(modelid) {
+     const getAccountForm =(formid)=>{
+         switch(formid) {
              case formEnum.CUSTOMER:
              case formEnum.SUPPLIER:
                  return wrapIt(<CustomerAccountForm current={current} setCurrent={setCurrent}
@@ -106,11 +103,11 @@ const addRow = (newData) =>{
    const GetTabContent = (props) => {
          switch(props.id) {
            case "0":
-              return getForm(value.modelid);
+              return getForm(formid);
            case "1":
               return wrapIt( <AddressForm current={current} setCurrent={setCurrent} t={t}/>)
            case "2":
-              return getAccountForm(value.modelid);
+              return getAccountForm(formid);
            case "3":
              return wrapIt(
                      <EditableTable id="bankaccouts" Options ={{...Options, paging:false}} flag={false}

@@ -1,6 +1,6 @@
 import axios from "axios";
 
- const Edit = (url, profile, record, data, setCurrent) => {
+const Edit = (url, profile, record, data, setCurrent) => {
      axios.patch( url, record, {headers: {'authorization':profile.token}})
       .then(response => {
         const index = data.findIndex(obj => obj.id === record.id);
@@ -10,7 +10,7 @@ import axios from "axios";
          console.log('error', error);
        });
   };
-    const Add = (url, profile, record, data, initialState, setCurrent) => {
+ const Add = (url, profile, record, data, initialState, setCurrent) => {
     axios.post(url, record, {headers: {'authorization':profile.token}})
       .then(response => {
         const i = data.findIndex(obj => obj.id === record.id);
@@ -23,7 +23,7 @@ import axios from "axios";
         console.log('error', error);
       });
   };
-    const Post = (url, profile, record, ctx) => {
+ const Post = (url, profile, record, ctx) => {
      axios.patch(url.concat(ctx), record, {headers: {'authorization':profile.token}})
       .then(response => {
         //console.log('responsex', response.data);
@@ -31,15 +31,18 @@ import axios from "axios";
       console.log('error', error);
     });
   };
-  const login = (history, url, data, setProfile) => {
+ const Login = (history, url, data, setProfile, MENU, t, setMenu) => {
         axios.post( url, data)
             .then(response => {
                 const {authorization} = response.headers
                 //console.log('response', response);
                 //console.log('history', history);
+;
                 const profile = {token:authorization, company:response.data.company
                     , modules:response.data.menu};
                 setProfile(profile);
+                setMenu(MENU(t));
+                history.push("/dashboard");
                 //setProfile(previous => (profile));
                 //loginSet(profile);
             }).catch(function (error) {
@@ -47,9 +50,9 @@ import axios from "axios";
            // history.push(routes.user.login)
         });
     }
-
-  const Get = (url, profile, func) => {
+ const Get = (url, profile, func) => {
       let result
+      console.log('Calling GET', profile);
           axios.get( url, {headers: {'authorization':profile.token}})
             .then(response => {
                 const resp = response.data
@@ -67,18 +70,25 @@ import axios from "axios";
             })
             return result;
         }
-
-    const Query = (event, url, profile, func, init) => {
+ const Query = (event, url, profile, func, init) => {
         const fetchData =(url_, profile, call)=>{
             const res = Get(url_, profile, call);
-            console.log("resx"+url_);
+            console.log('resx=>', url_);
             const datax = res?res : init;
             return datax;
         }
         fetchData(url, profile, func);
         event.preventDefault();
     };
-
+ const EditRow = (current, isNew, setCurrent)  => {
+    console.log('isNew', isNew );
+    console.log('current_', current );
+    const flag = typeof isNew==='undefined' || typeof current.editing==='undefined' ;
+    const row = {...current, editing:flag};
+    console.log('row1_', row );
+    setCurrent(row);
+    //setEditing( row.editing);
+};
 
 // login set localStorage
 export const loginSet = (profile) => {
@@ -93,5 +103,5 @@ export const logoutUnset = () => {
     delete axios.defaults.headers['Authentication']
     window.localStorage.removeItem('profile')
 }
-export  { Query,Get, Post, login,  Add, Edit}
+export  { Query,Get, Post, Login,  Add, Edit, EditRow}
 

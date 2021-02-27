@@ -1,19 +1,17 @@
-import React from 'react'
+import React, {memo} from 'react'
 import {useTranslation} from "react-i18next";
 import {modules} from './Menu';
-import {useGlobalState} from './AccountContext';
+import {useGlobalState} from './Menu';
 import Tabs from "../tabs/Tabs";
 import {CTabPane} from "@coreui/react";
 import CrudAccount from "./CrudAccount";
-import {useRecoilState} from "recoil";
-import {PROFILE} from "../../../common/api/state";
+
 
  const MenuTabs = () => {
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-    const [profile, setProfile] = useGlobalState('profile');
-    //const [profile, setProfile] = useRecoilState(PROFILE);
+    const [profile, ] = useGlobalState('profile');
     const { t,  } = useTranslation();
-    //const [menu, setMenu] = useState()
+    console.log('Moduls', profile?.modules?profile.modules:[])
     const data =  profile?.modules?profile.modules:[];
     const modules_= modules(t).filter(m=> data.includes(m.id)|| m.id==="0")
     const  getTabContent= (module) => <GetCrudTabContent module ={module} SERVER_URL ={SERVER_URL}/>
@@ -31,4 +29,4 @@ import {PROFILE} from "../../../common/api/state";
 
     return <Tabs tabContent ={getTabContent} modules = {modules_}/>
 }
-export default MenuTabs
+export default memo(MenuTabs);

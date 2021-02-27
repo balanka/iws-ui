@@ -1,6 +1,7 @@
-import React, {useState, Fragment} from 'react'
-import {AccountContext, useGlobalState} from "./AccountContext";
-import { Query, Get, Post,  login,  Add, Edit} from './CrudController';
+import React, {useState} from 'react'
+import {AccountContext} from "./AccountContext";
+import {useGlobalState} from './Menu';
+import { Query, Get, Post,  Login,  Add, Edit, EditRow} from './CrudController';
 
 const CrudAccount =  (props)=> {
     const { form, initialState, initAcc, initCc, url, accUrl, ccUrl, bankUrl, modelid, get, title, headers} = props
@@ -10,17 +11,19 @@ const CrudAccount =  (props)=> {
     const submitEdit = (record, data) =>Edit(url, profile, record, data, setCurrent);
     const submitAdd = (record, data) => Add(url, profile, record, data, initialState, setCurrent);
     const submitPost = (record, ctx) =>  Post(url, profile, record, ctx);
-    const submitLogin = (history, url, data) => login(history, url, data, setProfile);
+    const submitLogin = (history, url, data) => Login(history, url, data, setProfile);
     const submitGet = (url, func) => Get(url, profile, func);
     const submitQuery = (event, url, func, init) =>Query(event, url, profile, func, init);
     const deleteUser =() => setEditing(false);
+    const editRow = (current, flag)  =>EditRow(current, flag, setCurrent);
+
 
     return (
      <div className="animated fadeIn">
         <AccountContext  form ={form} url={url}  get={get} title={title} accUrl={accUrl} ccUrl={ccUrl} bankUrl={bankUrl}
                          submitAdd={submitAdd} submitGet={submitGet} l submitEdit={submitEdit} submitPost={submitPost}
                          login={submitLogin} editing={editing} setEditing={setEditing}  current={current}
-                         setCurrent={setCurrent} initialState={initialState} initAcc={initAcc} initCc={initCc}
+        setCurrent={setCurrent} initialState={initialState} initAcc={initAcc} initCc={initCc} editRow={editRow}
                          headers={headers} modelid={modelid} deleteUser={deleteUser} submitQuery={submitQuery}>
                   <>
                       { form }
