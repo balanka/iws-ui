@@ -255,5 +255,26 @@
     "lastName": "Nom",
     "role": "Role",
     "menu": "Menu"
+  },
+  "menu": {
+    "dashboard": "Tableau de board",
+    "masterfiles": "Masterfiles",
+    "accounting": "Comptabilité",
+    "journal": "Grand livre",
+    "pacb": "Balance",
+    "account": "Comptes",
+    "bank": "Banque",
+    "costcenter": "Centre de cout",
+    "customer": "Clients",
+    "supplier": "Fournisseurs",
+    "vat": "TVA",
+    "login"  :"Login",
+    "company": "Société",
+    "user": "Utilisateurs",
+    "bankstatement": "Rélévé bancaire",
+    "masterfiles": "Références",
+    "balancesheet": "Bilanz",
+    "financials": "Clients/Fournisseurs",
+    "financials_stmt": "Clôture/Rapports financiers"
   }
 }

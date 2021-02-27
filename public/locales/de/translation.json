@@ -259,5 +259,25 @@
     "lastName": "Nachname",
     "role": "Role",
     "menu": "Menü"
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "accounting": "Buchhaltung",
+    "journal": "Journal",
+    "pacb": "Salden",
+    "account": "Konten",
+    "bank": "Bank",
+    "costcenter": "Kostenstelle",
+    "customer": "Kunden",
+    "supplier": "Lieferanten",
+    "vat": "Mehrwertsteuer",
+    "login"  :"Login",
+    "company": "Mandant",
+    "user": "Benutzer",
+    "bankstatement": "Bankauszug",
+    "masterfiles": "Stammdaten",
+    "balancesheet": "Jahresabschluss",
+    "financials": "Debitoren/Kreditoren",
+    "financials_stmt": "Jahresabschluss/GuV"
   }
 }

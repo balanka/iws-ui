@@ -269,5 +269,25 @@
     "lastName": "Last name",
     "role": "Role",
     "menu": "Menu"
-   }
+   },
+  "menu": {
+    "dashboard": "Dashboard",
+    "accounting": "Accounting",
+    "journal": "Journal",
+    "pacb": "Account balance",
+    "account": "Accounts",
+    "bank": "Bank",
+    "costcenter": "Cost center",
+    "customer": "Customer",
+    "supplier": "Supplier",
+    "vat": "TVA",
+    "login"  :"Login",
+    "company": "Company",
+    "user": "Users",
+    "bankstatement": "Bank statement",
+    "masterfiles": "Masterfiles",
+    "balancesheet": "Balance sheet",
+    "financials": "Payables/Receivables",
+    "financials_stmt": "Financials statements"
+  }
 }
