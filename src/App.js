@@ -18,7 +18,7 @@ const TheLayout = React.lazy(() => import('./common/containers/TheLayout'));
 const TheEmailApp = React.lazy(() => import('./views/apps/email/TheEmailApp'));
 
 // Pages
-const Login = React.lazy(() => import('./views/pages/login/Login'));
+const Login = React.lazy(() => import('./views/base/Components/Login'));
 const Register = React.lazy(() => import('./views/pages/register/Register'));
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'));
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'));

@@ -17,9 +17,11 @@ import CCreateElement from './CCreateEelement'
 import CIcon from '@coreui/icons-react'
 
 // sidebar nav config
-import navigation from './_nav'
+import Navigation from './Navigation'
+import {useTranslation} from "react-i18next";
 
 const TheSidebar = () => {
+  const { t,  } = useTranslation();
   const dispatch = useDispatch()
   const show = useSelector(state => state.sidebarShow)
 
@@ -45,16 +47,11 @@ const TheSidebar = () => {
       <CSidebarNav>
 
         <CCreateElement
-          items={navigation}
+          items={Navigation(t)}
           components={{
             CSidebarNavDivider,
             CSidebarNavDropdown,
             CSidebarNavItem,
-          }}
-          fn={ (e, name) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('val_XX', name);
           }}
         />
 
