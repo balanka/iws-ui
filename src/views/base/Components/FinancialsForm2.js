@@ -69,9 +69,9 @@ const FinancialsForm2 = () => {
   const submitQuery =(event, modelid)=>{
     event.preventDefault();
     const url_=url.concat('/ftrmd/').concat(modelid);
-    !isEmpty(accUrl)&&accData?.length<2&&Query(event, accUrl, profile, setAccData, initAcc);
-    !isEmpty(ccUrl)&&ccData.length<2&&Query(event, ccUrl, profile, setCcData, initCc);
-    !isEmpty(url_)&&Query(event, url_, profile, setData, initialState);
+    !isEmpty(accUrl)&&accData?.length<2&&Query(event, accUrl, profile, history, setAccData, initAcc);
+    !isEmpty(ccUrl)&&ccData.length<2&&Query(event, ccUrl, profile, history, setCcData, initCc);
+    !isEmpty(url_)&&Query(event, url_, profile, history, setData, initialState);
   }
   const handleModuleChange = event => {
     event.preventDefault();

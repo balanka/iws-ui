@@ -10,14 +10,14 @@ import {useHistory} from "react-router-dom";
 import {OptionsM, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
 import {useTranslation} from "react-i18next";
 
-function Internal(data, setData, accUrl, initAcc, accData, setAccData, profile, current, initialState, state
+function Internal(data, setData, accUrl, initAcc, accData, setAccData, profile, history, current, initialState, state
     , title, getUrl, url, toggle, toggleToolbar, setCurrent, t, toolbar, columnsX) {
     const load = event => {
         event.preventDefault();
         accData?.length < 2 ?
-            Query(event, accUrl, profile, setAccData, initAcc) :
+            Query(event, accUrl, profile, history, setAccData, initAcc) :
             current.account && current.fromPeriod && current.toPeriod ?
-                Query(event, getUrl(), profile, setData, initialState) : void (0)
+                Query(event, getUrl(), profile, history, setData, initialState) : void (0)
     };
     const parentChildData = (row, rows) => rows.find(a => a.id === row.account)
 
@@ -51,21 +51,11 @@ const  BasicTreeTable2 =()=> {
     const [menu, ] = useGlobalState('menu');
     const datax =  profile?.modules?profile.modules:[];
     let history = useHistory()
-    //console.log('selected', selected);
-    //console.log('menu.get(selected)', menu.get(selected));
     const module_= menu.get(selected);
     const loginMenu = menu&&menu.length>0?menu.get('/login'):LOGIN_MENU(t)[0]
-    //if(!module_) history.push("/login");
-    /*console.log('menu', menu);
-    console.log('loginMenu', loginMenu);
-    console.log('module_', module_);
-
-     */
     const modules_= (module_)&&datax.includes(module_.id)?module_:loginMenu
-    //console.log('modules_', modules_);
     if(modules_.id==='0') history.push("/login");
     const module = modules_
-    //console.log('menu.module', module);
     const url=SERVER_URL.concat(module.ctx)
     const accUrl=SERVER_URL.concat(module.ctx1)
     const initAcc =module.state1
@@ -76,7 +66,7 @@ const  BasicTreeTable2 =()=> {
     const [current,setCurrent] = useState(current_);
     const [data, setData] = useState(initAcc);
     const [accData, setAccData] = useState(initAcc);
-    Get(url, profile, setAccData);
+    Get(url, profile, history, setAccData);
     //console.log('modules_', modules_);
     const [toolbar, setToolbar] = useState(false);
     useEffect(() => {setCurrent(current_)}, [current_]);
@@ -87,7 +77,7 @@ const  BasicTreeTable2 =()=> {
         .concat(current.account).concat('/')
         .concat(current.fromPeriod).concat('/')
         .concat(current.toPeriod);
-    return Internal(data, setData, accUrl, initAcc, accData, setAccData, profile, current, initialState, state
+    return Internal(data, setData, accUrl, initAcc, accData, setAccData, profile, history, current, initialState, state
         , title, getUrl, url, toggle, toggleToolbar, setCurrent, t, toolbar, columnsX);
 };
 export default  memo(BasicTreeTable2)

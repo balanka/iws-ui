@@ -10,7 +10,7 @@ import { Query} from './CrudController';
 import {useGlobalState} from "./Menu";
 import {useHistory} from "react-router-dom";
 
-function Internal(isDebit, t, modelid, accData, accUrl, profile, setAccData, initAcc, current, getUrl, setData
+function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
                   , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX) {
     const summaryPCB = (data) => {
         const row_ = data;
@@ -89,17 +89,17 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, setAccData, ini
     const load = event => {
         event.preventDefault();
         accData?.length < 2 ?
-            Query(event, accUrl, profile, setAccData, initAcc) :
+            Query(event, accUrl, profile, history, setAccData, initAcc) :
             current.account && current.fromPeriod && current.toPeriod ?
-                Query(event, getUrl(), profile, setData, initialState) : void (0)
+                Query(event, getUrl(), profile, history, setData, initialState) : void (0)
         setIsDebit(accData.find(x => x.id === current.account).isDebit)
     };
 
     const submitQuery_ = event => {
         event.preventDefault();
         accData?.length < 2 ?
-            Query(event, accUrl, profile, setAccData, initAcc) :
-            Query(event, getUrl(), profile, setData, initialState)
+            Query(event, accUrl, profile, history, setAccData, initAcc) :
+            Query(event, getUrl(), profile, history, setData, initialState)
     };
     function buildForm() {
         return <>
@@ -155,7 +155,7 @@ const JForm2 = () => {
         .concat(current.account).concat('/')
         .concat(current.fromPeriod).concat('/')
         .concat(current.toPeriod);
-    return Internal(isDebit, t, modelid, accData, accUrl, profile, setAccData, initAcc, current, getUrl, setData
+    return Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
         , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX);
 
 };

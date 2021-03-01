@@ -1,27 +1,47 @@
-import React, {useEffect, useState, useContext, memo} from 'react'
-import {accountContext, useGlobalState} from './AccountContext';
+import React, {useEffect, useState} from 'react'
+import {useGlobalState} from './Menu';
 import Grid from "react-fast-grid";
-import useFetch from "../../../utils/useFetch";
 import {CommonFormHead, FormFactory} from './FormsProps'
 import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
+import {useTranslation} from "react-i18next";
+import { Add, Edit, EditRow, Query} from './CrudController';
+import {useHistory} from "react-router-dom";
 const MasterfileForm = () => {
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const [profile, ] = useGlobalState('profile');
+  const [selected, ] = useGlobalState('selected');
+  let history = useHistory()
+  console.log('selected', selected);
+  const [menu, ] = useGlobalState('menu');
+  console.log('menu', menu);
+  console.log('menu.get(selected)', menu.get(selected));
+  const datax =  profile?.modules?profile.modules:[];
+  const module_= menu.get(selected);
+  const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
+  if(modules_.id==='0') history.push("/login");
+  const module=modules_
+  console.log('menu.module', module);
+  const url=SERVER_URL.concat(module.ctx)
+  const accUrl=SERVER_URL.concat(module.ctx1)
+  const vatUrl=SERVER_URL.concat(module.ctx2)
+  const bankUrl=SERVER_URL.concat(module.ctx3)
+  const initVat = module.state2
+  const initAcc = module.state1
+  const initBank = module.state3
+  const initialState = module.state
+  const current_= initialState[0]//.query;
+  const title =module.title
+  const { t,  } = useTranslation();
+
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [, setRows] = useState([])
-  const value = useContext(accountContext);
-  const t = value.t
-  const modelid_ = value.modelid;
-  const [ res, loading, error] = useFetch(value.url, {});
-  const [res2, loading2, error2] = useFetch(value.accUrl, {});
-  const [res3 , loading3, error3] = useFetch(value.ccUrl, {});
-  const [res4, loading4, error4] = useFetch(value.bankUrl, {});
-  const data_ =  res?.response?res.response:value.initialState;
-  const accData_=  res2?.response?res2.response:value.accData;
-  const vatData_=  res3?.response?res3.response:value.ccData;
-  const bankData_=  res4?.response?res4.response:[];
-  const current_= value.user;
+  const data_ = initialState
+  const accData_ = initAcc
+  const vatData_ = initVat
+  const bankData_ = initBank
+  const modelid_ = module.modelid;
   const [data, setData] = useState(data_);
   const [accData, setAccData] = useState(accData_);
   const [vatData, setVatData] = useState(vatData_);
@@ -36,9 +56,9 @@ const MasterfileForm = () => {
   const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id))
 
   const initAdd =()=> {
-    const row = {...value.initialState[0], company:profile.company, editing:false};
-    value.editRow(row, false);
-    setCurrent(row);
+    const row = {...initialState[0], company:profile.company, editing:false};
+    EditRow(row, false, setCurrent);
+    //setCurrent(row);
   };
 
   const cancelEdit = (e) => initAdd();
@@ -54,37 +74,39 @@ const MasterfileForm = () => {
     if(current.editing) {
       const row = {...current}
       setCurrent(row);
-      value.submitEdit(row, data);
+      Edit(url, profile, row, data, setCurrent);
     } else submitAdd(event)
   };
 
+  const  isEmpty = (str) => (!str || 0 === str.length);
+  const load = event => data?.length<2?submitQuery(event): void(0)
   const submitQuery =(event)=>{
     event.preventDefault();
-    value.accUrl&&value.submitQuery(event, value.accUrl, setAccData, value.initAcc);
-    value.ccUrl&&value.submitQuery(event, value.ccUrl, setVatData, value.initCc);
-    value.bankUrl&&value.submitQuery(event, value.bankUrl, setBankData, []);
-    value.url&&value.submitQuery(event, value.url, setData, value.initialState);
+    !isEmpty(accUrl)&&Query(event, accUrl, profile, history, setAccData, initAcc);
+    !isEmpty(vatUrl)&&Query(event, vatUrl, profile, history, setVatData, initVat);
+    !isEmpty(bankUrl)&&Query(event, bankUrl, profile, history, setBankData, initBank);
+    !isEmpty(url)&&Query(event, url, profile, history, setData, initialState);
   }
 
   const submitAdd = event => {
     event.preventDefault();
     const row = {...current};
-    value.submitAdd(row, data);
-    setCurrent(row);
+    Add(url, profile, row, data, initialState, setCurrent);
   };
 
   function buildForm(current){
     return <>
       <Grid container spacing={2} style={{...styles.outer }} direction="column" >
-        <CommonFormHead styles={styles} title={value.title} collapse={state.collapse} initAdd ={initAdd} initialState={value.initialState}
-                        setData={setData} setAccData={setAccData} setBankData={setBankData}  url={value.url} accUrl={value.accUrl}
-                        cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {submitQuery} toggle={toggle}
+        <CommonFormHead styles={styles} title={title} collapse={state.collapse} initAdd ={initAdd} initialState={initialState}
+                        setData={setData} setAccData={setAccData} setBankData={setBankData}  url={url} accUrl={accUrl}
+                        cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {load} toggle={toggle}
                         toggleToolbar={toggleToolbar}  style={{...styles.inner}}/>
         <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t} accData={accData} vatData={vatData}
                      bankData={bankData} collapse={state.collapse} styles={styles} style={{...styles.inner}}/>
 
         <Grid container spacing={2} style={{...styles.inner, display:'block' }} direction="column" >
-          <EditableTable Options={{...OptionsM, toolbar:toolbar}}  data={data}
+          <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px"
+            , pageSize:10, pageSizeOptions:[10, 20, 50]}}  data={data}
                          columns={columns}   theme={theme} t={t}  edit ={edit} setSelectedRows ={setSelectedRows}/>
         </Grid>
       </Grid>
@@ -94,4 +116,4 @@ const MasterfileForm = () => {
   return buildForm(current);
 
 };
-export default memo(MasterfileForm)
+export default MasterfileForm

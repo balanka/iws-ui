@@ -9,13 +9,13 @@ import {Edit, EditRow, Post, Query} from './CrudController';
 import {LOGIN_MENU, useGlobalState} from "./Menu";
 import {useHistory} from "react-router-dom";
 
-function internal(url, profile, initialState, data, setData,  current, setCurrent,  title, state
+function internal(url, profile, history, initialState, data, setData,  current, setCurrent,  title, state
     , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows) {
 
     const isEmpty = (str) => (!str || 0 === str.length);
     const submitQuery = event => {
         event.preventDefault();
-        !isEmpty(url) && Query(event, url, profile, setData, initialState);
+        !isEmpty(url) && Query(event, url, profile, history,setData, initialState);
     };
     const cancelEdit = (e) => EditRow({...current}, false, setCurrent);
 
@@ -91,7 +91,7 @@ const BankStatementForm2 = () => {
     const toggle= ()=> setState({...state, collapse:!state.collapse });
     const columns = ColumnFactory(modelid_, data, t);
     const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.bid));
-     return internal(url, profile, initialState, data, setData,  current, setCurrent,  title, state
+     return internal(url, profile, history,initialState, data, setData,  current, setCurrent,  title, state
         , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows);
 
 };

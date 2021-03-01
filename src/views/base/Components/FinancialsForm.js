@@ -1,41 +1,47 @@
-import React, {useEffect, useState, useContext, createRef, memo} from 'react'
+import React, {useEffect, useState, createRef, memo} from 'react'
 import { CInput} from '@coreui/react'
-import {accountContext} from './AccountContext';
-import useFetch from "../../../utils/useFetch";
 import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles} from "../Tree/BasicTreeTableProps";
-import {
-  Options,
-  OptionsM,
-  columnsF,
-  Linescolumns
+import {Add, Edit, EditRow, Post, Query} from './CrudController';
+import {Options, OptionsM, columnsF, Linescolumns
 } from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
+import {useGlobalState} from "./Menu";
+import {useHistory} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const FinancialsForm = () => {
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+  const [profile, ] = useGlobalState('profile');
+  const [selected, ] = useGlobalState('selected');
+  let history = useHistory()
+  const [menu, ] = useGlobalState('menu');
+  const datax_ =  profile?.modules?profile.modules:[];
+  const module_= menu.get(selected);
+  const modules_=(datax_.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
+  if(modules_.id==='0') history.push("/login");
+  const module=modules_
+  const url=SERVER_URL.concat(module.ctx)
+  const accUrl=SERVER_URL.concat(module.ctx1)
+  const ccUrl=SERVER_URL.concat(module.ctx2)
+  const initCc = module.state2
+  const initAcc = module.state1
+  const initialState = module.state
+  const current_= initialState[0]
+  const title =module.title
+  const { t,  } = useTranslation();
+
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [rows, setRows] =useState([])
-  const [module, setModule] = useState('');
-  const value = useContext(accountContext);
-  const t = value.t
-  const [url,] = useState('');
+  const [model, setModel] = useState('');
   const tableRef = createRef();
-  const [res, loading, error ]= useFetch(url, {});
-  const [res2, loading2, error2] = useFetch(value.accUrl, {});
-  const [res3, loading3, error3] = useFetch(value.ccUrl, {});
-  const init = ()=> {return value.initialState}
-  const data_ = res && res.response?res.response:value.initialState;
-  const accData_=  res2&&res2.response?res2.response:value.accData;
-  const ccData_=  res3&&res3.response?res3.response:value.ccData;
-  const current_= value.user;
-  const initLine=value.initialState[0].lines[0];
+  const initLine=initialState[0].lines[0];
   const [toolbar, setToolbar] = useState(false);
-  const [data, setData] = useState(data_);
-  //console.log('transData', data)
-  const [accData, setAccData] = useState(accData_);
-  const [ccData, setCcData] = useState(ccData_);
+  const [data, setData] = useState(initialState);
+  const [accData, setAccData] = useState(initAcc);
+  const [ccData, setCcData] = useState(initCc);
   const [current,setCurrent] = useState(current_);
   const columnsX = Linescolumns(accData, initLine, current, t);
   const columns= columnsF(ccData, initLine, current, t);
@@ -45,42 +51,36 @@ const FinancialsForm = () => {
   const toggle = ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( (item) =>({id:item.tid,  modelid:item.modelid})))
 
-  const modules=[{ id:'112', name:'Supplier invoice'}
-                ,{ id:'114', name:'Payment'}
-                ,{ id:'122', name:'Receivables'}
-                ,{ id:'124', name:'Settlement'}
-                ,{ id:'134', name:'General ledger'}]
+  const models=[{ id:'112', name:'Supplier invoice'}
+    ,{ id:'114', name:'Payment'}
+    ,{ id:'122', name:'Receivables'}
+    ,{ id:'124', name:'Settlement'}
+    ,{ id:'134', name:'General ledger'}]
 
-  const initAdd =()=> {
-    const row = {...value.initialState, editing:false};
-    value.editRow(row, false);
-    setCurrent(row);
-  };
+  const initAdd =()=> EditRow({...initialState, editing:false}, false, setCurrent);
+
 
   const cancelEdit = (e) => {
     e.preventDefault();
     initAdd();
-    //setSelected([]);
   };
 
-
-  const submitQuery = (event,modelid) => {
-    accData?.length<2? value.submitQuery(event, value.accUrl, setAccData, accData_):void(0)
-    ccData?.length<2? value.submitQuery(event, value.ccUrl, setCcData, ccData_):void(0)
-    const url_=value.url.concat('/ftrmd/').concat(modelid);
-    value.submitQuery(event, url_, setData, value.initialState);
-    console.log('dataxX', datax())
-  };
+  const isEmpty = (str) => (!str || 0 === str.length);
+  const submitQuery =(event, modelid)=>{
+    event.preventDefault();
+    const url_=url.concat('/ftrmd/').concat(modelid);
+    !isEmpty(accUrl)&&accData?.length<2&&Query(event, accUrl, profile, history, setAccData, initAcc);
+    !isEmpty(ccUrl)&&ccData.length<2&&Query(event, ccUrl, profile, history, setCcData, initCc);
+    !isEmpty(url_)&&Query(event, url_, profile, history, setData, initialState);
+  }
   const handleModuleChange = event => {
     event.preventDefault();
-    const value = event.target.value
-    setModule(value);
-    //console.log('modulXX', value)
-    submitQuery(event, value);
+    setModel(event.target.value);
+    submitQuery(event, event.target.value);
   };
 
   const addAmount = row => ({...row, total: row.lines.reduce((acc, line) => acc + line.amount, 0)})
-  const datax=() =>(data?data:init()).map( row =>addAmount(row));
+  const datax=() =>(data).map( row =>addAmount(row));
 
   const edit = editedRow =>{
     const record = data.find(obj => obj.tid === editedRow.tid);
@@ -89,15 +89,12 @@ const FinancialsForm = () => {
 
   const submitPost = event => {
     event.preventDefault();
-   // const row = getCurrentRow
-    //setCurrent(row);
-    value.submitPost([current.id], "/post");
-    //console.log("submitEdit current", current);
+    Post(url, profile, [current.id], "/post");
   };
 
   const submitCopy = event => {
     event.preventDefault();
-    value.submitPost(rows, "/copy");
+    Post(url, profile, rows, "/copy");
   };
 
   const getCurrentMonth = (date)=>{
@@ -112,7 +109,7 @@ const FinancialsForm = () => {
     if(current.editing) {
       const row = {...current}
       setCurrent(row);
-      value.submitEdit(row, data);
+      Edit(url, profile, row, data, setCurrent);
     } else submitAdd(event)
   };
 
@@ -124,11 +121,8 @@ const FinancialsForm = () => {
       , postingdate:new Date().toISOString(), period:getPeriod(getCurrentDate()), posted:current_.posted
       , modelid:current_.modelid, company:current_.company, text:current_.text, typeJournal:current_.typeJournal
       , file_content:current_.file_content, lines:[] };
+    Add(url, profile, row, data, initialState, setCurrent);
 
-    //console.log('submitAdd row', row);
-    value.submitAdd(row, data);
-    setCurrent(row);
-   // console.log('submitAdd current', current);
   };
 
   const onNewLine =() => {
@@ -139,7 +133,7 @@ const FinancialsForm = () => {
     });
   }
 
-const addRow = (newData) =>{
+  const addRow = (newData) =>{
     if(newData ) {
       const dx = {...current};
       dx.lines[dx.lines.length] = newData;
@@ -148,13 +142,10 @@ const addRow = (newData) =>{
   }
   const updateRow = (newData, oldData) =>{
     if (oldData) {
-     // console.log('newDataX',newData);
       const dx = {...current};
       const index = dx.lines.findIndex(obj => obj.lid === newData.lid);
       dx.lines[index] = {...newData};
       setCurrent({...dx});
-      //console.log('dxdx',dx);
-     // console.log('currentcurrentX',current);
     }
   }
   const deleteRow = (oldData) =>{
@@ -166,41 +157,40 @@ const addRow = (newData) =>{
       setCurrent({...dx});
     }
   }
- const  editable = () => ({
-   onRowAdd: async (newData) => addRow(newData),
-   onRowUpdate: async (newData, oldData) => updateRow(newData, oldData),
-   onRowDelete: async (oldData) => deleteRow(oldData)
- })
+  const  editable = () => ({
+    onRowAdd: async (newData) => addRow(newData),
+    onRowUpdate: async (newData, oldData) => updateRow(newData, oldData),
+    onRowDelete: async (oldData) => deleteRow(oldData)
+  })
 
   function buildForm( current){
-    const lines_=()=>current.lines&&current.lines.length >0 ? current.lines:[value.initialState[0].lines[0]];
+    const lines_=()=>current.lines&&current.lines.length >0 ? current.lines:[initialState[0].lines[0]];
     const LinesFinancials = () =>  (<>
-      <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()}
-                     columns={columnsX} editable={editable()}  t={t}
-                     tableRef={tableRef} />
-      <CInput disabled={current.posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
-              placeholder="text" value={current.text} onChange={(event)  =>
-          setCurrent({ ...current, text: event.target.value})} />
-       </>
-      )
+          <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()}
+                         columns={columnsX} editable={editable()}  t={t}
+                         tableRef={tableRef} />
+          <CInput disabled={current.posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
+                  placeholder="text" value={current.text} onChange={(event)  =>
+              setCurrent({ ...current, text: event.target.value})} />
+        </>
+    )
 
     const parentChildData =(row, rows) => rows.find(a => a.tid === row.transid)
     return <>
-
       <Grid container spacing={2} style={{...styles.outer , display:'block'}} direction="column" >
-        <FinancialsFormHead styles={styles} title={value.title}  collapse={state.collapse} initAdd ={initAdd}
-                        setData={setData} setAccData={setAccData} url={value.url} accUrl={value.accUrl}
-                        initialState={value.initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
-                        module ={module}  modules ={modules} handleModuleChange={handleModuleChange}
-                        onNewLine={onNewLine} submitPost={submitPost} submitCopy={submitCopy}
-                        submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
+        <FinancialsFormHead styles={styles} title={title}  collapse={state.collapse} initAdd ={initAdd}
+                            setData={setData} setAccData={setAccData} url={url} accUrl={accUrl}
+                            initialState={initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
+                            module ={model}  modules ={models} handleModuleChange={handleModuleChange}
+                            onNewLine={onNewLine} submitPost={submitPost} submitCopy={submitCopy}
+                            submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
         <FormFactory formid ={formEnum.FINANCIALS} current={current} setCurrent={setCurrent} t={t} accData={accData}
                      ccData={ccData}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
                      collapse={state.collapse}
-         />
-          <EditableTable Options={{...OptionsM, toolbar:toolbar}} flag={current.posted} data={datax()}
-                         columns={columns}  t={t}  edit ={edit} setSelectedRows ={setSelectedRows}
-                         parentChildData={parentChildData}/>
+        />
+        <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px", pageSize:5
+          , pageSizeOptions:[5,10, 20, 50]}} flag={current.posted} data={datax()}
+                       columns={columns}  t={t}  edit ={edit} setSelectedRows ={setSelectedRows} parentChildData={parentChildData}/>
 
       </Grid>
     </>

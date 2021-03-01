@@ -12,8 +12,8 @@ const CrudAccount =  (props)=> {
     const submitAdd = (record, data) => Add(url, profile, record, data, initialState, setCurrent);
     const submitPost = (record, ctx) =>  Post(url, profile, record, ctx);
     const submitLogin = (history, url, data) => Login(history, url, data, setProfile);
-    const submitGet = (url, func) => Get(url, profile, func);
-    const submitQuery = (event, url, func, init) =>Query(event, url, profile, func, init);
+    const submitGet = (url, history, func) => Get(url, profile, history, func);
+    const submitQuery = (event, url, func, history, init) =>Query(event, url, profile, history, func, init);
     const deleteUser =() => setEditing(false);
     const editRow = (current, flag)  =>EditRow(current, flag, setCurrent);
 

@@ -50,7 +50,7 @@ const Edit = (url, profile, record, data, setCurrent) => {
            // history.push(routes.user.login)
         });
     }
- const Get = (url, profile, func) => {
+ const Get = (url, profile, history, func) => {
       let result
       console.log('Calling GET', profile);
           axios.get( url, {headers: {'authorization':profile.token}})
@@ -64,20 +64,21 @@ const Edit = (url, profile, record, data, setCurrent) => {
             //console.log('authorization', profile.token);
               if(JSON.stringify(error).includes("401")) {
                   console.log('error', "Session expired!!!!! Login again!!!!");
+                  history.push("/login");
               }
 
                 console.log('error', error);
             })
             return result;
         }
- const Query = (event, url, profile, func, init) => {
-        const fetchData =(url_, profile, call)=>{
-            const res = Get(url_, profile, call);
+ const Query = (event, url, profile, history, func, init) => {
+        const fetchData =(url_, profile, history, call)=>{
+            const res = Get(url_, profile, history, call);
             console.log('resx=>', url_);
             const datax = res?res : init;
             return datax;
         }
-        fetchData(url, profile, func);
+        fetchData(url, profile, history, func);
         event.preventDefault();
     };
  const EditRow = (current, isNew, setCurrent)  => {

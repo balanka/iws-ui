@@ -82,10 +82,10 @@ const MasterfileForm2 = () => {
   const load = event => data?.length<2?submitQuery(event): void(0)
   const submitQuery =(event)=>{
     event.preventDefault();
-    !isEmpty(accUrl)&&Query(event, accUrl, profile, setAccData, initAcc);
-    !isEmpty(vatUrl)&&Query(event, vatUrl, profile, setVatData, initVat);
-    !isEmpty(bankUrl)&&Query(event, bankUrl, profile, setBankData, initBank);
-    !isEmpty(url)&&Query(event, url, profile, setData, initialState);
+    !isEmpty(accUrl)&&Query(event, accUrl, profile, history, setAccData, initAcc);
+    !isEmpty(vatUrl)&&Query(event, vatUrl, profile, history, setVatData, initVat);
+    !isEmpty(bankUrl)&&Query(event, bankUrl, profile, history, setBankData, initBank);
+    !isEmpty(url)&&Query(event, url, profile, history, setData, initialState);
   }
 
   const submitAdd = event => {
