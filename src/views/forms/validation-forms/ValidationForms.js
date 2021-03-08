@@ -15,14 +15,11 @@ import {
 } from '@coreui/react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import { useTranslation, withTranslation, Trans } from 'react-i18next';
+import { useTranslation} from 'react-i18next';
 
 const ValidationForms = () =>  {
-  const { t, i18n } = useTranslation();
+  const { t, } = useTranslation();
 
-  const changeLanguage = lng => {
-    i18n.changeLanguage(lng);
-  };
 const validationSchema = function (values) {
 
   return Yup.object().shape({
