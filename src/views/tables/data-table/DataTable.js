@@ -14,11 +14,9 @@ import { useTranslation} from 'react-i18next';
 const DataTable = () => {
   const [details, setDetails] = useState([])
   // const [items, setItems] = useState(usersData)
-  const { t, i18n } = useTranslation();
+  const { t, } = useTranslation();
 
-  const changeLanguage = lng => {
-    i18n.changeLanguage(lng);
-  };
+
   const toggleDetails = (index) => {
     const position = details.indexOf(index)
     let newDetails = details.slice()
