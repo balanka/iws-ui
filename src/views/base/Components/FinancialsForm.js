@@ -8,19 +8,24 @@ import {Options, OptionsM, columnsF, Linescolumns
 } from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
-import {useGlobalState} from "./Menu";
+import {useGlobalState, LoginMenu} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import ErrorFallback from "../../../utils/ErrorFallback";
+import {ErrorBoundary} from "react-error-boundary";
 
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const [profile, ] = useGlobalState('profile');
   const [selected, ] = useGlobalState('selected');
-  let history = useHistory()
+  let history = useHistory();
+  const { t,  } = useTranslation();
   const [menu, ] = useGlobalState('menu');
   const datax_ =  profile?.modules?profile.modules:[];
   const module_= menu.get(selected);
-  const modules_=(datax_.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
+  console.log('module_s', module_);
+  console.log('module_s', module_!=undefined);
+  const modules_=(module_!=undefined)&&(datax_.includes(module_.id)|| (module_.id==="0"))?module_:LoginMenu(t)
   if(modules_.id==='0') history.push("/login");
   const module=modules_
   const url=SERVER_URL.concat(module.ctx)
@@ -31,8 +36,6 @@ const FinancialsForm = () => {
   const initialState = module.state
   const current_= initialState[0]
   const title =module.title
-  const { t,  } = useTranslation();
-
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [rows, setRows] =useState([])
   const [model, setModel] = useState('');
@@ -45,8 +48,7 @@ const FinancialsForm = () => {
   const [current,setCurrent] = useState(current_);
   const columnsX = Linescolumns(accData, initLine, current, t);
   const columns= columnsF(ccData, initLine, current, t);
-  useEffect(() => {setCurrent(current_)}, [ current_]);
-
+  useEffect(() => {}, [current, setCurrent, data, setData ]);
   const toggleToolbar = ()=> setToolbar(!toolbar );
   const toggle = ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( (item) =>({id:item.tid,  modelid:item.modelid})))
@@ -196,8 +198,8 @@ const FinancialsForm = () => {
     </>
 
   }
-
-  return buildForm( current);
+  const Login = React.lazy(() => import('./Login'));
+  return <ErrorBoundary FallbackComponent={Login}> {buildForm( current)} </ErrorBoundary>;
 
 };
 export default memo(FinancialsForm);

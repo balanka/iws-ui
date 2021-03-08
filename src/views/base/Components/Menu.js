@@ -13,6 +13,7 @@ export const getCurrentMonth = (date)=>{
         const p=date.getUTCMonth()+1;
         return p<=10?"0".concat(p.toString()):p.toString();
     }
+
 export const date= new Date().toISOString()
 export const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
 const LOGIN=(t)=> ( {id:"0", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:""
@@ -152,8 +153,9 @@ export const MENU = (t)=> new Map([['/journal', JOURNAL(t)],
 
 const initialState = {profile:{token:'noTOken', company:'', modules:[]}, selected:'', menu:new Map(),
 history_:''}
+ const LoginMenu =(t) => new Map([['/login', LOGIN(t)]])
 export const { useGlobalState } = createGlobalState(initialState);
-
+export {LoginMenu};
 
 
 

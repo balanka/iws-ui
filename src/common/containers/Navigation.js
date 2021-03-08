@@ -19,7 +19,7 @@ const Navigation =(t)=>
       {
         _tag: 'CSidebarNavDropdown',
         name: t('menu.accounting'),
-        route: '/base',
+        to: '/base',
         icon: 'cil-puzzle',
         _children: [
           {

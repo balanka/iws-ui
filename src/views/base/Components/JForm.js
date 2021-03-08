@@ -146,7 +146,6 @@ const JForm = () => {
     const [data, setData] = useState(initialState);
     const [accData, setAccData] = useState(initAcc);
     const [toolbar, setToolbar] = useState(true);
-
     const columnsX= modelid===formEnum.PACB?columnsPACB(t):ColumnJournal(t);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle= ()=> setState({...state, collapse:!state.collapse });

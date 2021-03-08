@@ -35,9 +35,6 @@ const Edit = (url, profile, record, data, setCurrent) => {
         axios.post( url, data)
             .then(response => {
                 const {authorization} = response.headers
-                //console.log('response', response);
-                //console.log('history', history);
-;
                 const profile = {token:authorization, company:response.data.company
                     , modules:response.data.menu};
                 setProfile(profile);
@@ -52,7 +49,7 @@ const Edit = (url, profile, record, data, setCurrent) => {
     }
  const Get = (url, profile, history, func) => {
       let result
-      console.log('Calling GET', profile);
+      //console.log('Calling GET', profile);
           axios.get( url, {headers: {'authorization':profile.token}})
             .then(response => {
                 const resp = response.data
