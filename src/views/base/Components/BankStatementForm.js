@@ -33,9 +33,7 @@ function internal(url, profile, history, initialState, data, setData,  current, 
     const submitEdit = event => {
         event.preventDefault();
         if (current.editing && !current.posted) {
-            const row = {...current}
-            setCurrent(row);
-            Edit(url, profile, row, data, setCurrent);
+            Edit(url, profile, {...current}, data, setCurrent);
         }
     };
 
@@ -86,7 +84,6 @@ const BankStatementForm = () => {
     const [current,setCurrent] = useState(current_);
     const [toolbar, setToolbar] = useState(true);
     useEffect(() => {}, [current, setCurrent, data]);
-    useEffect(() => {setCurrent(current_)}, [ current_]);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle= ()=> setState({...state, collapse:!state.collapse });
     const columns = ColumnFactory(modelid_, data, t);
