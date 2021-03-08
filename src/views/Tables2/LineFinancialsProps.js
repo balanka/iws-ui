@@ -81,37 +81,7 @@ export const columnsPACB = (t) => [
     , {field:'currency', title:t('common.currency'),   export:true }
     , { field:'company', title:t('common.company'), export:true }
 ]
-export const columnsJ =(t) => [{field:"id", title:t('common.id'),  type:"numeric", export:true }
-, {field:'transid', title:t('journal.transid'),   export:true }
-, { field: 'oid', title: t('journal.oid'),  export:true }
-, {field: 'account', title: t('common.account'), export:true}
-, {field: 'oaccount', title:t('journal.oaccount'), export:true}
-, {field: 'transdate', title:t('common.transdate'),  type:"date", align:"right",
-        dateSetting: { locale:"de" }, export:true}
-, {field: 'postingdate', title:t('common.postingdate'), type:"date", align:"right",
-         dateSetting: { locale:"de" }, export:true}
-, {field: 'enterdate', title:t('common.enterdate'), type:"date", align:"right",
-         dateSetting: { locale:"de" }, export:true}
-, {field: 'period', title:t('journal.period'), minWidth:1,  type:"numeric", export:true},
-, { field: 'amount', title: t('journal.amount'), currencySetting: { locale:"de"
-            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-, { field: 'idebit', title:t('common.idebit'), currencySetting: { locale:"de"
-    , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-, { field: 'debit', title: t('common.debit'), currencySetting: { locale:"de"
-            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-, { field: 'icredit', title:t('common.icredit'), currencySetting: { locale:"de"
-            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-, { field: 'credit', title:t('common.credit'), currencySetting: { locale:"de"
-            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-, { field: 'side', title:t('journal.side'), type:"boolean", export:true}
-, { field: 'text', title:t('journal.text'), export:true}
-, { field:'month', title:t('journal.month'), minWidth:1}
-, { field: 'year', title:t('journal.year'), minWidth:1}
-, { field:'company', title:t('common.company'), export:true }
-, { field: 'typeJournal', title:t('journal.type'), export:true}
-, { field: 'file_content', title:t('journal.file'), export:true}
-, { field: 'modelid', title:t('common.modelid'), export:true}
-]
+
 export const columnsF =(data, line, current, t) => [
      {field:'tid', title:t('financials.id'), initialEditValue:line.id, align:"right", export:true}
     , {field:'oid', title:t('financials.oid'),initialEditValue:current.oid, align:"right", export:true}
