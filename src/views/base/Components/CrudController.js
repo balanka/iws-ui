@@ -1,4 +1,5 @@
 import axios from "axios";
+import routes from '../../../routes'
 
 const Edit = (url, profile, record, data, setCurrent) => {
      axios.patch( url, record, {headers: {'authorization':profile.token}})
@@ -31,7 +32,7 @@ const Edit = (url, profile, record, data, setCurrent) => {
       console.log('error', error);
     });
   };
- const Login = (history, url, data, setProfile, MENU, t, setMenu) => {
+ const Login = (history, url, data, setProfile, MENU, t, setMenu, setRoutes) => {
         axios.post( url, data)
             .then(response => {
                 const {authorization} = response.headers
@@ -39,6 +40,7 @@ const Edit = (url, profile, record, data, setCurrent) => {
                     , modules:response.data.menu};
                 setProfile(profile);
                 setMenu(MENU(t));
+                setRoutes(routes(t));
                 history.push("/dashboard");
                 //setProfile(previous => (profile));
                 //loginSet(profile);

@@ -32,6 +32,7 @@ const Login = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const [, setProfile] = useGlobalState('profile');
   const [, setMenu] = useGlobalState('menu');
+  const [, setRoutes] = useGlobalState('routes');
   //const [history_, setHistory_] = useGlobalState('history_');
   const module= LOGIN_MENU(t)[0];
   const url=SERVER_URL.concat(module.ctx)
@@ -48,7 +49,7 @@ const Login = () => {
   const submit = event => {
     event.preventDefault();
     const data={"userName": current.username, "password": current.password}
-    Login_(history, url, data, setProfile, MENU, t, setMenu);
+    Login_(history, url, data, setProfile, MENU, t, setMenu, setRoutes);
   }
 
   const handleEvent=(event, value ) =>{

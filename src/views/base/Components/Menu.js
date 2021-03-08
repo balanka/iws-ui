@@ -152,10 +152,11 @@ export const MENU = (t)=> new Map([['/journal', JOURNAL(t)],
 ]);
 
 const initialState = {profile:{token:'noTOken', company:'', modules:[]}, selected:'', menu:new Map(),
-history_:''}
- const LoginMenu =(t) => new Map([['/login', LOGIN(t)]])
+history_:'', routes:(t)=>[{ path: '/login', name: 'Login', cp:'views/base/Components/Login' }]}
+const LoginMenu = (t) => new Map([['/login', LOGIN(t)]])
+const LoginRoute = [{ path: '/login', name: 'Login', cp:'views/base/Components/Login' }]
 export const { useGlobalState } = createGlobalState(initialState);
-export {LoginMenu};
+export {LoginMenu, LoginRoute};
 
 
 

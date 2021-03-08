@@ -6,9 +6,7 @@ import {
 } from 'react-router-dom'
 import { CContainer, CFade } from '@coreui/react'
 
-// routes config
-import routes from '../../routes'
-import {useTranslation} from "react-i18next";
+import {useGlobalState, LoginRoute} from "../../views/base/Components/Menu";
   
 const loading = (
   <div className="pt-3 text-center">
@@ -17,13 +15,14 @@ const loading = (
 )
 
 const TheContent = () => {
-    const { t,  } = useTranslation();
+    const [routes, ] = useGlobalState('routes');
+    const routes_= routes?[...routes]:[LoginRoute];
   return (
     <main className="c-main">
       <CContainer fluid>
         <Suspense fallback={loading}>
           <Switch>
-            {routes(t).map((route, idx) => {
+            {routes_.map((route, idx) => {
               return route.component && (
                 <Route
                   key={idx}

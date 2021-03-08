@@ -17,7 +17,7 @@ const CCreateElement = ({ items, components = {}, fn}) => {
 
     const generatedItems = useMemo(() => {
         return items && items.map((item, i) => renderItem(item, i))
-    }, [JSON.stringify(delete items.modules)])
+    }, [JSON.stringify(items)])
 
     return (
         <React.Fragment>
