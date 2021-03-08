@@ -1,9 +1,6 @@
 // Imports
 import { atom } from 'recoil'
 import {formEnum} from '../../utils/FORMS'
-import {AccountContext} from "../../views/base/Components/AccountContext";
-import React from "react";
-
 
 export const PROFILE = atom({
   key: 'profile',

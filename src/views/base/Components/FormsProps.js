@@ -21,7 +21,7 @@ import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers"
 import DateFnsUtils from "@date-io/date-fns";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import { blue, green } from "@material-ui/core/colors";
+import { blue } from "@material-ui/core/colors";
 import SvgIcon from '@material-ui/core/SvgIcon';
 import {styles} from "../Tree/BasicTreeTableProps";
 
@@ -60,15 +60,6 @@ export function IwsIcon(props) {
     );
 }
 
-
-    const mappingMenu = (acc) =>
-    <MenuItem key={acc.id} value={acc.id}>
-        {acc.id.concat( " ").concat(acc.name)}
-    </MenuItem>
-const mappingMenuName = (acc) =>
-    <MenuItem key={acc.id} value={acc.id}>
-        {acc.name.concat( " ").concat(acc.id)}
-    </MenuItem>
 const mapping = (acc) =>
     <MenuItem key={acc.id} value={acc.id}>
         {acc.id.concat( " ").concat(acc.name)}
@@ -82,7 +73,15 @@ const mappingSelectName = (item) => <option key={item.id} value={item.id}>
 export const  filter = (rows, cols, txt,) => rows.filter(col =>
     cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b)
 );
-
+/*
+    const mappingMenu = (acc) =>
+    <MenuItem key={acc.id} value={acc.id}>
+        {acc.id.concat( " ").concat(acc.name)}
+    </MenuItem>
+const mappingMenuName = (acc) =>
+    <MenuItem key={acc.id} value={acc.id}>
+        {acc.name.concat( " ").concat(acc.id)}
+    </MenuItem>
 export  const ACCOUNT=(data, value, onRowDataChange, rowData, fieldName) => {
     return (<Select value={value} onChange={(event) =>
         onRowDataChange({...rowData, account: event.target.value})}>
@@ -97,6 +96,7 @@ export  const ACCOUNT2=(data, value, onRowDataChange, rowData, fieldName) => {
     </Select>)
 }
 
+ */
 export  const BIC=(data, value, onRowDataChange, rowData, fieldName) => {
     console.log('value', value);
     console.log('rowData', rowData);
@@ -106,7 +106,7 @@ export  const BIC=(data, value, onRowDataChange, rowData, fieldName) => {
     </Select>)
 }
  
-   export const CommonFormHead = (props) => {
+export const CommonFormHead = (props) => {
     const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, submitPost, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >

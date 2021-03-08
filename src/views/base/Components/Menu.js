@@ -1,5 +1,5 @@
 import {formEnum} from "../../../utils/FORMS";
-import {ColumnsACC, columnsPACB, ColumnJournal, ColumnsBalancesheet, ColumnsVAT, ColumnsBS, ColumnsM, columnsJ
+import {ColumnsACC, columnsPACB, ColumnJournal, ColumnsBalancesheet, ColumnsVAT, ColumnsBS, ColumnsM
     , ColumnsComp, ColumnsCUST, ColumnsUSER  } from "../../Tables2/LineFinancialsProps";
 import MasterfileForm from "./MasterfileForm";
 import React from "react";

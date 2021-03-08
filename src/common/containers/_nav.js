@@ -1,4 +1,4 @@
-import {menu} from '../../views/base/Components/Menu';
+
 export default [
   {
     _tag: 'CSidebarNavItem',

@@ -2,7 +2,7 @@ import React from 'react'
 import {
   CBreadcrumb,
   CBreadcrumbItem,
-  CBreadcrumbRouter,
+  //CBreadcrumbRouter,
   CCard,
   CCardBody,
   CCardHeader,
@@ -10,7 +10,7 @@ import {
   CCol,
   CRow
 } from '@coreui/react'
-import routes from '../../../routes'
+
 
 const Breadcrumbs = () => {
   return (

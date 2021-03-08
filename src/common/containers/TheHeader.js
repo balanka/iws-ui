@@ -44,7 +44,7 @@ const TheHeader = () => {
   }
   const handleInputChange = event => {
     event.preventDefault();
-    const { name, value } = event.target;
+    const value  = event.target.value;
       setLanguage(value)
       changeLanguage(value)
   };

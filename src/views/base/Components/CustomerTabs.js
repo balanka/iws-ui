@@ -39,7 +39,7 @@ import {formEnum} from "../../../utils/FORMS";
           , ctx2:"", form:'bankAccountTable', state:initBankAcc, state1:'' ,state2:'',  columns:columns}          
      ]
 
-
+/*
   const onNewLine =() => {
    const ref = tableRef.current
    ref.dataManager.changeRowEditing();
@@ -47,6 +47,7 @@ import {formEnum} from "../../../utils/FORMS";
      showAddRow: !ref.state.showAddRow,
    });
  }
+ */
 
 const addRow = (newData) =>{
    if(newData ) {
@@ -87,6 +88,8 @@ const addRow = (newData) =>{
               return wrapIt(<CustomerGeneralForm current={current} setCurrent={setCurrent} t={t}/>);
          case formEnum.COMPANY:
               return wrapIt(<CompanyGeneralForm current={current} setCurrent={setCurrent} t={t}/>);
+          default:
+              return <>Invalid Tab</>
       }
   }
      const getAccountForm =(formid)=>{
@@ -98,6 +101,8 @@ const addRow = (newData) =>{
              case formEnum.COMPANY:
                  return wrapIt(<CompanyAccountForm current={current} setCurrent={setCurrent}
                             t={t}  accData={accData} vatData={vatData}/>);
+             default:
+                 return <>Invalid Tab</>
          }
      }
    const GetTabContent = (props) => {
