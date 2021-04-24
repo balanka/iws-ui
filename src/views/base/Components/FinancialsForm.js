@@ -4,15 +4,12 @@ import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles} from "../Tree/BasicTreeTableProps";
 import {Add, Edit, EditRow, Post, Query} from './CrudController';
-import {Options, OptionsM, columnsF, Linescolumns
-} from '../../Tables2/LineFinancialsProps'
+import {Options, OptionsM, columnsF, Linescolumns} from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
 import {useGlobalState, LoginMenu} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import ErrorFallback from "../../../utils/ErrorFallback";
-import {ErrorBoundary} from "react-error-boundary";
 
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -23,8 +20,6 @@ const FinancialsForm = () => {
   const [menu, ] = useGlobalState('menu');
   const datax_ =  profile?.modules?profile.modules:[];
   const module_= menu.get(selected);
-  console.log('module_s', module_);
-  console.log('module_s', module_!==undefined);
   const modules_=(module_!==undefined)&&(datax_.includes(module_.id)|| (module_.id==="0"))?module_:LoginMenu(t)
   if(modules_.id==='0') history.push("/login");
   const module=modules_
@@ -109,15 +104,12 @@ const FinancialsForm = () => {
   const submitEdit = event => {
     event.preventDefault();
     if(current.editing) {
-      const row = {...current}
-      setCurrent(row);
-      Edit(url, profile, row, data, setCurrent);
+      Edit(url, profile, {...current}, data, setCurrent);
     } else submitAdd(event)
   };
 
   const submitAdd = event => {
     event.preventDefault();
-
     const row = {tid:current_.id, oid:current_.oid, costcenter:current_.costcenter, account:current_.account
       , transdate:new Date(current_.transdate).toISOString(), enterdate:new Date().toISOString()
       , postingdate:new Date().toISOString(), period:getPeriod(getCurrentDate()), posted:current_.posted
@@ -191,16 +183,13 @@ const FinancialsForm = () => {
                      collapse={state.collapse}
         />
         <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px", pageSize:5
-          , pageSizeOptions:[5,10, 20, 50]}} flag={current.posted} data={datax()}
-                       columns={columns}  t={t}  edit ={edit} setSelectedRows ={setSelectedRows} parentChildData={parentChildData}/>
+          , pageSizeOptions:[5,10, 20, 50]}} flag={current.posted} data={datax()} columns={columns}
+          t={t}  edit ={edit} setSelectedRows ={setSelectedRows} parentChildData={parentChildData}/>
 
       </Grid>
     </>
-
   }
-  const Login = React.lazy(() => import('./Login'));
-  return <ErrorBoundary FallbackComponent={Login}> {buildForm( current)} </ErrorBoundary>;
-
+  return buildForm( current);
 };
 export default memo(FinancialsForm);
 

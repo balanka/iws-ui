@@ -25,7 +25,6 @@ import { blue } from "@material-ui/core/colors";
 import SvgIcon from '@material-ui/core/SvgIcon';
 import {styles} from "../Tree/BasicTreeTableProps";
 
-
 export const svgIcons = {
      plus:"M38 6H10c-2.21 0-4 1.79-4 4v28c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4zm-4 20h-8v8h-4v-8h-8v-4h8v-8h4v8h8v4z"
     , delete:"M12 38c0 2.21 1.79 4 4 4h16c2.21 0 4-1.79 4-4V14H12v24zM38 8h-7l-2-2H19l-2 2h-7v4h28V8z"
@@ -65,14 +64,14 @@ const mapping = (acc) =>
         {acc.id.concat( " ").concat(acc.name)}
     </MenuItem>
 
-  const mappingSelect = (item) => <option key={item.id} value={item.id}>
-    {item.id+ " ".concat (item.name)}</option>;
 
+  const mappingSelect = (item) => <option key={item.id} value={item.id}>
+    {item.id+ " ".concat (item.name)}</option>
 const mappingSelectName = (item) => <option key={item.id} value={item.id}>
     {item.name+ " ".concat (item.id)}</option>;
 export const  filter = (rows, cols, txt,) => rows.filter(col =>
-    cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b)
-);
+    cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b));
+
 /*
     const mappingMenu = (acc) =>
     <MenuItem key={acc.id} value={acc.id}>
@@ -98,8 +97,8 @@ export  const ACCOUNT2=(data, value, onRowDataChange, rowData, fieldName) => {
 
  */
 export  const BIC=(data, value, onRowDataChange, rowData, fieldName) => {
-    console.log('value', value);
-    console.log('rowData', rowData);
+   // console.log('value', value);
+   // console.log('rowData', rowData);
     return (<Select value={value} onChange={(event) =>
         onRowDataChange({...rowData, bic: event.target.value})}>
         {data.map(mapping)} id={"cb".concat(fieldName)}
@@ -454,7 +453,7 @@ export const BankStatementMainForm =(props) => {
                 <CCol sm="1.5">
                     <CInput  bsSize="sm" type="text"  id="postingdate-id" name="postingdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
-                             style={{'textAlign':'right', padding:2 }}/>
+                             style={{'textAlign':'right', padding:2 }} />
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
@@ -1210,6 +1209,7 @@ export const JournalMainForm = (props) => {
                     <CSelect className ="flex-row" type="select" name="account" id="account-id"
                              value={current.account} onChange={(event)  =>
                         setCurrent({ ...current, account: event.target.value})} style={{ height: 30, padding:2 }}>
+                        <option key="00" value="0000 All"/>
                         {accData.map(item => mappingSelect(item))};
 
                     </CSelect>
@@ -1218,6 +1218,7 @@ export const JournalMainForm = (props) => {
                     <CSelect className ="flex-row" type="select" name="account2" id="account2-id"
                              value={current.account} onChange={(event)  =>
                         setCurrent({ ...current, account: event.target.value})} style={{ height: 30, padding:2 }}>
+                        <option key="-2" value="All 0000"/>
                         {accData.map(item => mappingSelectName(item))};
 
                     </CSelect>

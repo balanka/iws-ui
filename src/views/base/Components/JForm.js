@@ -88,11 +88,12 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
     const summary = (data) => modelid === formEnum.PACB ? summaryPCB(data) : summaryJ(data)
     const load = event => {
         event.preventDefault();
+        console.log('Url >>>>><<<<<<<<<'+current);
         accData?.length < 2 ?
             Query(event, accUrl, profile, history, setAccData, initAcc) :
             current.account && current.fromPeriod && current.toPeriod ?
                 Query(event, getUrl(), profile, history, setData, initialState) : void (0)
-        setIsDebit(accData.find(x => x.id === current.account).isDebit)
+        //setIsDebit(accData.find(x => x.id === current.account).isDebit)
     };
 
     const submitQuery_ = event => {
@@ -154,6 +155,7 @@ const JForm = () => {
         .concat(current.account).concat('/')
         .concat(current.fromPeriod).concat('/')
         .concat(current.toPeriod);
+
     return Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
         , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX);
 

@@ -57,7 +57,12 @@ CoreUI-React#v2.0.0
 │
 └── package.json
 ```
-
+Prepare Docker posgres Install
+```
+mkdir -p $HOME/docker/volumes/postgres
+sudo mkdir -p /var/lib/postgresql/data
+## psql -h localhost -U postgres -W yourPostgresPWD -d iws2
+```
 ## Documentation
 
 

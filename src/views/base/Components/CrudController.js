@@ -72,8 +72,9 @@ const Edit = (url, profile, record, data, setCurrent) => {
         }
  const Query = (event, url, profile, history, func, init) => {
         const fetchData =(url_, profile, history, call)=>{
+            const urlx = url_.replace("//","/");
             const res = Get(url_, profile, history, call);
-            console.log('resx=>', url_);
+            console.log('resx=>', urlx);
             const datax = res?res : init;
             return datax;
         }

@@ -1,21 +1,25 @@
-version: '3'
+version: "3.8"
+
 services:
-  nodejs-server:
-    build:
-      context: ./api
+  db:
+    image: postgres
+    restart: always
     ports:
-      - "3080:3080"
-    container_name: node-api
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: prisma
+      POSTGRES_DB: tabata
     volumes:
-      - ./api:/usr/src/app/api
-      - /usr/src/app/api/node_modules
-  react-ui:
+      - ./data:/var/lib/postgresql/data\
+  web:
     build:
-      context: ./my-app
+      context: ./iws-ui
     ports:
       - "3000:3000"
-    container_name: react-ui
-    stdin_open: true
+    container_name: iws-ui
     volumes:
-      - ./my-app:/usr/src/app/my-app
-      - /usr/src/app/my-app/node_modules]
+      - ./iws-ui:/Users/iwsmac/Downloads/tools/js/react/iws-ui
+      - /Users/iwsmac/Downloads/tools/js/react/iws-ui/node_modules
+    depends_on:
+      - db
