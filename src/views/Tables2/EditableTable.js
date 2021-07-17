@@ -1,5 +1,5 @@
 import React from 'react';
-import MaterialTable from 'material-table';
+import {MaterialTable} from '@material-table/core';
 import tableIcons from "./TableIcons.js";
 
 export default function EditableTable(props) {
