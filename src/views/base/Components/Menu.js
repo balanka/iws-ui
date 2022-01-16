@@ -151,7 +151,7 @@ export const MENU = (t)=> new Map([['/journal', JOURNAL(t)],
                     ,['/balance', BALANCESHEET(t)]
 ]);
 
-const initialState = {profile:{token:'noTOken', company:'', modules:[]}, selected:''
+const initialState = {profile:{token:'noTOken', company:'', currency:'', modules:[]}, selected:''
     , menu:new Map(),history_:'', routes:(t)=>LoginRoute}
 const LoginMenu = (t) => new Map([['/login', LOGIN(t)]])
 const LoginRoute = [{ path: '/login', name: 'Login', cp:'views/base/Components/Login' }]
