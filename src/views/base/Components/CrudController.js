@@ -25,6 +25,7 @@ const Edit = (url, profile, record, data, setCurrent) => {
       });
   };
  const Post = (url, profile, record, ctx) => {
+     console.log('recordX', record);
      axios.patch(url.concat(ctx), record, {headers: {'authorization':profile.token}})
       .then(response => {
         //console.log('responsex', response.data);
@@ -44,6 +45,7 @@ const Edit = (url, profile, record, data, setCurrent) => {
                 history.push("/dashboard");
                 //setProfile(previous => (profile));
                 //loginSet(profile);
+                console.log("authorization:", authorization);
             }).catch(function (error) {
             console.log('error', error);
            // history.push(routes.user.login)

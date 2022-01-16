@@ -49,7 +49,7 @@ const MasterfileForm = () => {
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id))
-  const initAdd =()=> EditRow({...initialState[0], company:profile.company, editing:false}
+  const initAdd =()=> EditRow({...initialState[0], company:profile.company, currency:profile.currency, editing:false}
         , false, setCurrent);
   const cancelEdit = (e) => initAdd();
   const columns = ColumnFactory(modelid_,data, t);

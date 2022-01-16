@@ -337,9 +337,20 @@ export const FormWrapper=(props) => {
      </Grid>
     )
 }
+const updateAccount = function(data) {
+    const internal = [];
+    data.forEach(function(item){
+        internal.push({
+            ...item,
+            idebit:0.0, icredit:0.0, debit:0.0, credit:0.0
+        });
+    });
+    return internal;
+};
 
 export const AccountMainForm =(props) => {
     const {current, setCurrent, t, accData } = props
+    //const accData = data; //updateAccount(data);
     return (
         <>
      <CFormGroup row style={{  height:15 }}>
@@ -385,7 +396,6 @@ export const AccountMainForm =(props) => {
         <CSelect className ="flex-row" type="select" name="account" id="account-id"
                  value={current.account} onChange={(event)  => setCurrent({ ...current, account: event.target.value})} >
             {accData.map(item => mappingSelect(item))};
-
         </CSelect>
 
     </CCol>
@@ -422,6 +432,12 @@ export const AccountMainForm =(props) => {
                           label={t('account.balancesheet')}
         />
     </CCol>
+         <CCol sm="1">
+             <CInput bsSize="sm" type="text" id="currency-id" name="currency" className="input-sm"
+                     placeholder="currency" value={current.currency} onChange={(event)  =>
+                 setCurrent({ ...current, currency: event.target.value})} />
+
+         </CCol>
 </CFormGroup>
      <CFormGroup row style={{  height:15 }}>
     <CCol md="2">
