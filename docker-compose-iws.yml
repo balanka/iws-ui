@@ -1,0 +1,12 @@
+version: '3'
+services:
+  nodejs-server:
+    build:
+      context: ./iws-ui
+    ports:
+      - "3080:3080"
+    container_name: iws-ui-api
+    stdin_open: true
+    volumes:
+      - ./iws-ui:/Users/iwsmac/Downloads/tools/js/react/iws-ui
+      - /Users/iwsmac/Downloads/tools/js/react/iws-ui/node_modules
