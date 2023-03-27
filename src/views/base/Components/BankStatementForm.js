@@ -6,7 +6,7 @@ import {BSFormHead, FormFactory} from "./FormsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles,  theme} from "../Tree/BasicTreeTableProps";
 import {Edit, EditRow, Post, Query} from './CrudController';
-import {LOGIN_MENU, useGlobalState} from "./Menu";
+import {LOGIN_MENU, useGlobalState, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 
 function internal(url, profile, history, initialState, data, setData,  current, setCurrent,  title, state
@@ -62,7 +62,9 @@ function internal(url, profile, history, initialState, data, setData,  current, 
 const BankStatementForm = () => {
     const { t,  } = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-    const [profile, ] = useGlobalState('profile');
+    //const [profile, ] = useGlobalState('profile');
+    const { profile,  } = useStore()
+    const { token  } = profile
     const [selected, ] = useGlobalState('selected');
     const [menu, ] = useGlobalState('menu');
     const datax =  profile?.modules?profile.modules:[];
@@ -88,7 +90,7 @@ const BankStatementForm = () => {
     const toggle= ()=> setState({...state, collapse:!state.collapse });
     const columns = ColumnFactory(modelid_, data, t);
     const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.bid));
-    return internal(url, profile, history,initialState, data, setData,  current, setCurrent,  title, state
+    return internal(url, token, history,initialState, data, setData,  current, setCurrent,  title, state
         , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows);
 
 };

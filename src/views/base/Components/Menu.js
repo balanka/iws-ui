@@ -9,6 +9,7 @@ import BasicTreeTable from "./BasicTreeTable";
 import JForm  from "./JForm";
 import FinancialsForm from "./FinancialsForm";
 import {createGlobalState} from "react-hooks-global-state";
+import create from "zustand";
 export const getCurrentMonth = (date)=>{
         const p=date.getUTCMonth()+1;
         return p<=10?"0".concat(p.toString()):p.toString();
@@ -18,35 +19,35 @@ export const date= new Date().toISOString()
 export const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
 const LOGIN=(t)=> ( {id:"0", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:""
     , ctx2:"/", ctx3:'', form:<Login/>, state:loginInit, state1:'' ,state2:'',  state3:'', columns:[]});
-const SUPPLIER =(t)=>({id:"1", name:"Supplier", title:t('supplier.title'), ctx:"/sup", ctx1:"/acc/accmd/9", ctx2:"/vat",  ctx3:"/bank", get:"md/1"
+const SUPPLIER =(t)=>({id:"1", name:"Supplier", title:t('supplier.title'), ctx:"/sup/1000", ctx1:"/acc/accmd/1", ctx2:"/vat",  ctx3:"/bank", get:"md/1"
     , form:<MasterfileForm/> , state:initSup, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc, t)})
-const CUSTOMER = (t)=>({id:"3", name:'Customer', title:t('customer.title'), ctx:"/cust", ctx1:"/acc/accmd/9", ctx2:"/vat", ctx3:"/bank", get:"md/3"
+const CUSTOMER = (t)=>({id:"3", name:'Customer', title:t('customer.title'), ctx:"/cust/1000", ctx1:"/acc/accmd/3", ctx2:"/vat", ctx3:"/bank", get:"md/3"
     , form:<MasterfileForm/> , state:initCust, state1:initAcc, state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc,t)})
-const COSTCENTER =(t)=>({id:"6", name:'CostCenter', title:t('costcenter.title'), ctx:"/cc", ctx1:"/acc/accmd/9", ctx2:'/', ctx3:'', get:"md/6"
+const COSTCENTER =(t)=>({id:"6", name:'CostCenter', title:t('costcenter.title'), ctx:"/cc/1000", ctx1:"/acc/accmd/9", ctx2:'/', ctx3:'', get:"md/6"
     , form:<MasterfileForm/>, state:initCC, state1:initAcc ,state2:'', state3:'', modelid:formEnum.COSTCENTER, columns:ColumnsM(initAcc, t)})
-const ACCOUNT =(t)=>({id:"9", name:"Account", title:t('account.title'), ctx:"/acc", ctx1:"/acc/accmd/9", ctx2:'', ctx3:'', get:"md/9"
+const ACCOUNT =(t)=>({id:"9", name:"Account", title:t('account.title'), ctx:"/acc/1000", ctx1:"", ctx2:'', ctx3:'', get:"md/9"
     , form:<MasterfileForm/>, state:initCC, state1:initAcc ,state2:'', state3:'', modelid:formEnum.ACCOUNT, columns:ColumnsACC(initAcc, t)})
-const COMPANY = (t)=>({id:"10", name:"Company", title:t('company.title'), ctx:"/comp", ctx1:"/acc/accmd/9", ctx2:"/vat", ctx3:"/bank", get:"md/10"
+const COMPANY = (t)=>({id:"10", name:"Company", title:t('company.title'), ctx:"/comp/1000", ctx1:"/acc/accmd/9", ctx2:"/vat", ctx3:"/bank", get:"md/10"
     , form:<MasterfileForm/>, state:initComp, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.COMPANY, columns:ColumnsComp(initAcc,t)})
-const BANK =(t)=>({id:"11", name:"Bank", title:t('bank.title'), ctx:"/bank", ctx1:"", ctx2:"", ctx3:'', get:"md/11"
+const BANK =(t)=>({id:"11", name:"Bank", title:t('bank.title'), ctx:"/bank/1000", ctx1:"", ctx2:"", ctx3:'', get:"md/11"
     , form:<MasterfileForm/>, state:initBank, state1:initAcc ,state2:'', state3:'', modelid:formEnum.BANK, columns:ColumnsM(initAcc, t)})
-const VAT =(t)=>({id:"14", name:"Vat", title:t('vat.title'), ctx:"/vat", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/14"
+const VAT =(t)=>({id:"14", name:"Vat", title:t('vat.title'), ctx:"/vat/1000", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/14"
     , form:<MasterfileForm/>, state:initVat, state1:initAcc ,state2:'', state3:'', modelid:formEnum.VAT, columns:ColumnsVAT(initAcc, t)})
-const BS =(t)=>({id:"18", name:"Bankstatement", title:t('bankstatement.title'), ctx:"/bs", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/18"
+const BS =(t)=>({id:"18", name:"Bankstatement", title:t('bankstatement.title'), ctx:"/bs/1000", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/18"
     , form:<BankStatementForm />, state:initBS, state1:'' ,state2:'', state3:'', modelid:formEnum.BANKSTATEMENT,
     columns:ColumnsBS(t)})
-const PACB = (t)=>({id:"106", name:"PAC", title:t('pac.title'), ctx:"/pac", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/106"
+const PACB = (t)=>({id:"106", name:"PAC", title:t('pac.title'), ctx:"/pac/1000", ctx1:"/acc/1000", ctx2:"/acc/1000", ctx3:'/acc/1000', get:"md/106"
     , form:<JForm/>, state:initPac, state1:initAcc, state2:'', state3:'', modelid:formEnum.PACB, columns:columnsPACB(t) })
-const USER =(t)=>({id:"111", name:"User", title:t('user.title'), ctx:"/users", ctx1:'', ctx2:"", ctx3:'', get:"md/111"
+const USER =(t)=>({id:"111", name:"User", title:t('user.title'), ctx:"/users/1000", ctx1:'', ctx2:"", ctx3:'', get:"md/111"
     , form:<MasterfileForm/>, state:initUser, state1:'', state2:'', state3:'', modelid:formEnum.USER, columns:ColumnsUSER(t)  })
-const JOURNAL = (t)=>({id:"112", name:"Journal", title:t('journal.title'), ctx:"/jou", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
+const JOURNAL = (t)=>({id:"112", name:"Journal", title:t('journal.title'), ctx:"/jou", ctx1:"/acc/1000", ctx2:"", ctx3:'', get:"md/112"
     , form:<JForm/>, state:initJour, state1:initAcc, state2:'', state3:'', modelid:formEnum.JOURNAL, columns:ColumnJournal(t)  });
-const FINANCIALS= (t)=>({id:"1120", name:"Financials", title:t('financials.title'), ctx:"/ftr", ctx1:"/acc"
-    , ctx2:"/cc", ctx3:'', get:"md/112"
+const FINANCIALS= (t)=>({id:"1120", name:"Financials", title:t('financials.title'), ctx:"/ftr/model/1000", ctx1:"/acc/1000"
+    , ctx2:"/cc/1000", ctx3:'', get:"md/112"
     , form:<FinancialsForm/>, state:initFrt, state1:initAcc, state2:initCC , state3:'', modelid:formEnum.FINANCIALS});
 
-const BALANCESHEET =(t)=>({id:"1300", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance"
-    , ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
+const BALANCESHEET =(t)=>({id:"1300", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/balance/1000"
+    , ctx1:"/acc/1000", ctx2:"", ctx3:'', get:"md/112"
     , form:<BasicTreeTable/>, state:initAcc, state1:initAcc, state2:'', state3:'', modelid:formEnum.BALANCESHEET
     , columns:ColumnsBalancesheet(t) });
 export const LOGIN_MENU = (t)=> ([LOGIN(t)]);
@@ -80,7 +81,7 @@ export const modules  = (t) =>[
    , {id:"1120", name:"Financials", title:t('financials.title'), ctx:"/ftr", ctx1:"/acc", ctx2:"/cc", ctx3:'', get:"md/112"
    , form:<FinancialsForm/>, state:initFrt, state1:initAcc, state2:initCC , modelid:formEnum.FINANCIALS}
 
- , {id:"1300", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/acc/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
+ , {id:"1300", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
         , form:<BasicTreeTable/>, state:QUERY, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET
     , columns:ColumnsBalancesheet(t) }
 
@@ -124,9 +125,9 @@ export const initJour=[{ id:'', transid:'', oid:'', account:'', oaccount:'', tra
 export const initBS=[{ bid:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
             , beneficiary:'', accountno:'', bankCode:'', amount:'', currency:'', info:'', company:'', companyIban:''
             , posted:'',modelid:18}]
-export const initFrt=[{ tid:-1, oid:0, costcenter:'', account:'', transdate:new Date()
+export const initFrt=[{ id:-1, oid:0, costcenter:'', account:'', transdate:new Date()
             , enterdate:date, postingdate:date, period:getPeriod(new Date())
-            , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{lid:-1, transid:0
+            , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{id:-1, transid:0
                 , side:true, account:'', oaccount:'', amount:0, duedate:date, text:'', currency:'EUR', company:'1000'
             }]}]
 export const initPac=[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''
@@ -156,6 +157,15 @@ const initialState = {profile:{token:'noTOken', company:'', currency:'', modules
 const LoginMenu = (t) => new Map([['/login', LOGIN(t)]])
 const LoginRoute = [{ path: '/login', name: 'Login', cp:'views/base/Components/Login' }]
 export const { useGlobalState } = createGlobalState(initialState);
+export const  useStore = create((set) => ({
+  profile: initialState,
+  setProfile: (p) => set((state) => ({ profile: p })),
+}))
+
+export const  useDataStore = create((set) => ({
+  dataStore: initAcc,
+  setDataStore: (d) => set((state) => ({ data: d })),
+}))
 export {LoginMenu, LoginRoute};
 
 

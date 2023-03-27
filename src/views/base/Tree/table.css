@@ -35,7 +35,7 @@
 }
 
 .tree-table .cp_tree-table_header-cell:first-child > span {
-  padding-left: 15px;
+  paddingLeft: 15px;
 }
 
 
@@ -69,7 +69,7 @@
   color: #040402;
   border: none;
   padding: 4px 0 4px 15px;
-  background-color: transparent;
+  backgroundColor: transparent;
 }
 
 .tree-table .cp_tree-table_cell .toggle-button:not(:disabled) {
@@ -116,6 +116,6 @@
   font-weight: 400; */
   width: 100%;
   text-align: right;
-  padding-right: 10px;
+  paddingRight: 10px;
 }
 

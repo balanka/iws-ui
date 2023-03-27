@@ -1,5 +1,6 @@
 import React, {memo,useEffect, useState} from 'react'
 import {useGlobalState} from './Menu';
+import {useStore} from './Menu';
 import Grid from "react-fast-grid";
 import {CommonFormHead, FormFactory} from './FormsProps'
 import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
@@ -11,9 +12,13 @@ import {useHistory} from "react-router-dom";
 import {formEnum} from "../../../utils/FORMS";
 const MasterfileForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-  const [profile, ] = useGlobalState('profile');
+ // const [profile, ] = useGlobalState('profile');
   const [selected, ] = useGlobalState('selected');
   const [menu, ] = useGlobalState('menu');
+  const { profile,  } = useStore()
+  const { token  } = profile
+  console.log('profile', profile);
+  console.log('TOKEN', token);
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   let history = useHistory()
   const datax =  profile?.modules?profile.modules:[];
@@ -21,7 +26,7 @@ const MasterfileForm = () => {
   const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
   if(modules_.id==='0') history.push("/login");
   const module=modules_
-  //console.log('menu.module', module);
+  console.log('menu.module', module);
   const url=SERVER_URL.concat(module.ctx)
   const accUrl=SERVER_URL.concat(module.ctx1)
   const vatUrl=SERVER_URL.concat(module.ctx2)
@@ -40,6 +45,9 @@ const MasterfileForm = () => {
   const bankData_ = initBank
   const modelid_ = module.modelid;
   const [data, setData] = useState(data_);
+  console.log("initialState", initialState)
+  console.log("Data", data_)
+  console.log("current_", current_)
   const [accData, setAccData] = useState(accData_);
   const [vatData, setVatData] = useState(vatData_);
   const [bankData, setBankData] = useState(bankData_);
@@ -50,6 +58,7 @@ const MasterfileForm = () => {
   const toggle= ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id))
   const initAdd =()=> EditRow({...initialState[0], company:profile.company, currency:profile.currency, editing:false}
+ // const initAdd =()=> EditRow({...initialState[0], company:profile.company, editing:false}
         , false, setCurrent);
   const cancelEdit = (e) => initAdd();
   const columns = ColumnFactory(modelid_,data, t);
@@ -70,10 +79,10 @@ const MasterfileForm = () => {
   const load = event => data?.length<2?submitQuery(event): void(0)
   const submitQuery =(event)=>{
     event.preventDefault();
-    !isEmpty(accUrl)&&Query(event, accUrl, profile, history, setAccData, initAcc);
-    !isEmpty(vatUrl)&&Query(event, vatUrl, profile, history, setVatData, initVat);
-    !isEmpty(bankUrl)&&Query(event, bankUrl, profile, history, setBankData, initBank);
-    !isEmpty(url)&&Query(event, url, profile, history, setData, initialState);
+    !isEmpty(accUrl)&&Query(event, accUrl, token, history, setAccData, initAcc);
+    !isEmpty(vatUrl)&&Query(event, vatUrl, token, history, setVatData, initVat);
+    !isEmpty(bankUrl)&&Query(event, bankUrl, token, history, setBankData, initBank);
+    !isEmpty(url)&&Query(event, url, token, history, setData, initialState);
   }
 
   const submitAdd = event => {
@@ -82,13 +91,14 @@ const MasterfileForm = () => {
   };
   let parentChildData =(row, rows) => rows.find(a => a.id === row.account)
   function buildForm(current){
+   // console.log("current", current)
     return <>
       <Grid container spacing={2} style={{...styles.outer }} direction="column" >
         <CommonFormHead styles={styles} title={title} collapse={state.collapse} initAdd ={initAdd} initialState={initialState}
                         setData={setData} setAccData={setAccData} setBankData={setBankData}  url={url} accUrl={accUrl}
                         cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {load} toggle={toggle}
                         toggleToolbar={toggleToolbar}  style={{...styles.inner}}/>
-        <FormFactory formid ={modelid_} current={current} setCurrent={setCurrent} t={t} accData={accData} vatData={vatData}
+        <FormFactory formid ={modelid_}  current={current} setCurrent={setCurrent} t={t} accData={accData} vatData={vatData}
                      bankData={bankData} collapse={state.collapse} styles={styles} style={{...styles.inner}}/>
 
         <Grid container spacing={2} style={{...styles.inner, display:'block' }} direction="column" >

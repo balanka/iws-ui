@@ -12,6 +12,9 @@
  * The mask defaults to dateFormat.masks.default.
  */
 
+const sortById = (a,b) => ((a.id < b.id) ? -1 : ((a.id > b.id) ? 1 : 0));
+const sortByName = (a,b) => ((a.name < b.name) ? -1 : ((a.name > b.name) ? 1 : 0));
+
 const formatterDE = new Intl.NumberFormat('de-DE', {
     style: 'currency',
     currency: 'EUR',
@@ -155,4 +158,4 @@ function currencyAmountFormatDE(num, symbol) {
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.').concat(' ').concat(symbol)
   ) // use . as a separator
 }
-export {dateFormat, capitalize, formatterDE,  currencyFormatDE, currencyAmountFormatDE, currencyFormatUS};
+export {dateFormat, capitalize, formatterDE,  currencyFormatDE, currencyAmountFormatDE, currencyFormatUS, sortById, sortByName};

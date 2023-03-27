@@ -44,7 +44,7 @@ export default function EditableTable(props) {
                 },
                 pagination: {
                     labelDisplayedRows: t('muitable.labelDisplayedRows'),
-                    labelRowsSelect: t('muitable.labelRowsSelect'),
+                    //labelRowsSelect: t('muitable.labelRowsSelect'),
                     labelRowsPerPage: t('muitable.labelRowsPerPage'),
                     firstAriaLabel: t('muitable.firstAriaLabel'),
                     firstTooltip: t('muitable.firstTooltip'),

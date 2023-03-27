@@ -4,6 +4,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import {formEnum} from "../../utils/FORMS";
 import {dateFormat, formatterDE} from "../../utils/utils";
+import {CSelect} from "@coreui/react";
 
 
 const mapping = (acc) =>
@@ -17,6 +18,14 @@ export  const ACCOUNT=(data, value, onRowDataChange, rowData, fieldName) => {
         onRowDataChange({...rowData, account: event.target.value})}>
         {data.map(mapping)} id={"cb".concat(fieldName)}
     </Select>)
+}
+export  const ACCOUNT2X=(data, value, onRowDataChange, rowData, fieldName) => {
+    return (<CSelect className="flex-row" type="select" name="bankAcc" id="bankAcc-id"
+                     value={value} onChange={(event) =>
+      onRowDataChange({...rowData, oaccount: event.target.value})}>
+        {data.map(mapping)} id={"cb".concat(fieldName)}
+
+    </CSelect>)
 }
 
 export  const ACCOUNT2=(data, value, onRowDataChange, rowData, fieldName) => {
@@ -42,11 +51,11 @@ export const  editable = (data, setData, current ) => ({
             setTimeout(() => {
                 resolve();
                 const datax = JSON.parse(JSON.stringify(data));
-                const index = datax.findIndex(obj => obj.lid === newData.lid);
+                const index = datax.findIndex(obj => obj.id === newData.id);
                 datax[index] = newData;
                 setData(datax);
                 const currentx = {...current};
-                const index1 = currentx.lines.findIndex(obj => obj.lid === newData.lid);
+                const index1 = currentx.lines.findIndex(obj => obj.id === newData.id);
                 currentx.lines[index1] = newData;
 
             }, 600);
@@ -56,7 +65,7 @@ export const  editable = (data, setData, current ) => ({
           setTimeout(() => {
             const dataDelete = JSON.parse(JSON.stringify(data));
             const currentx = {...current};
-            const index = currentx.lines.findIndex(obj => obj.lid === oldData.lid);
+            const index = currentx.lines.findIndex(obj => obj.id === oldData.id);
             dataDelete.splice(index, 1);
             setData([...dataDelete]);
             const deleted = currentx.lines[index];
@@ -83,7 +92,7 @@ export const columnsPACB = (t) => [
 ]
 
 export const columnsF =(data, line, current, t) => [
-     {field:'tid', title:t('financials.id'), initialEditValue:line.id, align:"right", export:true}
+     {field:'id', title:t('financials.id'), initialEditValue:line.id, align:"right", export:true}
     , {field:'oid', title:t('financials.oid'),initialEditValue:current.oid, align:"right", export:true}
     , {field:'account', title:t('financials.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
             ACCOUNT ( data, value, onRowDataChange, rowData, "account" ),  initialEditValue:'', width: 20
@@ -103,13 +112,14 @@ export const columnsF =(data, line, current, t) => [
        , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }, export:true}
     , {field:'text', title:t('financials.text'), type:"string", export:true}
     , {field:'typeJournal', title:t('financials.type'), type:"numeric", export:true}
+    , {field:'file_content', title:t('financials.file_content'), type:"numeric", export:true}
     , {field:'modelid', title:t('common.modelid'), type:"numeric", export:true}
     , {field:'company', title:t('common.company'), type:"numeric", export:true}
 ]
 export const Linescolumns =(data, line, current, t) => [
-      {field:'lid', title:t('financials.line.id'), type:'numeric', hidden:true,  initialEditValue:line.lid, editable:'never'
+      {field:'id', title:t('financials.line.id'), type:'numeric', hidden:true,  initialEditValue:line.id, editable:'never'
       ,  cellStyle: {maxWidth:5}, headerStyle: {maxWidth:5}}
-    , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current.tid,  editable:'never'
+    , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current.id,  editable:'never'
     ,  cellStyle: {maxWidth:5}, headerStyle: {maxWidth:5}}
     , {field:'account', title:t('financials.line.account'), type:'string', hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
             ACCOUNT ( data, value, onRowDataChange, rowData,"account" ),  initialEditValue:'', align:"right"
@@ -171,10 +181,11 @@ export const OptionsM = ({
     showFirstLastPageButtons:false,
     showTitle:false,
     padding:"dense",
-    filtering: true,
+    filtering: false,
     search: false,
     selection: true,
     columnResizable: true,
+    doubleHorizontalScroll:true,
     cellStyle: {padding: '0.3em', fontSize: 10,},
     headerStyle: {padding: '0.3em', fontSize: 10,  position: 'sticky',
         //backgroundColor: theme.palette.common.black,
@@ -400,6 +411,7 @@ export const ColumnsBalancesheet=(t) =>[{ title:t('common.id'), field: 'id', typ
    ]
 
 export const ColumnFactory =(formid, data, t)=> {
+    console.log("formid~x:",formid)
     switch(formid) {
         case formEnum.ACCOUNT:
             return ColumnsACC(data, t);

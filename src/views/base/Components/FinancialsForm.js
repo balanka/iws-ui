@@ -7,13 +7,14 @@ import {Add, Edit, EditRow, Post, Query} from './CrudController';
 import {Options, OptionsM, columnsF, Linescolumns} from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
-import {useGlobalState, LoginMenu} from "./Menu";
+import {useGlobalState, LoginMenu, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-  const [profile, ] = useGlobalState('profile');
+  const { profile,  } = useStore()
+  const { token  } = profile
   const [selected, ] = useGlobalState('selected');
   let history = useHistory();
   const { t,  } = useTranslation();
@@ -46,7 +47,8 @@ const FinancialsForm = () => {
   useEffect(() => {}, [current, setCurrent, data, setData ]);
   const toggleToolbar = ()=> setToolbar(!toolbar );
   const toggle = ()=> setState({...state, collapse:!state.collapse });
-  const setSelectedRows = (rows_)=>setRows(rows_.map( (item) =>({id:item.tid,  modelid:item.modelid})))
+  const setSelectedRows = (rows_)=>setRows(rows_.map( (item) =>({id:item.id,  modelid:item.modelid})))
+
 
   const models=[{ id:'112', name:'Supplier invoice'}
     ,{ id:'114', name:'Payment'}
@@ -65,10 +67,10 @@ const FinancialsForm = () => {
   const isEmpty = (str) => (!str || 0 === str.length);
   const submitQuery =(event, modelid)=>{
     event.preventDefault();
-    const url_=url.concat('/ftrmd/').concat(modelid);
-    !isEmpty(accUrl)&&accData?.length<2&&Query(event, accUrl, profile, history, setAccData, initAcc);
-    !isEmpty(ccUrl)&&ccData.length<2&&Query(event, ccUrl, profile, history, setCcData, initCc);
-    !isEmpty(url_)&&Query(event, url_, profile, history, setData, initialState);
+    const url_=url.concat('/').concat(modelid);
+    !isEmpty(accUrl)&&accData?.length<2&&Query(event, accUrl, token, history, setAccData, initAcc);
+    !isEmpty(ccUrl)&&ccData.length<2&&Query(event, ccUrl, token, history, setCcData, initCc);
+    !isEmpty(url_)&&Query(event, url_, token, history, setData, initialState);
   }
   const handleModuleChange = event => {
     event.preventDefault();
@@ -76,22 +78,22 @@ const FinancialsForm = () => {
     submitQuery(event, event.target.value);
   };
 
-  const addAmount = row => ({...row, total: row.lines.reduce((acc, line) => acc + line.amount, 0)})
-  const datax=() =>(data).map( row =>addAmount(row));
+  const buildAmount = row => ({...row, total: row.lines.reduce((acc, line) => acc + line.amount, 0)});
+  const buildData =() => data.map( row =>buildAmount(row));
 
   const edit = editedRow =>{
-    const record = data.find(obj => obj.tid === editedRow.tid);
+    const record = data.find(obj => obj.id === editedRow.id);
     setCurrent({...record, editing:true});
   }
 
   const submitPost = event => {
     event.preventDefault();
-    Post(url, profile, [current.id], "/post");
+    Post(url, token, [current.id], "/post");
   };
 
   const submitCopy = event => {
     event.preventDefault();
-    Post(url, profile, rows, "/copy");
+    Post(url, token, rows, "/copy");
   };
 
   const getCurrentMonth = (date)=>{
@@ -104,18 +106,18 @@ const FinancialsForm = () => {
   const submitEdit = event => {
     event.preventDefault();
     if(current.editing) {
-      Edit(url, profile, {...current}, data, setCurrent);
+      Edit(url, token, {...current}, data, setCurrent);
     } else submitAdd(event)
   };
 
   const submitAdd = event => {
     event.preventDefault();
-    const row = {tid:current_.id, oid:current_.oid, costcenter:current_.costcenter, account:current_.account
+    const row = {id:current_.id, oid:current_.oid, costcenter:current_.costcenter, account:current_.account
       , transdate:new Date(current_.transdate).toISOString(), enterdate:new Date().toISOString()
       , postingdate:new Date().toISOString(), period:getPeriod(getCurrentDate()), posted:current_.posted
       , modelid:current_.modelid, company:current_.company, text:current_.text, typeJournal:current_.typeJournal
       , file_content:current_.file_content, lines:[] };
-    Add(url, profile, row, data, initialState, setCurrent);
+    Add(url, token, row, data, initialState, setCurrent);
 
   };
 
@@ -137,7 +139,7 @@ const FinancialsForm = () => {
   const updateRow = (newData, oldData) =>{
     if (oldData) {
       const dx = {...current};
-      const index = dx.lines.findIndex(obj => obj.lid === newData.lid);
+      const index = dx.lines.findIndex(obj => obj.id === newData.id);
       dx.lines[index] = {...newData};
       setCurrent({...dx});
     }
@@ -145,7 +147,7 @@ const FinancialsForm = () => {
   const deleteRow = (oldData) =>{
     if (oldData) {
       const dx = {...current};
-      const index =dx.lines.findIndex(obj => obj.lid === oldData.lid);
+      const index =dx.lines.findIndex(obj => obj.id === oldData.id);
       const deleted = dx.lines[index];
       dx.lines[index] = {...deleted, transid:-2 };
       setCurrent({...dx});
@@ -163,13 +165,13 @@ const FinancialsForm = () => {
           <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()}
                          columns={columnsX} editable={editable()}  t={t}
                          tableRef={tableRef} />
-          <CInput disabled={current.posted} bsSize="sm" type="textarea" id="text-input" name="text" className="input-sm"
+          <CInput disabled={current.posted} bssize="sm" type="textarea" id="text-input" name="text" className="input-sm"
                   placeholder="text" value={current.text} onChange={(event)  =>
               setCurrent({ ...current, text: event.target.value})} />
         </>
     )
 
-    const parentChildData =(row, rows) => rows.find(a => a.tid === row.transid)
+    const parentChildData =(row, rows) => rows.find(a => a.id === row.transid)
     return <>
       <Grid container spacing={2} style={{...styles.outer , display:'block'}} direction="column" >
         <FinancialsFormHead styles={styles} title={title}  collapse={state.collapse} initAdd ={initAdd}
@@ -183,7 +185,7 @@ const FinancialsForm = () => {
                      collapse={state.collapse}
         />
         <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px", pageSize:5
-          , pageSizeOptions:[5,10, 20, 50]}} flag={current.posted} data={datax()} columns={columns}
+          , pageSizeOptions:[5,10, 20, 50]}} flag={current.posted} data={buildData()} columns={columns}
           t={t}  edit ={edit} setSelectedRows ={setSelectedRows} parentChildData={parentChildData}/>
 
       </Grid>

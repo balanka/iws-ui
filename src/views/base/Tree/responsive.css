@@ -84,7 +84,7 @@
 
   header > section {
     padding-top: .8rem;
-    padding-bottom: 0;
+    paddingBottom: 0;
   }
 
   header > section .install-instructions {

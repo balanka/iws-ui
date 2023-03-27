@@ -7,7 +7,7 @@ import {formEnum} from "../../../utils/FORMS";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
 import { Query} from './CrudController';
-import {useGlobalState} from "./Menu";
+import {useGlobalState, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 
 function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
@@ -125,7 +125,9 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
 const JForm = () => {
     const { t,  } = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-    const [profile, ] = useGlobalState('profile');
+    //const [profile, ] = useGlobalState('profile');
+    const { profile,  } = useStore()
+    const { token  } = profile
     const [selected, ] = useGlobalState('selected');
     const [menu, ] = useGlobalState('menu');
     const datax =  profile?.modules?profile.modules:[];
@@ -156,7 +158,7 @@ const JForm = () => {
         .concat(current.fromPeriod).concat('/')
         .concat(current.toPeriod);
 
-    return Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
+    return Internal(isDebit, t, modelid, accData, accUrl, token, history, setAccData, initAcc, current, getUrl, setData
         , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX);
 
 };

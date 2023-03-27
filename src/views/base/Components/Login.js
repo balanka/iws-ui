@@ -15,10 +15,11 @@ import {
   CRow, CSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {useGlobalState} from './Menu';
+import {useGlobalState, useStore} from './Menu';
 import { Login as Login_} from './CrudController';
 import { useTranslation} from 'react-i18next';
 import {LOGIN_MENU, MENU} from "./Menu";
+import create from "zustand";
 
 export const languages = {data:[
     {id:'en', name:'English'},
@@ -30,9 +31,11 @@ const Login = () => {
   let history = useHistory()
   const { t, i18n } = useTranslation();
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-  const [, setProfile] = useGlobalState('profile');
+  //const [, setProfile] = useGlobalState('profile');
+  const { _, setProfile } = useStore()
   const [, setMenu] = useGlobalState('menu');
   const [, setRoutes] = useGlobalState('routes');
+
   //const [history_, setHistory_] = useGlobalState('history_');
   const module= LOGIN_MENU(t)[0];
   const url=SERVER_URL.concat(module.ctx)
