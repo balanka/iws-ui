@@ -53,7 +53,7 @@ const MasterfileForm = () => {
   const [bankData, setBankData] = useState(bankData_);
   const [current,setCurrent] = useState(current_);
   const [toolbar, setToolbar] = useState(true);
-  useEffect(() => {}, [current, setCurrent, data, setData ]);
+  useEffect(() => {}, [current, setCurrent, data ]);
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id))

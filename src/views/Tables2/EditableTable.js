@@ -1,9 +1,11 @@
 import React from 'react';
-import MaterialTable from '@material-table/core';
+import MaterialTable, {MTableBodyRow} from '@material-table/core';
 import tableIcons from "./TableIcons.js";
 
 export default function EditableTable(props) {
+    const handleClick = (event, rowData) => edit(rowData);
     const {Options, flag, data, columns, t, tableRef, edit, editable, setSelectedRows, parentChildData } = props
+
     return (
         <MaterialTable
             editable={flag?null:editable}
@@ -14,8 +16,13 @@ export default function EditableTable(props) {
             icons={tableIcons}
             options={Options} //, columnResizable:true, doubleHorizontalScroll:true, padding:'dense'
             parentChildData ={parentChildData}
-            //components={components}
+            components={{
+              Row: (props) => {
+                return <MTableBodyRow {...props} onRowClick={handleClick} />;
+              },
+            }}
             onSelectionChange={(rows) => {
+                console.log('rowsrows',rows)
                 setSelectedRows(rows);
                 if(Options.selection&&edit&&rows.length>0)
                     edit(rows[0]);

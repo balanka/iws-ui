@@ -182,7 +182,7 @@ export const OptionsM = ({
     showTitle:false,
     padding:"dense",
     filtering: false,
-    search: false,
+    search: true,
     selection: true,
     columnResizable: true,
     doubleHorizontalScroll:true,
