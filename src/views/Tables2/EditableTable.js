@@ -16,16 +16,12 @@ export default function EditableTable(props) {
             icons={tableIcons}
             options={Options} //, columnResizable:true, doubleHorizontalScroll:true, padding:'dense'
             parentChildData ={parentChildData}
-            components={{
-              Row: (props) => {
-                return <MTableBodyRow {...props} onRowClick={handleClick} />;
-              },
-            }}
-            onSelectionChange={(rows) => {
+            onRowClick={handleClick}
+            onSelectionChange={(rows, rowData) => {
                 console.log('rowsrows',rows)
                 setSelectedRows(rows);
-                if(Options.selection&&edit&&rows.length>0)
-                    edit(rows[0]);
+                if(Options.selection&&rows.length>0)
+                    edit(rowData);
             }}
             localization={{
                 body: {
