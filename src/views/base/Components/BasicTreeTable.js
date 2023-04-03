@@ -5,7 +5,7 @@ import {JournalFormHead, FormFactory} from './FormsProps';
 import {styles} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {Get, Query} from './CrudController';
-import {useGlobalState, LOGIN_MENU, useStore, useDataStore} from "./Menu";
+import {useGlobalState, LOGIN_MENU, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {OptionsM, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
 import {useTranslation} from "react-i18next";
@@ -79,7 +79,7 @@ const  BasicTreeTable =()=> {
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const { profile,  } = useStore()
     const { token  } = profile
-    const {dataStore,  setDataStore} = useDataStore()
+    //const {dataStore,  setDataStore} = useDataStore()
     //const { dataStore  } = dataStore_
     const [selected, ] = useGlobalState('selected');
     const [menu, ] = useGlobalState('menu');
@@ -115,6 +115,6 @@ const  BasicTreeTable =()=> {
         .concat(current.fromPeriod).concat('/')
         .concat(current.toPeriod);
     return Internal(data, setData, accUrl, initAcc, isEmpty(accData)?initAcc:accData, setAccData, token, history, current, initialState, state
-        , title, getUrl, url, toggle, toggleToolbar, setCurrent, t, toolbar, columnsX, dataStore);
+        , title, getUrl, url, toggle, toggleToolbar, setCurrent, t, toolbar, columnsX);
 };
 export default  memo(BasicTreeTable)

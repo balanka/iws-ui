@@ -455,7 +455,7 @@ export const BankStatementMainForm =(props) => {
                 </CCol>
                 <CCol sm="4">
                     <CInput  bssize="sm" type="text" id="account-id" name="id" className="input-sm"
-                             placeholder="Id" value= {current.bid}  />
+                             placeholder="Id" value= {current.id}  />
                 </CCol>
                 <CCol sm="1">
                     <CLabel size="sm" htmlFor="input-small">{t('common.postingdate')}</CLabel>

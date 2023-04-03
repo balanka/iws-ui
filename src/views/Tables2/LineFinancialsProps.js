@@ -172,7 +172,7 @@ export const Options = ({
 export const OptionsM = ({
     toolbar:true,
     draggable:true,
-    header:true,
+   // header:true,
     grouping:false,
     sorting:true,
     columnsButton:true,
@@ -187,6 +187,7 @@ export const OptionsM = ({
     columnResizable: true,
     doubleHorizontalScroll:true,
     cellStyle: {padding: '0.3em', fontSize: 10,},
+
     headerStyle: {padding: '0.3em', fontSize: 10,  position: 'sticky',
         //backgroundColor: theme.palette.common.black,
           backgroundColor: "#cce6ff",
@@ -311,7 +312,7 @@ export const ColumnsVAT = (data, t) => [
 ]
 
 export const ColumnsBS =(t) => [
-      {field:'bid', title:t('common.id'), type:'numeric', align:"right", export:true}
+      {field:'id', title:t('common.id'), type:'numeric', align:"right", export:true}
     , {field:'posted', title:t('bankstatement.posted'), type:"boolean", export:true}
     , {field:'depositor', title:t("bankstatement.depositor"), type:"string", export:true}
     , {field:'valuedate', title:t('bankstatement.valuedate'), type:"date",  align:"right", export:true}
@@ -411,7 +412,6 @@ export const ColumnsBalancesheet=(t) =>[{ title:t('common.id'), field: 'id', typ
    ]
 
 export const ColumnFactory =(formid, data, t)=> {
-    console.log("formid~x:",formid)
     switch(formid) {
         case formEnum.ACCOUNT:
             return ColumnsACC(data, t);

@@ -1,8 +1,8 @@
 
-import {createMuiTheme} from "@material-ui/core/styles";
+import {createTheme} from "@material-ui/core/styles";
 import { blue, green } from "@material-ui/core/colors";
 
-export const theme = createMuiTheme({
+export const theme = createTheme({
     palette: {
         primary: {
             main: '#4caf50',
@@ -17,7 +17,7 @@ export const theme = createMuiTheme({
 });
 
 export function rowStyle (rowData) {
-    return  (rowData.tableData.id % 2===0)?
+    return  (rowData.tableData.index % 2===0)?
         {
             //color:'black',
             padding:0.5,
@@ -32,7 +32,7 @@ export function rowStyle (rowData) {
             height:3,
             fontsize:10,
             //backgroundColor:"#fff9e6"
-        }
+        };
 
 }
 export const styles = {

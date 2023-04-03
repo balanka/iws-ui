@@ -112,7 +112,7 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
                              collapse={state.collapse} styles={styles} submitQuery={submitQuery_}/>
 
                 <Grid container spacing={2} style={{...styles.inner, display: 'block'}} direction="column">
-                    <EditableTable Options={{...OptionsM, toolbar: toolbar}}
+                    <EditableTable Options={{...OptionsM, toolbar: toolbar, pageSize:13, pageSizeOptions:[15, 25, 50]}}
                                    data={data ? summary(data) : initialState} columns={columnsX}
                                    theme={theme} t={t} setSelectedRows={() => void (0)}/>
                 </Grid>

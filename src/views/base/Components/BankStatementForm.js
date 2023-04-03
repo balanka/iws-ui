@@ -25,7 +25,7 @@ function internal(url, profile, history, initialState, data, setData,  current, 
     };
 
     const edit = editedRow => {
-        const record = data.find(obj => obj.bid === editedRow.bid);
+        const record = data.find(obj => obj.id === editedRow.id);
         const row = {...record, editing: true}
         setCurrent(row);
     }
@@ -89,7 +89,7 @@ const BankStatementForm = () => {
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle= ()=> setState({...state, collapse:!state.collapse });
     const columns = ColumnFactory(modelid_, data, t);
-    const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.bid));
+    const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id));
     return internal(url, token, history,initialState, data, setData,  current, setCurrent,  title, state
         , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows);
 

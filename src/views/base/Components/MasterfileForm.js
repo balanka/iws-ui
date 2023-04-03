@@ -79,10 +79,14 @@ const MasterfileForm = () => {
   const load = event => data?.length<2?submitQuery(event): void(0)
   const submitQuery =(event)=>{
     event.preventDefault();
-    !isEmpty(accUrl)&&Query(event, accUrl, token, history, setAccData, initAcc);
-    !isEmpty(vatUrl)&&Query(event, vatUrl, token, history, setVatData, initVat);
-    !isEmpty(bankUrl)&&Query(event, bankUrl, token, history, setBankData, initBank);
-    !isEmpty(url)&&Query(event, url, token, history, setData, initialState);
+    console.log('url', accUrl);
+    console.log('vatUrl', accUrl);
+    console.log('bankUrl', accUrl);
+    console.log('accUrl', accUrl);
+    accUrl&&Query(event, accUrl, token, history, setAccData, initAcc);
+    vatUrl&&Query(event, vatUrl, token, history, setVatData, initVat);
+    bankUrl&&Query(event, bankUrl, token, history, setBankData, initBank);
+    url&&Query(event, url, token, history, setData, initialState);
   }
 
   const submitAdd = event => {
