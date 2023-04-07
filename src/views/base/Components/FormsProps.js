@@ -68,9 +68,9 @@ const mapping = (acc) =>
 
 
   const mappingSelect = (item) => <option key={item.id} value={item.id}>
-    {item.id+ " ".concat (item.name)}</option>
+    {item.id.concat( " ").concat (item.name)}</option>
 const mappingSelectName = (item) => <option key={item.id} value={item.id}>
-    {item.name+ " ".concat (item.id)}</option>;
+    {item.name.concat( " ").concat (item.id)}</option>;
 export const  filter = (rows, cols, txt,) => rows.filter(col =>
     cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b));
 

@@ -60,10 +60,9 @@ const Login = () => {
     event.stopPropagation();
     setCurrent({...value})
   }
-  const mapping = item => <option key={item.id} value={item.id}>
-    {item.id+ " ".concat (item.name)}</option>
+
   //const onBlur =(value) => {console.log("focus lost", value) }
-  return (
+  return (<>
       <div className="c-app c-default-layout flex-row align-items-center">
         <CContainer>
           <CRow className="justify-content-center">
@@ -100,12 +99,12 @@ const Login = () => {
                         </CInputGroupPrepend>
                         <CSelect className ="flex-row" type="select" name="company" id="company-id"
                                  value={current.company} onChange={(event ) =>handleEvent(event, {...current, company: event.target.value})} >
-                          {companies.data.map(item => mapping(item))};
+                          {companies.data.map(item => <option key ={item.id} value ={item.id}>{item.id.concat (" ").concat (item.name)}</option>)};
                         </CSelect>
                         <CSelect className ="flex-row" type="select" name="language" id="language-id"
                                  value={current.language} onChange={(event ) =>{handleEvent(event,{...current, language: event.target.value});
                                 i18n.changeLanguage(event.target.value)}} >
-                          {languages.data.map(item => mapping(item))};
+                          {languages.data.map(item =><option key ={item.id} value ={item.id}>{item.id.concat (" ").concat (item.name)}</option> )};
                         </CSelect>
                       </CInputGroup>
                       <CRow>
@@ -136,6 +135,7 @@ const Login = () => {
           </CRow>
         </CContainer>
       </div>
+    </>
   )
 }
 

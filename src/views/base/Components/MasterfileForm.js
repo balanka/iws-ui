@@ -97,7 +97,7 @@ const MasterfileForm = () => {
   function buildForm(current){
    // console.log("current", current)
     return <>
-      <Grid container spacing={2} style={{...styles.outer }} direction="column" >
+      <Grid container spacing={2} style={{...styles.outer }} direction="column">
         <CommonFormHead styles={styles} title={title} collapse={state.collapse} initAdd ={initAdd} initialState={initialState}
                         setData={setData} setAccData={setAccData} setBankData={setBankData}  url={url} accUrl={accUrl}
                         cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {load} toggle={toggle}

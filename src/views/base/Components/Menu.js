@@ -17,72 +17,73 @@ export const getCurrentMonth = (date)=>{
 
 export const date= new Date().toISOString()
 export const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
+const masterfilesForm = '<MasterfileForm/>'
 const LOGIN=(t)=> ( {id:"0", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:""
-    , ctx2:"/", ctx3:'', form:<Login/>, state:loginInit, state1:'' ,state2:'',  state3:'', columns:[]});
+    , ctx2:"/", ctx3:'', form:'<Login/>', state:loginInit, state1:'' ,state2:'',  state3:'', columns:[]});
 const SUPPLIER =(t)=>({id:"1", name:"Supplier", title:t('supplier.title'), ctx:"/sup/1000", ctx1:"/acc/1000", ctx2:"/vat/1000",  ctx3:"/bank/1000", get:"md/1"
-    , form:<MasterfileForm/> , state:initSup, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc, t)})
+    , form:masterfilesForm , state:initSup, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc, t)})
 const CUSTOMER = (t)=>({id:"3", name:'Customer', title:t('customer.title'), ctx:"/cust/1000", ctx1:"/acc/1000", ctx2:"/vat/1000", ctx3:"/bank/1000", get:"md/3"
-    , form:<MasterfileForm/> , state:initCust, state1:initAcc, state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc,t)})
+    , form:masterfilesForm, state:initCust, state1:initAcc, state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc,t)})
 const COSTCENTER =(t)=>({id:"6", name:'CostCenter', title:t('costcenter.title'), ctx:"/cc/1000", ctx1:"/acc/1000", ctx2:'/', ctx3:'', get:"md/6"
-    , form:<MasterfileForm/>, state:initCC, state1:initAcc ,state2:'', state3:'', modelid:formEnum.COSTCENTER, columns:ColumnsM(initAcc, t)})
+    , form:masterfilesForm, state:initCC, state1:initAcc ,state2:'', state3:'', modelid:formEnum.COSTCENTER, columns:ColumnsM(initAcc, t)})
 const ACCOUNT =(t)=>({id:"9", name:"Account", title:t('account.title'), ctx:"/acc/1000", ctx1:"", ctx2:'', ctx3:'', get:"md/9"
-    , form:<MasterfileForm/>, state:initCC, state1:initAcc ,state2:'', state3:'', modelid:formEnum.ACCOUNT, columns:ColumnsACC(initAcc, t)})
+    , form:masterfilesForm, state:initCC, state1:initAcc ,state2:'', state3:'', modelid:formEnum.ACCOUNT, columns:ColumnsACC(initAcc, t)})
 const COMPANY = (t)=>({id:"10", name:"Company", title:t('company.title'), ctx:"/comp/1000", ctx1:"/acc/1000", ctx2:"/vat/1000", ctx3:"/bank/1000", get:"md/10"
-    , form:<MasterfileForm/>, state:initComp, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.COMPANY, columns:ColumnsComp(initAcc,t)})
+    , form:masterfilesForm, state:initComp, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.COMPANY, columns:ColumnsComp(initAcc,t)})
 const BANK =(t)=>({id:"11", name:"Bank", title:t('bank.title'), ctx:"/bank/1000", ctx1:"", ctx2:"", ctx3:'', get:"md/11"
-    , form:<MasterfileForm/>, state:initBank, state1:initAcc ,state2:'', state3:'', modelid:formEnum.BANK, columns:ColumnsM(initAcc, t)})
+    , form:masterfilesForm, state:initBank, state1:initAcc ,state2:'', state3:'', modelid:formEnum.BANK, columns:ColumnsM(initAcc, t)})
 const VAT =(t)=>({id:"14", name:"Vat", title:t('vat.title'), ctx:"/vat/1000", ctx1:"/acc/1000", ctx2:"", ctx3:'', get:"md/14"
-    , form:<MasterfileForm/>, state:initVat, state1:initAcc ,state2:'', state3:'', modelid:formEnum.VAT, columns:ColumnsVAT(initAcc, t)})
+    , form:masterfilesForm, state:initVat, state1:initAcc ,state2:'', state3:'', modelid:formEnum.VAT, columns:ColumnsVAT(initAcc, t)})
 const BS =(t)=>({id:"18", name:"Bankstatement", title:t('bankstatement.title'), ctx:"/bs/1000", ctx1:"/acc/1000", ctx2:"", ctx3:'', get:"md/18"
-    , form:<BankStatementForm />, state:initBS, state1:'' ,state2:'', state3:'', modelid:formEnum.BANKSTATEMENT,
+    , form:'<BankStatementForm/>', state:initBS, state1:'' ,state2:'', state3:'', modelid:formEnum.BANKSTATEMENT,
     columns:ColumnsBS(t)})
 const PACB = (t)=>({id:"106", name:"PAC", title:t('pac.title'), ctx:"/pac/1000", ctx1:"/acc/1000", ctx2:"/acc/1000", ctx3:'/acc/1000', get:"md/106"
-    , form:<JForm/>, state:initPac, state1:initAcc, state2:'', state3:'', modelid:formEnum.PACB, columns:columnsPACB(t) })
+    , form:'<JForm/>', state:initPac, state1:initAcc, state2:'', state3:'', modelid:formEnum.PACB, columns:columnsPACB(t) })
 const USER =(t)=>({id:"111", name:"User", title:t('user.title'), ctx:"/users/1000", ctx1:'', ctx2:"", ctx3:'', get:"md/111"
-    , form:<MasterfileForm/>, state:initUser, state1:'', state2:'', state3:'', modelid:formEnum.USER, columns:ColumnsUSER(t)  })
+    , form:masterfilesForm, state:initUser, state1:'', state2:'', state3:'', modelid:formEnum.USER, columns:ColumnsUSER(t)  })
 const JOURNAL = (t)=>({id:"112", name:"Journal", title:t('journal.title'), ctx:"/jou", ctx1:"/acc/1000", ctx2:"", ctx3:'', get:"md/112"
-    , form:<JForm/>, state:initJour, state1:initAcc, state2:'', state3:'', modelid:formEnum.JOURNAL, columns:ColumnJournal(t)  });
+    , form:'<JForm/>', state:initJour, state1:initAcc, state2:'', state3:'', modelid:formEnum.JOURNAL, columns:ColumnJournal(t)  });
 const FINANCIALS= (t)=>({id:"1120", name:"Financials", title:t('financials.title'), ctx:"/ftr/model/1000", ctx1:"/acc/1000"
     , ctx2:"/cc/1000", ctx3:'', get:"md/112"
-    , form:<FinancialsForm/>, state:initFrt, state1:initAcc, state2:initCC , state3:'', modelid:formEnum.FINANCIALS});
+    , form:'<FinancialsForm/>', state:initFrt, state1:initAcc, state2:initCC , state3:'', modelid:formEnum.FINANCIALS});
 
 const BALANCESHEET =(t)=>({id:"1300", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/balance/1000"
     , ctx1:"/acc/1000", ctx2:"", ctx3:'', get:"md/112"
-    , form:<BasicTreeTable/>, state:initAcc, state1:initAcc, state2:'', state3:'', modelid:formEnum.BALANCESHEET
+    , form:'<BasicTreeTable/>', state:initAcc, state1:initAcc, state2:'', state3:'', modelid:formEnum.BALANCESHEET
     , columns:ColumnsBalancesheet(t) });
 export const LOGIN_MENU = (t)=> ([LOGIN(t)]);
 
 export const modules  = (t) =>[
         {id:"0", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:""
-            , ctx2:"/", ctx3:'', form:<Login/>, state:initCC, state1:initAcc ,state2:'',  columns:[]}
+            , ctx2:"/", ctx3:'', form:'<Login/>', state:initCC, state1:initAcc ,state2:'',  columns:[]}
       , {id:"1", name:"Supplier", title:t('supplier.title'), ctx:"/sup", ctx1:"/acc/accmd/9", ctx2:"/vat",  ctx3:"/bank", get:"md/1"
-            , form:<MasterfileForm/> , state:initSup, state1:initAcc ,state2:initVat, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc, t)}
+            , form:masterfilesForm , state:initSup, state1:initAcc ,state2:initVat, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc, t)}
     , {id:"3", name:'Customer', title:t('customer.title'), ctx:"/cust", ctx1:"/acc/accmd/9", ctx2:"/vat", ctx3:"/bank", get:"md/3"
-        , form:<MasterfileForm/> , state:initCust, state1:initAcc, state2:initVat, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc,t)}
+        , form:masterfilesForm , state:initCust, state1:initAcc, state2:initVat, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc,t)}
     , {id:"6", name:'CostCenter', title:t('costcenter.title'), ctx:"/cc", ctx1:"/acc/accmd/9", ctx2:'/', ctx3:'', get:"md/6"
-        , form:<MasterfileForm/>, state:initCC, state1:initAcc ,state2:'', modelid:formEnum.COSTCENTER, columns:ColumnsM(initAcc, t)}
+        , form:masterfilesForm, state:initCC, state1:initAcc ,state2:'', modelid:formEnum.COSTCENTER, columns:ColumnsM(initAcc, t)}
     , {id:"9", name:"Account", title:t('account.title'), ctx:"/acc", ctx1:"/acc/accmd/9", ctx2:'', ctx3:'', get:"md/9"
-        , form:<MasterfileForm/>, state:initCC, state1:initAcc ,state2:'', modelid:formEnum.ACCOUNT, columns:ColumnsACC(initAcc, t)}
+        , form:masterfilesForm, state:initCC, state1:initAcc ,state2:'', modelid:formEnum.ACCOUNT, columns:ColumnsACC(initAcc, t)}
     , {id:"10", name:"Company", title:t('company.title'), ctx:"/comp", ctx1:"/acc/accmd/9", ctx2:"/vat", ctx3:"/bank", get:"md/10"
-        , form:<MasterfileForm/>, state:initComp, state1:initAcc ,state2:initVat, modelid:formEnum.COMPANY, columns:ColumnsComp(initAcc,t)}
+        , form:masterfilesForm, state:initComp, state1:initAcc ,state2:initVat, modelid:formEnum.COMPANY, columns:ColumnsComp(initAcc,t)}
     , {id:"11", name:"Bank", title:t('bank.title'), ctx:"/bank", ctx1:"", ctx2:"", ctx3:'', get:"md/11"
-        , form:<MasterfileForm/>, state:initBank, state1:initAcc ,state2:'', modelid:formEnum.BANK, columns:ColumnsM(initAcc, t)}
+        , form:masterfilesForm, state:initBank, state1:initAcc ,state2:'', modelid:formEnum.BANK, columns:ColumnsM(initAcc, t)}
     , {id:"14", name:"Vat", title:t('vat.title'), ctx:"/vat", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/14"
-        , form:<MasterfileForm/>, state:initVat, state1:initAcc ,state2:'', modelid:formEnum.VAT, columns:ColumnsVAT(initAcc, t)}
+        , form:masterfilesForm, state:initVat, state1:initAcc ,state2:'', modelid:formEnum.VAT, columns:ColumnsVAT(initAcc, t)}
     , {id:"18", name:"Bankstatement", title:t('bankstatement.title'), ctx:"/bs", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/18"
-        , form:<BankStatementForm />, state:initBS, state1:initAcc ,state2:'', modelid:formEnum.BANKSTATEMENT, columns:ColumnsBS(initAcc, t)}
+        , form:'<BankStatementForm />', state:initBS, state1:initAcc ,state2:'', modelid:formEnum.BANKSTATEMENT, columns:ColumnsBS(initAcc, t)}
     , {id:"106", name:"PAC", title:t('pac.title'), ctx:"/pac", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/106"
-        , form:<JForm/>, state:initPac, state1:initAcc, state2:'', modelid:formEnum.PACB, columns:columnsPACB(t) }
+        , form:'<JForm/>', state:initPac, state1:initAcc, state2:'', modelid:formEnum.PACB, columns:columnsPACB(t) }
     , {id:"111", name:"User", title:t('user.title'), ctx:"/users", ctx1:'', ctx2:"", ctx3:'', get:"md/111"
-        , form:<MasterfileForm/>, state:initUser, state1:'', state2:'', modelid:formEnum.USER, columns:ColumnsUSER(t)  }
+        , form:masterfilesForm, state:initUser, state1:'', state2:'', modelid:formEnum.USER, columns:ColumnsUSER(t)  }
     , {id:"112", name:"Journal", title:t('journal.title'), ctx:"/jou", ctx1:"/acc/accmd/9", ctx2:"", ctx3:'', get:"md/112"
-     , form:<JForm/>, state:initJour, state1:initAcc, state2:'', modelid:formEnum.JOURNAL, columns:ColumnJournal(t)  }
+     , form:'<JForm/>', state:initJour, state1:initAcc, state2:'', modelid:formEnum.JOURNAL, columns:ColumnJournal(t)  }
 
    , {id:"1120", name:"Financials", title:t('financials.title'), ctx:"/ftr", ctx1:"/acc", ctx2:"/cc", ctx3:'', get:"md/112"
-   , form:<FinancialsForm/>, state:initFrt, state1:initAcc, state2:initCC , modelid:formEnum.FINANCIALS}
+   , form:'<FinancialsForm/>', state:initFrt, state1:initAcc, state2:initCC , modelid:formEnum.FINANCIALS}
 
  , {id:"1300", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/balance", ctx1:"/acc", ctx2:"", ctx3:'', get:"md/112"
-        , form:<BasicTreeTable/>, state:QUERY, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET
+        , form:'<BasicTreeTable/>', state:QUERY, state1:initAcc, state2:'', modelid:formEnum.BALANCESHEET
     , columns:ColumnsBalancesheet(t) }
 
     ]
