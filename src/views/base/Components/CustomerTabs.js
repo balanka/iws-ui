@@ -19,7 +19,7 @@ import {formEnum} from "../../../utils/FORMS";
     const initBankAcc=current.bankaccounts;
     const tableRef = createRef();
     const columns=(data, t) => [
-      {field:'iban', title:t('common.iban'), initialEditValue:'', export:true}
+      {field:'id', title:t('common.iban'), initialEditValue:'', export:true}
      , {field:'bic', title:t('common.bank'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
                 BIC ( data, value, onRowDataChange, rowData, "bic" ),  initialEditValue:'', width: 20
        , align:"right", export:true}
@@ -59,7 +59,7 @@ const addRow = (newData) =>{
  const updateRow = (newData, oldData) =>{
    if (oldData) {
      const dx = {...current};
-     const index = dx.bankaccounts.findIndex(obj => obj.iban === oldData.iban);
+     const index = dx.bankaccounts.findIndex(obj => obj.id === oldData.id);
      dx.bankaccounts[index] = {...newData};
      setCurrent({...dx});
    }
@@ -69,7 +69,7 @@ const addRow = (newData) =>{
      const dx = {...current};
      const index =dx.bankaccounts.findIndex(obj => obj.lid === oldData.lid);
      const deleted = dx.bankaccounts[index];
-     dx.bankaccounts[index] = {...deleted, iban:'-0' };
+     dx.bankaccounts[index] = {...deleted, id:'-0' };
      setCurrent({...dx});
    }
  }

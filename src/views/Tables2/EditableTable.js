@@ -3,7 +3,7 @@ import MaterialTable from '@material-table/core';
 import tableIcons from "./TableIcons.js";
 
 export default function EditableTable(props) {
-    const handleClick = (event, rowData) => edit(rowData);
+    const handleClick = (event, rowData) => edit?edit(rowData):void(0);
     const {Options, flag, data, columns, t, tableRef, edit, editable, setSelectedRows, parentChildData } = props
     return (
         <MaterialTable

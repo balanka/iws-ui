@@ -23,15 +23,18 @@ const FinancialsForm = () => {
   const module_= menu.get(selected);
   const modules_=(module_!==undefined)&&(datax_.includes(module_.id)|| (module_.id==="0"))?module_:LoginMenu(t)
   if(modules_.id==='0') history.push("/login");
-  const module=modules_
-  const url=SERVER_URL.concat(module.ctx)
-  const accUrl=SERVER_URL.concat(module.ctx1)
-  const ccUrl=SERVER_URL.concat(module.ctx2)
-  const initCc = module.state2
-  const initAcc = module.state1
-  const initialState = module.state
-  const current_= initialState[0]
-  const title =module.title
+  const module_x=modules_;
+  const modifyUrl=SERVER_URL.concat(selected).concat(1).concat("/1000");
+  const createUrl=SERVER_URL.concat(module_x.ctx3);
+  const url=SERVER_URL.concat(module_x.ctx);
+  const accUrl=SERVER_URL.concat(module_x.ctx1);
+  const ccUrl=SERVER_URL.concat(module_x.ctx2);
+  const initCc = module_x.state2;
+  const initAcc = module_x.state1;
+  const initialState = module_x.state;
+  const current_= initialState[0];
+  console.log('current_',current_)
+  const title =module_x.title;
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [rows, setRows] =useState([])
   const [model, setModel] = useState('');
@@ -56,7 +59,7 @@ const FinancialsForm = () => {
     ,{ id:'124', name:'Settlement'}
     ,{ id:'134', name:'General ledger'}]
 
-  const initAdd =()=> EditRow({...initialState, editing:false}, false, setCurrent);
+  const initAdd =()=> EditRow({...initialState, editing:false}, true, setCurrent);
 
 
   const cancelEdit = (e) => {
@@ -64,13 +67,12 @@ const FinancialsForm = () => {
     initAdd();
   };
 
-  const isEmpty = (str) => (!str || 0 === str.length);
   const submitQuery =(event, modelid)=>{
     event.preventDefault();
     const url_=url.concat('/').concat(modelid);
-    !isEmpty(accUrl)&&accData?.length<2&&Query(event, accUrl, token, history, setAccData, initAcc);
-    !isEmpty(ccUrl)&&ccData.length<2&&Query(event, ccUrl, token, history, setCcData, initCc);
-    !isEmpty(url_)&&Query(event, url_, token, history, setData, initialState);
+    accUrl&&accData?.length<2&&Query(event, accUrl, token, history, setAccData, initAcc);
+    ccUrl&&ccData.length<2&&Query(event, ccUrl, token, history, setCcData, initCc);
+    url_&&Query(event, url_, token, history, setData, initialState);
   }
   const handleModuleChange = event => {
     event.preventDefault();
@@ -105,19 +107,27 @@ const FinancialsForm = () => {
 
   const submitEdit = event => {
     event.preventDefault();
+    console.log('token',token)
+    console.log('current',current)
+    console.log('current_',current_)
     if(current.editing) {
-      Edit(url, token, {...current}, data, setCurrent);
-    } else submitAdd(event)
+      console.log('editing',current)
+      const record = delete current.editing
+      Edit(modifyUrl, token, {...current}, data, setCurrent);
+    } else {
+      const record = delete current.editing
+      console.log('adding',current)
+      Add(createUrl, token, current, data, initialState, setCurrent);
+      //submitAdd(event)
+    }
   };
 
   const submitAdd = event => {
     event.preventDefault();
-    const row = {id:current_.id, oid:current_.oid, costcenter:current_.costcenter, account:current_.account
-      , transdate:new Date(current_.transdate).toISOString(), enterdate:new Date().toISOString()
-      , postingdate:new Date().toISOString(), period:getPeriod(getCurrentDate()), posted:current_.posted
-      , modelid:current_.modelid, company:current_.company, text:current_.text, typeJournal:current_.typeJournal
-      , file_content:current_.file_content, lines:[] };
-    Add(url, token, row, data, initialState, setCurrent);
+    console.log('in submitAdd: adding current:',current)
+    console.log('transdate:',current.transdate)
+    const row = {...current_, enterdate:new Date().toISOString(), postingdate:new Date().toISOString(), period:getPeriod(getCurrentDate())};
+    Add(createUrl, token, row, data, initialState, setCurrent);
 
   };
 
@@ -130,18 +140,33 @@ const FinancialsForm = () => {
   }
 
   const addRow = (newData) =>{
+    console.log('newData', newData);
+    console.log('current', current);
+    const dx = {...current};
+    console.log('dx', dx);
+    console.log('current.lines.filter', {...current.lines.filter(e=>!e.account.isEmpty)});
+    const dx1 =current.lines.length===0?{...current, lines:[{...current.lines.filter(e=>!e.account.isEmpty), ...newData, id:-1, transid:current.id}]}:
+                                        (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id})
+    const record = (current.lines.length>1)?dx:dx1;
+    console.log('{...current}', dx);
+    console.log('dx1', dx1);
+    console.log('record', record);
     if(newData ) {
-      const dx = {...current};
-      dx.lines[dx.lines.length] = newData;
-      setCurrent({...dx});
+    setCurrent({...record});
     }
   }
   const updateRow = (newData, oldData) =>{
     if (oldData) {
+      console.log('oldData', oldData)
+      console.log('newData', newData)
+      console.log('current', current)
       const dx = {...current};
+      console.log('dx', dx)
       const index = dx.lines.findIndex(obj => obj.id === newData.id);
-      dx.lines[index] = {...newData};
-      setCurrent({...dx});
+      console.log('index', index)
+      const dx1 =index===-1?{...dx, lines:[{...dx.lines, ...newData}]}:dx.lines[index] = {...newData};
+      console.log('dx1', dx)
+      setCurrent({...dx1});
     }
   }
   const deleteRow = (oldData) =>{
@@ -193,7 +218,7 @@ const FinancialsForm = () => {
   }
   return buildForm( current);
 };
-export default memo(FinancialsForm);
+export default FinancialsForm;
 
 
 

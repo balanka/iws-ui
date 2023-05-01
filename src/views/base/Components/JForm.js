@@ -129,10 +129,13 @@ const JForm = () => {
     const { profile,  } = useStore()
     const { token  } = profile
     const [selected, ] = useGlobalState('selected');
+    console.log('selected',selected)
     const [menu, ] = useGlobalState('menu');
     const datax =  profile?.modules?profile.modules:[];
     let history = useHistory()
+
     const module_= menu.get(selected);
+    console.log('module_',module_)
     const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
     if(modules_.id==='0') history.push("/login");
     const module = modules_

@@ -2,7 +2,7 @@ import axios from "axios";
 import routes from '../../../routes'
 
 const Edit = (url, profile, record, data, setCurrent) => {
-     axios.patch( url, record, {headers: {'Authorization':`Bearer ${profile}`}})
+     axios.put( url, record, {headers: {'Authorization':`Bearer ${profile}`}})
       .then(response => {
         const index = data.findIndex(obj => obj.id === record.id);
         data[index]= record;
@@ -25,8 +25,7 @@ const Edit = (url, profile, record, data, setCurrent) => {
       });
   };
  const Post = (url, profile, record, ctx) => {
-     console.log('recordX', record);
-     axios.patch(url.concat(ctx), record, {headers: {'Authorization':`Bearer ${profile}`}})
+     axios.patch(url.concat(ctx), record, {headers: {'Authorization':`Bearer ${profile.token}`}})
       .then(response => {
         //console.log('responsex', response.data);
       }).catch(function (error) {
@@ -64,10 +63,7 @@ const Edit = (url, profile, record, data, setCurrent) => {
        console.log('profile.token', profile);
 
           axios.get( url, {headers: {'Authorization':`Bearer ${profile}`}})
-            //,"Access-Control-Allow-Origin": "*"//})//,
-            //  ,"www-authenticate":profile}})
-              //'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS'}})
-          //axios.get( url, {headers: {'Authorization':profile}})
+
             .then(response => {
                 const resp = response.data
               console.log('responseRRRRRR', resp);
@@ -99,11 +95,11 @@ const Edit = (url, profile, record, data, setCurrent) => {
         fetchData(url, profile, history, func);
         event.preventDefault();
     };
- const EditRow = (current, isNew, setCurrent)  => {
+ const EditRow = (edited, isNew, setCurrent)  => {
     console.log('isNew', isNew );
-    console.log('current_', current );
-    const flag = typeof isNew==='undefined' || typeof current.editing==='undefined' ;
-    const row = {...current, editing:flag};
+    console.log('edited', edited );
+    const flag = typeof isNew==='undefined' || typeof edited.editing==='undefined' ;
+    const row = {...edited, editing:flag};
     console.log('row1_', row );
     setCurrent(row);
     //setEditing( row.editing);
