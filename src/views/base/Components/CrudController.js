@@ -1,8 +1,9 @@
 import axios from "axios";
 import routes from '../../../routes'
 
-const Edit = (url, profile, record, data, setCurrent) => {
-     axios.put( url, record, {headers: {'Authorization':`Bearer ${profile}`}})
+const Edit = (url, token, record, data, setCurrent) => {
+    console.log('record', record);
+     axios.put( url, record, {headers: {'Authorization':`Bearer ${token}`}})
       .then(response => {
         const index = data.findIndex(obj => obj.id === record.id);
         data[index]= record;
@@ -11,9 +12,12 @@ const Edit = (url, profile, record, data, setCurrent) => {
          console.log('error', error);
        });
   };
- const Add = (url, profile, record, data, initialState, setCurrent) => {
-    axios.post(url, record, {headers: {'Authorization':`Bearer ${profile}`}})
+ const Add = (url, token, record, data, initialState, setCurrent) => {
+     console.log('url', url);
+     console.log('record', record);
+    axios.post(url, record, {headers: {'Authorization':`Bearer ${token}`}})
       .then(response => {
+          console.log('response', response);
         const i = data.findIndex(obj => obj.id === record.id);
         const index = i === -1? data.length+1:i;
         data[index]=record;

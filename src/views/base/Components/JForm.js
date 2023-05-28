@@ -12,6 +12,7 @@ import {useHistory} from "react-router-dom";
 
 function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
     , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX) {
+    console.log('dataZZ',data);
     const summaryPCB = (data) => {
         const row_ = data;
         const row = row_ ? row_?.slice() : row_.slice();
@@ -40,9 +41,10 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
             };
         return row;
     }
-    const summaryJ = (data) => {
-        const row_ = data;
-        const row = row_.slice();
+    const summaryJ = (data_) => {
+        const row_ = data_;
+        console.log('data_',data_);
+        const row = row_?.slice();
         let debit = 0, credit = 0, amount = 0;
         let currency = ''
         let company = '';
@@ -85,7 +87,7 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
             };
         return row;
     }
-    const summary = (data) => modelid === formEnum.PACB ? summaryPCB(data) : summaryJ(data)
+    const summary = (data_) => modelid === formEnum.PACB ? summaryPCB(data_) : summaryJ(data_)
     const load = event => {
         event.preventDefault();
         console.log('Url >>>>><<<<<<<<<'+current);
@@ -133,7 +135,7 @@ const JForm = () => {
     const [menu, ] = useGlobalState('menu');
     const datax =  profile?.modules?profile.modules:[];
     let history = useHistory()
-
+    console.log('datax',datax)
     const module_= menu.get(selected);
     console.log('module_',module_)
     const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
@@ -142,8 +144,9 @@ const JForm = () => {
     const url=SERVER_URL.concat(module.ctx)
     const accUrl=SERVER_URL.concat(module.ctx1)
     const initAcc =module.state1
-    const initialState = module.state
-    const current_= initialState[0].query;
+    const initialState = module_.state
+    console.log('module_',module_.state[0])
+    const current_= module_.state[0].query;//initialState[0].query;
     const title =module.title
     const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
     const [isDebit, setIsDebit ] = useState(true);

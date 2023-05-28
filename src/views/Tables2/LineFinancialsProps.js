@@ -133,7 +133,7 @@ export const Linescolumns =(data, line, current, t) => [
     , {field:'amount', title:t('financials.line.amount'), type:"currency", initialEditValue:0,
        currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 } , width: 20}
     , {field:'text', title:t('financials.line.text'), initialEditValue:'', hidden:false, width: 300}
-    , {field:'currency', title:t('common.currency'), hidden:true,  initialEditValue:line.currency, width:5, editable:'never'}
+    , {field:'currency', title:t('common.currency'), hidden:false,  initialEditValue:line.currency, width:5, editable:'never'}
   ]
 export const Options = ({
     toolbar:false,

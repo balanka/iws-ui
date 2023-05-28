@@ -24,7 +24,7 @@ const FinancialsForm = () => {
   const modules_=(module_!==undefined)&&(datax_.includes(module_.id)|| (module_.id==="0"))?module_:LoginMenu(t)
   if(modules_.id==='0') history.push("/login");
   const module_x=modules_;
-  const modifyUrl=SERVER_URL.concat(selected).concat(1).concat("/1000");
+  const modifyUrl=SERVER_URL.concat(selected)
   const createUrl=SERVER_URL.concat(module_x.ctx3);
   const url=SERVER_URL.concat(module_x.ctx);
   const accUrl=SERVER_URL.concat(module_x.ctx1);
@@ -47,7 +47,8 @@ const FinancialsForm = () => {
   const [current,setCurrent] = useState(current_);
   const columnsX = Linescolumns(accData, initLine, current, t);
   const columns= columnsF(ccData, initLine, current, t);
-  useEffect(() => {}, [current, setCurrent, data, setData ]);
+  useEffect(() => {}, [current, data ]);
+
   const toggleToolbar = ()=> setToolbar(!toolbar );
   const toggle = ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( (item) =>({id:item.id,  modelid:item.modelid})))
@@ -59,7 +60,7 @@ const FinancialsForm = () => {
     ,{ id:'124', name:'Settlement'}
     ,{ id:'134', name:'General ledger'}]
 
-  const initAdd =()=> EditRow({...initialState, editing:false}, true, setCurrent);
+  const initAdd =()=> EditRow({...current_, editing:false}, true, setCurrent);
 
 
   const cancelEdit = (e) => {
@@ -67,7 +68,7 @@ const FinancialsForm = () => {
     initAdd();
   };
 
-  const submitQuery =(event, modelid)=>{
+  const submitQuery =(event, modelid)=> {
     event.preventDefault();
     const url_=url.concat('/').concat(modelid);
     accUrl&&accData?.length<2&&Query(event, accUrl, token, history, setAccData, initAcc);
@@ -85,6 +86,8 @@ const FinancialsForm = () => {
 
   const edit = editedRow =>{
     const record = data.find(obj => obj.id === editedRow.id);
+    console.log('editedRow',editedRow);
+    console.log('record',record);
     setCurrent({...record, editing:true});
   }
 
@@ -108,26 +111,35 @@ const FinancialsForm = () => {
   const submitEdit = event => {
     event.preventDefault();
     console.log('token',token)
-    console.log('current',current)
+    console.log('currentXZX',current)
+    console.log('current[0]',current.isArray?current[0]:current)
     console.log('current_',current_)
-    if(current.editing) {
+    if(current.id >0) {
       console.log('editing',current)
-      const record = delete current.editing
-      Edit(modifyUrl, token, {...current}, data, setCurrent);
+      const record = current?.editing? delete current.editing:void(false);
+      //Edit(modifyUrl, token, {...current}, data, setCurrent);
+      console.log('currentXZX',current)
+      Edit(modifyUrl, token, current, data, setCurrent);
     } else {
-      const record = delete current.editing
+      const record = current?.editing? delete current.editing:void(false);
       console.log('adding',current)
-      Add(createUrl, token, current, data, initialState, setCurrent);
-      //submitAdd(event)
+      //Add(createUrl, token, current, data, initialState, setCurrent);
+      submitAdd(event)
     }
   };
 
   const submitAdd = event => {
     event.preventDefault();
+    const row = {id:current.id, oid:current.oid, costcenter:current.costcenter, account:current.account
+      , transdate:new Date(current.transdate).toISOString(), enterdate:new Date().toISOString()
+      , postingdate:new Date().toISOString(), period:getPeriod(new Date()), posted:current.posted
+      , modelid:current.modelid, company:current.company, text:current.text, typeJournal:current.typeJournal
+      , file_content:current.file_content, lines:current.lines };
     console.log('in submitAdd: adding current:',current)
-    console.log('transdate:',current.transdate)
-    const row = {...current_, enterdate:new Date().toISOString(), postingdate:new Date().toISOString(), period:getPeriod(getCurrentDate())};
-    Add(createUrl, token, row, data, initialState, setCurrent);
+    //console.log('transdate:',current.transdate)
+
+    console.log('row: adding current:',row)
+    Add(modifyUrl, token, row, data, initialState, setCurrent);
 
   };
 
@@ -157,15 +169,26 @@ const FinancialsForm = () => {
   }
   const updateRow = (newData, oldData) =>{
     if (oldData) {
-      console.log('oldData', oldData)
-      console.log('newData', newData)
-      console.log('current', current)
+      console.log('oldData', oldData);
+      console.log('newData', newData);
+      console.log('current', current);
       const dx = {...current};
-      console.log('dx', dx)
-      const index = dx.lines.findIndex(obj => obj.id === newData.id);
-      console.log('index', index)
-      const dx1 =index===-1?{...dx, lines:[{...dx.lines, ...newData}]}:dx.lines[index] = {...newData};
-      console.log('dx1', dx)
+      console.log('dx ', dx);
+      console.log('dx.lines ', dx.lines);
+      //console.log('dx.linesfound ', dx.lines.findIndex(obj => obj.id === newData.id));
+      const idx = dx.lines.findIndex(obj => obj.id === newData.id);
+      const rx = delete newData.tableData;
+     // console.log('rx', rx);
+      console.log('index', idx);
+
+      const lx = {...newData, transid:dx.id};
+      console.log('lx', lx)
+      //const dx1 = {...dx, lines:[lx]};
+      const dx1 =idx===-1?{...dx, lines:[{...dx.lines, ...lx}]}:dx.lines[idx] = {...lx};
+      console.log('dx1', dx1)
+       const record = delete dx1.editing
+      const recordx = {...dx1}
+      Edit(modifyUrl, token, dx1, data, setCurrent);
       setCurrent({...dx1});
     }
   }
@@ -175,7 +198,8 @@ const FinancialsForm = () => {
       const index =dx.lines.findIndex(obj => obj.id === oldData.id);
       const deleted = dx.lines[index];
       dx.lines[index] = {...deleted, transid:-2 };
-      setCurrent({...dx});
+      const record ={...dx}
+      setCurrent({...record});
     }
   }
   const  editable = () => ({
@@ -183,9 +207,9 @@ const FinancialsForm = () => {
     onRowUpdate: async (newData, oldData) => updateRow(newData, oldData),
     onRowDelete: async (oldData) => deleteRow(oldData)
   })
-
   function buildForm( current){
-    const lines_=()=>current.lines&&current.lines.length >0 ? current.lines:[initialState[0].lines[0]];
+    const lines_=()=>Array.isArray(current.lines)&&current.lines.length >0 ? current.lines:[initLine];
+    //const lines_=()=>Array.isArray(current.lines)&&current.lines.length >0 ? current.lines:[];
     const LinesFinancials = () =>  (<>
           <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()}
                          columns={columnsX} editable={editable()}  t={t}
@@ -196,7 +220,9 @@ const FinancialsForm = () => {
         </>
     )
 
-    const parentChildData =(row, rows) => rows.find(a => a.id === row.transid)
+    const parentChildData =(row, rows) => Array.isArray(rows)&&rows.length >0 ?rows.find(a => a.id === row.transid):rows
+
+
     return <>
       <Grid container spacing={2} style={{...styles.outer , display:'block'}} direction="column" >
         <FinancialsFormHead styles={styles} title={title}  collapse={state.collapse} initAdd ={initAdd}

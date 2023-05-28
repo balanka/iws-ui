@@ -93,8 +93,8 @@ export const initBS=[{ id:'', depositor:'', postingdate:date, valuedate:date, po
             , posted:'',modelid:18}]
 export const initFtr=[{ id:-1, oid:0, costcenter:'', account:'', transdate:date
             , enterdate:date, postingdate:date, period:getPeriod(new Date())
-            , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{id:-1, transid:0
-            ,  account:'', side:true, oaccount:'', amount:0, duedate:date, text:'', currency:'EUR'}]}]
+            , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{id:-1, transid:-1
+            ,  account:'', side:true, oaccount:'', amount:0.0, duedate:date, text:'', currency:'EUR'}]}]
 export const initPac=[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''
             , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]
 export const initUser=[{ userName:'', firstName:'', lastName:'', email:'', hash:'', phone:'', company:'', id:0

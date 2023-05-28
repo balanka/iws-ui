@@ -74,6 +74,13 @@ const mappingSelectName = (item) => <option key={item.id} value={item.id}>
 export const  filter = (rows, cols, txt,) => rows.filter(col =>
     cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b));
 
+const updateObject = (keyName, newValue, object) =>
+    Object (object) === object
+        ? Object .fromEntries (Object .entries (object) .map (
+            ([k, v]) => [k, k == keyName ? newValue : updateObject (keyName, newValue, v)]
+        ))
+        : object
+
 /*
     const mappingMenu = (acc) =>
     <MenuItem key={acc.id} value={acc.id}>
