@@ -53,14 +53,14 @@ export const styles = {
         borderRadius: 5,
         boxShadow: "0 10px 30px #BBB",
         padding: 10,
-        'padding-top': 30,
-        'padding-bottom': 30
+        'paddingTop': 30,
+        'paddingBottom': 30
     },   
     middleSmall: {
         borderRadius: 5,
         boxShadow: "0 10px 20px #BBB",
         padding: 10,
-        'padding-bottom':5
+        'paddingBottom':5
     },
     cellStyle: {
         width: 20,

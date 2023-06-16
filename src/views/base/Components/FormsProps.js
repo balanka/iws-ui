@@ -735,8 +735,8 @@ export const UserForm =(props) => {
                     <CLabel htmlFor="textarea-input">{t('common.phone')}</CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
-                 <CInput bssize="sm" type="text" id="phone-id" name="phone" className="input-sm"
-                     value={current.phone} onChange={(event)  => setCurrent({ ...current, phone: event.target.value})}/>
+                 <CInput bssize="sm" type="text" id="menu-id" name="menu" className="input-sm"
+                     value={current.menu} onChange={(event)  => setCurrent({ ...current, menu: event.target.value})}/>
                 </CCol>
             </CFormGroup>
         </>

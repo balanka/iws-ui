@@ -1,4 +1,4 @@
-import React, {useEffect, useState, createRef, memo} from 'react'
+import React, {useEffect, useCallback, useState, createRef, memo} from 'react'
 import { CInput} from '@coreui/react'
 import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
@@ -10,6 +10,7 @@ import {formEnum} from "../../../utils/FORMS";
 import {useGlobalState, LoginMenu, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+//import useKeyPress from "./useKeyPress";
 
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -47,7 +48,33 @@ const FinancialsForm = () => {
   const [current,setCurrent] = useState(current_);
   const columnsX = Linescolumns(accData, initLine, current, t);
   const columns= columnsF(ccData, initLine, current, t);
-  useEffect(() => {}, [current, data ]);
+  //useEffect(() => {}, [current, data ]);
+  useEffect(() => {
+    // attach the event listener
+    document.addEventListener('keydown', handleKeyPress);
+
+    // remove the event listener
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress, current, data]);
+
+
+/*
+  const onKeyPress = (event) => {
+    console.log(`key pressed: ${event.key}`);
+  };
+
+  useKeyPress(['a', 'b', 'c', 's'], onKeyPress,  node = null);
+
+ */
+  const handleKeyPress = useCallback((event) => {
+    if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
+      submitEdit(event);
+      //event.preventDefault();
+      console.log(`Key pressed: ${event.key}`);
+    }
+  }, []);
 
   const toggleToolbar = ()=> setToolbar(!toolbar );
   const toggle = ()=> setState({...state, collapse:!state.collapse });
@@ -178,17 +205,22 @@ const FinancialsForm = () => {
       //console.log('dx.linesfound ', dx.lines.findIndex(obj => obj.id === newData.id));
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       const rx = delete newData.tableData;
-     // console.log('rx', rx);
       console.log('index', idx);
 
       const lx = {...newData, transid:dx.id};
-      console.log('lx', lx)
+      console.log('lx', lx);
       //const dx1 = {...dx, lines:[lx]};
-      const dx1 =idx===-1?{...dx, lines:[{...dx.lines, ...lx}]}:dx.lines[idx] = {...lx};
-      console.log('dx1', dx1)
+      const dx0 = {...dx, lines:[{...dx.lines}].push(lx)};
+      const dx00 = dx.lines[idx]= {...lx};
+      console.log('dx0', dx0);
+      console.log('dx00', dx00);
+      console.log('dx', dx);
+      //const dx11 =idx===-1?dx0:dx00;
+      const dx1 = idx===-1?dx0:dx00;
+      console.log('dx1', dx1);
        const record = delete dx1.editing
       const recordx = {...dx1}
-      Edit(modifyUrl, token, dx1, data, setCurrent);
+      //Edit(modifyUrl, token, dx1, data, setCurrent);
       setCurrent({...dx1});
     }
   }
@@ -220,7 +252,7 @@ const FinancialsForm = () => {
         </>
     )
 
-    const parentChildData =(row, rows) => Array.isArray(rows)&&rows.length >0 ?rows.find(a => a.id === row.transid):rows
+    const parentChildData =(row, rows) => Array.isArray(rows)&&rows.length >0 ?rows.find(a => a?.id === row.transid):rows
 
 
     return <>

@@ -39,7 +39,7 @@ const BS =(t)=>({id:"18", name:"Bankstatement", title:t('bankstatement.title'), 
     columns:ColumnsBS(t)})
 const PACB = (t)=>({id:"106", name:"PAC", title:t('pac.title'), ctx:"/pac/1000", ctx1:"/acc/1000", ctx2:"/acc/1000", ctx3:'/acc/1000', get:"md/106"
     , form:'<JForm/>', state:initPac, state1:initAcc, state2:'', state3:'/pac', modelid:formEnum.PACB, columns:columnsPACB(t) })
-const USER =(t)=>({id:"111", name:"User", title:t('user.title'), ctx:"/users/1000", ctx1:'', ctx2:"", ctx3:'', get:"md/111"
+const USER =(t)=>({id:"111", name:"User", title:t('user.title'), ctx:"/user/1000", ctx1:'', ctx2:"", ctx3:'', get:"md/111"
     , form:masterfilesForm, state:initUser, state1:'', state2:'', state3:'', modelid:formEnum.USER, columns:ColumnsUSER(t)  })
 const JOURNAL = (t)=>({id:"112", name:"Journal", title:t('journal.title'), ctx:"/jou", ctx1:"/acc/1000", ctx2:"", ctx3:'', get:"md/112"
     , form:'<JForm/>', state:initJour, state1:initAcc, state2:'', state3:'', modelid:formEnum.JOURNAL, columns:ColumnJournal(t)  });
