@@ -1,15 +1,15 @@
 import React, {memo,useEffect, useState} from 'react'
-import {useGlobalState} from './Menu';
-import {useStore} from './Menu';
+import {MASTERFILE, useStore, useGlobalState} from './Menu';
 import Grid from "react-fast-grid";
 import {CommonFormHead, FormFactory} from './FormsProps'
 import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import {useTranslation} from "react-i18next";
-import { Add, Edit, EditRow, Query} from './CrudController';
+import { Add, Edit, EditRow, Get1} from './CrudController';
 import {useHistory} from "react-router-dom";
-import {formEnum} from "../../../utils/FORMS";
+//import {formEnum} from "../../../utils/FORMS";
+import iwsStore from './Store';
 const MasterfileForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -30,32 +30,40 @@ const MasterfileForm = () => {
   if(modules_.id==='0') history.push("/login");
   const module=modules_
   console.log('module', module);
-  const url=SERVER_URL.concat(module.ctx)
-  const accUrl=SERVER_URL.concat(module.ctx1)
-  const vatUrl=SERVER_URL.concat(module.ctx2)
-  const bankUrl=SERVER_URL.concat(module.ctx3)
+  const url=SERVER_URL.concat(module.ctx);
+  const accUrl=SERVER_URL.concat(MASTERFILE.accURL);
+  //const ccUrl=SERVER_URL.concat(MASTERFILE.ccURL);
+  const vatUrl=SERVER_URL.concat(MASTERFILE.vatURL);
+  const bankUrl=SERVER_URL.concat(MASTERFILE.bankURL);
   const modifyUrl=SERVER_URL.concat(selected);
-  const initVat = module.state2
-  const initAcc = module.state1
-  const initBank = module.state3
+
+  // const initVat = module.state2
+  // const initAcc = module.state1
+  // const initBank = module.state3
   const initialState = module.state
   const current_= initialState[0]//.query;
   const title =module.title
   const { t,  } = useTranslation();
   const [, setRows] = useState([])
   const data_ = initialState
-  const accData_ = initAcc
-  const vatData_ = initVat
-  const bankData_ = initBank
+  // const accData_ = initAcc
+  // const vatData_ = initVat
+  // const bankData_ = initBank
   const modelid_ = module.modelid;
   const [data, setData] = useState(data_);
-
-  const [accData, setAccData] = useState(accData_);
-  const [vatData, setVatData] = useState(vatData_);
-  const [bankData, setBankData] = useState(bankData_);
+  //
+  // const [accData, setAccData] = useState(accData_);
+  // const [vatData, setVatData] = useState(vatData_);
+  // const [bankData, setBankData] = useState(bankData_);
   const [current,setCurrent] = useState(current_);
   const [toolbar, setToolbar] = useState(true);
-  useEffect(() => {}, [current, setCurrent, data ]);
+  const [iwsState, setIwsState] = useState(iwsStore.initialState);
+  useEffect(() => {
+    iwsStore.subscribe(setIwsState);
+    //iwsStore.put(current_.modelid, initialState)}, [current, current_.modelid, initialState, iwsState, setCurrent, data ]);
+    //iwsStore.init();
+    //iwsStore.put(current_.modelid, initialState)
+  }, [current, current.modelid, initialState, iwsState, setCurrent ]);
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id))
@@ -64,7 +72,9 @@ const MasterfileForm = () => {
   const cancelEdit = (e) => initAdd();
   const columns = ColumnFactory(modelid_,data, t);
   const edit = editedRow =>{
-    const record = data.find(obj => obj.id === editedRow.id);
+    const daten = iwsState.get(editedRow.modelid)
+    const record = daten.find(obj => obj.id === editedRow.id);
+    //const record = data.find(obj => obj.id === editedRow.id);
     const row = {...record, editing:true}
     setCurrent(row);
   }
@@ -80,36 +90,48 @@ const MasterfileForm = () => {
   const load = event => data?.length<2?submitQuery(event): void(0)
   const submitQuery =(event)=>{
     event.preventDefault();
-    console.log('url', accUrl);
-    console.log('vatUrl', accUrl);
-    console.log('bankUrl', accUrl);
-    console.log('accUrl', accUrl);
-    accUrl&&Query(event, accUrl, token, history, setAccData, initAcc);
-    vatUrl&&Query(event, vatUrl, token, history, setVatData, initVat);
-    bankUrl&&Query(event, bankUrl, token, history, setBankData, initBank);
-    url&&Query(event, url, token, history, setData, initialState);
+    // console.log('url', url);
+    // console.log('vatUrl', vatUrl);
+    // console.log('bankUrl', bankUrl);
+    // console.log('accUrl', accUrl);
+    // console.log('iwsState', iwsState);
+    // console.log('initAcc', initAcc);
+    // console.log('initVat', initVat);
+    // console.log('initBank', initBank);
+    accUrl&& (current_.modelid !==9) &&Get1(accUrl, token, history,  iwsStore, 9);
+    vatUrl&& (current_.modelid !==14) &&Get1(vatUrl, token, history,  iwsStore, 14);
+    bankUrl&&(current_.modelid !==11) &&Get1(bankUrl, token, history,   iwsStore, 11);
+    //ccUrl&&(current_.modelid !==6) &&Get1(ccUrl, token, history,   iwsStore, 6);
+    url&&Get1(url, token, history,  iwsStore, current_.modelid);
+    console.log('iwsState', iwsState);
   }
 
   const submitAdd = event => {
     event.preventDefault();
     Add(url, token, {...current}, data, initialState, setCurrent);
   };
-  let parentChildData =(row, rows) => rows.find(a => a.id === row.account)
+  //let parentChildData =(row, rows) => rows.find(a => a.id === row.account)
   function buildForm(current){
+    console.log('iwsState', iwsState);
+    const accd=iwsState.get(9)?iwsState.get(9):[];
+    const bankd=iwsState.get(11)?iwsState.get(11):[];
+    const vatd= iwsState.get(14)?iwsState.get(14):[];
+    // console.log('accd', accd);
+    // console.log('bankd', bankd);
+    // console.log('vatd', vatd);
     return <>
       <Grid container spacing={2} style={{...styles.outer }} direction="column">
         <CommonFormHead styles={styles} title={title} collapse={state.collapse} initAdd ={initAdd} initialState={initialState}
-                        setData={setData} setAccData={setAccData} setBankData={setBankData}  url={url} accUrl={accUrl}
+                          url={url} accUrl={accUrl}
                         cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {load} toggle={toggle}
                         toggleToolbar={toggleToolbar}  style={{...styles.inner}}/>
-        <FormFactory formid ={modelid_}  current={current} setCurrent={setCurrent} t={t} accData={accData} vatData={vatData}
-                     bankData={bankData} collapse={state.collapse} styles={styles} style={{...styles.inner}}/>
+        <FormFactory formid ={modelid_}  current={current} setCurrent={setCurrent} t={t} accData={accd} vatData={vatd}
+                     bankData={bankd} collapse={state.collapse} styles={styles} style={{...styles.inner}}/>
 
         <Grid container spacing={2} style={{...styles.inner, display:'block' }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px"
-            , pageSize:10, pageSizeOptions:[10, 20, 50]}}  data={data}
-                         columns={columns}   theme={theme} t={t}  edit ={edit} setSelectedRows ={setSelectedRows}
-                         parentChildData ={modelid_===formEnum.ACCOUNT?parentChildData:''}/>
+            , pageSize:10, pageSizeOptions:[10, 20, 50]}}  data={ iwsState.get(current.modelid)}
+             columns={columns}   theme={theme} t={t}  edit ={edit} setSelectedRows ={setSelectedRows}/>
         </Grid>
       </Grid>
     </>

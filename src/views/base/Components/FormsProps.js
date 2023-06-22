@@ -238,27 +238,27 @@ export const FinancialsFormHead = (props) => {
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton  className="card-header-action btn-minimize" onClick={onNewLine}>
+                            <CButton  className="card-header-action btn-minimize" title="Add new line" onClick={onNewLine}>
                                 <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.libraryAdd}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
+                            <CButton color="link" className="card-header-action btn-minimize" title="Cancel editing" onClick={(e) => cancelEdit(e)}>
                                 <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.highlightOff} />
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={initAdd}>
+                            <CButton color="link" className="card-header-action btn-minimize" title="Add new entry" onClick={initAdd}>
                                 <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.addCircleOutline}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitEdit(e)}>
+                            <CButton color="link" className="card-header-action btn-minimize" title="Save entry" onClick={(e) => submitEdit(e)}>
                                 <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.save}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
+                            <CButton color="link" className="card-header-action btn-minimize" title="Hide/Display transaction" onClick={() => toggle()}>
                                 <FontAwesomeIcon icon={collapse?faAngleDoubleUp:faAngleDoubleDown} />
                             </CButton>
                         </div>
@@ -1268,6 +1268,8 @@ export const JournalMainForm = (props) => {
     )}
 export const VatMainForm =(props) => {
     const {current, setCurrent, t, accData } = props
+    console.log('propsT', props);
+    console.log('accDataVat', accData);
  return (
      <>
     <CFormGroup row style={{height:15 }}>

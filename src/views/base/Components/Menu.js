@@ -2,13 +2,14 @@ import {formEnum} from "../../../utils/FORMS";
 import {ColumnsACC, columnsPACB, ColumnJournal, ColumnsBalancesheet, ColumnsVAT, ColumnsBS, ColumnsM
     , ColumnsComp, ColumnsCUST, ColumnsUSER  } from "../../Tables2/LineFinancialsProps";
 import MasterfileForm from "./MasterfileForm";
-import React from "react";
+import React, {useState} from "react";
 import BankStatementForm from "./BankStatementForm";
 import Login from './Login'
 import BasicTreeTable from "./BasicTreeTable";
 import JForm  from "./JForm";
 import FinancialsForm from "./FinancialsForm";
 import {createGlobalState} from "react-hooks-global-state";
+
 import create from "zustand";
 export const getCurrentMonth = (date)=>{
         const p=date.getUTCMonth()+1;
@@ -18,15 +19,16 @@ export const getCurrentMonth = (date)=>{
 export const date= new Date().toISOString()
 export const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
 const masterfilesForm = '<MasterfileForm/>'
+export const MASTERFILE ={accURL:'/acc/1000', bankURL:'/acc/1000', ccURL:'/acc/1000', vatURL:'/vat/1000', custURL:'/cust/1000', supURL:'/sup/1000', compURL:'/comp/1000'};
 const LOGIN=(t)=> ( {id:"0", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:""
     , ctx2:"/", ctx3:'', form:'<Login/>', state:loginInit, state1:'' ,state2:'',  state3:'', columns:[]});
 const SUPPLIER =(t)=>({id:"1", name:"Supplier", title:t('supplier.title'), ctx:"/sup/1000", ctx1:"/acc/1000", ctx2:"/vat/1000",  ctx3:"/bank/1000", get:"md/1"
     , form:masterfilesForm , state:initSup, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc, t)})
 const CUSTOMER = (t)=>({id:"3", name:'Customer', title:t('customer.title'), ctx:"/cust/1000", ctx1:"/acc/1000", ctx2:"/vat/1000", ctx3:"/bank/1000", get:"md/3"
     , form:masterfilesForm, state:initCust, state1:initAcc, state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc,t)})
-const COSTCENTER =(t)=>({id:"6", name:'CostCenter', title:t('costcenter.title'), ctx:"/cc/1000", ctx1:"/acc/1000", ctx2:'/', ctx3:'', get:"md/6"
+export const COSTCENTER =(t)=>({id:"6", name:'CostCenter', title:t('costcenter.title'), ctx:"/cc/1000", ctx1:"/acc/1000", ctx2:'/', ctx3:'', get:"md/6"
     , form:masterfilesForm, state:initCC, state1:initAcc ,state2:'', state3:'/cc', modelid:formEnum.COSTCENTER, columns:ColumnsM(initAcc, t)})
-const ACCOUNT =(t)=>({id:"9", name:"Account", title:t('account.title'), ctx:"/acc/1000", ctx1:"", ctx2:'', ctx3:'', get:"md/9"
+export const ACCOUNT =(t)=>({id:"9", name:"Account", title:t('account.title'), ctx:"/acc/1000", ctx1:"", ctx2:'', ctx3:'', get:"md/9"
     , form:masterfilesForm, state:initCC, state1:initAcc ,state2:'', state3:'/acc', modelid:formEnum.ACCOUNT, columns:ColumnsACC(initAcc, t)})
 const COMPANY = (t)=>({id:"10", name:"Company", title:t('company.title'), ctx:"/comp/1000", ctx1:"/acc/1000", ctx2:"/vat/1000", ctx3:"/bank/1000", get:"md/10"
     , form:masterfilesForm, state:initComp, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.COMPANY, columns:ColumnsComp(initAcc,t)})
@@ -101,8 +103,9 @@ export const initUser=[{ userName:'', firstName:'', lastName:'', email:'', hash:
         , role:'', modelid:111, menu:''}]
 
 const QUERY ={ account:'', account2:'', fromPeriod:'', toPeriod:''}
-export const MENU = (t)=> new Map([['/journal', JOURNAL(t)],
-                     ['/pacb', PACB(t)]
+export const MENU = (t)=> new Map([
+                     ['/journal', JOURNAL(t)]
+                    ,['/pacb', PACB(t)]
                     ,['/bank', BANK(t)]
                     ,['/acc', ACCOUNT(t)]
                     ,['/cc', COSTCENTER(t)]

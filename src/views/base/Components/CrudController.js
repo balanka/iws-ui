@@ -77,7 +77,7 @@ const Edit = (url, token, record, data, setCurrent) => {
               console.log('result', result);
               //  return resp;
             }).catch(function (error) {
-            console.log('authorization error', error);
+            console.log('Error', error);
               if(JSON.stringify(error).includes("401")) {
                   console.log('error', "Session expired!!!!! Login again!!!!");
                   history.push("/login");
@@ -88,17 +88,37 @@ const Edit = (url, token, record, data, setCurrent) => {
    console.log('resultRRRRRR', result);
             return result;
         }
- const Query = (event, url, profile, history, func, init) => {
-        const fetchData =(url_, profile, history, call)=>{
-          console.log('url_=>', url_);
-            const res = Get(url_, profile, history, call);
-            console.log('res=>XXX', res);
-            const datax = res?res : init;
-            return datax;
-        }
-        fetchData(url, profile, history, func);
-        event.preventDefault();
-    };
+
+const Get1 = (url, profile, history, store, key_) => {
+  let result
+  console.log('urlx', url);
+  console.log('key_', key_);
+  console.log('profile.token', profile);
+
+  axios.get( url, {headers: {'Authorization':`Bearer ${profile}`}})
+
+    .then(response => {
+      const resp = response.data
+      console.log('responseRRRRRR', resp);
+      store.put(key_, resp);
+      result={...resp};
+      console.log('resp', resp);
+      console.log('result', result);
+      //  return resp;
+    }).catch(function (error) {
+    console.log('Error', error);
+    //if(JSON.stringify(error).includes("401")) {
+      console.log('error', "Session expired!!!!! Login again!!!!");
+      //history.push("/login");
+   // }
+
+    console.log('error', error);
+  })
+  console.log('resultRRRRRR', result);
+  return result;
+}
+ const Query = (event, url, profile, history, func, init) => Get(url, profile, history, func);
+
  const EditRow = (edited, isNew, setCurrent)  => {
     console.log('isNew', isNew );
     console.log('edited', edited );
@@ -122,5 +142,5 @@ export const logoutUnset = () => {
     delete axios.defaults.headers['Authentication']
     window.localStorage.removeItem('profile')
 }
-export  { Query,Get, Post, Login,  Add, Edit, EditRow}
+export  { Query,Get, Get1, Post, Login,  Add, Edit, EditRow}
 

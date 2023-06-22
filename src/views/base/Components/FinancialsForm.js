@@ -3,13 +3,14 @@ import { CInput} from '@coreui/react'
 import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles} from "../Tree/BasicTreeTableProps";
-import {Add, Edit, EditRow, Post, Query} from './CrudController';
+import {Add, Edit, EditRow, Post, Get1, Query} from './CrudController';
 import {Options, OptionsM, columnsF, Linescolumns} from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
-import {useGlobalState, LoginMenu, useStore} from "./Menu";
+import {useGlobalState, LoginMenu, useStore, ACCOUNT, MASTERFILE,  COSTCENTER} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import iwsStore from './Store';
 //import useKeyPress from "./useKeyPress";
 
 const FinancialsForm = () => {
@@ -26,10 +27,11 @@ const FinancialsForm = () => {
   if(modules_.id==='0') history.push("/login");
   const module_x=modules_;
   const modifyUrl=SERVER_URL.concat(selected)
-  const createUrl=SERVER_URL.concat(module_x.ctx3);
+
   const url=SERVER_URL.concat(module_x.ctx);
-  const accUrl=SERVER_URL.concat(module_x.ctx1);
-  const ccUrl=SERVER_URL.concat(module_x.ctx2);
+  const accUrl=SERVER_URL.concat(MASTERFILE.accURL);
+  const ccUrl=SERVER_URL.concat(MASTERFILE.ccURL);
+
   const initCc = module_x.state2;
   const initAcc = module_x.state1;
   const initialState = module_x.state;
@@ -42,14 +44,18 @@ const FinancialsForm = () => {
   const tableRef = createRef();
   const initLine=initialState[0].lines[0];
   const [toolbar, setToolbar] = useState(false);
-  const [data, setData] = useState(initialState);
-  const [accData, setAccData] = useState(initAcc);
-  const [ccData, setCcData] = useState(initCc);
+  //const [data, setData] = useState(initialState);
+
+  //const [accData, setAccData] = useState(initAcc);
+  //const [ccData, setCcData] = useState(initCc);
   const [current,setCurrent] = useState(current_);
-  const columnsX = Linescolumns(accData, initLine, current, t);
-  const columns= columnsF(ccData, initLine, current, t);
+
+  const [iwsState, setIwsState] = useState(iwsStore.initialState);
+  const data_ = iwsState.get(parseInt(model));
+  const data  = ()=>data_?data_:initialState;
   //useEffect(() => {}, [current, data ]);
   useEffect(() => {
+    iwsStore.subscribe(setIwsState);
     // attach the event listener
     document.addEventListener('keydown', handleKeyPress);
 
@@ -57,9 +63,12 @@ const FinancialsForm = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
-  }, [handleKeyPress, current, data]);
+  }, [handleKeyPress, current, current.modelid, model, iwsState]);
 
-
+  const accData = iwsState.get(ACCOUNT.id)?iwsState.get(parseInt(ACCOUNT.id)):[...initAcc];
+  const ccData = iwsState.get(COSTCENTER.id)?iwsState.get(parseInt(COSTCENTER.id)):[...initCc];
+  const columnsX = Linescolumns(accData, initLine, current, t);
+  const columns= columnsF(ccData, initLine, current, t);
 /*
   const onKeyPress = (event) => {
     console.log(`key pressed: ${event.key}`);
@@ -98,9 +107,13 @@ const FinancialsForm = () => {
   const submitQuery =(event, modelid)=> {
     event.preventDefault();
     const url_=url.concat('/').concat(modelid);
-    accUrl&&accData?.length<2&&Query(event, accUrl, token, history, setAccData, initAcc);
-    ccUrl&&ccData.length<2&&Query(event, ccUrl, token, history, setCcData, initCc);
-    url_&&Query(event, url_, token, history, setData, initialState);
+    accUrl&&Get1(accUrl, token, history,  iwsStore, parseInt(ACCOUNT.id));
+    ccUrl&&Get1(ccUrl, token, history,   iwsStore, parseInt(COSTCENTER.id));
+    url_&&Get1(url_, token, history,   iwsStore, parseInt(modelid));
+
+    // accUrl&&accData?.length<2&&Query(event, accUrl, token, history, setAccData, initAcc);
+    // ccUrl&&ccData.length<2&&Query(event, ccUrl, token, history, setCcData, initCc);
+    // url_&&Query(event, url_, token, history, setData, initialState);
   }
   const handleModuleChange = event => {
     event.preventDefault();
@@ -109,9 +122,10 @@ const FinancialsForm = () => {
   };
 
   const buildAmount = row => ({...row, total: row.lines.reduce((acc, line) => acc + line.amount, 0)});
-  const buildData =() => data.map( row =>buildAmount(row));
+  const buildData = () => data().map( row =>buildAmount(row));
 
   const edit = editedRow =>{
+    const data = iwsState.get(editedRow.modelid)
     const record = data.find(obj => obj.id === editedRow.id);
     console.log('editedRow',editedRow);
     console.log('record',record);
@@ -146,7 +160,7 @@ const FinancialsForm = () => {
       const record = current?.editing? delete current.editing:void(false);
       //Edit(modifyUrl, token, {...current}, data, setCurrent);
       console.log('currentXZX',current)
-      Edit(modifyUrl, token, current, data, setCurrent);
+      Edit(modifyUrl, token, current, data(), setCurrent);
     } else {
       const record = current?.editing? delete current.editing:void(false);
       console.log('adding',current)
@@ -164,9 +178,8 @@ const FinancialsForm = () => {
       , file_content:current.file_content, lines:current.lines };
     console.log('in submitAdd: adding current:',current)
     //console.log('transdate:',current.transdate)
-
     console.log('row: adding current:',row)
-    Add(modifyUrl, token, row, data, initialState, setCurrent);
+    Add(modifyUrl, token, row, data(), initialState, setCurrent);
 
   };
 
@@ -206,22 +219,23 @@ const FinancialsForm = () => {
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       const rx = delete newData.tableData;
       console.log('index', idx);
-
-      const lx = {...newData, transid:dx.id};
-      console.log('lx', lx);
-      //const dx1 = {...dx, lines:[lx]};
-      const dx0 = {...dx, lines:[{...dx.lines}].push(lx)};
-      const dx00 = dx.lines[idx]= {...lx};
-      console.log('dx0', dx0);
-      console.log('dx00', dx00);
+      if(idx===-1) {
+        const lx = {...newData, transid:dx.id};
+        console.log('lx', lx);
+        dx.lines.push(lx);
+      }
+      //
+      // const dx0 = {...dx, lines:[{...dx.lines}].push(lx)};
+      // const dx00 = dx.lines[idx]= {...lx};
+      // console.log('dx0', dx0);
+      // console.log('dx00', dx00);
       console.log('dx', dx);
-      //const dx11 =idx===-1?dx0:dx00;
-      const dx1 = idx===-1?dx0:dx00;
-      console.log('dx1', dx1);
-       const record = delete dx1.editing
-      const recordx = {...dx1}
-      //Edit(modifyUrl, token, dx1, data, setCurrent);
-      setCurrent({...dx1});
+      // const dx1 = idx===-1?dx:dx00;
+      // console.log('dx1', dx1);
+      //  const record = delete dx.editing
+      // const recordx = {...dx1}
+      Edit(modifyUrl, token, dx, data(), setCurrent);
+      //setCurrent({...dx});
     }
   }
   const deleteRow = (oldData) =>{
@@ -240,6 +254,11 @@ const FinancialsForm = () => {
     onRowDelete: async (oldData) => deleteRow(oldData)
   })
   function buildForm( current){
+
+    console.log('iwsState', iwsState);
+    const accd= iwsState.get(parseInt(ACCOUNT.id))?iwsState.get(parseInt(ACCOUNT.id)):[...initAcc];
+    const ccd= iwsState.get(parseInt(COSTCENTER.id))?iwsState.get(parseInt(COSTCENTER.id)):[...initCc];
+
     const lines_=()=>Array.isArray(current.lines)&&current.lines.length >0 ? current.lines:[initLine];
     //const lines_=()=>Array.isArray(current.lines)&&current.lines.length >0 ? current.lines:[];
     const LinesFinancials = () =>  (<>
@@ -258,13 +277,13 @@ const FinancialsForm = () => {
     return <>
       <Grid container spacing={2} style={{...styles.outer , display:'block'}} direction="column" >
         <FinancialsFormHead styles={styles} title={title}  collapse={state.collapse} initAdd ={initAdd}
-                            setData={setData} setAccData={setAccData} url={url} accUrl={accUrl}
+                             url={url} accUrl={accUrl}
                             initialState={initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                             module ={model}  modules ={models} handleModuleChange={handleModuleChange}
                             onNewLine={onNewLine} submitPost={submitPost} submitCopy={submitCopy}
                             submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
-        <FormFactory formid ={formEnum.FINANCIALS} current={current} setCurrent={setCurrent} t={t} accData={accData}
-                     ccData={ccData}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
+        <FormFactory formid ={formEnum.FINANCIALS} current={current} setCurrent={setCurrent} t={t} accData={accd}
+                     ccData={ccd}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
                      collapse={state.collapse}
         />
         <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px", pageSize:5
