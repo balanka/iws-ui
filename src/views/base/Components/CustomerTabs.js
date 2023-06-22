@@ -80,7 +80,7 @@ const addRow = (newData) =>{
     })
 
   const  getTabContent= (module) => <GetTabContent id ={module.id}/>
-  const wrapIt =(component) => <CTabPane style ={{...styles.middle, 'padding-top':5}}>{component}</CTabPane>
+  const wrapIt =(component) => <CTabPane style ={{...styles.middle, 'paddingTop':5}}>{component}</CTabPane>
   const getForm =(formid)=>{
       switch(formid) {
          case formEnum.CUSTOMER:
