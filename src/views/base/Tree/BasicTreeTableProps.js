@@ -37,7 +37,7 @@ export function rowStyle (rowData) {
 }
 export const styles = {
     outer: {
-        'background-color':blue,
+        'backgroundColor':blue,
         borderRadius: 5,
         boxShadow: "0 10px 30px #BBB",
         padding:5,
@@ -46,10 +46,10 @@ export const styles = {
         borderRadius: 5,
         boxShadow: "0 10px 30px #BBB",
         padding: 10,
-        'padding-top': 30
+        'paddingTop': 30
     },
     middle: {
-        'background-color':green,
+        'backgroundColor':green,
         borderRadius: 5,
         boxShadow: "0 10px 30px #BBB",
         padding: 10,
