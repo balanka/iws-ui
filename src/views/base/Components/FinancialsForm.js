@@ -7,7 +7,7 @@ import {Add, Edit, EditRow, Post, Get1, Query} from './CrudController';
 import {Options, OptionsM, columnsF, Linescolumns} from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
-import {useGlobalState, LoginMenu, useStore, ACCOUNT, MASTERFILE,  COSTCENTER} from "./Menu";
+import {useGlobalState, LoginMenu, useStore, ACCOUNT, MASTERFILE, COSTCENTER, BANK} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import iwsStore from './Store';
@@ -31,6 +31,8 @@ const FinancialsForm = () => {
   const url=SERVER_URL.concat(module_x.ctx);
   const accUrl=SERVER_URL.concat(MASTERFILE.accURL);
   const ccUrl=SERVER_URL.concat(MASTERFILE.ccURL);
+  const acc_modelid=parseInt(ACCOUNT.id);
+  const cc_modelid=parseInt(COSTCENTER.id);
 
   const initCc = module_x.state2;
   const initAcc = module_x.state1;
@@ -44,10 +46,6 @@ const FinancialsForm = () => {
   const tableRef = createRef();
   const initLine=initialState[0].lines[0];
   const [toolbar, setToolbar] = useState(false);
-  //const [data, setData] = useState(initialState);
-
-  //const [accData, setAccData] = useState(initAcc);
-  //const [ccData, setCcData] = useState(initCc);
   const [current,setCurrent] = useState(current_);
 
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
@@ -63,10 +61,10 @@ const FinancialsForm = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
-  }, [handleKeyPress, current, current.modelid, model, iwsState]);
+  }, [ current, current.modelid, model, iwsState]);
 
-  const accData = iwsState.get(ACCOUNT.id)?iwsState.get(parseInt(ACCOUNT.id)):[...initAcc];
-  const ccData = iwsState.get(COSTCENTER.id)?iwsState.get(parseInt(COSTCENTER.id)):[...initCc];
+  const accData = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
+  const ccData = iwsState.get(cc_modelid)?iwsState.get(cc_modelid):[...initCc];
   const columnsX = Linescolumns(accData, initLine, current, t);
   const columns= columnsF(ccData, initLine, current, t);
 /*
@@ -107,13 +105,9 @@ const FinancialsForm = () => {
   const submitQuery =(event, modelid)=> {
     event.preventDefault();
     const url_=url.concat('/').concat(modelid);
-    accUrl&&Get1(accUrl, token, history,  iwsStore, parseInt(ACCOUNT.id));
-    ccUrl&&Get1(ccUrl, token, history,   iwsStore, parseInt(COSTCENTER.id));
+    accUrl&&Get1(accUrl, token, history,  iwsStore, acc_modelid);
+    ccUrl&&Get1(ccUrl, token, history,   iwsStore, cc_modelid);
     url_&&Get1(url_, token, history,   iwsStore, parseInt(modelid));
-
-    // accUrl&&accData?.length<2&&Query(event, accUrl, token, history, setAccData, initAcc);
-    // ccUrl&&ccData.length<2&&Query(event, ccUrl, token, history, setCcData, initCc);
-    // url_&&Query(event, url_, token, history, setData, initialState);
   }
   const handleModuleChange = event => {
     event.preventDefault();
@@ -149,6 +143,11 @@ const FinancialsForm = () => {
   const getCurrentDate = ()=>{return new Date()}
   const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
 
+  const toggleEdit = ()=>{
+    if(current?.editing){
+      delete current.editing;
+    }
+  }
   const submitEdit = event => {
     event.preventDefault();
     console.log('token',token)
@@ -157,14 +156,13 @@ const FinancialsForm = () => {
     console.log('current_',current_)
     if(current.id >0) {
       console.log('editing',current)
-      const record = current?.editing? delete current.editing:void(false);
-      //Edit(modifyUrl, token, {...current}, data, setCurrent);
-      console.log('currentXZX',current)
+      toggleEdit();
+      console.log('current',current)
       Edit(modifyUrl, token, current, data(), setCurrent);
+      iwsStore.update(current.modelid, current.id, current );
     } else {
-      const record = current?.editing? delete current.editing:void(false);
+      toggleEdit();
       console.log('adding',current)
-      //Add(createUrl, token, current, data, initialState, setCurrent);
       submitAdd(event)
     }
   };
@@ -176,8 +174,6 @@ const FinancialsForm = () => {
       , postingdate:new Date().toISOString(), period:getPeriod(new Date()), posted:current.posted
       , modelid:current.modelid, company:current.company, text:current.text, typeJournal:current.typeJournal
       , file_content:current.file_content, lines:current.lines };
-    console.log('in submitAdd: adding current:',current)
-    //console.log('transdate:',current.transdate)
     console.log('row: adding current:',row)
     Add(modifyUrl, token, row, data(), initialState, setCurrent);
 
@@ -215,7 +211,6 @@ const FinancialsForm = () => {
       const dx = {...current};
       console.log('dx ', dx);
       console.log('dx.lines ', dx.lines);
-      //console.log('dx.linesfound ', dx.lines.findIndex(obj => obj.id === newData.id));
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       const rx = delete newData.tableData;
       console.log('index', idx);
@@ -224,16 +219,8 @@ const FinancialsForm = () => {
         console.log('lx', lx);
         dx.lines.push(lx);
       }
-      //
-      // const dx0 = {...dx, lines:[{...dx.lines}].push(lx)};
-      // const dx00 = dx.lines[idx]= {...lx};
-      // console.log('dx0', dx0);
-      // console.log('dx00', dx00);
+
       console.log('dx', dx);
-      // const dx1 = idx===-1?dx:dx00;
-      // console.log('dx1', dx1);
-      //  const record = delete dx.editing
-      // const recordx = {...dx1}
       Edit(modifyUrl, token, dx, data(), setCurrent);
       //setCurrent({...dx});
     }
@@ -256,11 +243,10 @@ const FinancialsForm = () => {
   function buildForm( current){
 
     console.log('iwsState', iwsState);
-    const accd= iwsState.get(parseInt(ACCOUNT.id))?iwsState.get(parseInt(ACCOUNT.id)):[...initAcc];
-    const ccd= iwsState.get(parseInt(COSTCENTER.id))?iwsState.get(parseInt(COSTCENTER.id)):[...initCc];
+    const accd= iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
+    const ccd= iwsState.get(cc_modelid)?iwsState.get(cc_modelid):[...initCc];
 
     const lines_=()=>Array.isArray(current.lines)&&current.lines.length >0 ? current.lines:[initLine];
-    //const lines_=()=>Array.isArray(current.lines)&&current.lines.length >0 ? current.lines:[];
     const LinesFinancials = () =>  (<>
           <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()}
                          columns={columnsX} editable={editable()}  t={t}

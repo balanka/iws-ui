@@ -1,5 +1,5 @@
-import React, {memo,useEffect, useState} from 'react'
-import {MASTERFILE, useStore, useGlobalState} from './Menu';
+import React, {memo, useCallback, useEffect, useState} from 'react'
+import {MASTERFILE, useStore, useGlobalState, ACCOUNT, BANK, VAT} from './Menu';
 import Grid from "react-fast-grid";
 import {CommonFormHead, FormFactory} from './FormsProps'
 import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
@@ -28,53 +28,52 @@ const MasterfileForm = () => {
   console.log('module_', module_);
   const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
   if(modules_.id==='0') history.push("/login");
-  const module=modules_
+  const module=modules_;
   console.log('module', module);
   const url=SERVER_URL.concat(module.ctx);
   const accUrl=SERVER_URL.concat(MASTERFILE.accURL);
-  //const ccUrl=SERVER_URL.concat(MASTERFILE.ccURL);
   const vatUrl=SERVER_URL.concat(MASTERFILE.vatURL);
   const bankUrl=SERVER_URL.concat(MASTERFILE.bankURL);
   const modifyUrl=SERVER_URL.concat(selected);
-
-  // const initVat = module.state2
-  // const initAcc = module.state1
-  // const initBank = module.state3
   const initialState = module.state
-  const current_= initialState[0]//.query;
+  const current_= initialState[0];
   const title =module.title
   const { t,  } = useTranslation();
   const [, setRows] = useState([])
-  const data_ = initialState
-  // const accData_ = initAcc
-  // const vatData_ = initVat
-  // const bankData_ = initBank
   const modelid_ = module.modelid;
-  const [data, setData] = useState(data_);
-  //
-  // const [accData, setAccData] = useState(accData_);
-  // const [vatData, setVatData] = useState(vatData_);
-  // const [bankData, setBankData] = useState(bankData_);
+  const acc_modelid= parseInt(ACCOUNT(t).id);
+  const bank_modelid= parseInt(BANK(t).id);
+  const vat_modelid= parseInt(VAT(t).id);
+
   const [current,setCurrent] = useState(current_);
   const [toolbar, setToolbar] = useState(true);
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
+  const handleKeyPress = useCallback((event) => {
+    if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
+      submitEdit(event);
+      console.log(`Key pressed: ${event.key}`);
+    }
+  }, []);
   useEffect(() => {
-    iwsStore.subscribe(setIwsState);
-    //iwsStore.put(current_.modelid, initialState)}, [current, current_.modelid, initialState, iwsState, setCurrent, data ]);
-    //iwsStore.init();
-    //iwsStore.put(current_.modelid, initialState)
-  }, [current, current.modelid, initialState, iwsState, setCurrent ]);
+      iwsStore.subscribe(setIwsState);
+      // attach the event listener
+      document.addEventListener('keydown', handleKeyPress);
+      // remove the event listener
+      return () => {
+        document.removeEventListener('keydown', handleKeyPress);
+      };
+    },
+    [current, current.modelid,  iwsState, setCurrent ]);
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id))
   const initAdd =()=> EditRow({...initialState[0], company:profile.company, currency:profile.currency, editing:false}
         , false, setCurrent);
   const cancelEdit = (e) => initAdd();
-  const columns = ColumnFactory(modelid_,data, t);
+  const columns = ColumnFactory(modelid_, iwsState.get(current.modelid), t);
   const edit = editedRow =>{
-    const daten = iwsState.get(editedRow.modelid)
-    const record = daten.find(obj => obj.id === editedRow.id);
-    //const record = data.find(obj => obj.id === editedRow.id);
+    const data = iwsState.get(editedRow.modelid)
+    const record = data.find(obj => obj.id === editedRow.id);
     const row = {...record, editing:true}
     setCurrent(row);
   }
@@ -82,43 +81,38 @@ const MasterfileForm = () => {
   const submitEdit = event => {
     event.preventDefault();
     if(current.editing) {
-      const record = delete current.editing
+      delete current.editing
+      const data = iwsState.get(current.modelid);
       Edit(modifyUrl, token, {...current}, data, setCurrent);
+      iwsStore.update(current.modelid, current.id, current );
     }else submitAdd(event)
   };
 
-  const load = event => data?.length<2?submitQuery(event): void(0)
+
+  const load = event => submitQuery(event);
   const submitQuery =(event)=>{
     event.preventDefault();
-    // console.log('url', url);
-    // console.log('vatUrl', vatUrl);
-    // console.log('bankUrl', bankUrl);
-    // console.log('accUrl', accUrl);
-    // console.log('iwsState', iwsState);
-    // console.log('initAcc', initAcc);
-    // console.log('initVat', initVat);
-    // console.log('initBank', initBank);
-    accUrl&& (current_.modelid !==9) &&Get1(accUrl, token, history,  iwsStore, 9);
-    vatUrl&& (current_.modelid !==14) &&Get1(vatUrl, token, history,  iwsStore, 14);
-    bankUrl&&(current_.modelid !==11) &&Get1(bankUrl, token, history,   iwsStore, 11);
-    //ccUrl&&(current_.modelid !==6) &&Get1(ccUrl, token, history,   iwsStore, 6);
+    accUrl&& (current.modelid !== acc_modelid) &&Get1(accUrl, token, history,  iwsStore, acc_modelid);
+    vatUrl&& (current.modelid !== vat_modelid) &&Get1(vatUrl, token, history,  iwsStore, vat_modelid);
+    bankUrl&&(current.modelid !== bank_modelid) &&Get1(bankUrl, token, history,   iwsStore, bank_modelid);
     url&&Get1(url, token, history,  iwsStore, current_.modelid);
     console.log('iwsState', iwsState);
   }
 
   const submitAdd = event => {
     event.preventDefault();
+    const data = iwsState.get(current.modelid);
     Add(url, token, {...current}, data, initialState, setCurrent);
   };
   //let parentChildData =(row, rows) => rows.find(a => a.id === row.account)
   function buildForm(current){
     console.log('iwsState', iwsState);
-    const accd=iwsState.get(9)?iwsState.get(9):[];
-    const bankd=iwsState.get(11)?iwsState.get(11):[];
-    const vatd= iwsState.get(14)?iwsState.get(14):[];
-    // console.log('accd', accd);
-    // console.log('bankd', bankd);
-    // console.log('vatd', vatd);
+
+
+    const accd=iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[];
+    const bankd=iwsState.get(bank_modelid)?iwsState.get(bank_modelid):[];
+    const vatd= iwsState.get(vat_modelid)?iwsState.get(vat_modelid):[];
+
     return <>
       <Grid container spacing={2} style={{...styles.outer }} direction="column">
         <CommonFormHead styles={styles} title={title} collapse={state.collapse} initAdd ={initAdd} initialState={initialState}
