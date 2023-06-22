@@ -32,9 +32,9 @@ export const ACCOUNT =(t)=>({id:"9", name:"Account", title:t('account.title'), c
     , form:masterfilesForm, state:initCC, state1:initAcc ,state2:'', state3:'/acc', modelid:formEnum.ACCOUNT, columns:ColumnsACC(initAcc, t)})
 const COMPANY = (t)=>({id:"10", name:"Company", title:t('company.title'), ctx:"/comp/1000", ctx1:"/acc/1000", ctx2:"/vat/1000", ctx3:"/bank/1000", get:"md/10"
     , form:masterfilesForm, state:initComp, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.COMPANY, columns:ColumnsComp(initAcc,t)})
-const BANK =(t)=>({id:"11", name:"Bank", title:t('bank.title'), ctx:"/bank/1000", ctx1:"", ctx2:"", ctx3:'', get:"md/11"
+export const BANK =(t)=>({id:"11", name:"Bank", title:t('bank.title'), ctx:"/bank/1000", ctx1:"", ctx2:"", ctx3:'', get:"md/11"
     , form:masterfilesForm, state:initBank, state1:initAcc ,state2:'', state3:'/bank', modelid:formEnum.BANK, columns:ColumnsM(initAcc, t)})
-const VAT =(t)=>({id:"14", name:"Vat", title:t('vat.title'), ctx:"/vat/1000", ctx1:"/acc/1000", ctx2:"", ctx3:'', get:"md/14"
+export const VAT =(t)=>({id:"14", name:"Vat", title:t('vat.title'), ctx:"/vat/1000", ctx1:"/acc/1000", ctx2:"", ctx3:'', get:"md/14"
     , form:masterfilesForm, state:initVat, state1:initAcc ,state2:'', state3:'/vat', modelid:formEnum.VAT, columns:ColumnsVAT(initAcc, t)})
 const BS =(t)=>({id:"18", name:"Bankstatement", title:t('bankstatement.title'), ctx:"/bs/1000", ctx1:"/acc/1000", ctx2:"", ctx3:'', get:"md/18"
     , form:'<BankStatementForm/>', state:initBS, state1:'' ,state2:'', state3:'/bs', modelid:formEnum.BANKSTATEMENT,
