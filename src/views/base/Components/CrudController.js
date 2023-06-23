@@ -1,6 +1,7 @@
 import axios from "axios";
 import routes from '../../../routes'
 
+
 const Edit = (url, token, record, data, setCurrent) => {
     console.log('record', record);
      axios.put( url, record, {headers: {'Authorization':`Bearer ${token}`}})
@@ -31,7 +32,7 @@ const Edit = (url, token, record, data, setCurrent) => {
  const Post = (url, profile, record, ctx) => {
      axios.patch(url.concat(ctx), record, {headers: {'Authorization':`Bearer ${profile.token}`}})
       .then(response => {
-        //console.log('responsex', response.data);
+        console.log('responsex', response.data);
       }).catch(function (error) {
       console.log('error', error);
     });
@@ -61,12 +62,9 @@ const Edit = (url, token, record, data, setCurrent) => {
            // history.push(routes.user.login)
         });
     }
- const Get = (url, profile, history, func) => {
-      let result
-      console.log('url', url);
-       console.log('profile.token', profile);
-
-          axios.get( url, {headers: {'Authorization':`Bearer ${profile}`}})
+ const Get = (url, token, history, func) => {
+      let result;
+          axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
 
             .then(response => {
                 const resp = response.data
@@ -89,40 +87,43 @@ const Edit = (url, token, record, data, setCurrent) => {
             return result;
         }
 
-const Get1 = (url, profile, history, store, key_) => {
-  let result
-  console.log('urlx', url);
-  console.log('key_', key_);
-  console.log('profile.token', profile);
-
-  axios.get( url, {headers: {'Authorization':`Bearer ${profile}`}})
-
+const Get1 = (url, token, history, store, key_) => {
+  let result;
+  axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
     .then(response => {
       const resp = response.data
       console.log('responseRRRRRR', resp);
       store.put(key_, resp);
       result={...resp};
-      console.log('resp', resp);
-      console.log('result', result);
-      //  return resp;
     }).catch(function (error) {
-    console.log('Error', error);
-    //if(JSON.stringify(error).includes("401")) {
-      console.log('error', "Session expired!!!!! Login again!!!!");
-      //history.push("/login");
-   // }
-
     console.log('error', error);
   })
   console.log('resultRRRRRR', result);
   return result;
 }
- const Query = (event, url, profile, history, func, init) => Get(url, profile, history, func);
+
+const Get2 =  (url, token, store) => {
+  let result;
+  console.log('url', url);
+  //try {
+    axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
+    .then(response => {
+      const resp = response.data
+      console.log('responseRRRRRR2', resp);
+      store.update(resp.modelid, resp.id, {...resp} );
+      result={...resp};
+    }).catch( function (error) {
+    console.log('error', error);
+  });
+  console.log('resultRRRRRR2', result);
+  return result;
+}
+ const Query = (event, url, token, history, func, init) => Get(url, token, history, func);
 
  const EditRow = (edited, isNew, setCurrent)  => {
     console.log('isNew', isNew );
     console.log('edited', edited );
-    const flag = typeof isNew==='undefined' || typeof edited.editing==='undefined' ;
+    const flag =edited.id===-1;//typeof isNew==='undefined' || typeof edited.editing==='undefined' ;
     const row = {...edited, editing:flag};
     console.log('row1_', row );
     setCurrent(row);
@@ -142,5 +143,5 @@ export const logoutUnset = () => {
     delete axios.defaults.headers['Authentication']
     window.localStorage.removeItem('profile')
 }
-export  { Query,Get, Get1, Post, Login,  Add, Edit, EditRow}
+export  { Query,Get, Get1, Get2, Post, Login,  Add, Edit, EditRow}
 

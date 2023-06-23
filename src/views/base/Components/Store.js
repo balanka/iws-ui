@@ -30,8 +30,13 @@ const iwsStore = {
     subject.next(store);
   },
   update: (key, id, message) => {
+    console.debug('key', key);
+    console.debug('id', id);
+    console.debug('message', message);
     const temp = store.get(key);
+    console.debug('temp', temp);
     const temp1 = temp ? temp : new Set();
+    console.debug('temp1', temp1);
     const idx = temp1.findIndex(obj => obj.id === id);
     if (idx !== -1) {
       temp1[idx] = message;

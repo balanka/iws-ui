@@ -6,7 +6,7 @@ import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import {useTranslation} from "react-i18next";
-import { Add, Edit, EditRow, Get1} from './CrudController';
+import {Add, Edit, EditRow, Get1, Get2} from './CrudController';
 import {useHistory} from "react-router-dom";
 //import {formEnum} from "../../../utils/FORMS";
 import iwsStore from './Store';
@@ -84,7 +84,10 @@ const MasterfileForm = () => {
       delete current.editing
       const data = iwsState.get(current.modelid);
       Edit(modifyUrl, token, {...current}, data, setCurrent);
-      iwsStore.update(current.modelid, current.id, current );
+      const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
+      const row = Get2(url_, token, iwsStore);
+      console.log('row', row);
+      //iwsStore.update(current.modelid, current.id, current );
     }else submitAdd(event)
   };
 

@@ -9,6 +9,7 @@ import {Edit, EditRow, Post, Query} from './CrudController';
 import {LOGIN_MENU, useGlobalState, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 
+
 function internal(url, profile, history, initialState, data, setData,  current, setCurrent,  title, state
     , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows) {
 

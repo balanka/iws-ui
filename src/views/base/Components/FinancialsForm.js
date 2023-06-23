@@ -1,13 +1,13 @@
-import React, {useEffect, useCallback, useState, createRef, memo} from 'react'
-import { CInput} from '@coreui/react'
+import React, {createRef, useCallback, useEffect, useState} from 'react'
+import {CInput} from '@coreui/react'
 import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles} from "../Tree/BasicTreeTableProps";
-import {Add, Edit, EditRow, Post, Get1, Query} from './CrudController';
-import {Options, OptionsM, columnsF, Linescolumns} from '../../Tables2/LineFinancialsProps'
+import {Add, Edit, EditRow, Get1, Get2, Post} from './CrudController';
+import {columnsF, Linescolumns, Options, OptionsM} from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
-import {useGlobalState, LoginMenu, useStore, ACCOUNT, MASTERFILE, COSTCENTER, BANK} from "./Menu";
+import {ACCOUNT, COSTCENTER, LoginMenu, MASTERFILE, useGlobalState, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import iwsStore from './Store';
@@ -150,16 +150,20 @@ const FinancialsForm = () => {
   }
   const submitEdit = event => {
     event.preventDefault();
-    console.log('token',token)
-    console.log('currentXZX',current)
-    console.log('current[0]',current.isArray?current[0]:current)
-    console.log('current_',current_)
+    console.log('token',token);
+    console.log('currentXZX',current);
+    console.log('current[0]',current.isArray?current[0]:current);
+    console.log('current_',current_);
     if(current.id >0) {
-      console.log('editing',current)
+      console.log('editing',current);
       toggleEdit();
-      console.log('current',current)
+      console.log('current',current);
       Edit(modifyUrl, token, current, data(), setCurrent);
-      iwsStore.update(current.modelid, current.id, current );
+      const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
+      const row = Get2(url_, token, iwsStore);
+      console.log('row', row);
+      //iwsStore.update(row.modelid, row.id, row );
+      console.log('current',current);
     } else {
       toggleEdit();
       console.log('adding',current)
@@ -214,16 +218,11 @@ const FinancialsForm = () => {
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       const rx = delete newData.tableData;
       console.log('index', idx);
-      if(idx===-1) {
-        const lx = {...newData, transid:dx.id};
-        console.log('lx', lx);
-        dx.lines.push(lx);
-      }
-
+      (idx === -1)? dx.lines.push({...newData, transid: dx.id}): dx.lines[idx]={...newData, transid: dx.id};
       console.log('dx', dx);
       Edit(modifyUrl, token, dx, data(), setCurrent);
-      //setCurrent({...dx});
     }
+    console.log('data()', data());
   }
   const deleteRow = (oldData) =>{
     if (oldData) {

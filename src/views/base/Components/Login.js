@@ -51,7 +51,7 @@ const Login = () => {
 
   const submit = event => {
     event.preventDefault();
-    const data={"userName": current.username, "password": current.password}
+    const data={"userName": current.username, "password": current.password, "company":current.company, "language":current.language}
     Login_(history, url, data, setProfile, MENU, t, setMenu, setRoutes);
   }
 
