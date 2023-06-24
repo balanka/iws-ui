@@ -118,9 +118,9 @@ export const columnsF =(data, line, current, t) => [
 ]
 export const Linescolumns =(data, line, current, t) => [
       {field:'id', title:t('financials.line.id'), type:'numeric', hidden:true,  initialEditValue:line.id, editable:'never'
-      ,  cellStyle: {maxWidth:5}, headerStyle: {maxWidth:5}}
+      ,  cellStyle: {maxWidth:1}, headerStyle: {maxWidth:1}}
     , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current.id,  editable:'never'
-    ,  cellStyle: {maxWidth:5}, headerStyle: {maxWidth:5}, width:5}
+    ,  cellStyle: {maxWidth:1}, headerStyle: {maxWidth:1}, width:1}
     , {field:'account', title:t('financials.line.account'), type:'string', hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
             ACCOUNT ( data, value, onRowDataChange, rowData,"account" ),  initialEditValue:'', align:"right"
       , cellStyle: {maxWidth: 40}, headerStyle: {maxWidth: 40}}
