@@ -88,11 +88,12 @@ const FinancialsForm = () => {
   const setSelectedRows = (rows_)=>setRows(rows_.map( (item) =>({id:item.id,  modelid:item.modelid})))
 
 
-  const models=[{ id:'112', name:'Supplier invoice'}
-    ,{ id:'114', name:'Payment'}
-    ,{ id:'122', name:'Receivables'}
-    ,{ id:'124', name:'Settlement'}
-    ,{ id:'134', name:'General ledger'}]
+  const models=[
+     { id:'112', name:'Supplier invoice', account:'1810', isDebit:false}
+    ,{ id:'114', name:'Payment', account:'1810', isDebit:false}
+    ,{ id:'122', name:'Receivables', account:'1810', isDebit:false}
+    ,{ id:'124', name:'Settlement', account:'1810', isDebit:true}
+    ,{ id:'134', name:'General ledger', account:'1810', isDebit:false}]
 
   const initAdd =()=> EditRow({...current_, editing:false}, true, setCurrent);
 
@@ -176,7 +177,7 @@ const FinancialsForm = () => {
     const row = {id:current.id, oid:current.oid, costcenter:current.costcenter, account:current.account
       , transdate:new Date(current.transdate).toISOString(), enterdate:new Date().toISOString()
       , postingdate:new Date().toISOString(), period:getPeriod(new Date()), posted:current.posted
-      , modelid:current.modelid, company:current.company, text:current.text, typeJournal:current.typeJournal
+      , modelid:parseInt(model), company:current.company, text:current.text, typeJournal:current.typeJournal
       , file_content:current.file_content, lines:current.lines };
     console.log('row: adding current:',row)
     Add(modifyUrl, token, row, data(), initialState, setCurrent);
@@ -197,8 +198,14 @@ const FinancialsForm = () => {
     const dx = {...current};
     console.log('dx', dx);
     console.log('current.lines.filter', {...current.lines.filter(e=>!e.account.isEmpty)});
-    const dx1 =current.lines.length===0?{...current, lines:[{...current.lines.filter(e=>!e.account.isEmpty), ...newData, id:-1, transid:current.id}]}:
-                                        (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id})
+    const model_ = models.find(obj => obj.id === model);
+    const account_ = model_?model_.account:undefined;
+    console.log('model_', model_);
+    const accountLabel_= model_.isDebit?'account':'oaccount';
+    const dx1 =current.lines.length===0?
+      {...current, lines:[{...current.lines.filter(e=>!e.account.isEmpty), ...newData
+        , id:-1, transid:current.id, [accountLabel_]:account_}]}:
+      (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id, [accountLabel_]:account_})
     const record = (current.lines.length>1)?dx:dx1;
     console.log('{...current}', dx);
     console.log('dx1', dx1);
