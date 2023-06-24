@@ -1,13 +1,8 @@
 import {formEnum} from "../../../utils/FORMS";
 import {ColumnsACC, columnsPACB, ColumnJournal, ColumnsBalancesheet, ColumnsVAT, ColumnsBS, ColumnsM
     , ColumnsComp, ColumnsCUST, ColumnsUSER  } from "../../Tables2/LineFinancialsProps";
-import MasterfileForm from "./MasterfileForm";
-import React, {useState} from "react";
-import BankStatementForm from "./BankStatementForm";
-import Login from './Login'
-import BasicTreeTable from "./BasicTreeTable";
-import JForm  from "./JForm";
-import FinancialsForm from "./FinancialsForm";
+
+import React from "react";
 import {createGlobalState} from "react-hooks-global-state";
 
 import create from "zustand";
