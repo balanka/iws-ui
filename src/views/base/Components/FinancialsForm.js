@@ -3,7 +3,7 @@ import {CInput} from '@coreui/react'
 import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles} from "../Tree/BasicTreeTableProps";
-import {Add, Edit, EditRow, Get1, Get2, Post} from './CrudController';
+import {Add, Edit, EditRow, Get, Get1, Get2, Post} from './CrudController';
 import {columnsF, Linescolumns, Options, OptionsM} from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
@@ -11,6 +11,7 @@ import {ACCOUNT, COSTCENTER, LoginMenu, MASTERFILE, useGlobalState, useStore} fr
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import iwsStore from './Store';
+
 //import useKeyPress from "./useKeyPress";
 
 const FinancialsForm = () => {
@@ -31,8 +32,8 @@ const FinancialsForm = () => {
   const url=SERVER_URL.concat(module_x.ctx);
   const accUrl=SERVER_URL.concat(MASTERFILE.accURL);
   const ccUrl=SERVER_URL.concat(MASTERFILE.ccURL);
-  const acc_modelid=parseInt(ACCOUNT.id);
-  const cc_modelid=parseInt(COSTCENTER.id);
+  const acc_modelid=parseInt(ACCOUNT(t).id);
+  const cc_modelid=parseInt(COSTCENTER(t).id);
 
   const initCc = module_x.state2;
   const initAcc = module_x.state1;
@@ -61,7 +62,7 @@ const FinancialsForm = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
-  }, [ current, current.modelid, model, iwsState]);
+  }, [ current, model, iwsState]);
 
   const accData = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
   const ccData = iwsState.get(cc_modelid)?iwsState.get(cc_modelid):[...initCc];
@@ -122,19 +123,20 @@ const FinancialsForm = () => {
   const edit = editedRow =>{
     const data = iwsState.get(editedRow.modelid)
     const record = data.find(obj => obj.id === editedRow.id);
-    console.log('editedRow',editedRow);
     console.log('record',record);
     setCurrent({...record, editing:true});
   }
 
   const submitPost = event => {
     event.preventDefault();
-    Post(url, token, [current.id], "/post");
+    const url_ = modifyUrl.concat("/post/").concat(current.id).concat("/").concat(current.company);
+    Get(url_, token, history);
   };
 
   const submitCopy = event => {
     event.preventDefault();
-    Post(url, token, rows, "/copy");
+    const url_ = modifyUrl.concat("/copy")
+    Post(url_, token, rows, "/copy");
   };
 
   const getCurrentMonth = (date)=>{
@@ -151,19 +153,13 @@ const FinancialsForm = () => {
   }
   const submitEdit = event => {
     event.preventDefault();
-    console.log('token',token);
-    console.log('currentXZX',current);
-    console.log('current[0]',current.isArray?current[0]:current);
-    console.log('current_',current_);
     if(current.id >0) {
-      console.log('editing',current);
       toggleEdit();
       console.log('current',current);
       Edit(modifyUrl, token, current, data(), setCurrent);
       const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
       const row = Get2(url_, token, iwsStore);
       console.log('row', row);
-      //iwsStore.update(row.modelid, row.id, row );
       console.log('current',current);
     } else {
       toggleEdit();
@@ -174,12 +170,11 @@ const FinancialsForm = () => {
 
   const submitAdd = event => {
     event.preventDefault();
-    const row = {id:current.id, oid:current.oid, costcenter:current.costcenter, account:current.account
+    const row = {id:current.id, oid:current.oid, id2:current.id2, costcenter:current.costcenter, account:current.account
       , transdate:new Date(current.transdate).toISOString(), enterdate:new Date().toISOString()
       , postingdate:new Date().toISOString(), period:getPeriod(new Date()), posted:current.posted
       , modelid:parseInt(model), company:current.company, text:current.text, typeJournal:current.typeJournal
       , file_content:current.file_content, lines:current.lines };
-    console.log('row: adding current:',row)
     Add(modifyUrl, token, row, data(), initialState, setCurrent);
 
   };
@@ -193,22 +188,16 @@ const FinancialsForm = () => {
   }
 
   const addRow = (newData) =>{
-    console.log('newData', newData);
-    console.log('current', current);
     const dx = {...current};
-    console.log('dx', dx);
-    console.log('current.lines.filter', {...current.lines.filter(e=>!e.account.isEmpty)});
     const model_ = models.find(obj => obj.id === model);
     const account_ = model_?model_.account:undefined;
-    console.log('model_', model_);
     const accountLabel_= model_.isDebit?'account':'oaccount';
     const dx1 =current.lines.length===0?
       {...current, lines:[{...current.lines.filter(e=>!e.account.isEmpty), ...newData
         , id:-1, transid:current.id, [accountLabel_]:account_}]}:
       (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id, [accountLabel_]:account_})
     const record = (current.lines.length>1)?dx:dx1;
-    console.log('{...current}', dx);
-    console.log('dx1', dx1);
+
     console.log('record', record);
     if(newData ) {
     setCurrent({...record});
@@ -216,20 +205,13 @@ const FinancialsForm = () => {
   }
   const updateRow = (newData, oldData) =>{
     if (oldData) {
-      console.log('oldData', oldData);
-      console.log('newData', newData);
-      console.log('current', current);
       const dx = {...current};
-      console.log('dx ', dx);
-      console.log('dx.lines ', dx.lines);
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       const rx = delete newData.tableData;
-      console.log('index', idx);
       (idx === -1)? dx.lines.push({...newData, transid: dx.id}): dx.lines[idx]={...newData, transid: dx.id};
       console.log('dx', dx);
       Edit(modifyUrl, token, dx, data(), setCurrent);
     }
-    console.log('data()', data());
   }
   const deleteRow = (oldData) =>{
     if (oldData) {

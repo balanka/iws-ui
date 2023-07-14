@@ -183,6 +183,7 @@
     "text" :       "Texte",
     "type":         "Type",
     "file":         "Fichier",
+    "file_content":  "Contenu",
     "posted":     "Posted",
     "line": {
       "title": "Lignes",

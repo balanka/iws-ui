@@ -45,21 +45,25 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
         const row_ = data_;
         console.log('data_',data_);
         const row = row_?.slice();
+        const available = row.length > 0;
+        let idebit = available ? row[0].idebit : 0;
+        let icredit = available ? row[0].icredit : 0;
         let debit = 0, credit = 0, amount = 0;
         let currency = ''
         let company = '';
-        const available = row.length > 0;
+
         for (let i = 0, len = row.length - 1; i <= len; ++i) {
+            idebit = idebit + row[i].idebit;
             debit = debit + row[i].debit;
+            icredit = icredit + row[i].icredit;
             credit = credit + row[i].credit;
             amount = amount + row[i].amount;
             currency = row[i].currency;
             company = row[i].company;
-            row[i] = {...row[i], amount: amount};
+            //row[i] = {...row[i], amount: amount};
         }
         const len = row.length;
-        const idebit = available ? row[0].idebit : 0;
-        const icredit = available ? row[0].icredit : 0;
+
         if (len > 0)
             row[len] = {
                 id: Number.MAX_VALUE,

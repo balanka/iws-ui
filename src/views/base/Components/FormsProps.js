@@ -1,5 +1,6 @@
-import React from 'react'
-import Select from "@material-ui/core/Select";
+import React, {useState} from 'react'
+//import Select from "@material-ui/core/Select";
+import Select from "react-select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "react-fast-grid";
 import {IoMdMenu} from "react-icons/io/index";
@@ -66,6 +67,9 @@ const mapping = (acc) =>
         {acc.id.concat( " ").concat(acc.name)}
     </MenuItem>
 
+const mappingSelect2x =  (d) => ({value: d.id, label: d.id.concat( " ").concat(d.name)});
+const mappingSelect2 = (item) => {let myObj = {}; myObj.value = item.id; myObj.label =item.id.concat( " ").concat(item.name);  return myObj}
+const mappingSelectName2 = (item) => {let myObj = {}; myObj.value = item.id; myObj.label =item.name.concat( " ").concat(item.id); return myObj}
 
   const mappingSelect = (item) => <option key={item.id} value={item.id}>
     {item.id.concat( " ").concat (item.name)}</option>
@@ -77,10 +81,17 @@ export const  filter = (rows, cols, txt,) => rows.filter(col =>
 const updateObject = (keyName, newValue, object) =>
     Object (object) === object
         ? Object .fromEntries (Object .entries (object) .map (
-            ([k, v]) => [k, k == keyName ? newValue : updateObject (keyName, newValue, v)]
+            ([k, v]) => [k, k === keyName ? newValue : updateObject (keyName, newValue, v)]
         ))
         : object
 
+export const SELECT =(props) => {
+    const {options_ } = props;
+    console.log('propspropsprops', props);
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    return (<Select defaultValue={selectedOption} onChange={setSelectedOption} options={options_}/>)
+}
 /*
     const mappingMenu = (acc) =>
     <MenuItem key={acc.id} value={acc.id}>
@@ -105,6 +116,7 @@ export  const ACCOUNT2=(data, value, onRowDataChange, rowData, fieldName) => {
 }
 
  */
+
 export  const BIC=(data, value, onRowDataChange, rowData, fieldName) => {
    // console.log('value', value);
    // console.log('rowData', rowData);
@@ -1095,6 +1107,7 @@ export const CompanyAccountForm =(props) => {
             </CFormGroup>
         </>
     )}
+
 export const FinancialsMainForm =(props) => {
     const {current, setCurrent, t, accData, ccData } = props
     return (
@@ -1112,7 +1125,7 @@ export const FinancialsMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small" style={{padding:2}}>{t('financials.postingdate')}</CLabel>
                 </CCol>
                 <CCol sm="1">
-                    <CInput  bssize="sm"  type="text"  id="postingdate-id" name="postingdate" className="input-sm"
+                    <CInput  disabled={true} bssize="sm"  type="text"  id="postingdate-id" name="postingdate" className="input-sm"
                              placeholder={t('financials.postingdate')} value={dateFormat(current.postingdate, "dd mm yy")}
                              style={{'textAlign':'right', 'paddingLeft':400,'paddingRight':0, padding:2 }}/>
                 </CCol>
@@ -1120,7 +1133,7 @@ export const FinancialsMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small" style={{  'paddingRight':1 }}>{t('financials.period')}</CLabel>
                 </CCol>
                 <CCol sm="1">
-                    <CInput  bssize="sm" className="input-sm" type="text" id="period" name="period" value={current.period}
+                    <CInput  disabled={true} bssize="sm" className="input-sm" type="text" id="period" name="period" value={current.period}
                              style={{'textAlign':'right',padding:2 }}/>
                 </CCol>
             </CFormGroup>
@@ -1138,7 +1151,7 @@ export const FinancialsMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small" style={{ padding:2 }}>{t('financials.enterdate')}</CLabel>
                 </CCol>
                 <CCol sm="1">
-                    <CInput  bssize="sm"  type="text"  id="enterdate-id" name="enterdate" className="input-sm"
+                    <CInput  disabled={true} bssize="sm"  type="text"  id="enterdate-id" name="enterdate" className="input-sm"
                              placeholder="enterdate" value={dateFormat(current.enterdate, "dd.mm.yy")}
                              style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
@@ -1146,7 +1159,7 @@ export const FinancialsMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small" style={{  padding:2 }}>{t('common.company')}</CLabel>
                 </CCol>
                 <CCol sm="1">
-                    <CInput  bssize="sm" type="text" id="company-input" name="company" className="input-sm"
+                    <CInput  disabled={true} bssize="sm" type="text" id="company-input" name="company" className="input-sm"
                              placeholder={t('common.company')} value={current.company}  style={{'textAlign':'right',  padding:2 }}/>
                 </CCol>
             </CFormGroup>
@@ -1186,7 +1199,7 @@ export const FinancialsMainForm =(props) => {
                 </MuiPickersUtilsProvider>
                 </CCol>
                 <CCol sm="1">
-                    <FormControlLabel id="posted" name="posted" control={<Switch checked={current.posted} />} label={t('financials.posted')}/>
+                    <FormControlLabel disabled={true} id="posted" name="posted" control={<Switch checked={current.posted} />} label={t('financials.posted')}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{ paddingBottom:30, height:15 }}>

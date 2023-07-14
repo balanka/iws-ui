@@ -22,7 +22,8 @@ function internal(url, profile, history, initialState, data, setData,  current, 
 
     const submitPost = event => {
         event.preventDefault();
-        Post(url, profile, rows, "/post");
+        const url_ =url.concat("/post")
+        Post(url_, profile, rows, "/post");
     };
 
     const edit = editedRow => {

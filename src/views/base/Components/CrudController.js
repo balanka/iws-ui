@@ -30,7 +30,7 @@ const Edit = (url, token, record, data, setCurrent) => {
       });
   };
  const Post = (url, profile, record, ctx) => {
-     axios.patch(url.concat(ctx), record, {headers: {'Authorization':`Bearer ${profile.token}`}})
+     axios.patch(url, record, {headers: {'Authorization':`Bearer ${profile.token}`}})
       .then(response => {
         console.log('responsex', response.data);
       }).catch(function (error) {
@@ -69,7 +69,7 @@ const Edit = (url, token, record, data, setCurrent) => {
             .then(response => {
                 const resp = response.data
               console.log('responseRRRRRR', resp);
-                func(resp);
+              func?func(resp):void(false);
                 result={...resp};
                 console.log('resp', resp);
               console.log('result', result);
@@ -92,7 +92,6 @@ const Get1 = (url, token, history, store, key_) => {
   axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
     .then(response => {
       const resp = response.data
-      console.log('responseRRRRRR', resp);
       store.put(key_, resp);
       result={...resp};
     }).catch(function (error) {

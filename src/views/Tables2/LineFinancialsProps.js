@@ -116,7 +116,8 @@ export const columnsF =(data, line, current, t) => [
     , {field:'modelid', title:t('common.modelid'), type:"numeric", export:true}
     , {field:'company', title:t('common.company'), type:"numeric", export:true}
 ]
-export const Linescolumns =(data, line, current, t) => [
+export const Linescolumns =(data, line, current, t) =>  {console.log('current', current);
+    return [
       {field:'id', title:t('financials.line.id'), type:'numeric', hidden:true,  initialEditValue:line.id, editable:'never'
       ,  cellStyle: {maxWidth:1}, headerStyle: {maxWidth:1}}
     , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current.id,  editable:'never'
@@ -134,7 +135,7 @@ export const Linescolumns =(data, line, current, t) => [
        currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 } , width: 20}
     , {field:'text', title:t('financials.line.text'), initialEditValue:'', hidden:false, width: 300}
     , {field:'currency', title:t('common.currency'), hidden:false,  initialEditValue:line.currency, width:5, editable:'never'}
-  ]
+  ]}
 export const Options = ({
     toolbar:false,
     draggable:false,

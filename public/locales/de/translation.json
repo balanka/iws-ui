@@ -187,6 +187,7 @@
     "text" :       "Text",
     "type":         "B.Art",
     "file":         "Datei",
+    "file_content":  "Inhalt",
     "posted":     "Gebucht",
     "line": {
       "title": "Position(en)",

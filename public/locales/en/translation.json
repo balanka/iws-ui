@@ -190,11 +190,12 @@
     "enterdate"  : "Created",
     "postingdate": "Posted",
     "transdate":   "Transdate",
-    "accountHeader": "Deb./Cred.",
+    "account": "Account",
     "costcenter":   "Cost center",
     "text" :       "Text",
     "type":         "Type",
     "file":         "File",
+    "file_content":  "Content",
     "posted":     "Posted?",
     "line": {
       "title": "Line",

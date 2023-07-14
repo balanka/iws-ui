@@ -14,7 +14,7 @@ export const getCurrentMonth = (date)=>{
 export const date= new Date().toISOString()
 export const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
 const masterfilesForm = '<MasterfileForm/>'
-export const MASTERFILE ={accURL:'/acc/1000', bankURL:'/acc/1000', ccURL:'/acc/1000', vatURL:'/vat/1000', custURL:'/cust/1000', supURL:'/sup/1000', compURL:'/comp/1000'};
+export const MASTERFILE ={accURL:'/acc/1000', bankURL:'/acc/1000', ccURL:'/cc/1000', vatURL:'/vat/1000', custURL:'/cust/1000', supURL:'/sup/1000', compURL:'/comp/1000'};
 const LOGIN=(t)=> ( {id:"0", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:""
     , ctx2:"/", ctx3:'', form:'<Login/>', state:loginInit, state1:'' ,state2:'',  state3:'', columns:[]});
 const SUPPLIER =(t)=>({id:"1", name:"Supplier", title:t('supplier.title'), ctx:"/sup/1000", ctx1:"/acc/1000", ctx2:"/vat/1000",  ctx3:"/bank/1000", get:"md/1"
@@ -88,9 +88,9 @@ export const initJour=[{ id:'', transid:'', oid:'', account:'', oaccount:'', tra
 export const initBS=[{ id:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
             , beneficiary:'', accountno:'', bankCode:'', amount:'', currency:'', info:'', company:'', companyIban:''
             , posted:'',modelid:18}]
-export const initFtr=[{ id:-1, oid:0, costcenter:'', account:'', transdate:date
+export const initFtr=[{ id:-1, oid:0, id2:'' ,costcenter:'', account:'', transdate:date
             , enterdate:date, postingdate:date, period:getPeriod(new Date())
-            , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{id:-1, transid:-1
+            , posted:false, modelid:112, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{id:-1, transid:-1, transid2:''
             ,  account:'', side:true, oaccount:'', amount:0.0, duedate:date, text:'', currency:'EUR'}]}]
 export const initPac=[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:''
             , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]
