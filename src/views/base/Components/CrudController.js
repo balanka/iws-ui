@@ -3,9 +3,11 @@ import routes from '../../../routes'
 
 
 const Edit = (url, token, record, data, setCurrent) => {
+    console.log('url edit', url);
     console.log('record', record);
      axios.put( url, record, {headers: {'Authorization':`Bearer ${token}`}})
       .then(response => {
+        console.log('response.status', response.status);
         const index = data.findIndex(obj => obj.id === record.id);
         data[index]= record;
         setCurrent(record);

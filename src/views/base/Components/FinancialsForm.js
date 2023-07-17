@@ -188,19 +188,25 @@ const FinancialsForm = () => {
   }
 
   const addRow = (newData) =>{
+    if(newData ) {
     const dx = {...current};
     const model_ = models.find(obj => obj.id === model);
     const account_ = model_?model_.account:undefined;
     const accountLabel_= model_.isDebit?'account':'oaccount';
     const dx1 =current.lines.length===0?
       {...current, lines:[{...current.lines.filter(e=>!e.account.isEmpty), ...newData
-        , id:-1, transid:current.id, [accountLabel_]:account_}]}:
-      (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id, [accountLabel_]:account_})
+        , id:-1, transid:current.id, transid2:'',[accountLabel_]:account_}]}:
+      (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id, transid2:'', [accountLabel_]:account_})
     const record = (current.lines.length>1)?dx:dx1;
-
     console.log('record', record);
-    if(newData ) {
-    setCurrent({...record});
+    console.log('token', token);
+      const rx = delete record.editing;
+    // Add (modifyUrl, token, record, data(), initialState, setCurrent)
+    Edit(modifyUrl, token, record, data(), setCurrent);
+      const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
+      const row = Get2(url_, token, iwsStore);
+      console.log('row', row);
+      console.log('current',current);
     }
   }
   const updateRow = (newData, oldData) =>{
@@ -218,8 +224,11 @@ const FinancialsForm = () => {
       const dx = {...current};
       const index =dx.lines.findIndex(obj => obj.id === oldData.id);
       const deleted = dx.lines[index];
+      console.log('deleted', deleted);
       dx.lines[index] = {...deleted, transid:-2 };
       const record ={...dx}
+      console.log('dx', dx);
+      console.log('record', record);
       setCurrent({...record});
     }
   }
