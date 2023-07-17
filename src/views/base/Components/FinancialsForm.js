@@ -57,6 +57,7 @@ const FinancialsForm = () => {
     iwsStore.subscribe(setIwsState);
     // attach the event listener
     document.addEventListener('keydown', handleKeyPress);
+    
 
     // remove the event listener
     return () => {
@@ -143,7 +144,6 @@ const FinancialsForm = () => {
     const p=date.getUTCMonth()+1;
     return p<=10?"0".concat(p.toString()):p.toString();
   }
-  const getCurrentDate = ()=>{return new Date()}
   const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
 
   const toggleEdit = ()=>{
@@ -161,6 +161,7 @@ const FinancialsForm = () => {
       const row = Get2(url_, token, iwsStore);
       console.log('row', row);
       console.log('current',current);
+      //setCurrent(current);
     } else {
       toggleEdit();
       console.log('adding',current)
@@ -205,6 +206,7 @@ const FinancialsForm = () => {
     Edit(modifyUrl, token, record, data(), setCurrent);
       const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
       const row = Get2(url_, token, iwsStore);
+      console.log('state', iwsState.get(row.modelid));
       console.log('row', row);
       console.log('current',current);
     }
@@ -229,7 +231,9 @@ const FinancialsForm = () => {
       const record ={...dx}
       console.log('dx', dx);
       console.log('record', record);
-      setCurrent({...record});
+      const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
+      const row = Get2(url_, token, iwsStore);
+      console.log('current',current);
     }
   }
   const  editable = () => ({
