@@ -57,7 +57,7 @@ const FinancialsForm = () => {
     iwsStore.subscribe(setIwsState);
     // attach the event listener
     document.addEventListener('keydown', handleKeyPress);
-    
+
 
     // remove the event listener
     return () => {
@@ -171,7 +171,7 @@ const FinancialsForm = () => {
 
   const submitAdd = event => {
     event.preventDefault();
-    const row = {id:current.id, oid:current.oid, id2:current.id2, costcenter:current.costcenter, account:current.account
+    const row = {id:current.id, oid:current.oid, id1:current.id1, costcenter:current.costcenter, account:current.account
       , transdate:new Date(current.transdate).toISOString(), enterdate:new Date().toISOString()
       , postingdate:new Date().toISOString(), period:getPeriod(new Date()), posted:current.posted
       , modelid:parseInt(model), company:current.company, text:current.text, typeJournal:current.typeJournal
@@ -196,8 +196,8 @@ const FinancialsForm = () => {
     const accountLabel_= model_.isDebit?'account':'oaccount';
     const dx1 =current.lines.length===0?
       {...current, lines:[{...current.lines.filter(e=>!e.account.isEmpty), ...newData
-        , id:-1, transid:current.id, transid2:'',[accountLabel_]:account_}]}:
-      (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id, transid2:'', [accountLabel_]:account_})
+        , id:-1, transid:current.id1, paddingTop:'',[accountLabel_]:account_}]}:
+      (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id1, paddingTop:'', [accountLabel_]:account_})
     const record = (current.lines.length>1)?dx:dx1;
     console.log('record', record);
     console.log('token', token);
@@ -216,7 +216,7 @@ const FinancialsForm = () => {
       const dx = {...current};
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       const rx = delete newData.tableData;
-      (idx === -1)? dx.lines.push({...newData, transid: dx.id}): dx.lines[idx]={...newData, transid: dx.id};
+      (idx === -1)? dx.lines.push({...newData, transid: dx.id1}): dx.lines[idx]={...newData, transid: dx.id1};
       console.log('dx', dx);
       Edit(modifyUrl, token, dx, data(), setCurrent);
     }
