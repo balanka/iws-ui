@@ -1,4 +1,4 @@
-import React, {useState, memo} from 'react'
+import React, {useState, memo, useEffect} from 'react'
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
 import {FormFactory,JournalFormHead} from './FormsProps'
@@ -6,9 +6,10 @@ import {columnsPACB, ColumnJournal, OptionsM} from "../../Tables2/LineFinancials
 import {formEnum} from "../../../utils/FORMS";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
-import { Query} from './CrudController';
-import {useGlobalState, useStore} from "./Menu";
+import {Get1, Query} from './CrudController';
+import {ACCOUNT, MASTERFILE, useGlobalState, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
+import iwsStore from "./Store";
 
 function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
     , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX) {
@@ -159,16 +160,29 @@ const JForm = () => {
     const [data, setData] = useState(initialState);
     const [accData, setAccData] = useState(initAcc);
     const [toolbar, setToolbar] = useState(true);
+    const [iwsState, setIwsState] = useState(iwsStore.initialState);
     const columnsX= modelid===formEnum.PACB?columnsPACB(t):ColumnJournal(t);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle= ()=> setState({...state, collapse:!state.collapse });
+    const acc_modelid=parseInt(ACCOUNT(t).id);
+    const accData_ = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
+    console.log('accData_', accData_)
+    let init = false
+    useEffect(() => {
+        if(!init) {
+            iwsStore.subscribe(setIwsState);
+            init = true
+        }
+        // load account data as they are needed
+        accUrl&&Get1(accUrl, token, history,  iwsStore, acc_modelid);
+    },[init] );
 
     const getUrl=() =>url.concat('/')
         .concat(current.account).concat('/')
         .concat(current.fromPeriod).concat('/')
         .concat(current.toPeriod);
 
-    return Internal(isDebit, t, modelid, accData, accUrl, token, history, setAccData, initAcc, current, getUrl, setData
+    return Internal(isDebit, t, modelid, accData_, accUrl, token, history, setAccData, initAcc, current, getUrl, setData
         , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX);
 
 };
