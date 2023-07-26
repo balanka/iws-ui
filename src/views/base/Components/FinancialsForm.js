@@ -228,11 +228,12 @@ const FinancialsForm = () => {
       const deleted = dx.lines[index];
       console.log('deleted', deleted);
       dx.lines[index] = {...deleted, transid:-2 };
-      const record ={...dx}
+      //const record ={...dx}
       console.log('dx', dx);
-      console.log('record', record);
-      const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
-      const row = Get2(url_, token, iwsStore);
+     // console.log('record', record);
+      Edit(modifyUrl, token, dx, data(), setCurrent);
+     // const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
+      //const row = Get2(url_, token, iwsStore);
       console.log('current',current);
     }
   }
@@ -268,7 +269,7 @@ const FinancialsForm = () => {
                             initialState={initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                             module ={model}  modules ={models} handleModuleChange={handleModuleChange}
                             onNewLine={onNewLine} submitPost={submitPost} submitCopy={submitCopy}
-                            submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  />
+                            submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  current={current} />
         <FormFactory formid ={formEnum.FINANCIALS} current={current} setCurrent={setCurrent} t={t} accData={accd}
                      ccData={ccd}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
                      collapse={state.collapse}

@@ -222,7 +222,7 @@ export const BSFormHead = (props) => {
 }
 export const FinancialsFormHead = (props) => {
     const {styles, title, collapse, module, modules, initAdd, onNewLine, cancelEdit, submitEdit, submitQuery, toggle
-        , submitCopy, submitPost, handleModuleChange, toggleToolbar} = props
+        , submitCopy, submitPost, handleModuleChange, toggleToolbar, current} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -245,27 +245,27 @@ export const FinancialsFormHead = (props) => {
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{ align:'right' }}>
-                            <CButton  className="card-header-action btn-minimize" onClick={submitCopy}>
+                            <CButton  disabled={current.posted} className="card-header-action btn-minimize" onClick={submitCopy}>
                                 <IwsIcon  style ={{style:styles.imageIcon }}  d={svgIcons.copyContent}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton  className="card-header-action btn-minimize" title="Add new line" onClick={onNewLine}>
+                            <CButton  disabled={current.posted} className="card-header-action btn-minimize" title="Add new line" onClick={onNewLine}>
                                 <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.libraryAdd}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" title="Cancel editing" onClick={(e) => cancelEdit(e)}>
+                            <CButton disabled={current.posted} color="link" className="card-header-action btn-minimize" title="Cancel editing" onClick={(e) => cancelEdit(e)}>
                                 <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.highlightOff} />
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" title="Add new entry" onClick={initAdd}>
+                            <CButton disabled={current.posted} color="link" className="card-header-action btn-minimize" title="Add new entry" onClick={initAdd}>
                                 <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.addCircleOutline}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" title="Save entry" onClick={(e) => submitEdit(e)}>
+                            <CButton disabled={current.posted} color="link" className="card-header-action btn-minimize" title="Save entry" onClick={(e) => submitEdit(e)}>
                                 <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.save}/>
                             </CButton>
                         </div>
@@ -275,7 +275,7 @@ export const FinancialsFormHead = (props) => {
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton  className="card-header-action btn-minimize" onClick={submitPost}>
+                            <CButton disabled={current.posted} className="card-header-action btn-minimize" onClick={submitPost}>
                                 <IwsIcon  style ={{style:styles.imageIcon}} d={svgIcons.done}/>
                             </CButton>
                         </div>
@@ -295,18 +295,12 @@ export const JournalFormHead = (props) => {
                     </Grid>
                     <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
                     <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
-                        <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton block color="link"  className="card-header-action btn-minimize"
-                                     onClick={event => {event.preventDefault(); load(event)}}>
-                                <FontAwesomeIcon icon={faSpinner} rotation={90}/>
-                            </CButton>
-                        </div>
-                        <div className="card-header-actions" style={{  align: 'right' }}>
+                        <div className="card-header-actions" style={{ textAlign: 'end' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
                                 <FontAwesomeIcon icon={collapse?faAngleDoubleUp:faAngleDoubleDown} />
                             </CButton>
                         </div>
-                        <div className="card-header-actions" style={{  align: 'right' }}>
+                        <div className="card-header-actions" style={{ textAlign: 'end' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
                                 <FontAwesomeIcon icon={faPlusCircle} />
                             </CButton>
