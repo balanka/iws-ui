@@ -54,14 +54,13 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
         let company = '';
 
         for (let i = 0, len = row.length - 1; i <= len; ++i) {
-            idebit = idebit + row[i].idebit;
-            debit = debit + row[i].debit;
-            icredit = icredit + row[i].icredit;
-            credit = credit + row[i].credit;
+            idebit =  row[i].idebit;
+            debit =  row[i].debit;
+            icredit =  row[i].icredit;
+            credit =  row[i].credit;
             amount = amount + row[i].amount;
             currency = row[i].currency;
             company = row[i].company;
-            //row[i] = {...row[i], amount: amount};
         }
         const len = row.length;
 
@@ -95,12 +94,10 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
     const summary = (data_) => modelid === formEnum.PACB ? summaryPCB(data_) : summaryJ(data_)
     const load = event => {
         event.preventDefault();
-        console.log('Url >>>>><<<<<<<<<'+current);
         accData?.length < 2 ?
             Query(event, accUrl, profile, history, setAccData, initAcc) :
             current.account && current.fromPeriod && current.toPeriod ?
                 Query(event, getUrl(), profile, history, setData, initialState) : void (0)
-        //setIsDebit(accData.find(x => x.id === current.account).isDebit)
     };
 
     const submitQuery_ = event => {
@@ -132,7 +129,6 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
 const JForm = () => {
     const { t,  } = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-    //const [profile, ] = useGlobalState('profile');
     const { profile,  } = useStore()
     const { token  } = profile
     const [selected, ] = useGlobalState('selected');

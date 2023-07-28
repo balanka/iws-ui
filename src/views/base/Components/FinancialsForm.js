@@ -80,8 +80,6 @@ const FinancialsForm = () => {
   const handleKeyPress = useCallback((event) => {
     if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
       submitEdit(event);
-      //event.preventDefault();
-      console.log(`Key pressed: ${event.key}`);
     }
   }, []);
 
@@ -159,9 +157,6 @@ const FinancialsForm = () => {
       Edit(modifyUrl, token, current, data(), setCurrent);
       const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
       const row = Get2(url_, token, iwsStore);
-      console.log('row', row);
-      console.log('current',current);
-      //setCurrent(current);
     } else {
       toggleEdit();
       console.log('adding',current)
@@ -199,16 +194,9 @@ const FinancialsForm = () => {
         , id:-1, transid:current.id1, paddingTop:'',[accountLabel_]:account_}]}:
       (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id1, paddingTop:'', [accountLabel_]:account_})
     const record = (current.lines.length>1)?dx:dx1;
-    console.log('record', record);
-    console.log('token', token);
-      const rx = delete record.editing;
-    // Add (modifyUrl, token, record, data(), initialState, setCurrent)
+    const rx = delete record.editing;
     Edit(modifyUrl, token, record, data(), setCurrent);
-      const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
-      const row = Get2(url_, token, iwsStore);
-      console.log('state', iwsState.get(row.modelid));
-      console.log('row', row);
-      console.log('current',current);
+
     }
   }
   const updateRow = (newData, oldData) =>{

@@ -4,53 +4,35 @@ import {formEnum} from "../../../utils/FORMS";
 import {JournalFormHead, FormFactory} from './FormsProps';
 import {styles} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
-import {Get, Query} from './CrudController';
-import {useGlobalState, LOGIN_MENU, useStore} from "./Menu";
+import {Get, Get1, Query} from './CrudController';
+import {useGlobalState, LOGIN_MENU, useStore, ACCOUNT} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {OptionsM, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
 import {useTranslation} from "react-i18next";
+import iwsStore from "./Store";
 
-
-
-const isEmpty = (str) => (!str || str==='nullIDbalance'||str ==='undefined');
 function Internal(data, setData, accUrl, initAcc, accData, setAccData, profile, history, current, initialState, state
     , title, getUrl, url, toggle, toggleToolbar, setCurrent, t, toolbar, columnsX) {
 
     const load = event => {
         event.preventDefault();
-        console.log('Url >>>>><<<<<<<<<'+current);
-        // const x= Get(accUrl, profile, history, setAccData);
-
          accData?.length < 2 ?
           Query(event, accUrl, profile, history, setAccData, initAcc) :
           current.account && current.fromPeriod && current.toPeriod ?
             Query(event, getUrl(), profile, history, setData, initialState) : void (0)
-        //setIsDebit(accData.find(x => x.id === current.account).isDebit)
-
-
     };
 
 
     const submitQuery_ = event => {
         event.preventDefault();
-        console.log('currentVVV', current);
-        console.log('currentVVV', current.account && current.fromPeriod && current.toPeriod );
         const x=  Get(getUrl(), profile, history, setData);
-        console.log('xxxxxxxxxxxxxxxx', x);
-        //console.log('currentAAA', current);
-        //Query(event, getUrl(), profile, history, setData, initialState)
-        //current.account && current.fromPeriod && current.toPeriod &&Query(event, getUrl(), profile, history, setData, initialState)
-       // Query(event, getUrl(), profile, history, setData, initialState)
-        //!isEmpty(x)&&dataStore.setState(x)
-       // accData?.length < 2 ?
-          //Query(event, accUrl, profile, history, setAccData, initAcc) :
-         // Query(event, getUrl(), profile, history, setData, initialState)
-    };
-    //
 
-   // let parentChildFn =(row, rows) => rows.find((a) => a.account === row.id)
+    };
+
+
+
     let parentChildFn =(row, rows) => rows.find(a => a.id === row.account)
-   // parentChildData={(row, rows) => rows.find((a) => a.id === row.parentId)}
+
 
     function buildForm() {
         return <>
@@ -79,8 +61,7 @@ const  BasicTreeTable =()=> {
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const { profile,  } = useStore()
     const { token  } = profile
-    //const {dataStore,  setDataStore} = useDataStore()
-    //const { dataStore  } = dataStore_
+
     const [selected, ] = useGlobalState('selected');
     const [menu, ] = useGlobalState('menu');
     const datax =  profile?.modules?profile.modules:[];
@@ -101,12 +82,24 @@ const  BasicTreeTable =()=> {
     const [current,setCurrent] = useState(current_);
     const [data, setData] = useState(initAcc);
     const [accData, setAccData] = useState(initAcc);
-   //Get(accUrl, token, history, setAccData);
+
     console.log('accData', accData);
     console.log('initAcc', initAcc);
     console.log('data', data);
     const [toolbar, setToolbar] = useState(false);
-    useEffect(() => {setCurrent(current_)}, [current_]);
+    const [iwsState, setIwsState] = useState(iwsStore.initialState);
+    const acc_modelid=parseInt(ACCOUNT(t).id);
+    const accData_ = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
+    let init = false
+    useEffect(() => {
+        if(!init) {
+            iwsStore.subscribe(setIwsState);
+            init = true
+        }
+        // load account data as they are needed
+        accUrl&&Get1(accUrl, token, history,  iwsStore, acc_modelid);
+        setCurrent(current_)
+    }, [current_, init]);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle = ()=> setState({...state, collapse:!state.collapse });
     const columnsX = columns(t);
@@ -114,7 +107,8 @@ const  BasicTreeTable =()=> {
         .concat(current.account).concat('/')
         .concat(current.fromPeriod).concat('/')
         .concat(current.toPeriod);
-    return Internal(data, setData, accUrl, initAcc, isEmpty(accData)?initAcc:accData, setAccData, token, history, current, initialState, state
-        , title, getUrl, url, toggle, toggleToolbar, setCurrent, t, toolbar, columnsX);
+
+    return Internal(data, setData, accUrl, initAcc, accData_, setAccData, token, history, current, initialState
+      , state, title, getUrl, url, toggle, toggleToolbar, setCurrent, t, toolbar, columnsX);
 };
 export default  memo(BasicTreeTable)
