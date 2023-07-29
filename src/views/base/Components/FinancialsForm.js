@@ -39,7 +39,7 @@ const FinancialsForm = () => {
   const initAcc = module_x.state1;
   const initialState = module_x.state;
   const current_= initialState[0];
-  console.log('current_',current_)
+
   const title =module_x.title;
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [rows, setRows] =useState([])
@@ -48,22 +48,19 @@ const FinancialsForm = () => {
   const initLine=initialState[0].lines[0];
   const [toolbar, setToolbar] = useState(false);
   const [current,setCurrent] = useState(current_);
-
+  console.log('current',current)
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
   const data_ = iwsState.get(parseInt(model));
   const data  = ()=>data_?data_:initialState;
-  //useEffect(() => {}, [current, data ]);
   useEffect(() => {
     iwsStore.subscribe(setIwsState);
     // attach the event listener
     document.addEventListener('keydown', handleKeyPress);
-
-
     // remove the event listener
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
-  }, [ current, model, iwsState]);
+  }, [ current, model, data_]);
 
   const accData = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
   const ccData = iwsState.get(cc_modelid)?iwsState.get(cc_modelid):[...initCc];
@@ -129,7 +126,7 @@ const FinancialsForm = () => {
   const submitPost = event => {
     event.preventDefault();
     const url_ = modifyUrl.concat("/post/").concat(current.id).concat("/").concat(current.company);
-    Get(url_, token, history);
+    Get2(url_, token, iwsStore, setCurrent);
   };
 
   const submitCopy = event => {
@@ -153,10 +150,7 @@ const FinancialsForm = () => {
     event.preventDefault();
     if(current.id >0) {
       toggleEdit();
-      console.log('current',current);
-      Edit(modifyUrl, token, current, data(), setCurrent);
-      const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
-      const row = Get2(url_, token, iwsStore);
+      Edit(modifyUrl, token, current, data(), setCurrent, iwsStore);
     } else {
       toggleEdit();
       console.log('adding',current)
@@ -195,7 +189,7 @@ const FinancialsForm = () => {
       (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id1, paddingTop:'', [accountLabel_]:account_})
     const record = (current.lines.length>1)?dx:dx1;
     const rx = delete record.editing;
-    Edit(modifyUrl, token, record, data(), setCurrent);
+    Edit(modifyUrl, token, record, data(), setCurrent, iwsStore);
 
     }
   }
@@ -206,7 +200,8 @@ const FinancialsForm = () => {
       const rx = delete newData.tableData;
       (idx === -1)? dx.lines.push({...newData, transid: dx.id1}): dx.lines[idx]={...newData, transid: dx.id1};
       console.log('dx', dx);
-      Edit(modifyUrl, token, dx, data(), setCurrent);
+      Edit(modifyUrl, token, dx, data(), setCurrent, iwsStore);
+      console.log('current', current);
     }
   }
   const deleteRow = (oldData) =>{
@@ -219,7 +214,7 @@ const FinancialsForm = () => {
       //const record ={...dx}
       console.log('dx', dx);
      // console.log('record', record);
-      Edit(modifyUrl, token, dx, data(), setCurrent);
+      Edit(modifyUrl, token, dx, data(), setCurrent, iwsStore);
      // const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
       //const row = Get2(url_, token, iwsStore);
       console.log('current',current);
@@ -257,7 +252,7 @@ const FinancialsForm = () => {
                             initialState={initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                             module ={model}  modules ={models} handleModuleChange={handleModuleChange}
                             onNewLine={onNewLine} submitPost={submitPost} submitCopy={submitCopy}
-                            submitQuery= {submitQuery} toggle={toggle} toggleToolbar={toggleToolbar}  current={current} />
+                             toggle={toggle} toggleToolbar={toggleToolbar}  current={current} />
         <FormFactory formid ={formEnum.FINANCIALS} current={current} setCurrent={setCurrent} t={t} accData={accd}
                      ccData={ccd}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
                      collapse={state.collapse}

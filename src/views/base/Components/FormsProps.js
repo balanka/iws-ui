@@ -221,7 +221,7 @@ export const BSFormHead = (props) => {
         </Grid>);
 }
 export const FinancialsFormHead = (props) => {
-    const {styles, title, collapse, module, modules, initAdd, onNewLine, cancelEdit, submitEdit, submitQuery, toggle
+    const {styles, title, collapse, module, modules, initAdd, onNewLine, cancelEdit, submitEdit,  toggle
         , submitCopy, submitPost, handleModuleChange, toggleToolbar, current} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >

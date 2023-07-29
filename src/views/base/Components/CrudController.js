@@ -2,15 +2,18 @@ import axios from "axios";
 import routes from '../../../routes'
 
 
-const Edit = (url, token, record, data, setCurrent) => {
+const Edit = (url, token, record, data, setCurrent, store) => {
     console.log('url edit', url);
     console.log('record', record);
      axios.put( url, record, {headers: {'Authorization':`Bearer ${token}`}})
       .then(response => {
         console.log('response.status', response.status);
-        const index = data.findIndex(obj => obj.id === record.id);
-        data[index]= record;
-        setCurrent(record);
+        console.log('responseX', response);
+        const resp = response.data
+        const index = data.findIndex(obj => obj.id === resp.id);
+        data[index]= resp;
+        store.update(resp.modelid, resp.id, {...resp} );
+        setCurrent(resp);
       }).catch(function (error) {
          console.log('error', error);
        });
@@ -103,20 +106,22 @@ const Get1 = (url, token, history, store, key_) => {
   return result;
 }
 
-const Get2 =  (url, token, store) => {
+const Get2 =  (url, token, store, setCurrent) => {
   let result;
   console.log('url', url);
-  //try {
     axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
     .then(response => {
       const resp = response.data
       console.log('responseRRRRRR2', resp);
+      result=resp;
+      console.log('result', result);
       store.update(resp.modelid, resp.id, {...resp} );
-      result={...resp};
+      console.log('result', result);
+      setCurrent(resp);
     }).catch( function (error) {
     console.log('error', error);
   });
-  console.log('resultRRRRRR2', result);
+  console.log('result', result);
   return result;
 }
  const Query = (event, url, token, history, func, init) => Get(url, token, history, func);

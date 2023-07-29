@@ -6,9 +6,8 @@ import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import {useTranslation} from "react-i18next";
-import {Add, Edit, EditRow, Get1, Get2} from './CrudController';
+import {Add, Edit, EditRow, Get1} from './CrudController';
 import {useHistory} from "react-router-dom";
-//import {formEnum} from "../../../utils/FORMS";
 import iwsStore from './Store';
 const MasterfileForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -41,6 +40,7 @@ const MasterfileForm = () => {
   const { t,  } = useTranslation();
   const [, setRows] = useState([])
   const modelid_ = module.modelid;
+  console.log(`modelid_: ${modelid_}`);
   const acc_modelid= parseInt(ACCOUNT(t).id);
   const bank_modelid= parseInt(BANK(t).id);
   const vat_modelid= parseInt(VAT(t).id);
@@ -83,11 +83,7 @@ const MasterfileForm = () => {
     if(current.editing) {
       delete current.editing
       const data = iwsState.get(current.modelid);
-      Edit(modifyUrl, token, {...current}, data, setCurrent);
-      const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
-      const row = Get2(url_, token, iwsStore);
-      console.log('row', row);
-      //iwsStore.update(current.modelid, current.id, current );
+      Edit(modifyUrl, token, {...current}, data, setCurrent, iwsStore);
     }else submitAdd(event)
   };
 
