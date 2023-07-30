@@ -103,9 +103,9 @@ const FinancialsForm = () => {
   const submitQuery =(event, modelid)=> {
     event.preventDefault();
     const url_=url.concat('/').concat(modelid);
-    accUrl&&Get1(accUrl, token, history,  iwsStore, acc_modelid);
-    ccUrl&&Get1(ccUrl, token, history,   iwsStore, cc_modelid);
-    url_&&Get1(url_, token, history,   iwsStore, parseInt(modelid));
+    accUrl&&Get1(accUrl, token,  iwsStore, acc_modelid);
+    ccUrl&&Get1(ccUrl, token, iwsStore, cc_modelid);
+    url_&&Get1(url_, token,  iwsStore, parseInt(modelid));
   }
   const handleModuleChange = event => {
     event.preventDefault();

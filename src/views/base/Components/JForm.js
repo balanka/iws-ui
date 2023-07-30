@@ -7,7 +7,7 @@ import {formEnum} from "../../../utils/FORMS";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {Get1, Query} from './CrudController';
-import {ACCOUNT, MASTERFILE, useGlobalState, useStore} from "./Menu";
+import {ACCOUNT, useGlobalState, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import iwsStore from "./Store";
 
@@ -170,7 +170,7 @@ const JForm = () => {
             init = true
         }
         // load account data as they are needed
-        accUrl&&Get1(accUrl, token, history,  iwsStore, acc_modelid);
+        accUrl&&Get1(accUrl, token,  iwsStore, acc_modelid);
     },[init] );
 
     const getUrl=() =>url.concat('/')

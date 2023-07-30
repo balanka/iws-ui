@@ -92,7 +92,7 @@ const Edit = (url, token, record, data, setCurrent, store) => {
             return result;
         }
 
-const Get1 = (url, token, history, store, key_) => {
+const Get1 = (url, token,  store, key_) => {
   let result;
   axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
     .then(response => {

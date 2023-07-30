@@ -91,10 +91,10 @@ const MasterfileForm = () => {
   const load = event => submitQuery(event);
   const submitQuery =(event)=>{
     event.preventDefault();
-    accUrl&& (current.modelid !== acc_modelid) &&Get1(accUrl, token, history,  iwsStore, acc_modelid);
-    vatUrl&& (current.modelid !== vat_modelid) &&Get1(vatUrl, token, history,  iwsStore, vat_modelid);
-    bankUrl&&(current.modelid !== bank_modelid) &&Get1(bankUrl, token, history,   iwsStore, bank_modelid);
-    url&&Get1(url, token, history,  iwsStore, current_.modelid);
+    accUrl&& (current.modelid !== acc_modelid) &&Get1(accUrl, token, iwsStore, acc_modelid);
+    vatUrl&& (current.modelid !== vat_modelid) &&Get1(vatUrl, token, iwsStore, vat_modelid);
+    bankUrl&&(current.modelid !== bank_modelid) &&Get1(bankUrl, token, iwsStore, bank_modelid);
+    url&&Get1(url, token, iwsStore, current_.modelid);
     console.log('iwsState', iwsState);
   }
 
