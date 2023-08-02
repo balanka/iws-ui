@@ -1,4 +1,4 @@
-import React, {useState, memo, useEffect} from 'react'
+import React, {useState, memo, useEffect, useRef} from 'react'
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
 import {FormFactory,JournalFormHead} from './FormsProps'
@@ -6,7 +6,7 @@ import {columnsPACB, ColumnJournal, OptionsM} from "../../Tables2/LineFinancials
 import {formEnum} from "../../../utils/FORMS";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
-import {Get1, Query} from './CrudController';
+import {Get, Get1} from './CrudController';
 import {ACCOUNT, useGlobalState, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import iwsStore from "./Store";
@@ -92,26 +92,18 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
         return row;
     }
     const summary = (data_) => modelid === formEnum.PACB ? summaryPCB(data_) : summaryJ(data_)
-    const load = event => {
-        event.preventDefault();
-        accData?.length < 2 ?
-            Query(event, accUrl, profile, history, setAccData, initAcc) :
-            current.account && current.fromPeriod && current.toPeriod ?
-                Query(event, getUrl(), profile, history, setData, initialState) : void (0)
-    };
-
     const submitQuery_ = event => {
         event.preventDefault();
         accData?.length < 2 ?
-            Query(event, accUrl, profile, history, setAccData, initAcc) :
-            Query(event, getUrl(), profile, history, setData, initialState)
+          Get(accUrl, profile, history, setAccData) :
+          Get(getUrl(), profile, history, setData)
     };
     function buildForm() {
         return <>
             <Grid container spacing={1} style={{...styles.outer}} direction="column">
                 <JournalFormHead styles={styles} title={title} collapse={state.collapse}
                                  initialState={initialState} setData={setData} setAccData={setAccData} url={url}
-                                 accUrl={accUrl} toggle={toggle} load={load} toggleToolbar={toggleToolbar}/>
+                                 accUrl={accUrl} toggle={toggle}  toggleToolbar={toggleToolbar}/>
                 <FormFactory formid={modelid} current={current} setCurrent={setCurrent} t={t} accData={accData}
                              collapse={state.collapse} styles={styles} submitQuery={submitQuery_}/>
 
@@ -154,7 +146,7 @@ const JForm = () => {
     const modelid = module.modelid;
     const [current,setCurrent] = useState(current_);
     const [data, setData] = useState(initialState);
-    const [accData, setAccData] = useState(initAcc);
+    const [setAccData] = useState(initAcc);
     const [toolbar, setToolbar] = useState(true);
     const [iwsState, setIwsState] = useState(iwsStore.initialState);
     const columnsX= modelid===formEnum.PACB?columnsPACB(t):ColumnJournal(t);
@@ -163,15 +155,15 @@ const JForm = () => {
     const acc_modelid=parseInt(ACCOUNT(t).id);
     const accData_ = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
     console.log('accData_', accData_)
-    let init = false
+    let init = useRef(false)
     useEffect(() => {
-        if(!init) {
+        if(!init.current) {
             iwsStore.subscribe(setIwsState);
-            init = true
+            init.current = true
         }
         // load account data as they are needed
         accUrl&&Get1(accUrl, token,  iwsStore, acc_modelid);
-    },[init] );
+    },[init, accUrl, token, acc_modelid] );
 
     const getUrl=() =>url.concat('/')
         .concat(current.account).concat('/')
