@@ -1,10 +1,10 @@
-import React, { useState, useEffect, memo} from "react";
+import React, {useState, useEffect, memo, useRef} from "react";
 import Grid from "react-fast-grid";
 import {formEnum} from "../../../utils/FORMS";
 import {JournalFormHead, FormFactory} from './FormsProps';
 import {styles} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
-import {Get, Get1, Query} from './CrudController';
+import {Get, Get1} from './CrudController';
 import {useGlobalState, LOGIN_MENU, useStore, ACCOUNT} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {OptionsM, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
@@ -17,18 +17,16 @@ function Internal(data, setData, accUrl, initAcc, accData, setAccData, profile, 
     const load = event => {
         event.preventDefault();
          accData?.length < 2 ?
-          Query(event, accUrl, profile, history, setAccData, initAcc) :
+           Get(accUrl, profile, history, setAccData) :
           current.account && current.fromPeriod && current.toPeriod ?
-            Query(event, getUrl(), profile, history, setData, initialState) : void (0)
+            Get(getUrl(), profile, history, setData) : void (0)
     };
-
 
     const submitQuery_ = event => {
         event.preventDefault();
-        const x=  Get(getUrl(), profile, history, setData);
+       Get(getUrl(), profile, history, setData);
 
     };
-
 
 
     let parentChildFn =(row, rows) => rows.find(a => a.id === row.account)
@@ -90,16 +88,16 @@ const  BasicTreeTable =()=> {
     const [iwsState, setIwsState] = useState(iwsStore.initialState);
     const acc_modelid=parseInt(ACCOUNT(t).id);
     const accData_ = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
-    let init = false
+    const init = useRef(false)
     useEffect(() => {
-        if(!init) {
+        if(!init.current) {
             iwsStore.subscribe(setIwsState);
-            init = true
+            init.current = true
         }
         // load account data as they are needed
         accUrl&&Get1(accUrl, token, iwsStore, acc_modelid);
         setCurrent(current_)
-    }, [current_, init]);
+    }, [current_]);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle = ()=> setState({...state, collapse:!state.collapse });
     const columnsX = columns(t);
