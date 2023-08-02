@@ -34,7 +34,7 @@ const Edit = (url, token, record, data, setCurrent, store) => {
         console.log('error', error);
       });
   };
- const Post = (url, profile, record, ctx) => {
+ const Post = (url, profile, record) => {
      axios.patch(url, record, {headers: {'Authorization':`Bearer ${profile.token}`}})
       .then(response => {
         console.log('responsex', response.data);
@@ -56,8 +56,6 @@ const Edit = (url, token, record, data, setCurrent, store) => {
                 setMenu(MENU(t));
                 setRoutes(routes(t));
                 history.push("/dashboard");
-                //setProfile(previous => (profile));
-                //loginSet(profile);
               console.log("MENU(t):", MENU(t));
               console.log("authorization:", authorization);
               console.log("profile:", profile);
@@ -74,11 +72,10 @@ const Edit = (url, token, record, data, setCurrent, store) => {
             .then(response => {
                 const resp = response.data
               console.log('responseRRRRRR', resp);
-              func?func(resp):void(false);
+               func?func(resp):void(false);
                 result={...resp};
                 console.log('resp', resp);
-              console.log('result', result);
-              //  return resp;
+
             }).catch(function (error) {
             console.log('Error', error);
               if(JSON.stringify(error).includes("401")) {
@@ -124,7 +121,6 @@ const Get2 =  (url, token, store, setCurrent) => {
   console.log('result', result);
   return result;
 }
- const Query = (event, url, token, history, func, init) => Get(url, token, history, func);
 
  const EditRow = (edited, isNew, setCurrent)  => {
     console.log('isNew', isNew );
@@ -149,5 +145,5 @@ export const logoutUnset = () => {
     delete axios.defaults.headers['Authentication']
     window.localStorage.removeItem('profile')
 }
-export  { Query,Get, Get1, Get2, Post, Login,  Add, Edit, EditRow}
+export  {Get, Get1, Get2, Post, Login,  Add, Edit, EditRow}
 
