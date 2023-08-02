@@ -116,25 +116,22 @@ export const columnsF =(data, line, current, t) => [
     , {field:'modelid', title:t('common.modelid'), type:"numeric", minWidth:30, maxWidth:50, export:true}
     , {field:'company', title:t('common.company'), type:"numeric", minWidth:30, maxWidth:60, export:true}
 ]
-export const Linescolumns =(data, line, current, t) =>  {console.log('current', current);
+export const Linescolumns =(data, line, current, t) =>  {
     return [
-      {field:'id', title:t('financials.line.id'), type:'numeric', hidden:true,  initialEditValue:line.id, editable:'never'
-      ,  cellStyle: {maxWidth:1}, headerStyle: {maxWidth:1}}
-    , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current.id,  editable:'never'
-    ,  cellStyle: {maxWidth:1}, headerStyle: {maxWidth:1}, width:1}
+      {field:'id', title:t('financials.line.id'), type:'numeric', hidden:true,  initialEditValue:line.id, editable:'never'}
+    , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current.id,  editable:'never'}
     , {field:'account', title:t('financials.line.account'), type:'string', hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            ACCOUNT ( data, value, onRowDataChange, rowData,"account" ),  initialEditValue:'', align:"right"
-      , cellStyle: {maxWidth: 40}, headerStyle: {maxWidth: 40}}
-    , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true,  cellStyle: {maxWidth:2}, headerStyle: {maxWidth:2}}
+            ACCOUNT ( data, value, onRowDataChange, rowData,"account" ),  initialEditValue:'', align:"left"
+      , width:60, minWidth:50,  maxWidth:150}
+    , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true,  width:10, minWidth:10,  maxWidth:20,}
     , {field:'oaccount', title:t('financials.line.oaccount'), type:'string', hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-          ACCOUNT2 ( data, value, onRowDataChange, rowData, "oaccount"), initialEditValue:'',  cellStyle: {
-            maxWidth: 20}, headerStyle: {maxWidth: 20} , align:"right"}
+          ACCOUNT2 ( data, value, onRowDataChange, rowData, "oaccount"), initialEditValue:'',  width:60, minWidth:50,  maxWidth:150, align:"right"}
     , {field:'duedate', title:t('financials.line.duedate'), type:"date", align:"right",
-      initialEditValue:line.duedate, dateSetting: { locale:"de" }, cellStyle: {maxWidth: 20}, headerStyle: {maxWidth: 20} }
+      initialEditValue:line.duedate, dateSetting: { locale:"de" },  width:40, minWidth:50,  maxWidth:80 }
     , {field:'amount', title:t('financials.line.amount'), type:"currency", initialEditValue:0,
-       currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 } , width: 20}
-    , {field:'text', title:t('financials.line.text'), initialEditValue:'', hidden:false, width: 300}
-    , {field:'currency', title:t('common.currency'), hidden:false,  initialEditValue:line.currency, width:5, editable:'never'}
+       currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }, width:50, minWidth:30,  maxWidth:100}
+    , {field:'currency', title:t('common.currency'), hidden:false,  initialEditValue:line.currency, width:10, minWidth:10,  maxWidth:50, editable:'never'}
+    , {field:'text', title:t('financials.line.text'), initialEditValue:'', hidden:false,  width:300, minWidth:50,  maxWidth:3500}
   ]}
 export const Options = ({
     toolbar:false,
