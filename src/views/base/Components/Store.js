@@ -24,7 +24,7 @@ const iwsStore = {
     console.debug('spread (temp1)', [...temp1, ...message]);
     const temp2 = Array.isArray(temp1) && temp1.length > 0 ? [...temp1] : [...message];
     console.debug('temp2', temp2);
-    const cpy = store.set(key, temp2);
+     store.set(key, temp2);
     store = new Map([...store.entries()]);
     console.debug('store', store);
     subject.next(store);
@@ -44,6 +44,10 @@ const iwsStore = {
       store = new Map([...store.entries()]);
       subject.next(store);
     }
+  },
+  deleteKey: (key) => {
+    store.delete(key)
+    subject.next(store);
   },
   clear: () => {
     store = initialState;
