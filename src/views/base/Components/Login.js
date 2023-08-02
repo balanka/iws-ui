@@ -19,7 +19,6 @@ import {useGlobalState, useStore} from './Menu';
 import { Login as Login_} from './CrudController';
 import { useTranslation} from 'react-i18next';
 import {LOGIN_MENU, MENU} from "./Menu";
-import create from "zustand";
 
 export const languages = {data:[
     {id:'en', name:'English'},
@@ -32,16 +31,14 @@ const Login = () => {
   const { t, i18n } = useTranslation();
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   //const [, setProfile] = useGlobalState('profile');
-  const { _, setProfile } = useStore()
+  const { setProfile } = useStore()
   const [, setMenu] = useGlobalState('menu');
   const [, setRoutes] = useGlobalState('routes');
 
-  //const [history_, setHistory_] = useGlobalState('history_');
   const module= LOGIN_MENU(t)[0];
   const url=SERVER_URL.concat(module.ctx)
   const current_ =module.state
   const [current,setCurrent] = useState(current_);
-  //useEffect(() => {setCurrent(current_)}, [ current_]);
   const companies={data:[
       {id:'1000', name:'KABA Soft GmbH'},
       {id:'2000', name:'KABA Soft CI'},
