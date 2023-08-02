@@ -92,29 +92,29 @@ export const columnsPACB = (t) => [
 ]
 
 export const columnsF =(data, line, current, t) => [
-     {field:'id', title:t('financials.id'), initialEditValue:line.id, align:"right", export:true}
-    , {field:'oid', title:t('financials.oid'),initialEditValue:current.oid, align:"right", export:true}
+     {field:'id', title:t('financials.id'), initialEditValue:line.id, align:"right", width:40, minWidth:20,  maxWidth:50,export:true}
+    , {field:'oid', title:t('financials.oid'),initialEditValue:current.oid, align:"right", width:40, minWidth:20,  maxWidth:50,export:true}
     , {field:'account', title:t('financials.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            ACCOUNT ( data, value, onRowDataChange, rowData, "account" ),  initialEditValue:'', width: 20
+            ACCOUNT ( data, value, onRowDataChange, rowData, "account" ),  initialEditValue:'', width:20, minWidth:30,  maxWidth:80
       , align:"right", export:true}
     , {field:'costcenter', title:t('financials.costcenter'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            ACCOUNT ( data, value, onRowDataChange, rowData,"costcenter" ),  initialEditValue:'', width: 20
+            ACCOUNT ( data, value, onRowDataChange, rowData,"costcenter" ),  initialEditValue:'', width:30, minWidth:30,  maxWidth:80
       , align:"right", export:true}
-    , {field:'enterdate', title:t('financials.enterdate'), type:"date", align:"right",
+    , {field:'enterdate', title:t('financials.enterdate'), type:"date", align:"right", minWidth:20, width:40, maxWidth:80,
         initialEditValue:line.enterdate, dateSetting: { locale:"de" } , export:true}
-    , {field:'postingdate', title:t('financials.postingdate'), type:"date", align:"right",
+    , {field:'postingdate', title:t('financials.postingdate'), type:"date", align:"right", minWidth:20, width:40, maxWidth:80,
         initialEditValue:line.postingdate, dateSetting: { locale:"de" } , export:true}
-    , {field:'transdate', title:t('financials.transdate'), type:"date", align:"right",
+    , {field:'transdate', title:t('financials.transdate'), type:"date", align:"right", minWidth:20, width:40, maxWidth:80,
         initialEditValue:line.transdate, dateSetting: { locale:"de" } , export:true}
-    , {field:'period', title:t('financials.period'), type:"numeric", align:"right", export:true}
-    , {field:'posted', title:t('financials.posted'), type:"boolean", width:10, export:true}
+    , {field:'period', title:t('financials.period'), type:"numeric", align:"right", minWidth:20, width:30, maxWidth:40, export:true}
+    , {field:'posted', title:t('financials.posted'), type:"boolean", width:10, minWidth:10, maxWidth:20, export:true}
     , {field:'total', title:t('common.total'), type:"currency",currencySetting: { locale:"de"
-       , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }, export:true}
-    , {field:'text', title:t('financials.text'), type:"string", export:true}
+       , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }, minWidth:80, maxWidth:150, export:true}
+    , {field:'text', title:t('financials.text'), type:"string", minWidth:100, width:300, maxWidth:3000, export:true}
     , {field:'typeJournal', title:t('financials.type'), type:"numeric", export:true}
     , {field:'file_content', title:t('financials.file_content'), type:"numeric", export:true}
-    , {field:'modelid', title:t('common.modelid'), type:"numeric", export:true}
-    , {field:'company', title:t('common.company'), type:"numeric", export:true}
+    , {field:'modelid', title:t('common.modelid'), type:"numeric", minWidth:30, maxWidth:50, export:true}
+    , {field:'company', title:t('common.company'), type:"numeric", minWidth:30, maxWidth:60, export:true}
 ]
 export const Linescolumns =(data, line, current, t) =>  {console.log('current', current);
     return [
@@ -362,33 +362,33 @@ export const ColumnsUSER =(t) => [
     , {field:'modelid', title:t('common.modelid'), type:'numeric', align:"right", export:true}
     , {field:'company', title:t('common.company'), export:true}
 ]
-export const ColumnJournal=(t) =>[ {field:"id", title:t('common.id'), minWidth:2, type:"numeric", export:true }
-    , {field:"transid", title:t('journal.transid'), minWidth:1, type:"numeric", export:true }
-    , { field: "oid", title: t('journal.oid'), minWidth:1, type:"numeric", export:true }
-    , {field: "account", title: t('journal.account'), minWidth:1, export:true}
-    , {field: "oaccount", title:t('journal.oaccount'), minWidth:2, export:true}
-    , {field: "transdate", title:t('journal.transdate'), minWidth:5, type:"date"
+export const ColumnJournal=(t) =>[ {field:"id", title:t('common.id'), width:30, minWidth:6,  maxWidth:40, type:"numeric", export:true }
+    , {field:"transid", title:t('journal.transid'), width:30, minWidth:6,  maxWidth:40, type:"numeric", export:true }
+    , { field: "oid", title: t('journal.oid'), width:30, minWidth:30,  maxWidth:40,export:true }
+    , {field: "account", title: t('journal.account'), minWidth:40, maxWidth:50, export:true}
+    , {field: "oaccount", title:t('journal.oaccount'), minWidth:50, maxWidth:50,  export:true}
+    , {field: "transdate", title:t('journal.transdate'), minWidth:50, maxWidth:60, type:"date"
         , format:(value) =>  dateFormat(value, "dd mm yy"), numeric:true}
-    , {field: "postingdate", title:t('common.postingdate'), minWidth:5, type:"date"
+    , {field: "postingdate", title:t('common.postingdate'), minWidth:50, maxWidth:60, type:"date"
         , format:(value) =>  dateFormat(value, "dd mm yy"), export:true}
-    , {field: "enterdate", title:t('common.enterdate'), minWidth:5, type:"date"
+    , {field: "enterdate", title:t('common.enterdate'), minWidth:50, maxWidth:60, type:"date"
         , format:(value) =>  dateFormat(value, "dd mm yy"), export:true}
-    , {field: 'period', title:t('journal.period'), minWidth:1, type:"numeric", export:true}
-    , { field: 'amount', title: t('common.amount'), minWidth:2, type:"currency", export:true
+    , {field: 'period', title:t('journal.period'), minWidth:30, maxWidth:30,  type:"numeric", export:true}
+    , { field: 'amount', title: t('common.amount'), minWidth:40, maxWidth:70, type:"currency", export:true
         , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
-    , { field: 'idebit', title:t('common.idebit'), minWidth:2, type:"currency", export:true
+    , { field: 'idebit', title:t('common.idebit'), minWidth:40, maxWidth:70,  type:"currency", export:true
         , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
-    , { field: 'debit', title: t('common.debit'), minWidth:2,  type:"currency", export:true
+    , { field: 'debit', title: t('common.debit'), minWidth:40, maxWidth:70,   type:"currency", export:true
     , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
-    , { field: 'icredit', title:t('common.icredit'), minWidth:2, type:"currency", export:true
+    , { field: 'icredit', title:t('common.icredit'), minWidth:40, maxWidth:70,  type:"currency", export:true
     , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
-    , { field: 'credit', title:t('common.credit'), minWidth:2, type:"currency", export:true
+    , { field: 'credit', title:t('common.credit'), minWidth:40, maxWidth:70,  type:"currency", export:true
     , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
     , { field: 'side', title:t('journal.side'), type:"boolean", format:(value) => String(value), minWidth:1}
     , { field: 'text', title:t('journal.text'), minWidth:15, export:true}
-    , { id:'month', label:t('journal.month'), minWidth:1, export:true}
-    , { field: 'year', title:t('journal.year'), minWidth:1, export:true}
-    , { id:'company', label:t('common.company'), minWidth:1, export:true }
+    , { id:'month', label:t('journal.month'), minWidth:20, maxWidth:20, export:true}
+    , { field: 'year', title:t('journal.year'), minWidth:40, maxWidth:40, export:true}
+    , { id:'company', label:t('common.company'), minWidth:20, maxWidth:20, export:true }
     , { field: 'typeJournal', title:t('journal.type'), minWidth:1, export:true}
     , { id: 'file_content', label:t('journal.file'), minWidth:1, export:true}
     , { field: 'modelid', title:t('common.modelid'), minWidth:1, export:true}]
