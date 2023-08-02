@@ -5,7 +5,7 @@ import {OptionsM, ColumnFactory} from "../../Tables2/LineFinancialsProps";
 import {BSFormHead, FormFactory} from "./FormsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles,  theme} from "../Tree/BasicTreeTableProps";
-import {Edit, EditRow, Post, Query} from './CrudController';
+import {Edit, EditRow, Get, Post} from './CrudController';
 import {LOGIN_MENU, useGlobalState, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 
@@ -16,14 +16,14 @@ function internal(url, profile, history, initialState, data, setData,  current, 
     const isEmpty = (str) => (!str || 0 === str.length);
     const submitQuery = event => {
         event.preventDefault();
-        !isEmpty(url) && Query(event, url, profile, history,setData, initialState);
+        !isEmpty(url) && Get( url, profile, history,setData);
     };
     const cancelEdit = (e) => EditRow({...current}, false, setCurrent);
 
     const submitPost = event => {
         event.preventDefault();
         const url_ =url.concat("/post")
-        Post(url_, profile, rows, "/post");
+        Post(url_, profile, rows);
     };
 
     const edit = editedRow => {
