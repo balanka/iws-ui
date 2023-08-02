@@ -1,8 +1,6 @@
 import {formEnum} from "../../../utils/FORMS";
 import {ColumnsACC, columnsPACB, ColumnJournal, ColumnsBalancesheet, ColumnsVAT, ColumnsBS, ColumnsM
     , ColumnsComp, ColumnsCUST, ColumnsUSER  } from "../../Tables2/LineFinancialsProps";
-
-import React from "react";
 import {createGlobalState} from "react-hooks-global-state";
 
 import create from "zustand";
@@ -97,7 +95,6 @@ export const initPac=[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.
 export const initUser=[{ userName:'', firstName:'', lastName:'', email:'', hash:'', phone:'', company:'', id:0
         , role:'', modelid:111, menu:''}]
 
-const QUERY ={ account:'', account2:'', fromPeriod:'', toPeriod:''}
 export const MENU = (t)=> new Map([
                      ['/journal', JOURNAL(t)]
                     ,['/pacb', PACB(t)]
@@ -125,10 +122,6 @@ export const  useStore = create((set) => ({
   setProfile: (p) => set((state) => ({ profile: p })),
 }))
 
-// export const  useDataStore = create((set) => ({
-//   dataStore: initAcc,
-//   setDataStore: (d) => set((state) => ({ data: d })),
-// }))
 export {LoginMenu, LoginRoute};
 
 
