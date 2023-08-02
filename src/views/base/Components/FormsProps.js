@@ -25,7 +25,7 @@ import Switch from "@material-ui/core/Switch";
 import { blue } from "@material-ui/core/colors";
 import SvgIcon from '@material-ui/core/SvgIcon';
 import {styles} from "../Tree/BasicTreeTableProps";
-import {initAcc} from "./Menu";
+
 
 export const svgIcons = {
      plus:"M38 6H10c-2.21 0-4 1.79-4 4v28c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4zm-4 20h-8v8h-4v-8h-8v-4h8v-8h4v8h8v4z"
@@ -49,6 +49,7 @@ export const svgIcons = {
     , arrowUpSolid:"M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"
     , arrowDownSolid:"M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"
     , checkBox:"M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+    , refresh:"m19 8-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"
     , logo:"M666.3 296.5c0-32.5-40.7-63.3-103.1-82.4 14.4-63.6 8-114.2-20.2-130.4-6.5-3.8-14.1-5.6-22.4-5.6v22.3c4.6 0 8.3.9 11.4 2.6 13.6 7.8 19.5 37.5 14.9 75.7-1.1 9.4-2.9 19.3-5.1 29.4-19.6-4.8-41-8.5-63.5-10.9-13.5-18.5-27.5-35.3-41.6-50 32.6-30.3 63.2-46.9 84-46.9V78c-27.5 0-63.5 19.6-99.9 53.6-36.4-33.8-72.4-53.2-99.9-53.2v22.3c20.7 0 51.4 16.5 84 46.6-14 14.7-28 31.4-41.3 49.9-22.6 2.4-44 6.1-63.6 11-2.3-10-4-19.7-5.2-29-4.7-38.2 1.1-67.9 14.6-75.8 3-1.8 6.9-2.6 11.5-2.6V78.5c-8.4 0-16 1.8-22.6 5.6-28.1 16.2-34.4 66.7-19.9 130.1-62.2 19.2-102.7 49.9-102.7 82.3 0 32.5 40.7 63.3 103.1 82.4-14.4 63.6-8 114.2 20.2 130.4 6.5 3.8 14.1 5.6 22.5 5.6 27.5 0 63.5-19.6 99.9-53.6 36.4 33.8 72.4 53.2 99.9 53.2 8.4 0 16-1.8 22.6-5.6 28.1-16.2 34.4-66.7 19.9-130.1 62-19.1 102.5-49.9 102.5-82.3zm-130.2-66.7c-3.7 12.9-8.3 26.2-13.5 39.5-4.1-8-8.4-16-13.1-24-4.6-8-9.5-15.8-14.4-23.4 14.2 2.1 27.9 4.7 41 7.9zm-45.8 106.5c-7.8 13.5-15.8 26.3-24.1 38.2-14.9 1.3-30 2-45.2 2-15.1 0-30.2-.7-45-1.9-8.3-11.9-16.4-24.6-24.2-38-7.6-13.1-14.5-26.4-20.8-39.8 6.2-13.4 13.2-26.8 20.7-39.9 7.8-13.5 15.8-26.3 24.1-38.2 14.9-1.3 30-2 45.2-2 15.1 0 30.2.7 45 1.9 8.3 11.9 16.4 24.6 24.2 38 7.6 13.1 14.5 26.4 20.8 39.8-6.3 13.4-13.2 26.8-20.7 39.9zm32.3-13c5.4 13.4 10 26.8 13.8 39.8-13.1 3.2-26.9 5.9-41.2 8 4.9-7.7 9.8-15.6 14.4-23.7 4.6-8 8.9-16.1 13-24.1zM421.2 430c-9.3-9.6-18.6-20.3-27.8-32 9 .4 18.2.7 27.5.7 9.4 0 18.7-.2 27.8-.7-9 11.7-18.3 22.4-27.5 32zm-74.4-58.9c-14.2-2.1-27.9-4.7-41-7.9 3.7-12.9 8.3-26.2 13.5-39.5 4.1 8 8.4 16 13.1 24 4.7 8 9.5 15.8 14.4 23.4zM420.7 163c9.3 9.6 18.6 20.3 27.8 32-9-.4-18.2-.7-27.5-.7-9.4 0-18.7.2-27.8.7 9-11.7 18.3-22.4 27.5-32zm-74 58.9c-4.9 7.7-9.8 15.6-14.4 23.7-4.6 8-8.9 16-13 24-5.4-13.4-10-26.8-13.8-39.8 13.1-3.1 26.9-5.8 41.2-7.9zm-90.5 125.2c-35.4-15.1-58.3-34.9-58.3-50.6 0-15.7 22.9-35.6 58.3-50.6 8.6-3.7 18-7 27.7-10.1 5.7 19.6 13.2 40 22.5 60.9-9.2 20.8-16.6 41.1-22.2 60.6-9.9-3.1-19.3-6.5-28-10.2zM310 490c-13.6-7.8-19.5-37.5-14.9-75.7 1.1-9.4 2.9-19.3 5.1-29.4 19.6 4.8 41 8.5 63.5 10.9 13.5 18.5 27.5 35.3 41.6 50-32.6 30.3-63.2 46.9-84 46.9-4.5-.1-8.3-1-11.3-2.7zm237.2-76.2c4.7 38.2-1.1 67.9-14.6 75.8-3 1.8-6.9 2.6-11.5 2.6-20.7 0-51.4-16.5-84-46.6 14-14.7 28-31.4 41.3-49.9 22.6-2.4 44-6.1 63.6-11 2.3 10.1 4.1 19.8 5.2 29.1zm38.5-66.7c-8.6 3.7-18 7-27.7 10.1-5.7-19.6-13.2-40-22.5-60.9 9.2-20.8 16.6-41.1 22.2-60.6 9.9 3.1 19.3 6.5 28.1 10.2 35.4 15.1 58.3 34.9 58.3 50.6-.1 15.7-23 35.6-58.4 50.6zM320.8 78.4z"
 }
 
@@ -67,10 +68,6 @@ const mapping = (acc) =>
         {acc.id.concat( " ").concat(acc.name)}
     </MenuItem>
 
-const mappingSelect2x =  (d) => ({value: d.id, label: d.id.concat( " ").concat(d.name)});
-const mappingSelect2 = (item) => {let myObj = {}; myObj.value = item.id; myObj.label =item.id.concat( " ").concat(item.name);  return myObj}
-const mappingSelectName2 = (item) => {let myObj = {}; myObj.value = item.id; myObj.label =item.name.concat( " ").concat(item.id); return myObj}
-
   const mappingSelect = (item) => <option key={item.id} value={item.id}>
     {item.id.concat( " ").concat (item.name)}</option>
 const mappingSelectName = (item) => <option key={item.id} value={item.id}>
@@ -78,48 +75,14 @@ const mappingSelectName = (item) => <option key={item.id} value={item.id}>
 export const  filter = (rows, cols, txt,) => rows.filter(col =>
     cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b));
 
-const updateObject = (keyName, newValue, object) =>
-    Object (object) === object
-        ? Object .fromEntries (Object .entries (object) .map (
-            ([k, v]) => [k, k === keyName ? newValue : updateObject (keyName, newValue, v)]
-        ))
-        : object
-
 export const SELECT =(props) => {
     const {options_ } = props;
-    console.log('propspropsprops', props);
     const [selectedOption, setSelectedOption] = useState(null);
 
     return (<Select defaultValue={selectedOption} onChange={setSelectedOption} options={options_}/>)
 }
-/*
-    const mappingMenu = (acc) =>
-    <MenuItem key={acc.id} value={acc.id}>
-        {acc.id.concat( " ").concat(acc.name)}
-    </MenuItem>
-const mappingMenuName = (acc) =>
-    <MenuItem key={acc.id} value={acc.id}>
-        {acc.name.concat( " ").concat(acc.id)}
-    </MenuItem>
-export  const ACCOUNT=(data, value, onRowDataChange, rowData, fieldName) => {
-    return (<Select value={value} onChange={(event) =>
-        onRowDataChange({...rowData, account: event.target.value})}>
-        {data.map(mapping)} id={"cb".concat(fieldName)}
-    </Select>)
-}
-
-export  const ACCOUNT2=(data, value, onRowDataChange, rowData, fieldName) => {
-    return (<Select value={value} onChange={(event) =>
-        onRowDataChange({...rowData, oaccount: event.target.value})}>
-        {data.map(mapping)} id={"cb".concat(fieldName)}
-    </Select>)
-}
-
- */
 
 export  const BIC=(data, value, onRowDataChange, rowData, fieldName) => {
-   // console.log('value', value);
-   // console.log('rowData', rowData);
     return (<Select value={value} onChange={(event) =>
         onRowDataChange({...rowData, bic: event.target.value})}>
         {data.map(mapping)} id={"cb".concat(fieldName)}
@@ -127,7 +90,7 @@ export  const BIC=(data, value, onRowDataChange, rowData, fieldName) => {
 }
  
 export const CommonFormHead = (props) => {
-    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, submitPost, toggle, toggleToolbar} = props
+    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -174,7 +137,7 @@ export const CommonFormHead = (props) => {
         </Grid>);
 }
 export const BSFormHead = (props) => {
-    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, submitPost, toggle, toggleToolbar} = props
+    const {styles, title, collapse,  initAdd, submitEdit, submitQuery, submitPost, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -222,7 +185,7 @@ export const BSFormHead = (props) => {
 }
 export const FinancialsFormHead = (props) => {
     const {styles, title, collapse, module, modules, initAdd, onNewLine, cancelEdit, submitEdit,  toggle
-        , submitCopy, submitPost, handleModuleChange, toggleToolbar, current} = props
+        , submitCopy, submitPost, handleModuleChange, toggleToolbar, reload, current} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -238,6 +201,11 @@ export const FinancialsFormHead = (props) => {
                                <option value={module} selected >{module}</option>
                                 {modules.sort(sortById).map(item => mappingSelect(item))};
                            </CSelect>
+                        </div>
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" itle="Reload" onClick={reload}>
+                                <IwsIcon style={{style:styles.imageIcon }}  d={svgIcons.refresh}/>
+                            </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
@@ -260,7 +228,7 @@ export const FinancialsFormHead = (props) => {
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton disabled={current.posted} color="link" className="card-header-action btn-minimize" title="Add new entry" onClick={initAdd}>
+                            <CButton color="link" className="card-header-action btn-minimize" title="Add new entry" onClick={initAdd}>
                                 <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.addCircleOutline}/>
                             </CButton>
                         </div>
@@ -285,7 +253,7 @@ export const FinancialsFormHead = (props) => {
         </Grid>);
 }
 export const JournalFormHead = (props) => {
-    const {styles, title, collapse,  load, toggle, toggleToolbar} = props
+    const {styles, title, collapse,   toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -1220,10 +1188,8 @@ export const FinancialsMainForm =(props) => {
             </CFormGroup>
         </>
     )}
-//const  isEmpty = (str) => (!str || 0 === str.length||str ==='nullIDbalance')
 export const JournalMainForm = (props) => {
     const {current, setCurrent, t, accData, submitQuery } = props
-   // console.log('accDataXX', isEmpty(accData)?initAcc:accData)
     return (
         <>
           <CFormGroup row style={{  height:15 }} >
