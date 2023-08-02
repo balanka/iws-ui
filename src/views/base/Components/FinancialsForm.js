@@ -3,7 +3,7 @@ import {CInput} from '@coreui/react'
 import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles} from "../Tree/BasicTreeTableProps";
-import {Add, Edit, EditRow, Get, Get1, Get2, Post} from './CrudController';
+import {Add, Edit, EditRow, Get1, Get2, Post} from './CrudController';
 import {columnsF, Linescolumns, Options, OptionsM} from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
@@ -52,34 +52,53 @@ const FinancialsForm = () => {
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
   const data_ = iwsState.get(parseInt(model));
   const data  = ()=>data_?data_:initialState;
+
+  const toggleEdit = ()=>{
+    if(current?.editing){
+      delete current.editing;
+    }
+  }
+  const submitEdit = event => {
+    event.preventDefault();
+    if(current.id >0) {
+      toggleEdit();
+      Edit(modifyUrl, token, current, data(), setCurrent, iwsStore);
+    } else {
+      toggleEdit();
+      console.log('adding',current)
+      submitAdd(event)
+    }
+  };
+  const handleKeyPress = useCallback((event) => {
+    if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
+      submitEdit(event);
+    }
+  }, [submitEdit]);
+
   useEffect(() => {
-    iwsStore.subscribe(setIwsState);
-    // attach the event listener
-    document.addEventListener('keydown', handleKeyPress);
+      iwsStore.subscribe(setIwsState);
+      // attach the event listener
+      document.addEventListener('keydown', handleKeyPress);
+
     // remove the event listener
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
-  }, [ current, model, data_]);
+  }, [ current, model, data_, handleKeyPress]);
 
   const accData = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
   const ccData = iwsState.get(cc_modelid)?iwsState.get(cc_modelid):[...initCc];
   const columnsX = Linescolumns(accData, initLine, current, t);
   const columns= columnsF(ccData, initLine, current, t);
-/*
-  const onKeyPress = (event) => {
-    console.log(`key pressed: ${event.key}`);
-  };
 
-  useKeyPress(['a', 'b', 'c', 's'], onKeyPress,  node = null);
 
- */
-  const handleKeyPress = useCallback((event) => {
-    if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
-      submitEdit(event);
-    }
-  }, []);
+  const reload = ()=> {
+    console.log(' current ', current )
+    iwsStore.deleteKey(current.modelid );
 
+    const url_=url.concat('/').concat(current.modelid);
+    url_&&Get1(url_, token,  iwsStore, parseInt(current.modelid));
+  }
   const toggleToolbar = ()=> setToolbar(!toolbar );
   const toggle = ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( (item) =>({id:item.id,  modelid:item.modelid})))
@@ -132,7 +151,7 @@ const FinancialsForm = () => {
   const submitCopy = event => {
     event.preventDefault();
     const url_ = modifyUrl.concat("/copy")
-    Post(url_, token, rows, "/copy");
+    Post(url_, token, rows);
   };
 
   const getCurrentMonth = (date)=>{
@@ -141,22 +160,6 @@ const FinancialsForm = () => {
   }
   const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
 
-  const toggleEdit = ()=>{
-    if(current?.editing){
-      delete current.editing;
-    }
-  }
-  const submitEdit = event => {
-    event.preventDefault();
-    if(current.id >0) {
-      toggleEdit();
-      Edit(modifyUrl, token, current, data(), setCurrent, iwsStore);
-    } else {
-      toggleEdit();
-      console.log('adding',current)
-      submitAdd(event)
-    }
-  };
 
   const submitAdd = event => {
     event.preventDefault();
@@ -183,13 +186,16 @@ const FinancialsForm = () => {
     const model_ = models.find(obj => obj.id === model);
     const account_ = model_?model_.account:undefined;
     const accountLabel_= model_.isDebit?'account':'oaccount';
+      console.log('account_', account_);
+      console.log('accountLabel_', accountLabel_);
     const dx1 =current.lines.length===0?
       {...current, lines:[{...current.lines.filter(e=>!e.account.isEmpty), ...newData
         , id:-1, transid:current.id1, paddingTop:'',[accountLabel_]:account_}]}:
       (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id1, paddingTop:'', [accountLabel_]:account_})
     const record = (current.lines.length>1)?dx:dx1;
-    const rx = delete record.editing;
+     delete record.editing;
     Edit(modifyUrl, token, record, data(), setCurrent, iwsStore);
+      console.log('current', current);
 
     }
   }
@@ -197,7 +203,7 @@ const FinancialsForm = () => {
     if (oldData) {
       const dx = {...current};
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
-      const rx = delete newData.tableData;
+      delete newData.tableData;
       (idx === -1)? dx.lines.push({...newData, transid: dx.id1}): dx.lines[idx]={...newData, transid: dx.id1};
       console.log('dx', dx);
       Edit(modifyUrl, token, dx, data(), setCurrent, iwsStore);
@@ -211,13 +217,7 @@ const FinancialsForm = () => {
       const deleted = dx.lines[index];
       console.log('deleted', deleted);
       dx.lines[index] = {...deleted, transid:-2 };
-      //const record ={...dx}
-      console.log('dx', dx);
-     // console.log('record', record);
       Edit(modifyUrl, token, dx, data(), setCurrent, iwsStore);
-     // const url_= modifyUrl.concat('/').concat(current.company).concat('/').concat(current.id);
-      //const row = Get2(url_, token, iwsStore);
-      console.log('current',current);
     }
   }
   const  editable = () => ({
@@ -251,7 +251,7 @@ const FinancialsForm = () => {
                              url={url} accUrl={accUrl}
                             initialState={initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
                             module ={model}  modules ={models} handleModuleChange={handleModuleChange}
-                            onNewLine={onNewLine} submitPost={submitPost} submitCopy={submitCopy}
+                            onNewLine={onNewLine} submitPost={submitPost} submitCopy={submitCopy} reload={reload}
                              toggle={toggle} toggleToolbar={toggleToolbar}  current={current} />
         <FormFactory formid ={formEnum.FINANCIALS} current={current} setCurrent={setCurrent} t={t} accData={accd}
                      ccData={ccd}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
