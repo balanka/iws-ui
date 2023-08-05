@@ -1,10 +1,10 @@
 import axios from "axios";
-import routes from '../../../routes'
+import routes from '../../../routes';
 
-
-const Edit = (url, token, record, data, setCurrent, store) => {
+const Edit = (url, token, record, data, iwsStore, setCurrent) => {
     console.log('url edit', url);
-    console.log('record', record);
+   delete record.editing;
+   console.log('record', record);
      axios.put( url, record, {headers: {'Authorization':`Bearer ${token}`}})
       .then(response => {
         console.log('response.status', response.status);
@@ -12,27 +12,27 @@ const Edit = (url, token, record, data, setCurrent, store) => {
         const resp = response.data
         const index = data.findIndex(obj => obj.id === resp.id);
         data[index]= resp;
-        store.update(resp.modelid, resp.id, {...resp} );
+        iwsStore.update(resp.modelid, resp.id, {...resp} );
         setCurrent(resp);
       }).catch(function (error) {
          console.log('error', error);
        });
   };
- const Add = (url, token, record, data, initialState, setCurrent) => {
-     console.log('url', url);
-     console.log('record', record);
-    axios.post(url, record, {headers: {'Authorization':`Bearer ${token}`}})
-      .then(response => {
-          console.log('response', response);
-        const i = data.findIndex(obj => obj.id === record.id);
-        const index = i === -1? data.length+1:i;
-        data[index]=record;
-        const row = {...initialState, editing:false};
-        //setEditing(false);
-        setCurrent(row);
-      }).catch(function (error) {
-        console.log('error', error);
-      });
+ const Add = (url, token, record, data, iwsStore, setCurrent) => {
+   console.log('url', url);
+   console.log('record', record);
+   delete record.editing;
+   axios.post(url, record, {headers: {'Authorization': `Bearer ${token}`}})
+     .then(response => {
+       console.log('response', response);
+       const resp = response.data
+       console.log('result', resp);
+       const index =  data.length + 1;
+       data[index] = resp;
+       setCurrent(resp);
+     }).catch(function (error) {
+     console.log('error', error);
+   });
   };
  const Post = (url, profile, record) => {
      axios.patch(url, record, {headers: {'Authorization':`Bearer ${profile.token}`}})
@@ -91,6 +91,7 @@ const Edit = (url, token, record, data, setCurrent, store) => {
 
 const Get1 = (url, token,  store, key_) => {
   let result;
+  console.log('url', url);
   axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
     .then(response => {
       const resp = response.data
@@ -123,13 +124,12 @@ const Get2 =  (url, token, store, setCurrent) => {
 }
 
  const EditRow = (edited, isNew, setCurrent)  => {
-    console.log('isNew', isNew );
+    //console.log('isNew', isNew );
     console.log('edited', edited );
-    const flag =edited.id===-1;//typeof isNew==='undefined' || typeof edited.editing==='undefined' ;
+    const flag = edited.id===-1 ||!isNew;
     const row = {...edited, editing:flag};
     console.log('row1_', row );
     setCurrent(row);
-    //setEditing( row.editing);
 };
 
 // login set localStorage

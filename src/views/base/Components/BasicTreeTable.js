@@ -97,7 +97,7 @@ const  BasicTreeTable =()=> {
         // load account data as they are needed
         accUrl&&Get1(accUrl, token, iwsStore, acc_modelid);
         setCurrent(current_)
-    }, [current_]);
+    }, [current_, accUrl, token, acc_modelid]);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle = ()=> setState({...state, collapse:!state.collapse });
     const columnsX = columns(t);

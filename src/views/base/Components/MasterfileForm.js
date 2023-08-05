@@ -48,12 +48,14 @@ const MasterfileForm = () => {
   const [current,setCurrent] = useState(current_);
   const [toolbar, setToolbar] = useState(true);
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
+  const data = iwsState.get(current.modelid)
+
   const handleKeyPress = useCallback((event) => {
     if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
       submitEdit(event);
-      console.log(`Key pressed: ${event.key}`);
     }
-  }, []);
+  }, );
+
   useEffect(() => {
       iwsStore.subscribe(setIwsState);
       // attach the event listener
@@ -63,7 +65,7 @@ const MasterfileForm = () => {
         document.removeEventListener('keydown', handleKeyPress);
       };
     },
-    [current, current.modelid,  iwsState, setCurrent ]);
+    [current, data, handleKeyPress ]);
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id))
@@ -72,7 +74,7 @@ const MasterfileForm = () => {
   const cancelEdit = (e) => initAdd();
   const columns = ColumnFactory(modelid_, iwsState.get(current.modelid), t);
   const edit = editedRow =>{
-    const data = iwsState.get(editedRow.modelid)
+    //const data = iwsState.get(editedRow.modelid)
     const record = data.find(obj => obj.id === editedRow.id);
     const row = {...record, editing:true}
     setCurrent(row);
@@ -82,8 +84,8 @@ const MasterfileForm = () => {
     event.preventDefault();
     if(current.editing) {
       delete current.editing
-      const data = iwsState.get(current.modelid);
-      Edit(modifyUrl, token, {...current}, data, setCurrent, iwsStore);
+      //const data = iwsState.get(current.modelid);
+      Edit(modifyUrl, token, {...current}, data, iwsStore, setCurrent);
     }else submitAdd(event)
   };
 
@@ -100,10 +102,10 @@ const MasterfileForm = () => {
 
   const submitAdd = event => {
     event.preventDefault();
-    const data = iwsState.get(current.modelid);
-    Add(url, token, {...current}, data, initialState, setCurrent);
+    //const data = iwsState.get(current.modelid);
+    Add(url, token, {...current}, data, iwsStore, setCurrent);
   };
-  //let parentChildData =(row, rows) => rows.find(a => a.id === row.account)
+
   function buildForm(current){
     console.log('iwsState', iwsState);
 
@@ -123,7 +125,7 @@ const MasterfileForm = () => {
 
         <Grid container spacing={2} style={{...styles.inner, display:'block' }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px"
-            , pageSize:10, pageSizeOptions:[10, 20, 50]}}  data={ iwsState.get(current.modelid)}
+            , pageSize:10, pageSizeOptions:[10, 20, 50]}}  data={ data}
              columns={columns}   theme={theme} t={t}  edit ={edit} setSelectedRows ={setSelectedRows}/>
         </Grid>
       </Grid>

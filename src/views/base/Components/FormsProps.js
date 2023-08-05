@@ -207,11 +207,6 @@ export const FinancialsFormHead = (props) => {
                                 <IwsIcon style={{style:styles.imageIcon }}  d={svgIcons.refresh}/>
                             </CButton>
                         </div>
-                        <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
-                                <IwsIcon style={{style:styles.imageIcon }}  d={svgIcons.swapVertCircle}/>
-                            </CButton>
-                        </div>
                         <div className="card-header-actions" style={{ align:'right' }}>
                             <CButton  disabled={current.posted} className="card-header-action btn-minimize" onClick={submitCopy}>
                                 <IwsIcon  style ={{style:styles.imageIcon }}  d={svgIcons.copyContent}/>
@@ -237,14 +232,20 @@ export const FinancialsFormHead = (props) => {
                                 <IwsIcon  style ={{style:styles.imageIcon}}  d={svgIcons.save}/>
                             </CButton>
                         </div>
+
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton disabled={current.posted} className="card-header-action btn-minimize" onClick={submitPost}>
+                                <IwsIcon  style ={{style:styles.imageIcon}} d={svgIcons.done}/>
+                            </CButton>
+                        </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" title="Hide/Display transaction" onClick={() => toggle()}>
                                 <FontAwesomeIcon icon={collapse?faAngleDoubleUp:faAngleDoubleDown} />
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
-                            <CButton disabled={current.posted} className="card-header-action btn-minimize" onClick={submitPost}>
-                                <IwsIcon  style ={{style:styles.imageIcon}} d={svgIcons.done}/>
+                            <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
+                                <IwsIcon style={{style:styles.imageIcon }}  d={svgIcons.swapVertCircle}/>
                             </CButton>
                         </div>
                     </Grid>
@@ -270,7 +271,7 @@ export const JournalFormHead = (props) => {
                         </div>
                         <div className="card-header-actions" style={{ textAlign: 'end' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
-                                <FontAwesomeIcon icon={faPlusCircle} />
+                                <IwsIcon style={{style:styles.imageIcon }}  d={svgIcons.swapVertCircle}/>
                             </CButton>
                         </div>
                     </Grid>

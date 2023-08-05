@@ -8,6 +8,7 @@ import {styles,  theme} from "../Tree/BasicTreeTableProps";
 import {Edit, EditRow, Get, Post} from './CrudController';
 import {LOGIN_MENU, useGlobalState, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
+import iwsStore from "./Store";
 
 
 function internal(url, profile, history, initialState, data, setData,  current, setCurrent,  title, state
@@ -35,7 +36,7 @@ function internal(url, profile, history, initialState, data, setData,  current, 
     const submitEdit = event => {
         event.preventDefault();
         if (current.editing && !current.posted) {
-            Edit(url, profile, {...current}, data, setCurrent);
+            Edit(url, profile, {...current}, data, iwsStore, setCurrent);
         }
     };
 
