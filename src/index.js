@@ -2,7 +2,7 @@ import 'react-app-polyfill/ie11'; // For IE 11 support
 import 'react-app-polyfill/stable';
 import './polyfill'
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+//import { createRoot } from 'react-dom/client';
 import { render } from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
