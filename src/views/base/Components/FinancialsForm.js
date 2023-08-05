@@ -47,8 +47,8 @@ const FinancialsForm = () => {
   const tableRef = createRef();
   const initLine=initialState[0].lines[0];
   const [toolbar, setToolbar] = useState(false);
-  const [current,setCurrent] = useState(current_);
-  console.log('current',current)
+  const [current, setCurrent] = useState(current_);
+  //console.log('current',current)
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
   const data_ = iwsState.get(parseInt(model));
   const data  = ()=>data_?data_:initialState;
@@ -58,11 +58,12 @@ const FinancialsForm = () => {
       delete current.editing;
     }
   }
+
   const submitEdit = event => {
     event.preventDefault();
     if(current.id >0) {
       toggleEdit();
-      Edit(modifyUrl, token, current, data(), setCurrent, iwsStore);
+      Edit(modifyUrl, token, current, data(), iwsStore, setCurrent);
     } else {
       toggleEdit();
       console.log('adding',current)
@@ -73,13 +74,12 @@ const FinancialsForm = () => {
     if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
       submitEdit(event);
     }
-  }, [submitEdit]);
+  }, );
 
   useEffect(() => {
       iwsStore.subscribe(setIwsState);
       // attach the event listener
       document.addEventListener('keydown', handleKeyPress);
-
     // remove the event listener
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
@@ -95,7 +95,6 @@ const FinancialsForm = () => {
   const reload = ()=> {
     console.log(' current ', current )
     iwsStore.deleteKey(current.modelid );
-
     const url_=url.concat('/').concat(current.modelid);
     url_&&Get1(url_, token,  iwsStore, parseInt(current.modelid));
   }
@@ -111,7 +110,14 @@ const FinancialsForm = () => {
     ,{ id:'124', name:'Settlement', account:'1810', isDebit:true}
     ,{ id:'134', name:'General ledger', account:'1810', isDebit:false}]
 
-  const initAdd =()=> EditRow({...current_, editing:false}, true, setCurrent);
+  const initAdd =()=> {
+    const model_ = models.find(obj => obj.id === model);
+    const account_ = model_?model_.account:undefined;
+    const accountLabel_= model_.isDebit?'account':'oaccount';
+    const line =[{...current_.lines[0], id:-1, transid:current_.id1,  [accountLabel_]:account_}]
+    const record = {...current_, lines:line}
+    EditRow(record, true, setCurrent);
+  }
 
 
   const cancelEdit = (e) => {
@@ -163,12 +169,13 @@ const FinancialsForm = () => {
 
   const submitAdd = event => {
     event.preventDefault();
+    console.log('current', current)
     const row = {id:current.id, oid:current.oid, id1:current.id1, costcenter:current.costcenter, account:current.account
       , transdate:new Date(current.transdate).toISOString(), enterdate:new Date().toISOString()
       , postingdate:new Date().toISOString(), period:getPeriod(new Date()), posted:current.posted
       , modelid:parseInt(model), company:current.company, text:current.text, typeJournal:current.typeJournal
       , file_content:current.file_content, lines:current.lines };
-    Add(modifyUrl, token, row, data(), initialState, setCurrent);
+      Add(modifyUrl, token, row, data(), iwsStore, setCurrent);
 
   };
 
@@ -190,11 +197,18 @@ const FinancialsForm = () => {
       console.log('accountLabel_', accountLabel_);
     const dx1 =current.lines.length===0?
       {...current, lines:[{...current.lines.filter(e=>!e.account.isEmpty), ...newData
-        , id:-1, transid:current.id1, paddingTop:'',[accountLabel_]:account_}]}:
-      (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id1, paddingTop:'', [accountLabel_]:account_})
+        , id:-1, transid:current.id1, [accountLabel_]:account_}]}:
+      (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id1,  [accountLabel_]:account_})
     const record = (current.lines.length>1)?dx:dx1;
-     delete record.editing;
-    Edit(modifyUrl, token, record, data(), setCurrent, iwsStore);
+    delete record.editing;
+    //setCurrent({...record});
+      if(record.id>0) {
+        Edit(modifyUrl, token, record, data(), iwsStore, setCurrent);
+      }else{
+        console.log('current', current);
+       // Edit(modifyUrl, token, record, data(), iwsStore, setCurrent);
+        Add(modifyUrl, token, record, data(), iwsStore, setCurrent);
+      }
       console.log('current', current);
 
     }
@@ -204,9 +218,16 @@ const FinancialsForm = () => {
       const dx = {...current};
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       delete newData.tableData;
+
       (idx === -1)? dx.lines.push({...newData, transid: dx.id1}): dx.lines[idx]={...newData, transid: dx.id1};
       console.log('dx', dx);
-      Edit(modifyUrl, token, dx, data(), setCurrent, iwsStore);
+      delete dx.editing;
+      if(dx.id>0) {
+        Edit(modifyUrl, token, dx, data(), iwsStore, setCurrent);
+      }else{
+        Add(modifyUrl, token, dx, data(), iwsStore, setCurrent);
+      }
+     // setCurrent({...dx});
       console.log('current', current);
     }
   }
@@ -217,11 +238,12 @@ const FinancialsForm = () => {
       const deleted = dx.lines[index];
       console.log('deleted', deleted);
       dx.lines[index] = {...deleted, transid:-2 };
-      Edit(modifyUrl, token, dx, data(), setCurrent, iwsStore);
+      Edit(modifyUrl, token, dx, data(), iwsStore, setCurrent);
     }
   }
+  const OnRowAdd = async (newData) => addRow(newData)
   const  editable = () => ({
-    onRowAdd: async (newData) => addRow(newData),
+    onRowAdd: OnRowAdd,
     onRowUpdate: async (newData, oldData) => updateRow(newData, oldData),
     onRowDelete: async (oldData) => deleteRow(oldData)
   })
@@ -257,8 +279,8 @@ const FinancialsForm = () => {
                      ccData={ccd}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
                      collapse={state.collapse}
         />
-        <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px", pageSize:5
-          , pageSizeOptions:[5,10, 20, 50]}} flag={current.posted} data={buildData()} columns={columns}
+        <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px", pageSize:10
+          , pageSizeOptions:[10, 20, 50]}} flag={current.posted} data={buildData()} columns={columns}
           t={t}  edit ={edit} setSelectedRows ={setSelectedRows} parentChildData={parentChildData}/>
 
       </Grid>
