@@ -89,13 +89,16 @@ const MasterfileForm = () => {
     }else submitAdd(event)
   };
 
+  const accd=iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[];
+  const bankd=iwsState.get(bank_modelid)?iwsState.get(bank_modelid):[];
+  const vatd= iwsState.get(vat_modelid)?iwsState.get(vat_modelid):[];
 
   const load = event => submitQuery(event);
   const submitQuery =(event)=>{
     event.preventDefault();
     accUrl&& (current.modelid !== acc_modelid) &&Get1(accUrl, token, iwsStore, acc_modelid);
     vatUrl&& (current.modelid !== vat_modelid) &&Get1(vatUrl, token, iwsStore, vat_modelid);
-    bankUrl&&(current.modelid !== bank_modelid) &&Get1(bankUrl, token, iwsStore, bank_modelid);
+    bankUrl&&(current.modelid !== bank_modelid) && bankd.isEmpty &&Get1(bankUrl, token, iwsStore, bank_modelid);
     url&&Get1(url, token, iwsStore, current_.modelid);
     console.log('iwsState', iwsState);
   }
@@ -110,9 +113,7 @@ const MasterfileForm = () => {
     console.log('iwsState', iwsState);
 
 
-    const accd=iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[];
-    const bankd=iwsState.get(bank_modelid)?iwsState.get(bank_modelid):[];
-    const vatd= iwsState.get(vat_modelid)?iwsState.get(vat_modelid):[];
+
 
     return <>
       <Grid container spacing={2} style={{...styles.outer }} direction="column">

@@ -205,7 +205,6 @@ const FinancialsForm = () => {
       if(record.id>0) {
         Edit(modifyUrl, token, record, data(), iwsStore, setCurrent);
       }else{
-        console.log('current', current);
        // Edit(modifyUrl, token, record, data(), iwsStore, setCurrent);
         Add(modifyUrl, token, record, data(), iwsStore, setCurrent);
       }

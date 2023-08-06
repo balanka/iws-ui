@@ -128,7 +128,7 @@ export const CommonFormHead = (props) => {
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={toggleToolbar}>
-                                <FontAwesomeIcon icon={faPlusCircle} />
+                                <IwsIcon style={{style:styles.imageIcon }}  d={svgIcons.swapVertCircle}/>
                             </CButton>
                         </div>
                     </Grid>
