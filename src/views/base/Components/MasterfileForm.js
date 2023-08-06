@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useEffect, useState} from 'react'
+import React, {memo, useCallback, useLayoutEffect, useState} from 'react'
 import {MASTERFILE, useStore, useGlobalState, ACCOUNT, BANK, VAT} from './Menu';
 import Grid from "react-fast-grid";
 import {CommonFormHead, FormFactory} from './FormsProps'
@@ -55,8 +55,7 @@ const MasterfileForm = () => {
       submitEdit(event);
     }
   }, );
-
-  useEffect(() => {
+  useLayoutEffect(() => {
       iwsStore.subscribe(setIwsState);
       // attach the event listener
       document.addEventListener('keydown', handleKeyPress);
@@ -64,8 +63,7 @@ const MasterfileForm = () => {
       return () => {
         document.removeEventListener('keydown', handleKeyPress);
       };
-    },
-    [current, data, handleKeyPress ]);
+    }, [current, data, handleKeyPress ]);
   const toggleToolbar= ()=> setToolbar(!toolbar );
   const toggle= ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id))

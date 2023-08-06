@@ -1,4 +1,4 @@
-import React, {createRef, useCallback, useEffect, useState} from 'react'
+import React, {createRef, useCallback,  useLayoutEffect, useState} from 'react'
 import {CInput} from '@coreui/react'
 import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
@@ -75,8 +75,8 @@ const FinancialsForm = () => {
       submitEdit(event);
     }
   }, );
-
-  useEffect(() => {
+  useLayoutEffect(() => {
+ // useEffect(() => {
       iwsStore.subscribe(setIwsState);
       // attach the event listener
       document.addEventListener('keydown', handleKeyPress);
