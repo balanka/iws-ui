@@ -2,7 +2,6 @@ import axios from "axios";
 import routes from '../../../routes';
 
 const Edit = (url, token, record, data,  setCurrent) => {
-   delete record.editing;
    var result;
      axios.put( url, record, {headers: {'Authorization':`Bearer ${token}`}})
       .then(response => {
@@ -21,7 +20,6 @@ const Edit = (url, token, record, data,  setCurrent) => {
   return result;
   };
  const Add = (url, token, record, data, setCurrent) => {
-   delete record.editing;
    let result;
    axios.post(url, record, {headers: {'Authorization': `Bearer ${token}`}})
      .then(response => {

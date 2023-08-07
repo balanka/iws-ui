@@ -34,6 +34,7 @@ function internal(url, profile, history, initialState, data, setData,  current, 
     const submitEdit = event => {
         event.preventDefault();
         if (current.editing && !current.posted) {
+            delete current.editing
             Edit(url, profile, {...current}, data, setCurrent);
         }
     };

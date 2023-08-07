@@ -12,8 +12,6 @@ import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import iwsStore from './Store';
 
-//import useKeyPress from "./useKeyPress";
-
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const { profile,  } = useStore()
@@ -67,15 +65,14 @@ const FinancialsForm = () => {
   }
   const submitEdit = event => {
     event.preventDefault();
+    toggleEdit();
     if(current.id >0) {
-      toggleEdit();
       Edit(modifyUrl, token, current, data(), setCurrent);
     } else {
-      toggleEdit();
-      console.log('adding',current)
       submitAdd(event)
     }
   };
+
   const handleKeyPress = useCallback((event) => {
     if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
       submitEdit(event);
@@ -129,7 +126,6 @@ const FinancialsForm = () => {
     EditRow(record, true, setCurrent);
   }
 
-
   const cancelEdit = (e) => {
     e.preventDefault();
     initAdd();
@@ -154,7 +150,6 @@ const FinancialsForm = () => {
   const edit = editedRow =>{
     const data = iwsState.get(editedRow.modelid)
     const record = data.find(obj => obj.id === editedRow.id);
-    console.log('record',record);
     setCurrent({...record, editing:true});
   }
 
@@ -202,30 +197,23 @@ const FinancialsForm = () => {
     const result= record.id>0?Edit(modifyUrl, token, record, data(), setCurrent):
                               Add(modifyUrl, token, record, data(), setCurrent)
       setCurrent(result);
-      console.log('result', result);
-
     }
   }
-  const updateRow = (newData, oldData) =>{
+  const updateRow = async (newData, oldData) =>{
     if (oldData) {
       const dx = {...current};
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       delete newData.tableData;
       (idx === -1)? dx.lines.push({...newData, transid: dx.id1}): dx.lines[idx]={...newData, transid: dx.id1};
-      console.log('idx', idx);
-      console.log('dx', dx);
       delete dx.editing;
       if(dx.id>0) {
-        console.log('editing dx', dx);
         Edit(modifyUrl, token, dx, data(),  setCurrent);
       }else{
-        console.log('adding dx', dx);
         Add(modifyUrl, token, dx, data(),  setCurrent);
       }
-      console.log('current', current);
     }
   }
-  const deleteRow = (oldData) =>{
+  const deleteRow = async (oldData) =>{
     if (oldData) {
       const dx = {...current};
       const index =dx.lines.findIndex(obj => obj.id === oldData.id);
@@ -236,11 +224,7 @@ const FinancialsForm = () => {
     }
   }
   const OnRowAdd = async (newData) => addRow(newData)
-  const  editable = () => ({
-    onRowAdd: OnRowAdd,
-    onRowUpdate: async (newData, oldData) => updateRow(newData, oldData),
-    onRowDelete: async (oldData) => deleteRow(oldData)
-  })
+  const  editable = () => ({onRowAdd: OnRowAdd, onRowUpdate:  updateRow, onRowDelete:  deleteRow})
   function buildForm( current){
 
     const accd= iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
