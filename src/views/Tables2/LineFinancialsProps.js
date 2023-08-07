@@ -1,80 +1,25 @@
 import React from 'react'
 import {rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
-import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import {formEnum} from "../../utils/FORMS";
 import {dateFormat, formatterDE} from "../../utils/utils";
-import {CSelect} from "@coreui/react";
 
-
-const mapping = (acc) =>
-    <MenuItem key={acc.id} value={acc.id}>
-        {acc.id.concat( " ").concat(acc.name)}
-    </MenuItem>
-
-
-export  const ACCOUNT=(data, value, onRowDataChange, rowData, fieldName) => {
-    return (<Select value={value} onChange={(event) =>
-        onRowDataChange({...rowData, account: event.target.value})}>
-        {data.map(mapping)} id={"cb".concat(fieldName)}
-    </Select>)
+export  const ACCOUNT= (data, tableData) => {
+    return (
+      <Autocomplete
+      value={tableData.value} //Must be value instead
+      onChange={(event, newValue) => {
+          const v = newValue.toString().split(":")[0]
+          tableData.onChange(v); // Can just be the value
+      }}
+      disableClearable={true}
+      autoComplete={true}
+      options={data.map(d=>d.id.concat (': ').concat (d.name))} // Remove the getOptionsLabel
+      renderInput={params => <TextField {...params} />}
+    />)
 }
-export  const ACCOUNT2X=(data, value, onRowDataChange, rowData, fieldName) => {
-    return (<CSelect className="flex-row" type="select" name="bankAcc" id="bankAcc-id"
-                     value={value} onChange={(event) =>
-      onRowDataChange({...rowData, oaccount: event.target.value})}>
-        {data.map(mapping)} id={"cb".concat(fieldName)}
-
-    </CSelect>)
-}
-
-export  const ACCOUNT2=(data, value, onRowDataChange, rowData, fieldName) => {
-    return (<Select value={value} onChange={(event) =>
-        onRowDataChange({...rowData, oaccount: event.target.value})}>
-        {data.map(mapping)} id={"cb".concat(fieldName)}
-    </Select>)
-}
-
-export const  editable = (data, setData, current ) => ({
-    onRowAdd: newData =>{
-            const datax = JSON.parse(JSON.stringify(data));
-              const index=datax.length
-              datax[index] = newData;
-              setData([...datax]);
-              const currentx = {...current};
-              const index1 = currentx.lines.length;
-              currentx.lines[index1] = newData;
-        },
-
-    onRowUpdate: (newData, oldData) =>
-        new Promise((resolve) => {
-            setTimeout(() => {
-                resolve();
-                const datax = JSON.parse(JSON.stringify(data));
-                const index = datax.findIndex(obj => obj.id === newData.id);
-                datax[index] = newData;
-                setData(datax);
-                const currentx = {...current};
-                const index1 = currentx.lines.findIndex(obj => obj.id === newData.id);
-                currentx.lines[index1] = newData;
-
-            }, 600);
-        }),
-        onRowDelete : oldData =>
-        new Promise((resolve, reject) => {
-          setTimeout(() => {
-            const dataDelete = JSON.parse(JSON.stringify(data));
-            const currentx = {...current};
-            const index = currentx.lines.findIndex(obj => obj.id === oldData.id);
-            dataDelete.splice(index, 1);
-            setData([...dataDelete]);
-            const deleted = currentx.lines[index];
-            currentx.lines[index] = {...deleted, transid:-2 };
-
-            resolve()
-          }, 1000)
-        })
-})
 export const columnsPACB = (t) => [
       {field:'period', title:t('pac.period'),  type:"numeric", export:true }
     , {field:'idebit', title:t('common.idebit'), type:"currency", currencySetting: { locale:"de"
@@ -116,16 +61,25 @@ export const columnsF =(data, line, current, t) => [
     , {field:'modelid', title:t('common.modelid'), type:"numeric", minWidth:30, maxWidth:50, export:true}
     , {field:'company', title:t('common.company'), type:"numeric", minWidth:30, maxWidth:60, export:true}
 ]
-export const Linescolumns =(data, line, current, t) =>  {
+export const Linescolumns =(data, line, current, models,  model, t) =>  {
+    const model_ = models.find(obj => obj.id === model);
+    console.log('model', model_);
+    let  debitedAccount = '';//model_?.isDebit?model_.account:'';
+    let  creditedAccount = ''//model_?.isDebit?'':model_.account;
+    if(model_?.isDebit){
+        debitedAccount =  model_?.account;
+    }else{
+        creditedAccount =  model_?.account;
+    }
+
     return [
       {field:'id', title:t('financials.line.id'), type:'numeric', hidden:true,  initialEditValue:line.id, editable:'never'}
     , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current?current.id:0,  editable:'never'}
-    , {field:'account', title:t('financials.line.account'), type:'string', hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            ACCOUNT ( data, value, onRowDataChange, rowData,"account" ),  initialEditValue:'', align:"left"
-      , width:60, minWidth:50,  maxWidth:150}
+    , {field:'account', title:t('financials.line.account'), type:'string', editComponent: tableData => ACCOUNT ( data, tableData)
+    , initialEditValue:debitedAccount, align:"left",  minWidth:100,  maxWidth:450}
     , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true,  width:10, minWidth:10,  maxWidth:20,}
-    , {field:'oaccount', title:t('financials.line.oaccount'), type:'string', hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-          ACCOUNT2 ( data, value, onRowDataChange, rowData, "oaccount"), initialEditValue:'',  width:60, minWidth:50,  maxWidth:150, align:"right"}
+    , {field:'oaccount', title:t('financials.line.oaccount'), type:'string', editComponent:tableData => ACCOUNT ( data, tableData),
+    initialEditValue:creditedAccount,  width:100, minWidth:100,  maxWidth:450, align:"right"}
     , {field:'duedate', title:t('financials.line.duedate'), type:"date", align:"right",
       initialEditValue:line.duedate, dateSetting: { locale:"de" },  width:40, minWidth:50,  maxWidth:80 }
     , {field:'amount', title:t('financials.line.amount'), type:"currency", initialEditValue:0,

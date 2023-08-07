@@ -48,7 +48,6 @@ const FinancialsForm = () => {
   const initLine=initialState[0].lines[0];
   const [toolbar, setToolbar] = useState(false);
   const [current, setCurrent] = useState(current_);
-  console.log('currentXX',current)
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
   const data_ = iwsState.get(parseInt(model));
   const data  = ()=>data_?data_:initialState;
@@ -59,6 +58,13 @@ const FinancialsForm = () => {
     }
   }
 
+  const onNewLine =() => {
+    const ref = tableRef.current
+    ref.dataManager.changeRowEditing();
+    ref.setState({ ...ref.dataManager.getRenderState(),
+      showAddRow: !ref.state.showAddRow,
+    });
+  }
   const submitEdit = event => {
     event.preventDefault();
     if(current.id >0) {
@@ -73,10 +79,12 @@ const FinancialsForm = () => {
   const handleKeyPress = useCallback((event) => {
     if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
       submitEdit(event);
+    }else if(event.ctrlKey && (event.key === "l"||event.key === "L")) {
+      onNewLine();
     }
   }, );
+
   useLayoutEffect(() => {
- // useEffect(() => {
       iwsStore.subscribe(setIwsState);
       // attach the event listener
       document.addEventListener('keydown', handleKeyPress);
@@ -86,14 +94,19 @@ const FinancialsForm = () => {
     };
   }, [ current, model, data_, handleKeyPress]);
 
+  const models=[
+    { id:'112', name:'Supplier invoice', account:'1810', isDebit:false}
+    ,{ id:'114', name:'Payment', account:'1810', isDebit:false}
+    ,{ id:'122', name:'Receivables', account:'1810', isDebit:false}
+    ,{ id:'124', name:'Settlement', account:'1810', isDebit:true}
+    ,{ id:'134', name:'General ledger', account:'1810', isDebit:false}]
+
   const accData = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
   const ccData = iwsState.get(cc_modelid)?iwsState.get(cc_modelid):[...initCc];
-  const columnsX = Linescolumns(accData, initLine, current, t);
+  const columnsX = Linescolumns(accData, initLine, current, models, model,  t);
   const columns= columnsF(ccData, initLine, current, t);
 
-
   const reload = ()=> {
-    console.log(' current ', current )
     iwsStore.deleteKey(current.modelid );
     const url_=url.concat('/').concat(current.modelid);
     url_&&Get1(url_, token,  iwsStore, parseInt(current.modelid));
@@ -101,14 +114,6 @@ const FinancialsForm = () => {
   const toggleToolbar = ()=> setToolbar(!toolbar );
   const toggle = ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( (item) =>({id:item.id,  modelid:item.modelid})))
-
-
-  const models=[
-     { id:'112', name:'Supplier invoice', account:'1810', isDebit:false}
-    ,{ id:'114', name:'Payment', account:'1810', isDebit:false}
-    ,{ id:'122', name:'Receivables', account:'1810', isDebit:false}
-    ,{ id:'124', name:'Settlement', account:'1810', isDebit:true}
-    ,{ id:'134', name:'General ledger', account:'1810', isDebit:false}]
 
   function getAccountAndLabel() {
     const model_ = models.find(obj => obj.id === model);
@@ -174,7 +179,7 @@ const FinancialsForm = () => {
 
   const submitAdd = event => {
     event.preventDefault();
-    console.log('current', current)
+
     const row = {id:current.id, oid:current.oid, id1:current.id1, costcenter:current.costcenter, account:current.account
       , transdate:new Date(current.transdate).toISOString(), enterdate:new Date().toISOString()
       , postingdate:new Date().toISOString(), period:getPeriod(new Date()), posted:current.posted
@@ -183,14 +188,6 @@ const FinancialsForm = () => {
       Add(modifyUrl, token, row, data(), setCurrent);
 
   };
-
-  const onNewLine =() => {
-    const ref = tableRef.current
-    ref.dataManager.changeRowEditing();
-    ref.setState({ ...ref.dataManager.getRenderState(),
-      showAddRow: !ref.state.showAddRow,
-    });
-  }
 
   const addRow = (newData) =>{
     if(newData ) {
@@ -202,15 +199,8 @@ const FinancialsForm = () => {
       (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id1,  [accountLabel_]:account_})
     const record = (current.lines.length>1)?dx:dx1;
     delete record.editing;
-      let  result;
-      if(record.id>0) {
-        console.log('Editing record', record);
-         result=Edit(modifyUrl, token, record, data(), setCurrent);
-      }else{
-        console.log('Adding record', record);
-       // Edit(modifyUrl, token, record, data(), iwsStore, setCurrent);
-        result=Add(modifyUrl, token, record, data(), setCurrent);
-      }
+    const result= record.id>0?Edit(modifyUrl, token, record, data(), setCurrent):
+                              Add(modifyUrl, token, record, data(), setCurrent)
       setCurrent(result);
       console.log('result', result);
 
@@ -258,15 +248,17 @@ const FinancialsForm = () => {
 
     const lines_=()=> Array.isArray(current.lines)&&current.lines.length >0 ? current.lines:[initLine];
 
-    const LinesFinancials = () =>  (<>
+    const LinesFinancials = () =>  {
+      return (<>
           <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()}
                          columns={ columnsX} editable={editable()}  t={t}
                          tableRef={tableRef} />
           <CInput disabled={current.posted} bssize="sm" type="textarea" id="text-input" name="text" className="input-sm"
                   placeholder="text" value={current.text} onChange={(event)  =>
-              setCurrent({ ...current, text: event.target.value})} />
+            setCurrent({ ...current, text: event.target.value})} />
         </>
-    )
+      )
+    }
 
     const parentChildData =(row, rows) => Array.isArray(rows)&&rows.length >0 ?rows.find(a => a?.id === row.transid):rows
 
