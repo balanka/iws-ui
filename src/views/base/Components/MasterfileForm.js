@@ -83,7 +83,7 @@ const MasterfileForm = () => {
     if(current.editing) {
       delete current.editing
       //const data = iwsState.get(current.modelid);
-      Edit(modifyUrl, token, {...current}, data, iwsStore, setCurrent);
+      Edit(modifyUrl, token, {...current}, data, setCurrent);
     }else submitAdd(event)
   };
 
@@ -104,7 +104,7 @@ const MasterfileForm = () => {
   const submitAdd = event => {
     event.preventDefault();
     //const data = iwsState.get(current.modelid);
-    Add(url, token, {...current}, data, iwsStore, setCurrent);
+    Add(url, token, {...current}, data, setCurrent);
   };
 
   function buildForm(current){

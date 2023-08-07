@@ -1,38 +1,39 @@
 import axios from "axios";
 import routes from '../../../routes';
 
-const Edit = (url, token, record, data, iwsStore, setCurrent) => {
-    console.log('url edit', url);
+const Edit = (url, token, record, data,  setCurrent) => {
    delete record.editing;
-   console.log('record', record);
+   var result;
      axios.put( url, record, {headers: {'Authorization':`Bearer ${token}`}})
       .then(response => {
-        console.log('response.status', response.status);
-        console.log('responseX', response);
         const resp = response.data
-        const index = data.findIndex(obj => obj.id === resp.id);
+        const index = data.findIndex(obj => {
+          return obj?(obj.id === record.id):false
+        });
         data[index]= resp;
-        iwsStore.update(resp.modelid, resp.id, {...resp} );
+        result=resp;
         setCurrent(resp);
+        console.log('resultX', result);
       }).catch(function (error) {
          console.log('error', error);
        });
+  console.log('resultX', result);
+  return result;
   };
- const Add = (url, token, record, data, iwsStore, setCurrent) => {
-   console.log('url', url);
-   console.log('record', record);
+ const Add = (url, token, record, data, setCurrent) => {
    delete record.editing;
+   let result;
    axios.post(url, record, {headers: {'Authorization': `Bearer ${token}`}})
      .then(response => {
-       console.log('response', response);
        const resp = response.data
-       console.log('result', resp);
        const index =  data.length + 1;
        data[index] = resp;
+       result=resp;
        setCurrent(resp);
      }).catch(function (error) {
      console.log('error', error);
    });
+   return result;
   };
  const Post = (url, profile, record) => {
      axios.patch(url, record, {headers: {'Authorization':`Bearer ${profile.token}`}})
@@ -68,7 +69,6 @@ const Edit = (url, token, record, data, iwsStore, setCurrent) => {
  const Get = (url, token, history, func) => {
       let result;
           axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
-
             .then(response => {
                 const resp = response.data
               console.log('responseRRRRRR', resp);

@@ -49,6 +49,7 @@ const iwsStore = {
     store.delete(key)
     subject.next(store);
   },
+  get:(key)=>store.get(key),
   clear: () => {
     store = initialState;
     subject.next(store);

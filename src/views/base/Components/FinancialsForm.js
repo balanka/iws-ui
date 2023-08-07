@@ -48,7 +48,7 @@ const FinancialsForm = () => {
   const initLine=initialState[0].lines[0];
   const [toolbar, setToolbar] = useState(false);
   const [current, setCurrent] = useState(current_);
-  //console.log('current',current)
+  console.log('currentXX',current)
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
   const data_ = iwsState.get(parseInt(model));
   const data  = ()=>data_?data_:initialState;
@@ -63,7 +63,7 @@ const FinancialsForm = () => {
     event.preventDefault();
     if(current.id >0) {
       toggleEdit();
-      Edit(modifyUrl, token, current, data(), iwsStore, setCurrent);
+      Edit(modifyUrl, token, current, data(), setCurrent);
     } else {
       toggleEdit();
       console.log('adding',current)
@@ -110,10 +110,15 @@ const FinancialsForm = () => {
     ,{ id:'124', name:'Settlement', account:'1810', isDebit:true}
     ,{ id:'134', name:'General ledger', account:'1810', isDebit:false}]
 
-  const initAdd =()=> {
+  function getAccountAndLabel() {
     const model_ = models.find(obj => obj.id === model);
-    const account_ = model_?model_.account:undefined;
-    const accountLabel_= model_.isDebit?'account':'oaccount';
+    const account_ = model_ ? model_.account : undefined;
+    const accountLabel_ = model_.isDebit ? 'account' : 'oaccount';
+    return {account_, accountLabel_};
+  }
+
+  const initAdd =()=> {
+    const {account_, accountLabel_} = getAccountAndLabel();
     const line =[{...current_.lines[0], id:-1, transid:current_.id1,  [accountLabel_]:account_}]
     const record = {...current_, lines:line}
     EditRow(record, true, setCurrent);
@@ -175,7 +180,7 @@ const FinancialsForm = () => {
       , postingdate:new Date().toISOString(), period:getPeriod(new Date()), posted:current.posted
       , modelid:parseInt(model), company:current.company, text:current.text, typeJournal:current.typeJournal
       , file_content:current.file_content, lines:current.lines };
-      Add(modifyUrl, token, row, data(), iwsStore, setCurrent);
+      Add(modifyUrl, token, row, data(), setCurrent);
 
   };
 
@@ -189,26 +194,25 @@ const FinancialsForm = () => {
 
   const addRow = (newData) =>{
     if(newData ) {
+    const {account_, accountLabel_} = getAccountAndLabel();
     const dx = {...current};
-    const model_ = models.find(obj => obj.id === model);
-    const account_ = model_?model_.account:undefined;
-    const accountLabel_= model_.isDebit?'account':'oaccount';
-      console.log('account_', account_);
-      console.log('accountLabel_', accountLabel_);
     const dx1 =current.lines.length===0?
       {...current, lines:[{...current.lines.filter(e=>!e.account.isEmpty), ...newData
         , id:-1, transid:current.id1, [accountLabel_]:account_}]}:
       (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id1,  [accountLabel_]:account_})
     const record = (current.lines.length>1)?dx:dx1;
     delete record.editing;
-    //setCurrent({...record});
+      let  result;
       if(record.id>0) {
-        Edit(modifyUrl, token, record, data(), iwsStore, setCurrent);
+        console.log('Editing record', record);
+         result=Edit(modifyUrl, token, record, data(), setCurrent);
       }else{
+        console.log('Adding record', record);
        // Edit(modifyUrl, token, record, data(), iwsStore, setCurrent);
-        Add(modifyUrl, token, record, data(), iwsStore, setCurrent);
+        result=Add(modifyUrl, token, record, data(), setCurrent);
       }
-      console.log('current', current);
+      setCurrent(result);
+      console.log('result', result);
 
     }
   }
@@ -217,16 +221,17 @@ const FinancialsForm = () => {
       const dx = {...current};
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       delete newData.tableData;
-
       (idx === -1)? dx.lines.push({...newData, transid: dx.id1}): dx.lines[idx]={...newData, transid: dx.id1};
+      console.log('idx', idx);
       console.log('dx', dx);
       delete dx.editing;
       if(dx.id>0) {
-        Edit(modifyUrl, token, dx, data(), iwsStore, setCurrent);
+        console.log('editing dx', dx);
+        Edit(modifyUrl, token, dx, data(),  setCurrent);
       }else{
-        Add(modifyUrl, token, dx, data(), iwsStore, setCurrent);
+        console.log('adding dx', dx);
+        Add(modifyUrl, token, dx, data(),  setCurrent);
       }
-     // setCurrent({...dx});
       console.log('current', current);
     }
   }
@@ -237,7 +242,7 @@ const FinancialsForm = () => {
       const deleted = dx.lines[index];
       console.log('deleted', deleted);
       dx.lines[index] = {...deleted, transid:-2 };
-      Edit(modifyUrl, token, dx, data(), iwsStore, setCurrent);
+      Edit(modifyUrl, token, dx, data(), setCurrent);
     }
   }
   const OnRowAdd = async (newData) => addRow(newData)
@@ -248,14 +253,14 @@ const FinancialsForm = () => {
   })
   function buildForm( current){
 
-    console.log('iwsState', iwsState);
     const accd= iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
     const ccd= iwsState.get(cc_modelid)?iwsState.get(cc_modelid):[...initCc];
 
-    const lines_=()=>Array.isArray(current.lines)&&current.lines.length >0 ? current.lines:[initLine];
+    const lines_=()=> Array.isArray(current.lines)&&current.lines.length >0 ? current.lines:[initLine];
+
     const LinesFinancials = () =>  (<>
           <EditableTable id="LineTable" Options ={{...Options, paging:lines_().length>5}} flag={current.posted} data={lines_()}
-                         columns={columnsX} editable={editable()}  t={t}
+                         columns={ columnsX} editable={editable()}  t={t}
                          tableRef={tableRef} />
           <CInput disabled={current.posted} bssize="sm" type="textarea" id="text-input" name="text" className="input-sm"
                   placeholder="text" value={current.text} onChange={(event)  =>
@@ -274,18 +279,19 @@ const FinancialsForm = () => {
                             module ={model}  modules ={models} handleModuleChange={handleModuleChange}
                             onNewLine={onNewLine} submitPost={submitPost} submitCopy={submitCopy} reload={reload}
                              toggle={toggle} toggleToolbar={toggleToolbar}  current={current} />
-        <FormFactory formid ={formEnum.FINANCIALS} current={current} setCurrent={setCurrent} t={t} accData={accd}
+        <FormFactory formid ={formEnum.FINANCIALS} current={current} current_={current_} setCurrent={setCurrent} t={t} accData={accd}
                      ccData={ccd}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
                      collapse={state.collapse}
         />
         <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px", pageSize:10
-          , pageSizeOptions:[10, 20, 50]}} flag={current.posted} data={buildData()} columns={columns}
+          , pageSizeOptions:[10, 20, 50]}} flag={current?current.posted:false} data={buildData()} columns={columns}
           t={t}  edit ={edit} setSelectedRows ={setSelectedRows} parentChildData={parentChildData}/>
 
       </Grid>
     </>
   }
-  return buildForm( current);
+  const currentx= current?current:current_;
+  return buildForm( currentx);
 };
 export default FinancialsForm;
 

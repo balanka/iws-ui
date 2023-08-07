@@ -93,7 +93,7 @@ export const columnsPACB = (t) => [
 
 export const columnsF =(data, line, current, t) => [
      {field:'id', title:t('financials.id'), initialEditValue:line.id, align:"right", width:40, minWidth:20,  maxWidth:50,export:true}
-    , {field:'oid', title:t('financials.oid'),initialEditValue:current.oid, align:"right", width:40, minWidth:20,  maxWidth:50,export:true}
+    , {field:'oid', title:t('financials.oid'),initialEditValue:current?current.oid:-1, align:"right", width:40, minWidth:20,  maxWidth:50,export:true}
     , {field:'account', title:t('financials.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
             ACCOUNT ( data, value, onRowDataChange, rowData, "account" ),  initialEditValue:'', width:20, minWidth:30,  maxWidth:80
       , align:"right", export:true}
@@ -119,7 +119,7 @@ export const columnsF =(data, line, current, t) => [
 export const Linescolumns =(data, line, current, t) =>  {
     return [
       {field:'id', title:t('financials.line.id'), type:'numeric', hidden:true,  initialEditValue:line.id, editable:'never'}
-    , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current.id,  editable:'never'}
+    , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current?current.id:0,  editable:'never'}
     , {field:'account', title:t('financials.line.account'), type:'string', hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
             ACCOUNT ( data, value, onRowDataChange, rowData,"account" ),  initialEditValue:'', align:"left"
       , width:60, minWidth:50,  maxWidth:150}
