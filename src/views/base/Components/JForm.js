@@ -7,13 +7,12 @@ import {formEnum} from "../../../utils/FORMS";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {Get, Get1} from './CrudController';
-import {ACCOUNT, useGlobalState, useStore} from "./Menu";
+import {ACCOUNT, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import iwsStore from "./Store";
 
 function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
     , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX) {
-    console.log('dataZZ',data);
     const summaryPCB = (data) => {
         const row_ = data;
         const row = row_ ? row_?.slice() : row_.slice();
@@ -121,16 +120,13 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
 const JForm = () => {
     const { t,  } = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-    const { profile,  } = useStore()
+    const { profile,  selected} = useStore()
     const { token  } = profile
-    const [selected, ] = useGlobalState('selected');
     console.log('selected',selected)
-    const [menu, ] = useGlobalState('menu');
+    const { menu } = useStore();
     const datax =  profile?.modules?profile.modules:[];
     let history = useHistory()
-    console.log('datax',datax)
     const module_= menu.get(selected);
-    console.log('module_',module_)
     const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
     if(modules_.id==='0') history.push("/login");
     const module = modules_
@@ -138,7 +134,6 @@ const JForm = () => {
     const accUrl=SERVER_URL.concat(module.ctx1)
     const initAcc =module.state1
     const initialState = module_.state
-    console.log('module_',module_.state[0])
     const current_= module_.state[0].query;//initialState[0].query;
     const title =module.title
     const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
@@ -154,7 +149,6 @@ const JForm = () => {
     const toggle= ()=> setState({...state, collapse:!state.collapse });
     const acc_modelid=parseInt(ACCOUNT(t).id);
     const accData_ = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
-    console.log('accData_', accData_)
     let init = useRef(false)
     useEffect(() => {
         if(!init.current) {

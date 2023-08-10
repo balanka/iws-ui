@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 import { CContainer, CFade } from '@coreui/react'
 
-import {useGlobalState, LoginRoute} from "../../views/base/Components/Menu";
+import {LoginRoute, useStore} from "../../views/base/Components/Menu";
   
 const loading = (
   <div className="pt-3 text-center">
@@ -15,7 +15,7 @@ const loading = (
 )
 
 const TheContent = () => {
-    const [routes, ] = useGlobalState('routes');
+  const { routes } = useStore();
     const routes_= routes?[...routes]:[LoginRoute];
   return (
     <main className="c-main">

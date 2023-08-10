@@ -1,5 +1,5 @@
 import React, {memo, useCallback, useLayoutEffect, useState} from 'react'
-import {MASTERFILE, useStore, useGlobalState, ACCOUNT, BANK, VAT} from './Menu';
+import {MASTERFILE, useStore, ACCOUNT, BANK, VAT} from './Menu';
 import Grid from "react-fast-grid";
 import {CommonFormHead, FormFactory} from './FormsProps'
 import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
@@ -11,10 +11,7 @@ import {useHistory} from "react-router-dom";
 import iwsStore from './Store';
 const MasterfileForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-
-  const [selected, ] = useGlobalState('selected');
-  const [menu, ] = useGlobalState('menu');
-  const { profile,  } = useStore()
+  const { profile, menu, selected  } = useStore()
   const { token  } = profile
   console.log('selected', selected);
   console.log('profile', profile);
@@ -44,6 +41,7 @@ const MasterfileForm = () => {
   const acc_modelid= parseInt(ACCOUNT(t).id);
   const bank_modelid= parseInt(BANK(t).id);
   const vat_modelid= parseInt(VAT(t).id);
+  console.log(`bankUrl: ${bankUrl}`);
 
   const [current,setCurrent] = useState(current_);
   const [toolbar, setToolbar] = useState(true);
@@ -72,7 +70,6 @@ const MasterfileForm = () => {
   const cancelEdit = (e) => initAdd();
   const columns = ColumnFactory(modelid_, iwsState.get(current.modelid), t);
   const edit = editedRow =>{
-    //const data = iwsState.get(editedRow.modelid)
     const record = data.find(obj => obj.id === editedRow.id);
     const row = {...record, editing:true}
     setCurrent(row);
@@ -82,7 +79,6 @@ const MasterfileForm = () => {
     event.preventDefault();
     if(current.editing) {
       delete current.editing
-      //const data = iwsState.get(current.modelid);
       Edit(modifyUrl, token, {...current}, data, setCurrent);
     }else submitAdd(event)
   };
@@ -96,23 +92,18 @@ const MasterfileForm = () => {
     event.preventDefault();
     accUrl&& (current.modelid !== acc_modelid) &&Get1(accUrl, token, iwsStore, acc_modelid);
     vatUrl&& (current.modelid !== vat_modelid) &&Get1(vatUrl, token, iwsStore, vat_modelid);
-    bankUrl&&(current.modelid !== bank_modelid) && bankd.isEmpty &&Get1(bankUrl, token, iwsStore, bank_modelid);
+    bankUrl&&(current.modelid !== bank_modelid) &&Get1(bankUrl, token, iwsStore, bank_modelid);
+    //bankUrl&&(current.modelid !== bank_modelid) && bankd.isEmpty &&Get1(bankUrl, token, iwsStore, bank_modelid);
     url&&Get1(url, token, iwsStore, current_.modelid);
     console.log('iwsState', iwsState);
   }
 
   const submitAdd = event => {
     event.preventDefault();
-    //const data = iwsState.get(current.modelid);
     Add(url, token, {...current}, data, setCurrent);
   };
 
   function buildForm(current){
-    console.log('iwsState', iwsState);
-
-
-
-
     return <>
       <Grid container spacing={2} style={{...styles.outer }} direction="column">
         <CommonFormHead styles={styles} title={title} collapse={state.collapse} initAdd ={initAdd} initialState={initialState}

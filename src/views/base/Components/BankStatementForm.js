@@ -6,7 +6,7 @@ import {BSFormHead, FormFactory} from "./FormsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles,  theme} from "../Tree/BasicTreeTableProps";
 import {Edit, EditRow, Get, Post} from './CrudController';
-import {LOGIN_MENU, useGlobalState, useStore} from "./Menu";
+import {LOGIN_MENU,  useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 
 function internal(url, profile, history, initialState, data, setData,  current, setCurrent,  title, state
@@ -64,14 +64,11 @@ function internal(url, profile, history, initialState, data, setData,  current, 
 const BankStatementForm = () => {
     const { t,  } = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-    //const [profile, ] = useGlobalState('profile');
     const { profile,  } = useStore()
     const { token  } = profile
-    const [selected, ] = useGlobalState('selected');
-    const [menu, ] = useGlobalState('menu');
+    const {  selected, menu } = useStore();
     const datax =  profile?.modules?profile.modules:[];
     let history = useHistory()
-
     const module_= menu.get(selected);
     const loginMenu = menu&&menu.length>0?menu.get('/login'):LOGIN_MENU(t)[0]
     const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});

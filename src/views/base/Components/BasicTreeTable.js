@@ -5,7 +5,7 @@ import {JournalFormHead, FormFactory} from './FormsProps';
 import {styles} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {Get, Get1} from './CrudController';
-import {useGlobalState, LOGIN_MENU, useStore, ACCOUNT} from "./Menu";
+import {LOGIN_MENU, useStore, ACCOUNT} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {OptionsM, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
 import {useTranslation} from "react-i18next";
@@ -59,9 +59,7 @@ const  BasicTreeTable =()=> {
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const { profile,  } = useStore()
     const { token  } = profile
-
-    const [selected, ] = useGlobalState('selected');
-    const [menu, ] = useGlobalState('menu');
+    const {  selected, menu } = useStore();
     const datax =  profile?.modules?profile.modules:[];
     let history = useHistory()
     const module_= menu.get(selected);
