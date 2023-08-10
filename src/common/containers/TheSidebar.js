@@ -13,7 +13,7 @@ import {
   CSidebarNavDropdown,
   CSidebarNavItem
 } from '@coreui/react'
-import CCreateElement from './CCreateEelement'
+import CCreateElement from './CCreateElement'
 import CIcon from '@coreui/icons-react'
 
 // sidebar nav config
