@@ -7,21 +7,21 @@ import {Add, Edit, EditRow, Get1, Get2, Post} from './CrudController';
 import {columnsF, Linescolumns, Options, OptionsM} from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
-import {ACCOUNT, COSTCENTER, LoginMenu, MASTERFILE, useGlobalState, useStore} from "./Menu";
+import {ACCOUNT, COSTCENTER, LoginMenu, MASTERFILE,  useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import iwsStore from './Store';
 
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-  const { profile,  } = useStore()
+  const { profile, selected, menu } = useStore();
   const { token  } = profile
-  const [selected, ] = useGlobalState('selected');
   let history = useHistory();
   const { t,  } = useTranslation();
-  const [menu, ] = useGlobalState('menu');
+  console.log('menu', menu);
   const datax_ =  profile?.modules?profile.modules:[];
   const module_= menu.get(selected);
+  console.log('module_', module_);
   const modules_=(module_!==undefined)&&(datax_.includes(module_.id)|| (module_.id==="0"))?module_:LoginMenu(t)
   if(modules_.id==='0') history.push("/login");
   const module_x=modules_;
@@ -43,7 +43,7 @@ const FinancialsForm = () => {
   const [rows, setRows] =useState([])
   const [model, setModel] = useState('');
   const tableRef = createRef();
-  const initLine=initialState[0].lines[0];
+  const initLine = initialState[0].lines[0];
   const [toolbar, setToolbar] = useState(false);
   const [current, setCurrent] = useState(current_);
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
