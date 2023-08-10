@@ -1,10 +1,9 @@
 import React, {useCallback, useMemo} from 'react'
 import PropTypes from 'prop-types'
-import {useGlobalState} from "../../views/base/Components/Menu";
+import {useStore} from "../../views/base/Components/Menu";
 
-//component - CoreUI / CCreateElement
 const CCreateElement = ({ items, components = {}, fn}) => {
-    const [, setSelected] = useGlobalState('selected');
+    const { setSelected } = useStore();
     const renderItem = useCallback( (item, i) => {
         const { _tag, _children, ...rest } = item
         const Tag = components[_tag] || _tag
@@ -16,7 +15,7 @@ const CCreateElement = ({ items, components = {}, fn}) => {
     }, );
 
     const generatedItems = useMemo(() => {
-        return items && items.map((item, i) => renderItem(item, i))
+        return items && items.map((item, i) => renderItem(item, i));
     }, [items])
 
     return (
