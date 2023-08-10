@@ -4,7 +4,6 @@ import {
     AddressForm,
     CustomerGeneralForm,
     CustomerAccountForm,
-    BIC,
     CompanyAccountForm,
     CompanyGeneralForm
 } from "./FormsProps";
@@ -13,19 +12,19 @@ import {Options} from '../../Tables2/LineFinancialsProps';
 import EditableTable from "../../Tables2/EditableTable";
 import {styles} from "../Tree/BasicTreeTableProps";
 import {formEnum} from "../../../utils/FORMS";
+import {Autocomplete} from "./Autocomplete";
 
  const CustomerTabs =  (props) => {
     const {formid, current, setCurrent, accData, vatData, bankData, t}= props
     const initBankAcc=current.bankaccounts;
     const tableRef = createRef();
     const columns=(data, t) => [
-      {field:'id', title:t('common.iban'), initialEditValue:'', export:true}
-     , {field:'bic', title:t('common.bank'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-                BIC ( data, value, onRowDataChange, rowData, "bic" ),  initialEditValue:'', width: 20
-       , align:"right", export:true}
-    , {field:'owner', title:t('common.owner'),initialEditValue:current.id,  export:true}  
+      {field:'id', title:t('common.iban'), initialEditValue:'', minWidth:40, maxWidth:100, export:true}
+    , {field:'bic', title:t('common.bank'), hidden:false, editComponent:tableData => Autocomplete ( data, tableData)
+    ,  initialEditValue:'', minWidth:100, align:"right", export:true}
+    , {field:'owner', title:t('common.owner'),initialEditValue:current.id,  minWidth:5,  export:true}
     , {field:'modelid', title:t('common.modelid'),initialEditValue:12, hidden:true, export:true}
-    , {field:'company', title:t('common.company'),initialEditValue:current.company,  export:true} 
+    , {field:'company', title:t('common.company'),initialEditValue:current.company,  minWidth:5, editable:'never', export:true }
     ]
     const columnsX = columns(bankData, t);
     const modules= [

@@ -22,9 +22,10 @@ const FinancialsForm = () => {
   const datax_ =  profile?.modules?profile.modules:[];
   const module_= menu.get(selected);
   console.log('module_', module_);
-  const modules_=(module_!==undefined)&&(datax_.includes(module_.id)|| (module_.id==="0"))?module_:LoginMenu(t)
+  const modules_=module_&&(datax_.includes(module_.id)|| (module_.id==="0"))?module_:LoginMenu(t);
+  console.log('module_', module_);
   if(modules_.id==='0') history.push("/login");
-  const module_x=modules_;
+  const module_x= modules_;
   const modifyUrl=SERVER_URL.concat(selected)
 
   const url=SERVER_URL.concat(module_x.ctx);
