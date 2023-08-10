@@ -1,6 +1,9 @@
 import axios from "axios";
 import routes from '../../../routes';
+import {MASTERFILE} from "./Menu";
+import iwsStore from './Store';
 
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const Edit = (url, token, record, data,  setCurrent) => {
    var result;
      axios.put( url, record, {headers: {'Authorization':`Bearer ${token}`}})
@@ -41,21 +44,43 @@ const Edit = (url, token, record, data,  setCurrent) => {
       console.log('error', error);
     });
   };
- const Login = (history, url, data, setProfile, MENU, t, setMenu, setRoutes) => {
+
+ const Login = (history, url, data, setProfile, MENU, t, setMenu, setModule, setRoutes) => {
         axios.post( url, data)
             .then(response => {
               const hash = response.data.hash
               console.log("response.data:", response.data);
               console.log("response.data.hash:", hash);
-
                 const authorization = hash//response.headers
                 const profile = {token:response.data.hash, company:response.data.company
                     , modules:response.data.menu};
                 setProfile(profile);
-                setMenu(MENU(t));
-                setRoutes(routes(t));
+              const token = response.data.hash
+              const moduleURL=SERVER_URL.concat(MASTERFILE.moduleURL);
+              console.log("modules>>>>>>>>>>>>", module);
+              axios.get(moduleURL, {headers: {'Authorization': `Bearer ${token}`}})
+                .then(response => {
+                  const module = response.data
+                  iwsStore.put(400, module);
+                  const menu = module.map(m=>m.path).filter(p=> p!== '/');
+                  const menu_t  = MENU(t);
+                  const routes_t  = routes(t);
+                  const newMenu = new Map([...menu_t].filter(([k, _]) => menu.includes(k)));
+                  const newRoutes = routes_t.filter(r => menu.includes(r.path) )
+                  console.log("newMenu>>>>>>>>>>>>", newMenu);
+                  console.log("newRoutes>>>>>>>>>>>>", newRoutes);
+                  setModule(module);
+                  setMenu(newMenu);
+                  setRoutes(routes(t));
+                }).catch(function (error) {
+                console.log('Error', error);
+                if (JSON.stringify(error).includes("401")) {
+                  console.log('error', "Session expired!!!!! Login again!!!!");
+                  history.push("/login");
+                }
+                console.log('error', error);
+              });
                 history.push("/dashboard");
-              console.log("MENU(t):", MENU(t));
               console.log("authorization:", authorization);
               console.log("profile:", profile);
               console.log("response:", response);
@@ -93,6 +118,7 @@ const Get1 = (url, token,  store, key_) => {
   axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
     .then(response => {
       const resp = response.data
+      console.log('respRRRRRR', resp);
       store.put(key_, resp);
       result={...resp};
     }).catch(function (error) {

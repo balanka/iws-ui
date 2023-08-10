@@ -1,9 +1,8 @@
 import React, {useState} from 'react'
-//import Select from "@material-ui/core/Select";
-import Select from "react-select";
+import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "react-fast-grid";
-import {IoMdMenu} from "react-icons/io/index";
+import {IoMdMenu} from "react-icons/all";
 import {CBadge, CButton, CCol, CCollapse, CFormGroup, CInput, CLabel, CSelect, CTextarea} from "@coreui/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {formEnum} from "../../../utils/FORMS";
@@ -1135,8 +1134,8 @@ export const FinancialsMainForm =(props) => {
                 <CCol sm="2">
                     <CSelect  disabled={current.posted} className ="input-sm" type="select" name="account" id="account-id"
                               value={current.account} onChange={(event)  =>
-                        setCurrent({ ...current, account: event.target.value})} style={{ height:30}}>
-                        {accData.sort(sortById).map(item => mappingSelect(item))};
+                        setCurrent({ ...current, account: event.target.value})} style={{ height:30}} >
+                        {accData.sort(sortById).map(item => mappingSelect(item))}
                     </CSelect>
                 </CCol>
                 <CCol sm="3">

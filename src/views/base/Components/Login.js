@@ -15,7 +15,7 @@ import {
   CRow, CSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {useGlobalState, useStore} from './Menu';
+import {useStore} from './Menu';
 import { Login as Login_} from './CrudController';
 import { useTranslation} from 'react-i18next';
 import {LOGIN_MENU, MENU} from "./Menu";
@@ -30,11 +30,7 @@ const Login = () => {
   let history = useHistory()
   const { t, i18n } = useTranslation();
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-  //const [, setProfile] = useGlobalState('profile');
-  const { setProfile } = useStore()
-  const [, setMenu] = useGlobalState('menu');
-  const [, setRoutes] = useGlobalState('routes');
-
+  const { setProfile, setMenu, setModule, setRoutes, } = useStore();
   const module= LOGIN_MENU(t)[0];
   const url=SERVER_URL.concat(module.ctx)
   const current_ =module.state
@@ -49,7 +45,7 @@ const Login = () => {
   const submit = event => {
     event.preventDefault();
     const data={"userName": current.username, "password": current.password, "company":current.company, "language":current.language}
-    Login_(history, url, data, setProfile, MENU, t, setMenu, setRoutes);
+    Login_(history, url, data, setProfile, MENU, t, setMenu, setModule, setRoutes);
   }
 
   const handleEvent=(event, value ) =>{
@@ -58,7 +54,6 @@ const Login = () => {
     setCurrent({...value})
   }
 
-  //const onBlur =(value) => {console.log("focus lost", value) }
   return (<>
       <div className="c-app c-default-layout flex-row align-items-center">
         <CContainer>
