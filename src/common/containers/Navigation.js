@@ -12,7 +12,7 @@ const Navigation = (t) => {
 
   useLayoutEffect(() => {
     iwsStore.subscribe(setModule);
-  }, [module]);
+  }, [ setModule]);
 
   const buildMenu = (name_, path, children) => {
     let obj;

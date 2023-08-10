@@ -48,11 +48,22 @@ const MasterfileForm = () => {
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
   const data = iwsState.get(current.modelid)
 
+  const submitAdd = event => {
+    event.preventDefault();
+    Add(url, token, {...current}, data, setCurrent);
+  };
+  const submitEdit = event => {
+    event.preventDefault();
+    if(current.editing) {
+      delete current.editing
+      Edit(modifyUrl, token, {...current}, data, setCurrent);
+    }else submitAdd(event)
+  };
   const handleKeyPress = useCallback((event) => {
     if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
       submitEdit(event);
     }
-  }, );
+  } );
   useLayoutEffect(() => {
       iwsStore.subscribe(setIwsState);
       // attach the event listener
@@ -75,13 +86,7 @@ const MasterfileForm = () => {
     setCurrent(row);
   }
 
-  const submitEdit = event => {
-    event.preventDefault();
-    if(current.editing) {
-      delete current.editing
-      Edit(modifyUrl, token, {...current}, data, setCurrent);
-    }else submitAdd(event)
-  };
+
 
   const accd=iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[];
   const bankd=iwsState.get(bank_modelid)?iwsState.get(bank_modelid):[];
@@ -97,11 +102,6 @@ const MasterfileForm = () => {
     url&&Get1(url, token, iwsStore, current_.modelid);
     console.log('iwsState', iwsState);
   }
-
-  const submitAdd = event => {
-    event.preventDefault();
-    Add(url, token, {...current}, data, setCurrent);
-  };
 
   function buildForm(current){
     return <>

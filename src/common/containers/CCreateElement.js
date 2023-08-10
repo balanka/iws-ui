@@ -16,7 +16,7 @@ const CCreateElement = ({ items, components = {}, fn}) => {
 
     const generatedItems = useMemo(() => {
         return items && items.map((item, i) => renderItem(item, i));
-    }, [items])
+    }, [items, renderItem])
 
     return (
         <React.Fragment>

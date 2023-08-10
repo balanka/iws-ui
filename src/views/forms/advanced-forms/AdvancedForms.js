@@ -21,16 +21,8 @@ import 'react-dates/initialize'
 import { DateRangePicker } from 'react-dates'
 import 'react-dates/lib/css/_datepicker.css'
 
-// React select
-import states from './states'
-//import Select from 'react-select'
-
 const AdvancedForms = () => {
-  const [value, setValue] = React.useState([
-    { value: 'TX', label: 'Texas' },
-    { value: 'UT', label: 'Utah' }
-  ])
-  
+
   const [date, setDate] = React.useState({startDate: null, endDate: null})
   const [focused, setFocused] = React.useState()
 

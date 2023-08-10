@@ -129,9 +129,9 @@ dateFormat.i18n = {
 };
 
 // For convenience...
-Date.prototype.format = function (mask, utc) {
-  return dateFormat(this, mask, utc);
-};
+// Date.prototype.format = function (mask, utc) {
+//   return dateFormat(this, mask, utc);
+// };
  const capitalize = (s) => {
   if (typeof s !== 'string') return ''
   return s.charAt(0).toUpperCase() + s.slice(1)
