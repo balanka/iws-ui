@@ -3,12 +3,16 @@ import {useLayoutEffect} from "react";
 import iwsStore from "../../views/base/Components/Store";
 
 const Navigation = (t) => {
-  const {module, setModule} = useStore();
+  const {profile, module, setModule} = useStore();
+  console.log('profile<<<<<<', profile);
+  //const { modules  } = profile;
+  const userMenu = profile.modules?profile.modules:[1010, 11111];
   const DEFAULT =[
     {id: 11111, name: t('menu.login'), path: '/login', parent: -1},
     {id: 1010, name: 'Dashboard', path: '/dashboard', parent: -1},
   ]
   console.log('module<<<<<<', module);
+  console.log('userMenu<<<<<<', userMenu);
 
   useLayoutEffect(() => {
     iwsStore.subscribe(setModule);
@@ -27,14 +31,17 @@ const Navigation = (t) => {
     return obj;
 
   }
-
-  const modules = module ? iwsStore.get(400) : [];
-  const allItems = (Array.isArray(modules) && modules.length > 0) ? modules :DEFAULT;
+  //const modules = [...(module ? iwsStore.get(400) : []), ...DEFAULT];
+  const modules_ = module ? iwsStore.get(400) : [];
+  const allItems = ((Array.isArray(modules_) && modules_.length > 0) ? modules_ :DEFAULT)
+    //.filter(e=>userMenu.includes(e.id)|| e.parent ===-1);
 
   console.log("allItems", allItems);
   const allMenuItems = allItems.map(item =>
     Array.isArray(allItems) && allItems.length > 0 ?
-      {...item, children: [...allItems.filter(e => e.parent === item.id)]} : {...item});
+      {...item, children: [...allItems.filter(e => (e.parent === item.id)&&(userMenu.includes(parseInt(e.id))))]} : {...item});
+
+  console.log("allMenuItems", allMenuItems);
 
   const allMenu = allMenuItems.filter(e => (Array.isArray(e.children) && e.children.length > 0) || e.parent === -1)
     .map(e => buildMenu(t(e.name), e.path, e.children));

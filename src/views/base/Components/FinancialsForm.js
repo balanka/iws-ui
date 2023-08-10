@@ -7,25 +7,28 @@ import {Add, Edit, EditRow, Get1, Get2, Post} from './CrudController';
 import {columnsF, Linescolumns, Options, OptionsM} from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
-import {ACCOUNT, COSTCENTER, LoginMenu, MASTERFILE,  useStore} from "./Menu";
+import {ACCOUNT, COSTCENTER,  MASTERFILE,  useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import iwsStore from './Store';
 
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-  const { profile, selected, menu } = useStore();
+  const { profile, selected, menu, module } = useStore();
   const { token  } = profile
   let history = useHistory();
   const { t,  } = useTranslation();
   console.log('menu', menu);
-  const datax_ =  profile?.modules?profile.modules:[];
+  console.log('selected', selected);
+  const userMenu =  profile?.modules?profile.modules:[];
   const module_= menu.get(selected);
   console.log('module_', module_);
-  const modules_=module_&&(datax_.includes(module_.id)|| (module_.id==="0"))?module_:LoginMenu(t);
-  console.log('module_', module_);
-  if(modules_.id==='0') history.push("/login");
-  const module_x= modules_;
+  console.log('userMenu', userMenu);
+  //const modules_= module_&&(userMenu.includes(module_.id)|| (module_.id==="0"))?module_:LoginMenu(t);
+  //console.log('modules_', modules_);
+  if(module_.id==='11111') history.push("/login");
+  //const module_x= modules_;
+  const module_x= module_;
   const modifyUrl=SERVER_URL.concat(selected)
 
   const url=SERVER_URL.concat(module_x.ctx);
@@ -107,7 +110,7 @@ const FinancialsForm = () => {
   const reload = ()=> {
     iwsStore.deleteKey(current.modelid );
     const url_=url.concat('/').concat(current.modelid);
-    url_&&Get1(url_, token,  iwsStore, parseInt(current.modelid));
+    url_&&Get1(url_, token,  parseInt(current.modelid));
   }
   const toggleToolbar = ()=> setToolbar(!toolbar );
   const toggle = ()=> setState({...state, collapse:!state.collapse });
@@ -135,9 +138,9 @@ const FinancialsForm = () => {
   const submitQuery =(event, modelid)=> {
     event.preventDefault();
     const url_=url.concat('/').concat(modelid);
-    accUrl&&Get1(accUrl, token,  iwsStore, acc_modelid);
-    ccUrl&&Get1(ccUrl, token, iwsStore, cc_modelid);
-    url_&&Get1(url_, token,  iwsStore, parseInt(modelid));
+    accUrl&&Get1(accUrl, token, acc_modelid);
+    ccUrl&&Get1(ccUrl, token, cc_modelid);
+    url_&&Get1(url_, token,  parseInt(modelid));
   }
   const handleModuleChange = event => {
     event.preventDefault();
@@ -157,7 +160,7 @@ const FinancialsForm = () => {
   const submitPost = event => {
     event.preventDefault();
     const url_ = modifyUrl.concat("/post/").concat(current.id).concat("/").concat(current.company);
-    Get2(url_, token, iwsStore, setCurrent);
+    Get2(url_, token, setCurrent);
   };
 
   const submitCopy = event => {

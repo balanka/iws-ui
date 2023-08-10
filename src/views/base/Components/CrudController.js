@@ -5,20 +5,20 @@ import iwsStore from './Store';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const Edit = (url, token, record, data,  setCurrent) => {
-   var result;
-     axios.put( url, record, {headers: {'Authorization':`Bearer ${token}`}})
-      .then(response => {
-        const resp = response.data
-        const index = data.findIndex(obj => {
-          return obj?(obj.id === record.id):false
-        });
-        data[index]= resp;
-        result=resp;
-        setCurrent(resp);
-        console.log('resultX', result);
-      }).catch(function (error) {
-         console.log('error', error);
-       });
+  var result;
+  axios.put(url, record, {headers: {'Authorization': `Bearer ${token}`}})
+    .then(response => {
+      const resp = response.data
+      const index = data.findIndex(obj => {
+        return obj ? (obj.id === record.id) : false
+      });
+      data[index] = resp;
+      result = resp;
+      setCurrent(resp);
+      console.log('resultX', result);
+    }).catch(function (error) {
+    console.log('error', error);
+  });
   console.log('resultX', result);
   return result;
   };
@@ -27,9 +27,9 @@ const Edit = (url, token, record, data,  setCurrent) => {
    axios.post(url, record, {headers: {'Authorization': `Bearer ${token}`}})
      .then(response => {
        const resp = response.data
-       const index =  data.length + 1;
+       const index = data.length + 1;
        data[index] = resp;
-       result=resp;
+       result = resp;
        setCurrent(resp);
      }).catch(function (error) {
      console.log('error', error);
@@ -37,90 +37,103 @@ const Edit = (url, token, record, data,  setCurrent) => {
    return result;
   };
  const Post = (url, profile, record) => {
-     axios.patch(url, record, {headers: {'Authorization':`Bearer ${profile.token}`}})
-      .then(response => {
-        console.log('responsex', response.data);
-      }).catch(function (error) {
-      console.log('error', error);
-    });
+   axios.patch(url, record, {headers: {'Authorization': `Bearer ${profile.token}`}})
+     .then(response => {
+       console.log('responsex', response.data);
+     }).catch(function (error) {
+     console.log('error', error);
+   });
   };
 
  const Login = (history, url, data, setProfile, MENU, t, setMenu, setModule, setRoutes) => {
-        axios.post( url, data)
-            .then(response => {
-              const hash = response.data.hash
-              console.log("response.data:", response.data);
-              console.log("response.data.hash:", hash);
-                const authorization = hash//response.headers
-                const profile = {token:response.data.hash, company:response.data.company
-                    , modules:response.data.menu};
-                setProfile(profile);
-              const token = response.data.hash
-              const moduleURL=SERVER_URL.concat(MASTERFILE.moduleURL);
-              console.log("modules>>>>>>>>>>>>", module);
-              axios.get(moduleURL, {headers: {'Authorization': `Bearer ${token}`}})
-                .then(response => {
-                  const module = response.data
-                  iwsStore.put(400, module);
-                  const menu = module.map(m=>m.path).filter(p=> p!== '/');
-                  const menu_t  = MENU(t);
-                  const routes_t  = routes(t);
-                  const newMenu = new Map([...menu_t].filter(([k, _]) => menu.includes(k)));
-                  const newRoutes = routes_t.filter(r => menu.includes(r.path) )
-                  console.log("newMenu>>>>>>>>>>>>", newMenu);
-                  console.log("newRoutes>>>>>>>>>>>>", newRoutes);
-                  setModule(module);
-                  setMenu(newMenu);
-                  setRoutes(routes(t));
-                }).catch(function (error) {
-                console.log('Error', error);
-                if (JSON.stringify(error).includes("401")) {
-                  console.log('error', "Session expired!!!!! Login again!!!!");
-                  history.push("/login");
-                }
-                console.log('error', error);
-              });
-                history.push("/dashboard");
-              console.log("authorization:", authorization);
-              console.log("profile:", profile);
-              console.log("response:", response);
-            }).catch(function (error) {
-            console.log('error', error);
-           // history.push(routes.user.login)
-        });
+   axios.post(url, data)
+     .then(response => {
+       const hash = response.data.hash
+       console.log("response.data:", response.data);
+       console.log("response.data.hash:", hash);
+       const userMenu = response.data.menu.toString().split(",").map(e=>parseInt(e));
+       const authorization = hash//response.headers
+       const profile = {
+         token: response.data.hash, company: response.data.company
+         , modules: userMenu
+       };
+       setProfile(profile);
+       const token = response.data.hash
+       const moduleURL = SERVER_URL.concat(MASTERFILE.moduleURL);
+       //const userMenu = response.data.menu.toString().split(",").map(e=>e.trim());
+
+       console.log("modules>>>>>>>>>>>>", module);
+       console.log("response.data.menu isArray >>>>>>>>>>>>", Array.isArray(userMenu));
+       console.log("userMenu>>>>>>>>>>>>", userMenu);
+
+       axios.get(moduleURL, {headers: {'Authorization': `Bearer ${token}`}})
+         .then(response => {
+           const module = response.data
+           iwsStore.put(400, module);
+           console.log(" module>>>>>>>>>>>>", module);
+           const menu = module.filter(e=>userMenu.includes(parseInt(e.id))).map(m => m.path).filter(p => p !== '/');
+           console.log(" filtered menu>>>>>>>>>>>>", menu);
+           const menu_t = MENU(t);
+           const routes_t = routes(t);
+           const newMenu = new Map([...menu_t].filter(([k, _]) => menu.includes(k)));
+           const newRoutes = routes_t.filter(r => menu.includes(r.path))
+           console.log("newMenu>>>>>>>>>>>>", newMenu);
+           console.log("newRoutes>>>>>>>>>>>>", newRoutes);
+           setModule(module);
+           setMenu(newMenu);
+           setRoutes(routes(t));
+         }).catch(function (error) {
+         console.log('Error', error);
+         if (JSON.stringify(error).includes("401")) {
+           console.log('error', "Session expired!!!!! Login again!!!!");
+           history.push("/login");
+         }
+         console.log('error', error);
+       });
+       history.push("/dashboard");
+       console.log("authorization:", authorization);
+       console.log("profile:", profile);
+       console.log("response:", response);
+     }).catch(function (error) {
+     console.log('error', error);
+     // history.push(routes.user.login)
+   });
     }
  const Get = (url, token, history, func) => {
-      let result;
-          axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
-            .then(response => {
-                const resp = response.data
-              console.log('responseRRRRRR', resp);
-               func?func(resp):void(false);
-                result={...resp};
-                console.log('resp', resp);
+   let result;
+   axios.get(url, {headers: {'Authorization': `Bearer ${token}`}})
+     .then(response => {
+       const resp = response.data
+       console.log('responseRRRRRR', resp);
+       func ? func(resp) : void (false);
+       result = {...resp};
+       console.log('resp', resp);
 
-            }).catch(function (error) {
-            console.log('Error', error);
-              if(JSON.stringify(error).includes("401")) {
-                  console.log('error', "Session expired!!!!! Login again!!!!");
-                  history.push("/login");
-              }
+     }).catch(function (error) {
+     console.log('Error', error);
+     if (JSON.stringify(error).includes("401")) {
+       console.log('error', "Session expired!!!!! Login again!!!!");
+       history.push("/login");
+     }
 
-                console.log('error', error);
-            })
+     console.log('error', error);
+   })
    console.log('resultRRRRRR', result);
-            return result;
+   return result;
         }
 
-const Get1 = (url, token,  store, key_) => {
+const Get1 = (url, token,  key_) => {
   let result;
   console.log('url', url);
-  axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
+  console.log('key_', key_);
+  axios.get(url, {headers: {'Authorization': `Bearer ${token}`}})
     .then(response => {
       const resp = response.data
+      console.log('key_', key_);
       console.log('respRRRRRR', resp);
-      store.put(key_, resp);
-      result={...resp};
+      iwsStore.put(key_, resp);
+      console.log('iwsStore.initialState', iwsStore.initialState);
+      result = {...resp};
     }).catch(function (error) {
     console.log('error', error);
   })
@@ -128,19 +141,19 @@ const Get1 = (url, token,  store, key_) => {
   return result;
 }
 
-const Get2 =  (url, token, store, setCurrent) => {
+const Get2 =  (url, token, setCurrent) => {
   let result;
   console.log('url', url);
-    axios.get( url, {headers: {'Authorization':`Bearer ${token}`}})
+  axios.get(url, {headers: {'Authorization': `Bearer ${token}`}})
     .then(response => {
       const resp = response.data
       console.log('responseRRRRRR2', resp);
-      result=resp;
+      result = resp;
       console.log('result', result);
-      store.update(resp.modelid, resp.id, {...resp} );
+      iwsStore.update(resp.modelid, resp.id, {...resp});
       console.log('result', result);
       setCurrent(resp);
-    }).catch( function (error) {
+    }).catch(function (error) {
     console.log('error', error);
   });
   console.log('result', result);
@@ -148,12 +161,9 @@ const Get2 =  (url, token, store, setCurrent) => {
 }
 
  const EditRow = (edited, isNew, setCurrent)  => {
-    //console.log('isNew', isNew );
-    console.log('edited', edited );
-    const flag = edited.id===-1 ||!isNew;
-    const row = {...edited, editing:flag};
-    console.log('row1_', row );
-    setCurrent(row);
+   const flag = edited.id === -1 || !isNew;
+   const row = {...edited, editing: flag};
+   setCurrent(row);
 };
 
 // login set localStorage

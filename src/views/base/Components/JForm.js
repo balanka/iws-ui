@@ -1,4 +1,4 @@
-import React, {useState, memo, useEffect, useRef} from 'react'
+import React, {useState, memo, useEffect, useRef, useLayoutEffect} from 'react'
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
 import {FormFactory,JournalFormHead} from './FormsProps'
@@ -118,54 +118,64 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
 }
 
 const JForm = () => {
-    const { t,  } = useTranslation();
+    const {t,} = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-    const { profile,  selected} = useStore()
-    const { token  } = profile
-    console.log('selected',selected)
-    const { menu } = useStore();
-    const datax =  profile?.modules?profile.modules:[];
+    const {profile, selected, menu, routes, module} = useStore()
+
+    const {token} = profile
+    console.log('selected', selected)
+    console.log('menu', menu);
+
+    //const datax =  profile?.modules?profile.modules:[];
     let history = useHistory()
-    const module_= menu.get(selected);
-    const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
-    if(modules_.id==='0') history.push("/login");
-    const module = modules_
-    const url=SERVER_URL.concat(module.ctx)
-    const accUrl=SERVER_URL.concat(module.ctx1)
-    const initAcc =module.state1
+    const module_ = menu.get(selected);
+
+    console.log('module_', module_);
+    //const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
+    if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') {
+        history.push("/login");
+        //return null;
+    }
+    //const module = modules_
+    const url = SERVER_URL.concat(module_.ctx)
+    const accUrl = SERVER_URL.concat(module_.ctx1)
+    const initAcc = module_.state1
     const initialState = module_.state
-    const current_= module_.state[0].query;//initialState[0].query;
-    const title =module.title
-    const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
-    const [isDebit, setIsDebit ] = useState(true);
-    const modelid = module.modelid;
-    const [current,setCurrent] = useState(current_);
+    const current_ = module_.state[0].query;//initialState[0].query;
+    const title = module_.title
+    const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300});
+    const [isDebit, setIsDebit] = useState(true);
+    const modelid = module_.modelid;
+    console.log('modelid', modelid);
+    const [current, setCurrent] = useState(current_);
     const [data, setData] = useState(initialState);
     const [setAccData] = useState(initAcc);
     const [toolbar, setToolbar] = useState(true);
     const [iwsState, setIwsState] = useState(iwsStore.initialState);
-    const columnsX= modelid===formEnum.PACB?columnsPACB(t):ColumnJournal(t);
-    const toggleToolbar= ()=> setToolbar(!toolbar );
-    const toggle= ()=> setState({...state, collapse:!state.collapse });
-    const acc_modelid=parseInt(ACCOUNT(t).id);
-    const accData_ = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
+    const columnsX = modelid === formEnum.PACB ? columnsPACB(t) : ColumnJournal(t);
+    const toggleToolbar = () => setToolbar(!toolbar);
+    const toggle = () => setState({...state, collapse: !state.collapse});
+    const acc_modelid = parseInt(ACCOUNT(t).id);
+    console.log('acc_modelid', acc_modelid);
+    const accData_ = iwsState.get(acc_modelid) ? iwsState.get(acc_modelid) : [...initAcc];
+    console.log('accData_', accData_);
     let init = useRef(false)
-    useEffect(() => {
-        if(!init.current) {
+    useLayoutEffect(() => {
+        if (!init.current) {
             iwsStore.subscribe(setIwsState);
             init.current = true
         }
         // load account data as they are needed
-        accUrl&&Get1(accUrl, token,  iwsStore, acc_modelid);
-    },[init, accUrl, token, acc_modelid] );
+        accUrl && Get1(accUrl, token, acc_modelid);
+    }, [init, accUrl, token, acc_modelid]);
 
-    const getUrl=() =>url.concat('/')
-        .concat(current.account).concat('/')
-        .concat(current.fromPeriod).concat('/')
-        .concat(current.toPeriod);
+    const getUrl = () => url.concat('/')
+      .concat(current.account).concat('/')
+      .concat(current.fromPeriod).concat('/')
+      .concat(current.toPeriod);
 
     return Internal(isDebit, t, modelid, accData_, accUrl, token, history, setAccData, initAcc, current, getUrl, setData
-        , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX);
+      , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX);
 
 };
 export default memo(JForm);

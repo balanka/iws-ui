@@ -67,15 +67,17 @@ const BankStatementForm = () => {
     const { profile,  } = useStore()
     const { token  } = profile
     const {  selected, menu } = useStore();
-    const datax =  profile?.modules?profile.modules:[];
-    let history = useHistory()
+    //const datax =  profile?.modules?profile.modules:[];
+    let history = useHistory();
     const module_= menu.get(selected);
     const loginMenu = menu&&menu.length>0?menu.get('/login'):LOGIN_MENU(t)[0]
     const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
     const [rows, setRows] =useState([])
-    const modules_= (module_)&&datax.includes(module_.id)?module_:loginMenu
-    if(modules_.id==='0') history.push("/login");
-    const module = modules_
+    //const modules_= (module_)&&datax.includes(module_.id)?module_:loginMenu
+    if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') {
+        history.push("/login");
+    }
+    const module = module_
     const url=SERVER_URL.concat(module.ctx)
     const initialState = module.state
     const current_= initialState[0]
