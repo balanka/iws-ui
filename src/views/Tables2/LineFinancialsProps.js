@@ -1,24 +1,21 @@
 import React from 'react'
 import {rowStyle, theme} from "../base/Tree/BasicTreeTableProps";
+import {Autocomplete} from "../base/Components/Autocomplete";
+import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import {formEnum} from "../../utils/FORMS";
 import {dateFormat, formatterDE} from "../../utils/utils";
 
-export  const ACCOUNT= (data, tableData) => {
-    return (
-      <Autocomplete
-      value={tableData.value} //Must be value instead
-      onChange={(event, newValue) => {
-          const v = newValue.toString().split(":")[0]
-          tableData.onChange(v); // Can just be the value
-      }}
-      disableClearable={true}
-      autoComplete={true}
-      options={data.map(d=>d.id.concat (': ').concat (d.name))} // Remove the getOptionsLabel
-      renderInput={params => <TextField {...params} />}
-    />)
+const mapping = (acc) =>
+  <MenuItem key={acc.id} value={acc.id}>
+      {acc.id.concat( " ").concat(acc.name)}
+  </MenuItem>
+
+export  const ACCOUNT=(data, value, onRowDataChange, rowData, fieldName) => {
+    return (<Select value={value} onChange={(event) =>
+      onRowDataChange({...rowData, account: event.target.value})}>
+        {data.map(mapping)} id={"cb".concat(fieldName)}
+    </Select>)
 }
 export const columnsPACB = (t) => [
       {field:'period', title:t('pac.period'),  type:"numeric", export:true }
@@ -39,12 +36,10 @@ export const columnsPACB = (t) => [
 export const columnsF =(data, line, current, t) => [
      {field:'id', title:t('financials.id'), initialEditValue:line.id, align:"right", width:40, minWidth:20,  maxWidth:50,export:true}
     , {field:'oid', title:t('financials.oid'),initialEditValue:current?current.oid:-1, align:"right", width:40, minWidth:20,  maxWidth:50,export:true}
-    , {field:'account', title:t('financials.account'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            ACCOUNT ( data, value, onRowDataChange, rowData, "account" ),  initialEditValue:'', width:20, minWidth:30,  maxWidth:80
-      , align:"right", export:true}
-    , {field:'costcenter', title:t('financials.costcenter'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-            ACCOUNT ( data, value, onRowDataChange, rowData,"costcenter" ),  initialEditValue:'', width:30, minWidth:30,  maxWidth:80
-      , align:"right", export:true}
+    , {field:'account', title:t('financials.account'), hidden:false, editComponent:tableData =>
+          Autocomplete ( data, tableData ),  initialEditValue:'', width:20, minWidth:30,  maxWidth:80, align:"right", export:true}
+    , {field:'costcenter', title:t('financials.costcenter'), hidden:false, editComponent:tableData=>
+          Autocomplete ( data, tableData ),  initialEditValue:'', width:30, minWidth:30,  maxWidth:80, align:"right", export:true}
     , {field:'enterdate', title:t('financials.enterdate'), type:"date", align:"right", minWidth:20, width:40, maxWidth:80,
         initialEditValue:line.enterdate, dateSetting: { locale:"de" } , export:true}
     , {field:'postingdate', title:t('financials.postingdate'), type:"date", align:"right", minWidth:20, width:40, maxWidth:80,
@@ -63,9 +58,8 @@ export const columnsF =(data, line, current, t) => [
 ]
 export const Linescolumns =(data, line, current, models,  model, t) =>  {
     const model_ = models.find(obj => obj.id === model);
-    console.log('model', model_);
-    let  debitedAccount = '';//model_?.isDebit?model_.account:'';
-    let  creditedAccount = ''//model_?.isDebit?'':model_.account;
+    let  debitedAccount = '';
+    let  creditedAccount = '';
     if(model_?.isDebit){
         debitedAccount =  model_?.account;
     }else{
@@ -75,10 +69,10 @@ export const Linescolumns =(data, line, current, models,  model, t) =>  {
     return [
       {field:'id', title:t('financials.line.id'), type:'numeric', hidden:true,  initialEditValue:line.id, editable:'never'}
     , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current?current.id:0,  editable:'never'}
-    , {field:'account', title:t('financials.line.account'), type:'string', editComponent: tableData => ACCOUNT ( data, tableData)
+    , {field:'account', title:t('financials.line.account'), type:'string', editComponent: tableData => Autocomplete ( data, tableData)
     , initialEditValue:debitedAccount, align:"left",  minWidth:100,  maxWidth:450}
     , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true,  width:10, minWidth:10,  maxWidth:20,}
-    , {field:'oaccount', title:t('financials.line.oaccount'), type:'string', editComponent:tableData => ACCOUNT ( data, tableData),
+    , {field:'oaccount', title:t('financials.line.oaccount'), type:'string', editComponent:tableData => Autocomplete ( data, tableData),
     initialEditValue:creditedAccount,  width:100, minWidth:100,  maxWidth:450, align:"right"}
     , {field:'duedate', title:t('financials.line.duedate'), type:"date", align:"right",
       initialEditValue:line.duedate, dateSetting: { locale:"de" },  width:40, minWidth:50,  maxWidth:80 }
