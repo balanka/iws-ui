@@ -11,7 +11,7 @@ import {useHistory} from "react-router-dom";
 import iwsStore from './Store';
 const MasterfileForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-  const { profile, menu, selected  } = useStore()
+  const { profile, menu, selected,   } = useStore()
   const { token  } = profile
   console.log('selected', selected);
   console.log('profile', profile);
@@ -24,19 +24,17 @@ const MasterfileForm = () => {
   console.log('module_', module_);
   const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
   if(modules_.id==='0') history.push("/login");
-  const module=modules_;
-  console.log('module', module);
-  const url=SERVER_URL.concat(module.ctx);
+  const url=SERVER_URL.concat(module_.ctx);
   const accUrl=SERVER_URL.concat(MASTERFILE.accURL);
   const vatUrl=SERVER_URL.concat(MASTERFILE.vatURL);
   const bankUrl=SERVER_URL.concat(MASTERFILE.bankURL);
   const modifyUrl=SERVER_URL.concat(selected);
-  const initialState = module.state
+  const initialState = module_.state
   const current_= initialState[0];
-  const title =module.title
+  const title =module_.title
   const { t,  } = useTranslation();
   const [, setRows] = useState([])
-  const modelid_ = module.modelid;
+  const modelid_ = module_.modelid;
   console.log(`modelid_: ${modelid_}`);
   const acc_modelid= parseInt(ACCOUNT(t).id);
   const bank_modelid= parseInt(BANK(t).id);
@@ -95,11 +93,10 @@ const MasterfileForm = () => {
   const load = event => submitQuery(event);
   const submitQuery =(event)=>{
     event.preventDefault();
-    accUrl&& (current.modelid !== acc_modelid) &&Get1(accUrl, token, iwsStore, acc_modelid);
-    vatUrl&& (current.modelid !== vat_modelid) &&Get1(vatUrl, token, iwsStore, vat_modelid);
-    bankUrl&&(current.modelid !== bank_modelid) &&Get1(bankUrl, token, iwsStore, bank_modelid);
-    //bankUrl&&(current.modelid !== bank_modelid) && bankd.isEmpty &&Get1(bankUrl, token, iwsStore, bank_modelid);
-    url&&Get1(url, token, iwsStore, current_.modelid);
+    accUrl&& (current.modelid !== acc_modelid) &&Get1(accUrl, token, acc_modelid);
+    vatUrl&& (current.modelid !== vat_modelid) &&Get1(vatUrl, token, vat_modelid);
+    bankUrl&&(current.modelid !== bank_modelid) &&Get1(bankUrl, token, bank_modelid);
+    url&&Get1(url, token,  current_.modelid);
     console.log('iwsState', iwsState);
   }
 

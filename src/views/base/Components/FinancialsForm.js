@@ -14,7 +14,7 @@ import iwsStore from './Store';
 
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-  const { profile, selected, menu, module } = useStore();
+  const { profile, selected, menu,  } = useStore();
   const { token  } = profile
   let history = useHistory();
   const { t,  } = useTranslation();

@@ -1,4 +1,4 @@
-import React, {useState, memo, useEffect, useRef, useLayoutEffect} from 'react'
+import React, {useState, memo, useRef, useLayoutEffect} from 'react'
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
 import {FormFactory,JournalFormHead} from './FormsProps'
@@ -120,28 +120,20 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
 const JForm = () => {
     const {t,} = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-    const {profile, selected, menu, routes, module} = useStore()
-
+    const {profile, selected, menu,  } = useStore()
     const {token} = profile
-    console.log('selected', selected)
-    console.log('menu', menu);
-
-    //const datax =  profile?.modules?profile.modules:[];
     let history = useHistory()
     const module_ = menu.get(selected);
-
+    console.log('selected', selected)
+    console.log('menu', menu);
     console.log('module_', module_);
-    //const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
-    if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') {
-        history.push("/login");
-        //return null;
-    }
-    //const module = modules_
+
+    if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
     const url = SERVER_URL.concat(module_.ctx)
     const accUrl = SERVER_URL.concat(module_.ctx1)
     const initAcc = module_.state1
     const initialState = module_.state
-    const current_ = module_.state[0].query;//initialState[0].query;
+    const current_ = module_.state[0].query;
     const title = module_.title
     const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300});
     const [isDebit, setIsDebit] = useState(true);

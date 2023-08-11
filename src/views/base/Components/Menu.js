@@ -12,7 +12,7 @@ export const date= new Date().toISOString()
 export const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
 const masterfilesForm = '<MasterfileForm/>'
 export const MASTERFILE ={accURL:'/acc/1000', bankURL:'/bank/1000', ccURL:'/cc/1000', moduleURL:'/module/1000' , vatURL:'/vat/1000', custURL:'/cust/1000', supURL:'/sup/1000', compURL:'/comp/1000'};
-const LOGIN=(t)=> ( {id:"0", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:""
+const LOGIN=(t)=> ( {id:"11111", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:""
     , ctx2:"/", ctx3:'', form:'<Login/>', state:loginInit, state1:'' ,state2:'',  state3:'', columns:[]});
 const SUPPLIER =(t)=>({id:"1", name:"Supplier", title:t('supplier.title'), ctx:"/sup/1000", ctx1:"/acc/1000", ctx2:"/vat/1000",  ctx3:"/bank/1000", get:"md/1"
     , form:masterfilesForm , state:initSup, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc, t)})
@@ -113,7 +113,7 @@ export const MENU = (t)=> new Map([
 ]);
 
 const initialState = {profile:{token:'noTOken', company:'', currency:'', modules:[]}, selected:''
-    , menu:new Map(),history_:'', routes:(t)=>LoginRoute}
+    , userMenu:[], history_:'', routes:(t)=>LoginRoute}
 const LoginMenu = (t) => new Map([['/login', LOGIN(t)]])
 const LoginRoute = [{ path: '/login', name: 'Login', cp:'views/base/Components/Login' }]
 export const  useStore = create((set) => ({

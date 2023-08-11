@@ -579,7 +579,7 @@ export const MasterfilesMainForm =(props) => {
         <CLabel size="sm" htmlFor="input-small">{t('common.enterdate')}</CLabel>
     </CCol>
     <CCol sm="2">
-        <CInput  readOnly bssize="sm" type="text" id="enterdate-id" name="enterdate" className="input-sm"
+        <CInput  disabled={true} bssize="sm" type="text" id="enterdate-id" name="enterdate" className="input-sm"
                  placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
                  style={{'textAlign':'right', padding:2 }}/>
     </CCol>
@@ -596,7 +596,7 @@ export const MasterfilesMainForm =(props) => {
         <CLabel size="sm" htmlFor="input-small">{t('common.changedate')}</CLabel>
     </CCol>
     <CCol sm="2">
-        <CInput bssize="sm" type="text" id="changedate-id" name="changedate" className="input-sm"
+        <CInput disabled={true} bssize="sm" type="text" id="changedate-id" name="changedate" className="input-sm"
                 placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
                 style={{'textAlign':'right', padding:2 }} readonly/>
     </CCol>
@@ -615,7 +615,7 @@ export const MasterfilesMainForm =(props) => {
         <CLabel size="sm" htmlFor="input-small">{t("common.postingdate")}</CLabel>
     </CCol>
     <CCol sm="2">
-        <CInput bssize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
+        <CInput disabled={true} bssize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                 placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
                 style={{'textAlign':'right', padding:2 }} readonly />
     </CCol>
@@ -626,7 +626,7 @@ export const MasterfilesMainForm =(props) => {
         <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
     </CCol>
     <CCol sm="2">
-        <CInput  bssize="sm" type="text" id="company-id" name="company" className="input-sm"
+        <CInput disabled={true} bssize="sm" type="text" id="company-id" name="company" className="input-sm"
                  placeholder="company" value={current.company}
                  style={{'textAlign':'right', padding:2 }} readonly/>
     </CCol>
@@ -777,7 +777,7 @@ export const CustomerGeneralForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('common.enterdate')}</CLabel>
                 </CCol>
                 <CCol sm="2">
-                    <CInput  bssize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
+                    <CInput disabled={true} bssize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
                              style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
@@ -795,7 +795,7 @@ export const CustomerGeneralForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('common.changedate')}</CLabel>
                 </CCol>
                 <CCol sm="2">
-                    <CInput  bssize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
+                    <CInput disabled={true} bssize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
                              placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
                              style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
@@ -859,7 +859,7 @@ export const CustomerAccountForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('common.postingdate')}</CLabel>
                 </CCol>
                 <CCol sm="2">
-                    <CInput  bssize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
+                    <CInput disabled={true} bssize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
                              style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
@@ -919,7 +919,7 @@ export const CompanyGeneralForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('common.enterdate')}</CLabel>
                 </CCol>
                 <CCol sm="2">
-                    <CInput  bssize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
+                    <CInput disabled={true} bssize="sm" type="text"  id="enterdate-id" name="enterdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.enterdate, "dd.mm.yyyy")}
                              style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
@@ -937,7 +937,7 @@ export const CompanyGeneralForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('common.changedate')}</CLabel>
                 </CCol>
                 <CCol sm="2">
-                    <CInput  bssize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
+                    <CInput disabled={true} bssize="sm"  type="text"  id="changedate-id" name="changedate" className="input-sm"
                              placeholder="date" value={dateFormat(current.changedate, "dd.mm.yyyy")}
                              style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
@@ -977,7 +977,7 @@ export const CompanyAccountForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('common.postingdate')}</CLabel>
                 </CCol>
                 <CCol sm="2">
-                    <CInput  bssize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
+                    <CInput disabled={true} bssize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
                              style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
@@ -1260,7 +1260,7 @@ export const VatMainForm =(props) => {
             <CLabel size="sm" htmlFor="input-small">{t('vat.enterdate')}</CLabel>
         </CCol>
         <CCol sm="2">
-            <CInput  bssize="sm" type="text"  id="enterdate-id" name="enterdate"
+            <CInput disabled={true} bssize="sm" type="text"  id="enterdate-id" name="enterdate"
                      className="input-sm" placeholder="date"
                      value={dateFormat(current.enterdate, "dd.mm.yyyy")}
                      style={{'textAlign':'right', padding:2 }}/>
@@ -1279,7 +1279,7 @@ export const VatMainForm =(props) => {
         <CLabel size="sm" htmlFor="input-small">{t('vat.changedate')}</CLabel>
     </CCol>
     <CCol sm="2">
-        <CInput  bssize="sm"  type="text"  id="changedate-id" name="changedate"
+        <CInput disabled={true} bssize="sm"  type="text"  id="changedate-id" name="changedate"
                  className="input-sm" placeholder="date"
                  value={dateFormat(current.changedate, "dd.mm.yyyy")}
                  style={{'textAlign':'right', padding:2 }}/>
@@ -1302,7 +1302,7 @@ export const VatMainForm =(props) => {
         <CLabel size="sm" htmlFor="input-small">{t('vat.postingdate')}</CLabel>
     </CCol>
     <CCol sm="2">
-        <CInput  bssize="sm" type="text" id="input-small" name="postingdate" className="input-sm" placeholder="date"
+        <CInput disabled={true} bssize="sm" type="text" id="input-small" name="postingdate" className="input-sm" placeholder="date"
                  value={dateFormat(current.postingdate, "dd.mm.yyyy")}
                  style={{'textAlign':'right', padding:2 }}/>
     </CCol>
@@ -1330,7 +1330,7 @@ export const VatMainForm =(props) => {
         <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
     </CCol>
     <CCol sm="1">
-        <CInput  bssize="sm" type="text" id="company-id" name="company" className="input-sm"
+        <CInput disabled={true} bssize="sm" type="text" id="company-id" name="company" className="input-sm"
                  placeholder="company" value={current.company} />
     </CCol>
 
