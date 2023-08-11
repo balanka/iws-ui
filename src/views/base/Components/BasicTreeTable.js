@@ -93,7 +93,7 @@ const  BasicTreeTable =()=> {
             init.current = true
         }
         // load account data as they are needed
-        accUrl&&Get1(accUrl, token, iwsStore, acc_modelid);
+        accUrl&&Get1(accUrl, token,  acc_modelid);
         setCurrent(current_)
     }, [current_, accUrl, token, acc_modelid]);
     const toggleToolbar= ()=> setToolbar(!toolbar );

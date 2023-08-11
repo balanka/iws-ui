@@ -24,9 +24,8 @@ const FinancialsForm = () => {
   const module_= menu.get(selected);
   console.log('module_', module_);
   console.log('userMenu', userMenu);
-  //const modules_= module_&&(userMenu.includes(module_.id)|| (module_.id==="0"))?module_:LoginMenu(t);
-  //console.log('modules_', modules_);
-  if(module_.id==='11111') history.push("/login");
+
+  if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
   //const module_x= modules_;
   const module_x= module_;
   const modifyUrl=SERVER_URL.concat(selected)

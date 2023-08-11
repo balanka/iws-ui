@@ -121,6 +121,6 @@ const addRow = (newData) =>{
               return <>NODATA</>
              }
     };
-    return (<Tabs tabContent ={getTabContent} modules = {modules} style ={{...styles.outer, padding:0}}/>)
+ return (<Tabs tabContent ={getTabContent} modules = {modules} style ={{...styles.outer, padding:0}}/>)
 };
 export default CustomerTabs

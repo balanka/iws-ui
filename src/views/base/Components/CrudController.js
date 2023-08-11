@@ -24,12 +24,14 @@ const Edit = (url, token, record, data,  setCurrent) => {
   };
  const Add = (url, token, record, data, setCurrent) => {
    let result;
+   console.log('Adding', record);
    axios.post(url, record, {headers: {'Authorization': `Bearer ${token}`}})
      .then(response => {
        const resp = response.data
        const index = data.length + 1;
        data[index] = resp;
        result = resp;
+       console.log('response', resp);
        setCurrent(resp);
      }).catch(function (error) {
      console.log('error', error);

@@ -1,6 +1,4 @@
-import React, {useState} from 'react'
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import React from 'react'
 import Grid from "react-fast-grid";
 import {IoMdMenu} from "react-icons/all";
 import {CBadge, CButton, CCol, CCollapse, CFormGroup, CInput, CLabel, CSelect, CTextarea} from "@coreui/react";
@@ -62,34 +60,18 @@ export function IwsIcon(props) {
 }
 
 
-const mapping = (acc) =>
-    <MenuItem key={acc.id} value={acc.id}>
-        {acc.id.concat( " ").concat(acc.name)}
-    </MenuItem>
-
   const mappingSelect = (item) => <option key={item.id} value={item.id}>
     {item.id.concat( " ").concat (item.name)}</option>
 const mappingSelectName = (item) => <option key={item.id} value={item.id}>
     {item.name.concat( " ").concat (item.id)}</option>;
-export const  filter = (rows, cols, txt,) => rows.filter(col =>
-    cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b));
+// export const  filter = (rows, cols, txt,) => rows.filter(col =>
+//     cols.map(name => `col.${name}`.includes(txt)).reduce((a, b = false) => a || b));
+//
 
-export const SELECT =(props) => {
-    const {options_ } = props;
-    const [selectedOption, setSelectedOption] = useState(null);
 
-    return (<Select defaultValue={selectedOption} onChange={setSelectedOption} options={options_}/>)
-}
-
-export  const BIC=(data, value, onRowDataChange, rowData, fieldName) => {
-    return (<Select value={value} onChange={(event) =>
-        onRowDataChange({...rowData, bic: event.target.value})}>
-        {data.map(mapping)} id={"cb".concat(fieldName)}
-    </Select>)
-}
  
 export const CommonFormHead = (props) => {
-    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, toggle, toggleToolbar} = props
+    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, reload,  toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -99,6 +81,11 @@ export const CommonFormHead = (props) => {
                     </Grid>
                     <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
                     <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
+                        <div className="card-header-actions" style={{  align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" itle="Reload" onClick={reload}>
+                                <IwsIcon style={{style:styles.imageIcon }}  d={svgIcons.refresh}/>
+                            </CButton>
+                        </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => cancelEdit(e)}>
                                 <FontAwesomeIcon icon={faWindowClose} />
@@ -281,7 +268,7 @@ export const JournalFormHead = (props) => {
 }
 
 export const FormFactory =(props)=> {
-    console.log("props.formid",props.formid)
+    //console.log("props.formid",props.formid)
     switch(props.formid) {
         case formEnum.ACCOUNT:
             return <FormWrapper {...props} form = {AccountMainForm} />;
@@ -803,13 +790,21 @@ export const CustomerGeneralForm =(props) => {
             <CFormGroup row style={{  height:15 }}>
 
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.currency')}</CLabel>
+                </CCol>
+                <CCol sm="4">
+                    <CInput  bssize="sm" type="text" id="currency-id" name="currency" className="input-sm"
+                             placeholder="Currency" value={current.currency} onChange={(event)  =>
+                        setCurrent({ ...current, currency: event.target.value})}
+                             style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
                 <CCol sm="2">
-                    <CInput  bssize="sm" type="text" id="company-id" name="company" className="input-sm"
-                             placeholder="company" value={current.company} onChange={(event)  =>
-                        setCurrent({ ...current, company: event.target.value})}
-                             style={{'textAlign':'right', padding:2 }}/>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.postingdate')}</CLabel>
+                </CCol>
+                <CCol sm="2">
+                    <CInput disabled={true} bssize="sm"  type="text"  id="postingdate-id" name="postingdate" className="input-sm"
+                            placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
+                            style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>

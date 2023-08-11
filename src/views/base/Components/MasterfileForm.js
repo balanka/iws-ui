@@ -15,15 +15,11 @@ const MasterfileForm = () => {
   const { token  } = profile
   console.log('selected', selected);
   console.log('profile', profile);
-  console.log('TOKEN', token);
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   let history = useHistory()
-  const datax =  profile?.modules?profile.modules:[];
   const module_= menu.get(selected);
-  console.log('datax', datax);
   console.log('module_', module_);
-  const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
-  if(modules_.id==='0') history.push("/login");
+  if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
   const url=SERVER_URL.concat(module_.ctx);
   const accUrl=SERVER_URL.concat(MASTERFILE.accURL);
   const vatUrl=SERVER_URL.concat(MASTERFILE.vatURL);
@@ -35,11 +31,9 @@ const MasterfileForm = () => {
   const { t,  } = useTranslation();
   const [, setRows] = useState([])
   const modelid_ = module_.modelid;
-  console.log(`modelid_: ${modelid_}`);
   const acc_modelid= parseInt(ACCOUNT(t).id);
   const bank_modelid= parseInt(BANK(t).id);
   const vat_modelid= parseInt(VAT(t).id);
-  console.log(`bankUrl: ${bankUrl}`);
 
   const [current,setCurrent] = useState(current_);
   const [toolbar, setToolbar] = useState(true);
@@ -48,7 +42,7 @@ const MasterfileForm = () => {
 
   const submitAdd = event => {
     event.preventDefault();
-    Add(url, token, {...current}, data, setCurrent);
+    Add(modifyUrl, token, {...current}, data, setCurrent);
   };
   const submitEdit = event => {
     event.preventDefault();
@@ -57,6 +51,11 @@ const MasterfileForm = () => {
       Edit(modifyUrl, token, {...current}, data, setCurrent);
     }else submitAdd(event)
   };
+  const reload = ()=> {
+    iwsStore.deleteKey(current.modelid );
+    const url_= modifyUrl.concat('/').concat(current.modelid);
+    url_&&Get1(url_, token,  parseInt(current.modelid));
+  }
   const handleKeyPress = useCallback((event) => {
     if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
       submitEdit(event);
@@ -75,7 +74,7 @@ const MasterfileForm = () => {
   const toggle= ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id))
   const initAdd =()=> EditRow({...initialState[0], company:profile.company, currency:profile.currency, editing:false}
-        , false, setCurrent);
+        , true, setCurrent);
   const cancelEdit = (e) => initAdd();
   const columns = ColumnFactory(modelid_, iwsState.get(current.modelid), t);
   const edit = editedRow =>{
@@ -105,7 +104,7 @@ const MasterfileForm = () => {
       <Grid container spacing={2} style={{...styles.outer }} direction="column">
         <CommonFormHead styles={styles} title={title} collapse={state.collapse} initAdd ={initAdd} initialState={initialState}
                           url={url} accUrl={accUrl}
-                        cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {load} toggle={toggle}
+                        cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {load} reload={reload} toggle={toggle}
                         toggleToolbar={toggleToolbar}  style={{...styles.inner}}/>
         <FormFactory formid ={modelid_}  current={current} setCurrent={setCurrent} t={t} accData={accd} vatData={vatd}
                      bankData={bankd} collapse={state.collapse} styles={styles} style={{...styles.inner}}/>
