@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {useStore} from "../../views/base/Components/Menu";
 
 const CCreateElement = ({ items, components = {}, fn}) => {
+    console.log('items>>>>', items);
     const { setSelected } = useStore();
     const renderItem = useCallback( (item, i) => {
         const { _tag, _children, ...rest } = item
@@ -15,6 +16,7 @@ const CCreateElement = ({ items, components = {}, fn}) => {
     }, );
 
     const generatedItems = useMemo(() => {
+
         return items && items.map((item, i) => renderItem(item, i));
     }, [items, renderItem])
 

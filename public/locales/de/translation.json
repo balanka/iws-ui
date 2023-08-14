@@ -149,7 +149,18 @@
     "enterdate":"Enterdate",
     "postingdate":"Gebucht am",
     "changedate":"Geaendert am",
-    "account":"Konto"
+    "account"    : "Konto",
+    "company"    : "Mandant"
+  },
+  "module": {
+    "title":"Module",
+    "name":"Name",
+    "description":"Beschreibung",
+    "enterdate":"Enterdate",
+    "postingdate":"Gebucht am",
+    "changedate":"Geaendert am",
+    "parent":"Gruppe",
+    "path": "Path"
   },
   "article": {
     "title":      "Article",
@@ -268,6 +279,7 @@
     "pacb": "Salden",
     "account": "Konten",
     "bank": "Bank",
+    "module": "Module",
     "costcenter": "Kostenstelle",
     "customer": "Kunden",
     "supplier": "Lieferanten",

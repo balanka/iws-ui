@@ -13,11 +13,10 @@ const MasterfileForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const { profile, menu, selected,   } = useStore()
   const { token  } = profile
-  console.log('selected', selected);
-  console.log('profile', profile);
+
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   let history = useHistory()
-  const module_= menu.get(selected);
+  const module_= menu.get(selected?selected:'/cc');
   console.log('module_', module_);
   if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
   const url=SERVER_URL.concat(module_.ctx);
@@ -38,7 +37,7 @@ const MasterfileForm = () => {
   const [current,setCurrent] = useState(current_);
   const [toolbar, setToolbar] = useState(true);
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
-  const data = iwsState.get(current.modelid)
+  const data = iwsState.get(modelid_)
 
   const submitAdd = event => {
     event.preventDefault();
@@ -76,19 +75,16 @@ const MasterfileForm = () => {
   const initAdd =()=> EditRow({...initialState[0], company:profile.company, currency:profile.currency, editing:false}
         , true, setCurrent);
   const cancelEdit = (e) => initAdd();
-  const columns = ColumnFactory(modelid_, iwsState.get(current.modelid), t);
+  const columns = ColumnFactory(modelid_, iwsState.get(modelid_), t);
   const edit = editedRow =>{
     const record = data.find(obj => obj.id === editedRow.id);
     const row = {...record, editing:true}
     setCurrent(row);
   }
 
-
-
   const accd=iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[];
   const bankd=iwsState.get(bank_modelid)?iwsState.get(bank_modelid):[];
   const vatd= iwsState.get(vat_modelid)?iwsState.get(vat_modelid):[];
-
   const load = event => submitQuery(event);
   const submitQuery =(event)=>{
     event.preventDefault();

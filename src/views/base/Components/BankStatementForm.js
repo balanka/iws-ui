@@ -69,7 +69,8 @@ const BankStatementForm = () => {
     const {  selected, menu } = useStore();
     let history = useHistory();
     const module_= menu.get(selected);
-
+    console.log('menu', menu);
+    console.log('module_', module_);
     const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
     const [rows, setRows] =useState([])
     if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");

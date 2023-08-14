@@ -276,6 +276,7 @@ export const FormFactory =(props)=> {
             return <FormWrapper {...props} form = {BankStatementMainForm}/>;
         case formEnum.COSTCENTER:
         case formEnum.BANK:
+        case formEnum.MODULE:
             return <FormWrapper {...props} form = {MasterfilesMainForm}/>;
         case formEnum.COMPANY:
         case formEnum.CUSTOMER:

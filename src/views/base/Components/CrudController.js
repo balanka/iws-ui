@@ -1,7 +1,7 @@
 import axios from "axios";
-import routes from '../../../routes';
 import {MASTERFILE} from "./Menu";
 import iwsStore from './Store';
+import React from "react";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const Edit = (url, token, record, data,  setCurrent) => {
@@ -46,28 +46,18 @@ const Edit = (url, token, record, data,  setCurrent) => {
      console.log('error', error);
    });
   };
-
+const importFn =(str)=> React.lazy(() => import(`${str}`));
  const Login = (history, url, data, setProfile, MENU, t, setMenu, setModule, setRoutes) => {
    axios.post(url, data)
      .then(response => {
-       const hash = response.data.hash
-       console.log("response.data:", response.data);
-       console.log("response.data.hash:", hash);
+       const token = response.data.hash
        const userMenu = response.data.menu.toString().split(",").map(e=>parseInt(e));
-       const authorization = hash//response.headers
        const profile = {
-         token: response.data.hash, company: response.data.company
+         token: token, company: response.data.company
          , modules: userMenu
        };
        setProfile(profile);
-       const token = response.data.hash
        const moduleURL = SERVER_URL.concat(MASTERFILE.moduleURL);
-       //const userMenu = response.data.menu.toString().split(",").map(e=>e.trim());
-
-       console.log("modules>>>>>>>>>>>>", module);
-       console.log("response.data.menu isArray >>>>>>>>>>>>", Array.isArray(userMenu));
-       console.log("userMenu>>>>>>>>>>>>", userMenu);
-
        axios.get(moduleURL, {headers: {'Authorization': `Bearer ${token}`}})
          .then(response => {
            const module = response.data
@@ -76,14 +66,12 @@ const Edit = (url, token, record, data,  setCurrent) => {
            const menu = module.filter(e=>userMenu.includes(parseInt(e.id))).map(m => m.path).filter(p => p !== '/');
            console.log(" filtered menu>>>>>>>>>>>>", menu);
            const menu_t = MENU(t);
-           const routes_t = routes(t);
+           const routes_t =module.map(e=> {return {...e, component: e.description?importFn(e.description):undefined}});
            const newMenu = new Map([...menu_t].filter(([k, _]) => menu.includes(k)));
            const newRoutes = routes_t.filter(r => menu.includes(r.path))
-           console.log("newMenu>>>>>>>>>>>>", newMenu);
-           console.log("newRoutes>>>>>>>>>>>>", newRoutes);
            setModule(module);
            setMenu(newMenu);
-           setRoutes(routes(t));
+           setRoutes(newRoutes);
          }).catch(function (error) {
          console.log('Error', error);
          if (JSON.stringify(error).includes("401")) {
@@ -93,9 +81,9 @@ const Edit = (url, token, record, data,  setCurrent) => {
          console.log('error', error);
        });
        history.push("/dashboard");
-       console.log("authorization:", authorization);
-       console.log("profile:", profile);
-       console.log("response:", response);
+       // console.log("authorization:", authorization);
+       // console.log("profile:", profile);
+       // console.log("response:", response);
      }).catch(function (error) {
      console.log('error', error);
      // history.push(routes.user.login)

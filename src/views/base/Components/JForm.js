@@ -133,7 +133,8 @@ const JForm = () => {
     const accUrl = SERVER_URL.concat(module_.ctx1)
     const initAcc = module_.state1
     const initialState = module_.state
-    const current_ = module_.state[0].query;
+    console.log('module_', module_);
+    const current_ = module_.state?module_?.state[0].query:[];
     const title = module_.title
     const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300});
     const [isDebit, setIsDebit] = useState(true);

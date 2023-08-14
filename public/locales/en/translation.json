@@ -158,6 +158,18 @@
     "account"    : "Account",
     "company"    : "Company"
   },
+  "module": {
+    "title":"Module",
+    "name":"Name",
+    "description":"Description",
+    "enterdate"  : "Created",
+    "postingdate": "Posted",
+    "changedate": "Modified",
+    "account"    : "Account",
+    "company"    : "Company",
+    "parent":"Gruppe",
+    "path": "Path"
+  },
   "article": {
     "title":      "Article",
     "name":       "Name",
@@ -278,6 +290,7 @@
     "pacb": "Account balance",
     "account": "Accounts",
     "bank": "Bank",
+    "module": "Module",
     "costcenter": "Cost center",
     "customer": "Customer",
     "supplier": "Supplier",

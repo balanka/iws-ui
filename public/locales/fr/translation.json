@@ -146,6 +146,16 @@
     "changedate":  "Date mod.",
     "account"    : "Compte"
   },
+  "module": {
+    "title":"Module",
+    "name":       "Nom",
+    "description": "Description",
+    "enterdate"  : "Date saisie",
+    "postingdate": "Date validation",
+    "changedate":  "Date mod.",
+    "parent":"Groupe",
+    "path": "Path"
+  },
   "article": {
     "title":      "Article",
     "name":       "Nom",
@@ -265,6 +275,7 @@
     "pacb": "Balance",
     "account": "Comptes",
     "bank": "Banque",
+    "module": "Module",
     "costcenter": "Centre de cout",
     "customer": "Clients",
     "supplier": "Fournisseurs",
