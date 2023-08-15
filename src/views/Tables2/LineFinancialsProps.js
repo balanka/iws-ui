@@ -17,6 +17,11 @@ export  const ACCOUNT=(data, value, onRowDataChange, rowData, fieldName) => {
         {data.map(mapping)} id={"cb".concat(fieldName)}
     </Select>)
 }
+
+export const ColumnsLOGIN = () => [
+     {field:'id', title:'id', type:'numeric', align:"right", export:true}
+    , {field:'name', title:'name', type:"string", export:true}
+]
 export const columnsPACB = (t) => [
       {field:'period', title:t('pac.period'),  type:"numeric", export:true }
     , {field:'idebit', title:t('common.idebit'), type:"currency", currencySetting: { locale:"de"

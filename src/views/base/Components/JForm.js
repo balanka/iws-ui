@@ -120,7 +120,7 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
 const JForm = () => {
     const {t,} = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-    const {profile, selected, menu,  } = useStore()
+    const {profile, selected, menu  } = useStore()
     const {token} = profile
     let history = useHistory()
     const module_ = menu.get(selected);

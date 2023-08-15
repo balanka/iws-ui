@@ -1,6 +1,8 @@
 import {formEnum} from "../../../utils/FORMS";
-import {ColumnsACC, columnsPACB, ColumnJournal, ColumnsBalancesheet, ColumnsVAT, ColumnsBS, ColumnsM
-    , ColumnsComp, ColumnsCUST, ColumnsUSER  } from "../../Tables2/LineFinancialsProps";
+import {
+  ColumnsACC, columnsPACB, ColumnJournal, ColumnsBalancesheet, ColumnsVAT, ColumnsBS, ColumnsM
+  , ColumnsComp, ColumnsCUST, ColumnsUSER, ColumnsLOGIN
+} from "../../Tables2/LineFinancialsProps";
 
 import create from "zustand";
 export const getCurrentMonth = (date)=>{
@@ -12,7 +14,7 @@ export const date= new Date().toISOString()
 export const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
 export const MASTERFILE ={accURL:'/acc/1000', bankURL:'/bank/1000', ccURL:'/cc/1000', moduleURL:'/module/1000' , vatURL:'/vat/1000', custURL:'/cust/1000', supURL:'/sup/1000', compURL:'/comp/1000'};
 const LOGIN=(t)=> ( {id:"11111", name:'Login', title:t('login.title'), ctx:"/users/login", ctx1:"/md", get:"",  modelid:formEnum.LOGIN
-    , ctx2:"/", ctx3:'' , state:loginInit, state1:'' ,state2:'',  state3:'', columns:[]});
+    , ctx2:"/", ctx3:'' , state:loginInit, state1:'' ,state2:'',  state3:'', columns:ColumnsLOGIN()});
 const SUPPLIER =(t)=>({id:"1", name:"Supplier", title:t('supplier.title'), ctx:"/sup/1000", ctx1:"/acc/1000", ctx2:"/vat/1000",  ctx3:"/bank/1000", get:"md/1"
     ,  state:initSup, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc, t)})
 const CUSTOMER = (t)=>({id:"3", name:'Customer', title:t('customer.title'), ctx:"/cust/1000", ctx1:"/acc/1000", ctx2:"/vat/1000", ctx3:"/bank/1000", get:"md/3"
@@ -48,7 +50,7 @@ const BALANCESHEET =(t)=>({id:"1300", name:"Balancesheet", title:t('balancesheet
     , columns:ColumnsBalancesheet(t) });
 export const LOGIN_MENU = (t)=> ([LOGIN(t)]);
 
-export const loginInit ={username:'', password:'', company:'1000', language:'' }
+export const loginInit =[{username:'', password:'', company:'1000', language:'' }]
 export const initAcc = [{id:'', name: '', description: '', enterdate:date, postingdate:date
             , changedate:date, company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false, currency:''
             , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0 }]
@@ -56,7 +58,7 @@ export const initBank = [ {id:'', name: '', description: '', enterdate:date, pos
             , changedate:date, modelid:11, account:'-1', company:''}]
 export const initModule = [ {id:'', name: '', description: '', path:'', parent:-1,
   enterdate:date, postingdate:date, changedate:date, modelid:400, account:'-1', company:''}]
-export const initCC = [ {id:'', name: '', description: '', enterdate:date, postingdate:date,changedate:date
+export const initCC = [ {id:'6', name: '', description: '', enterdate:date, postingdate:date,changedate:date
             , modelid:6, account:'-1', company:''}]
 export const initComp = [ {id:'', name:'', description:'', street:'', city:'', state:'', zip:'', bankAcc:''
     , purchasingClearingAcc:'', salesClearingAcc:'', paymentClearingAcc:'', settlementClearingAcc:'', balanceSheetAcc:''

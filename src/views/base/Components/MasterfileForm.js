@@ -1,5 +1,5 @@
 import React, {memo, useCallback, useLayoutEffect, useState} from 'react'
-import {MASTERFILE, useStore, ACCOUNT, BANK, VAT} from './Menu';
+import {MASTERFILE, useStore, ACCOUNT, BANK, VAT, COSTCENTER} from './Menu';
 import Grid from "react-fast-grid";
 import {CommonFormHead, FormFactory} from './FormsProps'
 import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
@@ -11,23 +11,26 @@ import {useHistory} from "react-router-dom";
 import iwsStore from './Store';
 const MasterfileForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-  const { profile, menu, selected,   } = useStore()
+  const { profile, menu, selected,   } = useStore();
+  const { t,  } = useTranslation();
   const { token  } = profile
 
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
-  let history = useHistory()
-  const module_= menu.get(selected?selected:'/cc');
-  console.log('module_', module_);
+  let history = useHistory();
+  let module_ = menu.get((!selected||selected==='/login')?'/cc':selected);
+   module_= module_?module_:COSTCENTER(t).state;
   if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
-  const url=SERVER_URL.concat(module_.ctx);
-  const accUrl=SERVER_URL.concat(MASTERFILE.accURL);
-  const vatUrl=SERVER_URL.concat(MASTERFILE.vatURL);
-  const bankUrl=SERVER_URL.concat(MASTERFILE.bankURL);
-  const modifyUrl=SERVER_URL.concat(selected);
+  const url = SERVER_URL.concat(module_.ctx);
+  const accUrl = SERVER_URL.concat(MASTERFILE.accURL);
+  const vatUrl = SERVER_URL.concat(MASTERFILE.vatURL);
+  const bankUrl = SERVER_URL.concat(MASTERFILE.bankURL);
+  const modifyUrl = SERVER_URL.concat(selected);
   const initialState = module_.state
-  const current_= initialState[0];
-  const title =module_.title
-  const { t,  } = useTranslation();
+  const current_ = initialState[0];
+  console.log('current_', current_);
+  console.log('initialState', initialState);
+  const title = module_.title
+
   const [, setRows] = useState([])
   const modelid_ = module_.modelid;
   const acc_modelid= parseInt(ACCOUNT(t).id);
@@ -96,6 +99,7 @@ const MasterfileForm = () => {
   }
 
   function buildForm(current){
+    console.log('current<<<<<<<<<<<<<<<<<<', current);
     return <>
       <Grid container spacing={2} style={{...styles.outer }} direction="column">
         <CommonFormHead styles={styles} title={title} collapse={state.collapse} initAdd ={initAdd} initialState={initialState}
@@ -114,7 +118,7 @@ const MasterfileForm = () => {
     </>
   }
 
-  return buildForm(current);
+  return buildForm(current?current:current_);
 
 };
 export default memo(MasterfileForm);

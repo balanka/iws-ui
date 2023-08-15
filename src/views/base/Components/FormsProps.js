@@ -268,7 +268,7 @@ export const JournalFormHead = (props) => {
 }
 
 export const FormFactory =(props)=> {
-    //console.log("props.formid",props.formid)
+    console.log("props",props)
     switch(props.formid) {
         case formEnum.ACCOUNT:
             return <FormWrapper {...props} form = {AccountMainForm} />;
@@ -1188,6 +1188,7 @@ export const FinancialsMainForm =(props) => {
     )}
 export const JournalMainForm = (props) => {
     const {current, setCurrent, t, accData, submitQuery } = props
+    console.log('current?????????', current);
     return (
         <>
           <CFormGroup row style={{  height:15 }} >

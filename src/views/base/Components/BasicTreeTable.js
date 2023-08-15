@@ -5,7 +5,7 @@ import {JournalFormHead, FormFactory} from './FormsProps';
 import {styles} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {Get, Get1} from './CrudController';
-import {LOGIN_MENU, useStore, ACCOUNT} from "./Menu";
+import {useStore, ACCOUNT} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {OptionsM, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
 import {useTranslation} from "react-i18next";
@@ -60,20 +60,17 @@ const  BasicTreeTable =()=> {
     const { profile,  } = useStore()
     const { token  } = profile
     const {  selected, menu } = useStore();
-    const datax =  profile?.modules?profile.modules:[];
     let history = useHistory()
     const module_= menu.get(selected);
-    const loginMenu = menu&&menu.length>0?menu.get('/login'):LOGIN_MENU(t)[0]
-    const modules_= (module_)&&datax.includes(module_.id)?module_:loginMenu
-    if(modules_.id==='0') history.push("/login");
-    const module = modules_
-    const url=SERVER_URL.concat(module.ctx)
-    const accUrl=SERVER_URL.concat(module.ctx1)
-    const initAcc =module.state1
-    const initialState = module.state
+    if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
+    if(module_.id==='0') history.push("/login");
+    const url=SERVER_URL.concat(module_.ctx)
+    const accUrl=SERVER_URL.concat(module_.ctx1)
+    const initAcc =module_.state1
+    const initialState = module_.state
 
     const current_= initialState;
-    const title =module.title
+    const title =module_.title
     const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
     const [current,setCurrent] = useState(current_);
     const [data, setData] = useState(initAcc);
@@ -104,7 +101,7 @@ const  BasicTreeTable =()=> {
         .concat(current.fromPeriod).concat('/')
         .concat(current.toPeriod);
 
-    return Internal(data, setData, accUrl, initAcc, accData_, setAccData, token, history, current, initialState
+    return Internal(data, setData, accUrl, initAcc, accData_, setAccData, token, history, current?current:current_, initialState
       , state, title, getUrl, url, toggle, toggleToolbar, setCurrent, t, toolbar, columnsX);
 };
 export default  memo(BasicTreeTable)
