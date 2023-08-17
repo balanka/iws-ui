@@ -1,28 +1,29 @@
 import React, {useEffect, useState, memo} from 'react'
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
-import {OptionsM, ColumnFactory} from "../../Tables2/LineFinancialsProps";
+import {OptionsM,  ColumnsBS} from "../../Tables2/LineFinancialsProps";
 import {BSFormHead, FormFactory} from "./FormsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles,  theme} from "../Tree/BasicTreeTableProps";
-import {Edit, EditRow, Get, Post} from './CrudController';
+import {Edit, EditRow, Get, Get2} from './CrudController';
 import { useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 
-function internal(url, profile, history, initialState, data, setData,  current, setCurrent,  title, state
-    , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows) {
+function internal(url, token, history, initialState, data, setData,  current, setCurrent,  title, state
+    , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows, module_) {
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
     const isEmpty = (str) => (!str || 0 === str.length);
     const submitQuery = event => {
         event.preventDefault();
-        !isEmpty(url) && Get( url, profile, history,setData);
+        !isEmpty(url) && Get( url, token, history,setData);
     };
     const cancelEdit = (e) => EditRow({...current}, false, setCurrent);
 
     const submitPost = event => {
         event.preventDefault();
-        const url_ =url.concat("/post")
-        Post(url_, profile, rows);
+        const url_= SERVER_URL.concat(module_.state3).concat("/post/").concat(current.company).concat("/").concat(rows.join(","));
+        Get2(url_, token, setCurrent);
     };
 
     const edit = editedRow => {
@@ -35,7 +36,8 @@ function internal(url, profile, history, initialState, data, setData,  current, 
         event.preventDefault();
         if (current.editing && !current.posted) {
             delete current.editing
-            Edit(url, profile, {...current}, data, setCurrent);
+            const url_= SERVER_URL.concat(module_.state3)
+            Edit(url_, token, {...current}, data, setCurrent);
         }
     };
 
@@ -69,27 +71,30 @@ const BankStatementForm = () => {
     const {  selected, menu } = useStore();
     let history = useHistory();
     const module_= menu.get(selected);
-    console.log('menu', menu);
-    console.log('module_', module_);
+
     const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
     const [rows, setRows] =useState([])
     if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
-    const module = module_
-    const url=SERVER_URL.concat(module.ctx)
-    const initialState = module.state
+    const url=SERVER_URL.concat(module_.ctx)
+    const initialState = module_.state
     const current_= initialState[0]
-    const title =module.title
-    const modelid_ = module.modelid;
+    const title =module_.title
+    const modelid_ = module_.modelid;
     const [data, setData] = useState(initialState);
     const [current,setCurrent] = useState(current_);
     const [toolbar, setToolbar] = useState(true);
     useEffect(() => {}, [current, setCurrent, data]);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle= ()=> setState({...state, collapse:!state.collapse });
-    const columns = ColumnFactory(modelid_, data, t);
-    const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id));
+    const columns = ColumnsBS(t);
+    const setSelectedRows = (rows_)=>{
+        let rowsx = rows_.map(item=>item.id);
+        setRows(rowsx);
+        console.log('rows', rowsx);
+    };
+
     return internal(url, token, history,initialState, data, setData,  current, setCurrent,  title, state
-        , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows);
+        , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows, module_);
 
 };
 export default memo(BankStatementForm);

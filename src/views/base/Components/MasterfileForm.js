@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useLayoutEffect, useState} from 'react'
+import React, { memo, useCallback, useLayoutEffect, useState} from 'react'
 import {MASTERFILE, useStore, ACCOUNT, BANK, VAT, COSTCENTER} from './Menu';
 import Grid from "react-fast-grid";
 import {CommonFormHead, FormFactory} from './FormsProps'
@@ -14,11 +14,13 @@ const MasterfileForm = () => {
   const { profile, menu, selected,   } = useStore();
   const { t,  } = useTranslation();
   const { token  } = profile
-
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   let history = useHistory();
   let module_ = menu.get((!selected||selected==='/login')?'/cc':selected);
-   module_= module_?module_:COSTCENTER(t).state;
+  console.log('selected', selected);
+  console.log('menu', menu);
+  console.log('module_', module_);
+   module_= (typeof module_ === undefined)?COSTCENTER(t).state:module_;
   if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
   const url = SERVER_URL.concat(module_.ctx);
   const accUrl = SERVER_URL.concat(MASTERFILE.accURL);
@@ -33,6 +35,7 @@ const MasterfileForm = () => {
 
   const [, setRows] = useState([])
   const modelid_ = module_.modelid;
+  console.log('modelid_', modelid_);
   const acc_modelid= parseInt(ACCOUNT(t).id);
   const bank_modelid= parseInt(BANK(t).id);
   const vat_modelid= parseInt(VAT(t).id);
@@ -40,14 +43,18 @@ const MasterfileForm = () => {
   const [current,setCurrent] = useState(current_);
   const [toolbar, setToolbar] = useState(true);
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
-  const data = iwsState.get(modelid_)
-
+  const datax = iwsState.get(modelid_)
+  const data = (typeof datax === undefined)?[]:datax;
+  console.log('module_', module_);
+  console.log('data', data);
   const submitAdd = event => {
     event.preventDefault();
     Add(modifyUrl, token, {...current}, data, setCurrent);
   };
+
   const submitEdit = event => {
     event.preventDefault();
+    console.log('current', current);
     if(current.editing) {
       delete current.editing
       Edit(modifyUrl, token, {...current}, data, setCurrent);

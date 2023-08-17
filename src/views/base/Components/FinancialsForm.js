@@ -113,7 +113,10 @@ const FinancialsForm = () => {
   }
   const toggleToolbar = ()=> setToolbar(!toolbar );
   const toggle = ()=> setState({...state, collapse:!state.collapse });
-  const setSelectedRows = (rows_)=>setRows(rows_.map( (item) =>({id:item.id,  modelid:item.modelid})))
+  const setSelectedRows = (rows_)=>{
+    setRows(rows_.map( (item) =>({id:item.id,  modelid:item.modelid})));
+    console.log('rows_', rows_);
+  }
 
   function getAccountAndLabel() {
     const model_ = models.find(obj => obj.id === model);
@@ -177,7 +180,6 @@ const FinancialsForm = () => {
 
   const submitAdd = event => {
     event.preventDefault();
-
     const row = {id:current.id, oid:current.oid, id1:current.id1, costcenter:current.costcenter, account:current.account
       , transdate:new Date(current.transdate).toISOString(), enterdate:new Date().toISOString()
       , postingdate:new Date().toISOString(), period:getPeriod(new Date()), posted:current.posted

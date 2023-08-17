@@ -7,9 +7,11 @@ import React from "react";
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const Edit = (url, token, record, data,  setCurrent) => {
   var result;
+  console.log('put url', url);
   axios.put(url, record, {headers: {'Authorization': `Bearer ${token}`}})
     .then(response => {
       const resp = response.data
+      console.log('response', response);
       const index = data.findIndex(obj => {
         return obj ? (obj.id === record.id) : false
       });
@@ -23,6 +25,27 @@ const Edit = (url, token, record, data,  setCurrent) => {
   console.log('resultX', result);
   return result;
   };
+
+const Edit2 = (url, token, record, data,  setCurrent) => {
+  var result;
+  console.log('post url', url);
+  axios.post(url, record, {headers: {'Authorization': `Bearer ${token}`}})
+    .then(response => {
+      const resp = response.data
+      console.log('response', response);
+      const index = data.findIndex(obj => {
+        return obj ? (obj.id === record.id) : false
+      });
+      data[index] = resp;
+      result = resp;
+      setCurrent(resp);
+      console.log('resultX', result);
+    }).catch(function (error) {
+    console.log('error', error);
+  });
+  console.log('resultX', result);
+  return result;
+};
  const Add = (url, token, record, data, setCurrent) => {
    let result;
    console.log('Adding', record);
@@ -124,7 +147,7 @@ const Get1 = (url, token,  key_) => {
       console.log('key_', key_);
       console.log('respRRRRRR', resp);
       iwsStore.put(key_, resp);
-      console.log('iwsStore.initialState', iwsStore.initialState);
+      console.log('iwsStore.get(key_)', iwsStore.get(key_));
       result = {...resp};
     }).catch(function (error) {
     console.log('error', error);
@@ -144,7 +167,8 @@ const Get2 =  (url, token, setCurrent) => {
       console.log('result', result);
       iwsStore.update(resp.modelid, resp.id, {...resp});
       console.log('result', result);
-      setCurrent(resp);
+      Array.isArray(resp)&&resp.length>0?setCurrent(resp[0]):setCurrent(resp)
+      //setCurrent(resp);
     }).catch(function (error) {
     console.log('error', error);
   });
@@ -171,5 +195,5 @@ export const logoutUnset = () => {
     delete axios.defaults.headers['Authentication']
     window.localStorage.removeItem('profile')
 }
-export  {Get, Get1, Get2, Post, Login,  Add, Edit, EditRow}
+export  {Get, Get1, Get2, Post, Login,  Add, Edit, Edit2, EditRow}
 

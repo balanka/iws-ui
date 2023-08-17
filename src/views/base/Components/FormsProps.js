@@ -71,7 +71,7 @@ const mappingSelectName = (item) => <option key={item.id} value={item.id}>
 
  
 export const CommonFormHead = (props) => {
-    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, reload,  toggle, toggleToolbar} = props
+    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, reload,  onNewLine, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -91,6 +91,7 @@ export const CommonFormHead = (props) => {
                                 <FontAwesomeIcon icon={faWindowClose} />
                             </CButton>
                         </div>
+
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className = "card-header-action btn-minimize" onClick={initAdd}>
                                 <FontAwesomeIcon icon={faPlusSquare} />
@@ -135,7 +136,7 @@ export const BSFormHead = (props) => {
                     <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitPost(e)}>
-                                <FontAwesomeIcon icon={faWindowClose} />
+                                <IwsIcon  style ={{style:styles.imageIcon}} d={svgIcons.done}/>
                             </CButton>
                         </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>

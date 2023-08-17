@@ -160,6 +160,17 @@ export const OptionsM = ({
     exportDelimiter: ',',
     //exportFileName:'Masterfile.csv'
 })
+export const ColumnsModule =(t) => [
+    {field:'id', title:t('common.id'), export:true}
+    , {field:'name', title:t("common.name"),  type:"text", export:true}
+    , {field:'description', title:t('common.description'), type:"string", export:true}
+    , {field:'path', title:t('module.path'), type:"string", export:true}
+    , {field:'parent', title:t('module.parent'), type:"string", export:true}
+    , {field:'enterdate', title:t('common.enterdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
+    , {field:'changedate', title:t('common.changedate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
+    , {field:'postingdate', title:t('common.postingdate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
+    , {field:'company', title:t('common.company'), type:"string",  export:true}
+]
 export const ColumnsM =(data, t) => [
       {field:'id', title:t('common.id'), export:true}
     , {field:'name', title:t("common.name"),  type:"text", export:true}
@@ -171,7 +182,6 @@ export const ColumnsM =(data, t) => [
     , {field:'changedate', title:t('common.changedate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
     , {field:'postingdate', title:t('common.postingdate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
     , {field:'company', title:t('common.company'), type:"string",  export:true}
-
 ]
 export const ColumnsComp =(data, t) => [
      {field:'id', title:t('common.id'), export:true}
@@ -227,8 +237,8 @@ export const ColumnsACC =(data, t) => [
     , {field:'description', title:t('common.description'), type:"string",  export:true}
     , {field:'isDebit', title:t('account.debit_credit'), type:"boolean", export:true}
     , {field:'balancesheet', title:t('account.balancesheet'), type:"boolean", export:true}
-    , {field:'account', title:t('account.account'),
-        editComponent:({ value, onRowDataChange, rowData }) => ACCOUNT ( data, value, onRowDataChange, rowData, "account" )
+    , {field:'account', title:t('account.account'), type:"string"
+        //editComponent:({ value, onRowDataChange, rowData }) => ACCOUNT ( data, value, onRowDataChange, rowData, "account" )
         , width: 20, export:true}
     , {field:'idebit', title:t('account.idebit'), type:"currency", initialEditValue:0,
         currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
@@ -382,6 +392,8 @@ export const ColumnFactory =(formid, data, t)=> {
         //case formEnum.FINANCIALS:
         //    return <FormWrapper {...props} form = {FinancialsMainForm}/>;
        //     break;
+        case formEnum.MODULE:
+            return ColumnsModule(t);
         case formEnum.USER:
             return ColumnsUSER(t);
         case formEnum.VAT:

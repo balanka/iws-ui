@@ -8,7 +8,7 @@ import {
     CompanyGeneralForm
 } from "./FormsProps";
 import {CTabPane} from "@coreui/react";
-import {Options} from '../../Tables2/LineFinancialsProps';
+import {OptionsM} from '../../Tables2/LineFinancialsProps';
 import EditableTable from "../../Tables2/EditableTable";
 import {styles} from "../Tree/BasicTreeTableProps";
 import {formEnum} from "../../../utils/FORMS";
@@ -16,7 +16,7 @@ import {Autocomplete} from "./Autocomplete";
 
  const CustomerTabs =  (props) => {
     const {formid, current, setCurrent, accData, vatData, bankData, t}= props
-    const initBankAcc=current.bankaccounts;
+    const initBankAcc = current.bankaccounts;
     const tableRef = createRef();
     const columns=(data, t) => [
       {field:'id', title:t('common.iban'), initialEditValue:'', minWidth:40, maxWidth:100, export:true}
@@ -35,7 +35,7 @@ import {Autocomplete} from "./Autocomplete";
       , {id:"2", name:'account', title:t('common.account'), ctx:"", ctx1:"", get:""
           , ctx2:"", form:'accountForm', state:'', state1:'' ,state2:'',  columns:[]}
       ,  {id:"3", name:'bankAccounts', title:t('common.bankaccounts'), ctx:"/bankacc", ctx1:"", get:""
-          , ctx2:"", form:'bankAccountTable', state:initBankAcc, state1:'' ,state2:'',  columns:columns}          
+      , ctx2:"", form:'bankAccountTable', state:initBankAcc, state1:'' ,state2:'',  columns:columns}
      ]
 
 /*
@@ -49,17 +49,19 @@ import {Autocomplete} from "./Autocomplete";
  */
 
 const addRow = (newData) =>{
+  console.log('newData', newData);
    if(newData ) {
      const dx = {...current};
-     dx.bankaccounts[dx.length] = {...newData, owner:'-1'};
+     dx.bankaccounts[dx.bankaccounts.length] = {...newData, owner:current.id, modelid:12};
      setCurrent({...dx});
    }
  }
  const updateRow = (newData, oldData) =>{
+  console.log('newData', newData);
    if (oldData) {
      const dx = {...current};
      const index = dx.bankaccounts.findIndex(obj => obj.id === oldData.id);
-     dx.bankaccounts[index] = {...newData};
+     dx.bankaccounts[index] = {...newData, owner:current.id, modelid:12};
      setCurrent({...dx});
    }
  }
@@ -114,7 +116,7 @@ const addRow = (newData) =>{
               return getAccountForm(formid);
            case "3":
              return wrapIt(
-                     <EditableTable id="bankaccouts" Options ={{...Options, paging:false}} flag={false}
+                     <EditableTable id="bankaccouts" Options ={{...OptionsM, paging:false}} flag={false}
                          data = {current?current.bankaccounts:[]} columns={columnsX} editable={editable()}  t={t}
                         tableRef={tableRef}/>)
             default:

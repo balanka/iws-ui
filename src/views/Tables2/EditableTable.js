@@ -21,6 +21,7 @@ export default function EditableTable(props) {
                 setSelectedRows(rows);
                 if(Options.selection&&edit&&rows.length>0)
                     edit(rowData);
+                else edit({...rowData, editing:false})
             }}
             localization={{
                 body: {
