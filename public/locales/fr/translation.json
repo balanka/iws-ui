@@ -119,7 +119,8 @@
     "amount"      : "Montant",
     "info"       : "Info",
     "companyIban" : "Réf. société",
-    "posted"      : "Validé?"
+    "posted"      : "Validé?",
+    "period"      : "Periode"
   },
   "company": {
     "title":      "Société",

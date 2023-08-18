@@ -120,7 +120,8 @@
     "amount"      : "Betrag",
     "info"       : "Info",
     "companyIban" : "IBAN Mandant",
-    "posted"      : "Gebucht?"
+    "posted"      : "Gebucht?",
+    "period"      : "Periode"
   },
   "company": {
     "title":      "Mandant",
@@ -189,7 +190,7 @@
     "title":      "Beleg",
     "id":        "Nr.",
     "oid":        "O.BelegNr",
-    "period":       "Period",
+    "period":       "Periode",
     "enterdate"  : "Eingabedatum",
     "postingdate": "Buchungsdatum",
     "transdate":   "Belegdatum",

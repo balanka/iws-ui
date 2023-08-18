@@ -33,7 +33,7 @@ export const MODULE =(t)=>({id:"400", name:"Module", title:t('module.title'), ct
 export const VAT =(t)=>({id:"14", name:"Vat", title:t('vat.title'), ctx:"/vat/1000", ctx1:"/acc/1000", ctx2:"", ctx3:''
     ,  state:initVat, state1:initAcc ,state2:'', state3:'/vat', modelid:formEnum.VAT, columns:ColumnsVAT(initAcc, t)})
 const BS =(t)=>({id:"18", name:"Bankstatement", title:t('bankstatement.title'), ctx:"/bs/1000", ctx1:"/acc/1000", ctx2:"", ctx3:''
-    , state:initBS, state1:'' ,state2:'', state3:'/bs', modelid:formEnum.BANKSTATEMENT, columns:ColumnsBS(t)})
+    , state:initBS, state1:'' ,state2:'', state3:'/bs', modelid:formEnum.BANKSTATEMENT, period:-1, columns:ColumnsBS(t)})
 const PACB = (t)=>({id:"106", name:"PAC", title:t('pac.title'), ctx:"/pac/1000", ctx1:"/acc/1000", ctx2:"/acc/1000", ctx3:'/acc/1000'
     ,  state:initPac, state1:initAcc, state2:'', state3:'/pac', modelid:formEnum.PACB, columns:columnsPACB(t) })
 const USER =(t)=>({id:"111", name:"User", title:t('user.title'), ctx:"/user/1000", ctx1:'', ctx2:"", ctx3:''
@@ -87,7 +87,7 @@ export const initJour=[{ id:'', transid:'', oid:'', account:'', oaccount:'', tra
             , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]
 export const initBS=[{ id:'', depositor:'', postingdate:date, valuedate:date, postingtext:'', purpose:''
             , beneficiary:'', accountno:'', bankCode:'', amount:'', currency:'', info:'', company:'', companyIban:''
-            , posted:'',modelid:18}]
+            , posted:'',modelid:18, period:-1}]
 export const initFtr=[{ id:-1, oid:0, id1:-1 ,costcenter:'', account:'', transdate:date
             , enterdate:date, postingdate:date, period:getPeriod(new Date())
             , posted:false, modelid:1300, company:'1000', text:'', typeJournal:0, file_content:0,lines:[{id:-1, transid:-1

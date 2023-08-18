@@ -122,7 +122,8 @@
     "amount"      : "Amount",
     "info"       : "Info",
     "companyIban" : "IBAN comp.",
-    "posted"      : "Posted?"
+    "posted"      : "Posted?",
+    "period"      : "Period"
   },
   "company": {
     "title":      "Company",
