@@ -66,11 +66,14 @@ const addRow = (newData) =>{
    }
  }
  const deleteRow = (oldData) =>{
+   console.log('oldData', oldData);
    if (oldData) {
      const dx = {...current};
-     const index =dx.bankaccounts.findIndex(obj => obj.lid === oldData.lid);
+     const index =dx.bankaccounts.findIndex(obj => obj.id === oldData.id);
+     console.log('index', index);
      const deleted = dx.bankaccounts[index];
-     dx.bankaccounts[index] = {...deleted, id:'-0' };
+     console.log('deleted', deleted);
+     dx.bankaccounts[index] = {...deleted, modelid:-1 };
      setCurrent({...dx});
    }
  }

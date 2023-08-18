@@ -26,26 +26,6 @@ const Edit = (url, token, record, data,  setCurrent) => {
   return result;
   };
 
-const Edit2 = (url, token, record, data,  setCurrent) => {
-  var result;
-  console.log('post url', url);
-  axios.post(url, record, {headers: {'Authorization': `Bearer ${token}`}})
-    .then(response => {
-      const resp = response.data
-      console.log('response', response);
-      const index = data.findIndex(obj => {
-        return obj ? (obj.id === record.id) : false
-      });
-      data[index] = resp;
-      result = resp;
-      setCurrent(resp);
-      console.log('resultX', result);
-    }).catch(function (error) {
-    console.log('error', error);
-  });
-  console.log('resultX', result);
-  return result;
-};
  const Add = (url, token, record, data, setCurrent) => {
    let result;
    console.log('Adding', record);
@@ -195,5 +175,5 @@ export const logoutUnset = () => {
     delete axios.defaults.headers['Authentication']
     window.localStorage.removeItem('profile')
 }
-export  {Get, Get1, Get2, Post, Login,  Add, Edit, Edit2, EditRow}
+export  {Get, Get1, Get2, Post, Login,  Add, Edit,  EditRow}
 

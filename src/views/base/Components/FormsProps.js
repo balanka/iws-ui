@@ -71,7 +71,7 @@ const mappingSelectName = (item) => <option key={item.id} value={item.id}>
 
  
 export const CommonFormHead = (props) => {
-    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, reload,  onNewLine, toggle, toggleToolbar} = props
+    const {styles, title, collapse,  initAdd, cancelEdit, submitEdit, submitQuery, reload, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
