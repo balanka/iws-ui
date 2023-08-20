@@ -203,12 +203,12 @@
     "posted":     "Gebucht",
     "line": {
       "title": "Position(en)",
-      "id": "Pos.Nr.",
+      "id": "Nr.",
       "account": "Konto",
       "oaccount": "G.Konto",
       "amount": "Betrag",
       "side": "S/H?",
-      "duedate": "Fällig am",
+      "duedate": "Faellig am",
       "text": "Text"
     }
   },
