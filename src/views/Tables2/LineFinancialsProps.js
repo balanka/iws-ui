@@ -72,7 +72,7 @@ export const Linescolumns =(data, line, current, models,  model, t) =>  {
     }
 
     return [
-      {field:'id', title:t('financials.line.id'), type:'numeric', hidden:true,  initialEditValue:line.id, editable:'never'}
+      {field:'id', title:t('financials.line.id'), type:'numeric', minWidth:20, maxWidth:20, initialEditValue:line.id, align:"left", editable:'never'}
     , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current?current.id:0,  editable:'never'}
     , {field:'account', title:t('financials.line.account'), type:'string', editComponent: tableData => Autocomplete ( data, tableData)
     , initialEditValue:debitedAccount, align:"left",  minWidth:100,  maxWidth:450}
@@ -380,6 +380,8 @@ export const ColumnFactory =(formid, data, t)=> {
             return ColumnsBS(t);
         case formEnum.COSTCENTER:
         case formEnum.BANK:
+        case formEnum.ROLE:
+        case formEnum.PERMISSION:
             return  ColumnsM(data, t);
         case formEnum.COMPANY:
             return ColumnsComp (data, t);
@@ -390,9 +392,6 @@ export const ColumnFactory =(formid, data, t)=> {
         case formEnum.CUSTOMER:
         case formEnum.SUPPLIER:
             return ColumnsCUST(data, t);
-        //case formEnum.FINANCIALS:
-        //    return <FormWrapper {...props} form = {FinancialsMainForm}/>;
-       //     break;
         case formEnum.MODULE:
             return ColumnsModule(t);
         case formEnum.USER:
