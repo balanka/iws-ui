@@ -46,6 +46,12 @@ const FINANCIALS= (t)=>({id:"1120", name:"Financials", title:t('financials.title
 const BALANCESHEET =(t)=>({id:"1300", name:"Balancesheet", title:t('balancesheet.title'), ctx:"/balance/1000"
     , ctx1:"/acc/1000", ctx2:"", ctx3:'',  state:initAcc, state1:initAcc, state2:'', state3:'',
      modelid:formEnum.BALANCESHEET, columns:ColumnsBalancesheet(t) });
+
+export const ROLE =(t)=>({id:"121", name:"UserRole", title:t('role.title'), ctx:"/role/1000", ctx1:"", ctx2:"", ctx3:''
+  ,  state:initRole, state1:initAcc ,state2:'', state3:'/role', modelid:formEnum.ROLE, columns:ColumnsM(initAcc, t)})
+
+export const PERMISSION =(t)=>({id:"141", name:"Permission", title:t('permission.title'), ctx:"/perm/1000", ctx1:"", ctx2:"", ctx3:''
+  ,  state:initPermission, state1:initAcc ,state2:'', state3:'/perm', modelid:formEnum.PERMISSION, columns:ColumnsM(initAcc, t)})
 export const LOGIN_MENU = (t)=> ([LOGIN(t)]);
 
 export const loginInit =[{username:'', password:'', company:'1000', language:'' }]
@@ -97,6 +103,10 @@ export const initPac=[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.
 export const initUser=[{ userName:'', firstName:'', lastName:'', email:'', hash:'', phone:'', company:'', id:0
         , role:'', modelid:111, menu:''}]
 
+export const initRole = [ {id:'121', name: '', description: '', enterdate:date, postingdate:date
+  , changedate:date, modelid:121, account:'-1', company:''}]
+export const initPermission = [ {id:'141', name: '', description: '', enterdate:date, postingdate:date
+  , changedate:date, modelid:141, account:'-1', company:''}]
 export const MENU = (t)=> new Map([
                      ['/journal', JOURNAL(t)]
                     ,['/pacb', PACB(t)]
@@ -107,6 +117,8 @@ export const MENU = (t)=> new Map([
                     ,['/sup', SUPPLIER(t)]
                     ,['/vat', VAT(t)]
                     ,['/user', USER(t)]
+                    ,['/role', ROLE(t)]
+                    ,['/perm', PERMISSION(t)]
                     ,['/login', LOGIN(t)]
                     ,['/dashboard', LOGIN(t)]
                     ,['/comp', COMPANY(t)]

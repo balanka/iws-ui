@@ -186,6 +186,12 @@
     "title":      "Salden",
     "period":      "Periode"
   },
+  "role": {
+    "title":      "Role"
+  },
+  "permission": {
+    "title":      "Berechtigung"
+  },
   "financials": {
     "title":      "Beleg",
     "id":        "Nr.",
@@ -288,6 +294,8 @@
     "login"  :"Login",
     "company": "Mandant",
     "user": "Benutzer",
+    "permission": "Berechtigung",
+    "role": "Role",
     "bankstatement": "Bankauszug",
     "masterfiles": "Stammdaten",
     "balancesheet": "Jahresabschluss",

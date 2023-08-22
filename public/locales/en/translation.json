@@ -195,6 +195,12 @@
     "title":      "P.Account Balance",
     "period":      "Period"
   },
+  "role": {
+    "title":      "Role"
+  },
+  "permission": {
+    "title":      "Permission"
+  },
   "financials": {
     "title":      "Financials",
     "id":        "Id",
@@ -299,6 +305,8 @@
     "login"  :"Login",
     "company": "Company",
     "user": "Users",
+    "role": "Role",
+    "permission": "Permission",
     "bankstatement": "Bank statement",
     "masterfiles": "Master files",
     "balancesheet": "Balance sheet",

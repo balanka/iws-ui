@@ -180,7 +180,12 @@
     "title":      "Balance périodique",
     "period":      "Periode"
     },
-
+  "role": {
+    "title":      "Role"
+  },
+  "permission": {
+    "title":      "Permission"
+  },
   "financials": {
     "title":      "Pièce comptable",
     "id":        "Nº pièce",
@@ -284,6 +289,8 @@
     "login"  :"Login",
     "company": "Société",
     "user": "Utilisateurs",
+    "role": "Role",
+    "permission": "Permission",
     "bankstatement": "Rélévé bancaire",
     "masterfiles": "Références",
     "balancesheet": "Bilanz",
