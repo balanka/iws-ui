@@ -291,6 +291,7 @@
     "menu": "Menu"
    },
   "menu": {
+    "admin": "Administration",
     "dashboard": "Dashboard",
     "accounting": "Accounting",
     "journal": "Journal",

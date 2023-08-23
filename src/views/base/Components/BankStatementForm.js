@@ -78,7 +78,7 @@ const BankStatementForm = () => {
     const url=SERVER_URL.concat(module_.ctx)
     const initialState = module_.state
     const current_= initialState[0]
-    const title =module_.title
+    const title = t(module_.title);
     const modelid_ = module_.modelid;
     const [data, setData] = useState(initialState);
     const [current,setCurrent] = useState(current_);

@@ -190,7 +190,7 @@
     "title":      "Role"
   },
   "permission": {
-    "title":      "Berechtigung"
+    "title": "Berechtigung"
   },
   "financials": {
     "title":      "Beleg",
@@ -280,6 +280,7 @@
     "menu": "Menü"
   },
   "menu": {
+    "admin": "Verwaltung",
     "dashboard": "Dashboard",
     "accounting": "Buchhaltung",
     "journal": "Journal",

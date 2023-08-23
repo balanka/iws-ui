@@ -302,7 +302,7 @@ export const ColumnsCUST =(data, t) => [
 , {field:'email', title:t('common.email'), type:"string", export:true}
 , {field:'account', title:t('common.account'), type:"string", export:true}
 , {field:'oaccount', title:t('common.oaccount'), type:"string", export:true}
-, {field:'iban', title:t('common.iban'), type:"string", export:true}
+//, {field:'iban', title:t('common.iban'), type:"string", export:true}
 , {field:'vatcode', title:t('common.vatCode'), type:"string", export:true}
 , {field:'enterdate', title:t('common.enterdate'), type: "date", export:true}
 , {field:'postingdate', title:t('common.postingdate'), type: "date", export:true}
@@ -380,6 +380,7 @@ export const ColumnFactory =(formid, data, t)=> {
             return ColumnsBS(t);
         case formEnum.COSTCENTER:
         case formEnum.BANK:
+        case formEnum.FMODULE:
         case formEnum.ROLE:
         case formEnum.PERMISSION:
             return  ColumnsM(data, t);

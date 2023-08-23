@@ -31,11 +31,10 @@ const MasterfileForm = () => {
   const current_ = initialState[0];
   console.log('current_', current_);
   console.log('initialState', initialState);
-  const title = module_.title
-
-  const [, setRows] = useState([])
+  const title = t(module_.title);
+  const [, setRows] = useState([]);
   const modelid_ = module_.modelid;
-  console.log('modelid_', modelid_);
+
   const acc_modelid= parseInt(ACCOUNT(t).id);
   const bank_modelid= parseInt(BANK(t).id);
   const vat_modelid= parseInt(VAT(t).id);

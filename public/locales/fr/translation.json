@@ -177,7 +177,7 @@
     "percent":     "Pourcent"
      },
   "pac": {
-    "title":      "Balance périodique",
+    "title":      "Balance",
     "period":      "Periode"
     },
   "role": {
@@ -195,7 +195,7 @@
     "postingdate": "Validée",
     "transdate":   "Date pièce",
     "account": "Compte",
-    "costcenter":   "C.de coût",
+    "costcenter":   "C.coût",
     "text" :       "Texte",
     "type":         "Type",
     "file":         "Fichier",
@@ -204,10 +204,10 @@
     "line": {
       "title": "Lignes",
       "id": "Nº ligne",
-      "account": "C. débité",
-      "oaccount": "C. crédité",
+      "account": "C.débité",
+      "oaccount": "C.crédité",
       "amount": "Montant",
-      "side": "D/C?",
+      "side": "D/C",
       "duedate": "Date valeur",
       "text": "Texte"
     }
@@ -215,10 +215,10 @@
   "journal": {
     "title":      "Journal",
     "id":         "Nº",
-    "transid":    "Nº pièce",
+    "transid":    "Nºpièce",
     "oid":         "Nº",
-    "account":      "C. débité",
-    "oaccount":      "C. crédité",
+    "account":      "C.débité",
+    "oaccount":      "C.crédité",
     "enterdate"  : "Saisie",
     "postingdate": "Validée",
     "transdate":   "Valeur",
@@ -274,6 +274,7 @@
     "menu": "Menu"
   },
   "menu": {
+    "admin": "Administration",
     "dashboard": "Tableau de board",
     "masterfiles": "Masterfiles",
     "accounting": "Comptabilité",

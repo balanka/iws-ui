@@ -61,7 +61,7 @@ export function IwsIcon(props) {
 
 
   const mappingSelect = (item) => <option key={item.id} value={item.id}>
-    {item.id.concat( " ").concat (item.name)}</option>
+    {item.id.toString().concat( " ").concat (item.name)}</option>
 const mappingSelectName = (item) => <option key={item.id} value={item.id}>
     {item.name.concat( " ").concat (item.id)}</option>;
 // export const  filter = (rows, cols, txt,) => rows.filter(col =>
@@ -173,6 +173,7 @@ export const BSFormHead = (props) => {
 export const FinancialsFormHead = (props) => {
     const {styles, title, collapse, module, modules, initAdd, onNewLine, cancelEdit, submitEdit,  toggle
         , submitCopy, submitPost, handleModuleChange, toggleToolbar, reload, current} = props
+    console.log('modules>>>>>', modules);
     const posted = current?current.posted:false
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
@@ -278,6 +279,7 @@ export const FormFactory =(props)=> {
         case formEnum.COSTCENTER:
         case formEnum.BANK:
         case formEnum.MODULE:
+        case formEnum.FMODULE:
         case formEnum.ROLE:
         case formEnum.PERMISSION:
             return <FormWrapper {...props} form = {MasterfilesMainForm}/>;
@@ -855,13 +857,15 @@ export const CustomerAccountForm =(props) => {
 
                 </CCol>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('common.postingdate')}</CLabel>
+                    <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
                 </CCol>
                 <CCol sm="2">
-                    <CInput disabled={true} bssize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
-                             placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
+                    <CInput  bssize="sm" type="text" id="company-id" name="company" className="input-sm"
+                             placeholder="company" value={current.company} onChange={(event)  =>
+                      setCurrent({ ...current, company: event.target.value})}
                              style={{'textAlign':'right', padding:2 }}/>
                 </CCol>
+
             </CFormGroup>
             <CFormGroup row style={{ height:15 }}>
                 <CCol sm="2">
@@ -874,15 +878,7 @@ export const CustomerAccountForm =(props) => {
                         {accData.sort(sortById).map(item => mappingSelect(item))};
                     </CSelect>
                 </CCol>
-                <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
-                </CCol>
-                <CCol sm="2">
-                    <CInput  bssize="sm" type="text" id="company-id" name="company" className="input-sm"
-                             placeholder="company" value={current.company} onChange={(event)  =>
-                        setCurrent({ ...current, company: event.target.value})}
-                             style={{'textAlign':'right', padding:2 }}/>
-                </CCol>
+
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
@@ -894,9 +890,6 @@ export const CustomerAccountForm =(props) => {
                         setCurrent({ ...current, vatcode: event.target.value})} >
                         {vatData.sort(sortById).map(item => mappingSelect(item))};
                     </CSelect>
-                </CCol>
-                <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('common.iban')}</CLabel>
                 </CCol>
             </CFormGroup>
         </Grid>);

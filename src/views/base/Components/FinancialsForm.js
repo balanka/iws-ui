@@ -1,4 +1,4 @@
-import React, {createRef, useCallback,  useLayoutEffect, useState} from 'react'
+import React, {createRef, useCallback, useLayoutEffect, useRef, useState} from 'react'
 import {CInput} from '@coreui/react'
 import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
@@ -7,7 +7,7 @@ import {Add, Edit, EditRow, Get1, Get2, Post} from './CrudController';
 import {columnsF, Linescolumns, Options, OptionsM} from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
-import {ACCOUNT, COSTCENTER,  MASTERFILE,  useStore} from "./Menu";
+import {ACCOUNT, COSTCENTER, FMODULE, MASTERFILE, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import iwsStore from './Store';
@@ -33,18 +33,20 @@ const FinancialsForm = () => {
   const url=SERVER_URL.concat(module_x.ctx);
   const accUrl=SERVER_URL.concat(MASTERFILE.accURL);
   const ccUrl=SERVER_URL.concat(MASTERFILE.ccURL);
+  const fmoduleUrl=SERVER_URL.concat(MASTERFILE.fmoduleURL);
   const acc_modelid=parseInt(ACCOUNT(t).id);
   const cc_modelid=parseInt(COSTCENTER(t).id);
-
+  const fmodule_modelid=parseInt(FMODULE(t).id);
+  console.log('fmodule_modelid', fmodule_modelid);
   const initCc = module_x.state2;
   const initAcc = module_x.state1;
   const initialState = module_x.state;
   const current_= initialState[0];
-
-  const title =module_x.title;
+  let title_ = t(module_x.title);
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   const [rows, setRows] =useState([])
   const [model, setModel] = useState('');
+  const [title, setTitle] = useState(title_);
   const tableRef = createRef();
   const initLine = initialState[0].lines[0];
   const [toolbar, setToolbar] = useState(false);
@@ -52,6 +54,12 @@ const FinancialsForm = () => {
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
   const data_ = iwsState.get(parseInt(model));
   const data  = ()=>data_?data_:initialState;
+  const fModuleData = iwsState.get(fmodule_modelid)?iwsState.get(fmodule_modelid):[];
+  const accData = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
+  const ccData = iwsState.get(cc_modelid)?iwsState.get(cc_modelid):[...initCc];
+
+  const columnsX = Linescolumns(accData, initLine, current, fModuleData, model,  t);
+  const columns = columnsF(ccData, initLine, current, t);
 
   const toggleEdit = ()=>{
     if(current?.editing){
@@ -83,28 +91,23 @@ const FinancialsForm = () => {
       onNewLine();
     }
   }, );
-
+  let init = useRef(false)
   useLayoutEffect(() => {
+    if (!init.current) {
       iwsStore.subscribe(setIwsState);
+      init.current = true
+      Get1(fmoduleUrl, token, fmodule_modelid);
       // attach the event listener
       document.addEventListener('keydown', handleKeyPress);
+
+    }
+
     // remove the event listener
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
-  }, [ current, model, data_, handleKeyPress]);
+  }, [init, data_]);
 
-  const models=[
-    { id:'112', name:'Supplier invoice', account:'1810', isDebit:false}
-    ,{ id:'114', name:'Payment', account:'1810', isDebit:false}
-    ,{ id:'122', name:'Receivables', account:'1810', isDebit:false}
-    ,{ id:'124', name:'Settlement', account:'1810', isDebit:true}
-    ,{ id:'134', name:'General ledger', account:'1810', isDebit:false}]
-
-  const accData = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
-  const ccData = iwsState.get(cc_modelid)?iwsState.get(cc_modelid):[...initCc];
-  const columnsX = Linescolumns(accData, initLine, current, models, model,  t);
-  const columns= columnsF(ccData, initLine, current, t);
 
   const reload = ()=> {
     iwsStore.deleteKey(current.modelid );
@@ -119,7 +122,10 @@ const FinancialsForm = () => {
   }
 
   function getAccountAndLabel() {
-    const model_ = models.find(obj => obj.id === model);
+    console.log('model', model);
+    console.log('fModuleData', fModuleData);
+    const model_ = fModuleData.find(obj =>obj.id === parseInt(model));
+    console.log('model_', model_);
     const account_ = model_ ? model_.account : undefined;
     const accountLabel_ = model_.isDebit ? 'account' : 'oaccount';
     return {account_, accountLabel_};
@@ -148,6 +154,9 @@ const FinancialsForm = () => {
     event.preventDefault();
     setModel(event.target.value);
     submitQuery(event, event.target.value);
+    const m= fModuleData.find(m=>m.id.toString() === event.target.value);
+    title_ = m?.name?m.name:title_;
+    setTitle(title_);
   };
 
   const buildAmount = row => ({...row, total: row.lines.reduce((acc, line) => acc + line.amount, 0)});
@@ -257,7 +266,7 @@ const FinancialsForm = () => {
         <FinancialsFormHead styles={styles} title={title}  collapse={state.collapse} initAdd ={initAdd}
                              url={url} accUrl={accUrl}
                             initialState={initialState} cancelEdit ={cancelEdit} submitEdit={submitEdit}
-                            module ={model}  modules ={models} handleModuleChange={handleModuleChange}
+                            module ={model}  modules ={fModuleData} handleModuleChange={handleModuleChange}
                             onNewLine={onNewLine} submitPost={submitPost} submitCopy={submitCopy} reload={reload}
                              toggle={toggle} toggleToolbar={toggleToolbar}  current={current} />
         <FormFactory formid ={formEnum.FINANCIALS} current={current} current_={current_} setCurrent={setCurrent} t={t} accData={accd}

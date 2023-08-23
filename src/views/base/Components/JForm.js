@@ -135,7 +135,7 @@ const JForm = () => {
     const initialState = module_.state
     console.log('module_', module_);
     const current_ = module_.state?module_?.state[0].query:[];
-    const title = module_.title
+    const title = t(module_.title);
     const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300});
     const [isDebit, setIsDebit] = useState(true);
     const modelid = module_.modelid;

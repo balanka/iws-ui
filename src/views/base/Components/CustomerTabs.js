@@ -38,16 +38,6 @@ import {Autocomplete} from "./Autocomplete";
       , ctx2:"", form:'bankAccountTable', state:initBankAcc, state1:'' ,state2:'',  columns:columns}
      ]
 
-/*
-  const onNewLine =() => {
-   const ref = tableRef.current
-   ref.dataManager.changeRowEditing();
-   ref.setState({ ...ref.dataManager.getRenderState(),
-     showAddRow: !ref.state.showAddRow,
-   });
- }
- */
-
 const addRow = (newData) =>{
   console.log('newData', newData);
    if(newData ) {
@@ -77,11 +67,11 @@ const addRow = (newData) =>{
      setCurrent({...dx});
    }
  }
-     const  editable = () => ({
+ const  editable = () => ({
       onRowAdd: async (newData) => addRow(newData),
       onRowUpdate: async (newData, oldData) => updateRow(newData, oldData),
       onRowDelete: async (oldData) => deleteRow(oldData)
-    })
+ })
 
   const  getTabContent= (module) => <GetTabContent id ={module.id}/>
   const wrapIt =(component) => <CTabPane style ={{...styles.middle, 'paddingTop':5}}>{component}</CTabPane>
@@ -96,7 +86,7 @@ const addRow = (newData) =>{
               return <>Invalid Tab</>
       }
   }
-     const getAccountForm =(formid)=>{
+  const getAccountForm =(formid)=>{
          switch(formid) {
              case formEnum.CUSTOMER:
              case formEnum.SUPPLIER:
@@ -109,7 +99,7 @@ const addRow = (newData) =>{
                  return <>Invalid Tab</>
          }
      }
-   const GetTabContent = (props) => {
+  const GetTabContent = (props) => {
          switch(props.id) {
            case "0":
               return getForm(formid);
