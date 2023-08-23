@@ -192,6 +192,9 @@
   "permission": {
     "title": "Berechtigung"
   },
+  "fmodule":{
+    "title": "Belegart"
+  },
   "financials": {
     "title":      "Beleg",
     "id":        "Nr.",
@@ -296,6 +299,7 @@
     "company": "Mandant",
     "user": "Benutzer",
     "permission": "Berechtigung",
+    "fmodule": "Belegart",
     "role": "Role",
     "bankstatement": "Bankauszug",
     "masterfiles": "Stammdaten",

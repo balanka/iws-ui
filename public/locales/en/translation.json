@@ -201,6 +201,9 @@
   "permission": {
     "title":      "Permission"
   },
+  "fmodule":{
+    "title": "Transactions"
+  },
   "financials": {
     "title":      "Financials",
     "id":        "Id",
@@ -308,6 +311,7 @@
     "user": "Users",
     "role": "Role",
     "permission": "Permission",
+    "fmodule":"Transactions",
     "bankstatement": "Bank statement",
     "masterfiles": "Master files",
     "balancesheet": "Balance sheet",

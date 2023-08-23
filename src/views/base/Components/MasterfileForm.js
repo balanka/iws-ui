@@ -105,7 +105,6 @@ const MasterfileForm = () => {
   }
 
   function buildForm(current){
-    console.log('current<<<<<<<<<<<<<<<<<<', current);
     return <>
       <Grid container spacing={2} style={{...styles.outer }} direction="column">
         <CommonFormHead styles={styles} title={title} collapse={state.collapse} initAdd ={initAdd} initialState={initialState}

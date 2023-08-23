@@ -186,6 +186,9 @@
   "permission": {
     "title":      "Permission"
   },
+  "fmodule":{
+    "title": "Journaux"
+  },
   "financials": {
     "title":      "Pièce comptable",
     "id":        "Nº pièce",
@@ -292,6 +295,7 @@
     "user": "Utilisateurs",
     "role": "Role",
     "permission": "Permission",
+    "fmodule": "Journaux",
     "bankstatement": "Rélévé bancaire",
     "masterfiles": "Références",
     "balancesheet": "Bilanz",
