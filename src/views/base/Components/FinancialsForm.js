@@ -15,7 +15,7 @@ import iwsStore from './Store';
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const { profile, selected, menu,  } = useStore();
-  const { token  } = profile
+  const { token, company } = profile
   let history = useHistory();
   const { t,  } = useTranslation();
   console.log('menu', menu);
@@ -30,10 +30,10 @@ const FinancialsForm = () => {
   const module_x= module_;
   const modifyUrl=SERVER_URL.concat(selected)
 
-  const url=SERVER_URL.concat(module_x.ctx);
-  const accUrl=SERVER_URL.concat(MASTERFILE.accURL);
-  const ccUrl=SERVER_URL.concat(MASTERFILE.ccURL);
-  const fmoduleUrl=SERVER_URL.concat(MASTERFILE.fmoduleURL);
+  const url=SERVER_URL.concat(module_x.ctx).concat("/").concat(company);
+  const accUrl=SERVER_URL.concat(MASTERFILE.acc).concat("/").concat(company);
+  const ccUrl=SERVER_URL.concat(MASTERFILE.cc).concat("/").concat(company);
+  const fmoduleUrl=SERVER_URL.concat(MASTERFILE.fmodule).concat("/").concat(company);
   const acc_modelid=parseInt(ACCOUNT(t).id);
   const cc_modelid=parseInt(COSTCENTER(t).id);
   const fmodule_modelid=parseInt(FMODULE(t).id);
