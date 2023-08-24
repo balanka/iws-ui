@@ -19,11 +19,13 @@ import CIcon from '@coreui/icons-react'
 // sidebar nav config
 import Navigation from './Navigation'
 import {useTranslation} from "react-i18next";
+import logo_svg from '../../assets/icons/logo-kabasoft.svg';
 
 const TheSidebar = () => {
   const { t,  } = useTranslation();
   const dispatch = useDispatch()
   const show = useSelector(state => state.sidebarShow)
+
 
   return (
     <CSidebar
@@ -36,7 +38,8 @@ const TheSidebar = () => {
         <CIcon
           className="c-sidebar-brand-full"
           name="logo-negative"
-          height={25}
+          height={95}
+          src={logo_svg}
         />
         <CIcon
           className="c-sidebar-brand-minimized"

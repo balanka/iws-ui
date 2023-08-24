@@ -52,7 +52,6 @@ CoreUI-React#v2.0.0
 │   ├── App.js
 │   ├── App.test.js
 │   ├── index.js
-│   ├── _nav.js      #sidebar config
 │   └── routes.js    #routes config
 │
 └── package.json

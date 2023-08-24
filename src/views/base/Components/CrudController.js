@@ -55,7 +55,6 @@ const importFn =(str)=> React.lazy(() => import(`${str}`));
    axios.post(url, data)
      .then(response => {
        const token = response.data.hash
-       console.log(" token>>>>>>>>>>>>", token);
        const userMenu = response.data.menu.toString().split(",").map(e=>parseInt(e));
        const profile = {
          token: token, company: response.data.company
@@ -86,12 +85,10 @@ const importFn =(str)=> React.lazy(() => import(`${str}`));
          console.log('error', error);
        });
        history.push("/dashboard");
-       // console.log("authorization:", authorization);
-       // console.log("profile:", profile);
-       // console.log("response:", response);
+
      }).catch(function (error) {
      console.log('error', error);
-     // history.push(routes.user.login)
+
    });
     }
  const Get = (url, token, history, func) => {
@@ -162,18 +159,6 @@ const Get2 =  (url, token, setCurrent) => {
    setCurrent(row);
 };
 
-// login set localStorage
-export const loginSet = (profile) => {
-    // HTTP header
-    axios.defaults.headers['Authentication'] = `Bearer ${profile.token}`
-    window.localStorage.setItem('profile', JSON.stringify(profile))
-}
 
-// logout remove localStorage
-export const logoutUnset = () => {
-    // HTTP header
-    delete axios.defaults.headers['Authentication']
-    window.localStorage.removeItem('profile')
-}
 export  {Get, Get1, Get2, Post, Login,  Add, Edit,  EditRow}
 
