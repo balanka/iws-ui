@@ -5,7 +5,7 @@ import {JournalFormHead, FormFactory} from './FormsProps';
 import {styles} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {Get, Get1} from './CrudController';
-import {useStore, ACCOUNT} from "./Menu";
+import {useStore, ACCOUNT, MASTERFILE} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {OptionsM, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
 import {useTranslation} from "react-i18next";
@@ -58,14 +58,14 @@ const  BasicTreeTable =()=> {
     const { t,  } = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const { profile,  } = useStore()
-    const { token  } = profile
+    const { token, company  } = profile
     const {  selected, menu } = useStore();
     let history = useHistory()
     const module_= menu.get(selected);
     if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
     if(module_.id==='0') history.push("/login");
-    const url=SERVER_URL.concat(module_.ctx)
-    const accUrl=SERVER_URL.concat(module_.ctx1)
+    const url=SERVER_URL.concat(module_.ctx).concat("/").concat(company);
+    const accUrl=SERVER_URL.concat(MASTERFILE.acc).concat("/").concat(company);
     const initAcc =module_.state1
     const initialState = module_.state
 

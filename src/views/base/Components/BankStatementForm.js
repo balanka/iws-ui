@@ -67,7 +67,7 @@ const BankStatementForm = () => {
     const { t,  } = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const { profile,  } = useStore()
-    const { token  } = profile
+    const { token, company} = profile
     const {  selected, menu } = useStore();
     let history = useHistory();
     const module_= menu.get(selected);
@@ -75,7 +75,7 @@ const BankStatementForm = () => {
     const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
     const [rows, setRows] =useState([])
     if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
-    const url=SERVER_URL.concat(module_.ctx)
+    const url=SERVER_URL.concat(module_.ctx).concat("/").concat(company);
     const initialState = module_.state
     const current_= initialState[0]
     const title = t(module_.title);

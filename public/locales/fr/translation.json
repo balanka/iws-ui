@@ -119,7 +119,7 @@
     "amount"      : "Montant",
     "info"       : "Info",
     "companyIban" : "Réf. société",
-    "posted"      : "Validé?",
+    "posted"      : "Validée",
     "period"      : "Periode"
   },
   "company": {
@@ -172,7 +172,7 @@
     "enterdate"  : "Saisie",
     "postingdate": "Validation",
     "changedate":  "Modif.",
-    "input_account": "TVA per.",
+    "input_account": "TVA perc.",
     "output_account": "TVA rec.",
     "percent":     "Pourcent"
      },
@@ -191,7 +191,7 @@
   },
   "financials": {
     "title":      "Pièce comptable",
-    "id":        "Nº pièce",
+    "id":        "Nº",
     "oid":        "Réf.",
     "period":       "Periode",
     "enterdate"  : "Saisie",
@@ -203,10 +203,10 @@
     "type":         "Type",
     "file":         "Fichier",
     "file_content":  "Contenu",
-    "posted":     "Posted",
+    "posted":     "Validée",
     "line": {
       "title": "Lignes",
-      "id": "Nº ligne",
+      "id": "Nº",
       "account": "C.débité",
       "oaccount": "C.crédité",
       "amount": "Montant",

@@ -13,19 +13,22 @@ const MasterfileForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const { profile, menu, selected,   } = useStore();
   const { t,  } = useTranslation();
-  const { token  } = profile
+  const { token, company  } = profile
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
   let history = useHistory();
   let module_ = menu.get((!selected||selected==='/login')?'/cc':selected);
   console.log('selected', selected);
   console.log('menu', menu);
   console.log('module_', module_);
+  console.log('company', company);
+  console.log('profile', profile);
    module_= (typeof module_ === undefined)?COSTCENTER(t).state:module_;
   if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
-  const url = SERVER_URL.concat(module_.ctx);
-  const accUrl = SERVER_URL.concat(MASTERFILE.accURL);
-  const vatUrl = SERVER_URL.concat(MASTERFILE.vatURL);
-  const bankUrl = SERVER_URL.concat(MASTERFILE.bankURL);
+  const baseURL = SERVER_URL.concat(module_.ctx)
+  const url = (module_.ctx===MASTERFILE.comp)?baseURL:baseURL.concat("/").concat(company);
+  const accUrl = SERVER_URL.concat(MASTERFILE.acc).concat("/").concat(company);
+  const vatUrl = SERVER_URL.concat(MASTERFILE.vat).concat("/").concat(company);
+  const bankUrl = SERVER_URL.concat(MASTERFILE.bank).concat("/").concat(company);
   const modifyUrl = SERVER_URL.concat(selected);
   const initialState = module_.state
   const current_ = initialState[0];

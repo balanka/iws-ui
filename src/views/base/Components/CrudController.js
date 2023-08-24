@@ -56,12 +56,9 @@ const importFn =(str)=> React.lazy(() => import(`${str}`));
      .then(response => {
        const token = response.data.hash
        const userMenu = response.data.menu.toString().split(",").map(e=>parseInt(e));
-       const profile = {
-         token: token, company: response.data.company
-         , modules: userMenu
-       };
+       const profile = {token: token, company: response.data.company, modules: userMenu};
        setProfile(profile);
-       const moduleURL = SERVER_URL.concat(MASTERFILE.moduleURL);
+       const moduleURL = SERVER_URL.concat(MASTERFILE.module).concat("/").concat(data.company);
        axios.get(moduleURL, {headers: {'Authorization': `Bearer ${token}`}})
          .then(response => {
            const module_ = response.data

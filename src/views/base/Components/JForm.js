@@ -7,7 +7,7 @@ import {formEnum} from "../../../utils/FORMS";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {Get, Get1} from './CrudController';
-import {ACCOUNT, useStore} from "./Menu";
+import {ACCOUNT, MASTERFILE, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import iwsStore from "./Store";
 
@@ -121,7 +121,7 @@ const JForm = () => {
     const {t,} = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const {profile, selected, menu  } = useStore()
-    const {token} = profile
+    const {token, company} = profile
     let history = useHistory()
     const module_ = menu.get(selected);
     console.log('selected', selected)
@@ -129,8 +129,8 @@ const JForm = () => {
     console.log('module_', module_);
 
     if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
-    const url = SERVER_URL.concat(module_.ctx)
-    const accUrl = SERVER_URL.concat(module_.ctx1)
+    const url = SERVER_URL.concat(module_.ctx).concat("/").concat(company);
+    const accUrl = SERVER_URL.concat(MASTERFILE.acc).concat("/").concat(company);
     const initAcc = module_.state1
     const initialState = module_.state
     console.log('module_', module_);
@@ -165,7 +165,8 @@ const JForm = () => {
     const getUrl = () => url.concat('/')
       .concat(current.account).concat('/')
       .concat(current.fromPeriod).concat('/')
-      .concat(current.toPeriod);
+      .concat(current.toPeriod).concat('/')
+      .concat(company);
 
     return Internal(isDebit, t, modelid, accData_, accUrl, token, history, setAccData, initAcc, current, getUrl, setData
       , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX);

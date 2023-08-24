@@ -20,7 +20,8 @@ import { Login as Login_} from './CrudController';
 import { useTranslation} from 'react-i18next';
 import {LOGIN_MENU} from "./Menu";
 
-export const languages = {data:[
+export const languages = {
+  data:[
     {id:'en', name:'English'},
     {id:'de', name:'Deutsch'},
     {id:'fr', name:'Francais'}
