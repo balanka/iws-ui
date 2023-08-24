@@ -157,6 +157,7 @@ const FinancialsForm = () => {
     const m= fModuleData.find(m=>m.id.toString() === event.target.value);
     title_ = m?.name?m.name:title_;
     setTitle(title_);
+    setCurrent(current_);
   };
 
   const buildAmount = row => ({...row, total: row.lines.reduce((acc, line) => acc + line.amount, 0)});

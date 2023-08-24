@@ -47,8 +47,6 @@ const MasterfileForm = () => {
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
   const datax = iwsState.get(modelid_)
   const data = (typeof datax === undefined)?[]:datax;
-  console.log('module_', module_);
-  console.log('data', data);
   const submitAdd = event => {
     event.preventDefault();
     Add(modifyUrl, token, {...current}, data, setCurrent);
@@ -66,6 +64,7 @@ const MasterfileForm = () => {
     iwsStore.deleteKey(current.modelid );
     const url_= modifyUrl.concat('/').concat(current.modelid);
     url_&&Get1(url_, token,  parseInt(current.modelid));
+    setCurrent(current_);
   }
   const handleKeyPress = useCallback((event) => {
     if (event.ctrlKey && (event.key === "s"||event.key === "S")) {
