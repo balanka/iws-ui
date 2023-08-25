@@ -279,7 +279,7 @@
   "menu": {
     "admin": "Administration",
     "dashboard": "Tableau de board",
-    "masterfiles": "Masterfiles",
+    "masterfiles": "Références",
     "accounting": "Comptabilité",
     "journal": "Grand livre",
     "pacb": "Balance",
@@ -297,9 +297,8 @@
     "permission": "Permission",
     "fmodule": "Journaux",
     "bankstatement": "Rélévé bancaire",
-    "masterfiles": "Références",
     "balancesheet": "Bilanz",
-    "financials": "Clients/Fournisseurs",
+    "financials": "Journaux",
     "financials_stmt": "Clôture/Rapports financiers"
   }
 }
