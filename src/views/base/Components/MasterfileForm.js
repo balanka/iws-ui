@@ -1,15 +1,14 @@
 import React, {createRef, memo, useCallback, useLayoutEffect, useState} from 'react'
-import {MASTERFILE, useStore, ACCOUNT, BANK, VAT, COSTCENTER, MODULE} from './Menu';
+import {MASTERFILE, useStore, ACCOUNT, BANK, VAT, COSTCENTER} from './Menu';
 import Grid from "react-fast-grid";
 import {CommonFormHead, FormFactory} from './FormsProps'
-import {ColumnFactory, RightsColumns, Options, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {ColumnFactory, RightsColumns, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import {useTranslation} from "react-i18next";
 import {Add, Edit, EditRow, Get1} from './CrudController';
 import {useHistory} from "react-router-dom";
 import iwsStore from './Store';
-import {CInput} from "@coreui/react";
 import {formEnum} from "../../../utils/FORMS";
 const MasterfileForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -60,6 +59,7 @@ const MasterfileForm = () => {
   const submitEdit = event => {
     event.preventDefault();
     console.log('current', current);
+    console.log('modifyUrl', modifyUrl);
     if(current.editing) {
       delete current.editing
       Edit(modifyUrl, token, {...current}, data, setCurrent);
