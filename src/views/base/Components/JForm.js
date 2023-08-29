@@ -93,6 +93,7 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
     const summary = (data_) => modelid === formEnum.PACB ? summaryPCB(data_) : summaryJ(data_)
     const submitQuery_ = event => {
         event.preventDefault();
+        console.log('getUrl()', getUrl())
         accData?.length < 2 ?
           Get(accUrl, profile, history, setAccData) :
           Get(getUrl(), profile, history, setData)
@@ -165,8 +166,7 @@ const JForm = () => {
     const getUrl = () => url.concat('/')
       .concat(current.account).concat('/')
       .concat(current.fromPeriod).concat('/')
-      .concat(current.toPeriod).concat('/')
-      .concat(company);
+      .concat(current.toPeriod).concat('/');
 
     return Internal(isDebit, t, modelid, accData_, accUrl, token, history, setAccData, initAcc, current, getUrl, setData
       , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX);
