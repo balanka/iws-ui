@@ -1,20 +1,23 @@
-import React, { memo, useCallback, useLayoutEffect, useState} from 'react'
-import {MASTERFILE, useStore, ACCOUNT, BANK, VAT, COSTCENTER} from './Menu';
+import React, {createRef, memo, useCallback, useLayoutEffect, useState} from 'react'
+import {MASTERFILE, useStore, ACCOUNT, BANK, VAT, COSTCENTER, MODULE} from './Menu';
 import Grid from "react-fast-grid";
 import {CommonFormHead, FormFactory} from './FormsProps'
-import {ColumnFactory, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {ColumnFactory, RightsColumns, Options, OptionsM} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import {useTranslation} from "react-i18next";
 import {Add, Edit, EditRow, Get1} from './CrudController';
 import {useHistory} from "react-router-dom";
 import iwsStore from './Store';
+import {CInput} from "@coreui/react";
+import {formEnum} from "../../../utils/FORMS";
 const MasterfileForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const { profile, menu, selected,   } = useStore();
   const { t,  } = useTranslation();
   const { token, company  } = profile
   const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
+  const tableRef = createRef();
   let history = useHistory();
   let module_ = menu.get((!selected||selected==='/login')?'/cc':selected);
   console.log('selected', selected);
@@ -29,6 +32,7 @@ const MasterfileForm = () => {
   const accUrl = SERVER_URL.concat(MASTERFILE.acc).concat("/").concat(company);
   const vatUrl = SERVER_URL.concat(MASTERFILE.vat).concat("/").concat(company);
   const bankUrl = SERVER_URL.concat(MASTERFILE.bank).concat("/").concat(company);
+  const moduleUrl = SERVER_URL.concat(MASTERFILE.module).concat("/").concat(company);
   const modifyUrl = SERVER_URL.concat(selected);
   const initialState = module_.state
   const current_ = initialState[0];
@@ -41,6 +45,7 @@ const MasterfileForm = () => {
   const acc_modelid= parseInt(ACCOUNT(t).id);
   const bank_modelid= parseInt(BANK(t).id);
   const vat_modelid= parseInt(VAT(t).id);
+  const module_modelid= formEnum.MODULE;
 
   const [current,setCurrent] = useState(current_);
   const [toolbar, setToolbar] = useState(true);
@@ -96,14 +101,83 @@ const MasterfileForm = () => {
   const accd=iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[];
   const bankd=iwsState.get(bank_modelid)?iwsState.get(bank_modelid):[];
   const vatd= iwsState.get(vat_modelid)?iwsState.get(vat_modelid):[];
+  const moduled = iwsState.get(module_modelid)?iwsState.get(module_modelid):[];
   const load = event => submitQuery(event);
   const submitQuery =(event)=>{
     event.preventDefault();
     accUrl&& (current.modelid !== acc_modelid) &&Get1(accUrl, token, acc_modelid);
     vatUrl&& (current.modelid !== vat_modelid) &&Get1(vatUrl, token, vat_modelid);
     bankUrl&&(current.modelid !== bank_modelid) &&Get1(bankUrl, token, bank_modelid);
+    moduleUrl&&(current.modelid !== module_modelid) &&Get1(moduleUrl, token, module_modelid);
     url&&Get1(url, token,  current_.modelid);
     console.log('iwsState', iwsState);
+  }
+  const updateRow = async (newData, oldData) =>{
+    if (oldData) {
+      const dx = {...current};
+      const idx = dx.rights.findIndex(obj => obj.moduleid === newData.moduleid);
+      delete newData.tableData;
+      (idx === -1)? dx.rights.push({...newData, moduleid: dx.moduleid}): dx.rights[idx]={...newData, moduleid: dx.moduleid};
+      delete dx.editing;
+      if(dx.id>0) {
+        Edit(modifyUrl, token, dx, data,  setCurrent);
+      }else{
+        Add(modifyUrl, token, dx, data,  setCurrent);
+      }
+    }
+  }
+  const deleteRow = async (oldData) =>{
+    if (oldData) {
+      const dx = {...current};
+      const index =dx.rights.findIndex(obj => obj.moduleid === oldData.moduleid);
+      const deleted = dx.rights[index];
+      console.log('deleted', deleted);
+      dx.rights[index] = {...deleted, moduleid:-2 };
+      Edit(modifyUrl, token, dx, data(), setCurrent);
+    }
+  }
+
+  const addRow1 = (newData) =>{
+    console.log('newData', newData);
+    if(newData ) {
+      const dx = {...current};
+      dx.bankaccounts[dx.bankaccounts.length] = {...newData, owner:current.id, modelid:12};
+      setCurrent({...dx});
+    }
+  }
+  const addRow = (newData) =>{
+    if(newData ) {
+      const dx = {...current};
+      const dx1 =current.rights.length===0?
+        {...current, rights:[{...current.rights.filter(e=>e.moduleid !== -1), ...newData
+            , roleid:-1, moduleid:current.moduleid, short:current.short}]}:
+        (dx.rights[current.rights.length] = {...newData, roleid:-1,  moduleid:current.moduleid, short:current.short,  modelid: 151})
+      const record = (current.rights.length>1)?dx:dx1;
+      delete record.editing;
+      console.log('record', record);
+      const result= record.id>0?Edit(modifyUrl, token, record, rights_(), setCurrent):
+        Add(modifyUrl, token, record, rights_(), setCurrent)
+      setCurrent(result);
+    }
+  }
+  const OnRowAdd = async (newData) => addRow(newData)
+  const  editable = () => ({onRowAdd: OnRowAdd, onRowUpdate:  updateRow, onRowDelete:  deleteRow})
+  const rights_ =()=> Array.isArray(current?.rights)&&current.rights?.length >0 ? current.rights:current_.rights;
+
+  const table = () =>  {
+    return (
+        <EditableTable id="LineTable" Options ={{...OptionsM, paging:rights_().length>5}} flag={false} data={rights_()}
+                       columns={ RightsColumns (moduled, current_.rights[0], current,  t)} editable={editable()}  t={t}
+                       tableRef={tableRef} />
+    )
+  }
+
+  const onNewLine =() => {
+    const ref = tableRef.current
+    ref.dataManager.changeRowEditing();
+    ref.setState({ ...ref.dataManager.getRenderState(),
+      showAddRow: !ref.state.showAddRow,
+    });
   }
 
   function buildForm(current){
@@ -114,7 +188,8 @@ const MasterfileForm = () => {
                         cancelEdit ={cancelEdit} submitEdit={submitEdit} submitQuery= {load} reload={reload} toggle={toggle}
                         toggleToolbar={toggleToolbar}  style={{...styles.inner}}/>
         <FormFactory formid ={modelid_}  current={current} setCurrent={setCurrent} t={t} accData={accd} vatData={vatd}
-                     bankData={bankd} collapse={state.collapse} styles={styles} style={{...styles.inner}}/>
+                     bankData={bankd}  table = {(modelid_ ===formEnum.ROLE)?table:null} onNewLine={onNewLine}
+                     collapse={state.collapse} styles={styles} style={{...styles.inner}}/>
 
         <Grid container spacing={2} style={{...styles.inner, display:'block' }} direction="column" >
           <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px"

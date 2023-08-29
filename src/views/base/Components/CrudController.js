@@ -50,26 +50,32 @@ const Edit = (url, token, record, data,  setCurrent) => {
      console.log('error', error);
    });
   };
+
 const importFn =(str)=> React.lazy(() => import(`${str}`));
  const Login = (history, url, data, setProfile, t, setMenu, setModule, setRoutes) => {
    axios.post(url, data)
      .then(response => {
        const token = response.data.hash
-       const userMenu = response.data.menu.toString().split(",").map(e=>parseInt(e));
-       const profile = {token: token, company: response.data.company, modules: userMenu};
-       setProfile(profile);
+       const userMenux = response.data.menu.toString().split(",").map(e=>parseInt(e));
+       console.log("userMenu>>>>>>>>>>>>", userMenux);
+       const result = Map.groupBy(response.data.rights, ({ moduleid }) => moduleid);
+       const userRights = Array.from(result, (entry) =>
+                    ({ key: entry[0], value: entry[1].map(e=>e.short).reduce((a,b)=>a.concat(b)) }));
+       const company = response.data.company
        const moduleURL = SERVER_URL.concat(MASTERFILE.module).concat("/").concat(data.company);
        axios.get(moduleURL, {headers: {'Authorization': `Bearer ${token}`}})
          .then(response => {
            const module_ = response.data
            iwsStore.put(400, module_);
-           console.log(" module>>>>>>>>>>>>", module_);
-           const menu = module_.filter(e=>userMenu.includes(parseInt(e.id))).map(m => m.path).filter(p => p !== '/');
-           console.log(" filtered menu>>>>>>>>>>>>", menu);
+           const moduleIds = module_.filter(e=>result.has(parseInt(e.id)))
+           const userMenu = moduleIds.map(m => parseInt(m.id))
+           const menu = moduleIds.map(m => m.path).filter(p => p !== '/');
            const menu_t = MENU(t);
-           const routes_t =module_.map(e=> {return {...e, component: e.description?importFn(e.description):undefined}});
+           const routes_t = module_.map(e=> {return {...e, component: e.description?importFn(e.description):undefined}});
            const newMenu = new Map([...menu_t].filter(([k, _]) => menu.includes(k)));
            const newRoutes = routes_t.filter(r => menu.includes(r.path))
+           const profile = {token: token, company:company, modules: userMenu, rights:userRights};
+           setProfile(profile);
            setModule(module_);
            setMenu(newMenu);
            setRoutes(newRoutes);

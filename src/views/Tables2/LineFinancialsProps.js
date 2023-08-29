@@ -61,6 +61,16 @@ export const columnsF =(data, line, current, t) => [
     , {field:'modelid', title:t('common.modelid'), type:"numeric", minWidth:30, maxWidth:50, export:true}
     , {field:'company', title:t('common.company'), type:"numeric", minWidth:30, maxWidth:60, export:true}
 ]
+export const RightsColumns =(data, line, current,  t) =>  {
+    return [
+        {field:'roleid', title:t('role.id'), type:'numeric', minWidth:30, maxWidth:30, initialEditValue:current?current.id:-1
+            , align:"left", hidden:true, editable:'never'}
+        , {field:'moduleid', title:t('module.id'), type:'numeric'
+        , editComponent: tableData => Autocomplete ( data, tableData),  initialEditValue:line?line.moduleid:-1
+            ,   align:"left",  minWidth:100,  maxWidth:200}
+        , {field:'short', title:t('userRight.short'), type:"string", initialEditValue:'',  width:10, minWidth:10,  maxWidth:20}
+        , {field:'modelid', title:t('common.modelid'), type:"numeric", minWidth:30, maxWidth:50, hidden:true, export:true}
+    ]}
 export const Linescolumns =(data, line, current, models,  model, t) =>  {
     const model_ = models.find(obj => obj.id === model);
     let  debitedAccount = '';
@@ -72,7 +82,7 @@ export const Linescolumns =(data, line, current, models,  model, t) =>  {
     }
 
     return [
-      {field:'id', title:t('financials.line.id'), type:'numeric', minWidth:20, maxWidth:20, initialEditValue:line.id, align:"left", editable:'never'}
+      {field:'id', title:t('financials.line.id'), type:'numeric', minWidth:30, maxWidth:30, initialEditValue:line.id, align:"left", editable:'never'}
     , {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current?current.id:0,  editable:'never'}
     , {field:'account', title:t('financials.line.account'), type:'string', editComponent: tableData => Autocomplete ( data, tableData)
     , initialEditValue:debitedAccount, align:"left",  minWidth:100,  maxWidth:450}

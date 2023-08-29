@@ -108,7 +108,7 @@ export const initUser=[{ userName:'', firstName:'', lastName:'', email:'', hash:
         , role:'', modelid:111, menu:''}]
 
 export const initRole = [ {id:'121', name: '', description: '', enterdate:date, postingdate:date
-  , changedate:date, modelid:121, account:'-1', company:''}]
+  , changedate:date, modelid:121,  company:'', rights: [{moduleid:'', roleid:-1, short:'', company:'', modelid:151}]}]
 export const initPermission = [ {id:'141', name: '', description: '', enterdate:date, postingdate:date
   , changedate:date, modelid:141, account:'-1', company:''}]
 

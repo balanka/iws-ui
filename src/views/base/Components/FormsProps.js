@@ -429,14 +429,14 @@ export const BankStatementMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('common.id')}</CLabel>
                 </CCol>
                 <CCol sm="4">
-                    <CInput  bssize="sm" type="text" id="account-id" name="id" className="input-sm"
+                    <CInput  disabled={true} bssize="sm" type="text" id="account-id" name="id" className="input-sm"
                              placeholder="Id" value= {current.id}  />
                 </CCol>
                 <CCol sm="1">
                     <CLabel size="sm" htmlFor="input-small">{t('common.postingdate')}</CLabel>
                 </CCol>
                 <CCol sm="1.5">
-                    <CInput  bssize="sm" type="text"  id="postingdate-id" name="postingdate" className="input-sm"
+                    <CInput  disabled={true} Bbssize="sm" type="text"  id="postingdate-id" name="postingdate" className="input-sm"
                              placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
                              style={{'textAlign':'right', padding:2 }} />
                 </CCol>
@@ -446,7 +446,7 @@ export const BankStatementMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.depositor')}</CLabel>
                 </CCol>
                 <CCol sm="4">
-                    <CInput  bssize="sm" type="text" id="depositor-input" name="depositor"
+                    <CInput disabled={current.posted}  bssize="sm" type="text" id="depositor-input" name="depositor"
                              className="input-sm" placeholder="depositor" value={current.depositor}  />
                 </CCol>
                 <CCol sm="1.5">
@@ -454,7 +454,7 @@ export const BankStatementMainForm =(props) => {
                 </CCol>
                 <CCol sm="1.5">
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
+                        <KeyboardDatePicker disabled={current.posted}
                             disableToolbar
                             variant="inline"
                             format="dd.MM.yyyy"
@@ -474,14 +474,14 @@ export const BankStatementMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.beneficiary')}</CLabel>
                 </CCol>
                 <CCol sm="4">
-                    <CInput  readonly type="text" id="beneficiary-input" name="beneficiary"
+                    <CInput  disabled={current.posted} type="text" id="beneficiary-input" name="beneficiary"
                              className="input-sm" placeholder="beneficiary" value={current.beneficiary}/>
                 </CCol>
                 <CCol sm="1">
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.postingtext')}</CLabel>
                 </CCol>
                 <CCol sm="1.5">
-                    <CInput  bssize="sm"  type="text"  id="postingtext-id" name="postingtext"
+                    <CInput disabled={current.posted} bssize="sm"  type="text"  id="postingtext-id" name="postingtext"
                              className="input-sm" placeholder="postingtext" value={current.postingtext} />
                 </CCol>
             </CFormGroup>
@@ -490,14 +490,14 @@ export const BankStatementMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.info')}</CLabel>
                 </CCol>
                 <CCol xs="4">
-                    <CInput  bssize="sm" type="text" id="info-input" name="info" className="input-sm"
+                    <CInput disabled={current.posted} bssize="sm" type="text" id="info-input" name="info" className="input-sm"
                              placeholder="info" value={current.info}  />
                 </CCol>
                 <CCol sm="1">
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.amount')}</CLabel>
                 </CCol>
                 <CCol sm="1.5">
-                    <CInput  bssize="sm" type="text" id="amount-input" name="amount" className="input-sm"
+                    <CInput disabled={current.posted} bssize="sm" type="text" id="amount-input" name="amount" className="input-sm"
                              placeholder="amount" value={currencyAmountFormatDE(Number(current.amount),current.currency)}
                              style={{ 'textAlign':'right' }}/>
                 </CCol>
@@ -507,7 +507,7 @@ export const BankStatementMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.companyIban')}</CLabel>
                 </CCol>
                 <CCol sm="4">
-                    <CInput  bssize="sm" type="text" id="companyIban-id" name="companyIban"
+                    <CInput disabled={current.posted} bssize="sm" type="text" id="companyIban-id" name="companyIban"
                             className="input-sm" placeholder="companyIban" value={current.companyIban}
                             onChange={(event)  => setCurrent({ ...current, accountno: event.target.value})}/>
                 </CCol>
@@ -515,7 +515,7 @@ export const BankStatementMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
                 </CCol>
                 <CCol sm="1.5">
-                    <CInput  bssize="sm" type="text" id="company-input" name="company" className="input-sm"
+                    <CInput disabled={current.posted} bssize="sm" type="text" id="company-input" name="company" className="input-sm"
                              placeholder="company" value={current.company} style={{ 'textAlign':'right' }}/>
                 </CCol>
 
@@ -525,7 +525,7 @@ export const BankStatementMainForm =(props) => {
                     <CLabel size="sm" htmlFor="input-small">{t('bankstatement.accountno')} </CLabel>
                 </CCol>
                 <CCol sm="4">
-                    <CInput  bssize="sm" type="text" id="accountno-input" name="accountno"
+                    <CInput disabled={current.posted} bssize="sm" type="text" id="accountno-input" name="accountno"
                             className="input-sm" placeholder="accountno" value={current.accountno}
                             onChange={(event)  => setCurrent({ ...current, accountno: event.target.value})} />
                 </CCol>
@@ -546,7 +546,7 @@ export const BankStatementMainForm =(props) => {
             </CFormGroup>
             <CFormGroup row style={{  height:15 }}>
                 <CCol sm="2">
-                    <CLabel size="sm" htmlFor="input-small">{t('bankstatement.purpose')}</CLabel>
+                    <CLabel disabled={current.posted} size="sm" htmlFor="input-small">{t('bankstatement.purpose')}</CLabel>
                 </CCol>
                 <CCol xs="12"   md="10">
                     <CTextarea disabled ={current.posted} bssize="sm" type="textarea" id="purpose-input" name="purpose" className="input-sm"
@@ -594,28 +594,33 @@ export const MasterfilesMainForm =(props) => {
                 style={{'textAlign':'right', padding:2 }} readonly/>
     </CCol>
 </CFormGroup>
-         <CFormGroup row style={{  height:15 }}>
-    <CCol sm="2">
-        <CLabel size="sm" htmlFor="input-small">{t('common.account')}</CLabel>
-    </CCol>
-    <CCol sm="4">
-        <CSelect className="flex-row" type="select" name="account" id="account-id"
-            value={current.account} onChange={(event)  => setCurrent({ ...current, account: event.target.value})}>
-            { accData.sort(sortById).map(item => mappingSelect(item))};
-        </CSelect>
-    </CCol>
-    <CCol sm="2">
+    <CFormGroup row style={{  height:15 }}>
+     {   current.account ?
+      ( <>
+        <CCol sm="2">
+            <CLabel size="sm" htmlFor="input-small">{t('common.account')}</CLabel>
+        </CCol>
+        <CCol sm="4">
+            <CSelect className="flex-row" type="select" name="account" id="account-id"
+                     value={current.account}
+                     onChange={(event) => setCurrent({...current, account: event.target.value})}>
+                {accData.sort(sortById).map(item => mappingSelect(item))};
+            </CSelect>
+        </CCol>
+        <CCol sm="2">
         <CLabel size="sm" htmlFor="input-small">{t("common.postingdate")}</CLabel>
     </CCol>
-    <CCol sm="2">
+        <CCol sm="2">
         <CInput disabled={true} bssize="sm" type="text" id="input-small" name="postingdate" className="input-sm"
                 placeholder="date" value={dateFormat(current.postingdate, "dd.mm.yyyy")}
                 style={{'textAlign':'right', padding:2 }} readonly />
     </CCol>
+       </>):<></>
+  }
 </CFormGroup>
-        <CFormGroup row style={{  height:15 }}>
-    <CCol sm="6"/>
-    <CCol sm="2">
+ <CFormGroup row style={{  height:15 }}>
+      {!current.account ? <CCol sm="6"/>:null}
+      <CCol sm="2">
         <CLabel size="sm" htmlFor="input-small">{t('common.company')}</CLabel>
     </CCol>
     <CCol sm="2">
