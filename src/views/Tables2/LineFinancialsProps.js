@@ -86,11 +86,11 @@ export const Linescolumns =(data, line, current, models,  model, t) =>  {
     return [
     //  {field:'id', title:t('financials.line.id'), type:'numeric', minWidth:30, maxWidth:30, initialEditValue:line.id, align:"left", editable:'never'}
      {field:'transid', title:t('financials.id'), type:'numeric', hidden:true, initialEditValue:current?current.id:0,  editable:'never'}
-    , {field:'account', title:t('financials.line.account'), type:'string', editComponent: tableData => Autocomplete ( data, tableData)
+    , {field:'account', title:t('financials.line.account'), type:'string', editComponent: tableData => Autocomplete ( data, tableData, true)
     , initialEditValue:debitedAccount, align:"left", width:30, minWidth:30,  maxWidth:450}
     , {field:'accountName', title:t('financials.line.accountName'), initialEditValue:'', hidden:false,  width:40, minWidth:30,  maxWidth:50}
     , {field:'side', title:t('financials.line.side'), type:"boolean", initialEditValue:true,  width:5, minWidth:5,  maxWidth:10,}
-    , {field:'oaccount', title:t('financials.line.oaccount'), type:'string', editComponent:tableData => Autocomplete ( data, tableData),
+    , {field:'oaccount', title:t('financials.line.oaccount'), type:'string', editComponent:tableData => Autocomplete ( data, tableData, true),
         initialEditValue:creditedAccount,  width:30, minWidth:30,  maxWidth:450, align:"right"}
     , {field:'oaccountName', title:t('financials.line.oaccountName'), initialEditValue:'', hidden:false,  width:40, minWidth:40,  maxWidth:50}
     , {field:'duedate', title:t('financials.line.duedate'), type:"date", align:"right",

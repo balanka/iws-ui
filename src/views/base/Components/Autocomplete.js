@@ -1,13 +1,14 @@
 import React from 'react'
 import { default as Autocomplete1} from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
-export  const Autocomplete = (data, tableData) => {
+export  const Autocomplete = (data, tableData, flag) => {
 
     return (
       <Autocomplete1
         value={tableData.value}
         onChange={(event, newValue) => {
-            tableData.onChange(newValue);
+          const value= flag?newValue:newValue.toString().split(" ")[0];
+            tableData.onChange(value);
         }}
         getOptionSelected={(option, value) => option.id === value.id}
         disableClearable={true}
