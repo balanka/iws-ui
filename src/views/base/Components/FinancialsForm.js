@@ -219,7 +219,16 @@ const FinancialsForm = () => {
       const dx = {...current};
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       delete newData.tableData;
-      (idx === -1)? dx.lines.push({...newData, transid: dx.id1}): dx.lines[idx]={...newData, transid: dx.id1};
+      const splittedAccount = newData.account.toString().split(" ");
+      const splittedOAccount = newData.oaccount.toString().split(" ");
+      const accountId = splittedAccount[0];
+      const accountName = splittedAccount[1];
+      const oaccountId = splittedOAccount[0];
+      const oaccountName = splittedOAccount[1];
+
+      (idx === -1)? dx.lines.push({...newData, transid: dx.id1}): dx.lines[idx]={...newData, transid: dx.id1
+        , account:accountId, accountName:accountName, oaccount:oaccountId, oaccountName:oaccountName };
+      console.log('dx', dx);
       delete dx.editing;
       if(dx.id>0) {
         Edit(modifyUrl, token, dx, data(),  setCurrent);

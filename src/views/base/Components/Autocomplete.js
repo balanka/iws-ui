@@ -7,15 +7,14 @@ export  const Autocomplete = (data, tableData) => {
       <Autocomplete1
         value={tableData.value}
         onChange={(event, newValue) => {
-            const value = newValue.toString().split(" ")[0]
-            tableData.onChange(value);
+            tableData.onChange(newValue);
         }}
         getOptionSelected={(option, value) => option.id === value.id}
         disableClearable={true}
         autoComplete={true}
-        options={data.map(d=>d.id.concat (' ').concat (d.name))} // Remove the getOptionsLabel
-        renderInput={params => <TextField {...params}
-                                           InputProps={{ ...params.InputProps, style: { fontSize: 12 } }}/>}
+        options={data.map(d=>d.id.concat (' ').concat (d.name))}
+        renderInput={params =>
+          <TextField {...params} InputProps={{ ...params.InputProps, style: { fontSize: 12 } }}/>}
       />)
 }
 

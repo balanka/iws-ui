@@ -101,7 +101,7 @@ export const initBS=[{ id:'', depositor:'', postingdate:date, valuedate:date, po
 export const initFtr=[{ id:-1, oid:0, id1:-1 ,costcenter:'', account:'', transdate:date
             , enterdate:date, postingdate:date, period:getPeriod(new Date())
             , posted:false, modelid:1300, company:'', text:'', typeJournal:0, file_content:0,lines:[{id:-1, transid:-1
-            ,  account:'', side:true, oaccount:'', amount:0.0, duedate:date, text:'', currency:'EUR'}]}]
+            ,  account:'', accountName:'', side:true, oaccount:'', oaccountName:'', amount:0.0, duedate:date, text:'', currency:'EUR'}]}]
 export const initPac=[{  id:'',  name:'', period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:'', modelid:106
             , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]
 export const initUser=[{ userName:'', firstName:'', lastName:'', email:'', hash:'', phone:'', company:'', id:0
