@@ -13,6 +13,7 @@ import iwsStore from "./Store";
 
 function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
     , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX) {
+    console.log('accDatajou', accData.filter(e=>e.id ==='*'))
     const summaryPCB = (data) => {
         const row_ = data;
         const row = row_ ? row_?.slice() : row_.slice();
@@ -134,6 +135,7 @@ const JForm = () => {
     const accUrl = SERVER_URL.concat(MASTERFILE.acc).concat("/").concat(company);
     const initAcc = module_.state1
     const initialState = module_.state
+    const ALL = {...initialState, id:'*', name:'**ALL**'}
     console.log('module_', module_);
     const current_ = module_.state?module_?.state[0].query:[];
     const title = t(module_.title);
@@ -151,7 +153,7 @@ const JForm = () => {
     const toggle = () => setState({...state, collapse: !state.collapse});
     const acc_modelid = parseInt(ACCOUNT(t).id);
     console.log('acc_modelid', acc_modelid);
-    const accData_ = iwsState.get(acc_modelid) ? iwsState.get(acc_modelid) : [...initAcc];
+    const accData_ = iwsState.get(acc_modelid) ? iwsState.get(acc_modelid) : [...initAcc]
     console.log('accData_', accData_);
     let init = useRef(false)
     useLayoutEffect(() => {
@@ -166,9 +168,9 @@ const JForm = () => {
     const getUrl = () => url.concat('/')
       .concat(current.account).concat('/')
       .concat(current.fromPeriod).concat('/')
-      .concat(current.toPeriod).concat('/');
+      .concat(current.toPeriod);
 
-    return Internal(isDebit, t, modelid, accData_, accUrl, token, history, setAccData, initAcc, current, getUrl, setData
+    return Internal(isDebit, t, modelid, selected===MASTERFILE.pac?[ALL].concat(accData_):accData_, accUrl, token, history, setAccData, initAcc, current, getUrl, setData
       , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX);
 
 };

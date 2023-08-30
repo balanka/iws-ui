@@ -13,7 +13,7 @@ export const getCurrentMonth = (date)=>{
 export const date= new Date().toISOString()
 export const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
 export const MASTERFILE ={acc:'/acc', bank:'/bank', cc:'/cc', module:'/module', fmodule:'/fmodule', role:'/role', perm:'/perm'
-  , vat:'/vat', cust:'/cust', sup:'/sup', comp:'/comp', ftr:'/ftr/model', bs:'/bs', pac:'/pac', jou:'/jou', balancesheet:'/balance'
+  , vat:'/vat', cust:'/cust', sup:'/sup', comp:'/comp', ftr:'/ftr/model', bs:'/bs', pac:'/pac', jou:'/journal', balancesheet:'/balance'
   , user:'/user'};
 const LOGIN=(t)=> ( {id:"11111", name:'Login', title:"login.title", ctx:"/users/login",  modelid:formEnum.LOGIN
     , state:loginInit, state1:'' ,state2:'',  state3:'', columns:ColumnsLOGIN()});
@@ -102,7 +102,7 @@ export const initFtr=[{ id:-1, oid:0, id1:-1 ,costcenter:'', account:'', transda
             , enterdate:date, postingdate:date, period:getPeriod(new Date())
             , posted:false, modelid:1300, company:'', text:'', typeJournal:0, file_content:0,lines:[{id:-1, transid:-1
             ,  account:'', side:true, oaccount:'', amount:0.0, duedate:date, text:'', currency:'EUR'}]}]
-export const initPac=[{ period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:'', modelid:106
+export const initPac=[{  id:'',  name:'', period:'', idebit:0.0, icredit:0.0, debit:0.0, credit:0.0, currency:'', company:'', modelid:106
             , query:{ account:'', account2:'', fromPeriod:'', toPeriod:''}}]
 export const initUser=[{ userName:'', firstName:'', lastName:'', email:'', hash:'', phone:'', company:'', id:0
         , role:'', modelid:111, menu:''}]
@@ -116,7 +116,7 @@ export const initfModule = [ {id:'151', name: '', description: '', enterdate:dat
   , changedate:date, modelid:151, account:'-1', isDebit:false, company:''}]
 export const MENU = (t)=> new Map([
                      ['/journal', JOURNAL(t)]
-                    ,['/pacb', PACB(t)]
+                    ,['/pac', PACB(t)]
                     ,['/bank', BANK(t)]
                     ,['/acc', ACCOUNT(t)]
                     ,['/cc', COSTCENTER(t)]

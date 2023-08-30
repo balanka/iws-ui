@@ -23,7 +23,9 @@ export const ColumnsLOGIN = () => [
     , {field:'name', title:'name', type:"string", export:true}
 ]
 export const columnsPACB = (t) => [
-      {field:'period', title:t('pac.period'),  type:"numeric", export:true }
+      {field:'id', title:t('common.id'),   minWidth:10, export:true }
+    , {field:'name', title:t('common.name'),   minWidth:40, export:true }
+    , {field:'period', title:t('pac.period'),  type:"numeric", export:true }
     , {field:'idebit', title:t('common.idebit'), type:"currency", currencySetting: { locale:"de"
             , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
     , {field:'debit', title:t('common.debit'), type:"currency", currencySetting: { locale:"de"

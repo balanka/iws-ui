@@ -1200,7 +1200,7 @@ export const JournalMainForm = (props) => {
                     <CSelect className ="flex-row" type="select" name="account" id="account-id"
                              value={current.account} onChange={(event)  =>
                         setCurrent({ ...current, account: event.target.value})} style={{ height: 30, padding:2 }}>
-                        <option key="00" value="0000 All"/>
+                        <option key="*" value="*** All"/>
                         {accData.sort(sortById).sort(sortById).map(item => mappingSelect(item))};
 
                     </CSelect>
