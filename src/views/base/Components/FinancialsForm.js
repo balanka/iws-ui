@@ -219,15 +219,18 @@ const FinancialsForm = () => {
       const dx = {...current};
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       delete newData.tableData;
-      const splittedAccount = newData.account.toString().split(" ");
-      const splittedOAccount = newData.oaccount.toString().split(" ");
-      const accountId = splittedAccount[0];
-      const accountName = splittedAccount[1];
-      const oaccountId = splittedOAccount[0];
-      const oaccountName = splittedOAccount[1];
+      const accountChanged = newData.account !== oldData.account
+      const oaccountChanged = newData.oaccount !== oldData.oaccount
+      const splittedAccount = accountChanged?newData.account.toString().split(" "):oldData.account;
+      const splittedOAccount = oaccountChanged?newData.oaccount.toString().split(" "):oldData.oaccount;
+      const accountId =  accountChanged?splittedAccount[0]:oldData.account;
+      const accountName = accountChanged?splittedAccount[1]:oldData.accountName;
+      const oaccountId = oaccountChanged?splittedOAccount[0]:oldData.oaccount;
+      const oaccountName = oaccountChanged?splittedOAccount[1]:oldData.oaccountName;
 
       (idx === -1)? dx.lines.push({...newData, transid: dx.id1}): dx.lines[idx]={...newData, transid: dx.id1
-        , account:accountId, accountName:accountName, oaccount:oaccountId, oaccountName:oaccountName };
+        , ...(accountChanged &&{account:accountId}), ...(accountChanged &&{accountName:accountName})
+        , ...(oaccountChanged &&{oaccount:oaccountId}), ...(oaccountChanged &&{oaccountName:oaccountName}) };
       console.log('dx', dx);
       delete dx.editing;
       if(dx.id>0) {
@@ -242,7 +245,6 @@ const FinancialsForm = () => {
       const dx = {...current};
       const index =dx.lines.findIndex(obj => obj.id === oldData.id);
       const deleted = dx.lines[index];
-      console.log('deleted', deleted);
       dx.lines[index] = {...deleted, transid:-2 };
       Edit(modifyUrl, token, dx, data(), setCurrent);
     }
@@ -269,7 +271,6 @@ const FinancialsForm = () => {
     }
 
     const parentChildData =(row, rows) => Array.isArray(rows)&&rows.length >0 ?rows.find(a => a?.id === row.transid):rows
-
 
     return <>
       <Grid container spacing={2} style={{...styles.outer , display:'block'}} direction="column" >
