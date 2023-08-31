@@ -93,9 +93,15 @@ const MasterfileForm = () => {
   const cancelEdit = (e) => initAdd();
   const columns = ColumnFactory(modelid_, iwsState.get(modelid_), t);
   const edit = editedRow =>{
-    const record = data.find(obj => obj.id === editedRow.id);
-    const row = {...record, editing:true}
-    setCurrent(row);
+    const isArray = Array.isArray(editedRow)&& editedRow.length>0
+    console.log('editedRow', editedRow);
+    console.log('isArray', isArray);
+    const row = isArray?editedRow[0]:editedRow;
+    console.log('row>>>>>>>', row);
+    if( row) {
+      const record = data.find(obj => obj.id === row.id);
+      setCurrent({...record, editing: true});
+    }
   }
 
   const accd=iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[];

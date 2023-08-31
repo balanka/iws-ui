@@ -11,6 +11,7 @@ import {ACCOUNT, COSTCENTER, FMODULE, MASTERFILE, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import iwsStore from './Store';
+//import { block } from "million/react";
 
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -164,9 +165,15 @@ const FinancialsForm = () => {
   const buildData = () => data().map( row =>buildAmount(row));
 
   const edit = editedRow =>{
-    const data = iwsState.get(editedRow.modelid)
-    const record = data.find(obj => obj.id === editedRow.id);
-    setCurrent({...record, editing:true});
+    const isArray = Array.isArray(editedRow)&& editedRow.length>0
+    console.log('isArray', isArray);
+    const row = isArray?editedRow[0]:editedRow;
+    console.log('row>>>>>>>', row);
+    if( row) {
+      const data = iwsState.get(row.modelid);
+      const record = data.find(obj => obj.id === row.id);
+      setCurrent({...record, editing: true});
+    }
   }
 
   const submitPost = event => {
@@ -294,6 +301,7 @@ const FinancialsForm = () => {
   const currentx= current?current:current_;
   return buildForm( currentx);
 };
+
 export default FinancialsForm;
 
 

@@ -5,6 +5,9 @@ import tableIcons from "./TableIcons.js";
 export default function EditableTable(props) {
     const handleClick = (event, rowData) => edit?edit(rowData):void(0);
     const {Options, flag, data, columns, t, tableRef, edit, editable, setSelectedRows, parentChildData } = props
+    var editFunction = typeof edit ==='function';
+    console.log('editFunction', editFunction);
+    console.log('Options', Options.selection);
     return (
         <MaterialTable
             style={{ padding: '0 8px' }}
@@ -18,10 +21,13 @@ export default function EditableTable(props) {
             parentChildData ={parentChildData}
             onRowClick={handleClick}
             onSelectionChange={(rows, rowData) => {
+                console.log('rowData', rowData);
+                console.log('rows', rows);
                 setSelectedRows(rows);
-                if(Options.selection&&edit&&rows.length>0)
-                    edit(rowData);
-                else edit({...rowData, editing:false})
+                if(Options.selection&&editFunction&&rows.length>0) {
+                    edit({...rowData?rowData:rows[0]});
+                }else (editFunction&&rows.length>0)?edit(rows):void(false);
+
             }}
             localization={{
                 body: {
