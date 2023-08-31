@@ -55,9 +55,14 @@ const FinancialsForm = () => {
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
   const data_ = iwsState.get(parseInt(model));
   const data  = ()=>data_?data_:initialState;
-  const fModuleData = iwsState.get(fmodule_modelid)?iwsState.get(fmodule_modelid):[];
-  const accData = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
-  const ccData = iwsState.get(cc_modelid)?iwsState.get(cc_modelid):[...initCc];
+
+  // const fModuleData = iwsState.get(fmodule_modelid)?iwsState.get(fmodule_modelid):[];
+  // const accData = iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];
+  // const ccData = iwsState.get(cc_modelid)?iwsState.get(cc_modelid):[...initCc];
+
+  const fModuleData = iwsState.get(fmodule_modelid)??[];
+  const accData = iwsState.get(acc_modelid)??[...initAcc];
+  const ccData = iwsState.get(cc_modelid)??[...initCc];
 
   const columnsX = Linescolumns(accData, initLine, current, fModuleData, model,  t);
   const columns = columnsF(ccData, initLine, current, t);

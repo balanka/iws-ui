@@ -19,11 +19,6 @@ const MasterfileForm = () => {
   const tableRef = createRef();
   let history = useHistory();
   let module_ = menu.get((!selected||selected==='/login')?'/cc':selected);
-  console.log('selected', selected);
-  console.log('menu', menu);
-  console.log('module_', module_);
-  console.log('company', company);
-  console.log('profile', profile);
    module_= (typeof module_ === undefined)?COSTCENTER(t).state:module_;
   if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
   const baseURL = SERVER_URL.concat(module_.ctx)
@@ -35,17 +30,13 @@ const MasterfileForm = () => {
   const modifyUrl = SERVER_URL.concat(selected);
   const initialState = module_.state
   const current_ = initialState[0];
-  console.log('current_', current_);
-  console.log('initialState', initialState);
   const title = t(module_.title);
   const [, setRows] = useState([]);
   const modelid_ = module_.modelid;
-
   const acc_modelid= parseInt(ACCOUNT(t).id);
   const bank_modelid= parseInt(BANK(t).id);
   const vat_modelid= parseInt(VAT(t).id);
   const module_modelid= formEnum.MODULE;
-
   const [current,setCurrent] = useState(current_);
   const [toolbar, setToolbar] = useState(true);
   const [iwsState, setIwsState] = useState(iwsStore.initialState);
@@ -58,8 +49,6 @@ const MasterfileForm = () => {
 
   const submitEdit = event => {
     event.preventDefault();
-    console.log('current', current);
-    console.log('modifyUrl', modifyUrl);
     if(current.editing) {
       delete current.editing
       Edit(modifyUrl, token, {...current}, data, setCurrent);
@@ -94,20 +83,17 @@ const MasterfileForm = () => {
   const columns = ColumnFactory(modelid_, iwsState.get(modelid_), t);
   const edit = editedRow =>{
     const isArray = Array.isArray(editedRow)&& editedRow.length>0
-    console.log('editedRow', editedRow);
-    console.log('isArray', isArray);
     const row = isArray?editedRow[0]:editedRow;
-    console.log('row>>>>>>>', row);
     if( row) {
       const record = data.find(obj => obj.id === row.id);
       setCurrent({...record, editing: true});
     }
   }
 
-  const accd=iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[];
-  const bankd=iwsState.get(bank_modelid)?iwsState.get(bank_modelid):[];
-  const vatd= iwsState.get(vat_modelid)?iwsState.get(vat_modelid):[];
-  const moduled = iwsState.get(module_modelid)?iwsState.get(module_modelid):[];
+  const accd=iwsState.get(acc_modelid)??[];
+  const bankd=iwsState.get(bank_modelid)??[];
+  const vatd= iwsState.get(vat_modelid)??[];
+  const moduled = iwsState.get(module_modelid)??[];
   const load = event => submitQuery(event);
   const submitQuery =(event)=>{
     event.preventDefault();
@@ -137,20 +123,11 @@ const MasterfileForm = () => {
       const dx = {...current};
       const index =dx.rights.findIndex(obj => obj.moduleid === oldData.moduleid);
       const deleted = dx.rights[index];
-      console.log('deleted', deleted);
       dx.rights[index] = {...deleted, moduleid:-2 };
       Edit(modifyUrl, token, dx, data(), setCurrent);
     }
   }
 
-  const addRow1 = (newData) =>{
-    console.log('newData', newData);
-    if(newData ) {
-      const dx = {...current};
-      dx.bankaccounts[dx.bankaccounts.length] = {...newData, owner:current.id, modelid:12};
-      setCurrent({...dx});
-    }
-  }
   const addRow = (newData) =>{
     if(newData ) {
       const dx = {...current};
@@ -160,7 +137,6 @@ const MasterfileForm = () => {
         (dx.rights[current.rights.length] = {...newData, roleid:-1,  moduleid:current.moduleid, short:current.short,  modelid: 151})
       const record = (current.rights.length>1)?dx:dx1;
       delete record.editing;
-      console.log('record', record);
       const result= record.id>0?Edit(modifyUrl, token, record, rights_(), setCurrent):
         Add(modifyUrl, token, record, rights_(), setCurrent)
       setCurrent(result);

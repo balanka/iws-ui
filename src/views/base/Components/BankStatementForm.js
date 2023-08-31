@@ -27,9 +27,12 @@ function internal(url, token, history, initialState, data, setData,  current, se
     };
 
     const edit = editedRow => {
-        const record = data.find(obj => obj.id === editedRow.id);
-        const row = {...record, editing: true}
-        setCurrent(row);
+        const isArray = Array.isArray(editedRow)&& editedRow.length>0
+        const row = isArray?editedRow[0]:editedRow;
+        if( row) {
+            const record = data.find(obj => obj.id === row.id);
+            setCurrent({...record, editing: true});
+        }
     }
 
     const submitEdit = event => {
@@ -90,7 +93,6 @@ const BankStatementForm = () => {
     const setSelectedRows = (rows_)=>{
         let rowsx = rows_.map(item=>item.id);
         setRows(rowsx);
-        console.log('rows', rowsx);
     };
 
     return internal(url, token, history,initialState, data, setData,  current, setCurrent,  title, state
