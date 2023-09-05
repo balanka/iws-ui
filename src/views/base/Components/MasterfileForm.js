@@ -80,7 +80,7 @@ const MasterfileForm = () => {
   const initAdd =()=> EditRow({...initialState[0], company:profile.company, currency:profile.currency, editing:false}
         , true, setCurrent);
   const cancelEdit = (e) => initAdd();
-  const columns = ColumnFactory(modelid_, iwsState.get(modelid_), t);
+  const columns = ColumnFactory(modelid_, iwsState.get(modelid_), t, profile.locale, profile.currency);
   const edit = editedRow =>{
     const isArray = Array.isArray(editedRow)&& editedRow.length>0
     const row = isArray?editedRow[0]:editedRow;

@@ -42,7 +42,7 @@
     "birthYear": "B. year",
     "birthCity": "B. City",
     "account":      "Account",
-    "oaccount"    : "Expense/Revenue acc",
+    "oaccount"    : "Op. acc",
     "currency"    : "Currency",
     "from"       :  "From",
     "to"        :  "To",
@@ -83,6 +83,21 @@
     "iban":"IBAN",
     "bank":"Bank",
     "owner":"Owner"
+  },
+  "asset": {
+    "title":      "Asset",
+    "name":       "Name",
+    "description": "Description",
+    "enterdate"  : "Enterdate",
+    "postingdate": "Posting date",
+    "changedate":  "Change date.",
+    "account": "Account",
+    "oaccount": "O. Acc",
+    "rate":     "rate",
+    "scrapValue": "Scrap value",
+    "lifeSpan":   "Life span",
+    "frequency":   "Frequency",
+    "depreciation":   "Method"
   },
   "account": {
     "title":      "Account",
@@ -297,6 +312,7 @@
    },
   "menu": {
     "admin": "Administration",
+    "asset": "Asset",
     "dashboard": "Dashboard",
     "accounting": "Accounting",
     "journal": "Journal",

@@ -42,7 +42,7 @@
     "birthYear": "Jahrgang",
     "birthCity": "Geburtsort",
     "account":      "Konto",
-    "oaccount"    : "Debitor-/Kreditorkonto",
+    "oaccount"    : "G.Konto",
     "currency"    : "Währung",
     "from"       :  "Von",
     "to"        :  "Bis",
@@ -83,6 +83,21 @@
     "iban":"IBAN",
     "bank":"Bank",
     "owner":"Inhaber"
+  },
+  "asset": {
+    "title":  "Anlage",
+    "name":       "Name",
+    "description": "Beschreibung",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Gebucht am",
+    "changedate":  "Geändert am",
+    "account":  "Konto",
+    "oaccount": "G. Konto",
+    "rate":     "Satz",
+    "scrapValue": "Restwert",
+    "lifeSpan":   "Laufzeit",
+    "frequency":   "Frequency",
+    "depreciation":   "Methode"
   },
   "account": {
     "title":"Konto",
@@ -286,6 +301,7 @@
   },
   "menu": {
     "admin": "Verwaltung",
+    "asset": "Anlage",
     "dashboard": "Dashboard",
     "accounting": "Buchhaltung",
     "journal": "Journal",

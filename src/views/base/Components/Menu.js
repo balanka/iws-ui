@@ -1,7 +1,7 @@
 import {formEnum} from "../../../utils/FORMS";
 import {
   ColumnsACC, columnsPACB, ColumnJournal, ColumnsBalancesheet, ColumnsVAT, ColumnsBS, ColumnsM
-  , ColumnsComp, ColumnsCUST, ColumnsUSER, ColumnsLOGIN, ColumnsModule
+  , ColumnsComp, ColumnsCUST, ColumnsUSER, ColumnsLOGIN, ColumnsModule, ColumnsAsset
 } from "../../Tables2/LineFinancialsProps";
 
 import create from "zustand";
@@ -12,35 +12,37 @@ export const getCurrentMonth = (date)=>{
 
 export const date= new Date().toISOString()
 export const getPeriod = (date ) => {return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))};
-export const MASTERFILE ={acc:'/acc', bank:'/bank', cc:'/cc', module:'/module', fmodule:'/fmodule', role:'/role', perm:'/perm'
+export const MASTERFILE ={acc:'/acc', asset:'/asset', bank:'/bank', cc:'/cc', module:'/module', fmodule:'/fmodule', role:'/role', perm:'/perm'
   , vat:'/vat', cust:'/cust', sup:'/sup', comp:'/comp', ftr:'/ftr/model', bs:'/bs', pac:'/pac', jou:'/journal', balancesheet:'/balance'
   , user:'/user'};
 const LOGIN=(t)=> ( {id:"11111", name:'Login', title:"login.title", ctx:"/users/login",  modelid:formEnum.LOGIN
     , state:loginInit, state1:'' ,state2:'',  state3:'', columns:ColumnsLOGIN()});
-const SUPPLIER =(t)=>({id:"1", name:"Supplier", title:"supplier.title", ctx:MASTERFILE.sup
-    ,  state:initSup, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.SUPPLIER, columns:ColumnsCUST(initAcc, t)})
-const CUSTOMER = (t)=>({id:"3", name:'Customer', title:"customer.title", ctx:MASTERFILE.cust
-    ,  state:initCust, state1:initAcc, state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc,t)})
-export const COSTCENTER =(t)=>({id:"6", name:'CostCenter', title:"costcenter.title", ctx:MASTERFILE.cc
-    ,  state:initCC, state1:initAcc ,state2:'', state3:'/cc', modelid:formEnum.COSTCENTER, columns:ColumnsM(initAcc, t)})
-export const ACCOUNT =(t)=>({id:"9", name:"Account", title:"account.title", ctx:MASTERFILE.acc
-    ,  state:initAcc, state1:initAcc ,state2:'', state3:'/acc', modelid:formEnum.ACCOUNT, columns:ColumnsACC(initAcc, t)})
-const COMPANY = (t)=>({id:"10", name:"Company", title:"company.title", ctx:MASTERFILE.comp
-    ,  state:initComp, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.COMPANY, columns:ColumnsComp(initAcc,t)})
-export const BANK =(t)=>({id:"11", name:"Bank", title:"bank.title", ctx:MASTERFILE.bank
-    ,  state:initBank, state1:initAcc ,state2:'', state3:'/bank', modelid:formEnum.BANK, columns:ColumnsM(initAcc, t)})
-export const MODULE =(t)=>({id:"400", name:"Module", title:t('module.title'), ctx:MASTERFILE.module
-  ,  state:initModule, state1:initAcc ,state2:'', state3:'/module', modelid:formEnum.MODULE, columns:ColumnsModule(t)})
+const SUPPLIER =(t, locale, currency)=>({id:"1", name:"Supplier", title:"supplier.title", ctx:MASTERFILE.sup
+    ,  state:initSup, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.SUPPLIER, columns:ColumnsCUST(initAcc, t, locale, currency)})
+const CUSTOMER = (t, locale, currency)=>({id:"3", name:'Customer', title:"customer.title", ctx:MASTERFILE.cust
+    ,  state:initCust, state1:initAcc, state2:initVat, state3:initBank, modelid:formEnum.CUSTOMER, columns:ColumnsCUST(initAcc,t, locale, currency)})
+export const COSTCENTER =(t, locale, currency)=>({id:"6", name:'CostCenter', title:"costcenter.title", ctx:MASTERFILE.cc
+    ,  state:initCC, state1:initAcc ,state2:'', state3:'/cc', modelid:formEnum.COSTCENTER, columns:ColumnsM(initAcc, t, locale, currency)})
+export const ACCOUNT =(t, locale, currency)=>({id:"9", name:"Account", title:"account.title", ctx:MASTERFILE.acc
+    ,  state:initAcc, state1:initAcc ,state2:'', state3:'/acc', modelid:formEnum.ACCOUNT, columns:ColumnsACC(initAcc, t, locale, currency)})
+const COMPANY = (t, locale, currency)=>({id:"10", name:"Company", title:"company.title", ctx:MASTERFILE.comp
+    ,  state:initComp, state1:initAcc ,state2:initVat, state3:initBank, modelid:formEnum.COMPANY, columns:ColumnsComp(initAcc,t, locale, currency)})
+export const ASSET =(t, locale, currency)=>({id:"19", name:"Asset", title:"asset.title", ctx:MASTERFILE.asset
+    ,  state:initAsset, state1:initAcc ,state2:'', state3:'/asset', modelid:formEnum.ASSET, columns:ColumnsAsset(initAcc, t, locale, currency)})
+export const BANK =(t, locale, currency)=>({id:"11", name:"Bank", title:"bank.title", ctx:MASTERFILE.bank
+  ,  state:initBank, state1:initAcc ,state2:'', state3:'/bank', modelid:formEnum.BANK, columns:ColumnsM(initAcc, t, locale, currency)})
+export const MODULE =(t, locale, currency)=>({id:"400", name:"Module", title:t('module.title'), ctx:MASTERFILE.module
+  ,  state:initModule, state1:initAcc ,state2:'', state3:'/module', modelid:formEnum.MODULE, columns:ColumnsModule(t, locale, currency)})
 export const VAT =(t)=>({id:"14", name:"Vat", title:"vat.title", ctx:MASTERFILE.vat
     ,  state:initVat, state1:initAcc ,state2:'', state3:'/vat', modelid:formEnum.VAT, columns:ColumnsVAT(initAcc, t)})
-const BS =(t)=>({id:"18", name:"Bankstatement", title:"bankstatement.title", ctx:MASTERFILE.bs
-    , state:initBS, state1:'' ,state2:'', state3:'/bs', modelid:formEnum.BANKSTATEMENT, period:-1, columns:ColumnsBS(t)})
-const PACB = (t)=>({id:"106", name:"PAC", title:"pac.title", ctx:MASTERFILE.pac
-    ,  state:initPac, state1:initAcc, state2:'', state3:'/pac', modelid:formEnum.PACB, columns:columnsPACB(t) })
-const USER =(t)=>({id:"111", name:"User", title:"user.title", ctx:MASTERFILE.user
-    ,  state:initUser, state1:'', state2:'', state3:'', modelid:formEnum.USER, columns:ColumnsUSER(t)  })
-const JOURNAL = (t)=>({id:"112", name:"Journal", title:"journal.title", ctx:MASTERFILE.jou
-    ,  state:initJour, state1:initAcc, state2:'', state3:'', modelid:formEnum.JOURNAL, columns:ColumnJournal(t)  });
+const BS =(t, locale, currency)=>({id:"18", name:"Bankstatement", title:"bankstatement.title", ctx:MASTERFILE.bs
+    , state:initBS, state1:'' ,state2:'', state3:'/bs', modelid:formEnum.BANKSTATEMENT, period:-1, columns:ColumnsBS(t, locale, currency)})
+const PACB = (t, locale, currency)=>({id:"106", name:"PAC", title:"pac.title", ctx:MASTERFILE.pac
+    ,  state:initPac, state1:initAcc, state2:'', state3:'/pac', modelid:formEnum.PACB, columns:columnsPACB(t, locale, currency) })
+const USER =(t, locale, currency)=>({id:"111", name:"User", title:"user.title", ctx:MASTERFILE.user
+    ,  state:initUser, state1:'', state2:'', state3:'', modelid:formEnum.USER, columns:ColumnsUSER(t, locale, currency)  })
+const JOURNAL = (t, locale, currency)=>({id:"112", name:"Journal", title:"journal.title", ctx:MASTERFILE.jou
+    ,  state:initJour, state1:initAcc, state2:'', state3:'', modelid:formEnum.JOURNAL, columns:ColumnJournal(t, locale, currency)  });
 const FINANCIALS= (t)=>({id:"1120", name:"Financials", title:"financials.title", ctx:MASTERFILE.ftr
   ,  state:initFtr, state1:initAcc, state2:initCC , state3:'', modelid:formEnum.FINANCIALS});
 
@@ -61,9 +63,13 @@ export const LOGIN_MENU = (t)=> ([LOGIN(t)]);
 export const loginInit =[{username:'', password:'', company:'', language:'' }]
 export const initAcc = [{id:'9', name: '', description: '', enterdate:date, postingdate:date
             , changedate:date, company:'', modelid:9, account:'-1', isDebit:false, balancesheet:false, currency:''
-            , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0 }]
+            , idebit:0.0,icredit:0.0, debit:0.0, credit:0.0, subAccounts:[] }]
+export const initAsset = [ {id:'', name: '', description: '', enterdate:date, postingdate:date
+            , changedate:date,  company:'', modelid:19, account:'-1', oaccount:'-1', scrapValue:-1, lifeSpan:-1, depMethod:1
+           , rate:1, frequency:-1, currency: 'EUR'}]
+
 export const initBank = [ {id:'', name: '', description: '', enterdate:date, postingdate:date
-            , changedate:date, modelid:11, account:'-1', company:''}]
+  , changedate:date, modelid:11, account:'-1', company:''}]
 export const initModule = [ {id:'400', name: '', description: '', path:'', parent:-1,
   enterdate:date, postingdate:date, changedate:date, modelid:400,  company:''}]
 export const initCC = [ {id:'6', name: '', description: '', enterdate:date, postingdate:date,changedate:date
@@ -115,7 +121,8 @@ export const initPermission = [ {id:'141', name: '', description: '', enterdate:
 export const initfModule = [ {id:'151', name: '', description: '', enterdate:date, postingdate:date
   , changedate:date, modelid:151, account:'-1', isDebit:false, company:''}]
 export const MENU = (t)=> new Map([
-                     ['/journal', JOURNAL(t)]
+                     ['/asset', ASSET(t, 'en', 'EUR')]
+                    ,['/journal', JOURNAL(t)]
                     ,['/pac', PACB(t)]
                     ,['/bank', BANK(t)]
                     ,['/acc', ACCOUNT(t)]

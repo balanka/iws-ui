@@ -12,8 +12,17 @@ const mapping = (acc) =>
   </MenuItem>
 
 export  const ACCOUNT=(data, value, onRowDataChange, rowData, fieldName) => {
+    console.log('rowData>>>>>', {...rowData, [`${fieldName}`]: value});
     return (<Select value={value} onChange={(event) =>
-      onRowDataChange({...rowData, account: event.target.value})}>
+      onRowDataChange({...rowData, [`${fieldName}`]: event.target.value})}>
+        {data.map(mapping)} id={"cb".concat(fieldName)}
+    </Select>)
+}
+
+export  const OACCOUNT=(data, value, onRowDataChange, rowData, fieldName) => {
+    console.log('rowData>>>>>', {...rowData, [`${fieldName}`]: value});
+    return (<Select value={value} onChange={(event) =>
+      onRowDataChange({...rowData, oaccount: event.target.value})}>
         {data.map(mapping)} id={"cb".concat(fieldName)}
     </Select>)
 }
@@ -183,6 +192,28 @@ export const ColumnsModule =(t) => [
     , {field:'enterdate', title:t('common.enterdate'), type:"date", align:"right", dateSetting: { locale:"de" } , export:true}
     , {field:'changedate', title:t('common.changedate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
     , {field:'postingdate', title:t('common.postingdate'), type:"date", align:"right",dateSetting: { locale:"de" } , export:true}
+    , {field:'company', title:t('common.company'), type:"string",  export:true}
+]
+export const ColumnsAsset =(data, t, locale, currency) => [
+    {field:'id', title:t('common.id'), export:true}
+    , {field:'name', title:t("common.name"),  type:"text", export:true}
+    , {field:'description', title:t('common.description'), type:"string", export:true}
+    , {field:'account', title:t('common.account')
+        ,  editComponent:({ value, onRowDataChange, rowData }) => ACCOUNT ( data, value, onRowDataChange, rowData, "account" )
+        , width: 20, export:true}
+    , {field:'oaccount', title:t('common.oaccount')
+        ,  editComponent:({ value, onRowDataChange, rowData }) => OACCOUNT ( data, value, onRowDataChange, rowData, "oaccount" )
+        , width: 20, export:true}
+    , {field:'scrapValue', title:t('asset.scrapValue'), type:"currency", initialEditValue:0,
+        currencySetting: { locale:locale, currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    , {field:'lifeSpan', title:t('asset.lifeSpan'), type:"number",  export:true}
+    , {field:'depMethod', title:t('asset.depreciation'), type:"number",  export:true}
+    , {field:'rate', title:t('asset.rate'), type:"number",  export:true}
+    , {field:'frequency', title:t('asset.frequency'), type:"number",  export:true}
+    , {field:'enterdate', title:t('common.enterdate'), type:"date", align:"right", dateSetting: { locale:locale } , export:true}
+    , {field:'changedate', title:t('common.changedate'), type:"date", align:"right",dateSetting: { locale:locale } , export:true}
+    , {field:'postingdate', title:t('common.postingdate'), type:"date", align:"right",dateSetting: { locale:locale } , export:true}
+    , {field:'currency', title:t("common.currency"),  type:"text", export:true}
     , {field:'company', title:t('common.company'), type:"string",  export:true}
 ]
 export const ColumnsM =(data, t) => [
@@ -386,33 +417,35 @@ export const ColumnsBalancesheet=(t) =>[{ title:t('common.id'), field: 'id', typ
      formatterDE.format(Number(rowData.icredit+rowData.credit-rowData.idebit-rowData.debit))}
    ]
 
-export const ColumnFactory =(formid, data, t)=> {
+export const ColumnFactory =(formid, data, t, locale, currency)=> {
     switch(formid) {
         case formEnum.ACCOUNT:
-            return ColumnsACC(data, t);
+            return ColumnsACC(data, t, locale, currency);
+        case formEnum.ASSET:
+            return ColumnsAsset(data, t, locale, currency);
         case formEnum.BANKSTATEMENT:
-            return ColumnsBS(t);
+            return ColumnsBS(t, locale, currency);
         case formEnum.COSTCENTER:
         case formEnum.BANK:
         case formEnum.FMODULE:
         case formEnum.ROLE:
         case formEnum.PERMISSION:
-            return  ColumnsM(data, t);
+            return  ColumnsM(data, t, locale, currency);
         case formEnum.COMPANY:
-            return ColumnsComp (data, t);
+            return ColumnsComp (data, t, locale, currency);
         case formEnum.PACB:
-            return columnsPACB (t)
+            return columnsPACB (t, locale, currency)
         case formEnum.JOURNAL:
-            return ColumnJournal (t)
+            return ColumnJournal (t, locale, currency)
         case formEnum.CUSTOMER:
         case formEnum.SUPPLIER:
-            return ColumnsCUST(data, t);
+            return ColumnsCUST(data, t, locale, currency);
         case formEnum.MODULE:
-            return ColumnsModule(t);
+            return ColumnsModule(t, locale, currency);
         case formEnum.USER:
-            return ColumnsUSER(t);
+            return ColumnsUSER(t, locale, currency);
         case formEnum.VAT:
-            return ColumnsVAT(data,t);
+            return ColumnsVAT(data,t, locale, currency);
         default:
             return <>NODATA</>
     }
