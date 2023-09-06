@@ -123,7 +123,7 @@ const JForm = () => {
     const {t,} = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const {profile, selected, menu  } = useStore()
-    const {token, company} = profile
+    const {token, company, locale, currency} = profile
     let history = useHistory()
     const module_ = menu.get(selected);
     console.log('selected', selected)
@@ -148,7 +148,7 @@ const JForm = () => {
     const [setAccData] = useState(initAcc);
     const [toolbar, setToolbar] = useState(true);
     const [iwsState, setIwsState] = useState(iwsStore.initialState);
-    const columnsX = modelid === formEnum.PACB ? columnsPACB(t) : ColumnJournal(t);
+    const columnsX = modelid === formEnum.PACB ? columnsPACB(t, locale, currency) : ColumnJournal(t, locale, currency);
     const toggleToolbar = () => setToolbar(!toolbar);
     const toggle = () => setState({...state, collapse: !state.collapse});
     const acc_modelid = parseInt(ACCOUNT(t).id);

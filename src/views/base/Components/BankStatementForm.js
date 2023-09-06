@@ -70,7 +70,7 @@ const BankStatementForm = () => {
     const { t,  } = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const { profile,  } = useStore()
-    const { token, company} = profile
+    const { token, company, locale, currency} = profile
     const {  selected, menu } = useStore();
     let history = useHistory();
     const module_= menu.get(selected);
@@ -89,7 +89,7 @@ const BankStatementForm = () => {
     useEffect(() => {}, [current, setCurrent, data]);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle= ()=> setState({...state, collapse:!state.collapse });
-    const columns = ColumnsBS(t);
+    const columns = ColumnsBS(t, locale, currency);
     const setSelectedRows = (rows_)=>{
         let rowsx = rows_.map(item=>item.id);
         setRows(rowsx);

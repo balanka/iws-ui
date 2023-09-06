@@ -4,7 +4,7 @@ import {Autocomplete} from "../base/Components/Autocomplete";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import {formEnum} from "../../utils/FORMS";
-import {dateFormat, formatterDE} from "../../utils/utils";
+import {dateFormat} from "../../utils/utils";
 
 const mapping = (acc) =>
   <MenuItem key={acc.id} value={acc.id}>
@@ -31,20 +31,20 @@ export const ColumnsLOGIN = () => [
      {field:'id', title:'id', type:'numeric', align:"right", export:true}
     , {field:'name', title:'name', type:"string", export:true}
 ]
-export const columnsPACB = (t) => [
+export const columnsPACB = (t, locale, currency) => [
       {field:'id', title:t('common.id'),   minWidth:10, export:true }
     , {field:'name', title:t('common.name'),   minWidth:40, export:true }
     , {field:'period', title:t('pac.period'),  type:"numeric", export:true }
-    , {field:'idebit', title:t('common.idebit'), type:"currency", currencySetting: { locale:"de"
-            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-    , {field:'debit', title:t('common.debit'), type:"currency", currencySetting: { locale:"de"
-            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-    , {field:'icredit', title:t('common.icredit'), type:"currency", currencySetting: { locale:"de"
-            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-    , {field:'credit', title:t('common.credit'), type:"currency", currencySetting: { locale:"de"
-            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
-    , {field:'balance', title:t('common.balance'), type:"currency", currencySetting: { locale:"de"
-            , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+    , {field:'idebit', title:t('common.idebit'), type:"currency", currencySetting: { locale:locale
+            , currencyCode:currency, minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+    , {field:'debit', title:t('common.debit'), type:"currency", currencySetting: { locale:locale
+            , currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+    , {field:'icredit', title:t('common.icredit'), type:"currency", currencySetting: { locale:locale
+            , currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+    , {field:'credit', title:t('common.credit'), type:"currency", currencySetting: { locale:locale
+            , currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
+    , {field:'balance', title:t('common.balance'), type:"currency", currencySetting: { locale:locale
+            , currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2}, export:true}
     , {field:'currency', title:t('common.currency'),   export:true }
     , { field:'company', title:t('common.company'), export:true }
 ]
@@ -316,7 +316,7 @@ export const ColumnsVAT = (data, t) => [
     , {field:'company', title:t('common.company'), type:"string", export:true}
 ]
 
-export const ColumnsBS =(t) => [
+export const ColumnsBS =(t, locale, currency) => [
       {field:'id', title:t('common.id'), type:'numeric', align:"right", minWidth:10, export:true}
     , {field:'posted', title:t('bankstatement.posted'), type:"boolean", minWidth:5, export:true}
     , {field:'depositor', title:t("bankstatement.depositor"), type:"string", minWidth:10, export:true}
@@ -324,7 +324,7 @@ export const ColumnsBS =(t) => [
     , {field:'postingdate', title:t('common.postingdate'), type:"date",  align:"right", minWidth:10, export:true}
     , {field:'period', title:t('bankstatement.period'), type:"numeric",  align:"right", minWidth:10, export:true}
     , {field:'amount', title:t("bankstatement.amount"), type: "currency", minWidth:20, export:true
-        , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+        , currencySetting: { locale:locale, currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     , {field:'currency', title:t("common.currency"), type:"string", hidden:true, export:true}
     , {field:'postingtext', title:t("bankstatement.postingtext"), type:"string", minWidth:50, export:true}
     , {field:'purpose', title:t("bankstatement.purpose"), type:"string", minWidth:60, export:true}
@@ -368,7 +368,7 @@ export const ColumnsUSER =(t) => [
     , {field:'modelid', title:t('common.modelid'), type:'numeric', align:"right", export:true}
     , {field:'company', title:t('common.company'), export:true}
 ]
-export const ColumnJournal=(t) =>[ {field:"id", title:t('common.id'), width:30, minWidth:6,  maxWidth:40, type:"numeric", export:true }
+export const ColumnJournal=(t, locale, currency) =>[ {field:"id", title:t('common.id'), width:30, minWidth:6,  maxWidth:40, type:"numeric", export:true }
     , {field:"transid", title:t('journal.transid'), width:30, minWidth:6,  maxWidth:40, type:"numeric", export:true }
     , { field: "oid", title: t('journal.oid'), width:30, minWidth:30,  maxWidth:40,export:true }
     , {field: "account", title: t('journal.account'), minWidth:40, maxWidth:50, export:true}
@@ -381,15 +381,15 @@ export const ColumnJournal=(t) =>[ {field:"id", title:t('common.id'), width:30, 
         , format:(value) =>  dateFormat(value, "dd mm yy"), export:true}
     , {field: 'period', title:t('journal.period'), minWidth:30, maxWidth:30,  type:"numeric", export:true}
     , { field: 'amount', title: t('common.amount'), minWidth:40, maxWidth:70, type:"currency", export:true
-        , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
+        , currencySetting: { locale:locale, currencyCode:currency, minimumFractionDigits: 2, maximumFractionDigits: 2}}
     , { field: 'idebit', title:t('common.idebit'), minWidth:40, maxWidth:70,  type:"currency", export:true
-        , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
+        , currencySetting: { locale:locale, currencyCode:currency, minimumFractionDigits: 2, maximumFractionDigits: 2}}
     , { field: 'debit', title: t('common.debit'), minWidth:40, maxWidth:70,   type:"currency", export:true
-    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
+    , currencySetting: { locale:locale, currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2}}
     , { field: 'icredit', title:t('common.icredit'), minWidth:40, maxWidth:70,  type:"currency", export:true
-    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
+    , currencySetting: { locale:locale, currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2}}
     , { field: 'credit', title:t('common.credit'), minWidth:40, maxWidth:70,  type:"currency", export:true
-    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}}
+    , currencySetting: { locale:locale, currencyCode:currency, minimumFractionDigits: 2, maximumFractionDigits: 2}}
     , { field: 'side', title:t('journal.side'), type:"boolean", format:(value) => String(value), minWidth:1}
     , { field: 'text', title:t('journal.text'), minWidth:15, export:true}
     , { id:'month', label:t('journal.month'), minWidth:20, maxWidth:20, export:true}
@@ -399,22 +399,24 @@ export const ColumnJournal=(t) =>[ {field:"id", title:t('common.id'), width:30, 
     , { id: 'file_content', label:t('journal.file'), minWidth:1, export:true}
     , { field: 'modelid', title:t('common.modelid'), minWidth:1, export:true}]
 
-export const ColumnsBalancesheet=(t) =>[{ title:t('common.id'), field: 'id', type: 'text', export:true }
+export const ColumnsBalancesheet=(t, locale, currency) =>[{ title:t('common.id'), field: 'id', type: 'text', export:true }
     ,  { title:t('common.name'), field: 'name',type: 'text', export:true}
     ,  { title:t('account.account'), field: 'account',type: 'text',  export:true}
     ,  { title:t('common.idebit'), field: 'idebit', type: 'currency', minWidth:3, export:true
-    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    , currencySetting: { locale:locale, currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     ,  { title:t('common.debit'), field: 'debit' , type: 'currency', minWidth:3, export:true
-    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    , currencySetting: { locale:locale, currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     ,  { title:t('common.icredit'), field: 'icredit', type: 'currency', minWidth:3, export:true 
-    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    , currencySetting: { locale:locale, currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     ,  { title:t('common.credit'), field: 'credit' , type: 'currency', minWidth:3, export:true
-    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+    , currencySetting: { locale:locale, currencyCode: currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }}
     , { title: t('common.balance'), field: 'balance', type: 'currency', minWidth:3, export:true
-    , currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2}
+    , currencySetting: { locale:locale, currencyCode:currency, minimumFractionDigits: 2, maximumFractionDigits: 2}
     , render: rowData =>rowData.isDebit?
-     formatterDE.format(Number(rowData.idebit+rowData.debit-rowData.icredit-rowData.credit)):
-     formatterDE.format(Number(rowData.icredit+rowData.credit-rowData.idebit-rowData.debit))}
+        Number(rowData.idebit+rowData.debit-rowData.icredit-rowData.credit)
+        .toLocaleString(locale, {maximumFractionDigits:2, minimumFractionDigits: 2,  style: 'currency', currency: currency }):
+        Number(rowData.icredit+rowData.credit-rowData.idebit-rowData.debit)
+        .toLocaleString(locale, {maximumFractionDigits:2, minimumFractionDigits: 2,  style: 'currency', currency: currency })}
    ]
 
 export const ColumnFactory =(formid, data, t, locale, currency)=> {

@@ -20,6 +20,58 @@ const formatterDE = new Intl.NumberFormat('de-DE', {
     currency: 'EUR',
 });
 
+const formatCurrency= (locale_, currency) =>
+  new Intl.NumberFormat(locale_, {
+    style: 'currency',
+    currency:currency,
+    minimumFractionDigits: 2, maximumFractionDigits: 2
+    //currency:CurrencyFactory(locale_)
+  });
+
+
+
+// export const CurrencyFactory =( locale_)=> {
+//   console.log('locale_>>>>>', locale_);
+//   switch (locale_) {
+//     case localeEnum.de_DE:
+//     case localeEnum.fr_FR:
+//       return 'EUR';
+//     case localeEnum.fr_CI:
+//     case localeEnum.ci:
+//       return 'XOF';
+//     case localeEnum.fr_GN:
+//       return 'GNF';
+//     case localeEnum.gn_GN:
+//       return 'GNF';
+//     case localeEnum.gn:
+//       return 'GNF';
+//     default:
+//       console.log('locale_ not found>>>>>', locale_);
+//       return 'GNF';
+//   }
+// }
+/*
+import React from "react";
+
+interface IProps {
+  price: number;
+}
+
+const Currency: React.FC<IProps> = ({ price }) => {
+  return (
+    <>
+      {Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD' // Change this
+      }).format(price)}
+    </>
+  );
+}
+export default Currency;
+ */
+
+
+
  var dateFormat = function () {
   var	token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
     timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
@@ -158,4 +210,4 @@ function currencyAmountFormatDE(num, symbol) {
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.').concat(' ').concat(symbol)
   ) // use . as a separator
 }
-export {dateFormat, capitalize, formatterDE,  currencyFormatDE, currencyAmountFormatDE, currencyFormatUS, sortById, sortByName};
+export {dateFormat, capitalize, formatCurrency, formatterDE,  currencyFormatDE, currencyAmountFormatDE, currencyFormatUS, sortById, sortByName};

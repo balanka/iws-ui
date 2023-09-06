@@ -58,7 +58,7 @@ const  BasicTreeTable =()=> {
     const { t,  } = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
     const { profile,  } = useStore()
-    const { token, company  } = profile
+    const { token, company, locale, currency  } = profile
     const {  selected, menu } = useStore();
     let history = useHistory()
     const module_= menu.get(selected);
@@ -95,7 +95,7 @@ const  BasicTreeTable =()=> {
     }, [current_, accUrl, token, acc_modelid]);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle = ()=> setState({...state, collapse:!state.collapse });
-    const columnsX = columns(t);
+    const columnsX = columns(t, locale, currency);
     const getUrl=() =>url.concat('/')
         .concat(current.account).concat('/')
         .concat(current.fromPeriod).concat('/')
