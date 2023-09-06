@@ -70,15 +70,12 @@ const  BasicTreeTable =()=> {
     const initialState = module_.state
 
     const current_= initialState;
-    const title =module_.title
+    const title = t(module_.title);
     const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
     const [current,setCurrent] = useState(current_);
     const [data, setData] = useState(initAcc);
-    const [accData, setAccData] = useState(initAcc);
+    const [setAccData] = useState(initAcc);
 
-    console.log('accData', accData);
-    console.log('initAcc', initAcc);
-    console.log('data', data);
     const [toolbar, setToolbar] = useState(false);
     const [iwsState, setIwsState] = useState(iwsStore.initialState);
     const acc_modelid=parseInt(ACCOUNT(t).id);

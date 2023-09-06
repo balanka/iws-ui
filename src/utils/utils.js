@@ -15,18 +15,18 @@
 const sortById = (a,b) => ((a.id < b.id) ? -1 : ((a.id > b.id) ? 1 : 0));
 const sortByName = (a,b) => ((a.name < b.name) ? -1 : ((a.name > b.name) ? 1 : 0));
 
-const formatterDE = new Intl.NumberFormat('de-DE', {
-    style: 'currency',
-    currency: 'EUR',
-});
-
-const formatCurrency= (locale_, currency) =>
-  new Intl.NumberFormat(locale_, {
-    style: 'currency',
-    currency:currency,
-    minimumFractionDigits: 2, maximumFractionDigits: 2
-    //currency:CurrencyFactory(locale_)
-  });
+// const formatterDE = new Intl.NumberFormat('de-DE', {
+//     style: 'currency',
+//     currency: 'EUR',
+// });
+//
+// const formatCurrency= (locale_, currency) =>
+//   new Intl.NumberFormat(locale_, {
+//     style: 'currency',
+//     currency:currency,
+//     minimumFractionDigits: 2, maximumFractionDigits: 2
+//     //currency:CurrencyFactory(locale_)
+//   });
 
 
 
@@ -210,4 +210,4 @@ function currencyAmountFormatDE(num, symbol) {
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.').concat(' ').concat(symbol)
   ) // use . as a separator
 }
-export {dateFormat, capitalize, formatCurrency, formatterDE,  currencyFormatDE, currencyAmountFormatDE, currencyFormatUS, sortById, sortByName};
+export {dateFormat, capitalize, currencyFormatDE, currencyAmountFormatDE, currencyFormatUS, sortById, sortByName};

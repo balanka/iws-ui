@@ -4,7 +4,7 @@ import {IoMdMenu} from "react-icons/all";
 import {CBadge, CButton, CCol, CCollapse, CFormGroup, CInput, CLabel, CSelect, CTextarea} from "@coreui/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {formEnum} from "../../../utils/FORMS";
-import {currencyAmountFormatDE, dateFormat,sortById, sortByName} from '../../../utils/utils'
+import {dateFormat,sortById, sortByName} from '../../../utils/utils'
 import CustomerTabs from './CustomerTabs'
 import {
     faAngleDoubleDown,
@@ -169,7 +169,6 @@ export const BSFormHead = (props) => {
 export const FinancialsFormHead = (props) => {
     const {styles, title, collapse, module, modules, initAdd, onNewLine, cancelEdit, submitEdit,  toggle
         , submitCopy, submitPost, handleModuleChange, toggleToolbar, reload, current} = props
-    console.log('modules>>>>>', modules);
     const posted = current?current.posted:false
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
