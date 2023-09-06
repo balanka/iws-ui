@@ -49,7 +49,7 @@ export const columnsPACB = (t, locale, currency) => [
     , { field:'company', title:t('common.company'), export:true }
 ]
 
-export const columnsF =(data, line, current, t) => [
+export const columnsF =(data, line, current, t, locale, currency) => [
      {field:'id', title:t('financials.id'), initialEditValue:line.id, align:"right", width:40, minWidth:20,  maxWidth:50,export:true}
     , {field:'oid', title:t('financials.oid'),initialEditValue:current?current.oid:-1, align:"right", width:40, minWidth:20,  maxWidth:50,export:true}
     , {field:'account', title:t('financials.account'), hidden:false, editComponent:tableData =>
@@ -57,15 +57,15 @@ export const columnsF =(data, line, current, t) => [
     , {field:'costcenter', title:t('financials.costcenter'), hidden:false, editComponent:tableData=>
           Autocomplete ( data, tableData ),  initialEditValue:'', width:30, minWidth:30,  maxWidth:80, align:"right", export:true}
     , {field:'enterdate', title:t('financials.enterdate'), type:"date", align:"right", minWidth:20, width:40, maxWidth:80,
-        initialEditValue:line.enterdate, dateSetting: { locale:"de" } , export:true}
+        initialEditValue:line.enterdate, dateSetting: { locale:locale } , export:true}
     , {field:'postingdate', title:t('financials.postingdate'), type:"date", align:"right", minWidth:20, width:40, maxWidth:80,
-        initialEditValue:line.postingdate, dateSetting: { locale:"de" } , export:true}
+        initialEditValue:line.postingdate, dateSetting: { locale:locale } , export:true}
     , {field:'transdate', title:t('financials.transdate'), type:"date", align:"right", minWidth:20, width:40, maxWidth:80,
-        initialEditValue:line.transdate, dateSetting: { locale:"de" } , export:true}
+        initialEditValue:line.transdate, dateSetting: { locale:locale } , export:true}
     , {field:'period', title:t('financials.period'), type:"numeric", align:"right", minWidth:20, width:30, maxWidth:40, export:true}
     , {field:'posted', title:t('financials.posted'), type:"boolean", width:10, minWidth:10, maxWidth:20, export:true}
-    , {field:'total', title:t('common.total'), type:"currency",currencySetting: { locale:"de"
-       , currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }, minWidth:80, maxWidth:150, export:true}
+    , {field:'total', title:t('common.total'), type:"currency",currencySetting: { locale:locale
+       , currencyCode:currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }, minWidth:80, maxWidth:150, export:true}
     , {field:'text', title:t('financials.text'), type:"string", minWidth:100, width:300, maxWidth:3000, export:true}
     , {field:'typeJournal', title:t('financials.type'), type:"numeric", export:true}
     , {field:'file_content', title:t('financials.file_content'), type:"numeric", export:true}
@@ -82,7 +82,7 @@ export const RightsColumns =(data, line, current,  t) =>  {
         , {field:'short', title:t('userRight.short'), type:"string", initialEditValue:'',  width:10, minWidth:10,  maxWidth:20}
         , {field:'modelid', title:t('common.modelid'), type:"numeric", minWidth:30, maxWidth:50, hidden:true, export:true}
     ]}
-export const Linescolumns =(data, line, current, models,  model, t) =>  {
+export const Linescolumns =(data, line, current, models,  model, t, locale, currency) =>  {
     const model_ = models.find(obj => obj.id === model);
     let  debitedAccount = '';
     let  creditedAccount = '';
@@ -103,9 +103,9 @@ export const Linescolumns =(data, line, current, models,  model, t) =>  {
         initialEditValue:creditedAccount,  width:30, minWidth:30,  maxWidth:450, align:"right"}
     , {field:'oaccountName', title:t('financials.line.oaccountName'), initialEditValue:'', hidden:false,  width:40, minWidth:40,  maxWidth:50}
     , {field:'duedate', title:t('financials.line.duedate'), type:"date", align:"right",
-      initialEditValue:line.duedate, dateSetting: { locale:"de" },  width:40, minWidth:50,  maxWidth:80 }
+      initialEditValue:line.duedate, dateSetting: { locale:locale },  width:40, minWidth:50,  maxWidth:80 }
     , {field:'amount', title:t('financials.line.amount'), type:"currency", initialEditValue:0,
-       currencySetting: { locale:"de", currencyCode: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }, width:50, minWidth:30,  maxWidth:100}
+       currencySetting: { locale:locale, currencyCode:currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }, width:50, minWidth:30,  maxWidth:100}
     , {field:'currency', title:t('common.currency'), hidden:false,  initialEditValue:line.currency, width:10, minWidth:10,  maxWidth:50, editable:'never'}
     , {field:'text', title:t('financials.line.text'), initialEditValue:'', hidden:false,  width:300, minWidth:50,  maxWidth:3500}
   ]}

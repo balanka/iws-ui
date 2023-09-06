@@ -16,7 +16,7 @@ import iwsStore from './Store';
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const { profile, selected, menu,  } = useStore();
-  const { token, company } = profile
+  const { token, company, locale, currency } = profile
   let history = useHistory();
   const { t,  } = useTranslation();
   console.log('menu', menu);
@@ -59,8 +59,8 @@ const FinancialsForm = () => {
   const accData = iwsState.get(acc_modelid)??[...initAcc];
   const ccData = iwsState.get(cc_modelid)??[...initCc];
 
-  const columnsX = Linescolumns(accData, initLine, current, fModuleData, model,  t);
-  const columns = columnsF(ccData, initLine, current, t);
+  const columnsX = Linescolumns(accData, initLine, current, fModuleData, model,  t, locale, currency);
+  const columns = columnsF(ccData, initLine, current, t, locale, currency);
 
   const toggleEdit = ()=>{
     if(current?.editing){

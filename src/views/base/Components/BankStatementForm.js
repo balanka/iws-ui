@@ -10,7 +10,7 @@ import { useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 
 function internal(url, token, history, initialState, data, setData,  current, setCurrent,  title, state
-    , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows, module_) {
+    , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows, module_, locale, currency) {
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
     const isEmpty = (str) => (!str || 0 === str.length);
@@ -52,7 +52,7 @@ function internal(url, token, history, initialState, data, setData,  current, se
                             url={url} cancelEdit={cancelEdit} submitEdit={submitEdit}
                             submitQuery={submitQuery} submitPost={submitPost} toggle={toggle}
                             toggleToolbar={toggleToolbar}/>
-                <FormFactory formid={modelid_} current={current} setCurrent={setCurrent} t={t}
+                <FormFactory formid={modelid_} current={current} setCurrent={setCurrent} t={t} locale ={locale} currency ={currency}
                              collapse={state.collapse} styles={styles}/>
                 <Grid container spacing={2} style={{...styles.inner, display: 'block'}} direction="column">
                     <EditableTable Options={{...OptionsM, toolbar: toolbar}} data={data}
@@ -96,7 +96,7 @@ const BankStatementForm = () => {
     };
 
     return internal(url, token, history,initialState, data, setData,  current, setCurrent,  title, state
-        , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows, module_);
+        , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows, module_, locale, currency);
 
 };
 export default memo(BankStatementForm);

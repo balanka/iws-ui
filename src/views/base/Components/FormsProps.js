@@ -419,7 +419,7 @@ export const AccountMainForm =(props) => {
 </>
 )}
 export const BankStatementMainForm =(props) => {
-    const {current, setCurrent, t } = props
+    const {current, setCurrent, t, locale, currency } = props
     return (
         <>
             <CFormGroup row style={{  height:15 }}>
@@ -496,7 +496,8 @@ export const BankStatementMainForm =(props) => {
                 </CCol>
                 <CCol sm="1.5">
                     <CInput disabled={current.posted} bssize="sm" type="text" id="amount-input" name="amount" className="input-sm"
-                             placeholder="amount" value={currencyAmountFormatDE(Number(current.amount),current.currency)}
+                             placeholder="amount" value={Number(current.amount).
+                    toLocaleString(locale, {maximumFractionDigits:2, minimumFractionDigits: 2,  style: 'currency', currency: currency })}
                              style={{ 'textAlign':'right' }}/>
                 </CCol>
             </CFormGroup>
