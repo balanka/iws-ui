@@ -1,4 +1,4 @@
-import React, {useState, memo} from 'react'
+import React, {useState, memo, useRef, useLayoutEffect} from 'react'
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
 import {FormFactory,JournalFormHead} from './FormsProps'
@@ -6,13 +6,14 @@ import {columnsPACB, ColumnJournal, OptionsM} from "../../Tables2/LineFinancials
 import {formEnum} from "../../../utils/FORMS";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
-import { Query} from './CrudController';
-import {useGlobalState, useStore} from "./Menu";
+import {Get, Get1} from './CrudController';
+import {ACCOUNT, MASTERFILE, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
+import iwsStore from "./Store";
 
 function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
     , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX) {
-    console.log('dataZZ',data);
+    console.log('accDatajou', accData.filter(e=>e.id ==='*'))
     const summaryPCB = (data) => {
         const row_ = data;
         const row = row_ ? row_?.slice() : row_.slice();
@@ -45,21 +46,24 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
         const row_ = data_;
         console.log('data_',data_);
         const row = row_?.slice();
+        const available = row.length > 0;
+        let idebit = available ? row[0].idebit : 0;
+        let icredit = available ? row[0].icredit : 0;
         let debit = 0, credit = 0, amount = 0;
         let currency = ''
         let company = '';
-        const available = row.length > 0;
+
         for (let i = 0, len = row.length - 1; i <= len; ++i) {
-            debit = debit + row[i].debit;
-            credit = credit + row[i].credit;
+            idebit =  row[i].idebit;
+            debit =  row[i].debit;
+            icredit =  row[i].icredit;
+            credit =  row[i].credit;
             amount = amount + row[i].amount;
             currency = row[i].currency;
             company = row[i].company;
-            row[i] = {...row[i], amount: amount};
         }
         const len = row.length;
-        const idebit = available ? row[0].idebit : 0;
-        const icredit = available ? row[0].icredit : 0;
+
         if (len > 0)
             row[len] = {
                 id: Number.MAX_VALUE,
@@ -88,28 +92,19 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
         return row;
     }
     const summary = (data_) => modelid === formEnum.PACB ? summaryPCB(data_) : summaryJ(data_)
-    const load = event => {
-        event.preventDefault();
-        console.log('Url >>>>><<<<<<<<<'+current);
-        accData?.length < 2 ?
-            Query(event, accUrl, profile, history, setAccData, initAcc) :
-            current.account && current.fromPeriod && current.toPeriod ?
-                Query(event, getUrl(), profile, history, setData, initialState) : void (0)
-        //setIsDebit(accData.find(x => x.id === current.account).isDebit)
-    };
-
     const submitQuery_ = event => {
         event.preventDefault();
+        console.log('getUrl()', getUrl())
         accData?.length < 2 ?
-            Query(event, accUrl, profile, history, setAccData, initAcc) :
-            Query(event, getUrl(), profile, history, setData, initialState)
+          Get(accUrl, profile, history, setAccData) :
+          Get(getUrl(), profile, history, setData)
     };
     function buildForm() {
         return <>
             <Grid container spacing={1} style={{...styles.outer}} direction="column">
                 <JournalFormHead styles={styles} title={title} collapse={state.collapse}
                                  initialState={initialState} setData={setData} setAccData={setAccData} url={url}
-                                 accUrl={accUrl} toggle={toggle} load={load} toggleToolbar={toggleToolbar}/>
+                                 accUrl={accUrl} toggle={toggle}  toggleToolbar={toggleToolbar}/>
                 <FormFactory formid={modelid} current={current} setCurrent={setCurrent} t={t} accData={accData}
                              collapse={state.collapse} styles={styles} submitQuery={submitQuery_}/>
 
@@ -125,47 +120,58 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
 }
 
 const JForm = () => {
-    const { t,  } = useTranslation();
+    const {t,} = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-    //const [profile, ] = useGlobalState('profile');
-    const { profile,  } = useStore()
-    const { token  } = profile
-    const [selected, ] = useGlobalState('selected');
-    console.log('selected',selected)
-    const [menu, ] = useGlobalState('menu');
-    const datax =  profile?.modules?profile.modules:[];
+    const {profile, selected, menu  } = useStore()
+    const {token, company, locale, currency} = profile
     let history = useHistory()
-    console.log('datax',datax)
-    const module_= menu.get(selected);
-    console.log('module_',module_)
-    const modules_=(datax.includes(module_.id)|| (module_.id==="0"))?module_:menu.get('/login')
-    if(modules_.id==='0') history.push("/login");
-    const module = modules_
-    const url=SERVER_URL.concat(module.ctx)
-    const accUrl=SERVER_URL.concat(module.ctx1)
-    const initAcc =module.state1
+    const module_ = menu.get(selected);
+    console.log('selected', selected)
+    console.log('menu', menu);
+    console.log('module_', module_);
+
+    if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
+    const url = SERVER_URL.concat(module_.ctx).concat("/").concat(company);
+    const accUrl = SERVER_URL.concat(MASTERFILE.acc).concat("/").concat(company);
+    const initAcc = module_.state1
     const initialState = module_.state
-    console.log('module_',module_.state[0])
-    const current_= module_.state[0].query;//initialState[0].query;
-    const title =module.title
-    const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
-    const [isDebit, setIsDebit ] = useState(true);
-    const modelid = module.modelid;
-    const [current,setCurrent] = useState(current_);
+    const ALL = {...initialState, id:'*', name:'**ALL**'}
+    console.log('module_', module_);
+    const current_ = module_.state?module_?.state[0].query:[];
+    const title = t(module_.title);
+    const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300});
+    const [isDebit, setIsDebit] = useState(true);
+    const modelid = module_.modelid;
+    console.log('modelid', modelid);
+    const [current, setCurrent] = useState(current_);
     const [data, setData] = useState(initialState);
-    const [accData, setAccData] = useState(initAcc);
+    const [setAccData] = useState(initAcc);
     const [toolbar, setToolbar] = useState(true);
-    const columnsX= modelid===formEnum.PACB?columnsPACB(t):ColumnJournal(t);
-    const toggleToolbar= ()=> setToolbar(!toolbar );
-    const toggle= ()=> setState({...state, collapse:!state.collapse });
+    const [iwsState, setIwsState] = useState(iwsStore.initialState);
+    const columnsX = modelid === formEnum.PACB ? columnsPACB(t, locale, currency) : ColumnJournal(t, locale, currency);
+    const toggleToolbar = () => setToolbar(!toolbar);
+    const toggle = () => setState({...state, collapse: !state.collapse});
+    const acc_modelid = parseInt(ACCOUNT(t).id);
+    console.log('acc_modelid', acc_modelid);
+    const accData_ = iwsState.get(acc_modelid) ? iwsState.get(acc_modelid) : [...initAcc]
+    console.log('accData_', accData_);
+    let init = useRef(false)
+    useLayoutEffect(() => {
+        if (!init.current) {
+            iwsStore.subscribe(setIwsState);
+            init.current = true
+        }
+        // load account data as they are needed
+        accUrl && Get1(accUrl, token, acc_modelid);
+    }, [init, accUrl, token, acc_modelid]);
 
-    const getUrl=() =>url.concat('/')
-        .concat(current.account).concat('/')
-        .concat(current.fromPeriod).concat('/')
-        .concat(current.toPeriod);
+    const getUrl = () => url.concat('/')
+      .concat(current.account).concat('/')
+      .concat(current.fromPeriod).concat('/')
+      .concat(current.toPeriod);
 
-    return Internal(isDebit, t, modelid, accData, accUrl, token, history, setAccData, initAcc, current, getUrl, setData
-        , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX);
+    return Internal(isDebit, t, modelid, selected===MASTERFILE.pac?[ALL].concat(accData_):accData_, accUrl, token, history, setAccData, initAcc, current, getUrl, setData
+      , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX);
 
 };
 export default memo(JForm);

@@ -1,39 +1,46 @@
 import React, {useEffect, useState, memo} from 'react'
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
-import {OptionsM, ColumnFactory} from "../../Tables2/LineFinancialsProps";
+import {OptionsM,  ColumnsBS} from "../../Tables2/LineFinancialsProps";
 import {BSFormHead, FormFactory} from "./FormsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles,  theme} from "../Tree/BasicTreeTableProps";
-import {Edit, EditRow, Post, Query} from './CrudController';
-import {LOGIN_MENU, useGlobalState, useStore} from "./Menu";
+import {Edit, EditRow, Get, Get2} from './CrudController';
+import { useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 
-function internal(url, profile, history, initialState, data, setData,  current, setCurrent,  title, state
-    , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows) {
+function internal(url, token, history, initialState, data, setData,  current, setCurrent,  title, state
+    , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows, module_, locale, currency) {
+    const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
     const isEmpty = (str) => (!str || 0 === str.length);
     const submitQuery = event => {
         event.preventDefault();
-        !isEmpty(url) && Query(event, url, profile, history,setData, initialState);
+        !isEmpty(url) && Get( url, token, history,setData);
     };
     const cancelEdit = (e) => EditRow({...current}, false, setCurrent);
 
     const submitPost = event => {
         event.preventDefault();
-        Post(url, profile, rows, "/post");
+        const url_= SERVER_URL.concat(module_.state3).concat("/post/").concat(current.company).concat("/").concat(rows.join(","));
+        Get2(url_, token, setCurrent);
     };
 
     const edit = editedRow => {
-        const record = data.find(obj => obj.id === editedRow.id);
-        const row = {...record, editing: true}
-        setCurrent(row);
+        const isArray = Array.isArray(editedRow)&& editedRow.length>0
+        const row = isArray?editedRow[0]:editedRow;
+        if( row) {
+            const record = data.find(obj => obj.id === row.id);
+            setCurrent({...record, editing: true});
+        }
     }
 
     const submitEdit = event => {
         event.preventDefault();
         if (current.editing && !current.posted) {
-            Edit(url, profile, {...current}, data, setCurrent);
+            delete current.editing
+            const url_= SERVER_URL.concat(module_.state3)
+            Edit(url_, token, {...current}, data, setCurrent);
         }
     };
 
@@ -45,7 +52,7 @@ function internal(url, profile, history, initialState, data, setData,  current, 
                             url={url} cancelEdit={cancelEdit} submitEdit={submitEdit}
                             submitQuery={submitQuery} submitPost={submitPost} toggle={toggle}
                             toggleToolbar={toggleToolbar}/>
-                <FormFactory formid={modelid_} current={current} setCurrent={setCurrent} t={t}
+                <FormFactory formid={modelid_} current={current} setCurrent={setCurrent} t={t} locale ={locale} currency ={currency}
                              collapse={state.collapse} styles={styles}/>
                 <Grid container spacing={2} style={{...styles.inner, display: 'block'}} direction="column">
                     <EditableTable Options={{...OptionsM, toolbar: toolbar}} data={data}
@@ -62,36 +69,34 @@ function internal(url, profile, history, initialState, data, setData,  current, 
 const BankStatementForm = () => {
     const { t,  } = useTranslation();
     const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-    //const [profile, ] = useGlobalState('profile');
     const { profile,  } = useStore()
-    const { token  } = profile
-    const [selected, ] = useGlobalState('selected');
-    const [menu, ] = useGlobalState('menu');
-    const datax =  profile?.modules?profile.modules:[];
-    let history = useHistory()
-
+    const { token, company, locale, currency} = profile
+    const {  selected, menu } = useStore();
+    let history = useHistory();
     const module_= menu.get(selected);
-    const loginMenu = menu&&menu.length>0?menu.get('/login'):LOGIN_MENU(t)[0]
+
     const [state, setState]= useState({collapse: true, fadeIn: true, timeout: 300});
     const [rows, setRows] =useState([])
-    const modules_= (module_)&&datax.includes(module_.id)?module_:loginMenu
-    if(modules_.id==='0') history.push("/login");
-    const module = modules_
-    const url=SERVER_URL.concat(module.ctx)
-    const initialState = module.state
+    if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
+    const url=SERVER_URL.concat(module_.ctx).concat("/").concat(company);
+    const initialState = module_.state
     const current_= initialState[0]
-    const title =module.title
-    const modelid_ = module.modelid;
+    const title = t(module_.title);
+    const modelid_ = module_.modelid;
     const [data, setData] = useState(initialState);
     const [current,setCurrent] = useState(current_);
     const [toolbar, setToolbar] = useState(true);
     useEffect(() => {}, [current, setCurrent, data]);
     const toggleToolbar= ()=> setToolbar(!toolbar );
     const toggle= ()=> setState({...state, collapse:!state.collapse });
-    const columns = ColumnFactory(modelid_, data, t);
-    const setSelectedRows = (rows_)=>setRows(rows_.map( item =>item.id));
+    const columns = ColumnsBS(t, locale, currency);
+    const setSelectedRows = (rows_)=>{
+        let rowsx = rows_.map(item=>item.id);
+        setRows(rowsx);
+    };
+
     return internal(url, token, history,initialState, data, setData,  current, setCurrent,  title, state
-        , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows);
+        , toggle, toggleToolbar, modelid_, t, toolbar, columns, rows, setSelectedRows, module_, locale, currency);
 
 };
 export default memo(BankStatementForm);

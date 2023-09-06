@@ -4,28 +4,27 @@ import {
     AddressForm,
     CustomerGeneralForm,
     CustomerAccountForm,
-    BIC,
     CompanyAccountForm,
     CompanyGeneralForm
 } from "./FormsProps";
 import {CTabPane} from "@coreui/react";
-import {Options} from '../../Tables2/LineFinancialsProps';
+import {OptionsM} from '../../Tables2/LineFinancialsProps';
 import EditableTable from "../../Tables2/EditableTable";
 import {styles} from "../Tree/BasicTreeTableProps";
 import {formEnum} from "../../../utils/FORMS";
+import {Autocomplete} from "./Autocomplete";
 
  const CustomerTabs =  (props) => {
     const {formid, current, setCurrent, accData, vatData, bankData, t}= props
-    const initBankAcc=current.bankaccounts;
+    const initBankAcc = current.bankaccounts;
     const tableRef = createRef();
     const columns=(data, t) => [
-      {field:'id', title:t('common.iban'), initialEditValue:'', export:true}
-     , {field:'bic', title:t('common.bank'), hidden:false, editComponent:({ value, onRowDataChange, rowData }) =>
-                BIC ( data, value, onRowDataChange, rowData, "bic" ),  initialEditValue:'', width: 20
-       , align:"right", export:true}
-    , {field:'owner', title:t('common.owner'),initialEditValue:current.id,  export:true}  
+      {field:'id', title:t('common.iban'), initialEditValue:'', minWidth:40, maxWidth:100, export:true}
+    , {field:'bic', title:t('common.bank'), hidden:false, editComponent:tableData => Autocomplete ( data, tableData)
+    ,  initialEditValue:'', minWidth:100, align:"right", export:true}
+    , {field:'owner', title:t('common.owner'),initialEditValue:current.id,  minWidth:5,  export:true}
     , {field:'modelid', title:t('common.modelid'),initialEditValue:12, hidden:true, export:true}
-    , {field:'company', title:t('common.company'),initialEditValue:current.company,  export:true} 
+    , {field:'company', title:t('common.company'),initialEditValue:current.company,  minWidth:5, editable:'never', export:true }
     ]
     const columnsX = columns(bankData, t);
     const modules= [
@@ -36,51 +35,46 @@ import {formEnum} from "../../../utils/FORMS";
       , {id:"2", name:'account', title:t('common.account'), ctx:"", ctx1:"", get:""
           , ctx2:"", form:'accountForm', state:'', state1:'' ,state2:'',  columns:[]}
       ,  {id:"3", name:'bankAccounts', title:t('common.bankaccounts'), ctx:"/bankacc", ctx1:"", get:""
-          , ctx2:"", form:'bankAccountTable', state:initBankAcc, state1:'' ,state2:'',  columns:columns}          
+      , ctx2:"", form:'bankAccountTable', state:initBankAcc, state1:'' ,state2:'',  columns:columns}
      ]
 
-/*
-  const onNewLine =() => {
-   const ref = tableRef.current
-   ref.dataManager.changeRowEditing();
-   ref.setState({ ...ref.dataManager.getRenderState(),
-     showAddRow: !ref.state.showAddRow,
-   });
- }
- */
-
 const addRow = (newData) =>{
+  console.log('newData', newData);
    if(newData ) {
      const dx = {...current};
-     dx.bankaccounts[dx.length] = {...newData, owner:'-1'};
+     dx.bankaccounts[dx.bankaccounts.length] = {...newData, owner:current.id, modelid:12};
      setCurrent({...dx});
    }
  }
  const updateRow = (newData, oldData) =>{
+  console.log('newData', newData);
    if (oldData) {
      const dx = {...current};
      const index = dx.bankaccounts.findIndex(obj => obj.id === oldData.id);
-     dx.bankaccounts[index] = {...newData};
+     dx.bankaccounts[index] = {...newData, owner:current.id, modelid:12};
      setCurrent({...dx});
    }
  }
  const deleteRow = (oldData) =>{
+   console.log('oldData', oldData);
    if (oldData) {
      const dx = {...current};
-     const index =dx.bankaccounts.findIndex(obj => obj.lid === oldData.lid);
+     const index =dx.bankaccounts.findIndex(obj => obj.id === oldData.id);
+     console.log('index', index);
      const deleted = dx.bankaccounts[index];
-     dx.bankaccounts[index] = {...deleted, id:'-0' };
+     console.log('deleted', deleted);
+     dx.bankaccounts[index] = {...deleted, modelid:-1 };
      setCurrent({...dx});
    }
  }
-     const  editable = () => ({
+ const  editable = () => ({
       onRowAdd: async (newData) => addRow(newData),
       onRowUpdate: async (newData, oldData) => updateRow(newData, oldData),
       onRowDelete: async (oldData) => deleteRow(oldData)
-    })
+ })
 
   const  getTabContent= (module) => <GetTabContent id ={module.id}/>
-  const wrapIt =(component) => <CTabPane style ={{...styles.middle, 'padding-top':5}}>{component}</CTabPane>
+  const wrapIt =(component) => <CTabPane style ={{...styles.middle, 'paddingTop':5}}>{component}</CTabPane>
   const getForm =(formid)=>{
       switch(formid) {
          case formEnum.CUSTOMER:
@@ -92,7 +86,7 @@ const addRow = (newData) =>{
               return <>Invalid Tab</>
       }
   }
-     const getAccountForm =(formid)=>{
+  const getAccountForm =(formid)=>{
          switch(formid) {
              case formEnum.CUSTOMER:
              case formEnum.SUPPLIER:
@@ -105,7 +99,7 @@ const addRow = (newData) =>{
                  return <>Invalid Tab</>
          }
      }
-   const GetTabContent = (props) => {
+  const GetTabContent = (props) => {
          switch(props.id) {
            case "0":
               return getForm(formid);
@@ -115,13 +109,13 @@ const addRow = (newData) =>{
               return getAccountForm(formid);
            case "3":
              return wrapIt(
-                     <EditableTable id="bankaccouts" Options ={{...Options, paging:false}} flag={false}
+                     <EditableTable id="bankaccouts" Options ={{...OptionsM, paging:false}} flag={false}
                          data = {current?current.bankaccounts:[]} columns={columnsX} editable={editable()}  t={t}
                         tableRef={tableRef}/>)
             default:
               return <>NODATA</>
              }
     };
-    return (<Tabs tabContent ={getTabContent} modules = {modules} style ={{...styles.outer, padding:0}}/>)
+ return (<Tabs tabContent ={getTabContent} modules = {modules} style ={{...styles.outer, padding:0}}/>)
 };
 export default CustomerTabs

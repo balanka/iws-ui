@@ -21,16 +21,8 @@ import 'react-dates/initialize'
 import { DateRangePicker } from 'react-dates'
 import 'react-dates/lib/css/_datepicker.css'
 
-// React select
-import states from './states'
-import Select from 'react-select'
-
 const AdvancedForms = () => {
-  const [value, setValue] = React.useState([
-    { value: 'TX', label: 'Texas' },
-    { value: 'UT', label: 'Utah' }
-  ])
-  
+
   const [date, setDate] = React.useState({startDate: null, endDate: null})
   const [focused, setFocused] = React.useState()
 
@@ -144,26 +136,26 @@ const AdvancedForms = () => {
         </CCard>
       </CCol>
       <CCol sm={12} md={6}>
-        <CCard>
-          <CCardHeader>
-            React-Select{' '}
-            <CBadge href="https://coreui.io/pro/react/" color="danger">CoreUI Pro Component</CBadge>
-            <div className="card-header-actions">
-              <a href="https://github.com/JedWatson/react-select" rel="noreferrer noopener" target="_blank" className="card-header-action">
-                <small className="text-muted">docs</small>
-              </a>
-            </div>
-          </CCardHeader>
-          <CCardBody>
-            <Select
-              name="form-field-name2"
-              value={value}
-              options={states}
-              onChange={setValue}
-              isMulti
-            />
-          </CCardBody>
-        </CCard>
+        {/*<CCard>*/}
+        {/*  <CCardHeader>*/}
+        {/*    React-Select{' '}*/}
+        {/*    <CBadge href="https://coreui.io/pro/react/" color="danger">CoreUI Pro Component</CBadge>*/}
+        {/*    <div className="card-header-actions">*/}
+        {/*      <a href="https://github.com/JedWatson/react-select" rel="noreferrer noopener" target="_blank" className="card-header-action">*/}
+        {/*        <small className="text-muted">docs</small>*/}
+        {/*      </a>*/}
+        {/*    </div>*/}
+        {/*  </CCardHeader>*/}
+        {/*  <CCardBody>*/}
+        {/*    <Select*/}
+        {/*      name="form-field-name2"*/}
+        {/*      value={value}*/}
+        {/*      options={states}*/}
+        {/*      onChange={setValue}*/}
+        {/*      isMulti*/}
+        {/*    />*/}
+        {/*  </CCardBody>*/}
+        {/*</CCard>*/}
         <CCard>
           <CCardHeader>
             React-Dates{' '}

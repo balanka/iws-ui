@@ -41,8 +41,8 @@
     "type": "Type",
     "birthYear": "Ann.naissance",
     "birthCity": "Lieu de naissance",
-    "account":  "Comptes",
-    "oaccount": "Comptes produit/charge",
+    "account":  "Cpte déb.",
+    "oaccount": "Cpte créd.",
     "currency"    : "Monaie",
     "from"       :  "De",
     "to"        :  "A",
@@ -58,11 +58,11 @@
     "street"      : "Rue",
     "zip"        : "Code P.",
     "city"       : "Ville",
-    "country"       : "Région",
-    "state"        : "Pays",
-    "phone"       : "Tel",
+    "country"    : "Région",
+    "state"      : "Pays",
+    "phone"      : "Tel",
     "fax"       : "Fax",
-    "email"       : "Email",
+    "email"     : "Email",
     "enterdate"  : "Date saisie",
     "postingdate": "Date validation",
     "changedate":  "Date mod.",
@@ -84,6 +84,21 @@
     "bank":"Banque",
     "owner":"Titulaire"
 
+  },
+  "asset": {
+    "title":      "Immobilisation",
+    "name":       "Nom",
+    "description": "Description",
+    "enterdate"  : "Saisie",
+    "postingdate": "Validation",
+    "changedate":  "Modif.",
+    "account": "compte.",
+    "oaccount": "Compte charge",
+    "rate":     "Taux",
+    "scrapValue": "Risidu",
+    "lifeSpan":   "Durée",
+    "frequency":   "Periode",
+    "depreciation":   "Methode"
   },
   "account": {
     "title":      "Comptes",
@@ -119,7 +134,8 @@
     "amount"      : "Montant",
     "info"       : "Info",
     "companyIban" : "Réf. société",
-    "posted"      : "Validé?"
+    "posted"      : "Validée",
+    "period"      : "Periode"
   },
   "company": {
     "title":      "Société",
@@ -146,6 +162,16 @@
     "changedate":  "Date mod.",
     "account"    : "Compte"
   },
+  "module": {
+    "title":"Module",
+    "name":       "Nom",
+    "description": "Description",
+    "enterdate"  : "Date saisie",
+    "postingdate": "Date validation",
+    "changedate":  "Date mod.",
+    "parent":"Groupe",
+    "path": "Path"
+  },
   "article": {
     "title":      "Article",
     "name":       "Nom",
@@ -161,36 +187,47 @@
     "enterdate"  : "Saisie",
     "postingdate": "Validation",
     "changedate":  "Modif.",
-    "input_account": "TVA per.",
+    "input_account": "TVA perc.",
     "output_account": "TVA rec.",
     "percent":     "Pourcent"
      },
   "pac": {
-    "title":      "Balance périodique",
+    "title":      "Balance",
     "period":      "Periode"
     },
-
+  "role": {
+    "title":      "Role"
+  },
+  "permission": {
+    "title":      "Permission"
+  },
+  "fmodule":{
+    "title": "Journaux"
+  },
   "financials": {
     "title":      "Pièce comptable",
-    "id":        "Nº pièce",
+    "id":        "Nº",
     "oid":        "Réf.",
     "period":       "Periode",
     "enterdate"  : "Saisie",
     "postingdate": "Validée",
     "transdate":   "Date pièce",
     "account": "Compte",
-    "costcenter":   "C.de coût",
+    "costcenter":   "C.coût",
     "text" :       "Texte",
     "type":         "Type",
     "file":         "Fichier",
-    "posted":     "Posted",
+    "file_content":  "Contenu",
+    "posted":     "Validée",
     "line": {
       "title": "Lignes",
-      "id": "Nº ligne",
-      "account": "C. débité",
-      "oaccount": "C. crédité",
+      "id": "Nº",
+      "account": "C.débité",
+      "accountName": "Nom",
+      "oaccount": "C.crédité",
+      "oaccountName": "Nom",
       "amount": "Montant",
-      "side": "D/C?",
+      "side": "D/C",
       "duedate": "Date valeur",
       "text": "Texte"
     }
@@ -198,10 +235,10 @@
   "journal": {
     "title":      "Journal",
     "id":         "Nº",
-    "transid":    "Nº pièce",
+    "transid":    "Nºpièce",
     "oid":         "Nº",
-    "account":      "C. débité",
-    "oaccount":      "C. crédité",
+    "account":      "C.débité",
+    "oaccount":      "C.crédité",
     "enterdate"  : "Saisie",
     "postingdate": "Validée",
     "transdate":   "Valeur",
@@ -257,13 +294,16 @@
     "menu": "Menu"
   },
   "menu": {
+    "admin": "Administration",
+    "asset": "Immobilisation",
     "dashboard": "Tableau de board",
-    "masterfiles": "Masterfiles",
+    "masterfiles": "Références",
     "accounting": "Comptabilité",
     "journal": "Grand livre",
     "pacb": "Balance",
     "account": "Comptes",
     "bank": "Banque",
+    "module": "Module",
     "costcenter": "Centre de cout",
     "customer": "Clients",
     "supplier": "Fournisseurs",
@@ -271,10 +311,12 @@
     "login"  :"Login",
     "company": "Société",
     "user": "Utilisateurs",
+    "role": "Role",
+    "permission": "Permission",
+    "fmodule": "Journaux",
     "bankstatement": "Rélévé bancaire",
-    "masterfiles": "Références",
     "balancesheet": "Bilanz",
-    "financials": "Clients/Fournisseurs",
+    "financials": "Journaux",
     "financials_stmt": "Clôture/Rapports financiers"
   }
 }

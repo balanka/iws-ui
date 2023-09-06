@@ -15,13 +15,13 @@ import {
   CRow, CSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {useGlobalState, useStore} from './Menu';
+import {useStore} from './Menu';
 import { Login as Login_} from './CrudController';
 import { useTranslation} from 'react-i18next';
-import {LOGIN_MENU, MENU} from "./Menu";
-import create from "zustand";
+import {LOGIN_MENU} from "./Menu";
 
-export const languages = {data:[
+export const languages = {
+  data:[
     {id:'en', name:'English'},
     {id:'de', name:'Deutsch'},
     {id:'fr', name:'Francais'}
@@ -31,17 +31,12 @@ const Login = () => {
   let history = useHistory()
   const { t, i18n } = useTranslation();
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-  //const [, setProfile] = useGlobalState('profile');
-  const { _, setProfile } = useStore()
-  const [, setMenu] = useGlobalState('menu');
-  const [, setRoutes] = useGlobalState('routes');
+  const { menu, selected, setProfile, setMenu, setModule, setRoutes, } = useStore();
 
-  //const [history_, setHistory_] = useGlobalState('history_');
-  const module= LOGIN_MENU(t)[0];
-  const url=SERVER_URL.concat(module.ctx)
-  const current_ =module.state
+  const module_ = menu?menu.get(selected):LOGIN_MENU(t)[0];
+  const url = SERVER_URL.concat(module_.ctx)
+  let current_ = module_.state[0]
   const [current,setCurrent] = useState(current_);
-  //useEffect(() => {setCurrent(current_)}, [ current_]);
   const companies={data:[
       {id:'1000', name:'KABA Soft GmbH'},
       {id:'2000', name:'KABA Soft CI'},
@@ -51,17 +46,20 @@ const Login = () => {
 
   const submit = event => {
     event.preventDefault();
-    const data={"userName": current.username, "password": current.password}
-    Login_(history, url, data, setProfile, MENU, t, setMenu, setRoutes);
+    const currentx = current?current:current_;
+    console.log('current', currentx);
+    const data={"userName": currentx.username, "password": currentx.password, "company":currentx.company, "language":currentx.language}
+    Login_(history, url, data, setProfile,  t, setMenu, setModule, setRoutes);
   }
 
   const handleEvent=(event, value ) =>{
     event.preventDefault();
     event.stopPropagation();
+    current_= {...value}
+    console.log('current_', current_);
     setCurrent({...value})
   }
 
-  //const onBlur =(value) => {console.log("focus lost", value) }
   return (<>
       <div className="c-app c-default-layout flex-row align-items-center">
         <CContainer>

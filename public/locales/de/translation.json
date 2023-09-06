@@ -42,7 +42,7 @@
     "birthYear": "Jahrgang",
     "birthCity": "Geburtsort",
     "account":      "Konto",
-    "oaccount"    : "Debitor-/Kreditorkonto",
+    "oaccount"    : "G.Konto",
     "currency"    : "Währung",
     "from"       :  "Von",
     "to"        :  "Bis",
@@ -84,6 +84,21 @@
     "bank":"Bank",
     "owner":"Inhaber"
   },
+  "asset": {
+    "title":  "Anlage",
+    "name":       "Name",
+    "description": "Beschreibung",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Gebucht am",
+    "changedate":  "Geändert am",
+    "account":  "Konto",
+    "oaccount": "G. Konto",
+    "rate":     "Satz",
+    "scrapValue": "Restwert",
+    "lifeSpan":   "Laufzeit",
+    "frequency":   "Frequency",
+    "depreciation":   "Methode"
+  },
   "account": {
     "title":"Konto",
     "name":"Name",
@@ -120,7 +135,8 @@
     "amount"      : "Betrag",
     "info"       : "Info",
     "companyIban" : "IBAN Mandant",
-    "posted"      : "Gebucht?"
+    "posted"      : "Gebucht?",
+    "period"      : "Periode"
   },
   "company": {
     "title":      "Mandant",
@@ -149,7 +165,18 @@
     "enterdate":"Enterdate",
     "postingdate":"Gebucht am",
     "changedate":"Geaendert am",
-    "account":"Konto"
+    "account"    : "Konto",
+    "company"    : "Mandant"
+  },
+  "module": {
+    "title":"Module",
+    "name":"Name",
+    "description":"Beschreibung",
+    "enterdate":"Enterdate",
+    "postingdate":"Gebucht am",
+    "changedate":"Geaendert am",
+    "parent":"Gruppe",
+    "path": "Path"
   },
   "article": {
     "title":      "Article",
@@ -174,11 +201,20 @@
     "title":      "Salden",
     "period":      "Periode"
   },
+  "role": {
+    "title":      "Role"
+  },
+  "permission": {
+    "title": "Berechtigung"
+  },
+  "fmodule":{
+    "title": "Belegart"
+  },
   "financials": {
     "title":      "Beleg",
     "id":        "Nr.",
     "oid":        "O.BelegNr",
-    "period":       "Period",
+    "period":       "Periode",
     "enterdate"  : "Eingabedatum",
     "postingdate": "Buchungsdatum",
     "transdate":   "Belegdatum",
@@ -187,15 +223,18 @@
     "text" :       "Text",
     "type":         "B.Art",
     "file":         "Datei",
+    "file_content":  "Inhalt",
     "posted":     "Gebucht",
     "line": {
       "title": "Position(en)",
-      "id": "Pos.Nr.",
+      "id": "Nr.",
       "account": "Konto",
+      "accountName": "Kontenname",
       "oaccount": "G.Konto",
+      "oaccountName": "Name G.",
       "amount": "Betrag",
       "side": "S/H?",
-      "duedate": "Fällig am",
+      "duedate": "Faellig am",
       "text": "Text"
     }
   },
@@ -261,12 +300,15 @@
     "menu": "Menü"
   },
   "menu": {
+    "admin": "Verwaltung",
+    "asset": "Anlage",
     "dashboard": "Dashboard",
     "accounting": "Buchhaltung",
     "journal": "Journal",
     "pacb": "Salden",
     "account": "Konten",
     "bank": "Bank",
+    "module": "Module",
     "costcenter": "Kostenstelle",
     "customer": "Kunden",
     "supplier": "Lieferanten",
@@ -274,10 +316,13 @@
     "login"  :"Login",
     "company": "Mandant",
     "user": "Benutzer",
+    "permission": "Berechtigung",
+    "fmodule": "Belegart",
+    "role": "Role",
     "bankstatement": "Bankauszug",
     "masterfiles": "Stammdaten",
     "balancesheet": "Jahresabschluss",
-    "financials": "Debitoren/Kreditoren",
+    "financials": "Belege",
     "financials_stmt": "Jahresabschluss/GuV"
   }
 }

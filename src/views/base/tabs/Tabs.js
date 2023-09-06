@@ -26,7 +26,7 @@ export const Tabs = ({ tabContent, modules}) => {
             <CNav variant="tabs">
                 {items.map(item => getNavLink(item))}
             </CNav>
-            <CTabContent fade={true}>
+            <CTabContent fade={false}>
                 {items.map(item => getTabPane(item))}
             </CTabContent>
         </>

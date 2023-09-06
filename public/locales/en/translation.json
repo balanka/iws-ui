@@ -42,7 +42,7 @@
     "birthYear": "B. year",
     "birthCity": "B. City",
     "account":      "Account",
-    "oaccount"    : "Expense/Revenue acc",
+    "oaccount"    : "Op. acc",
     "currency"    : "Currency",
     "from"       :  "From",
     "to"        :  "To",
@@ -84,6 +84,21 @@
     "bank":"Bank",
     "owner":"Owner"
   },
+  "asset": {
+    "title":      "Asset",
+    "name":       "Name",
+    "description": "Description",
+    "enterdate"  : "Enterdate",
+    "postingdate": "Posting date",
+    "changedate":  "Change date.",
+    "account": "Account",
+    "oaccount": "O. Acc",
+    "rate":     "rate",
+    "scrapValue": "Scrap value",
+    "lifeSpan":   "Life span",
+    "frequency":   "Frequency",
+    "depreciation":   "Method"
+  },
   "account": {
     "title":      "Account",
     "name":       "Name",
@@ -122,7 +137,8 @@
     "amount"      : "Amount",
     "info"       : "Info",
     "companyIban" : "IBAN comp.",
-    "posted"      : "Posted?"
+    "posted"      : "Posted?",
+    "period"      : "Period"
   },
   "company": {
     "title":      "Company",
@@ -158,6 +174,18 @@
     "account"    : "Account",
     "company"    : "Company"
   },
+  "module": {
+    "title":"Module",
+    "name":"Name",
+    "description":"Description",
+    "enterdate"  : "Created",
+    "postingdate": "Posted",
+    "changedate": "Modified",
+    "account"    : "Account",
+    "company"    : "Company",
+    "parent":"Gruppe",
+    "path": "Path"
+  },
   "article": {
     "title":      "Article",
     "name":       "Name",
@@ -182,6 +210,15 @@
     "title":      "P.Account Balance",
     "period":      "Period"
   },
+  "role": {
+    "title":      "Role"
+  },
+  "permission": {
+    "title":      "Permission"
+  },
+  "fmodule":{
+    "title": "Transactions"
+  },
   "financials": {
     "title":      "Financials",
     "id":        "Id",
@@ -190,17 +227,20 @@
     "enterdate"  : "Created",
     "postingdate": "Posted",
     "transdate":   "Transdate",
-    "accountHeader": "Deb./Cred.",
+    "account": "Account",
     "costcenter":   "Cost center",
     "text" :       "Text",
     "type":         "Type",
     "file":         "File",
+    "file_content":  "Content",
     "posted":     "Posted?",
     "line": {
       "title": "Line",
-      "id": "Nº line",
+      "id": "Nr",
       "account": "Acc.",
+      "accountName": "Acc. Name",
       "oaccount": "O.Acc.",
+      "oaccountName": "OAcc. Name",
       "amount": "Amount",
       "side": "D/C?",
       "duedate": "Due date",
@@ -271,12 +311,15 @@
     "menu": "Menu"
    },
   "menu": {
+    "admin": "Administration",
+    "asset": "Asset",
     "dashboard": "Dashboard",
     "accounting": "Accounting",
     "journal": "Journal",
     "pacb": "Account balance",
     "account": "Accounts",
     "bank": "Bank",
+    "module": "Module",
     "costcenter": "Cost center",
     "customer": "Customer",
     "supplier": "Supplier",
@@ -284,6 +327,9 @@
     "login"  :"Login",
     "company": "Company",
     "user": "Users",
+    "role": "Role",
+    "permission": "Permission",
+    "fmodule":"Transactions",
     "bankstatement": "Bank statement",
     "masterfiles": "Master files",
     "balancesheet": "Balance sheet",
