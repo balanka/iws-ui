@@ -49,9 +49,9 @@
     "total"     : "Total",
     "company": "Société",
     "modelid"     : "Model",
-    "idebit": "Debit.Init",
+    "idebit": "R. débit",
     "debit": "Debit",
-    "icredit": "Crédit.Init",
+    "icredit": "R. crédit",
     "credit": "Crédit",
     "balance": "Balance",
     "amount"      : "Montant",
@@ -97,7 +97,7 @@
     "rate":     "Taux",
     "scrapValue": "Risidu",
     "lifeSpan":   "Durée",
-    "frequency":   "Periode",
+    "frequency":   "Période",
     "depreciation":   "Methode"
   },
   "account": {
@@ -135,7 +135,7 @@
     "info"       : "Info",
     "companyIban" : "Réf. société",
     "posted"      : "Validée",
-    "period"      : "Periode"
+    "period"      : "Période"
   },
   "company": {
     "title":      "Société",
@@ -193,7 +193,7 @@
      },
   "pac": {
     "title":      "Balance",
-    "period":      "Periode"
+    "period":      "Période"
     },
   "role": {
     "title":      "Role"
@@ -208,7 +208,7 @@
     "title":      "Pièce comptable",
     "id":        "Nº",
     "oid":        "Réf.",
-    "period":       "Periode",
+    "period":       "Période",
     "enterdate"  : "Saisie",
     "postingdate": "Validée",
     "transdate":   "Date pièce",
@@ -242,7 +242,7 @@
     "enterdate"  : "Saisie",
     "postingdate": "Validée",
     "transdate":   "Valeur",
-    "period":       "Periode",
+    "period":       "Période",
     "amount":       "Montant",
     "side" :       "D/C?",
     "text" :       "Texte",
@@ -251,11 +251,12 @@
     "type":         "Type",
     "file":         "Fichier"
   },
+
   "balancesheet": {
-    "title":      "Bilan",
-    "name":         "Bilan",
+    "title":      "Bilan/Résultat",
+    "name":         "Bilan/Résultat",
     "account":     "Compte",
-    "period":      "Period",
+    "period":      "Période",
     "from"       :  "De",
     "to"        :  "A"
   },
@@ -272,7 +273,7 @@
   "firstname": "Prénom",
   "firstname_constraint": "Le prénom doit compté au moins  2 characteres",
   "lastname": "Nom",
-  "lastname_constraint": "Le Nnom doit compté au moins  2 characteres",
+  "lastname_constraint": "Le nom doit compté au moins  2 characteres",
 
   "title": "Bienvenue a react avec l'utilisation de  react-i18next",
   "description": {
@@ -282,7 +283,7 @@
     "status":"Statut" ,
     "show_details":"Afficher",
     "to": "a",
-    "part1": "Pour commencer, editer <1>src/App.js</1> et sauvegader pour le relancer.",
+    "part1": "Pour commencer, éditer <1>src/App.js</1> et sauvegader pour le relancer.",
     "part2": "Changer de langue entre l'englais, l'allemand et le francais en cliquant sur le boutton correspondants ci desus."
   },
   "user": {
@@ -315,8 +316,8 @@
     "permission": "Permission",
     "fmodule": "Journaux",
     "bankstatement": "Rélévé bancaire",
-    "balancesheet": "Bilanz",
+    "balancesheet": "Bilan/Résultat",
     "financials": "Journaux",
-    "financials_stmt": "Clôture/Rapports financiers"
+    "financials_stmt": "Clôture/Etat financiers"
   }
 }

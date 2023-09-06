@@ -21,7 +21,6 @@ render(
            <App/>
         </Provider>
      </React.StrictMode>, container, () => {
-    console.log('rendered');
 });
 
 
