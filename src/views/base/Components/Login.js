@@ -34,8 +34,9 @@ const Login = () => {
   const { menu, selected, setProfile, setMenu, setModule, setRoutes, } = useStore();
 
   const module_ = menu?menu.get(selected):LOGIN_MENU(t)[0];
-  const url = SERVER_URL.concat(module_.ctx)
-  let current_ = module_.state[0]
+  console.log('SERVER_URL',SERVER_URL);
+  const url = SERVER_URL.concat(module_.ctx);
+  let current_ = module_.state[0];
   const [current,setCurrent] = useState(current_);
   const companies={data:[
       {id:'1000', name:'KABA Soft GmbH'},

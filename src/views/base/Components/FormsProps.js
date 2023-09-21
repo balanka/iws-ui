@@ -120,7 +120,7 @@ export const CommonFormHead = (props) => {
         </Grid>);
 }
 export const BSFormHead = (props) => {
-    const {styles, title, collapse,  initAdd, submitEdit, submitQuery, submitPost, toggle, toggleToolbar} = props
+    const {styles, title, collapse,  initAdd, submitEdit, reload, submitQuery, submitPost, toggle, toggleToolbar} = props
     return (
         <Grid container spacing={2} justify="space-between" style={{...styles.inner}} direction="column" >
             <Grid container justify="space-between">
@@ -130,12 +130,17 @@ export const BSFormHead = (props) => {
                     </Grid>
                     <Grid item><h5><CBadge color="primary">{title}</CBadge></h5></Grid>
                     <Grid  container xs spacing={1} justify="flex-end" alignItems="right">
+                        <div className="card-header-actions" style={{ align: 'right' }}>
+                            <CButton color="link" className="card-header-action btn-minimize" itle="Reload" onClick={reload}>
+                                <IwsIcon style={{style:styles.imageIcon }}  d={svgIcons.refresh}/>
+                            </CButton>
+                        </div>
                         <div className="card-header-actions" style={{  align: 'right' }}>
                             <CButton color="link" className="card-header-action btn-minimize" onClick={(e) => submitPost(e)}>
                                 <IwsIcon  style ={{style:styles.imageIcon}} d={svgIcons.done}/>
                             </CButton>
                         </div>
-                        <div className="card-header-actions" style={{  align: 'right' }}>
+                        <div className="card-header-actions" style={{ align: 'right' }}>
                             <CButton color="link" className = "card-header-action btn-minimize" onClick={initAdd}>
                                 <FontAwesomeIcon icon={faPlusSquare} />
                             </CButton>
