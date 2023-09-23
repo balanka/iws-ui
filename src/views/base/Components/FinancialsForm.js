@@ -11,7 +11,6 @@ import {ACCOUNT, COSTCENTER, FMODULE, MASTERFILE, useStore} from "./Menu";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import iwsStore from './Store';
-//import { block } from "million/react";
 
 const FinancialsForm = () => {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -27,10 +26,9 @@ const FinancialsForm = () => {
   console.log('userMenu', userMenu);
 
   if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
-  //const module_x= modules_;
+
   const module_x= module_;
   const modifyUrl=SERVER_URL.concat(selected)
-
   const url=SERVER_URL.concat(module_x.ctx).concat("/").concat(company);
   const accUrl=SERVER_URL.concat(MASTERFILE.acc).concat("/").concat(company);
   const ccUrl=SERVER_URL.concat(MASTERFILE.cc).concat("/").concat(company);
@@ -38,7 +36,6 @@ const FinancialsForm = () => {
   const acc_modelid=parseInt(ACCOUNT(t).id);
   const cc_modelid=parseInt(COSTCENTER(t).id);
   const fmodule_modelid=parseInt(FMODULE(t).id);
-  console.log('fmodule_modelid', fmodule_modelid);
   const initCc = module_x.state2;
   const initAcc = module_x.state1;
   const initialState = module_x.state;
@@ -68,7 +65,7 @@ const FinancialsForm = () => {
     }
   }
 
-  const onNewLine =() => {
+  const onNewLine = () => {
     const ref = tableRef.current
     ref.dataManager.changeRowEditing();
     ref.setState({ ...ref.dataManager.getRenderState(),
@@ -129,12 +126,26 @@ const FinancialsForm = () => {
     console.log('model_', model_);
     const account_ = model_ ? model_.account : undefined;
     const accountLabel_ = model_.isDebit ? 'account' : 'oaccount';
-    return {account_, accountLabel_};
+    const oaccount_ = account_ ? '':model_.account  ;
+    const oaccountLabel_ = account_ ? 'oaccount' : 'account';
+    console.log('account_', account_);
+    console.log('accountLabel_', accountLabel_);
+    console.log('oaccount_', oaccount_);
+    console.log('oaccountLabel_', oaccountLabel_);
+    console.log('current_.lines[0]', current_.lines[0]);
+    return {account_, accountLabel_, oaccount_, oaccountLabel_};
   }
 
   const initAdd =()=> {
-    const {account_, accountLabel_} = getAccountAndLabel();
-    const line =[{...current_.lines[0], id:-1, transid:current_.id1,  [accountLabel_]:account_}]
+    const {account_, accountLabel_, oaccount_, oaccountLabel_} = getAccountAndLabel();
+    console.log('account_', account_);
+    console.log('accountLabel_', accountLabel_);
+    console.log('oaccount_', oaccount_);
+    console.log('oaccountLabel_', oaccountLabel_);
+    console.log('current_.lines[0]', current_.lines[0]);
+    const line =[{...current_.lines[0], id:-1, transid:current_.id1,
+        [accountLabel_]:account_, [oaccountLabel_]:oaccount_}]
+    console.log('line', line);
     const record = {...current_, lines:line}
     EditRow(record, true, setCurrent);
   }
@@ -206,16 +217,21 @@ const FinancialsForm = () => {
 
   };
 
-  const addRow = (newData) =>{
+  const addRow = async (newData) =>{
     if(newData ) {
-    const {account_, accountLabel_} = getAccountAndLabel();
+    const {account_, accountLabel_, oaccount_, oaccountLabel_} = getAccountAndLabel();
     const dx = {...current};
+      console.log('newData',newData);
+      console.log('dx',dx);
+      const oaccount = oaccount_?oaccount_:newData.oaccount;
+      const oaccountLabel =  oaccount_?'oaccount':'account'
     const dx1 =current.lines.length===0?
       {...current, lines:[{...current.lines.filter(e=>!e.account.isEmpty), ...newData
-        , id:-1, transid:current.id1, [accountLabel_]:account_}]}:
-      (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id1,  [accountLabel_]:account_})
+        , id:-1, transid:current.id1, [accountLabel_]:account_, [oaccountLabel]:oaccount}]}:
+      (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id1})
     const record = (current.lines.length>1)?dx:dx1;
     delete record.editing;
+    console.log('record',record);
     const result= record.id>0?Edit(modifyUrl, token, record, data(), setCurrent):
                               Add(modifyUrl, token, record, data(), setCurrent)
       setCurrent(result);
@@ -228,16 +244,11 @@ const FinancialsForm = () => {
       delete newData.tableData;
       const accountChanged = newData.account !== oldData.account
       const oaccountChanged = newData.oaccount !== oldData.oaccount
-      const splittedAccount = accountChanged?newData.account.toString().split(" "):oldData.account;
-      const splittedOAccount = oaccountChanged?newData.oaccount.toString().split(" "):oldData.oaccount;
-      const accountId =  accountChanged?splittedAccount[0]:oldData.account;
-      const accountName = accountChanged?splittedAccount[1]:oldData.accountName;
-      const oaccountId = oaccountChanged?splittedOAccount[0]:oldData.oaccount;
-      const oaccountName = oaccountChanged?splittedOAccount[1]:oldData.oaccountName;
+      const accountId = accountChanged?newData.account:oldData.account;
+      const oaccountId = oaccountChanged?newData.oaccount:oldData.oaccount;
 
       (idx === -1)? dx.lines.push({...newData, transid: dx.id1}): dx.lines[idx]={...newData, transid: dx.id1
-        , ...(accountChanged &&{account:accountId}), ...(accountChanged &&{accountName:accountName})
-        , ...(oaccountChanged &&{oaccount:oaccountId}), ...(oaccountChanged &&{oaccountName:oaccountName}) };
+        , ...(accountChanged &&{account:accountId}), ...(oaccountChanged &&{oaccount:oaccountId})};
       console.log('dx', dx);
       delete dx.editing;
       if(dx.id>0) {
@@ -256,8 +267,8 @@ const FinancialsForm = () => {
       Edit(modifyUrl, token, dx, data(), setCurrent);
     }
   }
-  const OnRowAdd = async (newData) => addRow(newData)
-  const  editable = () => ({onRowAdd: OnRowAdd, onRowUpdate:  updateRow, onRowDelete:  deleteRow})
+  //const OnRowAdd = async (newData) => addRow(newData)
+  const  editable = () => ({onRowAdd: addRow, onRowUpdate:  updateRow, onRowDelete:  deleteRow})
   function buildForm( current){
 
     const accd= iwsState.get(acc_modelid)?iwsState.get(acc_modelid):[...initAcc];

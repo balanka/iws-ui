@@ -7,9 +7,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prisma
-      POSTGRES_DB: tabata
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: iws123
+      POSTGRES_DB: iws
     volumes:
       - ./data:/var/lib/postgresql/data\
   web:
