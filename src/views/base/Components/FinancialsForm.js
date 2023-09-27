@@ -4,7 +4,7 @@ import Grid from "react-fast-grid";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles} from "../Tree/BasicTreeTableProps";
 import {Add, Edit, EditRow, Get1, Get2, Post} from './CrudController';
-import {columnsF, Linescolumns, Options, OptionsM} from '../../Tables2/LineFinancialsProps'
+import {buildExportOption, columnsF, Linescolumns,  Options} from '../../Tables2/LineFinancialsProps'
 import {FinancialsFormHead, FormFactory} from './FormsProps'
 import {formEnum} from "../../../utils/FORMS";
 import {ACCOUNT, COSTCENTER, FMODULE, MASTERFILE, useStore} from "./Menu";
@@ -302,7 +302,8 @@ const FinancialsForm = () => {
                      ccData={ccd}  styles={styles}  table={LinesFinancials} onNewLine={onNewLine}
                      collapse={state.collapse}
         />
-        <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px", pageSize:10
+        <EditableTable Options={{...buildExportOption("ExportCSV", "Export PDF", title)
+          , toolbar:toolbar, maxBodyHeight: "960px", pageSize:10
           , pageSizeOptions:[10, 20, 50]}} flag={current?current.posted:false} data={buildData()} columns={columns}
           t={t}  edit ={edit} setSelectedRows ={setSelectedRows} parentChildData={parentChildData}/>
 

@@ -2,7 +2,7 @@ import React, {createRef, memo, useCallback, useLayoutEffect, useState} from 're
 import {MASTERFILE, useStore, ACCOUNT, BANK, VAT, COSTCENTER} from './Menu';
 import Grid from "react-fast-grid";
 import {CommonFormHead, FormFactory} from './FormsProps'
-import {ColumnFactory, RightsColumns, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {ColumnFactory, RightsColumns, OptionsM, buildExportOption} from "../../Tables2/LineFinancialsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import {useTranslation} from "react-i18next";
@@ -174,7 +174,8 @@ const MasterfileForm = () => {
                      collapse={state.collapse} styles={styles} style={{...styles.inner}}/>
 
         <Grid container spacing={2} style={{...styles.inner, display:'block' }} direction="column" >
-          <EditableTable Options={{...OptionsM, toolbar:toolbar, maxBodyHeight: "960px"
+          <EditableTable Options={{...buildExportOption("Export CSV", "Export PDF", title)
+            , toolbar:toolbar, maxBodyHeight: "960px"
             , pageSize:10, pageSizeOptions:[10, 20, 50]}}  data={ data}
              columns={columns}   theme={theme} t={t}  edit ={edit} setSelectedRows ={setSelectedRows}/>
         </Grid>

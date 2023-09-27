@@ -1,7 +1,7 @@
 import React, {useEffect, useState, memo} from 'react'
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
-import {OptionsM,  ColumnsBS} from "../../Tables2/LineFinancialsProps";
+import {buildExportOption, ColumnsBS} from "../../Tables2/LineFinancialsProps";
 import {BSFormHead, FormFactory} from "./FormsProps";
 import EditableTable from "../../Tables2/EditableTable";
 import {styles,  theme} from "../Tree/BasicTreeTableProps";
@@ -61,7 +61,8 @@ function internal(url, token, history, initialState, data, setData,  current, se
                 <FormFactory formid={modelid_} current={current} setCurrent={setCurrent} t={t} locale ={locale} currency ={currency}
                              collapse={state.collapse} styles={styles}/>
                 <Grid container spacing={2} style={{...styles.inner, display: 'block'}} direction="column">
-                    <EditableTable Options={{...OptionsM, toolbar: toolbar}} data={data}
+                    <EditableTable Options={{...buildExportOption("ExportCSV", "Export PDF", title)
+                        , toolbar: toolbar}} data={data}
                                    columns={columns} theme={theme} t={t} edit={edit} setSelectedRows={setSelectedRows}/>
 
                 </Grid>

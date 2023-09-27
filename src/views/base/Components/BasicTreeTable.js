@@ -7,9 +7,10 @@ import EditableTable from "../../Tables2/EditableTable";
 import {Get, Get1} from './CrudController';
 import {useStore, ACCOUNT, MASTERFILE} from "./Menu";
 import {useHistory} from "react-router-dom";
-import {OptionsM, ColumnsBalancesheet as columns} from '../../Tables2/LineFinancialsProps';
+import {ColumnsBalancesheet as columns, buildExportOption} from '../../Tables2/LineFinancialsProps';
 import {useTranslation} from "react-i18next";
 import iwsStore from "./Store";
+
 
 function Internal(data, setData, accUrl, initAcc, accData, setAccData, profile, history, current, initialState, state
     , title, getUrl, url, toggle, toggleToolbar, setCurrent, t, toolbar, columnsX) {
@@ -31,7 +32,6 @@ function Internal(data, setData, accUrl, initAcc, accData, setAccData, profile, 
 
     let parentChildFn =(row, rows) => rows.find(a => a.id === row.account)
 
-
     function buildForm() {
         return <>
             <Grid container spacing={2} style={{...styles.outer}} direction="column">
@@ -42,9 +42,9 @@ function Internal(data, setData, accUrl, initAcc, accData, setAccData, profile, 
                              collapse={state.collapse} styles={styles} submitQuery={submitQuery_}/>
 
                 <Grid container spacing={2} style={{...styles.inner}} direction="column">
-                    <EditableTable Options={{...OptionsM, selection: false, grouping: true, toolbar: toolbar}}
-                                   flag={false} data={data}
-                                   columns={columnsX} t={t} parentChildData={parentChildFn}/>
+                    <EditableTable Options={{...buildExportOption("EXPORT_CSV", "EXPORT_PDF", title)
+                        , selection: false, grouping: true, toolbar: toolbar, exportAllData: true}}
+                        flag={false} data={data} columns={columnsX} t={t} parentChildData={parentChildFn}/>
 
                 </Grid>
             </Grid>

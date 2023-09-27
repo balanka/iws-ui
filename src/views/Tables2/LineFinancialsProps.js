@@ -5,6 +5,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import {formEnum} from "../../utils/FORMS";
 import {dateFormat} from "../../utils/utils";
+import {ExportCsv, ExportPdf} from "@material-table/exporters";
 
 const mapping = (acc) =>
   <MenuItem key={acc.id} value={acc.id}>
@@ -141,6 +142,19 @@ export const Options = ({
 
     rowStyle: rowStyle
 })
+export const buildExportOption = (csvMenu, pdfMenu, fileName) => ({
+    ...OptionsM,
+    exportMenu:[
+        {
+            label: csvMenu, //"EXPORT_CSV",
+            exportFunc: (cols, datas) => ExportCsv(cols, datas, fileName)
+        },
+        {
+            label:pdfMenu, //"EXPORT_PDF",
+            exportFunc: (cols, datas) => ExportPdf(cols, datas, fileName)
+        }
+    ]
+})
 
 export const OptionsM = ({
     toolbar:true,
@@ -181,6 +195,7 @@ export const OptionsM = ({
     exportAllData: true,
     exportButton: true,
     exportDelimiter: ',',
+
     //exportFileName:'Masterfile.csv'
 })
 export const ColumnsModule =(t) => [

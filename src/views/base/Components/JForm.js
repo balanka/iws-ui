@@ -2,7 +2,7 @@ import React, {useState, memo, useRef, useLayoutEffect} from 'react'
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
 import {FormFactory,JournalFormHead} from './FormsProps'
-import {columnsPACB, ColumnJournal, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {columnsPACB, ColumnJournal, buildExportOption} from "../../Tables2/LineFinancialsProps";
 import {formEnum} from "../../../utils/FORMS";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
@@ -109,7 +109,8 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
                              collapse={state.collapse} styles={styles} submitQuery={submitQuery_}/>
 
                 <Grid container spacing={2} style={{...styles.inner, display: 'block'}} direction="column">
-                    <EditableTable Options={{...OptionsM, toolbar: toolbar, pageSize:13, pageSizeOptions:[15, 25, 50]}}
+                    <EditableTable Options={{...buildExportOption("ExportCSV", "Export PDF", title)
+                        , toolbar: toolbar, pageSize:13, pageSizeOptions:[15, 25, 50]}}
                                    data={data ? summary(data) : initialState} columns={columnsX}
                                    theme={theme} t={t} setSelectedRows={() => void (0)}/>
                 </Grid>
