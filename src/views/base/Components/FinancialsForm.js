@@ -18,6 +18,7 @@ const FinancialsForm = () => {
   const { token, company, locale, currency } = profile
   let history = useHistory();
   const { t,  } = useTranslation();
+  console.log('company', company);
   console.log('menu', menu);
   console.log('selected', selected);
   const userMenu =  profile?.modules?profile.modules:[];
@@ -189,7 +190,9 @@ const FinancialsForm = () => {
 
   const submitPost = event => {
     event.preventDefault();
-    const url_ = modifyUrl.concat("/post/").concat(current.id).concat("/").concat(current.company);
+    console.log('rows', rows)
+    const ids = rows.length>0?rows.map(c=>c.id):[current.id]
+    const url_ = modifyUrl.concat("/post/").concat(ids).concat("/").concat(current.company);
     Get2(url_, token, setCurrent);
   };
 
@@ -211,7 +214,7 @@ const FinancialsForm = () => {
     const row = {id:current.id, oid:current.oid, id1:current.id1, costcenter:current.costcenter, account:current.account
       , transdate:new Date(current.transdate).toISOString(), enterdate:new Date().toISOString()
       , postingdate:new Date().toISOString(), period:getPeriod(new Date()), posted:current.posted
-      , modelid:parseInt(model), company:current.company, text:current.text, typeJournal:current.typeJournal
+      , modelid:parseInt(model), company:company, text:current.text, typeJournal:current.typeJournal
       , file_content:current.file_content, lines:current.lines };
       Add(modifyUrl, token, row, data(), setCurrent);
 
@@ -239,7 +242,7 @@ const FinancialsForm = () => {
   }
   const updateRow = async (newData, oldData) =>{
     if (oldData) {
-      const dx = {...current};
+      const dx = {...current, company:company};
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       delete newData.tableData;
       const accountChanged = newData.account !== oldData.account

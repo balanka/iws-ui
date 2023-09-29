@@ -110,8 +110,9 @@ const MasterfileForm = () => {
       const idx = dx.rights.findIndex(obj => obj.moduleid === newData.moduleid);
       delete newData.tableData;
       (idx === -1)? dx.rights.push({...newData, moduleid: dx.moduleid}): dx.rights[idx]={...newData, moduleid: dx.moduleid};
+      const isEditing = dx.editing;
       delete dx.editing;
-      if(dx.id>0) {
+      if(dx.id>0||isEditing) {
         Edit(modifyUrl, token, dx, data,  setCurrent);
       }else{
         Add(modifyUrl, token, dx, data,  setCurrent);
