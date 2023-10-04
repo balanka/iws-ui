@@ -97,13 +97,17 @@ const Login = () => {
                           </CInputGroupText>
                         </CInputGroupPrepend>
                         <CSelect className ="flex-row" type="select" name="company" id="company-id"
-                                 value={current.company} onChange={(event ) =>handleEvent(event, {...current, company: event.target.value})} >
+                                 value={current.company}
+                                 onFocus={(event ) =>handleEvent(event, {...current, company: event.target.value})}
+                                 onChange={(event ) =>handleEvent(event, {...current, company: event.target.value})} >
                           {companies.data.map(item => <option key ={item.id} value ={item.id}>{item.id.concat (" ").concat (item.name)}</option>)};
                         </CSelect>
                         <CSelect className ="flex-row" type="select" name="language" id="language-id"
-                                 value={current.language} onChange={(event ) =>{handleEvent(event,{...current, language: event.target.value});
+                                 value={current.language}
+                                 onFocus={(event ) =>handleEvent(event, {...current, language: event.target.value})}
+                                 onChange={(event ) =>{handleEvent(event,{...current, language: event.target.value});
                                 i18n.changeLanguage(event.target.value)}} >
-                          {languages.data.map(item =><option key ={item.id} value ={item.id}>{item.id.concat (" ").concat (item.name)}</option> )};
+                          {languages.data.map(item => <option key ={item.id} value ={item.id}>{item.id.concat (" ").concat (item.name)}</option>)};
                         </CSelect>
                       </CInputGroup>
                       <CRow>
