@@ -13,7 +13,7 @@ import iwsStore from "./Store";
 
 function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
     , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX) {
-    console.log('accDatajou', accData.filter(e=>e.id ==='*'))
+    //console.log('accDatajou', accData.filter(e=>e.id ==='*'))
     const summaryPCB = (data) => {
         const row_ = data;
         const row = row_ ? row_?.slice() : row_.slice();
@@ -55,9 +55,9 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
 
         for (let i = 0, len = row.length - 1; i <= len; ++i) {
             idebit =  row[i].idebit;
-            debit =  row[i].debit;
+            debit =  debit+row[i].debit;
             icredit =  row[i].icredit;
-            credit =  row[i].credit;
+            credit =  credit+row[i].credit;
             amount = amount + row[i].amount;
             currency = row[i].currency;
             company = row[i].company;

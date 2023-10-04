@@ -18,14 +18,8 @@ const FinancialsForm = () => {
   const { token, company, locale, currency } = profile
   let history = useHistory();
   const { t,  } = useTranslation();
-  console.log('company', company);
-  console.log('menu', menu);
-  console.log('selected', selected);
-  const userMenu =  profile?.modules?profile.modules:[];
-  const module_= menu.get(selected);
-  console.log('module_', module_);
-  console.log('userMenu', userMenu);
 
+  const module_= menu.get(selected);
   if ((typeof module_ === "undefined") || !module_ || module_.id === '11111') history.push("/login");
 
   const module_x= module_;
@@ -117,37 +111,22 @@ const FinancialsForm = () => {
   const toggle = ()=> setState({...state, collapse:!state.collapse });
   const setSelectedRows = (rows_)=>{
     setRows(rows_.map( (item) =>({id:item.id,  modelid:item.modelid})));
-    console.log('rows_', rows_);
   }
 
   function getAccountAndLabel() {
-    console.log('model', model);
-    console.log('fModuleData', fModuleData);
     const model_ = fModuleData.find(obj =>obj.id === parseInt(model));
-    console.log('model_', model_);
     const account_ = model_ ? model_.account : undefined;
     const accountLabel_ = model_.isDebit ? 'account' : 'oaccount';
     const oaccount_ = account_ ? '':model_.account  ;
     const oaccountLabel_ = account_ ? 'oaccount' : 'account';
-    console.log('account_', account_);
-    console.log('accountLabel_', accountLabel_);
-    console.log('oaccount_', oaccount_);
-    console.log('oaccountLabel_', oaccountLabel_);
-    console.log('current_.lines[0]', current_.lines[0]);
     return {account_, accountLabel_, oaccount_, oaccountLabel_};
   }
 
   const initAdd =()=> {
     const {account_, accountLabel_, oaccount_, oaccountLabel_} = getAccountAndLabel();
-    console.log('account_', account_);
-    console.log('accountLabel_', accountLabel_);
-    console.log('oaccount_', oaccount_);
-    console.log('oaccountLabel_', oaccountLabel_);
-    console.log('current_.lines[0]', current_.lines[0]);
     const line =[{...current_.lines[0], id:-1, transid:current_.id1,
         [accountLabel_]:account_, [oaccountLabel_]:oaccount_}]
-    console.log('line', line);
-    const record = {...current_, lines:line}
+    const record = {...current_, modelid: parseInt(model), lines:line}
     EditRow(record, true, setCurrent);
   }
 
@@ -178,9 +157,7 @@ const FinancialsForm = () => {
 
   const edit = editedRow =>{
     const isArray = Array.isArray(editedRow)&& editedRow.length>0
-    console.log('isArray', isArray);
     const row = isArray?editedRow[0]:editedRow;
-    console.log('row>>>>>>>', row);
     if( row) {
       const data = iwsState.get(row.modelid);
       const record = data.find(obj => obj.id === row.id);
@@ -190,7 +167,6 @@ const FinancialsForm = () => {
 
   const submitPost = event => {
     event.preventDefault();
-    console.log('rows', rows)
     const ids = rows.length>0?rows.map(c=>c.id):[current.id]
     const url_ = modifyUrl.concat("/post/").concat(ids).concat("/").concat(current.company);
     Get2(url_, token, setCurrent);
@@ -221,44 +197,43 @@ const FinancialsForm = () => {
   };
 
   const addRow = async (newData) =>{
-    if(newData ) {
-    const {account_, accountLabel_, oaccount_, oaccountLabel_} = getAccountAndLabel();
-    const dx = {...current};
-      console.log('newData',newData);
-      console.log('dx',dx);
-      const oaccount = oaccount_?oaccount_:newData.oaccount;
-      const oaccountLabel =  oaccount_?'oaccount':'account'
-    const dx1 =current.lines.length===0?
-      {...current, lines:[{...current.lines.filter(e=>!e.account.isEmpty), ...newData
-        , id:-1, transid:current.id1, [accountLabel_]:account_, [oaccountLabel]:oaccount}]}:
-      (dx.lines[current.lines.length] = {...newData, id:-1, transid:current.id1})
-    const record = (current.lines.length>1)?dx:dx1;
-    delete record.editing;
-    console.log('record',record);
-    const result= record.id>0?Edit(modifyUrl, token, record, data(), setCurrent):
-                              Add(modifyUrl, token, record, data(), setCurrent)
+    if (newData) {
+      const {account_, accountLabel_, oaccount_} = getAccountAndLabel();
+      const dx = {...current};
+      const oaccount = oaccount_ ? oaccount_ : newData.oaccount;
+      const oaccountLabel = oaccount_ ? 'oaccount' : 'account'
+      const dx1 = current.lines.length === 0 ?
+        {
+          ...current, lines: [{
+            ...current.lines.filter(e => !e.account.isEmpty), ...newData
+            , id: -1, transid: current.id1, [accountLabel_]: account_, [oaccountLabel]: oaccount
+          }]
+        } :
+        (dx.lines[current.lines.length] = {...newData, id: -1, transid: current.id1})
+      const record = (current.lines.length > 1) ? dx : dx1;
+      delete record.editing;
+      const result = record.id > 0 ? Edit(modifyUrl, token, record, data(), setCurrent) :
+        Add(modifyUrl, token, record, data(), setCurrent)
       setCurrent(result);
     }
   }
   const updateRow = async (newData, oldData) =>{
     if (oldData) {
-      const dx = {...current, company:company};
+      const dx = {...current, company: company};
       const idx = dx.lines.findIndex(obj => obj.id === newData.id);
       delete newData.tableData;
       const accountChanged = newData.account !== oldData.account
       const oaccountChanged = newData.oaccount !== oldData.oaccount
-      const accountId = accountChanged?newData.account:oldData.account;
-      const oaccountId = oaccountChanged?newData.oaccount:oldData.oaccount;
+      const accountId = accountChanged ? newData.account : oldData.account;
+      const oaccountId = oaccountChanged ? newData.oaccount : oldData.oaccount;
 
-      (idx === -1)? dx.lines.push({...newData, transid: dx.id1}): dx.lines[idx]={...newData, transid: dx.id1
-        , ...(accountChanged &&{account:accountId}), ...(oaccountChanged &&{oaccount:oaccountId})};
-      console.log('dx', dx);
+      (idx === -1) ? dx.lines.push({...newData, transid: dx.id1}) : dx.lines[idx] = {
+        ...newData, transid: dx.id1
+        , ...(accountChanged && {account: accountId}), ...(oaccountChanged && {oaccount: oaccountId})
+      };
       delete dx.editing;
-      if(dx.id>0) {
-        Edit(modifyUrl, token, dx, data(),  setCurrent);
-      }else{
-        Add(modifyUrl, token, dx, data(),  setCurrent);
-      }
+      (dx.id > 0)? Edit(modifyUrl, token, dx, data(), setCurrent):
+                   Add(modifyUrl, token, dx, data(), setCurrent);
     }
   }
   const deleteRow = async (oldData) =>{
@@ -270,7 +245,6 @@ const FinancialsForm = () => {
       Edit(modifyUrl, token, dx, data(), setCurrent);
     }
   }
-  //const OnRowAdd = async (newData) => addRow(newData)
   const  editable = () => ({onRowAdd: addRow, onRowUpdate:  updateRow, onRowDelete:  deleteRow})
   function buildForm( current){
 
@@ -313,8 +287,7 @@ const FinancialsForm = () => {
       </Grid>
     </>
   }
-  const currentx= current?current:current_;
-  return buildForm( currentx);
+  return buildForm( current?current:current_);
 };
 
 export default FinancialsForm;
