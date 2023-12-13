@@ -1,27 +1,55 @@
-import React from 'react';
-// const importFn =(str)=>  React.lazy(() => import(`./${str}`));
-//
-// const routes_=(t)=>[
-//   { path: '/login', name: 'Login', cp:'' },
-//   { path: '/dashboard', name:t('menu.dashboard'), cp: 'views/dashboard/Dashboard'},
-//   { path: '/accounting', name: t('menu.accounting') },
-//   { path: '/masterfiles', name: t('menu.masterfiles') },
-//   { path: '/journal', name: t('menu.journal'), cp:'views/base/Components/JForm'},
-//   { path: '/pacb', name: t('menu.pacb'), cp:'views/base/Components/JForm'},
-//   { path: '/acc', name: t('menu.account'), cp:'views/base/Components/MasterfileForm'},
-//   { path: '/cc', name: t('menu.costcenter'), cp:'views/base/Components/MasterfileForm'},
-//   { path: '/bank', name: t('menu.bank'), cp:'views/base/Components/MasterfileForm'},
-//   { path: '/module', name: t('menu.module'), cp:'views/base/Components/MasterfileForm'},
-//   { path: '/cust', name: t('menu.customer'), cp:'views/base/Components/MasterfileForm'},
-//   { path: '/sup', name: t('menu.supplier'), cp:'views/base/Components/MasterfileForm'},
-//   { path: '/vat', name: t('menu.vat'), cp:'views/base/Components/MasterfileForm'},
-//   { path: '/comp', name: t('menu.company'), cp:'views/base/Components/MasterfileForm'},
-//   { path: '/user', name: t('menu.user'), cp:'views/base/Components/MasterfileForm'},
-//   { path: '/balance', name: t('menu.balancesheet'), cp:'views/base/Components/BasicTreeTable'},
-//   { path: '/bs', name: t('menu.bankstatement'), cp:'views/base/Components/BankStatementForm'},
-//   { path: '/ftr', name: t('menu.financials'), cp:'views/base/Components/FinancialsForm'}
-// ];
+import React from 'react'
 
-//const routes =(t)=> routes_(t).map(route=> ({...route, component: importFn(route.cp) }));
+const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
-//export default routes;
+// Notifications
+const Alerts = React.lazy(() => import('./views/notifications/alerts/Alerts'))
+const Badges = React.lazy(() => import('./views/notifications/badges/Badges'))
+const Modals = React.lazy(() => import('./views/notifications/modals/Modals'))
+const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
+
+const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
+const MASTERFILE = (path) => React.lazy(() => import('./views/base/Components/MasterfileForm'))
+const FINANCIALS = (path) => React.lazy(() => import('./views/base/Components/FinancialsForm'))
+const JFORM = (path) => React.lazy(() => import('./views/base/Components/JForm'))
+const BANKSTATEMENT = (path) =>
+  React.lazy(() => import('./views/base/Components/BankStatementForm'))
+const BALANCESHEET = (path) => React.lazy(() => import('./views/base/Components/BasicTreeTable'))
+const LOGIN = () => React.lazy(() => import('./views/base/Components/Login'))
+
+const routes = [
+  { path: '/accounting', exact: true, name: 'Accounting' },
+  { path: '/ftr', name: 'Supplier', element: FINANCIALS() },
+  { path: '/journal', name: 'Journal', element: JFORM() },
+  { path: '/Masterfiles', exact: true, name: 'Masterfiles' },
+  { path: '/admin', name: 'Admin' },
+  { path: '/acc', name: 'Account', element: MASTERFILE() },
+  { path: '/art', name: 'Article', element: MASTERFILE() },
+  { path: '/cc', name: 'Cost center', element: MASTERFILE() },
+  { path: '/cust', name: 'Customer', element: MASTERFILE() },
+  { path: '/sup', name: 'Supplier', element: MASTERFILE() },
+  { path: '/store', name: 'Store', element: MASTERFILE() },
+  { path: '/emp', name: 'Employee', element: MASTERFILE() },
+  { path: '/user', name: 'Users', element: MASTERFILE() },
+  { path: '/vat', name: 'VAT', element: MASTERFILE() },
+  { path: '/bank', name: 'Bank', element: MASTERFILE() },
+  { path: '/role', name: 'Role', element: MASTERFILE() },
+  { path: '/bs', name: 'Bankstatement', element: BANKSTATEMENT() },
+  { path: '/pac', name: 'Pac', element: JFORM() },
+  { path: '/balance', name: 'Balancesheet', element: BALANCESHEET() },
+  { path: '/module', name: 'Module', element: MASTERFILE() },
+  { path: '/comp', name: 'Company', element: MASTERFILE() },
+  { path: '/asset', name: 'Assets', element: MASTERFILE() },
+  { path: '/s_item', name: 'Salary item', element: MASTERFILE() },
+  { path: '/users/login', name: 'Login', element: LOGIN() },
+  { path: '/', exact: true, name: 'Home' },
+  { path: '/dashboard', name: 'Dashboard', element: Dashboard },
+  { path: '/notifications', name: 'Notifications', element: Alerts, exact: true },
+  { path: '/notifications/alerts', name: 'Alerts', element: Alerts },
+  { path: '/notifications/badges', name: 'Badges', element: Badges },
+  { path: '/notifications/modals', name: 'Modals', element: Modals },
+  { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
+  { path: '/widgets', name: 'Widgets', element: Widgets },
+]
+
+export default routes

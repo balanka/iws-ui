@@ -82,7 +82,9 @@
     "bankaccounts":"Bankverbingungen",
     "iban":"IBAN",
     "bank":"Bank",
-    "owner":"Inhaber"
+    "owner":"Inhaber",
+    "exportCSV": "Exportieren CSV",
+    "exportPDF": "Exportieren PDF"
   },
   "asset": {
     "title":  "Anlage",
@@ -136,7 +138,12 @@
     "info"       : "Info",
     "companyIban" : "IBAN Mandant",
     "posted"      : "Gebucht?",
-    "period"      : "Periode"
+    "period"      : "Periode",
+    "path"        :  "Pfad",
+    "parameter"   : "Parameter",
+    "header"      : "Header",
+    "char"        : "Char",
+    "extension"   : "Extension"
   },
   "company": {
     "title":      "Mandant",
@@ -152,6 +159,11 @@
     "title":    "Kunde",
     "account":  "Debitor",
     "oaccount": "Erlös"
+  },
+  "employee": {
+    "title": "Mitarbeiter",
+    "account":  "Konto Mit.",
+    "oaccount": "Koto Geh."
   },
   "supplier": {
     "title":    "Lieferant",
@@ -178,13 +190,19 @@
     "parent":"Gruppe",
     "path": "Path"
   },
+  "salary": {
+    "item": {
+      "title": "Komponenten des Gehalts"
+    }
+  },
   "article": {
-    "title":      "Article",
-    "name":       "Name",
-    "description": "Beschreibung",
-    "enterdate"  : "Enterdate",
-    "postingdate": "Gebucht am",
-    "changedate":  "Geaendert am"
+    "title":      "Artikel",
+    "sprice": "Verkaufspreis",
+    "pprice": "Einkaufspreis",
+    "avgPrice": "G.D.P"
+  },
+  "store": {
+    "title":      "Lager"
   },
   "vat": {
     "title":      "MwSt.",
@@ -202,7 +220,8 @@
     "period":      "Periode"
   },
   "role": {
-    "title":      "Role"
+    "title":      "Rolle",
+    "rights":      "Berechtigungen"
   },
   "permission": {
     "title": "Berechtigung"
@@ -297,10 +316,15 @@
     "firstName": "Vorname",
     "lastName": "Nachname",
     "role": "Role",
-    "menu": "Menü"
+    "menu": "Menü",
+    "email": "Email"
   },
   "menu": {
+    "salary":{
+      "item": "Komponenten des Gehalts"
+    },
     "admin": "Verwaltung",
+    "article": "Artikel",
     "asset": "Anlage",
     "dashboard": "Dashboard",
     "accounting": "Buchhaltung",
@@ -311,7 +335,9 @@
     "module": "Module",
     "costcenter": "Kostenstelle",
     "customer": "Kunden",
+    "employee": "MitarbeiterIn",
     "supplier": "Lieferanten",
+    "store": "Lager",
     "vat": "Mehrwertsteuer",
     "login"  :"Login",
     "company": "Mandant",

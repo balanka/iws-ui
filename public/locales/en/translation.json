@@ -82,7 +82,9 @@
     "bankaccounts":"Bank accounts",
     "iban":"IBAN",
     "bank":"Bank",
-    "owner":"Owner"
+    "owner":"Owner",
+    "exportCSV": "Export CSV",
+    "exportPDF": "Export PDF"
   },
   "asset": {
     "title":      "Asset",
@@ -138,7 +140,12 @@
     "info"       : "Info",
     "companyIban" : "IBAN comp.",
     "posted"      : "Posted?",
-    "period"      : "Period"
+    "period"      : "Period",
+    "path"        :  "Path",
+    "parameter"   : "Parameter",
+    "header"      : "Header",
+    "char"        : "Char",
+    "extension"   : "Extension"
   },
   "company": {
     "title":      "Company",
@@ -158,6 +165,11 @@
     "title":    "Customer",
     "account":  "Receivable",
     "oaccount": "Revenue acc."
+  },
+  "employee": {
+    "title": "Employee",
+    "account":  "Payable",
+    "oaccount": "charge acc."
   },
   "supplier": {
     "title": "Supplier",
@@ -186,13 +198,19 @@
     "parent":"Gruppe",
     "path": "Path"
   },
+  "salary": {
+    "item": {
+      "title": "Salary items"
+    }
+  },
   "article": {
-    "title":      "Article",
-    "name":       "Name",
-    "description": "Description",
-    "enterdate"  : "Enter date",
-    "postingdate": "Posted on",
-    "changedate": "Modified on"
+    "title": "Article",
+    "sprice": "Sales price",
+    "pprice": "Purchase price",
+    "avgPrice": "Average price"
+  },
+  "store": {
+    "title": "Store"
   },
   "vat": {
     "title":      "VAT",
@@ -211,7 +229,8 @@
     "period":      "Period"
   },
   "role": {
-    "title":      "Role"
+    "title":      "Role",
+    "rights":      "Rights"
   },
   "permission": {
     "title":      "Permission"
@@ -308,10 +327,15 @@
     "firstName": "First name",
     "lastName": "Last name",
     "role": "Role",
-    "menu": "Menu"
+    "menu": "Menu",
+    "email": "Email"
    },
   "menu": {
+    "salary":{
+      "item": "Salary items"
+    },
     "admin": "Administration",
+    "article": "Article",
     "asset": "Asset",
     "dashboard": "Dashboard",
     "accounting": "Accounting",
@@ -322,8 +346,10 @@
     "module": "Module",
     "costcenter": "Cost center",
     "customer": "Customer",
+    "employee": "Employee",
     "supplier": "Supplier",
-    "vat": "TVA",
+    "store": "Store",
+    "vat": "T.V.A",
     "login"  :"Login",
     "company": "Company",
     "user": "Users",

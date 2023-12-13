@@ -82,7 +82,9 @@
     "bankaccounts":"Références bancaires",
     "iban":"IBAN",
     "bank":"Banque",
-    "owner":"Titulaire"
+    "owner":"Titulaire",
+    "exportCSV": "Exporter CSV",
+    "exportPDF": "Exporter PDF"
 
   },
   "asset": {
@@ -122,7 +124,7 @@
     "description": "Description"
   },
   "bankstatement": {
-    "title":      "Rélevé bancaire",
+    "title":      "Relevé bancaire",
     "depositor":  "Client",
     "postingdate": "Validé",
     "valuedate"  : "Valeur",
@@ -135,7 +137,12 @@
     "info"       : "Info",
     "companyIban" : "Réf. société",
     "posted"      : "Validée",
-    "period"      : "Période"
+    "period"      : "Période",
+    "path"        :  "Repertoire",
+    "parameter"   : "Parametres",
+    "header"      : "Entete",
+    "char"        : "Char",
+    "extension"   : "Extension"
   },
   "company": {
     "title":      "Société",
@@ -148,13 +155,18 @@
     "account":  "Compte Client",
     "oaccount": "Compte produit"
   },
+  "employee": {
+    "title":   "Employé",
+    "account":  "Cpte employé",
+    "oaccount": "Cpte salaire"
+  },
   "supplier": {
-    "title":      "Fournisseur",
+    "title":    "Fournisseur",
     "account":  "Compte Fournisseur",
     "oaccount": "Compte charge"
   },
   "costcenter": {
-    "title":      "Center de coût",
+    "title":      "Center de coûts",
     "name":       "Nom",
     "description": "Description",
     "enterdate"  : "Date saisie",
@@ -172,13 +184,19 @@
     "parent":"Groupe",
     "path": "Path"
   },
+  "salary": {
+    "item": {
+      "title": "Composantes du salaire"
+    }
+  },
   "article": {
-    "title":      "Article",
-    "name":       "Nom",
-    "description": "Description",
-    "enterdate"  : "Date saisie",
-    "postingdate": "Date validation",
-    "changedate":  "Date mod."
+    "title": "Article",
+    "sprice": "Prix de vente",
+    "pprice": "Prix d'achat",
+    "avgPrice": "P.M.P"
+  },
+  "store": {
+    "title": "Store"
   },
   "vat": {
     "title":      "TVA",
@@ -196,7 +214,8 @@
     "period":      "Période"
     },
   "role": {
-    "title":      "Role"
+    "title":      "Role",
+    "rights":      "Droits d'accès"
   },
   "permission": {
     "title":      "Permission"
@@ -213,7 +232,7 @@
     "postingdate": "Validée",
     "transdate":   "Date pièce",
     "account": "Compte",
-    "costcenter":   "C.coût",
+    "costcenter":   "C.coûts",
     "text" :       "Texte",
     "type":         "Type",
     "file":         "Fichier",
@@ -292,10 +311,15 @@
     "firstName": "Prénom",
     "lastName": "Nom",
     "role": "Role",
-    "menu": "Menu"
+    "menu": "Menu",
+    "email": "Ad. mail"
   },
   "menu": {
+    "salary":{
+      "item": "Composantes du salaire"
+      },
     "admin": "Administration",
+    "article": "Article",
     "asset": "Immobilisation",
     "dashboard": "Tableau de board",
     "masterfiles": "Références",
@@ -305,8 +329,10 @@
     "account": "Comptes",
     "bank": "Banque",
     "module": "Module",
-    "costcenter": "Centre de cout",
+    "costcenter": "Centre de coûts",
     "customer": "Clients",
+    "employee": "Employé",
+    "store": "Magasin",
     "supplier": "Fournisseurs",
     "vat": "TVA",
     "login"  :"Login",

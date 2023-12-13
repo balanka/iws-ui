@@ -1,5 +1,5 @@
 import { sygnet } from './sygnet'
-import { logo } from './logo'
+import { logoKaba } from './logoKaba'
 import { logoNegative } from './logo-negative'
 
 import {
@@ -133,8 +133,8 @@ import {
 } from '@coreui/icons'
 
 export const icons = Object.assign({}, {
-  sygnet,
-  logo,
+ // sygnet,
+  logoKaba,
   logoNegative
 }, {
   cilAlignCenter,
