@@ -372,7 +372,7 @@ const FinancialsForm = (callback, deps) => {
         <Grid item>
           <EditableTable
             Options={{
-              ...buildExportOption('ExportCSV', 'Export PDF', title),
+              ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),
               toolbar: toolbar,
               maxBodyHeight: '960px',
               pageSize: 10,
