@@ -34,8 +34,9 @@ const Login = () => {
   const { menu, selected, setProfile, setMenu, setModule, setRoutes, } = useStore();
 
   const module_ = menu?menu.get(selected):LOGIN_MENU(t)[0];
-  const url = SERVER_URL.concat(module_.ctx)
-  let current_ = module_.state[0]
+  console.log('SERVER_URL',SERVER_URL);
+  const url = SERVER_URL.concat(module_.ctx);
+  let current_ = module_.state[0];
   const [current,setCurrent] = useState(current_);
   const companies={data:[
       {id:'1000', name:'KABA Soft GmbH'},
@@ -96,13 +97,17 @@ const Login = () => {
                           </CInputGroupText>
                         </CInputGroupPrepend>
                         <CSelect className ="flex-row" type="select" name="company" id="company-id"
-                                 value={current.company} onChange={(event ) =>handleEvent(event, {...current, company: event.target.value})} >
+                                 value={current.company}
+                                 onFocus={(event ) =>handleEvent(event, {...current, company: event.target.value})}
+                                 onChange={(event ) =>handleEvent(event, {...current, company: event.target.value})} >
                           {companies.data.map(item => <option key ={item.id} value ={item.id}>{item.id.concat (" ").concat (item.name)}</option>)};
                         </CSelect>
                         <CSelect className ="flex-row" type="select" name="language" id="language-id"
-                                 value={current.language} onChange={(event ) =>{handleEvent(event,{...current, language: event.target.value});
+                                 value={current.language}
+                                 onFocus={(event ) =>handleEvent(event, {...current, language: event.target.value})}
+                                 onChange={(event ) =>{handleEvent(event,{...current, language: event.target.value});
                                 i18n.changeLanguage(event.target.value)}} >
-                          {languages.data.map(item =><option key ={item.id} value ={item.id}>{item.id.concat (" ").concat (item.name)}</option> )};
+                          {languages.data.map(item => <option key ={item.id} value ={item.id}>{item.id.concat (" ").concat (item.name)}</option>)};
                         </CSelect>
                       </CInputGroup>
                       <CRow>

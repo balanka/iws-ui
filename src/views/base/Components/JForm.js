@@ -2,7 +2,7 @@ import React, {useState, memo, useRef, useLayoutEffect} from 'react'
 import Grid from "react-fast-grid";
 import {useTranslation} from "react-i18next";
 import {FormFactory,JournalFormHead} from './FormsProps'
-import {columnsPACB, ColumnJournal, OptionsM} from "../../Tables2/LineFinancialsProps";
+import {columnsPACB, ColumnJournal, buildExportOption} from "../../Tables2/LineFinancialsProps";
 import {formEnum} from "../../../utils/FORMS";
 import {styles, theme} from "../Tree/BasicTreeTableProps";
 import EditableTable from "../../Tables2/EditableTable";
@@ -13,7 +13,7 @@ import iwsStore from "./Store";
 
 function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAccData, initAcc, current, getUrl, setData
     , initialState, setIsDebit, title, state, url, toggle, toggleToolbar, setCurrent, toolbar, data, columnsX) {
-    console.log('accDatajou', accData.filter(e=>e.id ==='*'))
+    //console.log('accDatajou', accData.filter(e=>e.id ==='*'))
     const summaryPCB = (data) => {
         const row_ = data;
         const row = row_ ? row_?.slice() : row_.slice();
@@ -55,9 +55,9 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
 
         for (let i = 0, len = row.length - 1; i <= len; ++i) {
             idebit =  row[i].idebit;
-            debit =  row[i].debit;
+            debit =  debit+row[i].debit;
             icredit =  row[i].icredit;
-            credit =  row[i].credit;
+            credit =  credit+row[i].credit;
             amount = amount + row[i].amount;
             currency = row[i].currency;
             company = row[i].company;
@@ -109,7 +109,8 @@ function Internal(isDebit, t, modelid, accData, accUrl, profile, history, setAcc
                              collapse={state.collapse} styles={styles} submitQuery={submitQuery_}/>
 
                 <Grid container spacing={2} style={{...styles.inner, display: 'block'}} direction="column">
-                    <EditableTable Options={{...OptionsM, toolbar: toolbar, pageSize:13, pageSizeOptions:[15, 25, 50]}}
+                    <EditableTable Options={{...buildExportOption("ExportCSV", "Export PDF", title)
+                        , toolbar: toolbar, pageSize:13, pageSizeOptions:[15, 25, 50]}}
                                    data={data ? summary(data) : initialState} columns={columnsX}
                                    theme={theme} t={t} setSelectedRows={() => void (0)}/>
                 </Grid>

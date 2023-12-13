@@ -7,8 +7,9 @@ export  const Autocomplete = (data, tableData, flag) => {
       <Autocomplete1
         value={tableData.value}
         onChange={(event, newValue) => {
-          const value= flag?newValue:newValue.toString().split(" ")[0];
-            tableData.onChange(value);
+          const value1= flag?newValue.toString().split(" ")[0]:newValue;
+          console.log('value1=',value1);
+            tableData.onChange(value1);
         }}
         getOptionSelected={(option, value) => option.id === value.id}
         disableClearable={true}
