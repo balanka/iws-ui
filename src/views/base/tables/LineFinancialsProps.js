@@ -6,9 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { formEnum } from '../utils/FORMS'
 import { dateFormat } from '../utils/utils'
 import { ExportCsv, ExportPdf } from '@material-table/exporters'
-//import { ExportCsv } from '@material-table/exporters/csv';
-//import { ExportPdf } from '@material-table/exporters/pdf';
-//import {ExportCsv, ExportPdf} from '@material-table/exporters';
+
 const EMPTY_CHAR = ' '
 const mapping = (acc) => (
   <MenuItem key={acc.id} value={acc.id}>
@@ -511,12 +509,12 @@ export const Options = {
     padding: '0.3em',
     fontSize: 10,
     position: 'sticky',
-    backgroundColor: theme.palette.common.black, //theme.palette.background.default, //theme.palette.background.paper,
-    color: '#eee', //theme.palette.common.black//'#fff9e6'
+    backgroundColor: theme.palette.common.black,
+    color: '#eee',
   },
   root: {
     '&:nth-child(odd)': {
-      backgroundColor: theme.palette.background.default, //'#fff9e6'//theme.palette.background.default,
+      backgroundColor: theme.palette.background.default,
     },
     color: '#eee',
     padding: 0.5,
@@ -530,11 +528,11 @@ export const buildExportOption = (csvMenu, pdfMenu, fileName) => ({
 
   exportMenu: [
     {
-      label: csvMenu, //'EXPORT_CSV',
+      label: csvMenu,
       exportFunc: (cols, datas) => ExportCsv(cols, datas, fileName),
     },
     {
-      label: pdfMenu, //'EXPORT_PDF',
+      label: pdfMenu,
       exportFunc: (cols, datas) => ExportPdf(cols, datas, fileName),
     },
   ],

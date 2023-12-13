@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Subject } from 'rxjs'
 const subject = new Subject()
 const initialState = new Map()

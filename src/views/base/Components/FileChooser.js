@@ -1,5 +1,4 @@
-/* eslint-disable */
-import React,{useRef} from 'react'
+import React, { useRef } from 'react'
 export const FileChooser = () => {
   const inputRef = useRef(null)
 
@@ -7,7 +6,7 @@ export const FileChooser = () => {
     inputRef.current.click()
   }
 
-  const handleFileChange = event => {
+  const handleFileChange = (event) => {
     const files = event.target.files
     const fileObj = files && files[0]
     if (!fileObj) {
@@ -18,14 +17,8 @@ export const FileChooser = () => {
 
   return (
     <div>
-      <input
-        style={{display: 'none'}}
-        ref={inputRef}
-        type="file"
-        onChange={handleFileChange}
-      />
+      <input style={{ display: 'none' }} ref={inputRef} type="file" onChange={handleFileChange} />
       <button onClick={handleClick}>Open file upload box</button>
     </div>
   )
 }
-

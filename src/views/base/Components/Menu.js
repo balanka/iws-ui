@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { formEnum } from '../utils/FORMS'
 import {
   ColumnsACC,
@@ -13,11 +12,13 @@ import {
   ColumnsUSER,
   ColumnsLOGIN,
   ColumnsModule,
-  ColumnsAsset, ColumnsM2, ColumnsSalaryItem,
+  ColumnsAsset,
+  ColumnsM2,
+  ColumnsSalaryItem,
 } from '../tables/LineFinancialsProps'
 
 import create from 'zustand'
-import React from "react";
+import React from 'react'
 
 export const getCurrentMonth = (date) => {
   const p = date.getUTCMonth() + 1
@@ -50,7 +51,7 @@ export const MASTERFILE = {
   jou: '/journal',
   balancesheet: '/balance',
   user: '/user',
-  salaryItem: '/s_item'
+  salaryItem: '/s_item',
 }
 export const LOGIN = (t) => ({
   id: '11111',
@@ -370,11 +371,11 @@ export const initArticle = [
     id: '',
     name: '',
     description: '',
-    parent:'',
+    parent: '',
     sprice: 0,
     pprice: 0,
     avgPrice: 0,
-    currency:'',
+    currency: '',
     stocked: true,
     company: '',
     modelid: 34,
@@ -588,7 +589,7 @@ export const initEmp = [
         id: '-1',
         account: '',
         amount: 0,
-        text:'',
+        text: '',
         company: '',
       },
     ],
@@ -736,7 +737,6 @@ export const initPac = [
   },
 ]
 
-
 export const initRole = [
   {
     id: '121',
@@ -768,10 +768,10 @@ export const initUser = [
     phone: '',
     company: '',
     id: 0,
-    roles: [{...initRole}],
+    roles: [{ ...initRole }],
     modelid: 111,
     menu: '',
-    rights:[[]]
+    rights: [[]],
   },
 ]
 export const initPermission = [
@@ -835,7 +835,7 @@ const initialState = {
     token: 'noTOken',
     company: '',
     currency: '',
-    language:'',
+    language: '',
     modules: [],
   },
   selected: '',
@@ -863,18 +863,6 @@ export const useStore = create((set) => ({
   setMenu: (m) => set((state) => ({ menu: m })),
   setModule: (module_) => set((state) => ({ module: module_ })),
   setRoutes: (r) => set((state) => ({ routes: r })),
-}))
-export const useIwsGlobalState = create((set) => ({
-  iwsState:'',
-  accounts:'',
-  banks:'',
-  vats:'',
-  t:'',
-  setIwsState: (p) => set((state) => ({ iwsState: p })),
-  setAccounts: (p) => set((state) => ({ accounts: p })),
-  setBanks: (p) => set((state) => ({ banks: p })),
-  setVats: (p) => set((state) => ({ vats: p })),
-  setT: (p) => set((state) => ({ t: p })),
 }))
 
 export { LoginRoute }
