@@ -1,8 +1,6 @@
-import Alerts from './alerts/Alerts';
-import Badges from './badges/Badges';
-import Modals from './modals/Modals';
-import Toaster from './toaster/Toaster';
+import Alerts from './Alerts'
+import Badges from './Badges'
+import Modals from './Modals'
+import Toaster from './toasts'
 
-export {
-  Alerts, Badges, Modals, Toaster
-};
+export { Alerts, Badges, Modals, Toaster }

@@ -1,54 +1,46 @@
-import React, {Suspense} from 'react'
-import {CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CCard, CCardBody, CTabs} from '@coreui/react'
+import React, { useState } from 'react'
+import { CNav, CNavItem, CNavLink, CTabContent, CTabPane } from '@coreui/react'
+import PropTypes from 'prop-types'
 
-const loading = (
-    <div className="pt-3 text-center">
-        <div className="sk-spinner sk-spinner-pulse"></div>
-    </div>
-)
+export const Tabs = (props) => {
+  const tabList = props.tabList
+  const [activeKey, setActiveKey] = useState(1)
+  const getNavItem = (item) => {
+    const isActive = () => activeKey === item.id
+    return (
+      <CNavItem role="presentation">
+        <CNavLink
+          active={isActive()}
+          component="button"
+          role="tab"
+          aria-controls={`${item.title}-tab-pane`}
+          aria-selected={isActive()}
+          onClick={() => setActiveKey(item.id)}
+        >
+          {item.title}
+        </CNavLink>
+      </CNavItem>
+    )
+  }
+  const getPane = (item) => {
+    const isVisible = () => activeKey === item.id
+    return (
+      <CTabPane role="tabpanel" aria-labelledby={item.title} visible={isVisible()}>
+        {item.form}
+      </CTabPane>
+    )
+  }
 
-export const Tabs = ({ tabContent, modules}) => {
-
-    //const [state, setState] = useState(modules?modules:[])
-    const getNavLink= ( module) =>{
-        return (<>
-                <CNavItem>
-                    <CNavLink>
-                        {module.title}
-                    </CNavLink>
-                </CNavItem>
-            </>
-        )}
-    const  getTabPane = (items) => tabContent(items)
-
-    const getContent = ( items) => {
-        return <>
-            <CNav variant="tabs">
-                {items.map(item => getNavLink(item))}
-            </CNav>
-            <CTabContent fade={false}>
-                {items.map(item => getTabPane(item))}
-            </CTabContent>
-        </>
-    }
-
-    const TabsComponent = (items) => {
-        return (
-            <CRow>
-                <CCol xs="12" md="12" className="mb-4">
-                    <CCard>
-                        <CCardBody>
-                            <CTabs>
-                               <Suspense fallback={loading}>
-                                  {getContent (items)}
-                                </Suspense>    
-                            </CTabs>
-                        </CCardBody>
-                    </CCard>
-                </CCol>
-            </CRow>
-        )
-    }
-    return TabsComponent(modules);
+  return (
+    <>
+      <CNav variant="pills" role="tablist">
+        {tabList.map((item) => getNavItem(item))}
+      </CNav>
+      <CTabContent>{tabList.map((item) => getPane(item))}</CTabContent>
+    </>
+  )
+}
+Tabs.propTypes = {
+  tabList: PropTypes.array,
 }
 export default Tabs
