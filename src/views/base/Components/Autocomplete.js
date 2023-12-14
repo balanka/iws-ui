@@ -4,6 +4,11 @@ import TextField from '@material-ui/core/TextField'
 export const Autocomplete = (data, tableData, flag) => {
   return (
     <Autocomplete1
+      style={{
+        width: 300,
+        height: 60,
+        marginLeft: 15,
+      }}
       value={tableData.value}
       onChange={(event, newValue) => {
         const value1 = flag ? newValue.toString().split(' ')[0] : newValue
@@ -14,7 +19,7 @@ export const Autocomplete = (data, tableData, flag) => {
       autoComplete={true}
       options={data.map((d) => d.id.concat(' ').concat(d.name))}
       renderInput={(params) => (
-        <TextField {...params} InputProps={{ ...params.InputProps, style: { fontSize: 12 } }} />
+        <TextField {...params} InputProps={{ ...params.InputProps, style: { fontSize: 10 } }} />
       )}
     />
   )
