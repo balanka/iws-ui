@@ -10,7 +10,7 @@ import Navigation from './Navigation'
 import { useTranslation } from 'react-i18next'
 import CIcon from '@coreui/icons-react'
 
-import { logo1 } from '../assets/icons/logo1'
+import { logo } from '../assets/icons/logo'
 //import { sygnet } from '../assets/brand/sygnet'
 
 //https://github.com/coreui/coreui-free-react-admin-template/issues/154
@@ -38,7 +38,7 @@ const AppSidebar = () => {
     >
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand className="d-none d-md-flex" to="/">
-          <CIcon customClassName="sidebar-brand-full" icon={logo1} height={100} width={300} />
+          <CIcon customClassName="sidebar-brand-full" icon={logo} height={100} width={300} />
         </CSidebarBrand>
       </CSidebarHeader>
       <CSidebarNav onClick={handleClickOpen}>

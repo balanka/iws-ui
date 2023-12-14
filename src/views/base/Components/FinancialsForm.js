@@ -84,7 +84,7 @@ const FinancialsForm = (callback, deps) => {
     }
   }
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // eslint-disable-next-line react-hooks/rules-of-hooks,react-hooks/exhaustive-deps
   const handleKeyPress = useCallback((event) => {
     if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
       submitEdit(event)
@@ -322,6 +322,7 @@ const FinancialsForm = (callback, deps) => {
               className="input-sm"
               placeholder="text"
               value={current.text}
+              style={{ height: 30, fontSize: 11 }}
               onChange={(event) => setCurrent({ ...current, text: event.target.value })}
             />
           </Grid>

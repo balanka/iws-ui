@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -6,7 +5,7 @@ import { CBadge } from '@coreui/react'
 import { useStore } from '../views/base/Components/Menu'
 
 export const AppSidebarNav = ({ items }) => {
-  const { selected, setSelected } = useStore()
+  const { setSelected } = useStore()
   const location = useLocation()
   const navLink = (name, icon, badge, indent = false) => {
     return (
@@ -14,10 +13,10 @@ export const AppSidebarNav = ({ items }) => {
         {icon
           ? icon
           : indent && (
-          <span className="nav-icon">
+              <span className="nav-icon">
                 <span className="nav-icon-bullet"></span>
               </span>
-        )}
+            )}
         {name && name}
         {badge && (
           <CBadge color={badge.color} className="ms-auto">
@@ -42,8 +41,7 @@ export const AppSidebarNav = ({ items }) => {
         onClick={(e) => {
           console.log('onClick2', e.target.childNodes[0].data + 'to>>>' + rest.to)
           setSelected(rest.to)
-        }
-      }
+        }}
       >
         {navLink(name, icon, badge, indent)}
       </Component>

@@ -66,7 +66,7 @@ const AppHeader = () => {
           className="ps-1"
           onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
         >
-          <CIcon icon={cilMenu} size="sm" />
+          <CIcon icon={cilMenu} size="xs" />
         </CHeaderToggler>
         <CHeaderToggler className="ps-1" onClick={(event) => handleInputChange(event)}>
           <CFormSelect
@@ -96,7 +96,7 @@ const AppHeader = () => {
         <CHeaderNav>
           <CNavItem>
             <CNavLink href="#">
-              <CIcon icon={cilBell} size="sm" />
+              <CIcon icon={cilBell} size="xs" />
             </CNavLink>
           </CNavItem>
           <CNavItem>
@@ -104,12 +104,12 @@ const AppHeader = () => {
           </CNavItem>
           <CNavItem>
             <CNavLink href="#" to="/tab">
-              <CIcon icon={cilList} size="sm" />
+              <CIcon icon={cilList} size="xs" />
             </CNavLink>
           </CNavItem>
           <CNavItem>
             <CNavLink href="#">
-              <CIcon icon={cilEnvelopeOpen} size="sm" />
+              <CIcon icon={cilEnvelopeOpen} size="xs" />
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
@@ -120,11 +120,11 @@ const AppHeader = () => {
           <CDropdown variant="nav-item" placement="bottom-end">
             <CDropdownToggle caret={false}>
               {colorMode === 'dark' ? (
-                <CIcon icon={cilMoon} size="sm" />
+                <CIcon icon={cilMoon} size="xs" />
               ) : colorMode === 'auto' ? (
-                <CIcon icon={cilContrast} size="sm" />
+                <CIcon icon={cilContrast} size="xs" />
               ) : (
-                <CIcon icon={cilSun} size="sm" />
+                <CIcon icon={cilSun} size="xs" />
               )}
             </CDropdownToggle>
             <CDropdownMenu>
@@ -135,7 +135,7 @@ const AppHeader = () => {
                 type="button"
                 onClick={() => setColorMode('light')}
               >
-                <CIcon className="me-2" icon={cilSun} size="sm" /> Light
+                <CIcon className="me-2" icon={cilSun} size="xs" /> Light
               </CDropdownItem>
               <CDropdownItem
                 active={colorMode === 'dark'}
@@ -144,7 +144,7 @@ const AppHeader = () => {
                 type="button"
                 onClick={() => setColorMode('dark')}
               >
-                <CIcon className="me-2" icon={cilMoon} size="sm" /> Dark
+                <CIcon className="me-2" icon={cilMoon} size="xs" /> Dark
               </CDropdownItem>
               <CDropdownItem
                 active={colorMode === 'auto'}
@@ -153,7 +153,7 @@ const AppHeader = () => {
                 type="button"
                 onClick={() => setColorMode('auto')}
               >
-                <CIcon className="me-2" icon={cilContrast} size="sm" /> Auto
+                <CIcon className="me-2" icon={cilContrast} size="xs" /> Auto
               </CDropdownItem>
             </CDropdownMenu>
           </CDropdown>

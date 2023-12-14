@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useStore } from '../views/base/Components/Menu'
 import React, { useLayoutEffect } from 'react'
 import iwsStore from '../views/base/Components/Store'
@@ -73,6 +72,6 @@ const Navigation = (t) => {
   )
   return allMenuItems
     .filter((e) => (Array.isArray(e.items) && e.items.length > 0) || e.parent === -1)
-    .map(e => buildMenu(e.name, e.path, e.items))
+    .map((e) => buildMenu(e.name, e.path, e.items))
 }
 export default Navigation

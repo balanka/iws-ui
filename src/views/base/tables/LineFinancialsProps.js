@@ -2062,6 +2062,7 @@ export const ColumnsBalancesheet = (t, locale, currency) => [
 ]
 
 export const ColumnFactory = (formid, data, t, locale, currency) => {
+  console.log('formid', formid)
   switch (formid) {
     case formEnum.ACCOUNT:
       return ColumnsACC(data, t, locale, currency)

@@ -169,6 +169,8 @@ function Internal(
               toolbar: toolbar,
               pageSize: 13,
               pageSizeOptions: [15, 25, 50],
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
             }}
             data={data ? summary(data) : initialState}
             columns={columnsX}

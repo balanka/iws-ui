@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs } from '../tabs/Tabs'
 import { AddressForm, FormFactory } from './FormsProps'
-import { ColumnFactory, OptionsM } from '../tables/LineFinancialsProps'
+import { ColumnFactory, Options, OptionsM } from '../tables/LineFinancialsProps'
 import EditableTable from '../tables/EditableTable'
 import { formEnum } from '../utils/FORMS'
 import Grid from 'react-fast-grid'
@@ -12,9 +12,10 @@ import { styles } from '../Tree/BasicTreeTableProps'
 import { blue } from '@material-ui/core/colors'
 
 const EmployeeTabs = (props) => {
+  console.log('props', props)
   const {
     // eslint-disable-next-line react/prop-types
-    formId,
+    formid,
     // eslint-disable-next-line react/prop-types
     current,
     // eslint-disable-next-line react/prop-types
@@ -41,13 +42,13 @@ const EmployeeTabs = (props) => {
   const { profile } = useStore()
   const { t } = useTranslation()
   const { token, company, locale, currency } = profile
-
+  console.log('locale', locale)
   const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
   const columnsY = (formid) => ColumnFactory(formid, accData, t, locale, currency)
   const addRow = (newData) => {
     const dx = { ...current }
     // eslint-disable-next-line react/prop-types
-    const companyx = formId === formEnum.COMPANY ? current.id : company
+    const companyx = formid === formEnum.COMPANY ? current.id : company
     dx.bankaccounts[dx.bankaccounts.length] = {
       ...newData,
       // eslint-disable-next-line react/prop-types
@@ -162,7 +163,7 @@ const EmployeeTabs = (props) => {
     >
       <EditableTable
         id="bankaccouts"
-        Options={{ ...OptionsM, paging: false }}
+        Options={{ ...Options, paging: false }}
         flag={false}
         /* eslint-disable-next-line react/prop-types */
         data={current ? current.bankaccounts : []}
@@ -183,7 +184,7 @@ const EmployeeTabs = (props) => {
     >
       <EditableTable
         id="salaryItems"
-        Options={{ ...OptionsM, paging: false }}
+        Options={{ ...Options, paging: false }}
         flag={false}
         /* eslint-disable-next-line react/prop-types */
         data={current ? current.salaryItem : []}
@@ -203,11 +204,11 @@ const EmployeeTabs = (props) => {
         form: <AddressForm current={current} setCurrent={setCurrent} t={t} />,
       },
       { title: t('common.accounts'), id: 3, form: getAccountForm(mainFormId) },
-      { title: t('common.bankaccounts'), id: 4, form: getTable(subFormId) },
+      { title: t('common.bankaccounts'), id: 4, form: getTable(formEnum.BANKACCOUNT) },
       { title: t('salary.item.title'), id: 5, form: getSalaryItemTable(subFormId) },
     ]
   }
 
-  return <Tabs tabList={GetTabContent(formId, formEnum.EMPLOYEE_SALARY_ITEM_TABLE)} />
+  return <Tabs tabList={GetTabContent(formid, formEnum.EMPLOYEE_SALARY_ITEM_TABLE)} />
 }
 export default EmployeeTabs

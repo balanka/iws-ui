@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs } from '../tabs/Tabs'
 import { AddressForm, FormFactory, FormWrapper } from './FormsProps'
-import { ColumnFactory, OptionsM } from '../tables/LineFinancialsProps'
+import { ColumnFactory, Options } from '../tables/LineFinancialsProps'
 import EditableTable from '../tables/EditableTable'
 import { formEnum } from '../utils/FORMS'
 import Grid from 'react-fast-grid'
@@ -108,7 +108,7 @@ const CustomerTabs = (props) => {
     <Grid container spacing={0.5} style={{ ...styles.inner, backgroundColor: blue }}>
       <EditableTable
         id="bankaccouts"
-        Options={{ ...OptionsM, paging: false }}
+        Options={{ ...Options, paging: false }}
         flag={false}
         /* eslint-disable-next-line react/prop-types */
         data={current ? current.bankaccounts : []}

@@ -6,7 +6,6 @@ import { cilCode, cilMediaPlay } from '@coreui/icons'
 
 const DocsExample = (props) => {
   const { children, href, tabContentClassName } = props
-
   const _href = `https://coreui.io/react/docs/${href}`
 
   return (

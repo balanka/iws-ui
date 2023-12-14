@@ -1,6 +1,5 @@
 import React from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from './index'
-
 const DefaultLayout = () => {
   return (
     <div>
