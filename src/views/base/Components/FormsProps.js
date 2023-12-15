@@ -2648,7 +2648,7 @@ export const FinancialsMainForm = (props) => {
             value={current.id}
           />
         </Col>
-        <Col sm="2" />
+        <Col sm="4" />
         <Col sm="1">
           <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
             {t('financials.postingdate')}
@@ -2665,11 +2665,18 @@ export const FinancialsMainForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="postingdate-id"
-            className="className='form-control form-control-solid"
+            style={{
+              backgroundColor: 'aliceblue',
+              height: '24px',
+              width: '30px',
+              borderRadius: '8px',
+              fontSize: '14px',
+              padding: '3px 10px',
+            }}
           />
         </Col>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ paddingRight: 1 }}>
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 20 }}>
             {t('financials.period')}
           </CFormLabel>
         </Col>
@@ -2709,7 +2716,7 @@ export const FinancialsMainForm = (props) => {
             onChange={(event) => setCurrent({ ...current, oid: event.target.value })}
           />
         </Col>
-        <Col sm="2" />
+        <Col sm="4" />
         <Col sm="1">
           <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
             {t('financials.enterdate')}
@@ -2726,11 +2733,18 @@ export const FinancialsMainForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="enterdate-id"
-            className="className='form-control form-control-solid"
+            style={{
+              backgroundColor: 'aliceblue',
+              height: '24px',
+              width: '30px',
+              borderRadius: '8px',
+              fontSize: '14px',
+              padding: '3px 10px',
+            }}
           />
         </Col>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30 }}>
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 20 }}>
             {t('common.company')}
           </CFormLabel>
         </Col>
@@ -2755,7 +2769,7 @@ export const FinancialsMainForm = (props) => {
             {t('financials.account')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="6">
           <CFormSelect
             /* eslint-disable-next-line react/prop-types */
             disabled={current.posted}
@@ -2773,7 +2787,6 @@ export const FinancialsMainForm = (props) => {
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-
         <Col sm="1">
           <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
             {t('financials.transdate')}
@@ -2791,7 +2804,14 @@ export const FinancialsMainForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="transdate-id"
-            className="className='form-control form-control-solid"
+            style={{
+              backgroundColor: 'aliceblue',
+              height: '24px',
+              width: '30px',
+              borderRadius: '8px',
+              fontSize: '14px',
+              padding: '3px 10px',
+            }}
             onChange={(newValue) => setCurrent({ ...current, transdate: newValue })}
           />
         </Col>
@@ -2802,7 +2822,7 @@ export const FinancialsMainForm = (props) => {
             {t('financials.costcenter')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="6">
           <CFormSelect
             /* eslint-disable-next-line react/prop-types */
             disabled={current.posted}
