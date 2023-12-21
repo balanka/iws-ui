@@ -34,7 +34,7 @@ import BankStatementTabs from './BankStatementTabs'
 import EmployeeTabs from './EmployeeTabs'
 //import ComboBox from './ComboBox'
 import ComboBox2 from './ComboBox2'
-import Select from '@material-ui/core/Select'
+//import Select from '@material-ui/core/Select'
 
 export const svgIcons = {
   plusCircle:
@@ -715,7 +715,7 @@ export const AccountMainForm = (props) => {
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.enterdate')}
           </CFormLabel>
@@ -755,7 +755,7 @@ export const AccountMainForm = (props) => {
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.changedate')}
           </CFormLabel>
@@ -798,7 +798,7 @@ export const AccountMainForm = (props) => {
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.postingdate')}
           </CFormLabel>
@@ -838,7 +838,7 @@ export const AccountMainForm = (props) => {
             onChange={(event) => setCurrent({ ...current, company: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 20 }}>
           <FormControlLabel
             id="isDebit"
             name="isDebit"
@@ -914,7 +914,7 @@ export const BankStatementParameterForm = (props) => {
             {t('bankstatement.header')}
           </CFormLabel>
         </Col>
-        <Col sm="1.5">
+        <Col sm="1.5" style={{ height: 30 }}>
           <Input
             bssize="sm"
             type="text"
@@ -928,12 +928,12 @@ export const BankStatementParameterForm = (props) => {
             style={{ paddingLeft: 0 }}
           />
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('bankstatement.char')}
           </CFormLabel>
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ height: 30 }}>
           <Input
             bssize="sm"
             type="text"
@@ -947,12 +947,12 @@ export const BankStatementParameterForm = (props) => {
             style={{ paddingLeft: 0 }}
           />
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('bankstatement.extension')}
           </CFormLabel>
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ height: 30 }}>
           <Input
             bssize="sm"
             type="text"
@@ -967,7 +967,7 @@ export const BankStatementParameterForm = (props) => {
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 5 }}>
         <Col sm="1">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('bankstatement.path')}
@@ -1015,7 +1015,7 @@ export const BankStatementMainForm = (props) => {
             value={current.id}
           />
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.postingdate')}
           </CFormLabel>
@@ -1056,7 +1056,7 @@ export const BankStatementMainForm = (props) => {
             value={current.depositor}
           />
         </Col>
-        <Col sm="1.5">
+        <Col sm="1.5" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('bankstatement.valuedate')}
           </CFormLabel>
@@ -1096,7 +1096,7 @@ export const BankStatementMainForm = (props) => {
             value={current.beneficiary}
           />
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('bankstatement.postingtext')}
           </CFormLabel>
@@ -1136,7 +1136,7 @@ export const BankStatementMainForm = (props) => {
             value={current.info}
           />
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('bankstatement.amount')}
           </CFormLabel>
@@ -1183,7 +1183,7 @@ export const BankStatementMainForm = (props) => {
             onChange={(event) => setCurrent({ ...current, accountno: event.target.value })}
           />
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.company')}
           </CFormLabel>
@@ -1225,7 +1225,7 @@ export const BankStatementMainForm = (props) => {
             onChange={(event) => setCurrent({ ...current, accountno: event.target.value })}
           />
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('bankstatement.bankCode')}{' '}
           </CFormLabel>
@@ -1246,7 +1246,7 @@ export const BankStatementMainForm = (props) => {
             style={{ paddingLeft: 0 }}
           />
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ height: 30, paddingLeft: 20 }}>
           <FormControlLabel
             id="posted"
             name="posted"
@@ -1257,7 +1257,7 @@ export const BankStatementMainForm = (props) => {
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 5 }}>
         <Col sm="2">
           {/* eslint-disable-next-line react/prop-types */}
           <CFormLabel disabled={current.posted} size="sm" htmlFor="input-small">
@@ -1278,30 +1278,6 @@ export const BankStatementMainForm = (props) => {
             value={current.purpose}
             onChange={(event) => setCurrent({ ...current, purpose: event.target.value })}
             rows="2"
-          />
-        </Col>
-      </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
-        <Col sm="2">
-          {/* eslint-disable-next-line react/prop-types */}
-          <CFormLabel disabled={current.posted} size="sm" htmlFor="input-small">
-            {t('bankstatement.path')}
-          </CFormLabel>
-        </Col>
-        <Col xs="12" md="10">
-          <Input
-            /* eslint-disable-next-line react/prop-types */
-            disabled={current.posted}
-            bssize="sm"
-            type="text"
-            id="path-input"
-            name="path"
-            className="input-sm"
-            placeholder="path"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.path}
-            onChange={(event) => setCurrent({ ...current, path: event.target.value })}
-            style={{ paddingLeft: 0 }}
           />
         </Col>
       </CInputGroup>
@@ -1333,7 +1309,7 @@ export const AssetForm = (props) => {
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.enterdate')}
           </CFormLabel>
@@ -1372,7 +1348,7 @@ export const AssetForm = (props) => {
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.changedate')}
           </CFormLabel>
@@ -1414,7 +1390,7 @@ export const AssetForm = (props) => {
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.postingdate')}
           </CFormLabel>
@@ -1456,7 +1432,7 @@ export const AssetForm = (props) => {
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.company')}
           </CFormLabel>
@@ -1497,7 +1473,7 @@ export const AssetForm = (props) => {
             onChange={(event) => setCurrent({ ...current, scrap_value: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('asset.lifeSpan')}
           </CFormLabel>
@@ -1537,7 +1513,7 @@ export const AssetForm = (props) => {
             onChange={(event) => setCurrent({ ...current, dep_Method: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('asset.frequency')}/{t('asset.rate')}
           </CFormLabel>
@@ -1683,12 +1659,13 @@ export const MasterfilesMainForm = (props) => {
         </Col>
         <Col sm="4">
           <ComboBox2
+            id="account"
             sm="4"
             data={accData}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.account}
-            placeholder={'cc number'}
+            placeholder={'acc number'}
             onChange={(event, newValue) => {
               console.log('newValue', newValue)
               setCurrent({ ...current, account: newValue?.id })
@@ -1910,7 +1887,7 @@ export const UserForm = (props) => {
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('user.role')}
           </CFormLabel>
@@ -1948,7 +1925,7 @@ export const UserForm = (props) => {
             onChange={(event) => setCurrent({ ...current, userName: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('user.firstName')}
           </CFormLabel>
@@ -1984,7 +1961,7 @@ export const UserForm = (props) => {
             onChange={(event) => setCurrent({ ...current, lastName: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('user.email')}
           </CFormLabel>
@@ -2004,7 +1981,7 @@ export const UserForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="6" />
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.company')}
           </CFormLabel>
@@ -2069,7 +2046,7 @@ export const AddressForm = (props) => {
             onChange={(event) => setCurrent({ ...current, street: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.zip')}
           </CFormLabel>
@@ -2107,7 +2084,7 @@ export const AddressForm = (props) => {
             onChange={(event) => setCurrent({ ...current, city: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.country')}
           </CFormLabel>
@@ -2161,7 +2138,7 @@ export const CustomerGeneralForm = (props) => {
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.enterdate')}
           </CFormLabel>
@@ -2200,7 +2177,7 @@ export const CustomerGeneralForm = (props) => {
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.changedate')}
           </CFormLabel>
@@ -2239,7 +2216,7 @@ export const CustomerGeneralForm = (props) => {
             onChange={(event) => setCurrent({ ...current, currency: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.postingdate')}
           </CFormLabel>

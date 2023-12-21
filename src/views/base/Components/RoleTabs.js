@@ -1,6 +1,6 @@
 import React, { createRef } from 'react'
 import { Tabs } from '../tabs/Tabs'
-import { MasterfilesMainForm } from './FormsProps'
+import { MasterfilesMainForm2 } from './FormsProps'
 import { OptionsM, RightsColumns } from '../tables/LineFinancialsProps'
 import EditableTable from '../tables/EditableTable'
 import Grid from 'react-fast-grid'
@@ -95,7 +95,7 @@ const RoleTabs = (props) => {
       style={{ ...styles.inner, backgroundColor: blue }}
       direction="column"
     >
-      <MasterfilesMainForm current={current} setCurrent={setCurrent} t={t} height={35} />
+      <MasterfilesMainForm2 current={current} setCurrent={setCurrent} t={t} height={35} />
     </Grid>
   )
 

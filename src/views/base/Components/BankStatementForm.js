@@ -173,7 +173,7 @@ function internal(
           locale={locale}
           currency={currency}
           collapse={state.collapse}
-          height={35}
+          height={25}
           styles={styles}
         />
 
