@@ -32,7 +32,9 @@ import RoleTabs from './RoleTabs'
 import UserTabs from './UserTabs'
 import BankStatementTabs from './BankStatementTabs'
 import EmployeeTabs from './EmployeeTabs'
-import ComboBox from './ComboBox'
+//import ComboBox from './ComboBox'
+import ComboBox2 from './ComboBox2'
+import Select from '@material-ui/core/Select'
 
 export const svgIcons = {
   plusCircle:
@@ -456,6 +458,7 @@ const getForm = (formId) => {
       return BankStatementTabs
     case formEnum.COSTCENTER:
     case formEnum.BANK:
+      return MasterfilesMainForm2
     case formEnum.MODULE:
     case formEnum.FMODULE:
     case formEnum.ARTICLE:
@@ -1607,13 +1610,14 @@ export const MasterfilesMainForm = (props) => {
             name="id"
             className="input-sm"
             placeholder="Id"
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
             {t('common.enterdate')}
           </CFormLabel>
         </Col>
@@ -1627,7 +1631,7 @@ export const MasterfilesMainForm = (props) => {
             showTimeInput
             footer
             dateFormat="dd.MM.yyyy"
-            className="text-end"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
@@ -1645,13 +1649,14 @@ export const MasterfilesMainForm = (props) => {
             name="name"
             className="input-sm"
             placeholder="Name"
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.name}
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
           />
         </Col>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
             {t('common.changedate')}
           </CFormLabel>
         </Col>
@@ -1665,53 +1670,53 @@ export const MasterfilesMainForm = (props) => {
             showTimeInput
             footer
             dateFormat="dd.MM.yyyy"
-            className="text-end"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         {/* eslint-disable-next-line react/prop-types */}
-        {current.account ? (
-          <>
-            <Col sm="2">
-              <CFormLabel size="sm" htmlFor="input-small">
-                {t('common.account')}
-              </CFormLabel>
-            </Col>
-            <Col sm="4">
-              <ComboBox
-                data={accData}
-                /* eslint-disable-next-line react/prop-types */
-                value={current.account}
-                onChange={(event) => setCurrent({ ...current, account: event.target.value })}
-              />
-            </Col>
-            <Col sm="2">
-              <CFormLabel size="sm" htmlFor="input-small">
-                {t('common.postingdate')}
-              </CFormLabel>
-            </Col>
-            <Col sm="2">
-              <CDatePicker
-                size="sm"
-                disabled={true}
-                /* eslint-disable-next-line react/prop-types */
-                selected={Date.parse(current.postingdate)}
-                label={t('common.postingdate')}
-                showTimeInput
-                footer
-                dateFormat="dd.MM.yyyy"
-                className="text-end"
-              />
-            </Col>
-          </>
-        ) : (
-          <></>
-        )}
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.account')}
+          </CFormLabel>
+        </Col>
+        <Col sm="4">
+          <ComboBox2
+            sm="4"
+            data={accData}
+            style={{ height: 30 }}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.account}
+            placeholder={'cc number'}
+            onChange={(event, newValue) => {
+              console.log('newValue', newValue)
+              setCurrent({ ...current, account: newValue?.id })
+            }}
+          />
+        </Col>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
+            {t('common.postingdate')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <CDatePicker
+            size="sm"
+            disabled={true}
+            /* eslint-disable-next-line react/prop-types */
+            selected={Date.parse(current.postingdate)}
+            label={t('common.postingdate')}
+            showTimeInput
+            footer
+            dateFormat="dd.MM.yyyy"
+            className="text-end w-50"
+          />
+        </Col>
+        )
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         {/* eslint-disable-next-line react/prop-types */}
-        {!current.account ? <Col sm="6" /> : null}
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.company')}
@@ -1726,9 +1731,9 @@ export const MasterfilesMainForm = (props) => {
             name="company"
             className="input-sm"
             placeholder="company"
+            style={{ height: 30, textAlign: 'right', padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
-            style={{ textAlign: 'right', padding: 2 }}
             readonly
           />
         </Col>
@@ -1744,6 +1749,134 @@ export const MasterfilesMainForm = (props) => {
             id="description-id"
             rows="1"
             placeholder="Content..."
+            style={{ height: 30 }}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.description}
+            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+          />
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
+export const MasterfilesMainForm2 = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, t, height } = props
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.id')}
+          </CFormLabel>
+        </Col>
+        <Col sm="4">
+          <Input
+            bssize="sm"
+            type="text"
+            id="id"
+            name="id"
+            className="input-sm"
+            placeholder="Id"
+            style={{ height: 30 }}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.id}
+            onChange={(event) => setCurrent({ ...current, id: event.target.value })}
+          />
+        </Col>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
+            {t('common.enterdate')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <CDatePicker
+            size="sm"
+            disabled={true}
+            /* eslint-disable-next-line react/prop-types */
+            selected={Date.parse(current.enterdate)}
+            label={t('common.enterdate')}
+            showTimeInput
+            footer
+            dateFormat="dd.MM.yyyy"
+            className="text-end w-50"
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.name')}
+          </CFormLabel>
+        </Col>
+        <Col sm="4">
+          <Input
+            bssize="sm"
+            type="text"
+            id="name-input"
+            name="name"
+            className="input-sm"
+            placeholder="Name"
+            style={{ height: 30 }}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.name}
+            onChange={(event) => setCurrent({ ...current, name: event.target.value })}
+          />
+        </Col>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
+            {t('common.changedate')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <CDatePicker
+            size="sm"
+            disabled={true}
+            /* eslint-disable-next-line react/prop-types */
+            selected={Date.parse(current.changedate)}
+            label={t('common.changedate')}
+            showTimeInput
+            footer
+            dateFormat="dd.MM.yyyy"
+            className="text-end w-50"
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        {/* eslint-disable-next-line react/prop-types */}
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.company')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            disabled={true}
+            bssize="sm"
+            type="text"
+            id="company-id"
+            name="company"
+            className="input-sm"
+            placeholder="company"
+            style={{ height: 30, textAlign: 'right', padding: 2 }}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.company}
+            readonly
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col md="2">
+          <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
+        </Col>
+        <Col xs="12" md="9">
+          <CFormTextarea
+            type="texarea"
+            name="description"
+            id="description-id"
+            rows="1"
+            placeholder="Content..."
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
@@ -2044,7 +2177,7 @@ export const CustomerGeneralForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="enterdate-id"
-            className="text-end"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
@@ -2083,7 +2216,7 @@ export const CustomerGeneralForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="changedate-id"
-            className="text-end"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
@@ -2122,7 +2255,7 @@ export const CustomerGeneralForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="postingdate-id"
-            className="text-end"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
@@ -2201,15 +2334,28 @@ export const CustomerAccountForm = (props) => {
           </CFormLabel>
         </Col>
         <Col sm="4">
+          {/*<Select*/}
+          {/*  className="flex-row"*/}
+          {/*  type="select"*/}
+          {/*  name="oaccount"*/}
+          {/*  id="oaccount-id"*/}
+          {/* eslint-disable-next-line react/prop-types */}
+          {/*  value={current.account}*/}
+          {/*  onChange={(event) => setCurrent({ ...current, account: event.target.value })}*/}
+          {/*>*/}
+          {/*  /!* eslint-disable-next-line react/prop-types *!/*/}
+          {/*  {accData.sort(sortById).map((item) => mappingSelect(item))};*/}
+          {/*</Select>*/}
           <CFormSelect
-            className="flex-row"
+            className="flex-row form-select-bg-size:16px 12px !default;"
             type="select"
             height="50"
             name="account"
             id="account-id"
             size="sm"
+            //htmlSize={10}
             style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+            /*eslint-disable-next-line react/prop-types*/
             value={current.account}
             onChange={(event) => setCurrent({ ...current, account: event.target.value })}
           >
@@ -2217,7 +2363,7 @@ export const CustomerAccountForm = (props) => {
             {accData.map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.company')}
           </CFormLabel>
@@ -2228,8 +2374,10 @@ export const CustomerAccountForm = (props) => {
             type="text"
             id="company-id"
             name="company"
-            className="input-sm"
+            className="input-sm form-select-bg-size"
             placeholder="company"
+            disabled={true}
+            //className="mb-3"
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
             onChange={(event) => setCurrent({ ...current, company: event.target.value })}
@@ -2250,6 +2398,7 @@ export const CustomerAccountForm = (props) => {
             name="oaccount"
             id="oaccount-id"
             size="sm"
+            html-size={10}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.oaccount}
@@ -2273,6 +2422,7 @@ export const CustomerAccountForm = (props) => {
             name="vatcode"
             id="vatcode-id"
             size="sm"
+            html-size={10}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.vatcode}
@@ -2333,7 +2483,7 @@ export const CompanyGeneralForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="enterdate-id"
-            className="text-end"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
@@ -2372,7 +2522,7 @@ export const CompanyGeneralForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="changedate-id"
-            className="text-end"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
@@ -2440,7 +2590,7 @@ export const CompanyAccountForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="postingdate-id"
-            className="text-end"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
@@ -2668,10 +2818,10 @@ export const FinancialsMainForm = (props) => {
             style={{
               backgroundColor: 'aliceblue',
               height: '24px',
-              width: '30px',
-              borderRadius: '8px',
+              width: '20',
+              //borderRadius: '8px',
               fontSize: '14px',
-              padding: '3px 10px',
+              //padding: '3px 10px',
             }}
           />
         </Col>
@@ -2736,10 +2886,10 @@ export const FinancialsMainForm = (props) => {
             style={{
               backgroundColor: 'aliceblue',
               height: '24px',
-              width: '30px',
-              borderRadius: '8px',
+              width: '20',
+              //borderRadius: '8px',
               fontSize: '14px',
-              padding: '3px 10px',
+              //padding: '3px 10px',
             }}
           />
         </Col>
@@ -2807,10 +2957,10 @@ export const FinancialsMainForm = (props) => {
             style={{
               backgroundColor: 'aliceblue',
               height: '24px',
-              width: '30px',
-              borderRadius: '8px',
+              width: '20',
+              //borderRadius: '8px',
               fontSize: '14px',
-              padding: '3px 10px',
+              //padding: '3px 10px',
             }}
             onChange={(newValue) => setCurrent({ ...current, transdate: newValue })}
           />
@@ -2885,7 +3035,7 @@ export const JournalMainForm = (props) => {
               .map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="4">
+        <Col sm="4" style={{ paddingLeft: 10 }}>
           <CFormSelect
             className="flex-row"
             type="select"
@@ -2902,12 +3052,12 @@ export const JournalMainForm = (props) => {
             {accData.sort(sortByName).map((item) => mappingSelectName(item))}
           </CFormSelect>
         </Col>
-        <Col sm="0.5" style={{ align: 'right', padding: 2 }}>
+        <Col sm="0.5" style={{ align: 'right', padding: 2, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.from')}
           </CFormLabel>
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ paddingLeft: 10 }}>
           <Input
             bssize="sm"
             type="text"
@@ -2918,15 +3068,15 @@ export const JournalMainForm = (props) => {
             /* eslint-disable-next-line react/prop-types */
             value={current.fromPeriod}
             onChange={(event) => setCurrent({ ...current, fromPeriod: event.target.value })}
-            style={{ height: 30, padding: 1 }}
+            style={{ height: 30, padding: 1, textAlign: 'right' }}
           />
         </Col>
-        <Col sm="0.5" style={{ align: 'right', padding: 2 }}>
+        <Col sm="0.5" style={{ padding: 2, paddingLeft: 10, textAlign: 'right' }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.to')}
           </CFormLabel>
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ paddingLeft: 10, textAlign: 'right' }}>
           <Input
             bssize="sm"
             type="text"
@@ -2937,10 +3087,10 @@ export const JournalMainForm = (props) => {
             /* eslint-disable-next-line react/prop-types */
             value={current.toPeriod}
             onChange={(event) => setCurrent({ ...current, toPeriod: event.target.value })}
-            style={{ height: 30, padding: 1, align: 'right' }}
+            style={{ height: 30, padding: 1, textAlign: 'right' }}
           />
         </Col>
-        <Col sm="1" style={{ align: 'right' }}>
+        <Col sm="1" style={{ paddingLeft: 10, align: 'right' }}>
           <Button
             type="submit"
             size="sm"
@@ -2995,7 +3145,7 @@ export const VatMainForm = (props) => {
             showTimeInput
             footer
             dateFormat="dd.MM.yyyy"
-            className="text-end"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
@@ -3034,7 +3184,7 @@ export const VatMainForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="changedate-id"
-            className="text-end"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
@@ -3076,7 +3226,7 @@ export const VatMainForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="postingdate-id"
-            className="text-end"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>

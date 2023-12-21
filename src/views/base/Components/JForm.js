@@ -166,6 +166,7 @@ function Internal(
           <EditableTable
             Options={{
               ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),
+              grouping: true,
               toolbar: toolbar,
               pageSize: 13,
               pageSizeOptions: [15, 25, 50],

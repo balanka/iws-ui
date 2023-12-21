@@ -5,6 +5,7 @@ import tableIcons from './TableIcons.js'
 export default function EditableTable(props) {
   const handleClick = (event, rowData) => (edit ? edit(rowData) : void 0)
   // eslint-disable-next-line react/prop-types
+  console.log('props T', props)
   const {
     // eslint-disable-next-line react/prop-types
     Options, // eslint-disable-next-line react/prop-types
@@ -22,7 +23,16 @@ export default function EditableTable(props) {
 
   return (
     <MaterialTable
-      style={{ padding: '0 8px' }}
+      style={{ padding: '0 8px', paddingTop: 5 }}
+      headerStyle={{
+        height: 10,
+        maxHeight: 10,
+        paddingTop: 20,
+        backgroundColor: '#039be5',
+        color: '#FFF',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+      }}
       editable={flag ? null : editable}
       tableRef={tableRef}
       columns={columns}

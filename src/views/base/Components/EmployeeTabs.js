@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs } from '../tabs/Tabs'
 import { AddressForm, FormFactory } from './FormsProps'
-import { ColumnFactory, Options, OptionsM } from '../tables/LineFinancialsProps'
+import { ColumnFactory, Options } from '../tables/LineFinancialsProps'
 import EditableTable from '../tables/EditableTable'
 import { formEnum } from '../utils/FORMS'
 import Grid from 'react-fast-grid'
@@ -43,6 +43,7 @@ const EmployeeTabs = (props) => {
   const { t } = useTranslation()
   const { token, company, locale, currency } = profile
   console.log('locale', locale)
+  console.log('accData', accData)
   const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
   const columnsY = (formid) => ColumnFactory(formid, accData, t, locale, currency)
   const addRow = (newData) => {
@@ -80,28 +81,37 @@ const EmployeeTabs = (props) => {
     const dx = { ...current }
     console.log('dx', dx)
     // eslint-disable-next-line react/prop-types
-    dx.salaryItem[dx.salaryItem.length] = { ...newData, id: current.id, company: current.company }
+    dx.salaryItems[dx.salaryItems.length] = {
+      ...newData,
+      id: '-3',
+      // eslint-disable-next-line react/prop-types
+      owner: current.id,
+      // eslint-disable-next-line react/prop-types
+      company: current.company,
+    }
     Add(modifyUrl, token, dx, data, setCurrent)
     setCurrent({ ...dx })
   }
   const updateSalaryItem = (newData, oldData) => {
     const dx = { ...current }
-    const index = dx.salaryItem.findIndex(
-      (obj) => obj.id === oldData.id && obj.account === oldData.account,
+    console.log('dx', dx)
+    const index = dx.salaryItems.findIndex(
+      (obj) => obj.id === oldData.id && obj.owner === oldData.owner,
     )
+    console.log('index', index)
     // eslint-disable-next-line react/prop-types
-    dx.salaryItem[index] = { ...newData, id: current.id, modelid: -2 }
+    dx.salaryItems[index] = { ...newData, id: '-2' }
     Edit(modifyUrl, token, dx, data, setCurrent)
   }
   const deleteSalaryItem = (oldData) => {
     const dx = { ...current }
-    const index = dx.salaryItem.findIndex(
-      (obj) => obj.id === oldData.id && obj.account === oldData.account,
+    const index = dx.salaryItems.findIndex(
+      (obj) => obj.id === oldData.id && obj.owner === oldData.owner,
     )
     console.log('index', index)
-    const deleted = dx.salaryItem[index]
+    const deleted = dx.salaryItems[index]
     console.log('deleted', deleted)
-    dx.salaryItem[index] = { ...deleted, modelid: -1 }
+    dx.salaryItems[index] = { ...deleted, id: '-1' }
     Edit(modifyUrl, token, dx, data, setCurrent)
   }
   const SalaryItemEditable = () => ({
@@ -175,26 +185,30 @@ const EmployeeTabs = (props) => {
     </Grid>
   )
 
-  const getSalaryItemTable = (formid) => (
-    <Grid
-      container
-      spacing={0.5}
-      style={{ ...styles.inner, backgroundColor: blue }}
-      direction="column"
-    >
-      <EditableTable
-        id="salaryItems"
-        Options={{ ...Options, paging: false }}
-        flag={false}
-        /* eslint-disable-next-line react/prop-types */
-        data={current ? current.salaryItem : []}
-        columns={columnsY(formid)}
-        editable={SalaryItemEditable()}
-        t={t}
-        tableRef={tableRef2}
-      />
-    </Grid>
-  )
+  const getSalaryItemTable = (formid) => {
+    // eslint-disable-next-line react/prop-types
+    console.log('current.salaryItem', current.salaryItems)
+    return (
+      <Grid
+        container
+        spacing={0.5}
+        style={{ ...styles.inner, backgroundColor: blue }}
+        direction="column"
+      >
+        <EditableTable
+          id="salaryItems"
+          Options={{ ...Options, paging: false }}
+          flag={false}
+          /* eslint-disable-next-line react/prop-types */
+          data={current ? current.salaryItems : []}
+          columns={columnsY(formid)}
+          editable={SalaryItemEditable()}
+          t={t}
+          tableRef={tableRef2}
+        />
+      </Grid>
+    )
+  }
   const GetTabContent = (mainFormId, subFormId) => {
     return [
       { title: t('common.general'), id: 1, form: getGeneralForm(mainFormId) },

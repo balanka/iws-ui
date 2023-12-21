@@ -577,8 +577,7 @@ export const OptionsM = {
   rowStyle: rowStyle,
   exportAllData: true,
   exportButton: true,
-  exportDelimiter: ',',
-  //exportFileName:'Masterfile.csv'
+  exportDelimiter: ';',
 }
 export const ColumnsModule = (t, locale) => [
   {
@@ -866,9 +865,11 @@ export const ColumnsEmployeeSalaryItem = (data, t, locale, currency) => [
   {
     field: 'account',
     title: t('common.account'),
-    editComponent: ({ value, onRowDataChange, rowData }) =>
-      ACCOUNT(data, value, onRowDataChange, rowData, 'account'),
-    width: 20,
+    hidden: false,
+    editComponent: (tableData) => Autocomplete(data, tableData, true),
+    initialEditValue: '',
+    minWidth: 100,
+    align: 'right',
     export: true,
   },
   {

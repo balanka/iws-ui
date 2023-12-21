@@ -51,6 +51,7 @@ const MasterfileForm = (callback, deps) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
   const datax = iwsState.get(modelid_)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const data = typeof datax === 'undefined' ? [] : datax
 
   const submitAdd = (event) => {
@@ -77,7 +78,7 @@ const MasterfileForm = (callback, deps) => {
     if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
       submitEdit(event)
     }
-  }, deps)
+  }, [])
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useLayoutEffect(() => {
     iwsStore.subscribe(setIwsState)
@@ -132,12 +133,16 @@ const MasterfileForm = (callback, deps) => {
 
   const onNewBankAccount = () => {
     const ref = tableRef.current
+    console.log('ref', ref)
+    console.log('ref', ref.dataManager)
     ref.dataManager.changeRowEditing()
     ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
   }
 
   const onNewSalaryItem = () => {
     const ref = tableRef2.current
+    console.log('ref2', ref)
+    console.log('ref2', ref.dataManager)
     ref.dataManager.changeRowEditing()
     ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
   }
@@ -171,7 +176,7 @@ const MasterfileForm = (callback, deps) => {
           accData={accd}
           vatData={vatd}
           bankData={bankd}
-          onNewLine={onNewBankAccount}
+          onNewLine={onNewSalaryItem}
           tableRef={tableRef}
           tableRef2={tableRef2}
           modifyUrl={modifyUrl}
@@ -194,6 +199,7 @@ const MasterfileForm = (callback, deps) => {
               maxBodyHeight: '960px',
               pageSize: 10,
               pageSizeOptions: [10, 20, 50],
+              showFirstLastPageButtons: true,
             }}
             data={data}
             columns={columns}

@@ -105,10 +105,10 @@ const CustomerTabs = (props) => {
     />
   )
   const getTable = (formid) => (
-    <Grid container spacing={0.5} style={{ ...styles.inner, backgroundColor: blue }}>
+    <Grid container spacing={0.5} style={{ ...styles.innerX, backgroundColor: blue }}>
       <EditableTable
         id="bankaccouts"
-        Options={{ ...Options, paging: false }}
+        Options={{ ...Options, tableLayout: 'auto', paging: false, tableWidth: 'full' }}
         flag={false}
         /* eslint-disable-next-line react/prop-types */
         data={current ? current.bankaccounts : []}
@@ -119,15 +119,15 @@ const CustomerTabs = (props) => {
       />
     </Grid>
   )
-  const GetTabContent = (mainFormId, subFormId) => {
+  const GetTabContent = (mainFormId) => {
     return [
       { title: t('common.general'), id: 1, form: getGeneralForm(mainFormId) },
       { title: t('common.address'), id: 2, form: getAddressForm() },
       { title: t('common.accounts'), id: 3, form: getAccountForm(mainFormId) },
-      { title: t('common.bankaccounts'), id: 4, form: getTable(subFormId) },
+      { title: t('common.bankaccounts'), id: 4, form: getTable(formEnum.BANKACCOUNT) },
     ]
   }
 
-  return <Tabs tabList={GetTabContent(formid, formEnum.BANKACCOUNT)} />
+  return <Tabs tabList={GetTabContent(formid)} />
 }
 export default CustomerTabs

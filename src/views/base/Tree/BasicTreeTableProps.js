@@ -50,9 +50,24 @@ export const styles = {
   },
   inner: {
     borderRadius: 5,
-    boxShadow: '0 10px 30px #BBB',
+    //boxShadow: '0 20px 30px #cce0e3', //#66a6ff, #97baeb #36a3ff
+    //boxShadow: '0 20px 30px #97baeb',
+    //boxShadow: '0 20px 30px #BBB',
+    boxShadow: '0 20px 50px #BBF',
     padding: 10,
     //height: 350,
+    paddingTop: 20,
+  },
+  innerX: {
+    borderRadius: 5,
+    //boxShadow: '0 20px 30px #cce0e3', //#66a6ff, #97baeb #36a3ff
+    //boxShadow: '0 20px 30px #97baeb',
+    boxShadow: '0 20px 30px #BBB',
+    //boxShadow: '0 20px 50px #BBF',
+    padding: 10,
+    //height: 350,
+    width: 900,
+    display: 'flex',
     paddingTop: 20,
   },
   middle: {

@@ -10,6 +10,7 @@ const Input = styled('input')(({ theme }) => ({
   width: 200,
   backgroundColor: theme.palette.mode === 'light' ? '#fff' : '#000',
   color: theme.palette.mode === 'light' ? '#000' : '#fff',
+  borderColor: 'white',
 }))
 
 const Listbox = styled('ul')(({ theme }) => ({

@@ -34,3 +34,4 @@ input {
 .autocomplete li:not(:last-of-type) {
     border-bottom: 1px solid #999;
 }
+.w-80{width:80%!important}

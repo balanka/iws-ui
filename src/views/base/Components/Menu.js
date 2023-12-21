@@ -587,6 +587,7 @@ export const initEmp = [
     salaryItem: [
       {
         id: '-1',
+        owner: '-1x',
         account: '',
         amount: 0,
         text: '',

@@ -370,27 +370,31 @@ const FinancialsForm = (callback, deps) => {
             collapse={state.collapse}
           />
         </Grid>
-        <Grid item>
-          <EditableTable
-            Options={{
-              ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),
-              toolbar: toolbar,
-              maxBodyHeight: '960px',
-              pageSize: 10,
-              pageSizeOptions: [10, 20, 50],
-            }}
-            flag={current ? current.posted : false}
-            data={buildData()}
-            columns={columns}
-            t={t}
-            edit={edit}
-            setSelectedRows={setSelectedRows}
-            parentChildData={parentChildData}
-          />
-        </Grid>
+        <div style={{ paddingTop: 5 }}>
+          <Grid item xs spacing={0.5}>
+            <EditableTable
+              Options={{
+                ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),
+                toolbar: toolbar,
+                maxBodyHeight: '960px',
+                pageSize: 10,
+                pageSizeOptions: [10, 20, 50],
+                showFirstLastPageButtons: true,
+              }}
+              flag={current ? current.posted : false}
+              data={buildData()}
+              columns={columns}
+              t={t}
+              edit={edit}
+              setSelectedRows={setSelectedRows}
+              parentChildData={parentChildData}
+            />
+          </Grid>
+        </div>
       </>
     )
   }
+
   return buildForm(current ? current : current_)
 }
 

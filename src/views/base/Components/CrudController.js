@@ -216,3 +216,27 @@ const EditRow = (edited, isNew, setCurrent) => {
 }
 
 export { Get, Get1, Get2, Post, Login, Add, Edit, EditRow }
+/*
+export function useFetchData() {
+  const [ data, setData ] = useState([]);
+  const [ isLoading, setIsLoading ] = useState(false);
+  const [ errMessage, setErrMessage ] = useState('');
+  useEffect(() => {
+    setIsLoading(true);
+    // Calls API to get list of customers
+    getCustomers().then((response) => {
+      setData(response.data.data);
+      setIsLoading(false);
+      setErrMessage('');
+    }).catch((e) => {
+      setErrMessage(e.message);
+      setIsLoading(false);
+    });
+  }, []);
+  return [ data, isLoading, errMessage ];
+}
+
+import { useFetchData } from './customHooks';
+...
+const [ data, isLoading, errMessage ] = useFetchData();
+ */
