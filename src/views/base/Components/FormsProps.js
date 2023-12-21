@@ -1662,7 +1662,6 @@ export const MasterfilesMainForm = (props) => {
             id="account"
             sm="4"
             data={accData}
-            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.account}
             placeholder={'acc number'}

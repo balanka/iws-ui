@@ -36,9 +36,10 @@ const StyledAutocomplete = styled(Autocomplete)({
 
 export default function ComboBox2(props) {
   // eslint-disable-next-line react/prop-types
-  const { id, data, onChange, value, placeholder, width } = props
+  const { id, data, onChange, value, placeholder } = props
   return (
     <StyledAutocomplete
+      fullWidth={true}
       id={id}
       options={data}
       value={value}
@@ -48,7 +49,13 @@ export default function ComboBox2(props) {
         typeof option === 'string' ? option : option.id + ' ' + option.name
       }
       //getOptionLabel={(option) => option?.id ?? option}
-      style={{ width: width, height: 10 }}
+      //style="background-color: Aqua;"
+      style={{ height: 10 }}
+      renderOption={(props, option) => (
+        <li {...props}>
+          {option.id}&nbsp;&nbsp;&nbsp;{option.id.concat(' ').concat(option.name)}
+        </li>
+      )}
       renderInput={(params) => {
         //console.log('params', params)
         return (
