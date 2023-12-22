@@ -2,6 +2,7 @@ import React from 'react'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import { styled } from '@mui/material/styles'
+import { lightBlue } from '@mui/material/colors'
 //import { StyledEngineProvider } from '@mui/material/styles'
 
 const StyledAutocomplete = styled(Autocomplete)({
@@ -34,6 +35,13 @@ const StyledAutocomplete = styled(Autocomplete)({
   },
 })
 
+// const ListboxComponent = React.forwardRef(function ListboxComponent(rest, ref) {
+//   return (
+//     <ul style={{ minHeight: '500px' }} ref={ref} {...rest}>
+//       <ul style={{ minHeight: '450px' }} ref={ref} {...rest} />
+//     </ul>
+//   )
+// })
 export default function ComboBox2(props) {
   // eslint-disable-next-line react/prop-types
   const { id, data, onChange, value, placeholder } = props
@@ -43,7 +51,10 @@ export default function ComboBox2(props) {
       id={id}
       options={data}
       value={value}
+      autoSelect={true}
+      blurOnSelect={true}
       onChange={onChange}
+      //ListboxComponent={ListboxComponent}
       //groupBy={(item) => item.id.slice(0, 3)}
       getOptionLabel={(option) =>
         typeof option === 'string' ? option : option.id + ' ' + option.name
@@ -51,9 +62,24 @@ export default function ComboBox2(props) {
       //getOptionLabel={(option) => option?.id ?? option}
       //style="background-color: Aqua;"
       style={{ height: 10 }}
+      sx={{
+        '& .MuiAutocomplete-option': {
+          backgroundColor: 'Aqua', //'#000',
+        },
+      }}
       renderOption={(props, option) => (
-        <li {...props}>
-          {option.id}&nbsp;&nbsp;&nbsp;{option.id.concat(' ').concat(option.name)}
+        // eslint-disable-next-line react/prop-types
+        <li
+          {...props}
+          /* eslint-disable-next-line react/prop-types  */
+          //style={{ backgroundColor: props['data-option-index'] % 2 === 0 ? '#4caf50' : 'Aqua' }}
+          /* eslint-disable-next-line react/prop-types */
+          style={{
+            // eslint-disable-next-line react/prop-types
+            backgroundColor: props['data-option-index'] % 2 === 0 ? '#DEEFFF' : 'lightblue',
+          }}
+        >
+          {option.id}&nbsp;&nbsp;&nbsp;{option.name}
         </li>
       )}
       renderInput={(params) => {

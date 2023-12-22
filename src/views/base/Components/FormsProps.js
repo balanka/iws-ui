@@ -1825,7 +1825,7 @@ export const MasterfilesMainForm2 = (props) => {
             {t('common.company')}
           </CFormLabel>
         </Col>
-        <Col sm="2">
+        <Col sm="4">
           <Input
             disabled={true}
             bssize="sm"
@@ -1838,6 +1838,24 @@ export const MasterfilesMainForm2 = (props) => {
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
             readonly
+          />
+        </Col>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
+            {t('common.postingdate')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <CDatePicker
+            size="sm"
+            disabled={true}
+            /* eslint-disable-next-line react/prop-types */
+            selected={Date.parse(current.postingdate)}
+            label={t('common.postingdate')}
+            showTimeInput
+            footer
+            dateFormat="dd.MM.yyyy"
+            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
