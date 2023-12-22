@@ -42,6 +42,24 @@ const StyledAutocomplete = styled(Autocomplete)({
 //     </ul>
 //   )
 // })
+const sortByIdFn = (a, b) => {
+  if (a.id < b.id) {
+    return -1
+  }
+  if (a.id > b.id) {
+    return 1
+  }
+  return 0
+}
+const sortByNameFn = (a, b) => {
+  if (a.name < b.name) {
+    return -1
+  }
+  if (a.name > b.name) {
+    return 1
+  }
+  return 0
+}
 export default function ComboBox2(props) {
   // eslint-disable-next-line react/prop-types
   const { id, data, onChange, value, placeholder } = props
@@ -49,18 +67,17 @@ export default function ComboBox2(props) {
     <StyledAutocomplete
       fullWidth={true}
       id={id}
-      options={data}
+      /* eslint-disable-next-line react/prop-types */
+      options={data.sort(sortByIdFn)}
       value={value}
       autoSelect={true}
       blurOnSelect={true}
       onChange={onChange}
-      //ListboxComponent={ListboxComponent}
       //groupBy={(item) => item.id.slice(0, 3)}
       getOptionLabel={(option) =>
         typeof option === 'string' ? option : option.id + ' ' + option.name
       }
       //getOptionLabel={(option) => option?.id ?? option}
-      //style="background-color: Aqua;"
       style={{ height: 10 }}
       sx={{
         '& .MuiAutocomplete-option': {
