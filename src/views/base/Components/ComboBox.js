@@ -1,67 +1,107 @@
-import * as React from 'react'
-import { useAutocomplete } from '@mui/base/useAutocomplete'
-import { styled } from '@mui/system'
+import React from 'react'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
+import { styled } from '@mui/material/styles'
+import { lightBlue } from '@mui/material/colors'
+//import { StyledEngineProvider } from '@mui/material/styles'
 
-const Label = styled('label')({
-  display: 'block',
+const StyledAutocomplete = styled(Autocomplete)({
+  '& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)': {
+    // Default transform is "translate(14px, 20px) scale(1)""
+    // This lines up the label with the initial cursor position in the input
+    // after changing its padding-left.
+    transform: 'translate(34px, 20px) scale(1);',
+  },
+  '&.Mui-focused .MuiInputLabel-outlined': {
+    color: 'purple',
+  },
+  '& .MuiAutocomplete-inputRoot': {
+    color: 'purple',
+    // This matches the specificity of the default styles at https://github.com/mui-org/material-ui/blob/v4.11.3/packages/material-ui-lab/src/Autocomplete/Autocomplete.js#L90
+    '&[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input:first-of-type': {
+      // Default left padding is 6px
+      paddingLeft: 26,
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'white',
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'red',
+      height: '30',
+    },
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'purple',
+    },
+  },
 })
 
-const Input = styled('input')(({ theme }) => ({
-  width: 200,
-  backgroundColor: theme.palette.mode === 'light' ? '#fff' : '#000',
-  color: theme.palette.mode === 'light' ? '#000' : '#fff',
-  borderColor: 'white',
-}))
-
-const Listbox = styled('ul')(({ theme }) => ({
-  width: 250,
-  margin: 0,
-  padding: 0,
-  zIndex: 1,
-  position: 'absolute',
-  listStyle: 'none',
-  backgroundColor: theme.palette.mode === 'light' ? '#fff' : '#000',
-  overflow: 'auto',
-  maxHeight: 250,
-  border: '1px solid rgba(0,0,0,.25)',
-  '& li.Mui-focused': {
-    backgroundColor: '#4a8df6',
-    color: 'white',
-    cursor: 'pointer',
-  },
-  '& li:active': {
-    backgroundColor: '#2977f5',
-    color: 'white',
-  },
-}))
-
+const sortByIdFn = (a, b) => {
+  if (a.id < b.id) {
+    return -1
+  }
+  if (a.id > b.id) {
+    return 1
+  }
+  return 0
+}
+const sortByNameFn = (a, b) => {
+  if (a.name < b.name) {
+    return -1
+  }
+  if (a.name > b.name) {
+    return 1
+  }
+  return 0
+}
 export default function ComboBox(props) {
   // eslint-disable-next-line react/prop-types
-  const { data, onChange, value } = props
-  const { getRootProps, getInputProps, getListboxProps, getOptionProps, groupedOptions } =
-    useAutocomplete({
-      id: 'use-autocomplete-demo',
-      value: value,
-      options: data,
-      onChange: onChange,
-      getOptionLabel: (option) => option.title,
-    })
-
+  const { id, data, onChange, value, placeholder } = props
   return (
-    <div>
-      <div {...getRootProps()}>
-        <Input {...getInputProps()} />
-      </div>
-      {groupedOptions.length > 0 ? (
-        <Listbox {...getListboxProps()}>
-          {groupedOptions.map((option, index) => (
-            // eslint-disable-next-line react/jsx-key
-            <li {...getOptionProps({ option, index })}>
-              {option.id.concat(' '.concat(option.name))}
-            </li>
-          ))}
-        </Listbox>
-      ) : null}
-    </div>
+    <StyledAutocomplete
+      fullWidth={true}
+      id={id}
+      /* eslint-disable-next-line react/prop-types */
+      options={data.sort(sortByIdFn)}
+      value={value}
+      autoSelect={true}
+      blurOnSelect={true}
+      onChange={onChange}
+      //groupBy={(item) => item.id.slice(0, 3)}
+      getOptionLabel={(option) =>
+        typeof option === 'string' ? option : option.id + ' ' + option.name
+      }
+      //getOptionLabel={(option) => option?.id ?? option}
+      style={{ height: 10 }}
+      renderOption={(props, option) => (
+        <li
+          style={{
+            fontSize: 10,
+            // eslint-disable-next-line react/prop-types
+            backgroundColor: props['data-option-index'] % 2 === 0 ? '#DEEFFF' : 'lightblue',
+          }}
+        >
+          {option.id}&nbsp;&nbsp;&nbsp;{option.name}
+        </li>
+      )}
+      renderInput={(params) => {
+        return (
+          <TextField
+            {...params}
+            placeholder={placeholder}
+            value={value}
+            id="combo=text-id"
+            fullWidth
+            variant="standard"
+            size="small"
+          />
+        )
+      }}
+      ListboxProps={{
+        style: {
+          maxHeight: '350px',
+          border: '1px solid lightBlue',
+        },
+      }}
+    />
   )
 }

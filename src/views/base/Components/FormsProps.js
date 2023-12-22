@@ -33,7 +33,7 @@ import UserTabs from './UserTabs'
 import BankStatementTabs from './BankStatementTabs'
 import EmployeeTabs from './EmployeeTabs'
 //import ComboBox from './ComboBox'
-import ComboBox2 from './ComboBox2'
+import ComboBox from './ComboBox'
 //import Select from '@material-ui/core/Select'
 
 export const svgIcons = {
@@ -1658,7 +1658,7 @@ export const MasterfilesMainForm = (props) => {
           </CFormLabel>
         </Col>
         <Col sm="4">
-          <ComboBox2
+          <ComboBox
             id="account"
             sm="4"
             data={accData}
@@ -1689,7 +1689,6 @@ export const MasterfilesMainForm = (props) => {
             className="text-end w-50"
           />
         </Col>
-        )
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         {/* eslint-disable-next-line react/prop-types */}
