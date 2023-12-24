@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import { styled } from '@mui/material/styles'
-import { lightBlue } from '@mui/material/colors'
-//import { StyledEngineProvider } from '@mui/material/styles'
+import { sortById, sortByName } from '../utils/utils'
 
 const StyledAutocomplete = styled(Autocomplete)({
   '& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)': {
@@ -35,38 +34,36 @@ const StyledAutocomplete = styled(Autocomplete)({
   },
 })
 
-const sortByIdFn = (a, b) => {
-  if (a.id < b.id) {
-    return -1
-  }
-  if (a.id > b.id) {
-    return 1
-  }
-  return 0
-}
-const sortByNameFn = (a, b) => {
-  if (a.name < b.name) {
-    return -1
-  }
-  if (a.name > b.name) {
-    return 1
-  }
-  return 0
-}
+const listBox = (option, props) => (
+  <li
+    style={{
+      fontSize: 10,
+      // eslint-disable-next-line react/prop-types
+      backgroundColor: props['data-option-index'] % 2 === 0 ? '#DEEFFF' : 'lightblue',
+    }}
+  >
+    {option.id}&nbsp;&nbsp;&nbsp;{option.name}
+  </li>
+)
 export default function ComboBox(props) {
   // eslint-disable-next-line react/prop-types
-  const { id, data, onChange, value, placeholder } = props
+  const { id, data, onChange, value, placeholder, idCol } = props
+  const entryRef = useRef()
   return (
     <StyledAutocomplete
       fullWidth={true}
       id={id}
       /* eslint-disable-next-line react/prop-types */
-      options={data.sort(sortByIdFn)}
+      options={idCol ? data.sort(sortById) : data.sort(sortByName)}
       value={value}
-      autoSelect={true}
-      blurOnSelect={true}
+      //autoSelect={true}
+      //blurOnSelect={true}
       onChange={onChange}
       //groupBy={(item) => item.id.slice(0, 3)}
+      /* eslint-disable-next-line react/prop-types */
+      //getOptionSelected={(option, value) => option.id === value.id}
+      /* eslint-disable-next-line react/prop-types */
+      isOptionEqualToValue={(option, value) => option.id + value.name === value.id + value.name}
       getOptionLabel={(option) =>
         typeof option === 'string' ? option : option.id + ' ' + option.name
       }
@@ -74,13 +71,14 @@ export default function ComboBox(props) {
       style={{ height: 10 }}
       renderOption={(props, option) => (
         <li
+          {...props}
           style={{
             fontSize: 10,
             // eslint-disable-next-line react/prop-types
             backgroundColor: props['data-option-index'] % 2 === 0 ? '#DEEFFF' : 'lightblue',
           }}
         >
-          {option.id}&nbsp;&nbsp;&nbsp;{option.name}
+          {idCol ? `${option.id} ${option.name}` : `${option.name} ${option.id}`}
         </li>
       )}
       renderInput={(params) => {
@@ -93,10 +91,16 @@ export default function ComboBox(props) {
             fullWidth
             variant="standard"
             size="small"
+            inputRef={entryRef}
+            onChange={(e) => {
+              console.log('e.target.value', e.target.value)
+              entryRef.current.value = e.target.value
+            }}
           />
         )
       }}
       ListboxProps={{
+        props: { ...props },
         style: {
           maxHeight: '350px',
           border: '1px solid lightBlue',

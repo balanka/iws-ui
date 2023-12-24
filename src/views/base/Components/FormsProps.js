@@ -32,9 +32,7 @@ import RoleTabs from './RoleTabs'
 import UserTabs from './UserTabs'
 import BankStatementTabs from './BankStatementTabs'
 import EmployeeTabs from './EmployeeTabs'
-//import ComboBox from './ComboBox'
 import ComboBox from './ComboBox'
-//import Select from '@material-ui/core/Select'
 
 export const svgIcons = {
   plusCircle:
@@ -122,6 +120,7 @@ const mappingSelectName = (item) => (
     {item?.name.concat(' ').concat(item?.id)}
   </option>
 )
+const isNullOrUndef = (value) => value === null || value === 'undefined'
 export const CommonFormHead = (props) => {
   const {
     // eslint-disable-next-line react/prop-types
@@ -149,7 +148,7 @@ export const CommonFormHead = (props) => {
     // eslint-disable-next-line react/prop-types
     onNewSalaryItem,
   } = props
-  const isNullOrUndef = (value) => value === null || value === 'undefined'
+
   return (
     // eslint-disable-next-line react/prop-types
     <Grid container xs style={{ ...styles.header }} justify="flex-start">
@@ -694,6 +693,8 @@ export const FormWrapper = (props) => {
 export const AccountMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, t, accData, height } = props
+  // eslint-disable-next-line react/prop-types
+  const currentAccount = accData.find((acc) => acc.id === current.account)
   return (
     <>
       <CInputGroup row style={{ height: height }}>
@@ -702,7 +703,7 @@ export const AccountMainForm = (props) => {
             {t('common.id')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="2">
           <Input
             bssize="sm"
             type="text"
@@ -715,6 +716,7 @@ export const AccountMainForm = (props) => {
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
+        <Col sm="4" />
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.enterdate')}
@@ -742,7 +744,7 @@ export const AccountMainForm = (props) => {
             {t('common.name')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="6">
           <Input
             bssize="sm"
             type="text"
@@ -782,21 +784,35 @@ export const AccountMainForm = (props) => {
             {t('common.account')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
-          <CFormSelect
-            className="flex-row"
-            type="select"
-            name="account"
-            id="account-id"
-            size="sm"
-            style={{ height: 30 }}
+        <Col sm="2">
+          <ComboBox
+            id="account"
+            idCol={true}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
             value={current.account}
-            onChange={(event) => setCurrent({ ...current, account: event.target.value })}
-          >
-            {/* eslint-disable-next-line react/prop-types */}
-            {accData.sort(sortById).map((item) => mappingSelect(item))}
-          </CFormSelect>
+            placeholder={'account number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="accountName"
+            idCol={false}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentAccount ? currentAccount.name : ''}
+            placeholder={'account name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
+            }}
+          />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
@@ -825,7 +841,7 @@ export const AccountMainForm = (props) => {
             {t('common.company')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="2">
           <Input
             bssize="sm"
             type="text"
@@ -1666,8 +1682,7 @@ export const MasterfilesMainForm = (props) => {
             value={current.account}
             placeholder={'acc number'}
             onChange={(event, newValue) => {
-              console.log('newValue', newValue)
-              setCurrent({ ...current, account: newValue?.id })
+              setCurrent({ ...current, account: newValue?.id, account2: newValue?.name })
             }}
           />
         </Col>
@@ -2303,7 +2318,13 @@ export const CustomerAccountForm = (props) => {
         current.modelid === 3
         ? t('customer.account')
         : t('employee.account')
-
+  // eslint-disable-next-line react/prop-types
+  const currentAccount = accData.find((acc) => acc.id === current.account)
+  // eslint-disable-next-line react/prop-types
+  const currentOAccount = accData.find((acc) => acc.id === current.oaccount)
+  // eslint-disable-next-line react/prop-types
+  const currentVat = vatData.find((vat) => vat.id === current.vatcode)
+  console.log('currentVat>>', currentVat)
   const oaccountLabel =
     /* eslint-disable-next-line react/prop-types */
     current.modelid === 1
@@ -2326,35 +2347,34 @@ export const CustomerAccountForm = (props) => {
             {accountLabel}
           </CFormLabel>
         </Col>
-        <Col sm="4">
-          {/*<Select*/}
-          {/*  className="flex-row"*/}
-          {/*  type="select"*/}
-          {/*  name="oaccount"*/}
-          {/*  id="oaccount-id"*/}
-          {/* eslint-disable-next-line react/prop-types */}
-          {/*  value={current.account}*/}
-          {/*  onChange={(event) => setCurrent({ ...current, account: event.target.value })}*/}
-          {/*>*/}
-          {/*  /!* eslint-disable-next-line react/prop-types *!/*/}
-          {/*  {accData.sort(sortById).map((item) => mappingSelect(item))};*/}
-          {/*</Select>*/}
-          <CFormSelect
-            className="flex-row form-select-bg-size:16px 12px !default;"
-            type="select"
-            height="50"
-            name="account"
-            id="account-id"
-            size="sm"
-            //htmlSize={10}
-            style={{ height: 30 }}
-            /*eslint-disable-next-line react/prop-types*/
+        <Col sm="2">
+          <ComboBox
+            id="account"
+            idCol={true}
+            sm="4"
+            data={accData}
+            /* eslint-disable-next-line react/prop-types */
             value={current.account}
-            onChange={(event) => setCurrent({ ...current, account: event.target.value })}
-          >
-            {/* eslint-disable-next-line react/prop-types */}
-            {accData.map((item) => mappingSelect(item))}
-          </CFormSelect>
+            placeholder={'account number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="accountName"
+            idCol={false}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentAccount ? currentAccount.name : ''}
+            placeholder={'account name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
+            }}
+          />
         </Col>
         <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
@@ -2384,22 +2404,34 @@ export const CustomerAccountForm = (props) => {
             {oaccountLabel}
           </CFormLabel>
         </Col>
-        <Col sm="4">
-          <CFormSelect
-            className="flex-row"
-            type="select"
-            name="oaccount"
-            id="oaccount-id"
-            size="sm"
-            html-size={10}
-            style={{ height: 30 }}
+        <Col sm="2">
+          <ComboBox
+            id="oaccount"
+            idCol={true}
+            sm="4"
+            data={accData}
             /* eslint-disable-next-line react/prop-types */
             value={current.oaccount}
-            onChange={(event) => setCurrent({ ...current, oaccount: event.target.value })}
-          >
-            {/* eslint-disable-next-line react/prop-types */}
-            {accData.sort(sortById).map((item) => mappingSelect(item))}
-          </CFormSelect>
+            placeholder={' o acc number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, oaccount: newValue?.id, oaccountName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="oaccountName"
+            idCol={false}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentOAccount ? currentOAccount.name : ''}
+            placeholder={'oaccount name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, account: newValue?.id, oaccountName: newValue?.name })
+            }}
+          />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
@@ -2408,22 +2440,35 @@ export const CustomerAccountForm = (props) => {
             {t('common.vatCode')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
-          <CFormSelect
-            className="flex-row"
-            type="select"
-            name="vatcode"
-            id="vatcode-id"
-            size="sm"
-            html-size={10}
-            style={{ height: 30 }}
+        <Col sm="2">
+          <ComboBox
+            id="vatcode"
+            idCol={true}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={vatData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
             value={current.vatcode}
-            onChange={(event) => setCurrent({ ...current, vatcode: event.target.value })}
-          >
-            {/* eslint-disable-next-line react/prop-types */}
-            {vatData.sort(sortById).map((item) => mappingSelect(item))}
-          </CFormSelect>
+            placeholder={'vat code'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, vatcode: newValue?.id, vatName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="vatName"
+            idCol={false}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={vatData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentVat ? currentVat.name : ''}
+            placeholder={'vat name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, vatcode: newValue?.id, vatName: newValue?.name })
+            }}
+          />
         </Col>
       </CInputGroup>
     </Grid>
@@ -3009,41 +3054,35 @@ export const JournalMainForm = (props) => {
             {t('common.account')}
           </CFormLabel>
         </Col>
-        <Col sm="3">
-          <CFormSelect
-            className="flex-row"
-            type="select"
-            name="account"
+        <Col sm="2">
+          <ComboBox
             id="account-id"
-            size="sm"
-            style={{ height: 30, maxHeight: 100 }}
+            idCol={true}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
             value={current.account}
-            onChange={(event) => setCurrent({ ...current, account: event.target.value })}
-          >
-            <option key="*" value="*** All" />
-            {accData
-              // eslint-disable-next-line react/prop-types
-              .sort(sortById)
-              .map((item) => mappingSelect(item))}
-          </CFormSelect>
+            placeholder={'account number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, account: newValue?.id, account2: newValue?.name })
+            }}
+          />
         </Col>
-        <Col sm="4" style={{ paddingLeft: 10 }}>
-          <CFormSelect
-            className="flex-row"
-            type="select"
-            name="account2"
+        <Col sm="5" style={{ paddingLeft: 10 }}>
+          <ComboBox
             id="account2-id"
-            size="sm"
-            style={{ height: 30, maxHeight: 100 }}
+            idCol={false}
+            sm="4"
             /* eslint-disable-next-line react/prop-types */
-            value={current.account}
-            onChange={(event) => setCurrent({ ...current, account: event.target.value })}
-          >
-            <option key="-2" value="All 0000" />
-            {/* eslint-disable-next-line react/prop-types */}
-            {accData.sort(sortByName).map((item) => mappingSelectName(item))}
-          </CFormSelect>
+            data={accData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.account2}
+            placeholder={'account name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, account: newValue?.id, account2: newValue?.name })
+            }}
+          />
         </Col>
         <Col sm="0.5" style={{ align: 'right', padding: 2, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
@@ -3101,6 +3140,10 @@ export const JournalMainForm = (props) => {
 export const VatMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, t, accData, height } = props
+  // eslint-disable-next-line react/prop-types
+  const currentInputAccount = accData.find((acc) => acc.id === current.inputVatAccount)
+  // eslint-disable-next-line react/prop-types
+  const currentOutputAccount = accData.find((acc) => acc.id === current.outputVatAccount)
   return (
     <>
       <CInputGroup row style={{ height: height }}>
@@ -3187,21 +3230,43 @@ export const VatMainForm = (props) => {
             {t('vat.input_account')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
-          <CFormSelect
-            className="flex-row"
-            type="select"
-            name="inputaccount"
-            id="inputaccount-id"
-            size="sm"
-            style={{ height: 30, maxHeight: 100 }}
+        <Col sm="2">
+          <ComboBox
+            id="inputaccount"
+            idCol={true}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
             value={current.inputVatAccount}
-            onChange={(event) => setCurrent({ ...current, inputVatAccount: event.target.value })}
-          >
-            {/* eslint-disable-next-line react/prop-types */}
-            {accData.sort(sortById).map((item) => mappingSelect(item))}
-          </CFormSelect>
+            placeholder={'input vat account Nr'}
+            onChange={(event, newValue) => {
+              setCurrent({
+                ...current,
+                inputVatAccount: newValue?.id,
+                inputVatAccountName: newValue?.name,
+              })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="accountName"
+            idCol={false}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentInputAccount ? currentInputAccount.name : ''}
+            placeholder={'account name'}
+            onChange={(event, newValue) => {
+              setCurrent({
+                ...current,
+                inputVatAccount: newValue?.id,
+                inputVatAccountName: newValue?.name,
+              })
+            }}
+          />
         </Col>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
@@ -3229,21 +3294,43 @@ export const VatMainForm = (props) => {
             {t('vat.output_account')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
-          <CFormSelect
-            className="flex-row"
-            type="select"
-            name="outputaccount"
-            id="outputaccount-id"
-            size="sm"
-            style={{ height: 30, maxHeight: 100 }}
+        <Col sm="2">
+          <ComboBox
+            id="outputVataccount"
+            idCol={true}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
             value={current.outputVatAccount}
-            onChange={(event) => setCurrent({ ...current, outputVatAccount: event.target.value })}
-          >
-            {/* eslint-disable-next-line react/prop-types */}
-            {accData.sort(sortById).map((item) => mappingSelect(item))}
-          </CFormSelect>
+            placeholder={'output vat account Nr'}
+            onChange={(event, newValue) => {
+              setCurrent({
+                ...current,
+                outputVatAccount: newValue?.id,
+                outputVatAccountName: newValue?.name,
+              })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="outputVataccountName"
+            idCol={false}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentOutputAccount ? currentOutputAccount.name : ''}
+            placeholder={'Output vat account name'}
+            onChange={(event, newValue) => {
+              setCurrent({
+                ...current,
+                outputVatAccount: newValue?.id,
+                outputVatAccountName: newValue?.name,
+              })
+            }}
+          />
         </Col>
         <Col md="1">
           <CFormLabel size="sm" htmlFor="input-small">
