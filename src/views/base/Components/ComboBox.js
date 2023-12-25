@@ -61,8 +61,6 @@ export default function ComboBox(props) {
       onChange={onChange}
       //groupBy={(item) => item.id.slice(0, 3)}
       /* eslint-disable-next-line react/prop-types */
-      //getOptionSelected={(option, value) => option.id === value.id}
-      /* eslint-disable-next-line react/prop-types */
       isOptionEqualToValue={(option, value) => option.id + value.name === value.id + value.name}
       getOptionLabel={(option) =>
         typeof option === 'string' ? option : option.id + ' ' + option.name
@@ -72,6 +70,7 @@ export default function ComboBox(props) {
       renderOption={(props, option) => (
         <li
           {...props}
+          key={idCol ? option.id : option.name}
           style={{
             fontSize: 10,
             // eslint-disable-next-line react/prop-types

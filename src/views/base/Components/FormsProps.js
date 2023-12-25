@@ -1586,6 +1586,8 @@ export const AssetForm = (props) => {
 export const MasterfilesMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, t, accData, height } = props
+  // eslint-disable-next-line react/prop-types
+  const currentAccount = accData.find((acc) => acc.id === current.id)
   return (
     <>
       <CInputGroup row style={{ height: height }}>
@@ -1594,7 +1596,7 @@ export const MasterfilesMainForm = (props) => {
             {t('common.id')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="2">
           <Input
             bssize="sm"
             type="text"
@@ -1608,6 +1610,7 @@ export const MasterfilesMainForm = (props) => {
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
+        <Col sm="4" />
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
             {t('common.enterdate')}
@@ -1633,7 +1636,7 @@ export const MasterfilesMainForm = (props) => {
             {t('costcenter.name')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="6">
           <Input
             bssize="sm"
             type="text"
@@ -1673,19 +1676,49 @@ export const MasterfilesMainForm = (props) => {
             {t('common.account')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="2">
           <ComboBox
             id="account"
+            idCol={true}
             sm="4"
-            data={accData}
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
             value={current.account}
-            placeholder={'acc number'}
+            placeholder={'account number'}
             onChange={(event, newValue) => {
-              setCurrent({ ...current, account: newValue?.id, account2: newValue?.name })
+              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
             }}
           />
         </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="accountName"
+            idCol={false}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentAccount ? currentAccount.name : ''}
+            placeholder={'account name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
+            }}
+          />
+        </Col>
+        {/*<Col sm="4">*/}
+        {/*  <ComboBox*/}
+        {/*    id="account"*/}
+        {/*    sm="4"*/}
+        {/*    data={accData}*/}
+        {/*   eslint-disable-next-line react/prop-types */}
+        {/*    value={current.account}*/}
+        {/*    placeholder={'acc number'}*/}
+        {/*    onChange={(event, newValue) => {*/}
+        {/*      setCurrent({ ...current, account: newValue?.id, account2: newValue?.name })*/}
+        {/*    }}*/}
+        {/*  />*/}
+        {/*</Col>*/}
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
             {t('common.postingdate')}
@@ -1760,7 +1793,7 @@ export const MasterfilesMainForm2 = (props) => {
             {t('common.id')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="2">
           <Input
             bssize="sm"
             type="text"
@@ -1774,6 +1807,7 @@ export const MasterfilesMainForm2 = (props) => {
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
+        <Col sm="4" />
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
             {t('common.enterdate')}
@@ -1799,7 +1833,7 @@ export const MasterfilesMainForm2 = (props) => {
             {t('common.name')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="6">
           <Input
             bssize="sm"
             type="text"
@@ -1839,7 +1873,7 @@ export const MasterfilesMainForm2 = (props) => {
             {t('common.company')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="2">
           <Input
             disabled={true}
             bssize="sm"
@@ -1854,6 +1888,7 @@ export const MasterfilesMainForm2 = (props) => {
             readonly
           />
         </Col>
+        <Col sm="4" />
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
             {t('common.postingdate')}
