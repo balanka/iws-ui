@@ -343,6 +343,7 @@ export const FinancialsFormHead = (props) => {
     // eslint-disable-next-line react/prop-types
     current,
   } = props
+  console.log('module', module)
   // eslint-disable-next-line react/prop-types
   const posted = current ? current.posted : false
   return (
@@ -373,7 +374,7 @@ export const FinancialsFormHead = (props) => {
             /* eslint-disable-next-line react/prop-types */
             data={modules.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
-            value={module}
+            //value={module}
             placeholder={'Module number'}
             onChange={handleModuleChange}
           />
@@ -2354,7 +2355,6 @@ export const CustomerAccountForm = (props) => {
   const currentOAccount = accData.find((acc) => acc.id === current.oaccount)
   // eslint-disable-next-line react/prop-types
   const currentVat = vatData.find((vat) => vat.id === current.vatcode)
-  console.log('currentVat>>', currentVat)
   const oaccountLabel =
     /* eslint-disable-next-line react/prop-types */
     current.modelid === 1

@@ -55,7 +55,7 @@ export default function ComboBox(props) {
       getOptionLabel={(option) =>
         typeof option === 'string' ? option : option.id + ' ' + option.name
       }
-      style={{ height: 10 }}
+      style={{ height: 10, minWidth: 150 }}
       renderOption={(props, option) => (
         <li
           {...props}
