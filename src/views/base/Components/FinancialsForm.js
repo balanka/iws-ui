@@ -156,12 +156,12 @@ const FinancialsForm = (callback, deps) => {
     ccUrl && Get1(ccUrl, token, cc_modelid)
     url_ && Get1(url_, token, parseInt(modelid))
   }
-  const handleModuleChange = (event) => {
+  const handleModuleChange = (event, value) => {
     event.preventDefault()
-    setModel(event.target.value)
-    submitQuery(event, event.target.value)
-    const m = fModuleData.find((m) => m.id.toString() === event.target.value)
-    title_ = m?.name ? m.name : title_
+    setModel(value.id)
+    submitQuery(event, value.id)
+    const mx = fModuleData.find((m) => m.id === value.id)
+    title_ = mx?.name ? mx.name : title_
     setTitle(title_)
     setCurrent(current_)
   }

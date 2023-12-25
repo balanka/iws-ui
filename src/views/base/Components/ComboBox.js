@@ -34,17 +34,6 @@ const StyledAutocomplete = styled(Autocomplete)({
   },
 })
 
-const listBox = (option, props) => (
-  <li
-    style={{
-      fontSize: 10,
-      // eslint-disable-next-line react/prop-types
-      backgroundColor: props['data-option-index'] % 2 === 0 ? '#DEEFFF' : 'lightblue',
-    }}
-  >
-    {option.id}&nbsp;&nbsp;&nbsp;{option.name}
-  </li>
-)
 export default function ComboBox(props) {
   // eslint-disable-next-line react/prop-types
   const { id, data, onChange, value, placeholder, idCol } = props
@@ -52,12 +41,13 @@ export default function ComboBox(props) {
   return (
     <StyledAutocomplete
       fullWidth={true}
+      disableClearable
       id={id}
       /* eslint-disable-next-line react/prop-types */
       options={idCol ? data.sort(sortById) : data.sort(sortByName)}
       value={value}
-      //autoSelect={true}
-      //blurOnSelect={true}
+      autoSelect={true}
+      blurOnSelect={true}
       onChange={onChange}
       //groupBy={(item) => item.id.slice(0, 3)}
       /* eslint-disable-next-line react/prop-types */
@@ -65,7 +55,6 @@ export default function ComboBox(props) {
       getOptionLabel={(option) =>
         typeof option === 'string' ? option : option.id + ' ' + option.name
       }
-      //getOptionLabel={(option) => option?.id ?? option}
       style={{ height: 10 }}
       renderOption={(props, option) => (
         <li
