@@ -46,8 +46,8 @@ export default function ComboBox(props) {
       /* eslint-disable-next-line react/prop-types */
       options={idCol ? data.sort(sortById) : data.sort(sortByName)}
       value={value}
-      autoSelect={true}
-      blurOnSelect={true}
+      //autoSelect={true}
+      //blurOnSelect={true}
       onChange={onChange}
       //groupBy={(item) => item.id.slice(0, 3)}
       /* eslint-disable-next-line react/prop-types */

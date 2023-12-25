@@ -1702,19 +1702,6 @@ export const MasterfilesMainForm = (props) => {
             }}
           />
         </Col>
-        {/*<Col sm="4">*/}
-        {/*  <ComboBox*/}
-        {/*    id="account"*/}
-        {/*    sm="4"*/}
-        {/*    data={accData}*/}
-        {/*   eslint-disable-next-line react/prop-types */}
-        {/*    value={current.account}*/}
-        {/*    placeholder={'acc number'}*/}
-        {/*    onChange={(event, newValue) => {*/}
-        {/*      setCurrent({ ...current, account: newValue?.id, account2: newValue?.name })*/}
-        {/*    }}*/}
-        {/*  />*/}
-        {/*</Col>*/}
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
             {t('common.postingdate')}
