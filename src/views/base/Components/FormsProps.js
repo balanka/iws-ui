@@ -1737,7 +1737,7 @@ export const MasterfilesMainForm = (props) => {
             name="company"
             className="input-sm"
             placeholder="company"
-            style={{ height: 30, textAlign: 'right', padding: 2 }}
+            style={{ height: 30, padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
             readonly
@@ -1865,7 +1865,7 @@ export const MasterfilesMainForm2 = (props) => {
             name="company"
             className="input-sm"
             placeholder="company"
-            style={{ height: 30, textAlign: 'right', padding: 2 }}
+            style={{ height: 30, padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
             readonly
