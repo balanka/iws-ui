@@ -2833,9 +2833,9 @@ export const FinancialsMainForm = (props) => {
   let { current, current_, setCurrent, t, accData, ccData, height } = props
   current = current ? current : current_
   // eslint-disable-next-line react/prop-types
-  const currentAccount = accData.find((acc) => (acc.id = current.account))
+  const currentAccount = accData.find((acc) => acc.id === current.account)
   // eslint-disable-next-line react/prop-types
-  const currentCC = ccData.find((cc) => (cc.id = current.costcenter))
+  const currentCC = ccData.find((cc) => cc.id === current.costcenter)
   return (
     <>
       <CInputGroup row style={{ height: height }}>
@@ -3091,6 +3091,8 @@ export const FinancialsMainForm = (props) => {
 export const JournalMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, t, accData, submitQuery, height } = props
+  // eslint-disable-next-line react/prop-types
+  const currentAccount = accData.find((acc) => acc.id === current.account)
   return (
     <>
       <CInputGroup row style={{ height: height }}>
@@ -3122,7 +3124,7 @@ export const JournalMainForm = (props) => {
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
-            value={current.account2}
+            value={currentAccount ? currentAccount.name : ''}
             placeholder={'account name'}
             onChange={(event, newValue) => {
               setCurrent({ ...current, account: newValue?.id, account2: newValue?.name })
