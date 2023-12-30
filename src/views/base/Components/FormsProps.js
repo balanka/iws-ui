@@ -439,7 +439,6 @@ export const JournalFormHead = (props) => {
 }
 
 const getForm = (formId) => {
-  console.log('formId', formId)
   switch (formId) {
     case formEnum.ASSET:
       return AssetForm
@@ -485,36 +484,6 @@ const getForm = (formId) => {
       return AddressForm
     case formEnum.COMPANY_ACCOUNT_FORM:
       return CompanyAccountForm
-
-    // case formEnum.BUSINESS_PARTNER_GENERAL_INFO_FORM:
-    //   return (
-    //     <Grid container spacing={0.5} style={{...styles.inner, 'backgroundColor': blue}} direction='column'>
-    //       <CustomerGeneralForm current={props.current} setCurrent={props.setCurrent} t={props.t} height = {props.height} />
-    //     </Grid>
-    //   )
-    // case formEnum.COMPANY_GENERAL_INFO_FORM:
-    //   return (
-    //     <Grid container spacing={0.5} style={{...styles.inner, 'backgroundColor': blue}} direction='column'>
-    //       <CompanyGeneralForm current={props.current} setCurrent={props.setCurrent} t={props.t} height = {props.height} />
-    //     </Grid>
-    //   )
-    // case formEnum.BUSINESS_PARTNER_ACCOUNT_FORM:
-    //   return (
-    //     <Grid container spacing={0.5} style={{...styles.inner, 'backgroundColor': blue}} direction='column'>
-    //       <CustomerAccountForm current={props.current} setCurrent={props.setCurrent}
-    //                            t={props.t}  accData={props.accData} vatData={props.vatData} height = {props.height}/>
-    //     </Grid>
-    //   )
-    //
-    // case formEnum.COMPANY_ACCOUNT_FORM:
-    //   return (
-    //     <Grid container spacing={0.5} style={{...styles.inner, 'backgroundColor': blue}} direction='column'>
-    //       <CompanyAccountForm current={props.current} setCurrent={props.setCurrent}
-    //                           t={props.t}  accData={props.accData} vatData={props.vatData} height = {props.height}
-    //       />
-    //     </Grid>
-    //   )
-
     default:
       return <>NODATA</>
   }

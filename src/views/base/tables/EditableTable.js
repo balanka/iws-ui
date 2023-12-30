@@ -5,7 +5,6 @@ import tableIcons from './TableIcons.js'
 export default function EditableTable(props) {
   const handleClick = (event, rowData) => (edit ? edit(rowData) : void 0)
   // eslint-disable-next-line react/prop-types
-  console.log('props T', props)
   const {
     // eslint-disable-next-line react/prop-types
     Options, // eslint-disable-next-line react/prop-types

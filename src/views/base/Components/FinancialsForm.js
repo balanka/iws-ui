@@ -378,7 +378,7 @@ const FinancialsForm = (callback, deps) => {
                 toolbar: toolbar,
                 maxBodyHeight: '960px',
                 pageSize: 10,
-                pageSizeOptions: [10, 20, 50],
+                pageSizeOptions: [5, 10, 20, 50],
                 showFirstLastPageButtons: true,
               }}
               flag={current ? current.posted : false}
