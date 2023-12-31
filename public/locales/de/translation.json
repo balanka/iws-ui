@@ -163,7 +163,8 @@
   "employee": {
     "title": "Mitarbeiter",
     "account":  "Konto Mit.",
-    "oaccount": "Koto Geh."
+    "oaccount": "Konto Geh.",
+    "salary": " Bruttogehalt"
   },
   "supplier": {
     "title":    "Lieferant",

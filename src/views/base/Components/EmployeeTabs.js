@@ -6,13 +6,11 @@ import EditableTable from '../tables/EditableTable'
 import { formEnum } from '../utils/FORMS'
 import Grid from 'react-fast-grid'
 import { Add, Edit } from './CrudController'
-import { useStore } from './Menu'
 import { useTranslation } from 'react-i18next'
 import { styles } from '../Tree/BasicTreeTableProps'
 import { blue } from '@material-ui/core/colors'
 
 const EmployeeTabs = (props) => {
-  console.log('props', props)
   const {
     // eslint-disable-next-line react/prop-types
     formid,
@@ -35,15 +33,15 @@ const EmployeeTabs = (props) => {
     // eslint-disable-next-line react/prop-types
     tableRef2,
     // eslint-disable-next-line react/prop-types
-    // onNewBankAccount,
+    locale,
     // eslint-disable-next-line react/prop-types
-    // onNewSalaryItem,
+    currency,
+    // eslint-disable-next-line react/prop-types
+    token,
+    // eslint-disable-next-line react/prop-types
+    company,
   } = props
-  const { profile } = useStore()
   const { t } = useTranslation()
-  const { token, company, locale, currency } = profile
-  console.log('locale', locale)
-  console.log('accData', accData)
   const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
   const columnsY = (formid) => ColumnFactory(formid, accData, t, locale, currency)
   const addRow = (newData) => {
@@ -148,6 +146,8 @@ const EmployeeTabs = (props) => {
       current={current}
       setCurrent={setCurrent}
       t={t}
+      locale={locale}
+      currency={currency}
       height={35}
     />
   )
@@ -160,6 +160,8 @@ const EmployeeTabs = (props) => {
       t={t}
       accData={accData}
       vatData={vatData}
+      locale={locale}
+      currency={currency}
       height={35}
     />
   )

@@ -169,7 +169,8 @@
   "employee": {
     "title": "Employee",
     "account":  "Payable",
-    "oaccount": "charge acc."
+    "oaccount": "charge acc.",
+    "salary": " Gross salary"
   },
   "supplier": {
     "title": "Supplier",

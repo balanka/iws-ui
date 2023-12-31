@@ -6,20 +6,40 @@ import EditableTable from '../tables/EditableTable'
 import { formEnum } from '../utils/FORMS'
 import Grid from 'react-fast-grid'
 import { Add, Edit } from './CrudController'
-import { useStore } from './Menu'
-import { useTranslation } from 'react-i18next'
 import { styles } from '../Tree/BasicTreeTableProps'
 import { blue } from '@material-ui/core/colors'
 
 const CustomerTabs = (props) => {
   // eslint-disable-next-line react/prop-types
-  const { formid, current, setCurrent, accData, vatData, bankData, modifyUrl, data, tableRef } =
-    props
-  const { profile } = useStore()
-  const { t } = useTranslation()
-  const { token } = profile
-
-  const columnsX = (formid) => ColumnFactory(formid, bankData, t, profile.locale, profile.currency)
+  const {
+    // eslint-disable-next-line react/prop-types
+    formid,
+    // eslint-disable-next-line react/prop-types
+    current,
+    // eslint-disable-next-line react/prop-types
+    setCurrent,
+    // eslint-disable-next-line react/prop-types
+    accData,
+    // eslint-disable-next-line react/prop-types
+    vatData,
+    // eslint-disable-next-line react/prop-types
+    bankData,
+    // eslint-disable-next-line react/prop-types
+    modifyUrl,
+    // eslint-disable-next-line react/prop-types
+    data,
+    // eslint-disable-next-line react/prop-types
+    tableRef,
+    // eslint-disable-next-line react/prop-types
+    t,
+    // eslint-disable-next-line react/prop-types
+    locale,
+    // eslint-disable-next-line react/prop-types
+    currency,
+    // eslint-disable-next-line react/prop-types
+    token,
+  } = props
+  const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
   const addRow = (newData) => {
     const dx = { ...current }
     // eslint-disable-next-line react/prop-types

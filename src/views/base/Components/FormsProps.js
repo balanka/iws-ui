@@ -488,6 +488,94 @@ const getForm = (formId) => {
       return <>NODATA</>
   }
 }
+const companyGeneralInfoForm = (props) => (
+  <Grid
+    container
+    spacing={0.5}
+    style={{ ...styles.inner, backgroundColor: blue }}
+    direction="column"
+  >
+    <CompanyGeneralForm
+      /* eslint-disable-next-line react/prop-types */
+      current={props.current}
+      /* eslint-disable-next-line react/prop-types */
+      setCurrent={props.setCurrent}
+      /* eslint-disable-next-line react/prop-types */
+      t={props.t}
+      /* eslint-disable-next-line react/prop-types */
+      height={props.height}
+    />
+  </Grid>
+)
+const businessPartnerGeneralInfoForm = (props) => (
+  <Grid
+    container
+    spacing={0.5}
+    style={{ ...styles.inner, backgroundColor: blue }}
+    direction="column"
+  >
+    <CustomerGeneralForm
+      /* eslint-disable-next-line react/prop-types */
+      current={props.current}
+      /* eslint-disable-next-line react/prop-types */
+      setCurrent={props.setCurrent}
+      /* eslint-disable-next-line react/prop-types */
+      t={props.t}
+      /* eslint-disable-next-line react/prop-types */
+      height={props.height}
+    />
+  </Grid>
+)
+const businessPartnerAccountForm = (props) => (
+  <Grid
+    container
+    spacing={0.5}
+    style={{ ...styles.inner, backgroundColor: blue }}
+    direction="column"
+  >
+    <CustomerAccountForm
+      /* eslint-disable-next-line react/prop-types */
+      current={props.current}
+      /* eslint-disable-next-line react/prop-types */
+      setCurrent={props.setCurrent}
+      /* eslint-disable-next-line react/prop-types */
+      t={props.t}
+      /* eslint-disable-next-line react/prop-types */
+      locale={props.locale}
+      /* eslint-disable-next-line react/prop-types */
+      currency={props.currency}
+      /* eslint-disable-next-line react/prop-types */
+      accData={props.accData}
+      /* eslint-disable-next-line react/prop-types */
+      vatData={props.vatData}
+      /* eslint-disable-next-line react/prop-types */
+      height={props.height}
+    />
+  </Grid>
+)
+const companyAccountForm = (props) => (
+  <Grid
+    container
+    spacing={0.5}
+    style={{ ...styles.inner, backgroundColor: blue }}
+    direction="column"
+  >
+    <CompanyAccountForm
+      /* eslint-disable-next-line react/prop-types */
+      current={props.current}
+      /* eslint-disable-next-line react/prop-types */
+      setCurrent={props.setCurrent}
+      /* eslint-disable-next-line react/prop-types */
+      t={props.t}
+      /* eslint-disable-next-line react/prop-types */
+      accData={props.accData}
+      /* eslint-disable-next-line react/prop-types */
+      vatData={props.vatData}
+      /* eslint-disable-next-line react/prop-types */
+      height={props.height}
+    />
+  </Grid>
+)
 export const FormFactory = (props) => {
   // eslint-disable-next-line react/prop-types
   switch (props.formid) {
@@ -517,95 +605,13 @@ export const FormFactory = (props) => {
       // eslint-disable-next-line react/prop-types
       return <FormWrapper {...props} form={getForm(props.formid)} />
     case formEnum.BUSINESS_PARTNER_GENERAL_INFO_FORM:
-      return (
-        <Grid
-          container
-          spacing={0.5}
-          style={{ ...styles.inner, backgroundColor: blue }}
-          direction="column"
-        >
-          <CustomerGeneralForm
-            /* eslint-disable-next-line react/prop-types */
-            current={props.current}
-            /* eslint-disable-next-line react/prop-types */
-            setCurrent={props.setCurrent}
-            /* eslint-disable-next-line react/prop-types */
-            t={props.t}
-            /* eslint-disable-next-line react/prop-types */
-            height={props.height}
-          />
-        </Grid>
-      )
+      return businessPartnerGeneralInfoForm(props)
     case formEnum.COMPANY_GENERAL_INFO_FORM:
-      return (
-        <Grid
-          container
-          spacing={0.5}
-          style={{ ...styles.inner, backgroundColor: blue }}
-          direction="column"
-        >
-          <CompanyGeneralForm
-            /* eslint-disable-next-line react/prop-types */
-            current={props.current}
-            /* eslint-disable-next-line react/prop-types */
-            setCurrent={props.setCurrent}
-            /* eslint-disable-next-line react/prop-types */
-            t={props.t}
-            /* eslint-disable-next-line react/prop-types */
-            height={props.height}
-          />
-        </Grid>
-      )
+      return companyGeneralInfoForm(props)
     case formEnum.BUSINESS_PARTNER_ACCOUNT_FORM:
-      return (
-        <Grid
-          container
-          spacing={0.5}
-          style={{ ...styles.inner, backgroundColor: blue }}
-          direction="column"
-        >
-          <CustomerAccountForm
-            /* eslint-disable-next-line react/prop-types */
-            current={props.current}
-            /* eslint-disable-next-line react/prop-types */
-            setCurrent={props.setCurrent}
-            /* eslint-disable-next-line react/prop-types */
-            t={props.t}
-            /* eslint-disable-next-line react/prop-types */
-            accData={props.accData}
-            /* eslint-disable-next-line react/prop-types */
-            vatData={props.vatData}
-            /* eslint-disable-next-line react/prop-types */
-            height={props.height}
-          />
-        </Grid>
-      )
-
+      return businessPartnerAccountForm(props)
     case formEnum.COMPANY_ACCOUNT_FORM:
-      return (
-        <Grid
-          container
-          spacing={0.5}
-          style={{ ...styles.inner, backgroundColor: blue }}
-          direction="column"
-        >
-          <CompanyAccountForm
-            /* eslint-disable-next-line react/prop-types */
-            current={props.current}
-            /* eslint-disable-next-line react/prop-types */
-            setCurrent={props.setCurrent}
-            /* eslint-disable-next-line react/prop-types */
-            t={props.t}
-            /* eslint-disable-next-line react/prop-types */
-            accData={props.accData}
-            /* eslint-disable-next-line react/prop-types */
-            vatData={props.vatData}
-            /* eslint-disable-next-line react/prop-types */
-            height={props.height}
-          />
-        </Grid>
-      )
-
+      return companyAccountForm(props)
     default:
       return <>NODATA</>
   }
@@ -2128,7 +2134,6 @@ export const AddressForm = (props) => {
 export const CustomerGeneralForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, t, height } = props
-  console.log('props', props)
   return (
     <Grid
       container
@@ -2294,6 +2299,43 @@ export const CustomerGeneralForm = (props) => {
     </Grid>
   )
 }
+const salaryField = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, locale, currency, t } = props
+  /* eslint-disable-next-line react/prop-types */
+  return current.modelid === formEnum.EMPLOYEE ? (
+    <>
+      <Col sm="2" style={{ paddingLeft: 10 }}>
+        <CFormLabel size="sm" htmlFor="input-small">
+          {t('employee.salary')}
+        </CFormLabel>
+      </Col>
+      <Col sm="2">
+        <Input
+          bssize="sm"
+          type="text"
+          id="salary-id"
+          name="salary"
+          className="input-sm form-select-bg-size"
+          placeholder="salary"
+          disabled={false}
+          inputProps={{ type: 'number' }}
+          /* eslint-disable-next-line react/prop-types */
+          value={Number(current.salary).toLocaleString(locale, {
+            maximumFractionDigits: 2,
+            minimumFractionDigits: 2,
+            style: 'currency',
+            currency: currency,
+          })}
+          onChange={(event) => setCurrent({ ...current, salary: event.target.value })}
+          style={{ textAlign: 'right', padding: 2 }}
+        />
+      </Col>
+    </>
+  ) : (
+    <></>
+  )
+}
 export const CustomerAccountForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, t, accData, vatData, height } = props
@@ -2419,6 +2461,8 @@ export const CustomerAccountForm = (props) => {
             }}
           />
         </Col>
+        {/* eslint-disable-next-line react/prop-types */}
+        {current.modelid === formEnum.EMPLOYEE ? salaryField(props) : null}
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">

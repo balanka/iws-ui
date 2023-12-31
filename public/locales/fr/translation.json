@@ -158,7 +158,8 @@
   "employee": {
     "title":   "Employé",
     "account":  "Cpte employé",
-    "oaccount": "Cpte salaire"
+    "oaccount": "Cpte salaire",
+    "salary": "Salaire brut"
   },
   "supplier": {
     "title":    "Fournisseur",

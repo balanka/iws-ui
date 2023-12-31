@@ -133,16 +133,12 @@ const MasterfileForm = (callback, deps) => {
 
   const onNewBankAccount = () => {
     const ref = tableRef.current
-    console.log('ref', ref)
-    console.log('ref', ref.dataManager)
     ref.dataManager.changeRowEditing()
     ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
   }
 
   const onNewSalaryItem = () => {
     const ref = tableRef2.current
-    console.log('ref2', ref)
-    console.log('ref2', ref.dataManager)
     ref.dataManager.changeRowEditing()
     ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
   }
@@ -173,6 +169,8 @@ const MasterfileForm = (callback, deps) => {
           current={current}
           setCurrent={setCurrent}
           t={t}
+          locale={locale}
+          currency={currency}
           accData={accd}
           vatData={vatd}
           bankData={bankd}
