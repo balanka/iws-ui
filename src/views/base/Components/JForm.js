@@ -24,6 +24,7 @@ function Internal(
   initAcc,
   current,
   getUrl,
+  getUrlAll,
   setData,
   initialState,
   setIsDebit,
@@ -133,6 +134,13 @@ function Internal(
       ? Get(accUrl, profile, history, setAccData)
       : Get(getUrl(), profile, history, setData)
   }
+  const submitQuery2 = (event) => {
+    event.preventDefault()
+    console.log('getUrl()', getUrl())
+    accData?.length < 2
+      ? Get(accUrl, profile, history, setAccData)
+      : Get(getUrlAll(), profile, history, setData)
+  }
   function buildForm() {
     return (
       <Grid container spacing={1} style={{ ...styles.outer }} direction="column">
@@ -156,6 +164,7 @@ function Internal(
           collapse={state.collapse}
           styles={styles}
           submitQuery={submitQuery_}
+          submitQuery2={submitQuery2}
         />
         <Grid
           container
@@ -253,7 +262,8 @@ const JForm = () => {
       .concat(current.fromPeriod)
       .concat('/')
       .concat(current.toPeriod)
-
+  const getUrlAll = () =>
+    url.concat('/').concat(current.fromPeriod).concat('/').concat(current.toPeriod)
   return Internal(
     isDebit,
     t,
@@ -266,6 +276,7 @@ const JForm = () => {
     initAcc,
     current,
     getUrl,
+    getUrlAll,
     setData,
     initialState,
     setIsDebit,

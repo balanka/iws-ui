@@ -3103,7 +3103,7 @@ export const FinancialsMainForm = (props) => {
 }
 export const JournalMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, accData, submitQuery, height } = props
+  const { current, setCurrent, t, accData, submitQuery, submitQuery2, height } = props
   // eslint-disable-next-line react/prop-types
   const currentAccount = accData.find((acc) => acc.id === current.account)
   return (
@@ -3129,7 +3129,7 @@ export const JournalMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="5" style={{ paddingLeft: 10 }}>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
           <ComboBox
             id="account2-id"
             idCol={false}
@@ -3189,6 +3189,17 @@ export const JournalMainForm = (props) => {
             color="primary"
             style={{ align: 'right' }}
             onClick={submitQuery}
+          >
+            <i className="fa fa-dot-circle-o"></i>
+          </Button>
+        </Col>
+        <Col sm="1" style={{ paddingLeft: 10, align: 'right' }}>
+          <Button
+            type="submit"
+            size="sm"
+            color="primary"
+            style={{ align: 'right' }}
+            onClick={submitQuery2}
           >
             <i className="fa fa-dot-circle-o"></i>
           </Button>
