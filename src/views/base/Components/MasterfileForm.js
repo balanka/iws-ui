@@ -20,7 +20,9 @@ const MasterfileForm = (callback, deps) => {
   const tableRef2 = createRef()
   const [state, setState] = useState({ collapse: true, fadeIn: true, timeout: 300 })
   const [toolbar, setToolbar] = useState(true)
-
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [disable, setDisable] = useState(true)
+  console.log('disable>>>>>', disable)
   console.log('menu>>>>>', menu)
   console.log('selected>>>>>', selected)
   console.log('locale>>>>>', locale)
@@ -30,12 +32,15 @@ const MasterfileForm = (callback, deps) => {
   if (typeof module_ === 'undefined' || !module_ || module_.id === '11111')
     return navigate('/login')
   const url =
-    module_.ctx === MASTERFILE.comp ? module_.ctx : module_.ctx.concat('/').concat(company)
+    module_.ctx === MASTERFILE.comp
+      ? module_.ctx
+      : module_.ctx.concat('/').concat(module_.id).concat('/').concat(company)
   const accUrl = MASTERFILE.acc.concat('/').concat(company)
   const vatUrl = MASTERFILE.vat.concat('/').concat(company)
-  const bankUrl = MASTERFILE.bank.concat('/').concat(company)
+  //const bankUrl = MASTERFILE.bank.concat('/').concat(company)
+  const bankUrl = MASTERFILE.masterfile.concat('/').concat(module_.id).concat('/').concat(company)
   const moduleUrl = MASTERFILE.module.concat('/').concat(company)
-  const modifyUrl = selected
+  const modifyUrl = module_.ctx //selected
   const initialState = module_.state
   const current_ = initialState[0]
   const title = t(module_.title)
@@ -62,9 +67,10 @@ const MasterfileForm = (callback, deps) => {
 
   const submitEdit = (event) => {
     event.preventDefault()
-    if (current.editing) {
+    if (!disable) {
       delete current.editing
       Edit(modifyUrl, token, { ...current }, data, setCurrent)
+      setDisable(true)
     } else submitAdd(event)
   }
   const reload = () => {
@@ -161,11 +167,14 @@ const MasterfileForm = (callback, deps) => {
           reload={reload}
           toggle={toggle}
           toggleToolbar={toggleToolbar}
+          setDisable={setDisable}
+          disable={disable}
           style={{ ...styles.inner }}
         />
 
         <FormFactory
           formid={modelid_}
+          disable={disable}
           current={current}
           setCurrent={setCurrent}
           t={t}

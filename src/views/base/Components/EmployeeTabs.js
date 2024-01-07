@@ -40,6 +40,8 @@ const EmployeeTabs = (props) => {
     token,
     // eslint-disable-next-line react/prop-types
     company,
+    // eslint-disable-next-line react/prop-types
+    disable,
   } = props
   const { t } = useTranslation()
   const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
@@ -149,6 +151,7 @@ const EmployeeTabs = (props) => {
       locale={locale}
       currency={currency}
       height={35}
+      disable={disable}
     />
   )
 
@@ -163,6 +166,7 @@ const EmployeeTabs = (props) => {
       locale={locale}
       currency={currency}
       height={35}
+      disable={disable}
     />
   )
 

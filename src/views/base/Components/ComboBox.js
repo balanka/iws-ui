@@ -36,13 +36,14 @@ const StyledAutocomplete = styled(Autocomplete)({
 
 export default function ComboBox(props) {
   // eslint-disable-next-line react/prop-types
-  const { id, data, onChange, value, placeholder, idCol } = props
+  const { id, data, onChange, value, placeholder, idCol, disable } = props
   const entryRef = useRef()
   return (
     <StyledAutocomplete
       fullWidth={true}
       disableClearable
       id={id}
+      disabled={disable}
       /* eslint-disable-next-line react/prop-types */
       options={idCol ? data.sort(sortById) : data.sort(sortByName)}
       value={value}

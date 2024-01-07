@@ -2,6 +2,7 @@ import axios from 'axios'
 import { MASTERFILE, MENU } from './Menu'
 import iwsStore from './Store'
 import React from 'react'
+import { formEnum } from '../utils/FORMS'
 
 const API_SERVER_PORT = 8091
 const SERVER_URL = 'http://127.0.0.1:'.concat(API_SERVER_PORT)
@@ -86,7 +87,11 @@ const Login = (
       const company = response.data.company
       let currency = ''
       let locale = ''
-      const moduleURL = SERVER_URL.concat(MASTERFILE.module).concat('/').concat(data.company)
+      const moduleURL = SERVER_URL.concat(MASTERFILE.module)
+        .concat('/')
+        .concat(formEnum.MODULE)
+        .concat('/')
+        .concat(data.company)
       const companyURL = SERVER_URL.concat(MASTERFILE.comp).concat('/').concat(data.company)
       axios.get(companyURL, { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
         const company_ = response.data

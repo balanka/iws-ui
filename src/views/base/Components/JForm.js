@@ -209,7 +209,7 @@ const JForm = () => {
     return navigate('/login')
 
   const url = module_.ctx.concat('/').concat(company)
-  const accUrl = MASTERFILE.acc.concat('/').concat(company)
+  const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
   const initAcc = module_.state1
   const initialState = module_.state
   const ALL = { ...initialState, id: '*', name: '**ALL**' }

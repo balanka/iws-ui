@@ -23,13 +23,19 @@ const FinancialsForm = (callback, deps) => {
 
   if (typeof module_ === 'undefined' || !module_ || module_.id === '11111')
     return navigate('/login')
-  console.log('module_', module_)
-  console.log('typeof module_', typeof module_)
   const modifyUrl = selected
   const url = module_.ctx.concat('/').concat(company)
-  const accUrl = MASTERFILE.acc.concat('/').concat(company)
-  const ccUrl = MASTERFILE.cc.concat('/').concat(company)
-  const fmoduleUrl = MASTERFILE.fmodule.concat('/').concat(company)
+  const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
+  const ccUrl = MASTERFILE.masterfile
+    .concat('/')
+    .concat(formEnum.COSTCENTER)
+    .concat('/')
+    .concat(company)
+  const fmoduleUrl = MASTERFILE.fmodule
+    .concat('/')
+    .concat(formEnum.FMODULE)
+    .concat('/')
+    .concat(company)
   const acc_modelid = parseInt(ACCOUNT(t).id)
   const cc_modelid = parseInt(COSTCENTER(t).id)
   const fmodule_modelid = parseInt(FMODULE(t).id)

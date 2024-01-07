@@ -22,7 +22,7 @@ const BasicTreeTable = () => {
     return navigate('/login')
   if (module_.id === '0') navigate.push('/login')
   const url = module_.ctx.concat('/').concat(company)
-  const accUrl = MASTERFILE.acc.concat('/').concat(company)
+  const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
   const initAcc = module_.state1
   const initialState = module_.state
 

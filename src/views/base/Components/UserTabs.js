@@ -11,7 +11,7 @@ import { styles } from '../Tree/BasicTreeTableProps'
 import { blue } from '@material-ui/core/colors'
 const UserTabs = (props) => {
   // eslint-disable-next-line react/prop-types
-  const { formid, current, setCurrent, modifyUrl, data } = props
+  const { formid, current, setCurrent, disable, modifyUrl, data } = props
   const { profile } = useStore()
   const { t } = useTranslation()
   const { token } = profile
@@ -93,7 +93,7 @@ const UserTabs = (props) => {
       style={{ ...styles.inner, backgroundColor: blue }}
       direction="column"
     >
-      <UserForm current={current} setCurrent={setCurrent} t={t} height={35} />
+      <UserForm current={current} setCurrent={setCurrent} t={t} height={35} disable={disable} />
     </Grid>
   )
 

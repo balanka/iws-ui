@@ -38,6 +38,8 @@ const CustomerTabs = (props) => {
     currency,
     // eslint-disable-next-line react/prop-types
     token,
+    /* eslint-disable-next-line react/prop-types */
+    disable,
   } = props
   const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
   const addRow = (newData) => {
@@ -110,6 +112,7 @@ const CustomerTabs = (props) => {
       setCurrent={setCurrent}
       t={t}
       height={35}
+      disable={disable}
     />
   )
 
@@ -122,6 +125,7 @@ const CustomerTabs = (props) => {
       accData={accData}
       vatData={vatData}
       height={35}
+      disable={disable}
     />
   )
   const getTable = (formid) => (

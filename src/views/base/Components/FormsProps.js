@@ -143,6 +143,10 @@ export const CommonFormHead = (props) => {
     onNewBankAccount,
     // eslint-disable-next-line react/prop-types
     onNewSalaryItem,
+    // eslint-disable-next-line react/prop-types
+    disable,
+    // eslint-disable-next-line react/prop-types
+    setDisable,
   } = props
 
   return (
@@ -211,6 +215,7 @@ export const CommonFormHead = (props) => {
             <FontAwesomeIcon icon={faSpinner} rotation={90} />
           </Button>
         </div>
+        {wrapIcon('Edit', svgIcons.plusCircle, () => setDisable(!disable), false)}
         <div className="card-header-actions" style={{ align: 'right' }}>
           <Button color="link" className="card-header-action btn-minimize" onClick={() => toggle()}>
             <FontAwesomeIcon icon={collapse ? faAngleDoubleUp : faAngleDoubleDown} />
@@ -504,6 +509,8 @@ const companyGeneralInfoForm = (props) => (
       t={props.t}
       /* eslint-disable-next-line react/prop-types */
       height={props.height}
+      /* eslint-disable-next-line react/prop-types */
+      disable={props.disable}
     />
   </Grid>
 )
@@ -523,6 +530,8 @@ const businessPartnerGeneralInfoForm = (props) => (
       t={props.t}
       /* eslint-disable-next-line react/prop-types */
       height={props.height}
+      /* eslint-disable-next-line react/prop-types */
+      disable={props.disable}
     />
   </Grid>
 )
@@ -550,6 +559,8 @@ const businessPartnerAccountForm = (props) => (
       vatData={props.vatData}
       /* eslint-disable-next-line react/prop-types */
       height={props.height}
+      /* eslint-disable-next-line react/prop-types */
+      disable={props.disable}
     />
   </Grid>
 )
@@ -573,6 +584,8 @@ const companyAccountForm = (props) => (
       vatData={props.vatData}
       /* eslint-disable-next-line react/prop-types */
       height={props.height}
+      /* eslint-disable-next-line react/prop-types */
+      disable={props.disable}
     />
   </Grid>
 )
@@ -659,7 +672,7 @@ export const FormWrapper = (props) => {
 
 export const AccountMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, accData, height } = props
+  const { current, setCurrent, disable, t, accData, height } = props
   // eslint-disable-next-line react/prop-types
   const currentAccount = accData.find((acc) => acc.id === current.account)
   return (
@@ -678,6 +691,7 @@ export const AccountMainForm = (props) => {
             name="id"
             className="input-sm"
             placeholder="Id"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
@@ -719,6 +733,7 @@ export const AccountMainForm = (props) => {
             name="name"
             className="input-sm"
             placeholder="Name"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.name}
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
@@ -756,6 +771,7 @@ export const AccountMainForm = (props) => {
             id="account"
             idCol={true}
             sm="4"
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -771,6 +787,7 @@ export const AccountMainForm = (props) => {
             id="accountName"
             idCol={false}
             sm="4"
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -816,6 +833,7 @@ export const AccountMainForm = (props) => {
             name="company"
             className="input-sm"
             placeholder="company"
+            disabled={true}
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
             onChange={(event) => setCurrent({ ...current, company: event.target.value })}
@@ -827,6 +845,7 @@ export const AccountMainForm = (props) => {
             name="isDebit"
             control={
               <Switch
+                disabled={disable}
                 /* eslint-disable-next-line react/prop-types */
                 checked={current.isDebit}
                 onChange={(event) => setCurrent({ ...current, isDebit: event.target.checked })}
@@ -842,6 +861,7 @@ export const AccountMainForm = (props) => {
             name="balancesheet"
             control={
               <Switch
+                disabled={disable}
                 /* eslint-disable-next-line react/prop-types */
                 checked={current.balancesheet}
                 onChange={(event) => setCurrent({ ...current, balancesheet: event.target.checked })}
@@ -859,6 +879,7 @@ export const AccountMainForm = (props) => {
             name="currency"
             className="input-sm"
             placeholder="currency"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.currency}
             onChange={(event) => setCurrent({ ...current, currency: event.target.value })}
@@ -876,6 +897,7 @@ export const AccountMainForm = (props) => {
             id="description-id"
             rows="1"
             placeholder="Content..."
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
@@ -1552,7 +1574,7 @@ export const AssetForm = (props) => {
 }
 export const MasterfilesMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, accData, height } = props
+  const { current, setCurrent, disable, t, accData, height } = props
   // eslint-disable-next-line react/prop-types
   const id = current.modelid === formEnum.SALARY_ITEM ? current.account : current.id
   // eslint-disable-next-line react/prop-types
@@ -1576,6 +1598,8 @@ export const MasterfilesMainForm = (props) => {
             className="input-sm"
             placeholder="Id"
             style={{ height: 30 }}
+            /* eslint-disable-next-line no-undef */
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
@@ -1590,7 +1614,8 @@ export const MasterfilesMainForm = (props) => {
         <Col sm="2">
           <CDatePicker
             size="sm"
-            disabled={true}
+            /* eslint-disable-next-line no-undef */
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             selected={Date.parse(current.enterdate)}
             label={t('common.enterdate')}
@@ -1616,6 +1641,8 @@ export const MasterfilesMainForm = (props) => {
             className="input-sm"
             placeholder="Name"
             style={{ height: 30 }}
+            /* eslint-disable-next-line no-undef */
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.name}
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
@@ -1652,6 +1679,8 @@ export const MasterfilesMainForm = (props) => {
             id="account"
             idCol={true}
             sm="4"
+            /* eslint-disable-next-line no-undef */
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -1667,6 +1696,8 @@ export const MasterfilesMainForm = (props) => {
             id="accountName"
             idCol={false}
             sm="4"
+            /* eslint-disable-next-line no-undef */
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -1731,6 +1762,8 @@ export const MasterfilesMainForm = (props) => {
             rows="1"
             placeholder="Content..."
             style={{ height: 30 }}
+            /* eslint-disable-next-line no-undef */
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
@@ -1742,7 +1775,7 @@ export const MasterfilesMainForm = (props) => {
 }
 export const MasterfilesMainForm2 = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, height } = props
+  const { current, setCurrent, disable, t, height } = props
   return (
     <>
       <CInputGroup row style={{ height: height }}>
@@ -1760,6 +1793,7 @@ export const MasterfilesMainForm2 = (props) => {
             className="input-sm"
             placeholder="Id"
             style={{ height: 30 }}
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
@@ -1800,6 +1834,7 @@ export const MasterfilesMainForm2 = (props) => {
             className="input-sm"
             placeholder="Name"
             style={{ height: 30 }}
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.name}
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
@@ -1878,6 +1913,7 @@ export const MasterfilesMainForm2 = (props) => {
             rows="1"
             placeholder="Content..."
             style={{ height: 30 }}
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
@@ -1889,7 +1925,7 @@ export const MasterfilesMainForm2 = (props) => {
 }
 export const UserForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, height } = props
+  const { current, setCurrent, disable, t, height } = props
   return (
     <>
       <CInputGroup row style={{ height: height }}>
@@ -1906,6 +1942,7 @@ export const UserForm = (props) => {
             name="id"
             className="input-sm"
             placeholder="Id"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
@@ -1924,6 +1961,7 @@ export const UserForm = (props) => {
             name="role"
             className="input-sm"
             placeholder="role"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.role}
             onChange={(event) => setCurrent({ ...current, role: event.target.value })}
@@ -1944,6 +1982,7 @@ export const UserForm = (props) => {
             name="userName"
             className="input-sm"
             placeholder="Name"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.userName}
             onChange={(event) => setCurrent({ ...current, userName: event.target.value })}
@@ -1961,6 +2000,7 @@ export const UserForm = (props) => {
             id="firstName-id"
             name="firstName"
             className="input-sm"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.firstName}
             onChange={(event) => setCurrent({ ...current, firstName: event.target.value })}
@@ -1980,6 +2020,7 @@ export const UserForm = (props) => {
             id="lastName-id"
             name="lastName"
             className="input-sm"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.lastName}
             onChange={(event) => setCurrent({ ...current, lastName: event.target.value })}
@@ -1997,6 +2038,7 @@ export const UserForm = (props) => {
             id="email-id"
             name="email"
             className="input-sm"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.email}
             onChange={(event) => setCurrent({ ...current, email: event.target.value })}
@@ -2037,6 +2079,7 @@ export const UserForm = (props) => {
             id="menu-id"
             name="menu"
             className="input-sm"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.menu}
             onChange={(event) => setCurrent({ ...current, menu: event.target.value })}
@@ -2048,7 +2091,7 @@ export const UserForm = (props) => {
 }
 export const AddressForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, height } = props
+  const { current, setCurrent, disable, t, height } = props
   return (
     <>
       <CInputGroup row style={{ height: height }}>
@@ -2065,6 +2108,7 @@ export const AddressForm = (props) => {
             name="street"
             className="input-sm"
             placeholder="Id"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.street}
             onChange={(event) => setCurrent({ ...current, street: event.target.value })}
@@ -2083,6 +2127,7 @@ export const AddressForm = (props) => {
             name="zip"
             className="input-sm"
             placeholder="zip"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.zip}
             onChange={(event) => setCurrent({ ...current, zip: event.target.value })}
@@ -2103,6 +2148,7 @@ export const AddressForm = (props) => {
             name="city"
             className="input-sm"
             placeholder="Name"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.city}
             onChange={(event) => setCurrent({ ...current, city: event.target.value })}
@@ -2121,6 +2167,7 @@ export const AddressForm = (props) => {
             name="country"
             className="input-sm"
             placeholder="country"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.country}
             onChange={(event) => setCurrent({ ...current, country: event.target.value })}
@@ -2133,7 +2180,7 @@ export const AddressForm = (props) => {
 }
 export const CustomerGeneralForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, height } = props
+  const { current, setCurrent, disable, t, height } = props
   return (
     <Grid
       container
@@ -2156,6 +2203,7 @@ export const CustomerGeneralForm = (props) => {
             name="id"
             className="input-sm"
             placeholder="Id"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
@@ -2195,6 +2243,7 @@ export const CustomerGeneralForm = (props) => {
             name="name"
             className="input-sm"
             placeholder="Name"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.name}
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
@@ -2234,6 +2283,7 @@ export const CustomerGeneralForm = (props) => {
             name="currency"
             className="input-sm"
             placeholder="Currency"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.currency}
             onChange={(event) => setCurrent({ ...current, currency: event.target.value })}
@@ -2273,6 +2323,7 @@ export const CustomerGeneralForm = (props) => {
             name="phone"
             className="input-sm"
             placeholder="phone"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.phone}
             onChange={(event) => setCurrent({ ...current, phone: event.target.value })}
@@ -2290,6 +2341,7 @@ export const CustomerGeneralForm = (props) => {
             id="description-id"
             rows="1"
             placeholder="Content..."
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
@@ -2301,7 +2353,7 @@ export const CustomerGeneralForm = (props) => {
 }
 const salaryField = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, locale, currency, t } = props
+  const { current, setCurrent, disable, locale, currency, t } = props
   /* eslint-disable-next-line react/prop-types */
   return current.modelid === formEnum.EMPLOYEE ? (
     <>
@@ -2318,7 +2370,7 @@ const salaryField = (props) => {
           name="salary"
           className="input-sm form-select-bg-size"
           placeholder="salary"
-          disabled={false}
+          disabled={disable}
           inputProps={{ type: 'number' }}
           /* eslint-disable-next-line react/prop-types */
           value={Number(current.salary).toLocaleString(locale, {
@@ -2338,7 +2390,7 @@ const salaryField = (props) => {
 }
 export const CustomerAccountForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, accData, vatData, height } = props
+  const { current, setCurrent, disable, t, accData, vatData, height } = props
   const accountLabel =
     /* eslint-disable-next-line react/prop-types */
     current.modelid === 1
@@ -2381,6 +2433,7 @@ export const CustomerAccountForm = (props) => {
             idCol={true}
             sm="4"
             data={accData}
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.account}
             placeholder={'account number'}
@@ -2394,6 +2447,7 @@ export const CustomerAccountForm = (props) => {
             id="accountName"
             idCol={false}
             sm="4"
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -2438,6 +2492,7 @@ export const CustomerAccountForm = (props) => {
             idCol={true}
             sm="4"
             data={accData}
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.oaccount}
             placeholder={' o acc number'}
@@ -2451,6 +2506,7 @@ export const CustomerAccountForm = (props) => {
             id="oaccountName"
             idCol={false}
             sm="4"
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -2475,6 +2531,7 @@ export const CustomerAccountForm = (props) => {
             id="vatcode"
             idCol={true}
             sm="4"
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={vatData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -2490,6 +2547,7 @@ export const CustomerAccountForm = (props) => {
             id="vatName"
             idCol={false}
             sm="4"
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={vatData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -2506,7 +2564,7 @@ export const CustomerAccountForm = (props) => {
 }
 export const CompanyGeneralForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, height } = props
+  const { current, setCurrent, disable, t, height } = props
   console.log('props', props)
   return (
     <Grid
@@ -2530,6 +2588,7 @@ export const CompanyGeneralForm = (props) => {
             name="id"
             className="input-sm"
             placeholder="Id"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
@@ -2569,6 +2628,7 @@ export const CompanyGeneralForm = (props) => {
             name="name"
             className="input-sm"
             placeholder="Name"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.name}
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
@@ -2605,6 +2665,7 @@ export const CompanyGeneralForm = (props) => {
             id="description-id"
             rows="1"
             placeholder="Content..."
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
@@ -2616,7 +2677,7 @@ export const CompanyGeneralForm = (props) => {
 }
 export const CompanyAccountForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, accData, vatData, height } = props
+  const { current, setCurrent, disable, t, accData, vatData, height } = props
 
   return (
     <>
@@ -2633,6 +2694,7 @@ export const CompanyAccountForm = (props) => {
             name="bankAcc"
             id="bankAcc-id"
             size="sm"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.bankAcc}
@@ -2674,6 +2736,7 @@ export const CompanyAccountForm = (props) => {
             type="select"
             name="paymentClearingAcc"
             id="paymentClearingAcc-id"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.paymentClearingAcc}
             onChange={(event) => setCurrent({ ...current, paymentClearingAcc: event.target.value })}
@@ -2695,6 +2758,7 @@ export const CompanyAccountForm = (props) => {
             id="settlementClearingAcc-id"
             size="sm"
             style={{ height: 30 }}
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.settlementClearingAcc}
             onChange={(event) =>
@@ -2719,6 +2783,7 @@ export const CompanyAccountForm = (props) => {
             name="cashAcc"
             id="cashAcc-id"
             size="sm"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.cashAcc}
@@ -2740,6 +2805,7 @@ export const CompanyAccountForm = (props) => {
             name="purchasingClearingAcc"
             id="purchasingClearingAcc-id"
             size="sm"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.purchasingClearingAcc}
@@ -2765,6 +2831,7 @@ export const CompanyAccountForm = (props) => {
             name="balanceSheetAcc"
             id="balanceSheetAcc-id"
             size="sm"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.balanceSheetAcc}
@@ -2786,6 +2853,7 @@ export const CompanyAccountForm = (props) => {
             name="incomeStmtAcc"
             id="incomeStmtAcc-id"
             size="sm"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.incomeStmtAcc}
@@ -2809,6 +2877,7 @@ export const CompanyAccountForm = (props) => {
             name="vatcode"
             id="vatcode-id"
             size="sm"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.vatCode}
@@ -2831,6 +2900,7 @@ export const CompanyAccountForm = (props) => {
             name="ibanid"
             className="input-sm"
             placeholder="Id"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.iban}
             onChange={(event) => setCurrent({ ...current, iban: event.target.value })}
@@ -3210,7 +3280,7 @@ export const JournalMainForm = (props) => {
 }
 export const VatMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, accData, height } = props
+  const { current, setCurrent, disable, t, accData, height } = props
   // eslint-disable-next-line react/prop-types
   const currentInputAccount = accData.find((acc) => acc.id === current.inputVatAccount)
   // eslint-disable-next-line react/prop-types
@@ -3231,6 +3301,7 @@ export const VatMainForm = (props) => {
             name="id"
             className="input-sm"
             placeholder="Id"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
@@ -3270,6 +3341,7 @@ export const VatMainForm = (props) => {
             name="name"
             className="input-sm"
             placeholder="Name"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.name}
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
@@ -3306,6 +3378,7 @@ export const VatMainForm = (props) => {
             id="inputaccount"
             idCol={true}
             sm="4"
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -3325,6 +3398,7 @@ export const VatMainForm = (props) => {
             id="accountName"
             idCol={false}
             sm="4"
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3370,6 +3444,7 @@ export const VatMainForm = (props) => {
             id="outputVataccount"
             idCol={true}
             sm="4"
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -3389,6 +3464,7 @@ export const VatMainForm = (props) => {
             id="outputVataccountName"
             idCol={false}
             sm="4"
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3416,6 +3492,7 @@ export const VatMainForm = (props) => {
             name="percent"
             className="input-sm"
             placeholder="percent"
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.percent}
             onChange={(event) => setCurrent({ ...current, percent: event.target.value })}
@@ -3451,6 +3528,7 @@ export const VatMainForm = (props) => {
             id="description-id"
             rows="1"
             placeholder="Content..."
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
