@@ -630,22 +630,6 @@ export const FormFactory = (props) => {
   }
 }
 
-export const FormWrapper2 = (props) => {
-  // eslint-disable-next-line react/prop-types
-  const { form } = props
-  console.log('props', props)
-  return (
-    <Grid
-      container
-      spacing={0.5}
-      style={{ ...styles.inner, backgroundColor: lightGreen }}
-      direction="column"
-    >
-      <>{form(props)}</>
-    </Grid>
-  )
-}
-
 export const FormWrapper = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { form, table, collapse } = props
@@ -692,6 +676,7 @@ export const AccountMainForm = (props) => {
             className="input-sm"
             placeholder="Id"
             disabled={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
@@ -734,6 +719,7 @@ export const AccountMainForm = (props) => {
             className="input-sm"
             placeholder="Name"
             disabled={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.name}
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
@@ -834,6 +820,7 @@ export const AccountMainForm = (props) => {
             className="input-sm"
             placeholder="company"
             disabled={true}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
             onChange={(event) => setCurrent({ ...current, company: event.target.value })}
@@ -846,10 +833,10 @@ export const AccountMainForm = (props) => {
             control={
               <Switch
                 disabled={disable}
+                style={{ height: 30, paddingLeft: 2 }}
                 /* eslint-disable-next-line react/prop-types */
                 checked={current.isDebit}
                 onChange={(event) => setCurrent({ ...current, isDebit: event.target.checked })}
-                style={{ paddingLeft: 2 }}
               />
             }
             label={t('account.debit_credit')}
@@ -862,10 +849,10 @@ export const AccountMainForm = (props) => {
             control={
               <Switch
                 disabled={disable}
+                style={{ height: 30, paddingLeft: 2 }}
                 /* eslint-disable-next-line react/prop-types */
                 checked={current.balancesheet}
                 onChange={(event) => setCurrent({ ...current, balancesheet: event.target.checked })}
-                style={{ paddingLeft: 2 }}
               />
             }
             label={t('account.balancesheet')}
@@ -880,6 +867,7 @@ export const AccountMainForm = (props) => {
             className="input-sm"
             placeholder="currency"
             disabled={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.currency}
             onChange={(event) => setCurrent({ ...current, currency: event.target.value })}
@@ -898,6 +886,7 @@ export const AccountMainForm = (props) => {
             rows="1"
             placeholder="Content..."
             disabled={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
@@ -1309,6 +1298,7 @@ export const AssetForm = (props) => {
             name="id"
             className="input-sm"
             placeholder="Id"
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
@@ -1323,6 +1313,7 @@ export const AssetForm = (props) => {
           <CDatePicker
             size="sm"
             disabled={true}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             selected={Date.parse(current.enterdate)}
             label={t('common.enterdate')}
@@ -1348,6 +1339,7 @@ export const AssetForm = (props) => {
             name="name"
             className="input-sm"
             placeholder="Name"
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.name}
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
@@ -1362,6 +1354,7 @@ export const AssetForm = (props) => {
           <CDatePicker
             size="sm"
             disabled={true}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             selected={Date.parse(current.changedate)}
             label={t('common.changedate')}
@@ -1404,6 +1397,7 @@ export const AssetForm = (props) => {
           <CDatePicker
             size="sm"
             disabled={true}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             selected={Date.parse(current.postingdate)}
             label={t('common.postingdate')}
@@ -1453,7 +1447,7 @@ export const AssetForm = (props) => {
             placeholder="company"
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
-            style={{ textAlign: 'right', padding: 2 }}
+            style={{ height: 30, textAlign: 'right', padding: 2 }}
             readonly
           />
         </Col>
@@ -1472,7 +1466,7 @@ export const AssetForm = (props) => {
             name="scrap_value"
             className="input-sm"
             placeholder="scrap_value"
-            style={{ textAlign: 'right', padding: 2 }}
+            style={{ height: 30, textAlign: 'right', padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.scrapValue}
             onChange={(event) => setCurrent({ ...current, scrap_value: event.target.value })}
@@ -1491,7 +1485,7 @@ export const AssetForm = (props) => {
             name="life_span"
             className="input-sm"
             placeholder="life span"
-            style={{ textAlign: 'right', padding: 2 }}
+            style={{ height: 30, textAlign: 'right', padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.lifeSpan}
             onChange={(event) => setCurrent({ ...current, life_span: event.target.value })}
@@ -1512,7 +1506,7 @@ export const AssetForm = (props) => {
             name="depreciation"
             className="input-sm"
             placeholder="depreciation"
-            style={{ textAlign: 'right', padding: 2 }}
+            style={{ height: 30, textAlign: 'right', padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.depMethod}
             onChange={(event) => setCurrent({ ...current, dep_Method: event.target.value })}
@@ -1531,7 +1525,7 @@ export const AssetForm = (props) => {
             name="frequency"
             className="input-sm"
             placeholder="frequency"
-            style={{ textAlign: 'right', padding: 2 }}
+            style={{ height: 30, textAlign: 'right', padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.frequency}
             onChange={(event) => setCurrent({ ...current, frequency: event.target.value })}
@@ -1545,7 +1539,7 @@ export const AssetForm = (props) => {
             name="rate"
             className="input-sm"
             placeholder="rate"
-            style={{ textAlign: 'right', padding: 2 }}
+            style={{ height: 30, textAlign: 'right', padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.rate}
             onChange={(event) => setCurrent({ ...current, rate: event.target.value })}
@@ -1579,8 +1573,6 @@ export const MasterfilesMainForm = (props) => {
   const id = current.modelid === formEnum.SALARY_ITEM ? current.account : current.id
   // eslint-disable-next-line react/prop-types
   const currentAccount = accData.find((acc) => acc.id === id)
-  console.log('current', current)
-  console.log('currentAccount', currentAccount)
   return (
     <>
       <CInputGroup row style={{ height: height }}>
@@ -3293,7 +3285,7 @@ export const VatMainForm = (props) => {
             {t('common.id')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="2">
           <Input
             bssize="sm"
             type="text"
@@ -3302,12 +3294,14 @@ export const VatMainForm = (props) => {
             className="input-sm"
             placeholder="Id"
             disabled={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="4" />
+        <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('vat.enterdate')}
           </CFormLabel>
@@ -3316,6 +3310,7 @@ export const VatMainForm = (props) => {
           <CDatePicker
             size="sm"
             disabled={true}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             selected={Date.parse(current.enterdate)}
             label={t('common.enterdate')}
@@ -3342,12 +3337,14 @@ export const VatMainForm = (props) => {
             className="input-sm"
             placeholder="Name"
             disabled={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.name}
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" />
+        <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('vat.changedate')}
           </CFormLabel>
@@ -3356,6 +3353,7 @@ export const VatMainForm = (props) => {
           <CDatePicker
             size="sm"
             disabled={true}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             selected={Date.parse(current.changedate)}
             label={t('common.changedate')}
@@ -3379,6 +3377,7 @@ export const VatMainForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -3399,6 +3398,7 @@ export const VatMainForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3422,6 +3422,7 @@ export const VatMainForm = (props) => {
           <CDatePicker
             size="sm"
             disabled={true}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             selected={Date.parse(current.postingdate)}
             label={t('common.postingdate')}
@@ -3445,6 +3446,7 @@ export const VatMainForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -3465,6 +3467,7 @@ export const VatMainForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3493,6 +3496,7 @@ export const VatMainForm = (props) => {
             className="input-sm"
             placeholder="percent"
             disabled={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.percent}
             onChange={(event) => setCurrent({ ...current, percent: event.target.value })}
@@ -3512,6 +3516,7 @@ export const VatMainForm = (props) => {
             name="company"
             className="input-sm"
             placeholder="company"
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
           />
@@ -3529,6 +3534,7 @@ export const VatMainForm = (props) => {
             rows="1"
             placeholder="Content..."
             disabled={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}

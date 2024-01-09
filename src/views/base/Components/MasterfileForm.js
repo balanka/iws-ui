@@ -22,23 +22,21 @@ const MasterfileForm = (callback, deps) => {
   const [toolbar, setToolbar] = useState(true)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [disable, setDisable] = useState(true)
-  console.log('disable>>>>>', disable)
-  console.log('menu>>>>>', menu)
-  console.log('selected>>>>>', selected)
-  console.log('locale>>>>>', locale)
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : LOGIN(t)
-  console.log('module_>>>>>', module_)
   if (typeof module_ === 'undefined' || !module_ || module_.id === '11111')
     return navigate('/login')
   const url =
     module_.ctx === MASTERFILE.comp
       ? module_.ctx
       : module_.ctx.concat('/').concat(module_.id).concat('/').concat(company)
-  const accUrl = MASTERFILE.acc.concat('/').concat(company)
-  const vatUrl = MASTERFILE.vat.concat('/').concat(company)
-  //const bankUrl = MASTERFILE.bank.concat('/').concat(company)
-  const bankUrl = MASTERFILE.masterfile.concat('/').concat(module_.id).concat('/').concat(company)
+  const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
+  const vatUrl = MASTERFILE.vat.concat('/').concat(formEnum.VAT).concat('/').concat(company)
+  const bankUrl = MASTERFILE.masterfile
+    .concat('/')
+    .concat(formEnum.BANK)
+    .concat('/')
+    .concat(company)
   const moduleUrl = MASTERFILE.module.concat('/').concat(company)
   const modifyUrl = module_.ctx //selected
   const initialState = module_.state
@@ -62,12 +60,16 @@ const MasterfileForm = (callback, deps) => {
   const submitAdd = (event) => {
     event.preventDefault()
     delete current.editing
+    console.log('modifyUrl', modifyUrl)
+    console.log('current add ', current)
     Add(modifyUrl, token, { ...current }, data, setCurrent)
   }
 
   const submitEdit = (event) => {
     event.preventDefault()
-    if (!disable) {
+    console.log('disable', disable)
+    console.log('current', current)
+    if (current.editing && !disable) {
       delete current.editing
       Edit(modifyUrl, token, { ...current }, data, setCurrent)
       setDisable(true)
@@ -96,21 +98,25 @@ const MasterfileForm = (callback, deps) => {
   const toggleToolbar = () => setToolbar(!toolbar)
   const toggle = () => setState({ ...state, collapse: !state.collapse })
   const setSelectedRows = (rows_) => setRows(rows_.map((item) => item.id))
-  const initAdd = () =>
-    EditRow(
-      { ...initialState[0], company: company, currency: currency, editing: false },
-      true,
-      setCurrent,
-    )
-  const cancelEdit = (e) => initAdd()
+  const initAdd = () => {
+    setDisable(false)
+    const newRow = { ...initialState[0], company: company, currency: currency, editing: false }
+    EditRow(newRow, true, setCurrent)
+    console.log('current', current)
+  }
+  const cancelEdit = (e) => {
+    initAdd()
+  }
   const columns = ColumnFactory(modelid_, iwsState.get(modelid_), t, locale, currency)
   const edit = (editedRow) => {
     const isArray = Array.isArray(editedRow) && editedRow.length > 0
     const row = isArray ? editedRow[0] : editedRow
+    console.log('row', row)
     if (row) {
       const record = data.find((obj) => obj.id === row.id)
       setCurrent({ ...record, editing: true })
     }
+    console.log('row', current)
   }
 
   const isNotArrayOrEmpty = (array) => !Array.isArray(array) || !array.length

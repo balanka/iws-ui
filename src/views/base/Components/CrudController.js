@@ -215,7 +215,7 @@ const Get2 = (url, token, setCurrent) => {
 }
 
 const EditRow = (edited, isNew, setCurrent) => {
-  const flag = edited.id === -1 || !isNew
+  const flag = !isNew
   const row = { ...edited, editing: flag }
   setCurrent(row)
 }

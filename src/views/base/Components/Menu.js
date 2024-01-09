@@ -415,7 +415,7 @@ export const initBank = [
     postingdate: date,
     changedate: date,
     modelid: 11,
-    account: '-1',
+    parent: '-1',
     company: '',
   },
 ]
@@ -454,7 +454,7 @@ export const initCC = [
     postingdate: date,
     changedate: date,
     modelid: 6,
-    account: '-1',
+    parent: '-1',
     company: '',
   },
 ]
