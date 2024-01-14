@@ -23,6 +23,7 @@ const StyledAutocomplete = styled(Autocomplete)({
     },
     '& .MuiOutlinedInput-notchedOutline': {
       borderColor: 'white',
+      // borderColor: '#1E5EF3',
     },
     '&:hover .MuiOutlinedInput-notchedOutline': {
       borderColor: 'red',
@@ -77,6 +78,7 @@ export default function ComboBox(props) {
             placeholder={placeholder}
             value={value}
             id="combo=text-id"
+            disabled={disable}
             fullWidth
             variant="standard"
             size="small"

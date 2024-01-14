@@ -2347,37 +2347,37 @@ const salaryField = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, locale, currency, t } = props
   /* eslint-disable-next-line react/prop-types */
-  return current.modelid === formEnum.EMPLOYEE ? (
-    <>
-      <Col sm="2" style={{ paddingLeft: 10 }}>
-        <CFormLabel size="sm" htmlFor="input-small">
-          {t('employee.salary')}
-        </CFormLabel>
-      </Col>
-      <Col sm="2">
-        <Input
-          bssize="sm"
-          type="text"
-          id="salary-id"
-          name="salary"
-          className="input-sm form-select-bg-size"
-          placeholder="salary"
-          disabled={disable}
-          inputProps={{ type: 'number' }}
-          /* eslint-disable-next-line react/prop-types */
-          value={Number(current.salary).toLocaleString(locale, {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2,
-            style: 'currency',
-            currency: currency,
-          })}
-          onChange={(event) => setCurrent({ ...current, salary: event.target.value })}
-          style={{ textAlign: 'right', padding: 2 }}
-        />
-      </Col>
-    </>
-  ) : (
-    <></>
+  return (
+    current.modelid === formEnum.EMPLOYEE && (
+      <>
+        <Col sm="2" style={{ paddingLeft: 10 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('employee.salary')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            bssize="sm"
+            type="text"
+            id="salary-id"
+            name="salary"
+            className="input-sm form-select-bg-size"
+            placeholder="salary"
+            disabled={disable}
+            inputProps={{ type: 'number' }}
+            /* eslint-disable-next-line react/prop-types */
+            value={Number(current.salary).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            onChange={(event) => setCurrent({ ...current, salary: event.target.value })}
+            style={{ textAlign: 'right', padding: 2 }}
+          />
+        </Col>
+      </>
+    )
   )
 }
 export const CustomerAccountForm = (props) => {
@@ -2729,6 +2729,7 @@ export const CompanyAccountForm = (props) => {
             name="paymentClearingAcc"
             id="paymentClearingAcc-id"
             disabled={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.paymentClearingAcc}
             onChange={(event) => setCurrent({ ...current, paymentClearingAcc: event.target.value })}

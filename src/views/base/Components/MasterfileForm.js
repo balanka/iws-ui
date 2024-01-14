@@ -56,19 +56,19 @@ const MasterfileForm = (callback, deps) => {
   const datax = iwsState.get(modelid_)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const data = typeof datax === 'undefined' ? [] : datax
+  const isNotArrayOrEmpty = (array) => !Array.isArray(array) || !array.length
+  const accd = iwsState.get(acc_modelId) ?? []
+  const bankd = iwsState.get(bank_modelId) ?? []
+  const vatd = iwsState.get(vat_modelId) ?? []
 
   const submitAdd = (event) => {
     event.preventDefault()
     delete current.editing
-    console.log('modifyUrl', modifyUrl)
-    console.log('current add ', current)
     Add(modifyUrl, token, { ...current }, data, setCurrent)
   }
 
   const submitEdit = (event) => {
     event.preventDefault()
-    console.log('disable', disable)
-    console.log('current', current)
     if (current.editing && !disable) {
       delete current.editing
       Edit(modifyUrl, token, { ...current }, data, setCurrent)
@@ -102,7 +102,6 @@ const MasterfileForm = (callback, deps) => {
     setDisable(false)
     const newRow = { ...initialState[0], company: company, currency: currency, editing: false }
     EditRow(newRow, true, setCurrent)
-    console.log('current', current)
   }
   const cancelEdit = (e) => {
     initAdd()
@@ -111,19 +110,11 @@ const MasterfileForm = (callback, deps) => {
   const edit = (editedRow) => {
     const isArray = Array.isArray(editedRow) && editedRow.length > 0
     const row = isArray ? editedRow[0] : editedRow
-    console.log('row', row)
     if (row) {
       const record = data.find((obj) => obj.id === row.id)
       setCurrent({ ...record, editing: true })
     }
-    console.log('row', current)
   }
-
-  const isNotArrayOrEmpty = (array) => !Array.isArray(array) || !array.length
-  const accd = iwsState.get(acc_modelId) ?? []
-  const bankd = iwsState.get(bank_modelId) ?? []
-  const vatd = iwsState.get(vat_modelId) ?? []
-
   const load = (event) => submitQuery(event)
   const submitQuery = (event) => {
     event.preventDefault()
