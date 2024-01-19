@@ -89,7 +89,14 @@ const FinancialsForm = (callback, deps) => {
       submitAdd(event)
     }
   }
-
+  const submitCanceln = (event) => {
+    event.preventDefault()
+    toggleEdit()
+    const url_ = modifyUrl.replace('ftr', 'cancelnFtr')
+    console.log('url_???', url_)
+    // eslint-disable-next-line no-unused-expressions
+    current.id > 0 ? Edit(url_, token, current, data(), setCurrent) : current
+  }
   // eslint-disable-next-line react-hooks/rules-of-hooks,react-hooks/exhaustive-deps
   const handleKeyPress = useCallback((event) => {
     if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
@@ -351,6 +358,7 @@ const FinancialsForm = (callback, deps) => {
           initialState={initialState}
           cancelEdit={cancelEdit}
           submitEdit={submitEdit}
+          submitCanceln={submitCanceln}
           module={model}
           modules={fModuleData}
           handleModuleChange={handleModuleChange}
