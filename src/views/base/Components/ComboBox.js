@@ -53,7 +53,10 @@ export default function ComboBox(props) {
       onChange={onChange}
       //groupBy={(item) => item.id.slice(0, 3)}
       /* eslint-disable-next-line react/prop-types */
-      isOptionEqualToValue={(option, value) => option.id + value.name === value.id + value.name}
+      isOptionEqualToValue={(option, value) =>
+        // eslint-disable-next-line react/prop-types
+        typeof option != 'undefined' && option ? false : option.id === value.id
+      }
       getOptionLabel={(option) =>
         typeof option === 'string' ? option : option.id + ' ' + option.name
       }

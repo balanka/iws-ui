@@ -19,11 +19,11 @@ const iwsStore = {
   },
   update: (key, id, message) => {
     const temp = store.get(key)
-    const temp1 = temp ? temp : new Set()
+    const temp1 = temp ? Array.from(temp) : []
     const idx = temp1.findIndex((obj) => obj.id === id)
     if (idx !== -1) {
       temp1[idx] = message
-      store.set(key, [...temp1])
+      store.set(key, new Set(temp1))
       store = new Map([...store.entries()])
       subject.next(store)
     }

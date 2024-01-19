@@ -53,6 +53,7 @@ const BankStatementForm = () => {
     data,
     setData,
     current || current_,
+    current_,
     setCurrent,
     title,
     state,
@@ -78,6 +79,7 @@ function internal(
   data,
   setData,
   current,
+  current_,
   setCurrent,
   title,
   state,
@@ -109,9 +111,12 @@ function internal(
       .concat(rows.join(','))
     Get2(url_, token, setCurrent)
   }
+
   const reload = () => {
     iwsStore.deleteKey(current.modelid)
+    console.log('url', url)
     url && Get1(url, token, parseInt(current.modelid))
+    setCurrent(current_)
   }
   const importData = () => {
     const url_ = module_.ctx
