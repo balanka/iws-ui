@@ -334,6 +334,8 @@ export const FinancialsFormHead = (props) => {
     // eslint-disable-next-line react/prop-types
     submitEdit,
     // eslint-disable-next-line react/prop-types
+    submitCanceln,
+    // eslint-disable-next-line react/prop-types
     toggle,
     // eslint-disable-next-line react/prop-types
     submitCopy,
@@ -384,12 +386,13 @@ export const FinancialsFormHead = (props) => {
             onChange={handleModuleChange}
           />
         </div>
-        {wrapIcon('Reload', svgIcons.refresh, reload, false)}
-        {wrapIcon('Copy', svgIcons.copyContent, submitCopy, posted)}
-        {wrapIcon('Add new line', svgIcons.libraryAdd, onNewLine, posted)}
+        {wrapIcon('Reload all transaction', svgIcons.refresh, reload, false)}
+        {wrapIcon('Copy transaction', svgIcons.copyContent, submitCopy, posted)}
+        {wrapIcon('Add new line transaction', svgIcons.libraryAdd, onNewLine, posted)}
         {wrapIcon('Cancel editing', svgIcons.highlightOff, (e) => cancelEdit(e), posted)}
-        {wrapIcon('Add new entry', svgIcons.addCircleOutline, initAdd, false)}
-        {wrapIcon('Save entry', svgIcons.save, (e) => submitEdit(e), posted)}
+        {wrapIcon('Add new transaction', svgIcons.addCircleOutline, initAdd, false)}
+        {wrapIcon('Save transaction', svgIcons.save, (e) => submitEdit(e), posted)}
+        {wrapIcon('Canceln transaction', svgIcons.save, (e) => submitCanceln(e), false)}
         {wrapIcon('Post', svgIcons.done, submitPost, posted)}
         <div className="card-header-actions">
           <Button
