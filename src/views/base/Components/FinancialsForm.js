@@ -133,24 +133,22 @@ const FinancialsForm = (callback, deps) => {
     setRows(rows_.map((item) => ({ id: item.id, modelid: item.modelid })))
   }
 
-  function getAccountAndLabel() {
-    const model_ = fModuleData.find((obj) => obj.id === parseInt(model))
-    const account_ = model_ ? model_.account : undefined
-    const accountLabel_ = model_.isDebit ? 'account' : 'oaccount'
-    const oaccount_ = account_ ? '' : model_.account
-    const oaccountLabel_ = account_ ? 'oaccount' : 'account'
-    return { account_, accountLabel_, oaccount_, oaccountLabel_ }
-  }
+  // function getAccountAndLabel() {
+  //   const model_ = fModuleData.find((obj) => obj.id === parseInt(model))
+  //   const account_ = model_ ? model_.account : undefined
+  //   const accountLabel_ = model_.isDebit ? 'account' : 'oaccount'
+  //   const oaccount_ = account_ ? '' : model_.account
+  //   const oaccountLabel_ = account_ ? 'oaccount' : 'account'
+  //   return { account_, accountLabel_, oaccount_, oaccountLabel_ }
+  // }
 
   const initAdd = () => {
-    const { account_, accountLabel_, oaccount_, oaccountLabel_ } = getAccountAndLabel()
+    //const { account_, accountLabel_, oaccount_, oaccountLabel_ } = getAccountAndLabel()
     const line = [
       {
         ...current_.lines[0],
         id: -1,
         transid: current_.id1,
-        [accountLabel_]: account_,
-        [oaccountLabel_]: oaccount_,
       },
     ]
     const record = { ...current_, modelid: parseInt(model), lines: line }
@@ -240,10 +238,7 @@ const FinancialsForm = (callback, deps) => {
 
   const addRow = async (newData) => {
     if (newData) {
-      const { account_, accountLabel_, oaccount_ } = getAccountAndLabel()
       const dx = { ...current }
-      const oaccount = oaccount_ ? oaccount_ : newData.oaccount
-      const oaccountLabel = oaccount_ ? 'oaccount' : 'account'
       const dx1 =
         current.lines.length === 0
           ? {
@@ -254,8 +249,6 @@ const FinancialsForm = (callback, deps) => {
                   ...newData,
                   id: -1,
                   transid: current.id1,
-                  [accountLabel_]: account_,
-                  [oaccountLabel]: oaccount,
                 },
               ],
             }

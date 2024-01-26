@@ -158,7 +158,6 @@ const BasicTreeTable = () => {
             Options={{
               ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),
               selection: false,
-              grouping: true,
               toolbar: toolbar,
               exportAllData: true,
             }}
