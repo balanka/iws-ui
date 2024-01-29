@@ -96,6 +96,7 @@ export function IwsIcon(props) {
     </SvgIcon>
   )
 }
+
 const wrapIcon = (title, icon, action, isDisabled) => (
   <div className="card-header-actions">
     <Button
@@ -106,6 +107,19 @@ const wrapIcon = (title, icon, action, isDisabled) => (
       onClick={action}
     >
       <IwsIcon style={{ style: styles.imageIcon, textAlign: 'end' }} d={icon} />
+    </Button>
+  </div>
+)
+const wrapFontAwesomeIcon = (title, icon, action, isDisabled) => (
+  <div className="card-header-actions">
+    <Button
+      color="link"
+      disabled={isDisabled}
+      className="card-header-action btn-minimize"
+      title={title}
+      onClick={action}
+    >
+      <FontAwesomeIcon icon={icon} />
     </Button>
   </div>
 )
@@ -148,7 +162,8 @@ export const CommonFormHead = (props) => {
     // eslint-disable-next-line react/prop-types
     setDisable,
   } = props
-
+  console.log('disable', disable)
+  console.log('isNullOrUndef(onNewBankAccount)', isNullOrUndef(onNewBankAccount) || disable)
   return (
     // eslint-disable-next-line react/prop-types
     <Grid container xs style={{ ...styles.header }} justify="flex-start">
@@ -168,27 +183,28 @@ export const CommonFormHead = (props) => {
         alignItems="right"
       >
         {wrapIcon('Reload', svgIcons.refresh, reload, false)}
-        <div className="card-header-actions">
-          <Button
-            color="link"
-            className="card-header-action btn-minimize"
-            title="Cancel edit"
-            onClick={(e) => cancelEdit(e)}
-          >
-            <FontAwesomeIcon icon={faWindowClose} />
-          </Button>
-        </div>
+        {wrapFontAwesomeIcon('Cancel edit', faWindowClose, (e) => cancelEdit(e), disable)}
+        {/*<div className="card-header-actions">*/}
+        {/*  <Button*/}
+        {/*    color="link"*/}
+        {/*    className="card-header-action btn-minimize"*/}
+        {/*    title="Cancel edit"*/}
+        {/*    onClick={(e) => cancelEdit(e)}*/}
+        {/*  >*/}
+        {/*    <FontAwesomeIcon icon={faWindowClose} />*/}
+        {/*  </Button>*/}
+        {/*</div>*/}
         {wrapIcon(
           'Add Bank Account',
           svgIcons.libraryAdd,
           onNewBankAccount,
-          isNullOrUndef(onNewBankAccount),
+          isNullOrUndef(onNewBankAccount) || disable,
         )}
         {wrapIcon(
           'Add salary item ',
           svgIcons.libraryAdd,
           onNewSalaryItem,
-          isNullOrUndef(onNewSalaryItem),
+          isNullOrUndef(onNewSalaryItem) || disable,
         )}
         {wrapIcon('Add Item', svgIcons.plusCircle, initAdd, false)}
         <div className="card-header-actions">
@@ -2914,7 +2930,10 @@ export const FinancialsMainForm = (props) => {
   // eslint-disable-next-line react/prop-types
   const currentAccount = accData.find((acc) => acc.id === current.account)
   // eslint-disable-next-line react/prop-types
-  const currentCC = ccData.find((cc) => cc.id === current.costcenter)
+  const ccData_ = ccData ? ccData : []
+  console.log('ccData_', ccData_)
+  // eslint-disable-next-line react/prop-types
+  const currentCC = ccData_.find((cc) => cc.id === current.costcenter)
   return (
     <>
       <CInputGroup row style={{ height: height }}>

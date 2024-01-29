@@ -40,8 +40,8 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     field: 'id',
     title: t('common.iban'),
     initialEditValue: '',
-    minWidth: 40,
-    maxWidth: 100,
+    minWidth: 200,
+    maxWidth: 300,
     export: true,
   },
   {
@@ -51,6 +51,7 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     editComponent: (tableData) => Autocomplete(data, tableData, true),
     initialEditValue: '',
     minWidth: 100,
+    maxWidth: 200,
     align: 'right',
     export: true,
   },
@@ -58,7 +59,8 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     field: 'owner',
     title: t('common.owner'),
     initialEditValue: '',
-    minWidth: 5,
+    minWidth: 30,
+    maxWidth: 100,
     export: true,
   },
   {
@@ -502,7 +504,7 @@ export const Options = {
   showTitle: false,
   padding: 'dense',
   filtering: false,
-  search: false,
+  //search: false,
   selection: false,
   cellStyle: { padding: '0.3em', fontSize: 10 },
   headerStyle: {

@@ -132,7 +132,17 @@ const CustomerTabs = (props) => {
     <Grid container spacing={0.5} style={{ ...styles.innerX, backgroundColor: blue }}>
       <EditableTable
         id="bankaccouts"
-        Options={{ ...Options, tableLayout: 'auto', paging: false, tableWidth: 'full' }}
+        Options={{
+          ...Options,
+          tableLayout: 'auto',
+          // eslint-disable-next-line react/prop-types
+          paging: current.bankaccounts.length > 5,
+          // eslint-disable-next-line react/prop-types
+          search: true,
+          pageSizeOptions: [5, 10, 20],
+          //showFirstLastPageButtons: false,
+          //tableWidth: 'full',
+        }}
         flag={false}
         /* eslint-disable-next-line react/prop-types */
         data={current ? current.bankaccounts : []}

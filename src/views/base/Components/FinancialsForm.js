@@ -65,6 +65,8 @@ const FinancialsForm = (callback, deps) => {
   const fModuleData = iwsState.get(fmodule_modelid) ?? []
   const accData = iwsState.get(acc_modelid) ?? [...initAcc]
   const ccData = iwsState.get(cc_modelid) ?? [...initCc]
+  console.log('ccData', ccData)
+  console.log('accData', accData)
 
   const columnsX = Linescolumns(accData, initLine, current, fModuleData, model, t, locale, currency)
   const columns = columnsF(ccData, initLine, current, t, locale, currency)
