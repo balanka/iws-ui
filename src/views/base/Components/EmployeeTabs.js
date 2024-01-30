@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from '../tabs/Tabs'
-import { AddressForm, FormFactory } from './FormsProps'
+import { AddressForm, FormFactory, FormWrapper } from './FormsProps'
 import { ColumnFactory, Options } from '../tables/LineFinancialsProps'
 import EditableTable from '../tables/EditableTable'
 import { formEnum } from '../utils/FORMS'
@@ -215,14 +215,11 @@ const EmployeeTabs = (props) => {
       </Grid>
     )
   }
+  const getAddressForm = () => <FormWrapper {...props} form={AddressForm} />
   const GetTabContent = (mainFormId, subFormId) => {
     return [
       { title: t('common.general'), id: 1, form: getGeneralForm(mainFormId) },
-      {
-        title: t('common.address'),
-        id: 2,
-        form: <AddressForm current={current} setCurrent={setCurrent} t={t} />,
-      },
+      { title: t('common.address'), id: 2, form: getAddressForm() },
       { title: t('common.accounts'), id: 3, form: getAccountForm(mainFormId) },
       { title: t('common.bankaccounts'), id: 4, form: getTable(formEnum.BANKACCOUNT) },
       { title: t('salary.item.title'), id: 5, form: getSalaryItemTable(subFormId) },

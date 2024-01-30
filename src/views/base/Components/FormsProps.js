@@ -2074,8 +2074,6 @@ export const UserForm = (props) => {
             placeholder="company"
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
-            style={{ textAlign: 'right', padding: 2 }}
-            readonly
           />
         </Col>
       </CInputGroup>
@@ -2130,7 +2128,7 @@ export const AddressForm = (props) => {
             {t('common.zip')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="2">
           <Input
             bssize="sm"
             type="text"
@@ -2170,7 +2168,7 @@ export const AddressForm = (props) => {
             {t('common.country')}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="2">
           <Input
             bssize="sm"
             type="text"
@@ -2182,7 +2180,6 @@ export const AddressForm = (props) => {
             /* eslint-disable-next-line react/prop-types */
             value={current.country}
             onChange={(event) => setCurrent({ ...current, country: event.target.value })}
-            style={{ padding: 2 }}
           />
         </Col>
       </CInputGroup>
@@ -2283,21 +2280,21 @@ export const CustomerGeneralForm = (props) => {
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.currency')}
+            {t('common.email')}
           </CFormLabel>
         </Col>
         <Col sm="4">
           <Input
             bssize="sm"
             type="text"
-            id="currency-id"
-            name="currency"
+            id="email-id"
+            name="email"
             className="input-sm"
-            placeholder="Currency"
+            placeholder="Email"
             disabled={disable}
             /* eslint-disable-next-line react/prop-types */
-            value={current.currency}
-            onChange={(event) => setCurrent({ ...current, currency: event.target.value })}
+            value={current.email}
+            onChange={(event) => setCurrent({ ...current, email: event.target.value })}
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>

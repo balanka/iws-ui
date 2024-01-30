@@ -60,20 +60,16 @@ const MasterfileForm = (callback, deps) => {
   const accd = iwsState.get(acc_modelId) ?? []
   const bankd = iwsState.get(bank_modelId) ?? []
   const vatd = iwsState.get(vat_modelId) ?? []
-
-  const submitAdd = (event) => {
-    event.preventDefault()
-    delete current.editing
-    Add(modifyUrl, token, { ...current }, data, setCurrent)
-  }
-
   const submitEdit = (event) => {
     event.preventDefault()
     if (current.editing && !disable) {
       delete current.editing
       Edit(modifyUrl, token, { ...current }, data, setCurrent)
-      setDisable(true)
-    } else submitAdd(event)
+    } else {
+      delete current.editing
+      Add(modifyUrl, token, { ...current }, data, setCurrent)
+    }
+    setDisable(true)
   }
   const reload = () => {
     iwsStore.deleteKey(current.modelid)
