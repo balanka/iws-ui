@@ -2466,27 +2466,6 @@ export const CustomerAccountForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="2" style={{ paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
-        </Col>
-        <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="company-id"
-            name="company"
-            className="input-sm form-select-bg-size"
-            placeholder="company"
-            disabled={true}
-            //className="mb-3"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.company}
-            onChange={(event) => setCurrent({ ...current, company: event.target.value })}
-            style={{ textAlign: 'right', padding: 2 }}
-          />
-        </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">

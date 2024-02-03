@@ -41,7 +41,7 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     title: t('common.iban'),
     initialEditValue: '',
     minWidth: 200,
-    maxWidth: 300,
+    maxWidth: 500,
     export: true,
   },
   {
@@ -51,8 +51,7 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     editComponent: (tableData) => Autocomplete(data, tableData, true),
     initialEditValue: '',
     minWidth: 100,
-    maxWidth: 200,
-    align: 'right',
+    maxWidth: 300,
     export: true,
   },
   {
@@ -61,6 +60,7 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     initialEditValue: '',
     minWidth: 30,
     maxWidth: 100,
+    hidden: true,
     export: true,
   },
   {
@@ -76,6 +76,7 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     initialEditValue: '',
     minWidth: 5,
     editable: 'never',
+    hidden: true,
     export: true,
   },
 ]
