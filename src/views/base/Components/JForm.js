@@ -39,11 +39,14 @@ function Internal(
   columnsX,
 ) {
   const summaryPCB = (data) => {
+    // eslint-disable-next-line no-undef
     const row_ = data
     const row = row_ ? row_?.slice() : row_.slice()
     let debit = 0,
+      idebit = 0,
       credit = 0,
-      balance = 0
+      icredit = 0
+    // balance = 0
     let currency = ''
     let company = ''
 
@@ -51,17 +54,17 @@ function Internal(
     for (let i = 0, len = row.length - 1; i <= len; ++i) {
       debit = debit + row[i].debit
       credit = credit + row[i].credit
-      balance = isDebit ? balance + debit - credit : balance + credit - debit
+      idebit = idebit + row[i].idebit
+      icredit = icredit + row[i].icredit
+      // balance = isDebit ? balance + debit - credit : balance + credit - debit
       const runningBalance = isDebit
         ? row[i].debit + row[i].idebit - row[i].credit - row[i].icredit
         : row[i].credit + row[i].icredit - row[i].debit - row[i].idebit
       currency = row[i].currency
       company = row[i].company
-      row[i] = { ...row[i], balance: runningBalance }
+      row[i] = { ...row[i], balance: '' }
     }
     const len = row ? row.length : 0
-    const idebit = available ? row[0].idebit : 0
-    const icredit = available ? row[0].icredit : 0
     if (len > 0)
       row[len] = {
         period: t('common.total'),
@@ -69,7 +72,7 @@ function Internal(
         debit: debit,
         icredit: icredit,
         credit: credit,
-        balance: row[len - 1].balance,
+        balance: isDebit ? idebit + debit - credit - icredit : credit + icredit - debit - idebit,
         currency: currency,
         company: company,
       }
@@ -79,9 +82,15 @@ function Internal(
     const row_ = data_
     console.log('data_', data_)
     const row = row_?.slice()
+    const idx = Math.max(...row.map((i) => i.id))
+    const last_row = row.find((e) => e.id === idx)
+    console.log('idx', idx)
+    console.log('debit at idx', last_row)
     const available = row.length > 0
-    let idebit = available ? row[0].idebit : 0
-    let icredit = available ? row[0].icredit : 0
+    // let idebit = available ? row[0].idebit : 0
+    // let icredit = available ? row[0].icredit : 0
+    const lastDebit = available ? last_row.debit : 0
+    const lastCredit = available ? last_row.credit : 0
     let debit = 0,
       credit = 0,
       amount = 0
@@ -89,9 +98,9 @@ function Internal(
     let company = ''
 
     for (let i = 0, len = row.length - 1; i <= len; ++i) {
-      idebit = row[i].idebit
-      debit = debit + row[i].debit
-      icredit = row[i].icredit
+      // idebit = row[i].idebit
+      debit = row[i].debit
+      // icredit = row[i].icredit
       credit = credit + row[i].credit
       amount = amount + row[i].amount
       currency = row[i].currency
@@ -110,10 +119,10 @@ function Internal(
         postingdate: '',
         period: '',
         amount: amount,
-        idebit: idebit,
-        debit: debit,
-        icredit: icredit,
-        credit: credit,
+        idebit: '',
+        debit: lastDebit,
+        icredit: '',
+        credit: lastCredit,
         balance: row[len - 1].balance,
         currency: currency,
         ide: '',
@@ -177,8 +186,8 @@ function Internal(
               ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),
               grouping: true,
               toolbar: toolbar,
-              pageSize: 13,
-              pageSizeOptions: [15, 25, 50],
+              pageSize: 14,
+              pageSizeOptions: [14, 25, 50],
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             }}
