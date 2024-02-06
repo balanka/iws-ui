@@ -46,20 +46,16 @@ function Internal(
       idebit = 0,
       credit = 0,
       icredit = 0
-    // balance = 0
     let currency = ''
     let company = ''
-
-    const available = row.length > 0
     for (let i = 0, len = row.length - 1; i <= len; ++i) {
       debit = debit + row[i].debit
       credit = credit + row[i].credit
       idebit = idebit + row[i].idebit
-      icredit = icredit + row[i].icredit
-      // balance = isDebit ? balance + debit - credit : balance + credit - debit
-      const runningBalance = isDebit
-        ? row[i].debit + row[i].idebit - row[i].credit - row[i].icredit
-        : row[i].credit + row[i].icredit - row[i].debit - row[i].idebit
+      icredit =
+        icredit + row[i].icredit
+          ? row[i].debit + row[i].idebit - row[i].credit - row[i].icredit
+          : row[i].credit + row[i].icredit - row[i].debit - row[i].idebit
       currency = row[i].currency
       company = row[i].company
       row[i] = { ...row[i], balance: '' }
@@ -79,29 +75,18 @@ function Internal(
     return row
   }
   const summaryJ = (data_) => {
-    const row_ = data_
-    console.log('data_', data_)
-    const row = row_?.slice()
+    // const row_ = data_
+    const row = data_?.slice()
     const idx = Math.max(...row.map((i) => i.id))
     const last_row = row.find((e) => e.id === idx)
-    console.log('idx', idx)
-    console.log('debit at idx', last_row)
     const available = row.length > 0
-    // let idebit = available ? row[0].idebit : 0
-    // let icredit = available ? row[0].icredit : 0
-    const lastDebit = available ? last_row.debit : 0
-    const lastCredit = available ? last_row.credit : 0
-    let debit = 0,
-      credit = 0,
-      amount = 0
+    const lastDebit = available && last_row ? last_row.debit : 0
+    const lastCredit = available && last_row ? last_row.credit : 0
+    let amount = 0
     let currency = ''
     let company = ''
 
     for (let i = 0, len = row.length - 1; i <= len; ++i) {
-      // idebit = row[i].idebit
-      debit = row[i].debit
-      // icredit = row[i].icredit
-      credit = credit + row[i].credit
       amount = amount + row[i].amount
       currency = row[i].currency
       company = row[i].company
@@ -110,7 +95,6 @@ function Internal(
 
     if (len > 0)
       row[len] = {
-        id: Number.MAX_VALUE,
         transid: t('common.total'),
         account: '',
         oaccount: '',
@@ -138,14 +122,12 @@ function Internal(
   const summary = (data_) => (modelid === formEnum.PACB ? summaryPCB(data_) : summaryJ(data_))
   const submitQuery_ = (event) => {
     event.preventDefault()
-    console.log('getUrl()', getUrl())
     accData?.length < 2
       ? Get(accUrl, profile, history, setAccData)
       : Get(getUrl(), profile, history, setData)
   }
   const submitQuery2 = (event) => {
     event.preventDefault()
-    console.log('getUrl()', getUrl())
     accData?.length < 2
       ? Get(accUrl, profile, history, setAccData)
       : Get(getUrlAll(), profile, history, setData)
@@ -210,9 +192,6 @@ const JForm = () => {
   const { token, company, locale, currency } = profile
   let navigate = useNavigate()
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/cc' : selected)
-  console.log('selected', selected)
-  console.log('menu', menu)
-  console.log('module_', module_)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : LOGIN(t)
   if (typeof module_ === 'undefined' || !module_ || module_.id === '11111')
     return navigate('/login')
@@ -222,7 +201,6 @@ const JForm = () => {
   const initAcc = module_.state1
   const initialState = module_.state
   const ALL = { ...initialState, id: '*', name: '**ALL**' }
-  console.log('module_', module_)
   const current_ = module_.state ? module_?.state[0].query : []
   const title = t(module_.title)
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -230,7 +208,6 @@ const JForm = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [isDebit, setIsDebit] = useState(true)
   const modelid = module_.modelid
-  console.log('modelid', modelid)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [current, setCurrent] = useState(current_)
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -248,9 +225,7 @@ const JForm = () => {
   const toggleToolbar = () => setToolbar(!toolbar)
   const toggle = () => setState({ ...state, collapse: !state.collapse })
   const acc_modelid = parseInt(ACCOUNT(t).id)
-  console.log('acc_modelid', acc_modelid)
   const accData_ = iwsState.get(acc_modelid) ? iwsState.get(acc_modelid) : [...initAcc]
-  console.log('accData_', accData_)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   let init = useRef(false)
   // eslint-disable-next-line react-hooks/rules-of-hooks

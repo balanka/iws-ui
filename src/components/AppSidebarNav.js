@@ -40,7 +40,6 @@ export const AppSidebarNav = ({ items }) => {
         key={index}
         {...rest}
         onClick={(e) => {
-          console.log('onClick navItem', e.target + 'rest.to>>>' + rest.to)
           setSelected(rest.to)
           navigate(rest.to)
         }}
@@ -52,7 +51,6 @@ export const AppSidebarNav = ({ items }) => {
   const navGroup = (item, index) => {
     const { component, name, icon, items, to, ...rest } = item
     const Component = component
-    console.log('item', item)
     return (
       <Component
         compact
