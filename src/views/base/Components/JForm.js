@@ -52,10 +52,7 @@ function Internal(
       debit = debit + row[i].debit
       credit = credit + row[i].credit
       idebit = idebit + row[i].idebit
-      icredit =
-        icredit + row[i].icredit
-          ? row[i].debit + row[i].idebit - row[i].credit - row[i].icredit
-          : row[i].credit + row[i].icredit - row[i].debit - row[i].idebit
+      icredit = icredit + row[i].icredit
       currency = row[i].currency
       company = row[i].company
       row[i] = { ...row[i], balance: '' }
@@ -85,7 +82,6 @@ function Internal(
     let amount = 0
     let currency = ''
     let company = ''
-
     for (let i = 0, len = row.length - 1; i <= len; ++i) {
       amount = amount + row[i].amount
       currency = row[i].currency
@@ -170,6 +166,7 @@ function Internal(
               toolbar: toolbar,
               pageSize: 14,
               pageSizeOptions: [14, 25, 50],
+              showFirstLastPageButtons: true,
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             }}
