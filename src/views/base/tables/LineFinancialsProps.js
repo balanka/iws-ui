@@ -96,9 +96,23 @@ export const ColumnsLOGIN = () => [
   },
 ]
 export const columnsPACB = (t, locale, currency) => [
-  { field: 'id', title: t('common.id'), minWidth: 10, export: true },
-  { field: 'name', title: t('common.name'), minWidth: 40, export: true },
-  { field: 'period', title: t('pac.period'), type: 'numeric', export: true },
+  //{ field: 'id', title: t('common.id'), minWidth: 10, export: true },
+  {
+    field: 'account',
+    title: t('account.account'),
+    width: '4%',
+    export: true,
+    align: 'left',
+  },
+  { field: 'name', title: t('common.name'), width: '35%', align: 'left', export: true },
+  {
+    field: 'period',
+    title: t('pac.period'),
+    type: 'numeric',
+    width: '4%',
+    align: 'left',
+    export: true,
+  },
   {
     field: 'idebit',
     title: t('common.idebit'),
@@ -159,8 +173,8 @@ export const columnsPACB = (t, locale, currency) => [
     },
     export: true,
   },
-  { field: 'currency', title: t('common.currency'), export: true },
-  { field: 'company', title: t('common.company'), export: true },
+  { field: 'currency', title: t('common.currency'), width: '2%', export: true },
+  { field: 'company', title: t('common.company'), width: '4%', export: true },
 ]
 
 export const columnsF = (data, line, current, t, locale, currency) => [
