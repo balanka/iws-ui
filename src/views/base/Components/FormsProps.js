@@ -184,16 +184,6 @@ export const CommonFormHead = (props) => {
       >
         {wrapIcon('Reload', svgIcons.refresh, reload, false)}
         {wrapFontAwesomeIcon('Cancel edit', faWindowClose, (e) => cancelEdit(e), disable)}
-        {/*<div className="card-header-actions">*/}
-        {/*  <Button*/}
-        {/*    color="link"*/}
-        {/*    className="card-header-action btn-minimize"*/}
-        {/*    title="Cancel edit"*/}
-        {/*    onClick={(e) => cancelEdit(e)}*/}
-        {/*  >*/}
-        {/*    <FontAwesomeIcon icon={faWindowClose} />*/}
-        {/*  </Button>*/}
-        {/*</div>*/}
         {wrapIcon(
           'Add Bank Account',
           svgIcons.libraryAdd,
@@ -2359,6 +2349,37 @@ export const CustomerGeneralForm = (props) => {
     </Grid>
   )
 }
+
+const fromPeriod = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, balancesheet, t } = props
+  /* eslint-disable-next-line react/prop-types */
+  return (
+    !balancesheet && (
+      <>
+        <Col sm="0.5" style={{ align: 'right', padding: 2, paddingLeft: 10 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.from')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1" style={{ paddingLeft: 10 }}>
+          <Input
+            bssize="sm"
+            type="text"
+            id="fromPeriod-id"
+            name="fromPeriod"
+            className="input-sm"
+            placeholder="fromPeriod"
+            /* eslint-disable-next-line react/prop-types */
+            value={current.fromPeriod}
+            onChange={(event) => setCurrent({ ...current, fromPeriod: event.target.value })}
+            style={{ height: 30, padding: 1, textAlign: 'right' }}
+          />
+        </Col>
+      </>
+    )
+  )
+}
 const salaryField = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, locale, currency, t } = props
@@ -3164,7 +3185,7 @@ export const FinancialsMainForm = (props) => {
 }
 export const JournalMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, accData, submitQuery, submitQuery2, height } = props
+  const { current, setCurrent, t, accData, submitQuery, submitQuery2, height, balancesheet } = props
   // eslint-disable-next-line react/prop-types
   const currentAccount = accData.find((acc) => acc.id === current.account)
   return (
@@ -3205,25 +3226,7 @@ export const JournalMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="0.5" style={{ align: 'right', padding: 2, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.from')}
-          </CFormLabel>
-        </Col>
-        <Col sm="1" style={{ paddingLeft: 10 }}>
-          <Input
-            bssize="sm"
-            type="text"
-            id="fromPeriod-id"
-            name="fromPeriod"
-            className="input-sm"
-            placeholder="fromPeriod"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.fromPeriod}
-            onChange={(event) => setCurrent({ ...current, fromPeriod: event.target.value })}
-            style={{ height: 30, padding: 1, textAlign: 'right' }}
-          />
-        </Col>
+        {fromPeriod(props)}
         <Col sm="0.5" style={{ padding: 2, paddingLeft: 10, textAlign: 'right' }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.to')}

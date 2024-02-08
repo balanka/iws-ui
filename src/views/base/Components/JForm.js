@@ -152,6 +152,7 @@ function Internal(
           styles={styles}
           submitQuery={submitQuery_}
           submitQuery2={submitQuery2}
+          balancesheet={false}
         />
         <Grid
           container

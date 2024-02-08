@@ -62,8 +62,8 @@ const BasicTreeTable = () => {
     url
       .concat('/')
       .concat(current.account)
-      .concat('/')
-      .concat(current.fromPeriod)
+      //.concat('/')
+      //.concat(current.fromPeriod)
       .concat('/')
       .concat(current.toPeriod)
 
@@ -151,6 +151,7 @@ const BasicTreeTable = () => {
           height={35}
           styles={styles}
           submitQuery={submitQuery_}
+          balancesheet={true}
         />
 
         <Grid container spacing={2} style={{ ...styles.inner }} direction="column">
