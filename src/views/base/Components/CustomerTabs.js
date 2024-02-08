@@ -142,7 +142,7 @@ const CustomerTabs = (props) => {
           ...Options,
           tableLayout: 'auto',
           // eslint-disable-next-line react/prop-types
-          paging: current.bankaccounts.length > 8,
+          paging: current ? current.bankaccounts?.length > 8 : false,
           search: true,
           pageSizeOptions: [5, 10, 20],
         }}

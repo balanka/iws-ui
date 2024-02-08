@@ -2602,7 +2602,7 @@ export const CompanyGeneralForm = (props) => {
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.enterdate')}
           </CFormLabel>
@@ -2642,7 +2642,7 @@ export const CompanyGeneralForm = (props) => {
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.changedate')}
           </CFormLabel>
@@ -2712,24 +2712,27 @@ export const CompanyAccountForm = (props) => {
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.postingdate')}
+            {t('common.vatCode')}
           </CFormLabel>
         </Col>
-        <Col sm="2">
-          <CDatePicker
+        <Col sm="4">
+          <CFormSelect
+            className="flex-row"
+            type="select"
+            name="vatcode"
+            id="vatcode-id"
             size="sm"
-            inputReadOnly
+            disabled={disable}
+            style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
-            selected={Date.parse(current.postingdate)}
-            label={t('common.postingdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="postingdate-id"
-            className="text-end w-50"
-          />
+            value={current.vatCode}
+            onChange={(event) => setCurrent({ ...current, vatCode: event.target.value })}
+          >
+            {/* eslint-disable-next-line react/prop-types */}
+            {vatData.sort(sortById).map((item) => mappingSelect(item))}
+          </CFormSelect>
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
@@ -2754,7 +2757,7 @@ export const CompanyAccountForm = (props) => {
             {accData.map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.settlementClearingAcc')}
           </CFormLabel>
@@ -2802,7 +2805,7 @@ export const CompanyAccountForm = (props) => {
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.purchasingClearingAcc')}
           </CFormLabel>
@@ -2850,7 +2853,7 @@ export const CompanyAccountForm = (props) => {
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.incomeStmtAcc')}
           </CFormLabel>
@@ -2871,49 +2874,6 @@ export const CompanyAccountForm = (props) => {
             {/* eslint-disable-next-line react/prop-types */}
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
-        </Col>
-      </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.vatCode')}
-          </CFormLabel>
-        </Col>
-        <Col sm="4">
-          <CFormSelect
-            className="flex-row"
-            type="select"
-            name="vatcode"
-            id="vatcode-id"
-            size="sm"
-            disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.vatCode}
-            onChange={(event) => setCurrent({ ...current, vatCode: event.target.value })}
-          >
-            {/* eslint-disable-next-line react/prop-types */}
-            {vatData.sort(sortById).map((item) => mappingSelect(item))}
-          </CFormSelect>
-        </Col>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.iban')}
-          </CFormLabel>
-        </Col>
-        <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="iban-id"
-            name="ibanid"
-            className="input-sm"
-            placeholder="Id"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.iban}
-            onChange={(event) => setCurrent({ ...current, iban: event.target.value })}
-          />
         </Col>
       </CInputGroup>
     </>
@@ -3415,7 +3375,7 @@ export const VatMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('vat.postingdate')}
           </CFormLabel>
@@ -3484,7 +3444,7 @@ export const VatMainForm = (props) => {
             }}
           />
         </Col>
-        <Col md="1">
+        <Col md="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('vat.percent')}
           </CFormLabel>
@@ -3498,31 +3458,31 @@ export const VatMainForm = (props) => {
             className="input-sm"
             placeholder="percent"
             disabled={disable}
-            style={{ height: 30 }}
+            style={{ height: 30, textAlign: 'right' }}
             /* eslint-disable-next-line react/prop-types */
             value={current.percent}
             onChange={(event) => setCurrent({ ...current, percent: event.target.value })}
           />
         </Col>
-        <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
-        </Col>
-        <Col sm="1">
-          <Input
-            disabled={true}
-            bssize="sm"
-            type="text"
-            id="company-id"
-            name="company"
-            className="input-sm"
-            placeholder="company"
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.company}
-          />
-        </Col>
+        {/*<Col sm="1">*/}
+        {/*  <CFormLabel size="sm" htmlFor="input-small">*/}
+        {/*    {t('common.company')}*/}
+        {/*  </CFormLabel>*/}
+        {/*</Col>*/}
+        {/*<Col sm="1">*/}
+        {/*  <Input*/}
+        {/*    disabled={true}*/}
+        {/*    bssize="sm"*/}
+        {/*    type="text"*/}
+        {/*    id="company-id"*/}
+        {/*    name="company"*/}
+        {/*    className="input-sm"*/}
+        {/*    placeholder="company"*/}
+        {/*    style={{ height: 30 }}*/}
+        {/*    eslint-disable-next-line react/prop-types */}
+        {/*    value={current.company}*/}
+        {/*  />*/}
+        {/*</Col>*/}
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col md="2">
