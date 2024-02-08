@@ -152,7 +152,7 @@ function Internal(
           styles={styles}
           submitQuery={submitQuery_}
           submitQuery2={submitQuery2}
-          balancesheet={false}
+          balancesheet={modelid === formEnum.PACB}
         />
         <Grid
           container
@@ -236,7 +236,8 @@ const JForm = () => {
     accUrl && Get1(accUrl, token, acc_modelid)
   }, [init, accUrl, token, acc_modelid])
 
-  const getUrl = () =>
+  const getUrl = () => url.concat('/').concat(current.account).concat('/').concat(current.toPeriod)
+  const getJournalUrl = () =>
     url
       .concat('/')
       .concat(current.account)
@@ -257,7 +258,7 @@ const JForm = () => {
     setAccData,
     initAcc,
     current,
-    getUrl,
+    formEnum.PACB ? getUrl : getJournalUrl,
     getUrlAll,
     setData,
     initialState,
