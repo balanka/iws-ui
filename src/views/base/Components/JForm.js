@@ -236,8 +236,9 @@ const JForm = () => {
     accUrl && Get1(accUrl, token, acc_modelid)
   }, [init, accUrl, token, acc_modelid])
 
-  const getUrl = () => url.concat('/').concat(current.account).concat('/').concat(current.toPeriod)
-  const getJournalUrl = () =>
+  const buildUrl = () =>
+    url.concat('/').concat(current.account).concat('/').concat(current.toPeriod)
+  const buildJournalUrl = () =>
     url
       .concat('/')
       .concat(current.account)
@@ -245,8 +246,8 @@ const JForm = () => {
       .concat(current.fromPeriod)
       .concat('/')
       .concat(current.toPeriod)
-  const getUrlAll = () =>
-    url.concat('/').concat(current.fromPeriod).concat('/').concat(current.toPeriod)
+  const getUrlAll = () => url.concat('/').concat(current.toPeriod)
+  const getUrl = modelid === formEnum.PACB ? buildUrl : buildJournalUrl
   return Internal(
     isDebit,
     t,
@@ -258,7 +259,7 @@ const JForm = () => {
     setAccData,
     initAcc,
     current,
-    formEnum.PACB ? getUrl : getJournalUrl,
+    getUrl,
     getUrlAll,
     setData,
     initialState,
