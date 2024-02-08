@@ -3185,7 +3185,7 @@ export const FinancialsMainForm = (props) => {
 }
 export const JournalMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, accData, submitQuery, submitQuery2, height, balancesheet } = props
+  const { current, setCurrent, t, accData, submitQuery, submitQuery2, height } = props
   // eslint-disable-next-line react/prop-types
   const currentAccount = accData.find((acc) => acc.id === current.account)
   return (
