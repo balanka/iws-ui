@@ -169,6 +169,7 @@ const MasterfileForm = (callback, deps) => {
           formid={modelid_}
           disable={disable}
           current={current}
+          current_={current_}
           setCurrent={setCurrent}
           t={t}
           locale={locale}

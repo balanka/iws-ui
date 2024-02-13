@@ -12,7 +12,7 @@ import { blue } from '@material-ui/core/colors'
 
 const RoleTabs = (props) => {
   // eslint-disable-next-line react/prop-types
-  const { current, setCurrent, modifyUrl, data } = props
+  const { current, current_, setCurrent, modifyUrl, data } = props
   const { profile } = useStore()
   const { t } = useTranslation()
   const { token } = profile
@@ -100,7 +100,6 @@ const RoleTabs = (props) => {
   )
 
   // eslint-disable-next-line react/prop-types
-  let current_
   const rights_ = () =>
     // eslint-disable-next-line react/prop-types
     Array.isArray(current?.rights) && current.rights?.length > 0 ? current.rights : current_.rights
