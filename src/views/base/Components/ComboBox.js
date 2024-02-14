@@ -87,7 +87,6 @@ export default function ComboBox(props) {
             size="small"
             inputRef={entryRef}
             onChange={(e) => {
-              console.log('e.target.value', e.target.value)
               entryRef.current.value = e.target.value
             }}
           />
