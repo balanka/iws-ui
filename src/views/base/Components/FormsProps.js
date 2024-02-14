@@ -1679,7 +1679,7 @@ export const MasterfilesMainForm = (props) => {
             idCol={true}
             sm="4"
             /* eslint-disable-next-line no-undef */
-            disabled={disable}
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -1696,7 +1696,7 @@ export const MasterfilesMainForm = (props) => {
             idCol={false}
             sm="4"
             /* eslint-disable-next-line no-undef */
-            disabled={disable}
+            disable={disable}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3095,9 +3095,9 @@ export const FinancialsMainForm = (props) => {
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ paddingBottom: 7, height: height }}>
+      <CInputGroup row style={{ height: height }}>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
             {t('financials.costcenter')}
           </CFormLabel>
         </Col>

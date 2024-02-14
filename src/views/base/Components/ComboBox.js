@@ -7,13 +7,12 @@ import { sortById, sortByName } from '../utils/utils'
 const StyledAutocomplete = styled(Autocomplete, {
   shouldForwardProp: (props) => props !== 'primary',
 })((props) => {
+  let bgColor = props.disabled ? '#e3e7e7' : '#ffffff'
   return {
     '& .MuiAutocomplete-inputRoot': {
-      // color: 'purple',
-      backgroundColor: props.disabled ? '#e3e7e7' : '#ffffff',
+      backgroundColor: bgColor,
       borderRadius: 8,
-      //border: 'none',
-      //disableUnderline: true,
+      border: 'none',
     },
   }
 })
