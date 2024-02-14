@@ -23,6 +23,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import CDatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import './width-datepicker.css'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
 import { blue, lightGreen } from '@material-ui/core/colors'
@@ -2919,7 +2920,7 @@ export const FinancialsMainForm = (props) => {
         </Col>
         <Col sm="1">
           <CDatePicker
-            size="xs"
+            size="sm"
             disabled={true}
             /* eslint-disable-next-line react/prop-types */
             selected={Date.parse(current.postingdate)}
@@ -2928,14 +2929,6 @@ export const FinancialsMainForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="postingdate-id"
-            style={{
-              backgroundColor: 'aliceblue',
-              height: '24px',
-              width: '20',
-              //borderRadius: '8px',
-              fontSize: '14px',
-              //padding: '3px 10px',
-            }}
           />
         </Col>
         <Col sm="1">
@@ -2996,14 +2989,6 @@ export const FinancialsMainForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="enterdate-id"
-            style={{
-              backgroundColor: 'aliceblue',
-              height: '24px',
-              width: '20',
-              //borderRadius: '8px',
-              fontSize: '14px',
-              //padding: '3px 10px',
-            }}
           />
         </Col>
         <Col sm="1">
@@ -3083,14 +3068,6 @@ export const FinancialsMainForm = (props) => {
             footer
             dateFormat="dd.MM.yyyy"
             id="transdate-id"
-            style={{
-              backgroundColor: 'aliceblue',
-              height: '24px',
-              width: '20',
-              //borderRadius: '8px',
-              fontSize: '14px',
-              //padding: '3px 10px',
-            }}
             onChange={(newValue) => setCurrent({ ...current, transdate: newValue })}
           />
         </Col>
@@ -3135,12 +3112,12 @@ export const FinancialsMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="1">
           <FormControlLabel
             disabled={true}
             id="posted"
             name="posted"
-            style={{ height: 30, paddingLeft: 60 }}
+            style={{ paddingLeft: 60 }}
             /* eslint-disable-next-line react/prop-types */
             control={<Switch checked={current.posted} />}
             label={t('financials.posted')}
