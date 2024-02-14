@@ -401,7 +401,6 @@ export const Linescolumns = (data, line, current, models, model, t, locale, curr
   }
 
   return [
-    //  {field:'id', title:t('financials.line.id'), type:'numeric', minWidth:30, maxWidth:30, initialEditValue:line.id, align:'left', editable:'never'}
     {
       field: 'transid',
       title: t('financials.id'),

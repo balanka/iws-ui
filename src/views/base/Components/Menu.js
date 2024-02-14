@@ -289,7 +289,12 @@ const BALANCESHEET = (t, locale, currency) => ({
   name: 'Balancesheet',
   title: 'balancesheet.title',
   ctx: MASTERFILE.balancesheet,
-  state: initAcc,
+  state: {
+    account: '',
+    account2: '',
+    fromPeriod: '',
+    toPeriod: '',
+  },
   state1: initAcc,
   state2: '',
   state3: '',
