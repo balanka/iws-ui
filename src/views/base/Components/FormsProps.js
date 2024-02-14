@@ -162,8 +162,6 @@ export const CommonFormHead = (props) => {
     // eslint-disable-next-line react/prop-types
     setDisable,
   } = props
-  console.log('disable', disable)
-  console.log('isNullOrUndef(onNewBankAccount)', isNullOrUndef(onNewBankAccount) || disable)
   return (
     // eslint-disable-next-line react/prop-types
     <Grid container xs style={{ ...styles.header }} justify="flex-start">
@@ -2888,7 +2886,6 @@ export const FinancialsMainForm = (props) => {
   const currentAccount = accData.find((acc) => acc.id === current.account)
   // eslint-disable-next-line react/prop-types
   const ccData_ = ccData ? ccData : []
-  console.log('ccData_', ccData_)
   // eslint-disable-next-line react/prop-types
   const currentCC = ccData_.find((cc) => cc.id === current.costcenter)
   return (
@@ -2906,6 +2903,8 @@ export const FinancialsMainForm = (props) => {
             id="id"
             name="id"
             className="sm"
+            /* eslint-disable-next-line react/prop-types */
+            disabled={current.posted}
             placeholder={t('financials.id')}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
@@ -3039,6 +3038,8 @@ export const FinancialsMainForm = (props) => {
             idCol={true}
             sm="4"
             /* eslint-disable-next-line react/prop-types */
+            disable={current.posted}
+            /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
             value={current.account}
@@ -3048,11 +3049,13 @@ export const FinancialsMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="4" style={{ paddingLeft: 10 }}>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
           <ComboBox
             id="accountName"
             idCol={false}
             sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            disable={current.posted}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3104,6 +3107,8 @@ export const FinancialsMainForm = (props) => {
             idCol={true}
             sm="4"
             /* eslint-disable-next-line react/prop-types */
+            disable={current.posted}
+            /* eslint-disable-next-line react/prop-types */
             data={ccData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
             value={current.costcenter}
@@ -3113,11 +3118,13 @@ export const FinancialsMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="4" style={{ paddingLeft: 10 }}>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
           <ComboBox
             id="costCenterName"
             idCol={false}
             sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            disable={current.posted}
             /* eslint-disable-next-line react/prop-types */
             data={ccData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3354,7 +3361,7 @@ export const VatMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="4" style={{ paddingLeft: 10 }}>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
           <ComboBox
             id="accountName"
             idCol={false}
@@ -3423,7 +3430,7 @@ export const VatMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="4" style={{ paddingLeft: 10 }}>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
           <ComboBox
             id="outputVataccountName"
             idCol={false}
@@ -3464,25 +3471,6 @@ export const VatMainForm = (props) => {
             onChange={(event) => setCurrent({ ...current, percent: event.target.value })}
           />
         </Col>
-        {/*<Col sm="1">*/}
-        {/*  <CFormLabel size="sm" htmlFor="input-small">*/}
-        {/*    {t('common.company')}*/}
-        {/*  </CFormLabel>*/}
-        {/*</Col>*/}
-        {/*<Col sm="1">*/}
-        {/*  <Input*/}
-        {/*    disabled={true}*/}
-        {/*    bssize="sm"*/}
-        {/*    type="text"*/}
-        {/*    id="company-id"*/}
-        {/*    name="company"*/}
-        {/*    className="input-sm"*/}
-        {/*    placeholder="company"*/}
-        {/*    style={{ height: 30 }}*/}
-        {/*    eslint-disable-next-line react/prop-types */}
-        {/*    value={current.company}*/}
-        {/*  />*/}
-        {/*</Col>*/}
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col md="2">
