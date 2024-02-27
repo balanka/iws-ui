@@ -14,6 +14,8 @@ export const formEnum = {
   EMPLOYEE: 33,
   ARTICLE: 34,
   STORE: 35,
+  ACCOUNT_CLASS: 36,
+  ACCOUNT_GROUP: 37,
   PACB: 106,
   USER: 111,
   ROLE: 121,

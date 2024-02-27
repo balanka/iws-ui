@@ -6,6 +6,8 @@ import { formEnum } from '../utils/FORMS'
 
 const API_SERVER_PORT = 8091
 const SERVER_URL = 'http://127.0.0.1:'.concat(API_SERVER_PORT)
+//const SERVER_URL = 'http://mac-Studio.fritz.box:'.concat(API_SERVER_PORT)
+console.log('NODE_ENV', process.env)
 const Edit = (url, token, record, data, setCurrent) => {
   const url_ = SERVER_URL.concat(url)
   var result
@@ -102,11 +104,15 @@ const Login = (
         .get(moduleURL, { headers: { Authorization: `Bearer ${token}` } })
         .then((response) => {
           const module_ = response.data
-          iwsStore.put(400, module_)
+          console.log('module_', module_)
+          iwsStore.put(formEnum.MODULE, module_)
           const moduleIds = module_.filter((e) => result.has(parseInt(e.id)))
+          console.log('moduleIds', moduleIds)
           const userMenu = moduleIds.map((m) => parseInt(m.id))
           const menu = moduleIds.map((m) => m.path).filter((p) => p !== '/')
+          console.log('menu', menu)
           const menu_t = MENU(t, locale, currency)
+          console.log('menu_t', menu_t)
           const routes_t = module_.map((e) => {
             return {
               ...e,

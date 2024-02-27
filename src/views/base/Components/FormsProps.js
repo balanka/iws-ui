@@ -468,6 +468,8 @@ const getForm = (formId) => {
     case formEnum.STORE:
     case formEnum.SALARY_ITEM:
     case formEnum.PERMISSION:
+    case formEnum.ACCOUNT_CLASS:
+    case formEnum.ACCOUNT_GROUP:
       return MasterfilesMainForm
     case formEnum.USER:
       return UserTabs
@@ -605,6 +607,8 @@ export const FormFactory = (props) => {
     case formEnum.BANKSTATEMENT:
     case formEnum.COSTCENTER:
     case formEnum.BANK:
+    case formEnum.ACCOUNT_CLASS:
+    case formEnum.ACCOUNT_GROUP:
     case formEnum.MODULE:
     case formEnum.FMODULE:
     case formEnum.ARTICLE:
@@ -1456,7 +1460,7 @@ export const AssetForm = (props) => {
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
             style={{ height: 30, textAlign: 'right', padding: 2 }}
-            readonly
+            readOnly
           />
         </Col>
       </CInputGroup>
@@ -1574,6 +1578,58 @@ export const AssetForm = (props) => {
     </>
   )
 }
+
+const accountIdField = (props) => {
+  const { accClassData, accGroupData, current, setCurrent, disable } = props
+  const data = [...accClassData, ...accGroupData]
+  return (
+    <>
+      <ComboBox
+        id="account"
+        idCol={true}
+        sm="4"
+        /* eslint-disable-next-line no-undef */
+        disable={disable}
+        /* eslint-disable-next-line react/prop-types */
+        data={data.sort(sortById)}
+        /* eslint-disable-next-line react/prop-types */
+        value={current.account}
+        placeholder={'account number'}
+        onChange={(event, newValue) => {
+          setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
+        }}
+      />
+    </>
+  )
+}
+const accountNameField = (props) => {
+  const { accClassData, accGroupData, accData, current, setCurrent, disable } = props
+  const data = [...accClassData, ...accGroupData]
+  const id = current.modelid === formEnum.SALARY_ITEM ? current.account : current.parent
+  const currentAccount =
+    current.modelid === formEnum.ACCOUNT_CLASS || current.modelid === formEnum.ACCOUNT_GROUP
+      ? data.find((acc) => acc.id === id)
+      : accData.find((acc) => acc.id === id)
+  return (
+    <>
+      <ComboBox
+        id="accountName"
+        idCol={false}
+        sm="4"
+        /* eslint-disable-next-line no-undef */
+        disable={disable}
+        /* eslint-disable-next-line react/prop-types */
+        data={data.sort(sortByName)}
+        /* eslint-disable-next-line react/prop-types */
+        value={currentAccount ? currentAccount.name : ''}
+        placeholder={'account name'}
+        onChange={(event, newValue) => {
+          setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
+        }}
+      />
+    </>
+  )
+}
 export const MasterfilesMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, accData, height } = props
@@ -1674,39 +1730,9 @@ export const MasterfilesMainForm = (props) => {
             {t('common.account')}
           </CFormLabel>
         </Col>
-        <Col sm="2">
-          <ComboBox
-            id="account"
-            idCol={true}
-            sm="4"
-            /* eslint-disable-next-line no-undef */
-            disable={disable}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.account}
-            placeholder={'account number'}
-            onChange={(event, newValue) => {
-              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
-            }}
-          />
-        </Col>
+        <Col sm="2">{accountIdField(props)}</Col>
         <Col sm="4" style={{ paddingLeft: 10 }}>
-          <ComboBox
-            id="accountName"
-            idCol={false}
-            sm="4"
-            /* eslint-disable-next-line no-undef */
-            disable={disable}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
-            value={currentAccount ? currentAccount.name : ''}
-            placeholder={'account name'}
-            onChange={(event, newValue) => {
-              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
-            }}
-          />
+          {accountNameField(props)}
         </Col>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
@@ -1746,7 +1772,7 @@ export const MasterfilesMainForm = (props) => {
             style={{ height: 30, padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
-            readonly
+            readOnly
           />
         </Col>
       </CInputGroup>
@@ -2379,6 +2405,7 @@ const fromPeriod = (props) => {
     )
   )
 }
+
 const salaryField = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, locale, currency, t } = props

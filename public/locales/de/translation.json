@@ -332,6 +332,8 @@
     "journal": "Journal",
     "pacb": "Salden",
     "account": "Konten",
+    "accountGroup": "Kontengruppen ",
+    "accountClass": "Kontenklassen",
     "bank": "Bank",
     "module": "Module",
     "costcenter": "Kostenstelle",
@@ -351,5 +353,11 @@
     "balancesheet": "Jahresabschluss",
     "financials": "Belege",
     "financials_stmt": "Jahresabschluss/GuV"
+  },
+  "accountClass": {
+    "title":      "Kontenklassen"
+  },
+  "accountGroup": {
+    "title":      "Kontengruppen"
   }
 }

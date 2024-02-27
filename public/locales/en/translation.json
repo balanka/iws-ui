@@ -343,6 +343,8 @@
     "journal": "Journal",
     "pacb": "Account balance",
     "account": "Accounts",
+    "accountGroup": "Account group",
+    "accountClass": "Account class",
     "bank": "Bank",
     "module": "Module",
     "costcenter": "Cost center",
@@ -362,5 +364,11 @@
     "balancesheet": "Balance sheet",
     "financials": "Payable/Receivable",
     "financials_stmt": "Financials statements"
+  },
+  "accountClass": {
+    "title":      "Account class"
+  },
+  "accountGroup": {
+    "title":      "Account group"
   }
 }

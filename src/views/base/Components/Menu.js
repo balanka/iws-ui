@@ -53,6 +53,8 @@ export const MASTERFILE = {
   user: '/user',
   salaryItem: '/s_item',
   masterfile: '/mf',
+  accountClass: '/class',
+  accountGroup: '/group',
 }
 export const LOGIN = (t) => ({
   id: '11111',
@@ -210,6 +212,30 @@ export const MODULE = (t, locale) => ({
   state3: '/module',
   modelid: formEnum.MODULE,
   columns: ColumnsModule(t, locale),
+})
+export const ACCOUNT_CLASS = (t, locale) => ({
+  id: '36',
+  name: 'Account class',
+  title: 'accountClass.title',
+  ctx: MASTERFILE.masterfile,
+  state: initAccountClass,
+  state1: initAccountClass,
+  state2: '',
+  state3: '/class',
+  modelid: formEnum.ACCOUNT_CLASS,
+  columns: ColumnsM(initAccountClass, t, locale),
+})
+export const ACCOUNT_GROUP = (t, locale) => ({
+  id: '37',
+  name: 'Account group',
+  title: 'accountGroup.title',
+  ctx: MASTERFILE.masterfile,
+  state: initAccountGroup,
+  state1: [...initAccountClass, ...initAccountGroup],
+  state2: '',
+  state3: '/group',
+  modelid: formEnum.ACCOUNT_GROUP,
+  columns: ColumnsM([...initAccountGroup, ...initAccountClass], t, locale),
 })
 export const VAT = (t, locale) => ({
   id: '14',
@@ -448,6 +474,32 @@ export const initModule = [
     changedate: date,
     modelid: 400,
     company: '',
+  },
+]
+export const initAccountClass = [
+  {
+    id: '',
+    name: '',
+    description: '',
+    parent: -1,
+    enterdate: date,
+    postingdate: date,
+    changedate: date,
+    company: '',
+    modelid: 36,
+  },
+]
+export const initAccountGroup = [
+  {
+    id: '',
+    name: '',
+    description: '',
+    parent: -1,
+    enterdate: date,
+    postingdate: date,
+    changedate: date,
+    company: '',
+    modelid: 37,
   },
 ]
 export const initCC = [
@@ -824,6 +876,8 @@ export const MENU = (t, locale, currency) =>
     ['/cust', CUSTOMER(t, locale, currency)],
     ['/sup', SUPPLIER(t, locale, currency)],
     ['/store', STORE(t, locale, currency)],
+    ['/class', ACCOUNT_CLASS(t, locale, currency)],
+    ['/group', ACCOUNT_GROUP(t, locale, currency)],
     ['/s_item', SALARY_ITEM(t, locale, currency)],
     ['/vat', VAT(t, locale, currency)],
     ['/user', USER(t, locale, currency)],

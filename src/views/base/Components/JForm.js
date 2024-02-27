@@ -58,6 +58,7 @@ function Internal(
       row[i] = { ...row[i], balance: '' }
     }
     const len = row ? row.length : 0
+    const acc = data.find((d) => d.id === current.id)
     if (len > 0)
       row[len] = {
         period: t('common.total'),
@@ -65,10 +66,14 @@ function Internal(
         debit: debit,
         icredit: icredit,
         credit: credit,
-        balance: isDebit ? idebit + debit - credit - icredit : credit + icredit - debit - idebit,
+        balance: acc?.isDebit
+          ? idebit + debit - credit - icredit
+          : credit + icredit - debit - idebit,
         currency: currency,
         company: company,
       }
+    console.log(`isDebit`, isDebit)
+    console.log(`row[ ${len}]`, row[len])
     return row
   }
   const summaryJ = (data_) => {

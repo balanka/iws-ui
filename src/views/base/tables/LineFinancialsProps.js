@@ -481,7 +481,7 @@ export const Linescolumns = (data, line, current, models, model, t, locale, curr
         maximumFractionDigits: 2,
       },
       width: 50,
-      minWidth: 30,
+      minWidth: 50,
       maxWidth: 100,
     },
     {
@@ -2097,6 +2097,8 @@ export const ColumnFactory = (formid, data, t, locale, currency) => {
       return ColumnsArticle(data, t, locale, currency)
     case formEnum.COSTCENTER:
     case formEnum.BANK:
+    case formEnum.ACCOUNT_CLASS:
+    case formEnum.ACCOUNT_GROUP:
     case formEnum.FMODULE:
     case formEnum.ROLE:
     case formEnum.PERMISSION:

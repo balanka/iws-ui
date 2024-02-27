@@ -32,6 +32,16 @@ const MasterfileForm = (callback, deps) => {
       : module_.ctx.concat('/').concat(module_.id).concat('/').concat(company)
   const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
   const vatUrl = MASTERFILE.vat.concat('/').concat(formEnum.VAT).concat('/').concat(company)
+  const classUrl = MASTERFILE.accountClass
+    .concat('/')
+    .concat(formEnum.ACCOUNT_CLASS)
+    .concat('/')
+    .concat(company)
+  const groupUrl = MASTERFILE.accountGroup
+    .concat('/')
+    .concat(formEnum.ACCOUNT_GROUP)
+    .concat('/')
+    .concat(company)
   const bankUrl = MASTERFILE.masterfile
     .concat('/')
     .concat(formEnum.BANK)
@@ -60,6 +70,8 @@ const MasterfileForm = (callback, deps) => {
   const accd = iwsState.get(acc_modelId) ?? []
   const bankd = iwsState.get(bank_modelId) ?? []
   const vatd = iwsState.get(vat_modelId) ?? []
+  const accClassd = iwsState.get(formEnum.ACCOUNT_CLASS) ?? []
+  const accGroupd = iwsState.get(formEnum.ACCOUNT_GROUP) ?? []
   const submitEdit = (event) => {
     event.preventDefault()
     if (current.editing && !disable) {
@@ -126,6 +138,14 @@ const MasterfileForm = (callback, deps) => {
       bankUrl &&
       current.modelid !== bank_modelId &&
       Get1(bankUrl, token, bank_modelId)
+    isNotArrayOrEmpty(accClassd) &&
+      classUrl &&
+      current.modelid !== formEnum.ACCOUNT_CLASS &&
+      Get1(classUrl, token, formEnum.ACCOUNT_CLASS)
+    isNotArrayOrEmpty(accClassd) &&
+      groupUrl &&
+      current.modelid !== formEnum.ACCOUNT_GROUP &&
+      Get1(groupUrl, token, formEnum.ACCOUNT_GROUP)
     moduleUrl && current.modelid !== module_modelId && Get1(moduleUrl, token, module_modelId)
     url && Get1(url, token, current_.modelid)
   }
@@ -177,6 +197,8 @@ const MasterfileForm = (callback, deps) => {
           accData={accd}
           vatData={vatd}
           bankData={bankd}
+          accClassData={accClassd}
+          accGroupData={accGroupd}
           onNewLine={onNewSalaryItem}
           tableRef={tableRef}
           tableRef2={tableRef2}

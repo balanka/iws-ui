@@ -328,6 +328,8 @@
     "journal": "Grand livre",
     "pacb": "Balance",
     "account": "Comptes",
+    "accountGroup": "Groupe",
+    "accountClass": "Classe",
     "bank": "Banque",
     "module": "Module",
     "costcenter": "Centre de coûts",
@@ -346,5 +348,11 @@
     "balancesheet": "Bilan/Résultat",
     "financials": "Journaux",
     "financials_stmt": "Clôture/Etat financiers"
+  },
+  "accountClass": {
+    "title":"Classe"
+  },
+  "accountGroup": {
+    "title": "Groupe"
   }
 }
