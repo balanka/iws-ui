@@ -3,11 +3,14 @@ import { MASTERFILE, MENU } from './Menu'
 import iwsStore from './Store'
 import React from 'react'
 import { formEnum } from '../utils/FORMS'
-
-const API_SERVER_PORT = 8091
-const SERVER_URL = 'http://127.0.0.1:'.concat(API_SERVER_PORT)
-//const SERVER_URL = 'http://mac-Studio.fritz.box:'.concat(API_SERVER_PORT)
-console.log('NODE_ENV', process.env)
+const SERVER_IP = 'REACT_APP_HOST_IP_ADDRESS'
+const SERVER_PORT = 'REACT_APP_PORT'
+const SERVER_URL =
+  SERVER_IP === 'REACT_APP_HOST_IP_ADDRESS'
+    ? 'http://0.0.0.0:8091'
+    : 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT)
+//const SERVER_URL = 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT)
+console.log('SERVER_URL_', SERVER_URL)
 const Edit = (url, token, record, data, setCurrent) => {
   const url_ = SERVER_URL.concat(url)
   var result
