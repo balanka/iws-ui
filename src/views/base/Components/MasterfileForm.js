@@ -161,7 +161,7 @@ const MasterfileForm = (callback, deps) => {
     ref.dataManager.changeRowEditing()
     ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
   }
-  const parentChildFn = (row, rows) => rows.find((a) => a.id === row.parent)
+  const parentChildFn = (row, rows) => rows.find((a) => a.id === row?.parent)
   function buildForm(current) {
     return (
       <>
