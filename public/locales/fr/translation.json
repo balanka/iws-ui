@@ -187,14 +187,18 @@
   },
   "salary": {
     "item": {
-      "title": "Composantes du salaire"
+      "title": "Composantes du salaire",
+      "amount" : "Montant"
     }
   },
   "article": {
     "title": "Article",
     "sprice": "Prix de vente",
     "pprice": "Prix d'achat",
-    "avgPrice": "P.M.P"
+    "avgPrice": "P.M.P",
+    "quantityUnit": "Unité mesure",
+    "packUnit": "Emballage",
+    "stocked": "Stocké ?"
   },
   "store": {
     "title": "Store"

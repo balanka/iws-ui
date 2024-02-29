@@ -201,14 +201,18 @@
   },
   "salary": {
     "item": {
-      "title": "Salary items"
+      "title": "Salary items",
+      "amount" : "Amount"
     }
   },
   "article": {
     "title": "Article",
     "sprice": "Sales price",
     "pprice": "Purchase price",
-    "avgPrice": "Average price"
+    "avgPrice": "Average price",
+    "quantityUnit": "QtyUnit",
+    "packUnit": "PackUnit",
+    "stocked": "Stocked ?"
   },
   "store": {
     "title": "Store"

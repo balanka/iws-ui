@@ -193,14 +193,18 @@
   },
   "salary": {
     "item": {
-      "title": "Komponenten des Gehalts"
+      "title": "Komponenten des Gehalts",
+        "amount" : "Betrag"
     }
   },
   "article": {
     "title":      "Artikel",
     "sprice": "Verkaufspreis",
     "pprice": "Einkaufspreis",
-    "avgPrice": "G.D.P"
+    "avgPrice": "G.D.P",
+    "quantityUnit": "M.E.",
+    "packUnit": "V.E.",
+    "stocked": "Bestand ?"
   },
   "store": {
     "title":      "Lager"

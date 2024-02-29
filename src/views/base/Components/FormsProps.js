@@ -34,6 +34,7 @@ import UserTabs from './UserTabs'
 import BankStatementTabs from './BankStatementTabs'
 import EmployeeTabs from './EmployeeTabs'
 import ComboBox from './ComboBox'
+import { textAlign } from '@mui/system'
 
 export const svgIcons = {
   plusCircle:
@@ -462,11 +463,13 @@ const getForm = (formId) => {
     case formEnum.COSTCENTER:
     case formEnum.BANK:
       return MasterfilesMainForm2
+    case formEnum.ARTICLE:
+      return ArticleForm
+    case formEnum.SALARY_ITEM:
+      return SalaryItemForm
     case formEnum.MODULE:
     case formEnum.FMODULE:
-    case formEnum.ARTICLE:
     case formEnum.STORE:
-    case formEnum.SALARY_ITEM:
     case formEnum.PERMISSION:
     case formEnum.ACCOUNT_CLASS:
     case formEnum.ACCOUNT_GROUP:
@@ -1946,6 +1949,221 @@ export const MasterfilesMainForm2 = (props) => {
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+          />
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
+
+export const ArticleForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, locale, currency, disable, t, height } = props
+  return (
+    <>
+      {MasterfilesMainForm(props)}
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('article.pprice')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            style={{ height: height, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="pptice-id"
+            name="pptice"
+            className="input-sm"
+            placeholder="Purchase price"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={Number(current.pprice).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            onChange={(event) => setCurrent({ ...current, pprice: event.target.value })}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('article.sprice')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            style={{ height: height, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="sprice-id"
+            name="sprice"
+            className="input-sm"
+            placeholder="Sales price"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={Number(current.sprice).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            onChange={(event) => setCurrent({ ...current, sprice: event.target.value })}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('article.avgPrice')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1">
+          <Input
+            style={{ height: height, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="avgprice-id"
+            name="sprice"
+            className="input-sm"
+            placeholder="Average price"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={Number(current.avgPrice).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            onChange={(event) => setCurrent({ ...current, avgPrice: event.target.value })}
+          />
+        </Col>
+        <Col sm="1" style={{ height: height, paddingLeft: 3 }}>
+          <Input
+            style={{ height: height }}
+            bssize="sm"
+            type="text"
+            id="currency-id"
+            name="currency"
+            className="input-sm"
+            placeholder="currency"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.currency}
+            onChange={(event) => setCurrent({ ...current, currency: event.target.value })}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('article.quantityUnit')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            style={{ height: height }}
+            bssize="sm"
+            type="text"
+            id="quantityUnit-id"
+            name="quantityUnit"
+            className="input-sm"
+            placeholder="quantity unit"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.quantityUnit}
+            onChange={(event) => setCurrent({ ...current, quantityUnit: event.target.value })}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('article.packUnit')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            style={{ height: height }}
+            bssize="sm"
+            type="text"
+            id="packUnit-id"
+            name="packUnit"
+            className="input-sm"
+            placeholder="Pack unit"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.packUnit}
+            onChange={(event) => setCurrent({ ...current, packUnit: event.target.value })}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('article.stocked')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1">
+          <Input
+            style={{ height: height }}
+            bssize="sm"
+            type="text"
+            id="stocked-id"
+            name="stocked"
+            className="input-sm"
+            placeholder="Stocked?"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.stocked}
+            onChange={(event) => setCurrent({ ...current, stocked: event.target.value })}
+          />
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
+export const SalaryItemForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, locale, currency, disable, t, height } = props
+  return (
+    <>
+      {MasterfilesMainForm(props)}
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('salary.item.amount')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            style={{ height: height, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="amount-id"
+            name="amount"
+            className="input-sm"
+            placeholder="Amount"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={Number(current.amount).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            onChange={(event) => setCurrent({ ...current, amount: event.target.value })}
+          />
+        </Col>
+        <Col sm="1" style={{ height: height, paddingLeft: 3 }}>
+          <Input
+            style={{ height: height }}
+            bssize="sm"
+            type="text"
+            id="currency-id"
+            name="currency"
+            className="input-sm"
+            placeholder="currency"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.currency}
+            onChange={(event) => setCurrent({ ...current, currency: event.target.value })}
           />
         </Col>
       </CInputGroup>

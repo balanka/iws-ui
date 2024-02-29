@@ -396,7 +396,6 @@ export const initAcc = [
     subAccounts: [],
   },
 ]
-
 export const initArticle = [
   {
     id: '34',
@@ -408,6 +407,8 @@ export const initArticle = [
     avgPrice: 0,
     currency: '',
     stocked: true,
+    quantityUnit: '',
+    packUnit: '',
     company: '',
     modelid: 34,
     enterdate: date,
