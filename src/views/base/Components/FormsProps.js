@@ -34,8 +34,6 @@ import UserTabs from './UserTabs'
 import BankStatementTabs from './BankStatementTabs'
 import EmployeeTabs from './EmployeeTabs'
 import ComboBox from './ComboBox'
-import { textAlign } from '@mui/system'
-
 export const svgIcons = {
   plusCircle:
     'M10 3a7 7 0 100 14 7 7 0 000-14zm-9 7a9 9 0 1118 0 9 9 0 01-18 0zm14 .069a1 1 0 01-1 1h-2.931V14a1 1 0 11-2 0v-2.931H6a1 1 0 110-2h3.069V6a1 1 0 112 0v3.069H14a1 1 0 011 1z',
@@ -462,6 +460,7 @@ const getForm = (formId) => {
       return BankStatementTabs
     case formEnum.COSTCENTER:
     case formEnum.BANK:
+    case formEnum.QUANTITYUNIT:
       return MasterfilesMainForm2
     case formEnum.ARTICLE:
       return ArticleForm
@@ -610,6 +609,7 @@ export const FormFactory = (props) => {
     case formEnum.BANKSTATEMENT:
     case formEnum.COSTCENTER:
     case formEnum.BANK:
+    case formEnum.QUANTITYUNIT:
     case formEnum.ACCOUNT_CLASS:
     case formEnum.ACCOUNT_GROUP:
     case formEnum.MODULE:

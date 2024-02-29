@@ -9,6 +9,7 @@ export const formEnum = {
   BANK: 11,
   BANKACCOUNT: 12,
   VAT: 14,
+  QUANTITYUNIT: 15,
   BANKSTATEMENT: 18,
   ASSET: 19,
   EMPLOYEE: 33,

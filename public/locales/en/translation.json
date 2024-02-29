@@ -350,6 +350,7 @@
     "accountGroup": "Account group",
     "accountClass": "Account class",
     "bank": "Bank",
+    "quantityUnit": "Quantity unit",
     "module": "Module",
     "costcenter": "Cost center",
     "customer": "Customer",
@@ -374,5 +375,8 @@
   },
   "accountGroup": {
     "title":      "Account group"
+  },
+  "quantityUnit": {
+    "title": "Quantity unit"
   }
 }

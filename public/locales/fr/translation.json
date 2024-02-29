@@ -335,6 +335,7 @@
     "accountGroup": "Groupe",
     "accountClass": "Classe",
     "bank": "Banque",
+    "quantityUnit": "Unité de mesure",
     "module": "Module",
     "costcenter": "Centre de coûts",
     "customer": "Clients",
@@ -358,5 +359,8 @@
   },
   "accountGroup": {
     "title": "Groupe"
+  },
+  "quantityUnit": {
+    "title": "Unité de mesure"
   }
 }

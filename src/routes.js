@@ -33,6 +33,7 @@ const routes = [
   { path: '/user', name: 'Users', element: MASTERFILE() },
   { path: '/vat', name: 'VAT', element: MASTERFILE() },
   { path: '/bank', name: 'Bank', element: MASTERFILE() },
+  { path: '/qty', name: 'Quantity unit', element: MASTERFILE() },
   { path: '/class', name: 'Account class', element: MASTERFILE() },
   { path: '/group', name: 'Account group', element: MASTERFILE() },
   { path: '/role', name: 'Role', element: MASTERFILE() },

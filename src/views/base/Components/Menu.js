@@ -14,6 +14,7 @@ import {
   ColumnsModule,
   ColumnsAsset,
   ColumnsSalaryItem,
+  ColumnsM2,
 } from '../tables/LineFinancialsProps'
 
 import create from 'zustand'
@@ -182,11 +183,23 @@ export const BANK = (t, locale) => ({
   title: 'bank.title',
   ctx: MASTERFILE.masterfile,
   state: initBank,
-  state1: initAcc,
+  state1: [],
   state2: '',
   state3: '/bank',
   modelid: formEnum.BANK,
-  columns: ColumnsM(initAcc, t, locale),
+  columns: ColumnsM2(t, locale),
+})
+export const QUANTITYUNIT = (t, locale) => ({
+  id: '15',
+  name: 'Quantity unit',
+  title: 'quantityUnit.title',
+  ctx: MASTERFILE.masterfile,
+  state: initQuantity,
+  state1: [],
+  state2: '',
+  state3: '/qty',
+  modelid: formEnum.QUANTITYUNIT,
+  columns: ColumnsM2(t, locale),
 })
 export const SALARY_ITEM = (t, locale) => ({
   id: '171',
@@ -447,6 +460,18 @@ export const initBank = [
     changedate: date,
     modelid: 11,
     parent: '-1',
+    company: '',
+  },
+]
+export const initQuantity = [
+  {
+    id: '',
+    name: '',
+    description: '',
+    enterdate: date,
+    postingdate: date,
+    changedate: date,
+    modelid: 15,
     company: '',
   },
 ]
@@ -872,6 +897,7 @@ export const MENU = (t, locale, currency) =>
     ['/journal', JOURNAL(t, locale, currency)],
     ['/pac', PACB(t, locale, currency)],
     ['/bank', BANK(t, locale)],
+    ['/qty', QUANTITYUNIT(t, locale)],
     ['/acc', ACCOUNT(t, locale, currency)],
     ['/cc', COSTCENTER(t, locale)],
     ['/cust', CUSTOMER(t, locale, currency)],

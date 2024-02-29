@@ -339,6 +339,7 @@
     "accountGroup": "Kontengruppen ",
     "accountClass": "Kontenklassen",
     "bank": "Bank",
+    "quantityUnit": "Mengeneinheit",
     "module": "Module",
     "costcenter": "Kostenstelle",
     "customer": "Kunden",
@@ -363,5 +364,8 @@
   },
   "accountGroup": {
     "title":      "Kontengruppen"
+  },
+  "quantityUnit": {
+    "title": "Mengeneinheit"
   }
 }

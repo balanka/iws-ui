@@ -2097,6 +2097,7 @@ export const ColumnFactory = (formid, data, t, locale, currency) => {
       return ColumnsArticle(data, t, locale, currency)
     case formEnum.COSTCENTER:
     case formEnum.BANK:
+    case formEnum.QUANTITYUNIT:
     case formEnum.ACCOUNT_CLASS:
     case formEnum.ACCOUNT_GROUP:
     case formEnum.FMODULE:
