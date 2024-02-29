@@ -13,7 +13,6 @@ import {
   ColumnsLOGIN,
   ColumnsModule,
   ColumnsAsset,
-  ColumnsM2,
   ColumnsSalaryItem,
 } from '../tables/LineFinancialsProps'
 
@@ -139,7 +138,7 @@ export const STORE = (t, locale) => ({
   state2: '',
   state3: '/store',
   modelid: formEnum.STORE,
-  columns: ColumnsM2(t, locale),
+  columns: ColumnsM(initAcc, t, locale),
 })
 export const ACCOUNT = (t, locale, currency) => ({
   id: '9',
@@ -400,7 +399,7 @@ export const initAcc = [
 
 export const initArticle = [
   {
-    id: '',
+    id: '34',
     name: '',
     description: '',
     parent: '',
@@ -458,8 +457,9 @@ export const initStore = [
     enterdate: date,
     postingdate: date,
     changedate: date,
-    company: '',
     modelid: 35,
+    account: '-1',
+    company: '',
   },
 ]
 export const initModule = [

@@ -1580,10 +1580,14 @@ export const AssetForm = (props) => {
 }
 
 const accountIdField = (props) => {
-  const { accClassData, accGroupData, current, setCurrent, disable } = props
+  const { accClassData, accGroupData, accData, current, setCurrent, disable } = props
   const data = [...accClassData, ...accGroupData]
   const id = current.modelid === formEnum.SALARY_ITEM ? current.account : current.parent
   const fieldName = current.modelid === formEnum.SALARY_ITEM ? 'account' : 'parent'
+  const currentAccount =
+    current.modelid === formEnum.ACCOUNT_CLASS || current.modelid === formEnum.ACCOUNT_GROUP
+      ? data.find((acc) => acc.id === id)
+      : accData.find((acc) => acc.id === id)
   return (
     <>
       <ComboBox
@@ -1595,7 +1599,7 @@ const accountIdField = (props) => {
         /* eslint-disable-next-line react/prop-types */
         data={data.sort(sortById)}
         /* eslint-disable-next-line react/prop-types */
-        value={id}
+        value={currentAccount ? currentAccount.id : ''}
         placeholder={'account number'}
         onChange={(event, newValue) => {
           setCurrent({ ...current, [fieldName]: newValue?.id, accountName: newValue?.name })
@@ -1636,7 +1640,6 @@ const accountNameField = (props) => {
 export const MasterfilesMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, height } = props
-
   return (
     <>
       <CInputGroup row style={{ height: height }}>

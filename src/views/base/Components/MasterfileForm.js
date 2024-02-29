@@ -161,6 +161,7 @@ const MasterfileForm = (callback, deps) => {
     ref.dataManager.changeRowEditing()
     ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
   }
+  const parentChildFn = (row, rows) => rows.find((a) => a.id === row.parent)
   function buildForm(current) {
     return (
       <>
@@ -213,7 +214,6 @@ const MasterfileForm = (callback, deps) => {
           style={{ ...styles.inner }}
           title={title}
         />
-
         <Grid container spacing={1} style={{ ...styles.outer }} direction="column">
           <EditableTable
             Options={{
@@ -230,6 +230,7 @@ const MasterfileForm = (callback, deps) => {
             t={t}
             edit={edit}
             setSelectedRows={setSelectedRows}
+            parentChildData={parentChildFn}
           />
         </Grid>
       </>
