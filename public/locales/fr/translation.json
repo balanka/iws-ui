@@ -188,7 +188,8 @@
   "salary": {
     "item": {
       "title": "Composantes du salaire",
-      "amount" : "Montant"
+      "amount" : "Montant",
+      "percentage": "Pourcentage"
     }
   },
   "article": {

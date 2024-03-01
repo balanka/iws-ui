@@ -202,7 +202,8 @@
   "salary": {
     "item": {
       "title": "Salary items",
-      "amount" : "Amount"
+      "amount" : "Amount",
+      "percentage": "Percentage"
     }
   },
   "article": {

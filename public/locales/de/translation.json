@@ -194,7 +194,8 @@
   "salary": {
     "item": {
       "title": "Komponenten des Gehalts",
-        "amount" : "Betrag"
+        "amount" : "Betrag",
+       "percentage": "Prozentsatz"
     }
   },
   "article": {

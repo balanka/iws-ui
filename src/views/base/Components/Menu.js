@@ -631,6 +631,7 @@ export const initSalaryItem = [
     name: '',
     description: '',
     amount: 0,
+    percentage: 0,
     account: '',
     enterdate: date,
     postingdate: date,

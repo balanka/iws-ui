@@ -2166,6 +2166,29 @@ export const SalaryItemForm = (props) => {
             onChange={(event) => setCurrent({ ...current, currency: event.target.value })}
           />
         </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('salary.item.percentage')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1">
+          <Input
+            style={{ height: height }}
+            bssize="sm"
+            type="text"
+            id="percentage-id"
+            name="percentage"
+            className="input-sm"
+            placeholder="Percentage"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={Number(current.percentage).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })}
+            onChange={(event) => setCurrent({ ...current, percentage: event.target.value })}
+          />
+        </Col>
       </CInputGroup>
     </>
   )
