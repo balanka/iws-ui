@@ -874,15 +874,20 @@ export const ColumnsM = (data, t, locale) => [
 
 export const ColumnsEmployeeSalaryItem = (data, t, locale, currency) => [
   {
-    field: 'id',
-    title: t('common.id'),
-    export: true,
-  },
-  {
     field: 'account',
     title: t('common.account'),
     hidden: false,
     editComponent: (tableData) => Autocomplete(data, tableData, true),
+    initialEditValue: '',
+    minWidth: 100,
+    align: 'right',
+    export: true,
+  },
+  {
+    field: 'accountName',
+    title: t('common.name'),
+    hidden: false,
+    //editComponent: (tableData) => Autocomplete(data, tableData, true),
     initialEditValue: '',
     minWidth: 100,
     align: 'right',
