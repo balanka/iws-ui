@@ -472,6 +472,7 @@ const getForm = (formId) => {
     case formEnum.PERMISSION:
     case formEnum.ACCOUNT_CLASS:
     case formEnum.ACCOUNT_GROUP:
+    case formEnum.PAYROLL_TAX_RANGE:
       return MasterfilesMainForm
     case formEnum.USER:
       return UserTabs
@@ -612,6 +613,7 @@ export const FormFactory = (props) => {
     case formEnum.QUANTITYUNIT:
     case formEnum.ACCOUNT_CLASS:
     case formEnum.ACCOUNT_GROUP:
+    case formEnum.PAYROLL_TAX_RANGE:
     case formEnum.MODULE:
     case formEnum.FMODULE:
     case formEnum.ARTICLE:

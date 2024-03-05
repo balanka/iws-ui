@@ -199,6 +199,17 @@
     "parent":"Gruppe",
     "path": "Path"
   },
+  "payroll": {
+    "tax": {
+      "range": {
+        "title": "Payroll tax table",
+        "from": "From ",
+        "to": "To",
+        "tax": "Tax",
+        "class": "Tax class"
+      }
+    }
+  },
   "salary": {
     "item": {
       "title": "Salary items",
@@ -369,7 +380,8 @@
     "masterfiles": "Master files",
     "balancesheet": "Balance sheet",
     "financials": "Payable/Receivable",
-    "financials_stmt": "Financials statements"
+    "financials_stmt": "Financials statements",
+    "payroll.tax.range": "Pay roll tax table"
   },
   "accountClass": {
     "title":      "Account class"

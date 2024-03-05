@@ -880,7 +880,7 @@ export const ColumnsEmployeeSalaryItem = (data, t, locale, currency) => [
     editComponent: (tableData) => Autocomplete(data, tableData, true),
     initialEditValue: '',
     minWidth: 100,
-    align: 'right',
+    align: 'left',
     export: true,
   },
   {
@@ -890,7 +890,7 @@ export const ColumnsEmployeeSalaryItem = (data, t, locale, currency) => [
     //editComponent: (tableData) => Autocomplete(data, tableData, true),
     initialEditValue: '',
     minWidth: 100,
-    align: 'right',
+    align: 'left',
     export: true,
   },
   {
@@ -982,6 +982,69 @@ export const ColumnsSalaryItem = (data, t, locale, currency) => [
     type: 'date',
     align: 'right',
     dateSetting: { locale: locale },
+    export: true,
+  },
+  {
+    field: 'company',
+    title: t('common.company'),
+    type: 'string',
+    export: true,
+  },
+]
+
+export const ColumnsPayrollTaxRange = (t, locale, currency) => [
+  {
+    field: 'id',
+    title: t('common.id'),
+    export: true,
+    width: 5,
+  },
+  {
+    field: 'fromAmount',
+    title: t('payroll.tax.range.from'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    width: 40,
+    export: true,
+  },
+  {
+    field: 'toAmount',
+    title: t('payroll.tax.range.to'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    width: 40,
+    export: true,
+  },
+  {
+    field: 'tax',
+    title: t('payroll.tax.range.tax'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    width: 40,
+    export: true,
+  },
+  {
+    field: 'taxClass',
+    title: t('payroll.tax.range.class'),
+    type: 'string',
     export: true,
   },
   {
@@ -2084,7 +2147,6 @@ export const ColumnsBalancesheet = (t, locale, currency) => [
 ]
 
 export const ColumnFactory = (formid, data, t, locale, currency) => {
-  console.log('formid', formid)
   switch (formid) {
     case formEnum.ACCOUNT:
       return ColumnsACC(data, t, locale, currency)
@@ -2100,6 +2162,8 @@ export const ColumnFactory = (formid, data, t, locale, currency) => {
       return ColumnsM2(t, locale)
     case formEnum.ARTICLE:
       return ColumnsArticle(data, t, locale, currency)
+    case formEnum.PAYROLL_TAX_RANGE:
+      return ColumnsPayrollTaxRange(t, locale, currency)
     case formEnum.COSTCENTER:
     case formEnum.BANK:
     case formEnum.QUANTITYUNIT:

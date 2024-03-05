@@ -185,6 +185,17 @@
     "parent":"Groupe",
     "path": "Path"
   },
+  "payroll": {
+    "tax": {
+      "range": {
+        "title": "Table impôt sur salaire",
+        "from": "Début ",
+        "to": "Fin",
+        "tax": "Tax",
+        "class": "Classe impôt"
+      }
+    }
+  },
   "salary": {
     "item": {
       "title": "Composantes du salaire",
@@ -353,7 +364,9 @@
     "bankstatement": "Rélévé bancaire",
     "balancesheet": "Bilan/Résultat",
     "financials": "Journaux",
-    "financials_stmt": "Clôture/Etat financiers"
+    "financials_stmt": "Clôture/Etat financiers",
+    "payroll.tax.range": "Table impôt sur salaire"
+
   },
   "accountClass": {
     "title":"Classe"

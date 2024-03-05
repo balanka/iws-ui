@@ -191,6 +191,17 @@
     "parent":"Gruppe",
     "path": "Path"
   },
+  "payroll": {
+    "tax" : {
+      "range": {
+        "title": "Lohnsteuertabelle",
+        "from": "Von",
+        "to": "Bis",
+        "tax": "Betrag",
+        "class": "Steuerklasse"
+      }
+    }
+  },
   "salary": {
     "item": {
       "title": "Komponenten des Gehalts",
@@ -358,7 +369,8 @@
     "masterfiles": "Stammdaten",
     "balancesheet": "Jahresabschluss",
     "financials": "Belege",
-    "financials_stmt": "Jahresabschluss/GuV"
+    "financials_stmt": "Jahresabschluss/GuV",
+    "payroll.tax.range": "Lohnsteuertabelle"
   },
   "accountClass": {
     "title":      "Kontenklassen"
