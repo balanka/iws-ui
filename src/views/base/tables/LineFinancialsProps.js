@@ -40,8 +40,8 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     field: 'id',
     title: t('common.iban'),
     initialEditValue: '',
-    minWidth: 40,
-    maxWidth: 100,
+    minWidth: 200,
+    maxWidth: 500,
     export: true,
   },
   {
@@ -51,14 +51,16 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     editComponent: (tableData) => Autocomplete(data, tableData, true),
     initialEditValue: '',
     minWidth: 100,
-    align: 'right',
+    maxWidth: 300,
     export: true,
   },
   {
     field: 'owner',
     title: t('common.owner'),
     initialEditValue: '',
-    minWidth: 5,
+    minWidth: 30,
+    maxWidth: 100,
+    hidden: true,
     export: true,
   },
   {
@@ -74,6 +76,7 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     initialEditValue: '',
     minWidth: 5,
     editable: 'never',
+    hidden: true,
     export: true,
   },
 ]
@@ -93,9 +96,23 @@ export const ColumnsLOGIN = () => [
   },
 ]
 export const columnsPACB = (t, locale, currency) => [
-  { field: 'id', title: t('common.id'), minWidth: 10, export: true },
-  { field: 'name', title: t('common.name'), minWidth: 40, export: true },
-  { field: 'period', title: t('pac.period'), type: 'numeric', export: true },
+  //{ field: 'id', title: t('common.id'), minWidth: 10, export: true },
+  {
+    field: 'account',
+    title: t('account.account'),
+    width: '4%',
+    export: true,
+    align: 'left',
+  },
+  { field: 'name', title: t('common.name'), width: '35%', align: 'left', export: true },
+  {
+    field: 'period',
+    title: t('pac.period'),
+    type: 'numeric',
+    width: '4%',
+    align: 'left',
+    export: true,
+  },
   {
     field: 'idebit',
     title: t('common.idebit'),
@@ -156,8 +173,8 @@ export const columnsPACB = (t, locale, currency) => [
     },
     export: true,
   },
-  { field: 'currency', title: t('common.currency'), export: true },
-  { field: 'company', title: t('common.company'), export: true },
+  { field: 'currency', title: t('common.currency'), width: '2%', export: true },
+  { field: 'company', title: t('common.company'), width: '4%', export: true },
 ]
 
 export const columnsF = (data, line, current, t, locale, currency) => [
@@ -384,7 +401,6 @@ export const Linescolumns = (data, line, current, models, model, t, locale, curr
   }
 
   return [
-    //  {field:'id', title:t('financials.line.id'), type:'numeric', minWidth:30, maxWidth:30, initialEditValue:line.id, align:'left', editable:'never'}
     {
       field: 'transid',
       title: t('financials.id'),
@@ -465,7 +481,7 @@ export const Linescolumns = (data, line, current, models, model, t, locale, curr
         maximumFractionDigits: 2,
       },
       width: 50,
-      minWidth: 30,
+      minWidth: 50,
       maxWidth: 100,
     },
     {
@@ -502,7 +518,7 @@ export const Options = {
   showTitle: false,
   padding: 'dense',
   filtering: false,
-  search: false,
+  //search: false,
   selection: false,
   cellStyle: { padding: '0.3em', fontSize: 10 },
   headerStyle: {
@@ -858,18 +874,23 @@ export const ColumnsM = (data, t, locale) => [
 
 export const ColumnsEmployeeSalaryItem = (data, t, locale, currency) => [
   {
-    field: 'id',
-    title: t('common.id'),
-    export: true,
-  },
-  {
     field: 'account',
     title: t('common.account'),
     hidden: false,
     editComponent: (tableData) => Autocomplete(data, tableData, true),
     initialEditValue: '',
     minWidth: 100,
-    align: 'right',
+    align: 'left',
+    export: true,
+  },
+  {
+    field: 'accountName',
+    title: t('common.name'),
+    hidden: false,
+    //editComponent: (tableData) => Autocomplete(data, tableData, true),
+    initialEditValue: '',
+    minWidth: 100,
+    align: 'left',
     export: true,
   },
   {
@@ -961,6 +982,69 @@ export const ColumnsSalaryItem = (data, t, locale, currency) => [
     type: 'date',
     align: 'right',
     dateSetting: { locale: locale },
+    export: true,
+  },
+  {
+    field: 'company',
+    title: t('common.company'),
+    type: 'string',
+    export: true,
+  },
+]
+
+export const ColumnsPayrollTaxRange = (t, locale, currency) => [
+  {
+    field: 'id',
+    title: t('common.id'),
+    export: true,
+    width: 5,
+  },
+  {
+    field: 'fromAmount',
+    title: t('payroll.tax.range.from'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    width: 40,
+    export: true,
+  },
+  {
+    field: 'toAmount',
+    title: t('payroll.tax.range.to'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    width: 40,
+    export: true,
+  },
+  {
+    field: 'tax',
+    title: t('payroll.tax.range.tax'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    width: 40,
+    export: true,
+  },
+  {
+    field: 'taxClass',
+    title: t('payroll.tax.range.class'),
+    type: 'string',
     export: true,
   },
   {
@@ -2063,7 +2147,6 @@ export const ColumnsBalancesheet = (t, locale, currency) => [
 ]
 
 export const ColumnFactory = (formid, data, t, locale, currency) => {
-  console.log('formid', formid)
   switch (formid) {
     case formEnum.ACCOUNT:
       return ColumnsACC(data, t, locale, currency)
@@ -2079,8 +2162,13 @@ export const ColumnFactory = (formid, data, t, locale, currency) => {
       return ColumnsM2(t, locale)
     case formEnum.ARTICLE:
       return ColumnsArticle(data, t, locale, currency)
+    case formEnum.PAYROLL_TAX_RANGE:
+      return ColumnsPayrollTaxRange(t, locale, currency)
     case formEnum.COSTCENTER:
     case formEnum.BANK:
+    case formEnum.QUANTITYUNIT:
+    case formEnum.ACCOUNT_CLASS:
+    case formEnum.ACCOUNT_GROUP:
     case formEnum.FMODULE:
     case formEnum.ROLE:
     case formEnum.PERMISSION:

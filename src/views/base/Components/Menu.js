@@ -13,8 +13,9 @@ import {
   ColumnsLOGIN,
   ColumnsModule,
   ColumnsAsset,
-  ColumnsM2,
   ColumnsSalaryItem,
+  ColumnsM2,
+  ColumnsPayrollTaxRange,
 } from '../tables/LineFinancialsProps'
 
 import create from 'zustand'
@@ -37,6 +38,7 @@ export const MASTERFILE = {
   cc: '/cc',
   module: '/module',
   fmodule: '/fmodule',
+  login: '/login',
   role: '/role',
   perm: '/perm',
   vat: '/vat',
@@ -48,11 +50,14 @@ export const MASTERFILE = {
   ftr: '/ftr/model',
   bs: '/bs',
   pac: '/pac',
-  jou: '/journal',
+  journal: '/journal',
   balancesheet: '/balance',
   user: '/user',
   salaryItem: '/s_item',
+  payrollTaxRange: '/payrollTax',
   masterfile: '/mf',
+  accountClass: '/class',
+  accountGroup: '/group',
 }
 export const LOGIN = (t) => ({
   id: '11111',
@@ -137,7 +142,7 @@ export const STORE = (t, locale) => ({
   state2: '',
   state3: '/store',
   modelid: formEnum.STORE,
-  columns: ColumnsM2(t, locale),
+  columns: ColumnsM(initAcc, t, locale),
 })
 export const ACCOUNT = (t, locale, currency) => ({
   id: '9',
@@ -181,11 +186,23 @@ export const BANK = (t, locale) => ({
   title: 'bank.title',
   ctx: MASTERFILE.masterfile,
   state: initBank,
-  state1: initAcc,
+  state1: [],
   state2: '',
   state3: '/bank',
   modelid: formEnum.BANK,
-  columns: ColumnsM(initAcc, t, locale),
+  columns: ColumnsM2(t, locale),
+})
+export const QUANTITYUNIT = (t, locale) => ({
+  id: '15',
+  name: 'Quantity unit',
+  title: 'quantityUnit.title',
+  ctx: MASTERFILE.masterfile,
+  state: initQuantity,
+  state1: [],
+  state2: '',
+  state3: '/qty',
+  modelid: formEnum.QUANTITYUNIT,
+  columns: ColumnsM2(t, locale),
 })
 export const SALARY_ITEM = (t, locale) => ({
   id: '171',
@@ -211,6 +228,30 @@ export const MODULE = (t, locale) => ({
   modelid: formEnum.MODULE,
   columns: ColumnsModule(t, locale),
 })
+export const ACCOUNT_CLASS = (t, locale) => ({
+  id: '36',
+  name: 'Account class',
+  title: 'accountClass.title',
+  ctx: MASTERFILE.masterfile,
+  state: initAccountClass,
+  state1: initAccountClass,
+  state2: '',
+  state3: '/class',
+  modelid: formEnum.ACCOUNT_CLASS,
+  columns: ColumnsM(initAccountClass, t, locale),
+})
+export const ACCOUNT_GROUP = (t, locale) => ({
+  id: '37',
+  name: 'Account group',
+  title: 'accountGroup.title',
+  ctx: MASTERFILE.masterfile,
+  state: initAccountGroup,
+  state1: [...initAccountClass, ...initAccountGroup],
+  state2: '',
+  state3: '/group',
+  modelid: formEnum.ACCOUNT_GROUP,
+  columns: ColumnsM([...initAccountGroup, ...initAccountClass], t, locale),
+})
 export const VAT = (t, locale) => ({
   id: '14',
   name: 'Vat',
@@ -223,6 +264,18 @@ export const VAT = (t, locale) => ({
   modelid: formEnum.VAT,
   columns: ColumnsVAT(initAcc, t, locale),
 })
+export const PAYROLL_TAX_RANGE = (t, locale) => ({
+  id: '172',
+  name: 'Payroll tax range',
+  title: 'payroll.tax.range.title',
+  ctx: MASTERFILE.payrollTaxRange,
+  state: initPayrollTaxRange,
+  state1: [],
+  state2: '',
+  state3: MASTERFILE.payrollTaxRange,
+  modelid: formEnum.PAYROLL_TAX_RANGE,
+  columns: ColumnsPayrollTaxRange(t, locale),
+})
 const BS = (t, locale, currency) => ({
   id: '18',
   name: 'Bankstatement',
@@ -231,7 +284,7 @@ const BS = (t, locale, currency) => ({
   state: initBS,
   state1: '',
   state2: '',
-  state3: '/bs',
+  state3: MASTERFILE.bs,
   modelid: formEnum.BANKSTATEMENT,
   period: -1,
   columns: ColumnsBS(t, locale, currency),
@@ -244,7 +297,7 @@ const PACB = (t, locale, currency) => ({
   state: initPac,
   state1: initAcc,
   state2: '',
-  state3: '/pac',
+  state3: MASTERFILE.pac,
   modelid: formEnum.PACB,
   columns: columnsPACB(t, locale, currency),
 })
@@ -264,7 +317,7 @@ const JOURNAL = (t, locale, currency) => ({
   id: '112',
   name: 'Journal',
   title: 'journal.title',
-  ctx: MASTERFILE.jou,
+  ctx: MASTERFILE.journal,
   state: initJour,
   state1: initAcc,
   state2: '',
@@ -289,7 +342,12 @@ const BALANCESHEET = (t, locale, currency) => ({
   name: 'Balancesheet',
   title: 'balancesheet.title',
   ctx: MASTERFILE.balancesheet,
-  state: initAcc,
+  state: {
+    account: '',
+    account2: '',
+    fromPeriod: '',
+    toPeriod: '',
+  },
   state1: initAcc,
   state2: '',
   state3: '',
@@ -366,10 +424,9 @@ export const initAcc = [
     subAccounts: [],
   },
 ]
-
 export const initArticle = [
   {
-    id: '',
+    id: '34',
     name: '',
     description: '',
     parent: '',
@@ -378,6 +435,8 @@ export const initArticle = [
     avgPrice: 0,
     currency: '',
     stocked: true,
+    quantityUnit: '',
+    packUnit: '',
     company: '',
     modelid: 34,
     enterdate: date,
@@ -419,6 +478,18 @@ export const initBank = [
     company: '',
   },
 ]
+export const initQuantity = [
+  {
+    id: '',
+    name: '',
+    description: '',
+    enterdate: date,
+    postingdate: date,
+    changedate: date,
+    modelid: 15,
+    company: '',
+  },
+]
 export const initStore = [
   {
     id: '',
@@ -427,8 +498,9 @@ export const initStore = [
     enterdate: date,
     postingdate: date,
     changedate: date,
-    company: '',
     modelid: 35,
+    account: '-1',
+    company: '',
   },
 ]
 export const initModule = [
@@ -443,6 +515,32 @@ export const initModule = [
     changedate: date,
     modelid: 400,
     company: '',
+  },
+]
+export const initAccountClass = [
+  {
+    id: '',
+    name: '',
+    description: '',
+    parent: -1,
+    enterdate: date,
+    postingdate: date,
+    changedate: date,
+    company: '',
+    modelid: 36,
+  },
+]
+export const initAccountGroup = [
+  {
+    id: '',
+    name: '',
+    description: '',
+    parent: -1,
+    enterdate: date,
+    postingdate: date,
+    changedate: date,
+    company: '',
+    modelid: 37,
   },
 ]
 export const initCC = [
@@ -548,11 +646,23 @@ export const initSalaryItem = [
     name: '',
     description: '',
     amount: 0,
+    percentage: 0,
     account: '',
     enterdate: date,
     postingdate: date,
     changedate: date,
     modelid: 171,
+    company: '',
+  },
+]
+export const initPayrollTaxRange = [
+  {
+    id: '-1',
+    from: 0,
+    to: 0,
+    tax: 0,
+    taxClass: '',
+    modelid: 172,
     company: '',
   },
 ]
@@ -809,30 +919,34 @@ export const initfModule = [
 ]
 export const MENU = (t, locale, currency) =>
   new Map([
-    ['/art', ARTICLE(t, locale, currency)],
-    ['/asset', ASSET(t, locale, currency)],
-    ['/journal', JOURNAL(t, locale, currency)],
-    ['/pac', PACB(t, locale, currency)],
-    ['/bank', BANK(t, locale)],
-    ['/acc', ACCOUNT(t, locale, currency)],
-    ['/cc', COSTCENTER(t, locale)],
-    ['/cust', CUSTOMER(t, locale, currency)],
-    ['/sup', SUPPLIER(t, locale, currency)],
-    ['/store', STORE(t, locale, currency)],
-    ['/s_item', SALARY_ITEM(t, locale, currency)],
-    ['/vat', VAT(t, locale, currency)],
-    ['/user', USER(t, locale, currency)],
-    ['/role', ROLE(t, locale)],
-    ['/perm', PERMISSION(t, locale)],
-    ['/login', LOGIN(t, locale, currency)],
+    [MASTERFILE.article, ARTICLE(t, locale, currency)],
+    [MASTERFILE.asset, ASSET(t, locale, currency)],
+    [MASTERFILE.journal, JOURNAL(t, locale, currency)],
+    [MASTERFILE.pac, PACB(t, locale, currency)],
+    [MASTERFILE.bank, BANK(t, locale)],
+    [MASTERFILE.masterfile, QUANTITYUNIT(t, locale)],
+    [MASTERFILE.acc, ACCOUNT(t, locale, currency)],
+    [MASTERFILE.cc, COSTCENTER(t, locale)],
+    [MASTERFILE.cust, CUSTOMER(t, locale, currency)],
+    [MASTERFILE.sup, SUPPLIER(t, locale, currency)],
+    [MASTERFILE.store, STORE(t, locale, currency)],
+    [MASTERFILE.accountClass, ACCOUNT_CLASS(t, locale, currency)],
+    [MASTERFILE.accountGroup, ACCOUNT_GROUP(t, locale, currency)],
+    [MASTERFILE.salaryItem, SALARY_ITEM(t, locale, currency)],
+    [MASTERFILE.payrollTaxRange, PAYROLL_TAX_RANGE(t, locale, currency)],
+    [MASTERFILE.vat, VAT(t, locale, currency)],
+    [MASTERFILE.user, USER(t, locale, currency)],
+    [MASTERFILE.role, ROLE(t, locale)],
+    [MASTERFILE.perm, PERMISSION(t, locale)],
+    [MASTERFILE.login, LOGIN(t, locale, currency)],
     ['/dashboard', LOGIN(t, locale, currency)],
-    ['/comp', COMPANY(t, locale, currency)],
-    ['/bs', BS(t, locale, currency)],
-    ['/ftr', FINANCIALS(t, locale, currency)],
-    ['/module', MODULE(t, locale)],
-    ['/fmodule', FMODULE(t, locale)],
-    ['/emp', EMPLOYEE(t, locale, currency)],
-    ['/balance', BALANCESHEET(t, locale, currency)],
+    [MASTERFILE.comp, COMPANY(t, locale, currency)],
+    [MASTERFILE.bs, BS(t, locale, currency)],
+    [MASTERFILE.ftr, FINANCIALS(t, locale, currency)],
+    [MASTERFILE.module, MODULE(t, locale)],
+    [MASTERFILE.fmodule, FMODULE(t, locale)],
+    [MASTERFILE.emp, EMPLOYEE(t, locale, currency)],
+    [MASTERFILE.balancesheet, BALANCESHEET(t, locale, currency)],
   ])
 
 const initialState = {

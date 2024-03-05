@@ -199,16 +199,32 @@
     "parent":"Gruppe",
     "path": "Path"
   },
+  "payroll": {
+    "tax": {
+      "range": {
+        "title": "Payroll tax table",
+        "from": "From ",
+        "to": "To",
+        "tax": "Tax",
+        "class": "Tax class"
+      }
+    }
+  },
   "salary": {
     "item": {
-      "title": "Salary items"
+      "title": "Salary items",
+      "amount" : "Amount",
+      "percentage": "Percentage"
     }
   },
   "article": {
     "title": "Article",
     "sprice": "Sales price",
     "pprice": "Purchase price",
-    "avgPrice": "Average price"
+    "avgPrice": "Average price",
+    "quantityUnit": "QtyUnit",
+    "packUnit": "PackUnit",
+    "stocked": "Stocked ?"
   },
   "store": {
     "title": "Store"
@@ -343,7 +359,10 @@
     "journal": "Journal",
     "pacb": "Account balance",
     "account": "Accounts",
+    "accountGroup": "Account group",
+    "accountClass": "Account class",
     "bank": "Bank",
+    "quantityUnit": "Quantity unit",
     "module": "Module",
     "costcenter": "Cost center",
     "customer": "Customer",
@@ -361,6 +380,16 @@
     "masterfiles": "Master files",
     "balancesheet": "Balance sheet",
     "financials": "Payable/Receivable",
-    "financials_stmt": "Financials statements"
+    "financials_stmt": "Financials statements",
+    "payroll.tax.range": "Pay roll tax table"
+  },
+  "accountClass": {
+    "title":      "Account class"
+  },
+  "accountGroup": {
+    "title":      "Account group"
+  },
+  "quantityUnit": {
+    "title": "Quantity unit"
   }
 }

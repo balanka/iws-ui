@@ -93,7 +93,6 @@ const FinancialsForm = (callback, deps) => {
     event.preventDefault()
     toggleEdit()
     const url_ = modifyUrl.replace('ftr', 'cancelnFtr')
-    console.log('url_???', url_)
     // eslint-disable-next-line no-unused-expressions
     current.id > 0 ? Edit(url_, token, current, data(), setCurrent) : current
   }
@@ -123,24 +122,15 @@ const FinancialsForm = (callback, deps) => {
     }
   }, [init, data_])
   const reload = () => {
-    iwsStore.deleteKey(current.modelid)
-    const url_ = url.concat('/').concat(current.modelid)
-    url_ && Get1(url_, token, parseInt(current.modelid))
+    iwsStore.deleteKey(model)
+    const url_ = url.concat('/').concat(model)
+    url_ && Get1(url_, token, parseInt(model))
   }
   const toggleToolbar = () => setToolbar(!toolbar)
   const toggle = () => setState({ ...state, collapse: !state.collapse })
   const setSelectedRows = (rows_) => {
     setRows(rows_.map((item) => ({ id: item.id, modelid: item.modelid })))
   }
-
-  // function getAccountAndLabel() {
-  //   const model_ = fModuleData.find((obj) => obj.id === parseInt(model))
-  //   const account_ = model_ ? model_.account : undefined
-  //   const accountLabel_ = model_.isDebit ? 'account' : 'oaccount'
-  //   const oaccount_ = account_ ? '' : model_.account
-  //   const oaccountLabel_ = account_ ? 'oaccount' : 'account'
-  //   return { account_, accountLabel_, oaccount_, oaccountLabel_ }
-  // }
 
   const initAdd = () => {
     //const { account_, accountLabel_, oaccount_, oaccountLabel_ } = getAccountAndLabel()

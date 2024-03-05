@@ -191,16 +191,32 @@
     "parent":"Gruppe",
     "path": "Path"
   },
+  "payroll": {
+    "tax" : {
+      "range": {
+        "title": "Lohnsteuertabelle",
+        "from": "Von",
+        "to": "Bis",
+        "tax": "Betrag",
+        "class": "Steuerklasse"
+      }
+    }
+  },
   "salary": {
     "item": {
-      "title": "Komponenten des Gehalts"
+      "title": "Komponenten des Gehalts",
+        "amount" : "Betrag",
+       "percentage": "Prozentsatz"
     }
   },
   "article": {
     "title":      "Artikel",
     "sprice": "Verkaufspreis",
     "pprice": "Einkaufspreis",
-    "avgPrice": "G.D.P"
+    "avgPrice": "G.D.P",
+    "quantityUnit": "M.E.",
+    "packUnit": "V.E.",
+    "stocked": "Bestand ?"
   },
   "store": {
     "title":      "Lager"
@@ -332,7 +348,10 @@
     "journal": "Journal",
     "pacb": "Salden",
     "account": "Konten",
+    "accountGroup": "Kontengruppen ",
+    "accountClass": "Kontenklassen",
     "bank": "Bank",
+    "quantityUnit": "Mengeneinheit",
     "module": "Module",
     "costcenter": "Kostenstelle",
     "customer": "Kunden",
@@ -350,6 +369,16 @@
     "masterfiles": "Stammdaten",
     "balancesheet": "Jahresabschluss",
     "financials": "Belege",
-    "financials_stmt": "Jahresabschluss/GuV"
+    "financials_stmt": "Jahresabschluss/GuV",
+    "payroll.tax.range": "Lohnsteuertabelle"
+  },
+  "accountClass": {
+    "title":      "Kontenklassen"
+  },
+  "accountGroup": {
+    "title":      "Kontengruppen"
+  },
+  "quantityUnit": {
+    "title": "Mengeneinheit"
   }
 }

@@ -128,11 +128,24 @@ const CustomerTabs = (props) => {
       disable={disable}
     />
   )
+
   const getTable = (formid) => (
-    <Grid container spacing={0.5} style={{ ...styles.innerX, backgroundColor: blue }}>
+    <Grid
+      container
+      spacing={0.5}
+      style={{ ...styles.inner, backgroundColor: blue }}
+      direction="column"
+    >
       <EditableTable
         id="bankaccouts"
-        Options={{ ...Options, tableLayout: 'auto', paging: false, tableWidth: 'full' }}
+        Options={{
+          ...Options,
+          tableLayout: 'auto',
+          // eslint-disable-next-line react/prop-types
+          paging: current ? current.bankaccounts?.length > 8 : false,
+          search: true,
+          pageSizeOptions: [5, 10, 20],
+        }}
         flag={false}
         /* eslint-disable-next-line react/prop-types */
         data={current ? current.bankaccounts : []}

@@ -25,7 +25,6 @@ const BasicTreeTable = () => {
   const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
   const initAcc = module_.state1
   const initialState = module_.state
-
   const current_ = initialState
   const title = t(module_.title)
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -62,8 +61,8 @@ const BasicTreeTable = () => {
     url
       .concat('/')
       .concat(current.account)
-      .concat('/')
-      .concat(current.fromPeriod)
+      //.concat('/')
+      //.concat(current.fromPeriod)
       .concat('/')
       .concat(current.toPeriod)
 
@@ -151,6 +150,7 @@ const BasicTreeTable = () => {
           height={35}
           styles={styles}
           submitQuery={submitQuery_}
+          balancesheet={true}
         />
 
         <Grid container spacing={2} style={{ ...styles.inner }} direction="column">

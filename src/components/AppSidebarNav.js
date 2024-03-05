@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { CBadge } from '@coreui/react'
 import { useStore } from '../views/base/Components/Menu'
@@ -7,6 +7,7 @@ import { useStore } from '../views/base/Components/Menu'
 export const AppSidebarNav = ({ items }) => {
   const { setSelected } = useStore()
   const location = useLocation()
+  const navigate = useNavigate()
   const navLink = (name, icon, badge, indent = false) => {
     return (
       <>
@@ -39,8 +40,8 @@ export const AppSidebarNav = ({ items }) => {
         key={index}
         {...rest}
         onClick={(e) => {
-          console.log('onClick2', e.target.childNodes[0].data + 'to>>>' + rest.to)
           setSelected(rest.to)
+          navigate(rest.to)
         }}
       >
         {navLink(name, icon, badge, indent)}
@@ -58,7 +59,7 @@ export const AppSidebarNav = ({ items }) => {
         toggler={navLink(name, icon)}
         visible={location.pathname.startsWith(to)}
         {...rest}
-        onClick={(e) => console.log('onClick', e.target.childNodes[0].data + 'to>>>' + to)}
+        onClick={(e) => console.log('onClick ', e.target + 'to>>>' + to)}
       >
         {item.items?.map((item, index) =>
           item.items ? navGroup(item, index) : navItem(item, index, true),
