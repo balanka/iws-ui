@@ -658,8 +658,8 @@ export const initSalaryItem = [
 export const initPayrollTaxRange = [
   {
     id: '-1',
-    from: 0,
-    to: 0,
+    fromAmount: 0,
+    toAmount: 0,
     tax: 0,
     taxClass: '',
     modelid: 172,

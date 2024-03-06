@@ -472,8 +472,9 @@ const getForm = (formId) => {
     case formEnum.PERMISSION:
     case formEnum.ACCOUNT_CLASS:
     case formEnum.ACCOUNT_GROUP:
-    case formEnum.PAYROLL_TAX_RANGE:
       return MasterfilesMainForm
+    case formEnum.PAYROLL_TAX_RANGE:
+      return PayrollTaxForm
     case formEnum.USER:
       return UserTabs
     case formEnum.ROLE:
@@ -1801,6 +1802,159 @@ export const MasterfilesMainForm = (props) => {
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+          />
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
+
+export const PayrollTaxForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, disable, t, locale, currency, height } = props
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.id')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            style={{ height: 30, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="id"
+            name="id"
+            className="input-sm"
+            placeholder="Id"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.id}
+            onChange={(event) => setCurrent({ ...current, id: event.target.value })}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('payroll.tax.range.from')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            style={{ height: 30, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="from-id"
+            name="from"
+            className="input-sm"
+            placeholder="From amount"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={Number(current.fromAmount).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            onChange={(event) => setCurrent({ ...current, fromAmount: event.target.value })}
+          />
+        </Col>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('payroll.tax.range.to')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            style={{ height: 30, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="to-id"
+            name="to"
+            className="input-sm"
+            placeholder="To amount"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={Number(current.toAmount).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            onChange={(event) => setCurrent({ ...current, toAmount: event.target.value })}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('payroll.tax.range.tax')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            style={{ height: 30, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="tax-id"
+            name="tax"
+            className="input-sm"
+            placeholder="Tax amount"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={Number(current.tax).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            onChange={(event) => setCurrent({ ...current, tax: event.target.value })}
+          />
+        </Col>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('payroll.tax.range.class')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            style={{ height: 30, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="taxClass-input"
+            name="taxClass"
+            className="input-sm"
+            placeholder="Tax class"
+            disabled={disable}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.taxClass}
+            onChange={(event) => setCurrent({ ...current, taxClass: event.target.value })}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        {/* eslint-disable-next-line react/prop-types */}
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.company')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            disabled={true}
+            bssize="sm"
+            type="text"
+            id="company-id"
+            name="company"
+            className="input-sm"
+            placeholder="company"
+            style={{ height: 30, padding: 2 }}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.company}
+            readonly
           />
         </Col>
       </CInputGroup>

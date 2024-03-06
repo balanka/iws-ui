@@ -997,7 +997,7 @@ export const ColumnsPayrollTaxRange = (t, locale, currency) => [
     field: 'id',
     title: t('common.id'),
     export: true,
-    width: 5,
+    width: '10%',
   },
   {
     field: 'fromAmount',
@@ -1010,7 +1010,7 @@ export const ColumnsPayrollTaxRange = (t, locale, currency) => [
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     },
-    width: 40,
+    width: '20%',
     export: true,
   },
   {
@@ -1024,7 +1024,7 @@ export const ColumnsPayrollTaxRange = (t, locale, currency) => [
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     },
-    width: 40,
+    width: '20%',
     export: true,
   },
   {
@@ -1038,7 +1038,8 @@ export const ColumnsPayrollTaxRange = (t, locale, currency) => [
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     },
-    width: 40,
+    width: '20%',
+    align: 'right',
     export: true,
   },
   {
@@ -1046,12 +1047,15 @@ export const ColumnsPayrollTaxRange = (t, locale, currency) => [
     title: t('payroll.tax.range.class'),
     type: 'string',
     export: true,
+    width: '10%',
+    align: 'center',
   },
   {
     field: 'company',
     title: t('common.company'),
     type: 'string',
     export: true,
+    width: '10%',
   },
 ]
 export const ColumnsArticle = (data, t, locale, currency) => [
