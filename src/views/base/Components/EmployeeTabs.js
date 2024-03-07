@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from '../tabs/Tabs'
-import { AddressForm, FormFactory, FormWrapper } from './FormsProps'
+import { AddressForm, FormFactory, FormInCollapsibleWrapper } from './FormsProps'
 import { ColumnFactory, Options } from '../tables/LineFinancialsProps'
 import EditableTable from '../tables/EditableTable'
 import { formEnum } from '../utils/FORMS'
@@ -197,7 +197,7 @@ const EmployeeTabs = (props) => {
       </Grid>
     )
   }
-  const getAddressForm = () => <FormWrapper {...props} form={AddressForm} />
+  const getAddressForm = () => <FormInCollapsibleWrapper {...props} form={AddressForm} />
   const GetTabContent = (mainFormId, subFormId) => {
     return [
       { title: t('common.general'), id: 1, form: getGeneralForm() },

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from '../tabs/Tabs'
-import { AddressForm, FormFactory, FormWrapper } from './FormsProps'
+import { AddressForm, FormFactory, FormInCollapsibleWrapper } from './FormsProps'
 import { ColumnFactory, Options } from '../tables/LineFinancialsProps'
 import EditableTable from '../tables/EditableTable'
 import { formEnum } from '../utils/FORMS'
@@ -40,6 +40,9 @@ const CustomerTabs = (props) => {
     token,
     /* eslint-disable-next-line react/prop-types */
     disable,
+
+    // eslint-disable-next-line react/prop-types
+    height,
   } = props
   const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
   const addRow = (newData) => {
@@ -104,14 +107,14 @@ const CustomerTabs = (props) => {
     }
   }
 
-  const getAddressForm = () => <FormWrapper {...props} form={AddressForm} />
+  const getAddressForm = () => <FormInCollapsibleWrapper {...props} form={AddressForm} />
   const getGeneralForm = (mainFormId) => (
     <FormFactory
       formid={getSubFormId(mainFormId)}
       current={current}
       setCurrent={setCurrent}
       t={t}
-      height={35}
+      height={height}
       disable={disable}
     />
   )
@@ -124,7 +127,7 @@ const CustomerTabs = (props) => {
       t={t}
       accData={accData}
       vatData={vatData}
-      height={35}
+      height={height}
       disable={disable}
     />
   )

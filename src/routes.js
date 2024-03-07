@@ -20,7 +20,7 @@ const LOGIN = () => React.lazy(() => import('./views/base/Components/Login'))
 
 const routes = [
   { path: '/accounting', exact: true, name: 'Accounting' },
-  { path: MASTERFILE.ftr, name: 'Supplier', element: FINANCIALS() },
+  { path: '/ftr', name: 'financials', element: FINANCIALS() },
   { path: MASTERFILE.journal, name: 'Journal', element: JFORM() },
   { path: '/Masterfiles', exact: true, name: 'Masterfiles' },
   { path: '/admin', name: 'Admin' },

@@ -942,7 +942,7 @@ export const MENU = (t, locale, currency) =>
     ['/dashboard', LOGIN(t, locale, currency)],
     [MASTERFILE.comp, COMPANY(t, locale, currency)],
     [MASTERFILE.bs, BS(t, locale, currency)],
-    [MASTERFILE.ftr, FINANCIALS(t, locale, currency)],
+    ['/ftr', FINANCIALS(t, locale, currency)],
     [MASTERFILE.module, MODULE(t, locale)],
     [MASTERFILE.fmodule, FMODULE(t, locale)],
     [MASTERFILE.emp, EMPLOYEE(t, locale, currency)],

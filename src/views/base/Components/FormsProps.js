@@ -532,7 +532,7 @@ const businessPartnerGeneralInfoForm = (props) => (
   <Grid
     container
     spacing={0.5}
-    style={{ ...styles.inner, backgroundColor: blue }}
+    style={{ ...styles.inner, backgroundColor: blue, height: 250 }}
     direction="column"
   >
     <CustomerGeneralForm
@@ -631,10 +631,11 @@ export const FormFactory = (props) => {
     case formEnum.JOURNAL:
     case formEnum.PACB:
     case formEnum.BALANCETREE:
-    case formEnum.BUSINESS_PARTNER_ADDRESS_FORM:
     case formEnum.VAT:
       // eslint-disable-next-line react/prop-types
       return <FormWrapper {...props} form={getForm(props.formid)} />
+    case formEnum.BUSINESS_PARTNER_ADDRESS_FORM:
+      return AddressForm(props)
     case formEnum.BUSINESS_PARTNER_GENERAL_INFO_FORM:
       return businessPartnerGeneralInfoForm(props)
     case formEnum.COMPANY_GENERAL_INFO_FORM:
@@ -669,6 +670,23 @@ export const FormWrapper = (props) => {
         </>
       </CCollapse>
     </Grid>
+  )
+}
+
+export const FormInCollapsibleWrapper = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { form, table, collapse } = props
+  return (
+    <CCollapse
+      visible={collapse}
+      id="JScollapse"
+      style={{ ...styles.inner, backgroundColor: lightGreen }}
+    >
+      <>
+        {form && form(props)}
+        {table && table(props)}
+      </>
+    </CCollapse>
   )
 }
 
@@ -1771,6 +1789,7 @@ export const MasterfilesMainForm = (props) => {
         </Col>
         <Col sm="2">
           <Input
+            style={{ height: height }}
             disabled={true}
             bssize="sm"
             type="text"
@@ -1778,14 +1797,13 @@ export const MasterfilesMainForm = (props) => {
             name="company"
             className="input-sm"
             placeholder="company"
-            style={{ height: 30, padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
             readOnly
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 3 }}>
         <Col md="2">
           <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
         </Col>
@@ -1796,7 +1814,6 @@ export const MasterfilesMainForm = (props) => {
             id="description-id"
             rows="1"
             placeholder="Content..."
-            style={{ height: 30 }}
             /* eslint-disable-next-line no-undef */
             disabled={disable}
             /* eslint-disable-next-line react/prop-types */
@@ -1862,7 +1879,7 @@ export const PayrollTaxForm = (props) => {
             onChange={(event) => setCurrent({ ...current, fromAmount: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: height, paddingLeft: 10, paddingTop: 2 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('payroll.tax.range.to')}
           </CFormLabel>
@@ -1914,7 +1931,7 @@ export const PayrollTaxForm = (props) => {
             onChange={(event) => setCurrent({ ...current, tax: event.target.value })}
           />
         </Col>
-        <Col sm="2">
+        <Col sm="2" style={{ height: height, paddingLeft: 10, paddingTop: 2 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('payroll.tax.range.class')}
           </CFormLabel>
@@ -1944,6 +1961,7 @@ export const PayrollTaxForm = (props) => {
         </Col>
         <Col sm="2">
           <Input
+            style={{ height: 30, padding: 2, textAlign: 'right' }}
             disabled={true}
             bssize="sm"
             type="text"
@@ -1951,10 +1969,8 @@ export const PayrollTaxForm = (props) => {
             name="company"
             className="input-sm"
             placeholder="company"
-            style={{ height: 30, padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
-            readonly
           />
         </Col>
       </CInputGroup>
@@ -1965,7 +1981,7 @@ export const MasterfilesMainForm2 = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, height } = props
   return (
-    <>
+    <div style={{ height: 140 }}>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
@@ -2063,7 +2079,6 @@ export const MasterfilesMainForm2 = (props) => {
             name="company"
             className="input-sm"
             placeholder="company"
-            style={{ height: 30, padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.company}
             readonly
@@ -2093,14 +2108,13 @@ export const MasterfilesMainForm2 = (props) => {
         <Col md="2">
           <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
         </Col>
-        <Col xs="12" md="9">
+        <Col xs="12" md="9" style={{ height: height, paddingTop: 8 }}>
           <CFormTextarea
             type="texarea"
             name="description"
             id="description-id"
             rows="1"
             placeholder="Content..."
-            style={{ height: 30 }}
             disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
@@ -2108,7 +2122,7 @@ export const MasterfilesMainForm2 = (props) => {
           />
         </Col>
       </CInputGroup>
-    </>
+    </div>
   )
 }
 
@@ -2118,7 +2132,7 @@ export const ArticleForm = (props) => {
   return (
     <>
       {MasterfilesMainForm(props)}
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, padding: 2 }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('article.pprice')}
@@ -2126,7 +2140,7 @@ export const ArticleForm = (props) => {
         </Col>
         <Col sm="2">
           <Input
-            style={{ height: height, textAlign: 'right' }}
+            style={{ height: height, textAlign: 'right', padding: 2 }}
             bssize="sm"
             type="text"
             id="pptice-id"
@@ -2144,14 +2158,14 @@ export const ArticleForm = (props) => {
             onChange={(event) => setCurrent({ ...current, pprice: event.target.value })}
           />
         </Col>
-        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+        <Col sm="2" style={{ height: height, paddingLeft: 10, paddingTop: 2 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('article.sprice')}
           </CFormLabel>
         </Col>
         <Col sm="2">
           <Input
-            style={{ height: height, textAlign: 'right' }}
+            style={{ height: height, textAlign: 'right', padding: 2 }}
             bssize="sm"
             type="text"
             id="sprice-id"
@@ -2176,7 +2190,7 @@ export const ArticleForm = (props) => {
         </Col>
         <Col sm="1">
           <Input
-            style={{ height: height, textAlign: 'right' }}
+            style={{ height: height, textAlign: 'right', padding: 2 }}
             bssize="sm"
             type="text"
             id="avgprice-id"
@@ -2196,7 +2210,7 @@ export const ArticleForm = (props) => {
         </Col>
         <Col sm="1" style={{ height: height, paddingLeft: 3 }}>
           <Input
-            style={{ height: height }}
+            style={{ height: height, padding: 2 }}
             bssize="sm"
             type="text"
             id="currency-id"
@@ -2218,7 +2232,7 @@ export const ArticleForm = (props) => {
         </Col>
         <Col sm="2">
           <Input
-            style={{ height: height }}
+            style={{ height: height, padding: 2 }}
             bssize="sm"
             type="text"
             id="quantityUnit-id"
@@ -2238,7 +2252,7 @@ export const ArticleForm = (props) => {
         </Col>
         <Col sm="2">
           <Input
-            style={{ height: height }}
+            style={{ height: height, padding: 2 }}
             bssize="sm"
             type="text"
             id="packUnit-id"
@@ -2258,7 +2272,7 @@ export const ArticleForm = (props) => {
         </Col>
         <Col sm="1">
           <Input
-            style={{ height: height }}
+            style={{ height: height, padding: 2 }}
             bssize="sm"
             type="text"
             id="stocked-id"
@@ -2279,9 +2293,9 @@ export const SalaryItemForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, locale, currency, disable, t, height } = props
   return (
-    <>
+    <div style={{ height: 210 }}>
       {MasterfilesMainForm(props)}
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 12 }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('salary.item.amount')}
@@ -2309,7 +2323,7 @@ export const SalaryItemForm = (props) => {
         </Col>
         <Col sm="1" style={{ height: height, paddingLeft: 3 }}>
           <Input
-            style={{ height: height }}
+            style={{ height: height, padding: 2 }}
             bssize="sm"
             type="text"
             id="currency-id"
@@ -2329,7 +2343,7 @@ export const SalaryItemForm = (props) => {
         </Col>
         <Col sm="1">
           <Input
-            style={{ height: height }}
+            style={{ height: height, padding: 2 }}
             bssize="sm"
             type="text"
             id="percentage-id"
@@ -2346,7 +2360,7 @@ export const SalaryItemForm = (props) => {
           />
         </Col>
       </CInputGroup>
-    </>
+    </div>
   )
 }
 export const UserForm = (props) => {
@@ -2516,9 +2530,10 @@ export const UserForm = (props) => {
 export const AddressForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, height } = props
+  console.log('props', props)
   return (
     <>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.street')}
@@ -2526,6 +2541,7 @@ export const AddressForm = (props) => {
         </Col>
         <Col sm="4">
           <Input
+            style={{ height: height, paddingTop: 2, paddingBottom: 2 }}
             bssize="sm"
             type="text"
             id="street-id"
@@ -2538,13 +2554,14 @@ export const AddressForm = (props) => {
             onChange={(event) => setCurrent({ ...current, street: event.target.value })}
           />
         </Col>
-        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.zip')}
           </CFormLabel>
         </Col>
         <Col sm="2">
           <Input
+            style={{ height: height, paddingTop: 2, paddingBottom: 2 }}
             bssize="sm"
             type="text"
             id="zip-id"
@@ -2558,7 +2575,7 @@ export const AddressForm = (props) => {
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 5 }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.city')}
@@ -2566,6 +2583,7 @@ export const AddressForm = (props) => {
         </Col>
         <Col sm="4">
           <Input
+            style={{ height: height, paddingTop: 2, paddingBottom: 2 }}
             bssize="sm"
             type="text"
             id="city-input"
@@ -2578,13 +2596,14 @@ export const AddressForm = (props) => {
             onChange={(event) => setCurrent({ ...current, city: event.target.value })}
           />
         </Col>
-        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.country')}
           </CFormLabel>
         </Col>
         <Col sm="2">
           <Input
+            style={{ height: height, paddingTop: 2, paddingBottom: 2 }}
             bssize="sm"
             type="text"
             id="country-id"
@@ -2605,14 +2624,8 @@ export const CustomerGeneralForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, height } = props
   return (
-    <Grid
-      container
-      spacing={2}
-      justify="space-between"
-      style={{ ...styles.inner }}
-      direction="column"
-    >
-      <CInputGroup row style={{ height: height }}>
+    <div style={{ height: 200 }}>
+      <CInputGroup row>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.id')}
@@ -2622,7 +2635,7 @@ export const CustomerGeneralForm = (props) => {
           <Input
             bssize="sm"
             type="text"
-            id="account-id"
+            id="id-id"
             name="id"
             className="input-sm"
             placeholder="Id"
@@ -2652,7 +2665,7 @@ export const CustomerGeneralForm = (props) => {
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 2 }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.name')}
@@ -2672,7 +2685,7 @@ export const CustomerGeneralForm = (props) => {
             onChange={(event) => setCurrent({ ...current, name: event.target.value })}
           />
         </Col>
-        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
+        <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.changedate')}
           </CFormLabel>
@@ -2692,7 +2705,7 @@ export const CustomerGeneralForm = (props) => {
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 10 }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.email')}
@@ -2712,7 +2725,7 @@ export const CustomerGeneralForm = (props) => {
             onChange={(event) => setCurrent({ ...current, email: event.target.value })}
           />
         </Col>
-        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.postingdate')}
           </CFormLabel>
@@ -2732,7 +2745,7 @@ export const CustomerGeneralForm = (props) => {
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 18 }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.phone')}
@@ -2753,12 +2766,13 @@ export const CustomerGeneralForm = (props) => {
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 25 }}>
         <Col md="2">
           <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
         </Col>
         <Col xs="12" md="9">
           <CFormTextarea
+            style={{ height: height }}
             type="texarea"
             name="description"
             id="description-id"
@@ -2771,7 +2785,7 @@ export const CustomerGeneralForm = (props) => {
           />
         </Col>
       </CInputGroup>
-    </Grid>
+    </div>
   )
 }
 
@@ -2869,13 +2883,7 @@ export const CustomerAccountForm = (props) => {
         ? t('customer.oaccount')
         : t('employee.oaccount')
   return (
-    <Grid
-      container
-      spacing={2}
-      justify="space-between"
-      style={{ ...styles.inner }}
-      direction="column"
-    >
+    <div style={{ height: 100 }}>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
@@ -2993,7 +3001,7 @@ export const CustomerAccountForm = (props) => {
           />
         </Col>
       </CInputGroup>
-    </Grid>
+    </div>
   )
 }
 export const CompanyGeneralForm = (props) => {
@@ -3001,13 +3009,7 @@ export const CompanyGeneralForm = (props) => {
   const { current, setCurrent, disable, t, height } = props
   console.log('props', props)
   return (
-    <Grid
-      container
-      spacing={2}
-      justify="space-between"
-      style={{ ...styles.inner }}
-      direction="column"
-    >
+    <div style={{ height: 110 }}>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
@@ -3016,6 +3018,7 @@ export const CompanyGeneralForm = (props) => {
         </Col>
         <Col sm="4">
           <Input
+            style={{ height: height }}
             bssize="sm"
             type="text"
             id="account-id"
@@ -3028,7 +3031,7 @@ export const CompanyGeneralForm = (props) => {
             onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
-        <Col sm="2" style={{ paddingLeft: 10 }}>
+        <Col sm="2" style={{ paddingLeft: 8 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('common.enterdate')}
           </CFormLabel>
@@ -3048,7 +3051,7 @@ export const CompanyGeneralForm = (props) => {
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 5 }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('company.name')}
@@ -3056,6 +3059,7 @@ export const CompanyGeneralForm = (props) => {
         </Col>
         <Col sm="4">
           <Input
+            style={{ height: height }}
             bssize="sm"
             type="text"
             id="name-input"
@@ -3088,7 +3092,7 @@ export const CompanyGeneralForm = (props) => {
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 10 }}>
         <Col md="2">
           <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
         </Col>
@@ -3106,7 +3110,7 @@ export const CompanyGeneralForm = (props) => {
           />
         </Col>
       </CInputGroup>
-    </Grid>
+    </div>
   )
 }
 export const CompanyAccountForm = (props) => {
