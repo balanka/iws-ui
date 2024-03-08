@@ -794,6 +794,7 @@ export const AccountMainForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -810,6 +811,7 @@ export const AccountMainForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -1604,7 +1606,7 @@ export const AssetForm = (props) => {
 }
 
 const accountIdField = (props) => {
-  const { accClassData, accGroupData, accData, current, setCurrent, disable } = props
+  const { accClassData, accGroupData, accData, current, setCurrent, disable, height } = props
   const data = [...accClassData, ...accGroupData]
   const id = current.modelid === formEnum.SALARY_ITEM ? current.account : current.parent
   const fieldName = current.modelid === formEnum.SALARY_ITEM ? 'account' : 'parent'
@@ -1620,6 +1622,7 @@ const accountIdField = (props) => {
         sm="4"
         /* eslint-disable-next-line no-undef */
         disable={disable}
+        height={height}
         /* eslint-disable-next-line react/prop-types */
         data={data.sort(sortById)}
         /* eslint-disable-next-line react/prop-types */
@@ -1633,7 +1636,7 @@ const accountIdField = (props) => {
   )
 }
 const accountNameField = (props) => {
-  const { accClassData, accGroupData, accData, current, setCurrent, disable } = props
+  const { accClassData, accGroupData, accData, current, setCurrent, disable, height } = props
   const data = [...accClassData, ...accGroupData]
   const id = current.modelid === formEnum.SALARY_ITEM ? current.account : current.parent
   const fieldName = current.modelid === formEnum.SALARY_ITEM ? 'account' : 'parent'
@@ -1649,6 +1652,7 @@ const accountNameField = (props) => {
         sm="4"
         /* eslint-disable-next-line no-undef */
         disable={disable}
+        height={height}
         /* eslint-disable-next-line react/prop-types */
         data={data.sort(sortByName)}
         /* eslint-disable-next-line react/prop-types */
@@ -2530,7 +2534,6 @@ export const UserForm = (props) => {
 export const AddressForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, height } = props
-  console.log('props', props)
   return (
     <>
       <CInputGroup row>
@@ -2897,6 +2900,7 @@ export const CustomerAccountForm = (props) => {
             sm="4"
             data={accData}
             disable={disable}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             value={current.account}
             placeholder={'account number'}
@@ -2911,6 +2915,7 @@ export const CustomerAccountForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -2935,6 +2940,7 @@ export const CustomerAccountForm = (props) => {
             sm="4"
             data={accData}
             disable={disable}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             value={current.oaccount}
             placeholder={' o acc number'}
@@ -2949,6 +2955,7 @@ export const CustomerAccountForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -2974,6 +2981,7 @@ export const CustomerAccountForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={vatData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -2990,6 +2998,7 @@ export const CustomerAccountForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={vatData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3455,6 +3464,7 @@ export const FinancialsMainForm = (props) => {
             sm="4"
             /* eslint-disable-next-line react/prop-types */
             disable={current.posted}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -3472,6 +3482,7 @@ export const FinancialsMainForm = (props) => {
             sm="4"
             /* eslint-disable-next-line react/prop-types */
             disable={current.posted}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3516,6 +3527,7 @@ export const FinancialsMainForm = (props) => {
             sm="4"
             /* eslint-disable-next-line react/prop-types */
             disable={current.posted}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={ccData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -3533,6 +3545,7 @@ export const FinancialsMainForm = (props) => {
             sm="4"
             /* eslint-disable-next-line react/prop-types */
             disable={current.posted}
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={ccData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3576,6 +3589,7 @@ export const JournalMainForm = (props) => {
             id="account-id"
             idCol={true}
             sm="4"
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -3591,6 +3605,7 @@ export const JournalMainForm = (props) => {
             id="account2-id"
             idCol={false}
             sm="4"
+            height={height}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3754,7 +3769,8 @@ export const VatMainForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
-            style={{ height: 30 }}
+            height={height}
+            //style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -3775,7 +3791,8 @@ export const VatMainForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
-            style={{ height: 30 }}
+            height={height}
+            //style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
@@ -3823,7 +3840,8 @@ export const VatMainForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
-            style={{ height: 30 }}
+            height={height}
+            //style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -3844,7 +3862,8 @@ export const VatMainForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
-            style={{ height: 30 }}
+            height={height}
+            //style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */

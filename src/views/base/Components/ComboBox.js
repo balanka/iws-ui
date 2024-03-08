@@ -13,13 +13,15 @@ const StyledAutocomplete = styled(Autocomplete, {
       backgroundColor: bgColor,
       borderRadius: 8,
       border: 'none',
+      paddingLeft: 10,
     },
   }
 })
 
 export default function ComboBox(props) {
   // eslint-disable-next-line react/prop-types
-  const { id, data, onChange, value, placeholder, idCol, disable } = props
+  const { id, data, onChange, value, placeholder, idCol, disable, height } = props
+  console.log('props', props)
   const entryRef = useRef()
   return (
     <StyledAutocomplete
@@ -42,7 +44,7 @@ export default function ComboBox(props) {
       getOptionLabel={(option) =>
         typeof option === 'string' ? option : option.id + ' ' + option.name
       }
-      style={{ height: 10, minWidth: 150, border: 'none' }}
+      style={{ height: height, minWidth: 150, border: 'none' }}
       renderOption={(props, option) => (
         <li
           {...props}
@@ -59,6 +61,7 @@ export default function ComboBox(props) {
       renderInput={(params) => {
         return (
           <TextField
+            //style={{ paddingLeft: 5 }}
             {...params}
             placeholder={placeholder}
             value={value}
