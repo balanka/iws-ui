@@ -56,6 +56,7 @@
     "balance": "Balance",
     "amount"      : "Amount",
     "street"      : "Street",
+    "period"      : "Period",
     "zip"        : "Zip",
     "city"       : "City",
     "country"       : "Country",
@@ -84,7 +85,9 @@
     "bank":"Bank",
     "owner":"Owner",
     "exportCSV": "Export CSV",
-    "exportPDF": "Export PDF"
+    "exportPDF": "Export PDF",
+    "run": "run",
+    "runAll": "run 4 all"
   },
   "asset": {
     "title":      "Asset",
@@ -95,6 +98,7 @@
     "changedate":  "Change date.",
     "account": "Account",
     "oaccount": "O. Acc",
+    "amount": "Init. value",
     "rate":     "rate",
     "scrapValue": "Scrap value",
     "lifeSpan":   "Life span",
@@ -381,7 +385,10 @@
     "balancesheet": "Balance sheet",
     "financials": "Payable/Receivable",
     "financials_stmt": "Financials statements",
-    "payroll.tax.range": "Pay roll tax table"
+    "payroll.tax.range": "Pay roll tax table",
+    "closeAccountingPeriod": "Close accounting period",
+    "createPayrollTransaction": "Generate payroll transaction",
+    "createDepreciationTransaction": "Generate depr. transaction"
   },
   "accountClass": {
     "title":      "Account class"
@@ -391,5 +398,18 @@
   },
   "quantityUnit": {
     "title": "Quantity unit"
+  },
+  "closeAccountingPeriod": {
+    "title": "Close accounting period",
+    "account": "Account",
+    "close": "Close"
+  },
+  "createPayrollTransaction": {
+    "title": "Generate payroll transaction",
+    "generate": "Generate"
+  },
+  "createDepreciationTransaction": {
+    "title": "Generate depr. transaction",
+    "generate": "Generate"
   }
 }

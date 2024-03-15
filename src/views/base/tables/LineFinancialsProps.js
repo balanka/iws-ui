@@ -692,6 +692,19 @@ export const ColumnsAsset = (data, t, locale, currency) => [
     export: true,
   },
   {
+    field: 'amount',
+    title: t('asset.amount'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    export: true,
+  },
+  {
     field: 'scrapValue',
     title: t('asset.scrapValue'),
     type: 'currency',
@@ -702,6 +715,7 @@ export const ColumnsAsset = (data, t, locale, currency) => [
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     },
+    export: true,
   },
   {
     field: 'lifeSpan',
@@ -712,7 +726,14 @@ export const ColumnsAsset = (data, t, locale, currency) => [
   {
     field: 'depMethod',
     title: t('asset.depreciation'),
-    type: 'number',
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
     export: true,
   },
   {
@@ -871,7 +892,6 @@ export const ColumnsM = (data, t, locale) => [
     export: true,
   },
 ]
-
 export const ColumnsEmployeeSalaryItem = (data, t, locale, currency) => [
   {
     field: 'account',
@@ -1081,6 +1101,22 @@ export const ColumnsArticle = (data, t, locale, currency) => [
     title: t('article.parent'),
     editComponent: ({ value, onRowDataChange, rowData }) =>
       ACCOUNT(data, value, onRowDataChange, rowData, 'account'),
+    width: 20,
+    export: true,
+  },
+  {
+    field: 'stockAccount',
+    title: t('article.stockAccount'),
+    editComponent: ({ value, onRowDataChange, rowData }) =>
+      ACCOUNT(data, value, onRowDataChange, rowData, 'stockAccount'),
+    width: 20,
+    export: true,
+  },
+  {
+    field: 'expenseAccount',
+    title: t('article.expenseAccount'),
+    editComponent: ({ value, onRowDataChange, rowData }) =>
+      ACCOUNT(data, value, onRowDataChange, rowData, 'expenseAccount'),
     width: 20,
     export: true,
   },
@@ -2153,7 +2189,10 @@ export const ColumnsBalancesheet = (t, locale, currency) => [
 export const ColumnFactory = (formid, data, t, locale, currency) => {
   switch (formid) {
     case formEnum.ACCOUNT:
+    case formEnum.CLOSE_ACCOUNT_PERIOD:
+    case formEnum.CREATE_PAYROLL_TRANSACTION:
       return ColumnsACC(data, t, locale, currency)
+    case formEnum.CREATE_DEPRECIATION_TRANSACTION:
     case formEnum.ASSET:
       return ColumnsAsset(data, t, locale, currency)
     case formEnum.BANKACCOUNT:

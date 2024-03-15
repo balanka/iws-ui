@@ -5,17 +5,27 @@ import React from 'react'
 import { formEnum } from '../utils/FORMS'
 const SERVER_IP = 'REACT_APP_HOST_IP_ADDRESS'
 const SERVER_PORT = 'REACT_APP_PORT'
-const SERVER_URL =
-  SERVER_IP === 'REACT_APP_HOST_IP_ADDRESS'
-    ? 'http://0.0.0.0:8091'
-    : 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT)
+const SERVER_URL = 'http://0.0.0.0:8091' //'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT)
+// SERVER_IP === 'REACT_APP_HOST_IP_ADDRESS'
+//   ? 'http://0.0.0.0:8091'
+//   : 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT)
 //const SERVER_URL = 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT)
+console.log('SERVER_IP', SERVER_IP)
+console.log('SERVER_PORT', SERVER_PORT)
 console.log('SERVER_URL_', SERVER_URL)
+console.log('process.env', process.env)
+
+const getFn = (url, token) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
+const putFn = (url, token, record) =>
+  axios.put(url, record, { headers: { Authorization: `Bearer ${token}` } })
+const postFn = (url, token, record) =>
+  axios.post(url, record, { headers: { Authorization: `Bearer ${token}` } })
+
+const patchFn = (url, token, record) =>
+  axios.patch(url, record, { headers: { Authorization: `Bearer ${token}` } })
 const Edit = (url, token, record, data, setCurrent) => {
-  const url_ = SERVER_URL.concat(url)
   var result
-  axios
-    .put(url_, record, { headers: { Authorization: `Bearer ${token}` } })
+  putFn(SERVER_URL.concat(url), token)
     .then((response) => {
       const resp = response.data
       console.log('response', response)
@@ -35,11 +45,9 @@ const Edit = (url, token, record, data, setCurrent) => {
 }
 
 const Add = (url, token, record, data, setCurrent) => {
-  const url_ = SERVER_URL.concat(url)
   let result
   console.log('Adding', record)
-  axios
-    .post(url_, record, { headers: { Authorization: `Bearer ${token}` } })
+  postFn(SERVER_URL.concat(url), record)
     .then((response) => {
       const resp = response.data
       const index = data.length + 1
@@ -54,8 +62,7 @@ const Add = (url, token, record, data, setCurrent) => {
   return result
 }
 const Post = (url, profile, record) => {
-  axios
-    .patch(url, record, { headers: { Authorization: `Bearer ${profile.token}` } })
+  patchFn(url, profile.token, record)
     .then((response) => {
       console.log('responsex', response.data)
     })
@@ -80,8 +87,7 @@ const Login = (
   const url_ = SERVER_URL.concat(url)
   console.log(' url', url)
   console.log(' url_', url_)
-  axios
-    .post(url_, data)
+  postFn(url_, data)
     .then((response) => {
       const token = response.data.hash
       const result = Map.groupBy(response.data.rights, ({ moduleid }) => moduleid)
@@ -90,21 +96,24 @@ const Login = (
         value: entry[1].map((e) => e.short).reduce((a, b) => a.concat(b)),
       }))
       const company = response.data.company
-      let currency = ''
-      let locale = ''
+      let currency = '',
+        locale = '',
+        incomeStmtAcc = ''
       const moduleURL = SERVER_URL.concat(MASTERFILE.module)
         .concat('/')
         .concat(formEnum.MODULE)
         .concat('/')
         .concat(data.company)
       const companyURL = SERVER_URL.concat(MASTERFILE.comp).concat('/').concat(data.company)
-      axios.get(companyURL, { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
+      //axios.get(companyURL, { headers: { Authorization: `Bearer ${token}` } })
+      getFn(companyURL, token).then((response) => {
         const company_ = response.data
         locale = company_.locale
         currency = company_.currency
+        incomeStmtAcc = company_.incomeStmtAcc
       })
-      axios
-        .get(moduleURL, { headers: { Authorization: `Bearer ${token}` } })
+      //axios.get(moduleURL, { headers: { Authorization: `Bearer ${token}` } })
+      getFn(moduleURL, token)
         .then((response) => {
           const module_ = response.data
           console.log('module_', module_)
@@ -133,6 +142,7 @@ const Login = (
             rights: userRights,
             locale: locale,
             currency: currency,
+            incomeStmtAcc: incomeStmtAcc,
           }
           setProfile(profile)
           setModule(module_)
@@ -154,10 +164,8 @@ const Login = (
     })
 }
 const Get = (url, token, history, func) => {
-  const url_ = SERVER_URL.concat(url)
   let result
-  axios
-    .get(url_, { headers: { Authorization: `Bearer ${token}` } })
+  getFn(SERVER_URL.concat(url), token)
     .then((response) => {
       const resp = response.data
       console.log('responseRRRRRR', resp)
@@ -179,18 +187,14 @@ const Get = (url, token, history, func) => {
 }
 
 const Get1 = (url, token, key_) => {
-  const url_ = SERVER_URL.concat(url)
   let result
-  console.log('url', url_)
-  console.log('key_', key_)
-  axios
-    .get(url_, { headers: { Authorization: `Bearer ${token}` } })
+  getFn(SERVER_URL.concat(url), token)
     .then((response) => {
       const resp = response.data
       console.log('key_', key_)
       console.log('respRRRRRR', resp)
       iwsStore.put(key_, resp)
-      console.log('iwsStore.get(key_)', iwsStore.get(key_))
+      //console.log('iwsStore.get(key_)', iwsStore.get(key_))
       result = { ...resp }
     })
     .catch(function (error) {
@@ -201,11 +205,8 @@ const Get1 = (url, token, key_) => {
 }
 
 const Get2 = (url, token, setCurrent) => {
-  const url_ = SERVER_URL.concat(url)
   let result
-  console.log('url_', url_)
-  axios
-    .get(url_, { headers: { Authorization: `Bearer ${token}` } })
+  getFn(SERVER_URL.concat(url), token)
     .then((response) => {
       const resp = response.data
       console.log('responseRRRRRR2', resp)

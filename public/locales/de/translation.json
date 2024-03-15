@@ -56,6 +56,7 @@
     "balance": "Saldo",
     "amount"      : "Betrag",
     "street"      : "Strasse",
+    "period"      : "Buchungsperiode",
     "zip"         : "PLZ",
     "city"       : "Stadt",
     "country"       : "Bundesland",
@@ -84,7 +85,9 @@
     "bank":"Bank",
     "owner":"Inhaber",
     "exportCSV": "Exportieren CSV",
-    "exportPDF": "Exportieren PDF"
+    "exportPDF": "Exportieren PDF",
+    "run": "Ausführen",
+    "runAll": "Ausführen alle"
   },
   "asset": {
     "title":  "Anlage",
@@ -95,10 +98,11 @@
     "changedate":  "Geändert am",
     "account":  "Konto",
     "oaccount": "G. Konto",
+    "amount": "Anschaffungskosten",
     "rate":     "Satz",
     "scrapValue": "Restwert",
     "lifeSpan":   "Laufzeit",
-    "frequency":   "Frequency",
+    "frequency":   "Frequenz",
     "depreciation":   "Methode"
   },
   "account": {
@@ -170,16 +174,6 @@
     "title":    "Lieferant",
     "account":  "Kreditor",
     "oaccount": "Aufwand"
-  },
-  "costcenter": {
-    "title":"Kostenstelle",
-    "name":"Name",
-    "description":"Beschreibung",
-    "enterdate":"Enterdate",
-    "postingdate":"Gebucht am",
-    "changedate":"Geaendert am",
-    "account"    : "Konto",
-    "company"    : "Mandant"
   },
   "module": {
     "title":"Module",
@@ -370,7 +364,10 @@
     "balancesheet": "Jahresabschluss",
     "financials": "Belege",
     "financials_stmt": "Jahresabschluss/GuV",
-    "payroll.tax.range": "Lohnsteuertabelle"
+    "payroll.tax.range": "Lohnsteuertabelle",
+    "closeAccountingPeriod": "Buchungsperiode abschliessen",
+    "createPayrollTransaction": "Gehaltsliste generieren",
+    "createDepreciationTransaction": "Abschreibungsbelege generieren"
   },
   "accountClass": {
     "title":      "Kontenklassen"
@@ -380,5 +377,18 @@
   },
   "quantityUnit": {
     "title": "Mengeneinheit"
+  },
+  "closeAccountingPeriod": {
+    "title": "Buchungsperiode abschliessen",
+    "account": "Konto",
+    "close": "Close"
+  },
+  "createPayrollTransaction": {
+    "title": "Gehaltsliste generieren",
+    "generate": "Generieren"
+  },
+  "createDepreciationTransaction": {
+    "title": "Abschreibungsbelege generieren",
+    "generate": "Generieren"
   }
 }

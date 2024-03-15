@@ -25,6 +25,17 @@ const routes = [
   { path: '/Masterfiles', exact: true, name: 'Masterfiles' },
   { path: '/admin', name: 'Admin' },
   { path: MASTERFILE.acc, name: 'Account', element: Masterfile() },
+  { path: MASTERFILE.closeAccountPeriod, name: 'Close accounting period', element: Masterfile() },
+  {
+    path: MASTERFILE.createPayrollTransaction,
+    name: 'Generate payroll transaction',
+    element: Masterfile(),
+  },
+  {
+    path: MASTERFILE.createDepreciationTransaction,
+    name: 'Generate depreciation transaction',
+    element: Masterfile(),
+  },
   { path: MASTERFILE.article, name: 'Article', element: Masterfile() },
   { path: MASTERFILE.cc, name: 'Cost center', element: Masterfile() },
   { path: MASTERFILE.cust, name: 'Customer', element: Masterfile() },

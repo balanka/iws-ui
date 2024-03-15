@@ -34,6 +34,8 @@ import UserTabs from './UserTabs'
 import BankStatementTabs from './BankStatementTabs'
 import EmployeeTabs from './EmployeeTabs'
 import ComboBox from './ComboBox'
+import { Get } from './CrudController'
+import { MASTERFILE } from './Menu'
 export const svgIcons = {
   plusCircle:
     'M10 3a7 7 0 100 14 7 7 0 000-14zm-9 7a9 9 0 1118 0 9 9 0 01-18 0zm14 .069a1 1 0 01-1 1h-2.931V14a1 1 0 11-2 0v-2.931H6a1 1 0 110-2h3.069V6a1 1 0 112 0v3.069H14a1 1 0 011 1z',
@@ -452,6 +454,12 @@ export const JournalFormHead = (props) => {
 
 const getForm = (formId) => {
   switch (formId) {
+    case formEnum.CLOSE_ACCOUNT_PERIOD:
+      return CloseAccountingPeriodForm
+    case formEnum.CREATE_PAYROLL_TRANSACTION:
+      return CreatePayrollTransactionForm
+    case formEnum.CREATE_DEPRECIATION_TRANSACTION:
+      return CreateDepreciationTransactionForm
     case formEnum.ASSET:
       return AssetForm
     case formEnum.ACCOUNT:
@@ -606,6 +614,9 @@ const companyAccountForm = (props) => (
 export const FormFactory = (props) => {
   // eslint-disable-next-line react/prop-types
   switch (props.formid) {
+    case formEnum.CLOSE_ACCOUNT_PERIOD:
+    case formEnum.CREATE_PAYROLL_TRANSACTION:
+    case formEnum.CREATE_DEPRECIATION_TRANSACTION:
     case formEnum.ASSET:
     case formEnum.ACCOUNT:
     case formEnum.BANKSTATEMENT:
@@ -934,7 +945,237 @@ export const AccountMainForm = (props) => {
     </>
   )
 }
-
+export const CloseAccountingPeriodForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, token, company, incomeStmtAcc, navigate, t, height } = props
+  console.log('props', props)
+  const submitQuery = (event) => {
+    event.preventDefault()
+    const url = MASTERFILE.closeAccountPeriod
+      .concat('/')
+      .concat(incomeStmtAcc)
+      .concat('/')
+      // eslint-disable-next-line react/prop-types
+      .concat(current.period)
+      .concat('/')
+      .concat(company)
+    Get(url, token, navigate, null)
+  }
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('closeAccountingPeriod.account')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1.5" style={{ height: 30 }}>
+          <Input
+            bssize="sm"
+            type="text"
+            id="account-input"
+            name="header"
+            className="input-sm"
+            placeholder={incomeStmtAcc}
+            /* eslint-disable-next-line react/prop-types */
+            value={incomeStmtAcc}
+            onChange={(event) => setCurrent({ ...current, account: event.target.value })}
+            style={{ paddingLeft: 0 }}
+          />
+        </Col>
+        <Col sm="2" style={{ height: 30, paddingLeft: 10, paddingTop: 5 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.period')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1" style={{ height: height }}>
+          <Input
+            style={{ height: height, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="period-input"
+            name="period"
+            className="input-sm"
+            placeholder="Period"
+            /* eslint-disable-next-line react/prop-types */
+            value={current.period}
+            onChange={(event) => setCurrent({ ...current, period: event.target.value })}
+          />
+        </Col>
+        <Col sm="1" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.company')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1" style={{ height: height }}>
+          <Input
+            bssize="sm"
+            type="text"
+            id="company-input"
+            name="company"
+            className="input-sm"
+            placeholder={company}
+            style={{ height: height, textAlign: 'right' }}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.company}
+            onChange={(event) => setCurrent({ ...current, company: event.target.value })}
+          />
+        </Col>
+        <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
+          <Button
+            type="submit"
+            size="md"
+            color="primary"
+            className="px-4"
+            style={{ height: height, align: 'right' }}
+            onClick={(e) => submitQuery(e)}
+          >
+            {t('closeAccountingPeriod.close')}
+          </Button>
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
+export const CreateDepreciationTransactionForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, token, company, navigate, t, height } = props
+  console.log('props', props)
+  const submitQuery = (event) => {
+    event.preventDefault()
+    const url = MASTERFILE.createDepreciationTransaction
+      .concat('/')
+      // eslint-disable-next-line react/prop-types
+      .concat(current.period)
+      .concat('/')
+      .concat(company)
+    Get(url, token, navigate, null)
+  }
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2" style={{ height: 30, paddingLeft: 10, paddingTop: 5 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.period')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1" style={{ height: height }}>
+          <Input
+            style={{ height: height, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="period-input"
+            name="period"
+            className="input-sm"
+            placeholder="Period"
+            /* eslint-disable-next-line react/prop-types */
+            value={current.period}
+            onChange={(event) => setCurrent({ ...current, period: event.target.value })}
+          />
+        </Col>
+        <Col sm="1" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.company')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1" style={{ height: height }}>
+          <Input
+            bssize="sm"
+            type="text"
+            id="company-input"
+            name="company"
+            className="input-sm"
+            placeholder={company}
+            style={{ height: height, textAlign: 'right' }}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.company}
+            onChange={(event) => setCurrent({ ...current, company: event.target.value })}
+          />
+        </Col>
+        <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
+          <Button
+            type="submit"
+            size="md"
+            color="primary"
+            className="px-4"
+            style={{ height: height, align: 'right' }}
+            onClick={(e) => submitQuery(e)}
+          >
+            {t('createDepreciationTransaction.generate')}
+          </Button>
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
+export const CreatePayrollTransactionForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, company, token, navigate, t, height } = props
+  const submitQuery = (event) => {
+    event.preventDefault()
+    // eslint-disable-next-line react/prop-types
+    const url = MASTERFILE.createPayrollTransaction
+      .concat('/')
+      // eslint-disable-next-line react/prop-types
+      .concat(company)
+    Get(url, token, navigate, null)
+  }
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.id')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1.5" style={{ height: height }}>
+          <Input
+            bssize="sm"
+            type="text"
+            id="modelid-input"
+            name="header"
+            className="input-sm"
+            placeholder="modelid"
+            /* eslint-disable-next-line react/prop-types */
+            value={current.id}
+            onChange={(event) => setCurrent({ ...current, id: event.target.value })}
+            style={{ paddingLeft: 0 }}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.company')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1">
+          <Input
+            style={{ height: height, textAlign: 'right' }}
+            bssize="sm"
+            type="text"
+            id="company-input"
+            name="company"
+            className="input-sm"
+            placeholder={company}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.company}
+            onChange={(event) => setCurrent({ ...current, company: event.target.value })}
+          />
+        </Col>
+        <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
+          <Button
+            type="submit"
+            size="xs"
+            color="primary"
+            style={{ height: height, align: 'right' }}
+            onClick={(event) => submitQuery(event)}
+          >
+            {t('createPayrollTransaction.generate')}
+          </Button>
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
 export const BankStatementParameterForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, t, height } = props
@@ -1319,7 +1560,7 @@ export const BankStatementMainForm = (props) => {
 
 export const AssetForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, accData, height } = props
+  const { current, setCurrent, t, accData, height, disable, locale, currency } = props
   return (
     <>
       <CInputGroup row style={{ height: height }}>
@@ -1336,6 +1577,7 @@ export const AssetForm = (props) => {
             name="id"
             className="input-sm"
             placeholder="Id"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.id}
@@ -1366,7 +1608,7 @@ export const AssetForm = (props) => {
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
-            {t('costcenter.name')}
+            {t('common.name')}
           </CFormLabel>
         </Col>
         <Col sm="4">
@@ -1377,6 +1619,7 @@ export const AssetForm = (props) => {
             name="name"
             className="input-sm"
             placeholder="Name"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.name}
@@ -1417,6 +1660,7 @@ export const AssetForm = (props) => {
             name="account"
             id="account-id"
             size="sm"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.account}
@@ -1460,6 +1704,7 @@ export const AssetForm = (props) => {
             name="oaccount"
             id="oaccount-id"
             size="sm"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.oaccount}
@@ -1493,10 +1738,30 @@ export const AssetForm = (props) => {
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
-            {t('asset.scrapValue')}
+            {t('asset.amount').concat('/').concat(t('asset.scrapValue'))}
           </CFormLabel>
         </Col>
-        <Col sm="4">
+        <Col sm="2">
+          <Input
+            bssize="sm"
+            type="text"
+            id="amount-input"
+            name="amount"
+            className="input-sm"
+            placeholder="Amount"
+            style={{ height: 30, textAlign: 'right', padding: 2 }}
+            disabled={true}
+            /* eslint-disable-next-line react/prop-types */
+            value={Number(current.amount).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            //onChange={(event) => setCurrent({ ...current, amount: event.target.value })}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 5 }}>
           <Input
             bssize="sm"
             type="text"
@@ -1504,9 +1769,15 @@ export const AssetForm = (props) => {
             name="scrap_value"
             className="input-sm"
             placeholder="scrap_value"
+            disabled={disable}
             style={{ height: 30, textAlign: 'right', padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
-            value={current.scrapValue}
+            value={Number(current.scrapValue).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
             onChange={(event) => setCurrent({ ...current, scrap_value: event.target.value })}
           />
         </Col>
@@ -1523,6 +1794,7 @@ export const AssetForm = (props) => {
             name="life_span"
             className="input-sm"
             placeholder="life span"
+            disabled={disable}
             style={{ height: 30, textAlign: 'right', padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.lifeSpan}
@@ -1544,6 +1816,7 @@ export const AssetForm = (props) => {
             name="depreciation"
             className="input-sm"
             placeholder="depreciation"
+            disabled={disable}
             style={{ height: 30, textAlign: 'right', padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.depMethod}
@@ -1563,13 +1836,14 @@ export const AssetForm = (props) => {
             name="frequency"
             className="input-sm"
             placeholder="frequency"
+            disabled={disable}
             style={{ height: 30, textAlign: 'right', padding: 2 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.frequency}
             onChange={(event) => setCurrent({ ...current, frequency: event.target.value })}
           />
         </Col>
-        <Col sm="1">
+        <Col sm="1" style={{ height: height, paddingLeft: 6 }}>
           <Input
             bssize="sm"
             type="number"
@@ -1577,7 +1851,8 @@ export const AssetForm = (props) => {
             name="rate"
             className="input-sm"
             placeholder="rate"
-            style={{ height: 30, textAlign: 'right', padding: 2 }}
+            disabled={disable}
+            style={{ height: 30, textAlign: 'right' }}
             /* eslint-disable-next-line react/prop-types */
             value={current.rate}
             onChange={(event) => setCurrent({ ...current, rate: event.target.value })}
@@ -1595,6 +1870,7 @@ export const AssetForm = (props) => {
             id="description-id"
             rows="1"
             placeholder="Content..."
+            disabled={disable}
             /* eslint-disable-next-line react/prop-types */
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
@@ -2134,9 +2410,9 @@ export const ArticleForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, locale, currency, disable, t, height } = props
   return (
-    <>
+    <div style={{ height: 250 }}>
       {MasterfilesMainForm(props)}
-      <CInputGroup row style={{ height: height, padding: 2 }}>
+      <CInputGroup row style={{ height: height, paddingTop: 11 }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('article.pprice')}
@@ -2162,7 +2438,7 @@ export const ArticleForm = (props) => {
             onChange={(event) => setCurrent({ ...current, pprice: event.target.value })}
           />
         </Col>
-        <Col sm="2" style={{ height: height, paddingLeft: 10, paddingTop: 2 }}>
+        <Col sm="2" style={{ height: height, padding: 2, paddingLeft: 12 }}>
           <CFormLabel size="sm" htmlFor="input-small">
             {t('article.sprice')}
           </CFormLabel>
@@ -2228,7 +2504,7 @@ export const ArticleForm = (props) => {
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 14 }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
             {t('article.quantityUnit')}
@@ -2290,7 +2566,7 @@ export const ArticleForm = (props) => {
           />
         </Col>
       </CInputGroup>
-    </>
+    </div>
   )
 }
 export const SalaryItemForm = (props) => {
@@ -2325,7 +2601,7 @@ export const SalaryItemForm = (props) => {
             onChange={(event) => setCurrent({ ...current, amount: event.target.value })}
           />
         </Col>
-        <Col sm="1" style={{ height: height, paddingLeft: 3 }}>
+        <Col sm="1" style={{ height: height, paddingLeft: 5 }}>
           <Input
             style={{ height: height, padding: 2 }}
             bssize="sm"
@@ -2347,7 +2623,7 @@ export const SalaryItemForm = (props) => {
         </Col>
         <Col sm="1">
           <Input
-            style={{ height: height, padding: 2 }}
+            style={{ height: height, textAlign: 'right', padding: 2 }}
             bssize="sm"
             type="text"
             id="percentage-id"
@@ -3644,20 +3920,22 @@ export const JournalMainForm = (props) => {
             style={{ align: 'right' }}
             onClick={submitQuery}
           >
-            <i className="fa fa-dot-circle-o"></i>
+            <i className="fa fa-dot-circle-o">{t('common.run')}</i>
           </Button>
         </Col>
-        <Col sm="1" style={{ paddingLeft: 10, align: 'right' }}>
-          <Button
-            type="submit"
-            size="sm"
-            color="primary"
-            style={{ align: 'right' }}
-            onClick={submitQuery2}
-          >
-            <i className="fa fa-dot-circle-o"></i>
-          </Button>
-        </Col>
+        {submitQuery2 ? (
+          <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
+            <Button
+              type="submit"
+              size="sm"
+              color="primary"
+              style={{ align: 'right' }}
+              onClick={submitQuery2}
+            >
+              <i className="fa fa-dot-circle-o">{t('common.runAll')}</i>
+            </Button>
+          </Col>
+        ) : null}
       </CInputGroup>
     </>
   )
@@ -3841,7 +4119,6 @@ export const VatMainForm = (props) => {
             sm="4"
             disable={disable}
             height={height}
-            //style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
@@ -3863,7 +4140,6 @@ export const VatMainForm = (props) => {
             sm="4"
             disable={disable}
             height={height}
-            //style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             data={accData.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */

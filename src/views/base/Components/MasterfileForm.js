@@ -14,7 +14,7 @@ import { formEnum } from '../utils/FORMS'
 const MasterfileForm = (callback, deps) => {
   const { profile, menu, selected } = useStore()
   const { t } = useTranslation()
-  const { token, company, locale, currency } = profile
+  const { token, company, locale, currency, incomeStmtAcc } = profile
   let navigate = useNavigate()
   const tableRef = createRef()
   const tableRef2 = createRef()
@@ -195,6 +195,9 @@ const MasterfileForm = (callback, deps) => {
           t={t}
           locale={locale}
           currency={currency}
+          company={company}
+          incomeStmtAcc={incomeStmtAcc}
+          navigate={navigate}
           accData={accd}
           vatData={vatd}
           bankData={bankd}

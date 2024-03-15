@@ -11,7 +11,7 @@ const StyledAutocomplete = styled(Autocomplete, {
   return {
     '& .MuiAutocomplete-inputRoot': {
       backgroundColor: bgColor,
-      borderRadius: 8,
+      borderRadius: 6,
       border: 'none',
       paddingLeft: 10,
     },
@@ -21,7 +21,7 @@ const StyledAutocomplete = styled(Autocomplete, {
 export default function ComboBox(props) {
   // eslint-disable-next-line react/prop-types
   const { id, data, onChange, value, placeholder, idCol, disable, height } = props
-  console.log('props', props)
+  //console.log('props', props)
   const entryRef = useRef()
   return (
     <StyledAutocomplete
@@ -71,7 +71,6 @@ export default function ComboBox(props) {
             variant="standard"
             size="small"
             inputRef={entryRef}
-            //InputProps={{ sx: { borderRadius: 2 } }}
             onChange={(e) => {
               entryRef.current.value = e.target.value
             }}
@@ -82,7 +81,8 @@ export default function ComboBox(props) {
         props: { ...props },
         style: {
           maxHeight: '350px',
-          border: '1px solid lightBlue',
+          //border: '1px solid lightBlue',
+          border: 'none',
         },
       }}
     />

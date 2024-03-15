@@ -59,6 +59,9 @@ export const MASTERFILE = {
   masterfile: '/mf',
   accountClass: '/class',
   accountGroup: '/group',
+  closeAccountPeriod: '/close',
+  createPayrollTransaction: '/ptr',
+  createDepreciationTransaction: '/dtr',
 }
 export const LOGIN = (t) => ({
   id: '11111',
@@ -253,6 +256,42 @@ export const ACCOUNT_GROUP = (t, locale) => ({
   modelid: formEnum.ACCOUNT_GROUP,
   columns: ColumnsM([...initAccountGroup, ...initAccountClass], t, locale),
 })
+export const CLOSE_ACCOUNT_PERIOD = (t, locale) => ({
+  id: '38',
+  name: 'Close Account period',
+  title: 'closeAccountingPeriod.title',
+  ctx: MASTERFILE.closeAccountPeriod,
+  state: initCloseAccPeriod,
+  state1: [...initAcc],
+  state2: '',
+  state3: MASTERFILE.closeAccountPeriod,
+  modelid: formEnum.CLOSE_ACCOUNT_PERIOD,
+  columns: ColumnsACC(initAcc, t, locale),
+})
+export const CREATE_PAYROLL_TRANSACTION = (t, locale) => ({
+  id: '39',
+  name: 'Create Payroll transaction',
+  title: 'createPayrollTransaction.title',
+  ctx: MASTERFILE.createPayrollTransaction,
+  state: initCreatePayrollTransaction,
+  state1: [...initAcc],
+  state2: '',
+  state3: MASTERFILE.createPayrollTransaction,
+  modelid: formEnum.CREATE_PAYROLL_TRANSACTION,
+  columns: ColumnsACC(initAcc, t, locale),
+})
+export const CREATE_DEPRECIATION_TRANSACTION = (t, locale, currency) => ({
+  id: '39',
+  name: 'Create depreciation transaction',
+  title: 'createDepreciationTransaction.title',
+  ctx: MASTERFILE.createDepreciationTransaction,
+  state: initCreateDepreciationTransaction,
+  state1: [...initAsset],
+  state2: '',
+  state3: MASTERFILE.createDepreciationTransaction,
+  modelid: formEnum.CREATE_DEPRECIATION_TRANSACTION,
+  columns: ColumnsAsset(initAsset, t, locale, currency),
+})
 export const VAT = (t, locale) => ({
   id: '14',
   name: 'Vat',
@@ -438,6 +477,8 @@ export const initArticle = [
     stocked: true,
     quantityUnit: '',
     packUnit: '',
+    stockAccount: '',
+    expenseAccount: '',
     company: '',
     modelid: 34,
     enterdate: date,
@@ -460,6 +501,7 @@ export const initAsset = [
     scrapValue: -1,
     lifeSpan: -1,
     depMethod: 1,
+    amount: 0.0,
     rate: 1,
     frequency: -1,
     currency: 'EUR',
@@ -501,6 +543,27 @@ export const initStore = [
     changedate: date,
     modelid: 35,
     account: '-1',
+    company: '',
+  },
+]
+export const initCloseAccPeriod = [
+  {
+    id: '38',
+    account: '',
+    accountName: '',
+    period: '',
+    company: '',
+  },
+]
+export const initCreatePayrollTransaction = [
+  {
+    id: '39',
+    company: '',
+  },
+]
+export const initCreateDepreciationTransaction = [
+  {
+    period: '',
     company: '',
   },
 ]
@@ -948,6 +1011,12 @@ export const MENU = (t, locale, currency) =>
     [MASTERFILE.fmodule, FMODULE(t, locale)],
     [MASTERFILE.emp, EMPLOYEE(t, locale, currency)],
     [MASTERFILE.balancesheet, BALANCESHEET(t, locale, currency)],
+    [MASTERFILE.closeAccountPeriod, CLOSE_ACCOUNT_PERIOD(t, locale)],
+    [MASTERFILE.createPayrollTransaction, CREATE_PAYROLL_TRANSACTION(t, locale)],
+    [
+      MASTERFILE.createDepreciationTransaction,
+      CREATE_DEPRECIATION_TRANSACTION(t, locale, currency),
+    ],
   ])
 
 const initialState = {
@@ -956,6 +1025,7 @@ const initialState = {
     company: '',
     currency: '',
     language: '',
+    incomeStmtAcc: '',
     modules: [],
   },
   selected: '',
@@ -964,12 +1034,13 @@ const initialState = {
   routes: () => LoginRoute,
 }
 const importFn = (str) => React.lazy(() => import(`./${str}`))
+//console.log('import ====', importFn('Login') === importFn('views/base/Components/Login'))
 const LoginRoute = [
   {
     path: '/login',
     exact: true,
     name: 'Login',
-    element: importFn('views/base/Components/Login'),
+    element: importFn('Login'),
   },
 ]
 export const useStore = create((set) => ({
