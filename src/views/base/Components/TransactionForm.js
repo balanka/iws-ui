@@ -1,0 +1,424 @@
+import React, { createRef, useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { CFormInput } from '@coreui/react'
+import Grid from 'react-fast-grid'
+import EditableTable from '../tables/EditableTable'
+import { styles } from '../Tree/BasicTreeTableProps'
+import { Add, Edit, EditRow, Get1, Get2, Post } from './CrudController'
+import {
+  buildExportOption,
+  Options,
+  Transactioncolumns,
+  TransactionLinesColumns,
+} from '../tables/LineFinancialsProps'
+import { FormFactory, TransactionFormHead } from './FormsProps'
+import { formEnum } from '../utils/FORMS'
+import {
+  ARTICLE,
+  COSTCENTER,
+  FMODULE,
+  LOGIN,
+  MASTERFILE,
+  STORE,
+  TRANSACTION,
+  useStore,
+} from './Menu'
+import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import iwsStore from './Store'
+
+const TransactionForm = (callback, deps) => {
+  const { profile, selected, menu } = useStore()
+  const { token, company, locale, currency } = profile
+  let navigate = useNavigate()
+  const { t } = useTranslation()
+
+  let module_ = menu && menu.get(!selected || selected === '/login' ? '/cc' : selected)
+  module_ = typeof module_ !== 'undefined' && module_ ? module_ : LOGIN(t)
+
+  if (typeof module_ === 'undefined' || !module_ || module_.id === '11111')
+    return navigate('/login')
+  const modifyUrl = selected
+  const url = module_.ctx.concat('/').concat(company)
+  const artUrl = MASTERFILE.article.concat('/').concat(formEnum.ARTICLE).concat('/').concat(company)
+  const storeUrl = MASTERFILE.store.concat('/').concat(formEnum.STORE).concat('/').concat(company)
+  const ccUrl = MASTERFILE.masterfile
+    .concat('/')
+    .concat(formEnum.COSTCENTER)
+    .concat('/')
+    .concat(company)
+  const fmoduleUrl = MASTERFILE.fmodule
+    .concat('/')
+    .concat(formEnum.FMODULE)
+    .concat('/')
+    .concat(company)
+    .concat('/')
+    .concat(TRANSACTION(t).id)
+  console.log('fmoduleUrl', fmoduleUrl)
+  console.log('module_', module_)
+  const store_modelid = parseInt(STORE(t).id)
+  const art_modelid = parseInt(ARTICLE(t).id)
+  const cc_modelid = parseInt(COSTCENTER(t).id)
+  const fmodule_modelid = parseInt(FMODULE(t).id)
+  const initCc = module_.state2
+  const initArt = module_.state1
+  const initStore = module_.state1
+  const initialState = module_.state
+  const current_ = initialState[0]
+  console.log('current_', current_)
+  let title_ = t(module_.title)
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [state, setState] = useState({ collapse: true, fadeIn: true, timeout: 300 })
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [rows, setRows] = useState([])
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [model, setModel] = useState('')
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [title, setTitle] = useState(title_)
+  const tableRef = createRef()
+  const initLine = current_ && current_?.lines[0] ? current_?.lines[0] : []
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [toolbar, setToolbar] = useState(false)
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [current, setCurrent] = useState(current_)
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [iwsState, setIwsState] = useState(iwsStore.initialState)
+  const data_ = iwsState.get(parseInt(model))
+  const data = () => (data_ ? data_ : initialState)
+  const fModuleData = iwsState.get(fmodule_modelid) ?? []
+  const artData = iwsState.get(art_modelid) ?? [...initArt]
+  const storeData = iwsState.get(store_modelid) ?? [...initStore]
+  const ccData = iwsState.get(cc_modelid) ?? [...initCc]
+  const columnsX = TransactionLinesColumns(
+    artData,
+    initLine,
+    current,
+    fModuleData,
+    model,
+    t,
+    locale,
+    currency,
+  )
+  const columns = Transactioncolumns(storeData, ccData, initLine, current, t, locale, currency)
+
+  const toggleEdit = () => {
+    if (current?.editing) {
+      delete current.editing
+    }
+  }
+
+  const onNewLine = () => {
+    const ref = tableRef.current
+    ref.dataManager.changeRowEditing()
+    ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
+  }
+  const submitEdit = (event) => {
+    event.preventDefault()
+    toggleEdit()
+    if (current.id > 0) {
+      Edit(modifyUrl, token, current, data(), setCurrent)
+    } else {
+      submitAdd(event)
+    }
+  }
+  const submitCanceln = (event) => {
+    event.preventDefault()
+    toggleEdit()
+    const url_ = modifyUrl.replace('ltr', 'cancelnLtr')
+    // eslint-disable-next-line no-unused-expressions
+    current.id > 0 ? Edit(url_, token, current, data(), setCurrent) : current
+  }
+  // eslint-disable-next-line react-hooks/rules-of-hooks,react-hooks/exhaustive-deps
+  const handleKeyPress = useCallback((event) => {
+    if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
+      submitEdit(event)
+    } else if (event.ctrlKey && (event.key === 'l' || event.key === 'L')) {
+      onNewLine()
+    }
+  })
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  let init = useRef(false)
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useLayoutEffect(() => {
+    if (!init.current) {
+      iwsStore.subscribe(setIwsState)
+      init.current = true
+      Get1(fmoduleUrl, token, fmodule_modelid)
+      // attach the event listener
+      document.addEventListener('keydown', handleKeyPress)
+    }
+
+    // remove the event listener
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [init, data_])
+  const reload = () => {
+    iwsStore.deleteKey(model)
+    const url_ = url.concat('/').concat(model)
+    url_ && Get1(url_, token, parseInt(model))
+  }
+  const toggleToolbar = () => setToolbar(!toolbar)
+  const toggle = () => setState({ ...state, collapse: !state.collapse })
+  const setSelectedRows = (rows_) => {
+    setRows(rows_.map((item) => ({ id: item.id, modelid: item.modelid })))
+  }
+
+  const initAdd = () => {
+    const line = [
+      {
+        ...current_.lines[0],
+        id: -1,
+        transid: current_.id1,
+      },
+    ]
+    const record = { ...current_, modelid: parseInt(model), lines: line }
+    EditRow(record, true, setCurrent)
+  }
+
+  const cancelEdit = (e) => {
+    e.preventDefault()
+    initAdd()
+  }
+
+  const submitQuery = (event, modelid) => {
+    event.preventDefault()
+    const url_ = url.concat('/').concat(modelid)
+    storeUrl && Get1(storeUrl, token, store_modelid)
+    ccUrl && Get1(ccUrl, token, cc_modelid)
+    artUrl && Get1(artUrl, token, art_modelid)
+    url_ && Get1(url_, token, parseInt(modelid))
+  }
+  const handleModuleChange = (event, value) => {
+    event.preventDefault()
+    setModel(value.id)
+    submitQuery(event, value.id)
+    const mx = fModuleData.find((m) => m.id === value.id)
+    title_ = mx?.name ? mx.name : title_
+    setTitle(title_)
+    setCurrent(current_)
+  }
+
+  const buildAmount = (row) => ({
+    ...row,
+    total: row.lines.reduce((acc, line) => acc + line.quality * line.price, 0),
+  })
+  const buildData = () => data().map((row) => buildAmount(row))
+
+  const edit = (editedRow) => {
+    const isArray = Array.isArray(editedRow) && editedRow.length > 0
+    const row = isArray ? editedRow[0] : editedRow
+    if (row) {
+      const data = iwsState.get(row.modelid)
+      const record = data.find((obj) => obj.id === row.id)
+      setCurrent({ ...record, editing: true })
+    }
+  }
+
+  const submitPost = (event) => {
+    event.preventDefault()
+    const ids = rows.length > 0 ? rows.map((c) => c.id) : [current.id]
+    const url_ = modifyUrl.concat('/post/').concat(ids).concat('/').concat(current.company)
+    Get2(url_, token, setCurrent)
+  }
+
+  const submitCopy = (event) => {
+    event.preventDefault()
+    const url_ = modifyUrl.concat('/copy')
+    Post(url_, token, rows)
+  }
+
+  const getCurrentMonth = (date) => {
+    const p = date.getUTCMonth() + 1
+    return p <= 10 ? '0'.concat(p.toString()) : p.toString()
+  }
+  const getPeriod = (date) => {
+    return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))
+  }
+  const submitAdd = (event) => {
+    event.preventDefault()
+    const row = {
+      id: current.id,
+      oid: current.oid,
+      id1: current.id1,
+      store: current.store,
+      costcenter: current.costcenter,
+      transdate: new Date(current.transdate).toISOString(),
+      enterdate: new Date().toISOString(),
+      postingdate: new Date().toISOString(),
+      period: getPeriod(new Date()),
+      posted: current.posted,
+      modelid: parseInt(model),
+      company: company,
+      text: current.text,
+      lines: current.lines,
+    }
+    Add(modifyUrl, token, row, data(), setCurrent)
+  }
+
+  const addRow = async (newData) => {
+    if (newData) {
+      const dx = { ...current }
+      const dx1 =
+        current.lines.length === 0
+          ? {
+              ...current,
+              lines: [
+                {
+                  ...current.lines.filter((e) => !e.article.isEmpty),
+                  ...newData,
+                  id: -1,
+                  transid: current.id1,
+                },
+              ],
+            }
+          : (dx.lines[current.lines.length] = { ...newData, id: -1, transid: current.id1 })
+      const record = current.lines.length > 1 ? dx : dx1
+      delete record.editing
+      const result =
+        record.id > 0
+          ? Edit(modifyUrl, token, record, data(), setCurrent)
+          : Add(modifyUrl, token, record, data(), setCurrent)
+      setCurrent(result)
+    }
+  }
+  const updateRow = async (newData, oldData) => {
+    if (oldData) {
+      const dx = { ...current, company: company }
+      const idx = dx.lines.findIndex((obj) => obj.id === newData.id)
+      delete newData.tableData
+      const articleChanged = newData.article !== oldData.article
+      const articleId = articleChanged ? newData.article : oldData.article
+
+      if (idx === -1) {
+        dx.lines.push({ ...newData, transid: dx.id1 })
+      } else {
+        dx.lines[idx] = {
+          ...newData,
+          transid: dx.id1,
+          ...(articleChanged && { article: articleId }),
+        }
+      }
+      delete dx.editing
+      if (dx.id > 0) {
+        Edit(modifyUrl, token, dx, data(), setCurrent)
+      } else Add(modifyUrl, token, dx, data(), setCurrent)
+    }
+  }
+  const deleteRow = async (oldData) => {
+    if (oldData) {
+      const dx = { ...current }
+      const index = dx.lines.findIndex((obj) => obj.id === oldData.id)
+      const deleted = dx.lines[index]
+      dx.lines[index] = { ...deleted, transid: -2 }
+      Edit(modifyUrl, token, dx, data(), setCurrent)
+    }
+  }
+  const editable = () => ({ onRowAdd: addRow, onRowUpdate: updateRow, onRowDelete: deleteRow })
+  function buildForm(current) {
+    const stored = iwsState.get(store_modelid) ? iwsState.get(store_modelid) : [...initStore]
+    const ccd = iwsState.get(cc_modelid) ? iwsState.get(cc_modelid) : [...initCc]
+
+    const lines_ = () =>
+      Array.isArray(current.lines) && current.lines.length > 0 ? current.lines : [initLine]
+
+    const LinesTransaction = () => {
+      return (
+        <>
+          <Grid item>
+            <EditableTable
+              id="LineTable"
+              Options={{ ...Options, paging: lines_().length > 5 }}
+              flag={current.posted}
+              data={lines_()}
+              columns={columnsX}
+              editable={editable()}
+              t={t}
+              tableRef={tableRef}
+            />
+            <CFormInput
+              disabled={current.posted}
+              bssize="sm"
+              type="textarea"
+              id="text-input"
+              name="text"
+              className="input-sm"
+              placeholder="text"
+              value={current.text}
+              style={{ height: 30, fontSize: 11 }}
+              onChange={(event) => setCurrent({ ...current, text: event.target.value })}
+            />
+          </Grid>
+        </>
+      )
+    }
+
+    const parentChildData = (row, rows) =>
+      Array.isArray(rows) && rows.length > 0 ? rows.find((a) => a?.id === row.transid) : rows
+
+    return (
+      <>
+        <TransactionFormHead
+          styles={styles}
+          title={title}
+          collapse={state.collapse}
+          initAdd={initAdd}
+          url={url}
+          storeUrl={storeUrl}
+          initialState={initialState}
+          cancelEdit={cancelEdit}
+          submitEdit={submitEdit}
+          submitCanceln={submitCanceln}
+          module={model}
+          modules={fModuleData}
+          handleModuleChange={handleModuleChange}
+          onNewLine={onNewLine}
+          submitPost={submitPost}
+          submitCopy={submitCopy}
+          reload={reload}
+          toggle={toggle}
+          toggleToolbar={toggleToolbar}
+          current={current}
+        />
+        <Grid item>
+          <FormFactory
+            formid={formEnum.TRANSACTION}
+            current={current}
+            current_={current_}
+            setCurrent={setCurrent}
+            t={t}
+            storeData={stored}
+            ccData={ccd}
+            styles={styles}
+            table={LinesTransaction}
+            collapse={state.collapse}
+          />
+        </Grid>
+        <div style={{ paddingTop: 5 }}>
+          <Grid item xs spacing={0.5}>
+            <EditableTable
+              Options={{
+                ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),
+                toolbar: toolbar,
+                maxBodyHeight: '960px',
+                pageSize: 10,
+                pageSizeOptions: [5, 10, 20, 50],
+                showFirstLastPageButtons: true,
+              }}
+              flag={current ? current.posted : false}
+              data={buildData()}
+              columns={columns}
+              t={t}
+              edit={edit}
+              setSelectedRows={setSelectedRows}
+              parentChildData={parentChildData}
+            />
+          </Grid>
+        </div>
+      </>
+    )
+  }
+
+  return buildForm(current ? current : current_)
+}
+
+export default TransactionForm
