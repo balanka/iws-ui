@@ -6,7 +6,7 @@ import { formEnum } from '../utils/FORMS'
 
 const SERVER_IP = 'REACT_APP_HOST_IP_ADDRESS'
 const SERVER_PORT = 'REACT_APP_PORT'
-const SERVER_URL = 'http://0.0.0.0:8091' // 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT) //'http://localhost:8091'
+const SERVER_URL = 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT) //'http://0.0.0.0:8091'
 console.log('SERVER_IP', SERVER_IP)
 console.log('SERVER_PORT', SERVER_PORT)
 console.log('SERVER_URL_', SERVER_URL)
