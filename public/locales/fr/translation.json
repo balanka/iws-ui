@@ -272,6 +272,31 @@
       "text": "Texte"
     }
   },
+  "transaction": {
+    "title":      "Pièce comptable",
+    "id":        "Nº",
+    "oid":        "Réf.",
+    "period":       "Période",
+    "enterdate"  : "Saisie",
+    "postingdate": "Validée",
+    "transdate":   "Date pièce",
+    "store": "Magasin",
+    "costcenter":   "C.coûts",
+    "text" :       "Texte",
+    "file_content":  "Contenu",
+    "posted":     "Validée",
+    "line": {
+      "title": "Lignes",
+      "id": "Nº",
+      "article": "Article",
+      "articleName": "Nom",
+      "quantity": "Quantité",
+      "unit": "Unité",
+      "price": "Prix",
+      "duedate": "Date valeur",
+      "text": "Texte"
+    }
+  },
   "journal": {
     "title":      "Journal",
     "id":         "Nº",
@@ -368,6 +393,7 @@
     "bankstatement": "Rélévé bancaire",
     "balancesheet": "Bilan/Résultat",
     "financials": "Journaux",
+    "transaction": "Pièces",
     "financials_stmt": "Clôture/Etat financiers",
     "payroll.tax.range": "Table impôt sur salaire",
     "closeAccountingPeriod": "Clôturer periode comptable",
@@ -397,4 +423,5 @@
     "title": "Générer les journaux  amort.",
     "generate": "Générer"
   }
+
 }

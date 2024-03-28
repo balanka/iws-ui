@@ -7,7 +7,7 @@ import { Add, Edit, EditRow, Get1, Get2, Post } from './CrudController'
 import { buildExportOption, columnsF, Linescolumns, Options } from '../tables/LineFinancialsProps'
 import { FinancialsFormHead, FormFactory } from './FormsProps'
 import { formEnum } from '../utils/FORMS'
-import { ACCOUNT, COSTCENTER, FMODULE, LOGIN, MASTERFILE, useStore } from './Menu'
+import { ACCOUNT, COSTCENTER, FMODULE, LOGIN, MASTERFILE, FINANCIALS, useStore } from './Menu'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import iwsStore from './Store'
@@ -36,6 +36,8 @@ const FinancialsForm = (callback, deps) => {
     .concat(formEnum.FMODULE)
     .concat('/')
     .concat(company)
+    .concat('/')
+    .concat(FINANCIALS(t).id)
   const acc_modelid = parseInt(ACCOUNT(t).id)
   const cc_modelid = parseInt(COSTCENTER(t).id)
   const fmodule_modelid = parseInt(FMODULE(t).id)

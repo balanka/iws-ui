@@ -287,7 +287,30 @@
       "text": "Text"
     }
   },
-
+  "transaction": {
+    "title":      "Transaction",
+    "id":        "Id",
+    "oid":        "O.Id",
+    "period":       "Périod",
+    "enterdate"  : "Created",
+    "postingdate": "Posted",
+    "transdate":   "Transdate",
+    "store": "Store",
+    "costcenter":   "C.center",
+    "text" :       "Text",
+    "posted":     "Validée",
+    "line": {
+      "title": "Lines",
+      "id": "Nr",
+      "article": "Item",
+      "articleName": "Name",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "price": "Price",
+      "duedate": "Due date",
+      "text": "Text"
+    }
+  },
   "journal": {
     "title":      "Journal",
     "transid":    "TransId",
@@ -384,6 +407,7 @@
     "masterfiles": "Master files",
     "balancesheet": "Balance sheet",
     "financials": "Payable/Receivable",
+    "transaction": "Transaction",
     "financials_stmt": "Financials statements",
     "payroll.tax.range": "Pay roll tax table",
     "closeAccountingPeriod": "Close accounting period",

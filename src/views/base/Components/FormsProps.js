@@ -415,6 +415,102 @@ export const FinancialsFormHead = (props) => {
     </Grid>
   )
 }
+export const TransactionFormHead = (props) => {
+  const {
+    // eslint-disable-next-line react/prop-types
+    styles,
+    // eslint-disable-next-line react/prop-types
+    title,
+    // eslint-disable-next-line react/prop-types
+    collapse,
+    // eslint-disable-next-line react/prop-types
+    module,
+    // eslint-disable-next-line react/prop-types
+    modules,
+    // eslint-disable-next-line react/prop-types
+    initAdd,
+    // eslint-disable-next-line react/prop-types
+    onNewLine,
+    // eslint-disable-next-line react/prop-types
+    cancelEdit,
+    // eslint-disable-next-line react/prop-types
+    submitEdit,
+    // eslint-disable-next-line react/prop-types
+    submitCanceln,
+    // eslint-disable-next-line react/prop-types
+    toggle,
+    // eslint-disable-next-line react/prop-types
+    submitCopy,
+    // eslint-disable-next-line react/prop-types
+    submitPost,
+    // eslint-disable-next-line react/prop-types
+    handleModuleChange,
+    // eslint-disable-next-line react/prop-types
+    toggleToolbar,
+    // eslint-disable-next-line react/prop-types
+    reload,
+    // eslint-disable-next-line react/prop-types
+    current,
+  } = props
+  console.log('module', module)
+  // eslint-disable-next-line react/prop-types
+  const posted = current ? current.posted : false
+  return (
+    // eslint-disable-next-line react/prop-types
+    <Grid container xs style={{ ...styles.header }} justify="flex-start">
+      <Grid item justify="center" alignItems="center">
+        <IoMdMenu />
+      </Grid>
+      <Grid item>
+        <h5>
+          <CBadge color="primary">{title}</CBadge>
+        </h5>
+      </Grid>
+      <Grid
+        container
+        xs
+        spacing={0.5}
+        justify="flex-end"
+        /* eslint-disable-next-line react/prop-types */
+        style={{ ...styles.header }}
+        alignItems="right"
+      >
+        <div className="card-header-actions">
+          <ComboBox
+            id="module-id"
+            idCol={true}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            data={modules.sort(sortById)}
+            /* eslint-disable-next-line react/prop-types */
+            //value={module}
+            placeholder={'Module number'}
+            onChange={handleModuleChange}
+          />
+        </div>
+        {wrapIcon('Reload all transaction', svgIcons.refresh, reload, false)}
+        {wrapIcon('Copy transaction', svgIcons.copyContent, submitCopy, posted)}
+        {wrapIcon('Add new line transaction', svgIcons.libraryAdd, onNewLine, posted)}
+        {wrapIcon('Cancel editing', svgIcons.highlightOff, (e) => cancelEdit(e), posted)}
+        {wrapIcon('Add new transaction', svgIcons.addCircleOutline, initAdd, false)}
+        {wrapIcon('Save transaction', svgIcons.save, (e) => submitEdit(e), posted)}
+        {wrapIcon('Canceln transaction', svgIcons.save, (e) => submitCanceln(e), false)}
+        {wrapIcon('Post', svgIcons.done, submitPost, posted)}
+        <div className="card-header-actions">
+          <Button
+            color="link"
+            className="card-header-action btn-minimize"
+            title="Hide/Display transaction"
+            onClick={() => toggle()}
+          >
+            <FontAwesomeIcon icon={collapse ? faAngleDoubleUp : faAngleDoubleDown} />
+          </Button>
+        </div>
+        {wrapIcon('Toggle tool bar', svgIcons.swapVertCircle, toggleToolbar, false)}
+      </Grid>
+    </Grid>
+  )
+}
 export const JournalFormHead = (props) => {
   // eslint-disable-next-line react/prop-types
   const { styles, title, collapse, toggle, toggleToolbar } = props
@@ -495,6 +591,8 @@ const getForm = (formId) => {
       return EmployeeTabs
     case formEnum.FINANCIALS:
       return FinancialsMainForm
+    case formEnum.TRANSACTION:
+      return TransactionMainForm
     case formEnum.JOURNAL:
     case formEnum.PACB:
     case formEnum.BALANCETREE:
@@ -643,6 +741,7 @@ export const FormFactory = (props) => {
     case formEnum.PACB:
     case formEnum.BALANCETREE:
     case formEnum.VAT:
+    case formEnum.TRANSACTION:
       // eslint-disable-next-line react/prop-types
       return <FormWrapper {...props} form={getForm(props.formid)} />
     case formEnum.BUSINESS_PARTNER_ADDRESS_FORM:
@@ -3841,6 +3940,258 @@ export const FinancialsMainForm = (props) => {
             /* eslint-disable-next-line react/prop-types */
             control={<Switch checked={current.posted} />}
             label={t('financials.posted')}
+          />
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
+export const TransactionMainForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  let { current, current_, setCurrent, t, storeData, ccData, height } = props
+  current = current ? current : current_
+  // eslint-disable-next-line react/prop-types
+  const currentStore = storeData.find((store) => store.id === current.store)
+  // eslint-disable-next-line react/prop-types
+  const ccData_ = ccData ? ccData : []
+  // eslint-disable-next-line react/prop-types
+  const currentCC = ccData_.find((cc) => cc.id === current.costcenter)
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1">
+          <CFormLabel size="xs" htmlFor="input-small">
+            {t('transaction.id')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            bssize="sm"
+            type="text"
+            id="id"
+            name="id"
+            className="sm"
+            /* eslint-disable-next-line react/prop-types */
+            disabled={current.posted}
+            placeholder={t('transaction.id')}
+            style={{ height: 30 }}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.id}
+          />
+        </Col>
+        <Col sm="4" />
+        <Col sm="1">
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
+            {t('transaction.postingdate')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1">
+          <CDatePicker
+            size="sm"
+            disabled={true}
+            /* eslint-disable-next-line react/prop-types */
+            selected={Date.parse(current.postingdate)}
+            label={t('transaction.postingdate')}
+            showTimeInput
+            footer
+            dateFormat="dd.MM.yyyy"
+            id="postingdate-id"
+          />
+        </Col>
+        <Col sm="1">
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 20 }}>
+            {t('transaction.period')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1">
+          <Input
+            disabled={true}
+            bssize="sm"
+            className="input-sm"
+            type="text"
+            id="period"
+            name="period"
+            /* eslint-disable-next-line react/prop-types */
+            value={current.period}
+            style={{ textAlign: 'right', padding: 2 }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1" style={{ height: 30 }}>
+          <CFormLabel size="xs" htmlFor="input-small" style={{ height: 30 }}>
+            {t('transaction.oid')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <Input
+            /* eslint-disable-next-line react/prop-types */
+            disabled={current.posted}
+            bssize="sm"
+            type="text"
+            id="oid-input"
+            name="oid"
+            className="input-sm"
+            placeholder="oid"
+            style={{ height: 30 }}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.oid}
+            onChange={(event) => setCurrent({ ...current, oid: event.target.value })}
+          />
+        </Col>
+        <Col sm="4" />
+        <Col sm="1">
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
+            {t('transaction.enterdate')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1">
+          <CDatePicker
+            size="xs"
+            disabled={true}
+            /* eslint-disable-next-line react/prop-types */
+            selected={Date.parse(current.enterdate)}
+            label={t('transaction.enterdate')}
+            showTimeInput
+            footer
+            dateFormat="dd.MM.yyyy"
+            id="enterdate-id"
+          />
+        </Col>
+        <Col sm="1">
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 20 }}>
+            {t('common.company')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1">
+          <Input
+            disabled={true}
+            bssize="sm"
+            type="text"
+            id="company-input"
+            name="company"
+            className="input-sm"
+            placeholder={t('common.company')}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.company}
+            style={{ textAlign: 'right', height: 30 }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('transaction.store')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="store"
+            idCol={true}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            disable={current.posted}
+            height={height}
+            /* eslint-disable-next-line react/prop-types */
+            data={storeData.sort(sortById)}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.store}
+            placeholder={'store number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, store: newValue?.id, storeName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
+          <ComboBox
+            id="StoreName"
+            idCol={false}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            disable={current.posted}
+            height={height}
+            /* eslint-disable-next-line react/prop-types */
+            data={storeData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentStore ? currentStore.name : ''}
+            placeholder={'store name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, store: newValue?.id, storeName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="1">
+          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
+            {t('transaction.transdate')}
+          </CFormLabel>
+        </Col>
+        <Col sm="1">
+          <CDatePicker
+            size="xs"
+            /* eslint-disable-next-line react/prop-types */
+            disabled={current.posted}
+            /* eslint-disable-next-line react/prop-types */
+            selected={Date.parse(current.transdate)}
+            label={t('transaction.transdate')}
+            showTimeInput
+            footer
+            dateFormat="dd.MM.yyyy"
+            id="transdate-id"
+            onChange={(newValue) => setCurrent({ ...current, transdate: newValue })}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('transaction.costcenter')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="costcenter"
+            idCol={true}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            disable={current.posted}
+            height={height}
+            /* eslint-disable-next-line react/prop-types */
+            data={ccData.sort(sortById)}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.costcenter}
+            placeholder={'cost center number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, costcenter: newValue?.id, costcenterName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
+          <ComboBox
+            id="costCenterName"
+            idCol={false}
+            sm="4"
+            /* eslint-disable-next-line react/prop-types */
+            disable={current.posted}
+            height={height}
+            /* eslint-disable-next-line react/prop-types */
+            data={ccData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentCC ? currentCC.name : ''}
+            placeholder={'cost center name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, costcenter: newValue?.id, accountName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="1">
+          <FormControlLabel
+            disabled={true}
+            id="posted"
+            name="posted"
+            style={{ paddingLeft: 60 }}
+            /* eslint-disable-next-line react/prop-types */
+            control={<Switch checked={current.posted} />}
+            label={t('transaction.posted')}
           />
         </Col>
       </CInputGroup>

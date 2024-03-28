@@ -12,6 +12,7 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const Masterfile = (path) => React.lazy(() => import('./views/base/Components/MasterfileForm'))
 const FINANCIALS = (path) => React.lazy(() => import('./views/base/Components/FinancialsForm'))
+const TRANSACTION = (path) => React.lazy(() => import('./views/base/Components/TransactionForm'))
 const JFORM = (path) => React.lazy(() => import('./views/base/Components/JForm'))
 const BANKSTATEMENT = (path) =>
   React.lazy(() => import('./views/base/Components/BankStatementForm'))
@@ -21,6 +22,7 @@ const LOGIN = () => React.lazy(() => import('./views/base/Components/Login'))
 const routes = [
   { path: '/accounting', exact: true, name: 'Accounting' },
   { path: '/ftr', name: 'financials', element: FINANCIALS() },
+  { path: '/ltr', name: 'transaction', element: TRANSACTION() },
   { path: MASTERFILE.journal, name: 'Journal', element: JFORM() },
   { path: '/Masterfiles', exact: true, name: 'Masterfiles' },
   { path: '/admin', name: 'Admin' },

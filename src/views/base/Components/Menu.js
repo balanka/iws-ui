@@ -49,6 +49,7 @@ export const MASTERFILE = {
   sup: '/sup',
   comp: '/comp',
   ftr: '/ftr/model',
+  ltr: '/ltr/model',
   bs: '/bs',
   pac: '/pac',
   journal: '/journal',
@@ -365,16 +366,28 @@ const JOURNAL = (t, locale, currency) => ({
   modelid: formEnum.JOURNAL,
   columns: ColumnJournal(t, locale, currency),
 })
-const FINANCIALS = (t) => ({
-  id: '1120',
+export const FINANCIALS = (t) => ({
+  id: '1300',
   name: 'Financials',
-  title: 'financials.title',
+  title: t('financials.title'),
   ctx: MASTERFILE.ftr,
   state: initFtr,
   state1: initAcc,
   state2: initCC,
   state3: '',
   modelid: formEnum.FINANCIALS,
+})
+
+export const TRANSACTION = (t) => ({
+  id: '1301',
+  name: 'Transaction',
+  title: t('transaction.title'),
+  ctx: MASTERFILE.ltr,
+  state: initLtr,
+  state1: initStore,
+  state2: initCC,
+  state3: '',
+  modelid: formEnum.TRANSACTION,
 })
 
 const BALANCESHEET = (t, locale, currency) => ({
@@ -895,6 +908,37 @@ export const initFtr = [
     ],
   },
 ]
+export const initLtr = [
+  {
+    id: -1,
+    oid: 0,
+    id1: -1,
+    store: '',
+    costcenter: '',
+    transdate: date,
+    enterdate: date,
+    postingdate: date,
+    period: getPeriod(new Date()),
+    posted: false,
+    modelid: 1600,
+    company: '',
+    text: '',
+    lines: [
+      {
+        id: -1,
+        transid: -1,
+        article: '',
+        articleName: '',
+        quantity: 0.0,
+        unit: 'x',
+        price: 0.0,
+        currency: 'EUR',
+        duedate: date,
+        text: '',
+      },
+    ],
+  },
+]
 export const initPac = [
   {
     id: '',
@@ -1006,7 +1050,8 @@ export const MENU = (t, locale, currency) =>
     ['/dashboard', LOGIN(t, locale, currency)],
     [MASTERFILE.comp, COMPANY(t, locale, currency)],
     [MASTERFILE.bs, BS(t, locale, currency)],
-    ['/ftr', FINANCIALS(t, locale, currency)],
+    ['/ftr', FINANCIALS(t)],
+    ['/ltr', TRANSACTION(t, locale, currency)],
     [MASTERFILE.module, MODULE(t, locale)],
     [MASTERFILE.fmodule, FMODULE(t, locale)],
     [MASTERFILE.emp, EMPLOYEE(t, locale, currency)],
