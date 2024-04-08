@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 import Grid from 'react-fast-grid'
 import { IoMdMenu } from 'react-icons/io'
 import { Button, Col, Input } from 'reactstrap'
@@ -36,6 +36,7 @@ import EmployeeTabs from './EmployeeTabs'
 import ComboBox from './ComboBox'
 import { Get } from './CrudController'
 import { MASTERFILE } from './Menu'
+import ArticleTabs from './ArticleTabs'
 export const svgIcons = {
   plusCircle:
     'M10 3a7 7 0 100 14 7 7 0 000-14zm-9 7a9 9 0 1118 0 9 9 0 01-18 0zm14 .069a1 1 0 01-1 1h-2.931V14a1 1 0 11-2 0v-2.931H6a1 1 0 110-2h3.069V6a1 1 0 112 0v3.069H14a1 1 0 011 1z',
@@ -551,7 +552,7 @@ const getForm = (formId) => {
     case formEnum.QUANTITYUNIT:
       return MasterfilesMainForm2
     case formEnum.ARTICLE:
-      return ArticleForm
+      return ArticleTabs
     case formEnum.SALARY_ITEM:
       return SalaryItemForm
     case formEnum.MODULE:
@@ -593,10 +594,40 @@ const getForm = (formId) => {
       return AddressForm
     case formEnum.COMPANY_ACCOUNT_FORM:
       return CompanyAccountForm
+    case formEnum.ARTICLE_GENERAL_INFO_FORM:
+      return articleGeneralInfoForm
+    case formEnum.ARTICLE_ACCOUNT_FORM:
+      return ArticleAccountForm
     default:
       return <>NODATA</>
   }
 }
+
+const articleGeneralInfoForm = (props) => (
+  <Grid
+    container
+    spacing={0.5}
+    style={{ ...styles.inner, backgroundColor: blue, height: 250 }}
+    direction="column"
+  >
+    <ArticleForm
+      /* eslint-disable-next-line react/prop-types */
+      current={props.current}
+      /* eslint-disable-next-line react/prop-types */
+      setCurrent={props.setCurrent}
+      /* eslint-disable-next-line react/prop-types */
+      locale={props.locale}
+      /* eslint-disable-next-line react/prop-types */
+      currency={props.currency}
+      /* eslint-disable-next-line react/prop-types */
+      t={props.t}
+      /* eslint-disable-next-line react/prop-types */
+      height={props.height}
+      /* eslint-disable-next-line react/prop-types */
+      disable={props.disable}
+    />
+  </Grid>
+)
 const companyGeneralInfoForm = (props) => (
   <Grid
     container
@@ -738,6 +769,10 @@ export const FormFactory = (props) => {
       return businessPartnerAccountForm(props)
     case formEnum.COMPANY_ACCOUNT_FORM:
       return companyAccountForm(props)
+    case formEnum.ARTICLE_GENERAL_INFO_FORM:
+      return articleGeneralInfoForm(props)
+    case formEnum.ARTICLE_ACCOUNT_FORM:
+      return <FormInCollapsibleWrapper2 {...props} form={ArticleAccountForm} />
     default:
       return <>NODATA</>
   }
@@ -780,6 +815,19 @@ export const FormInCollapsibleWrapper = (props) => {
         {form && form(props)}
         {table && table(props)}
       </>
+    </CCollapse>
+  )
+}
+export const FormInCollapsibleWrapper2 = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { form } = props
+  return (
+    <CCollapse
+      visible={true}
+      id="JScollapse"
+      style={{ ...styles.inner, backgroundColor: lightGreen }}
+    >
+      {form(props)}
     </CCollapse>
   )
 }
@@ -3217,6 +3265,146 @@ const salaryField = (props) => {
         </Col>
       </>
     )
+  )
+}
+export const ArticleAccountForm = (props) => {
+  console.log('props>>>>>', props)
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, disable, t, accData, vatData, height } = props
+  const stockAccountLabel = t('article.stock.account')
+  // eslint-disable-next-line react/prop-types
+  const currentAccount = accData.find((acc) => acc.id === current.stockAccount)
+  // eslint-disable-next-line react/prop-types
+  const currentOAccount = accData.find((acc) => acc.id === current.expenseAccount)
+  // eslint-disable-next-line react/prop-types
+  const currentVat = vatData.find((vat) => vat.id === current.vatCode)
+  const expenseAccountLabel = t('article.expense.account')
+  console.log('current>>>>>', current)
+
+  return (
+    <div style={{ height: 100 }}>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {stockAccountLabel}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="account"
+            idCol={true}
+            sm="4"
+            data={accData}
+            disable={disable}
+            height={height}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.stockAccount}
+            placeholder={'account number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, stockAccount: newValue?.id, accountName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="accountName"
+            idCol={false}
+            sm="4"
+            disable={disable}
+            height={height}
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentAccount ? currentAccount.name : ''}
+            placeholder={'account name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, stockAccount: newValue?.id, accountName: newValue?.name })
+            }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {expenseAccountLabel}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="oaccount"
+            idCol={true}
+            sm="4"
+            data={accData}
+            disable={disable}
+            height={height}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.expenseAccount}
+            placeholder={' o acc number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, expenseAccount: newValue?.id, oaccountName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="oaccountName"
+            idCol={false}
+            sm="4"
+            disable={disable}
+            height={height}
+            /* eslint-disable-next-line react/prop-types */
+            data={accData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentOAccount ? currentOAccount.name : ''}
+            placeholder={'oaccount name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, expenseAccount: newValue?.id, oaccountName: newValue?.name })
+            }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <CFormLabel size="sm" htmlFor="input-small">
+            {t('common.vatCode')}
+          </CFormLabel>
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="vatcode"
+            idCol={true}
+            sm="4"
+            disable={disable}
+            height={height}
+            /* eslint-disable-next-line react/prop-types */
+            data={vatData.sort(sortById)}
+            /* eslint-disable-next-line react/prop-types */
+            value={current.vatCode}
+            placeholder={'vat code'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, vatCode: newValue?.id, vatName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="vatName"
+            idCol={false}
+            sm="4"
+            disable={disable}
+            height={height}
+            /* eslint-disable-next-line react/prop-types */
+            data={vatData.sort(sortByName)}
+            /* eslint-disable-next-line react/prop-types */
+            value={currentVat ? currentVat.name : ''}
+            placeholder={'vat name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, vatCode: newValue?.id, vatName: newValue?.name })
+            }}
+          />
+        </Col>
+      </CInputGroup>
+    </div>
   )
 }
 export const CustomerAccountForm = (props) => {

@@ -214,8 +214,13 @@
     "avgPrice": "P.M.P",
     "quantityUnit": "Unité mesure",
     "packUnit": "Emballage",
-    "stocked": "Stocké ?"
-  },
+    "stocked": "Stocké ?",
+    "stock": {
+          "account": "Cpte. Stock"
+    },
+    "expense": {
+      "account": "Cpte. Charge"
+    },
   "store": {
     "title": "Store"
   },

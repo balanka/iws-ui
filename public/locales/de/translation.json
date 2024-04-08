@@ -210,7 +210,13 @@
     "avgPrice": "G.D.P",
     "quantityUnit": "M.E.",
     "packUnit": "V.E.",
-    "stocked": "Bestand ?"
+    "stocked": "Bestand ?",
+    "stock": {
+      "account": "Best.Konto"
+    },
+    "expense": {
+      "account": "WE.Konto"
+    }
   },
   "store": {
     "title":      "Lager"

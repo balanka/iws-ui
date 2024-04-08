@@ -228,7 +228,13 @@
     "avgPrice": "Average price",
     "quantityUnit": "QtyUnit",
     "packUnit": "PackUnit",
-    "stocked": "Stocked ?"
+    "stocked": "Stocked ?",
+    "stock": {
+      "account": "stock Acc."
+    },
+    "expense": {
+      "account": "Exp. Acc."
+    }
   },
   "store": {
     "title": "Store"

@@ -492,6 +492,7 @@ export const initArticle = [
     packUnit: '',
     stockAccount: '',
     expenseAccount: '',
+    vatCode: '',
     company: '',
     modelid: 34,
     enterdate: date,
