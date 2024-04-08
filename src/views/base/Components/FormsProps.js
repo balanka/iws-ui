@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import Grid from 'react-fast-grid'
 import { IoMdMenu } from 'react-icons/io'
 import { Button, Col, Input } from 'reactstrap'
@@ -357,6 +357,7 @@ export const FinancialsFormHead = (props) => {
     current,
   } = props
   console.log('module', module)
+  console.log('modules>>>', modules)
   // eslint-disable-next-line react/prop-types
   const posted = current ? current.posted : false
   return (
@@ -418,41 +419,24 @@ export const FinancialsFormHead = (props) => {
 export const TransactionFormHead = (props) => {
   const {
     // eslint-disable-next-line react/prop-types
-    styles,
-    // eslint-disable-next-line react/prop-types
-    title,
-    // eslint-disable-next-line react/prop-types
-    collapse,
-    // eslint-disable-next-line react/prop-types
-    module,
-    // eslint-disable-next-line react/prop-types
-    modules,
-    // eslint-disable-next-line react/prop-types
-    initAdd,
-    // eslint-disable-next-line react/prop-types
-    onNewLine,
-    // eslint-disable-next-line react/prop-types
-    cancelEdit,
-    // eslint-disable-next-line react/prop-types
-    submitEdit,
-    // eslint-disable-next-line react/prop-types
-    submitCanceln,
-    // eslint-disable-next-line react/prop-types
-    toggle,
-    // eslint-disable-next-line react/prop-types
-    submitCopy,
-    // eslint-disable-next-line react/prop-types
-    submitPost,
-    // eslint-disable-next-line react/prop-types
-    handleModuleChange,
-    // eslint-disable-next-line react/prop-types
-    toggleToolbar,
-    // eslint-disable-next-line react/prop-types
-    reload,
-    // eslint-disable-next-line react/prop-types
-    current,
+    styles, // eslint-disable-next-line react/prop-types
+    title, // eslint-disable-next-line react/prop-types
+    collapse, // eslint-disable-next-line react/prop-types
+    modules, // eslint-disable-next-line react/prop-types
+    initAdd, // eslint-disable-next-line react/prop-types
+    onNewLine, // eslint-disable-next-line react/prop-types
+    cancelEdit, // eslint-disable-next-line react/prop-types
+    submitEdit, // eslint-disable-next-line react/prop-types
+    submitCanceln, // eslint-disable-next-line react/prop-types
+    toggle, // eslint-disable-next-line react/prop-types
+    submitCopy, // eslint-disable-next-line react/prop-types
+    submitPost, // eslint-disable-next-line react/prop-types
+    handleModuleChange, // eslint-disable-next-line react/prop-types
+    toggleToolbar, // eslint-disable-next-line react/prop-types
+    reload, // eslint-disable-next-line react/prop-types
+    current, // eslint-disable-next-line react/prop-types
   } = props
-  console.log('module', module)
+  console.log('modules>>>', modules)
   // eslint-disable-next-line react/prop-types
   const posted = current ? current.posted : false
   return (
@@ -3948,14 +3932,14 @@ export const FinancialsMainForm = (props) => {
 }
 export const TransactionMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  let { current, current_, setCurrent, t, storeData, ccData, height } = props
+  let { current, current_, setCurrent, t, storeData, accData, height } = props
   current = current ? current : current_
   // eslint-disable-next-line react/prop-types
   const currentStore = storeData.find((store) => store.id === current.store)
   // eslint-disable-next-line react/prop-types
-  const ccData_ = ccData ? ccData : []
+  const accData_ = accData ? accData : []
   // eslint-disable-next-line react/prop-types
-  const currentCC = ccData_.find((cc) => cc.id === current.costcenter)
+  const currentAcc = accData_.find((acc) => acc.id === current.account)
   return (
     <>
       <CInputGroup row style={{ height: height }}>
@@ -4144,7 +4128,7 @@ export const TransactionMainForm = (props) => {
       <CInputGroup row style={{ height: height }}>
         <Col sm="1">
           <CFormLabel size="sm" htmlFor="input-small">
-            {t('transaction.costcenter')}
+            {t('transaction.account')}
           </CFormLabel>
         </Col>
         <Col sm="2">
@@ -4156,12 +4140,12 @@ export const TransactionMainForm = (props) => {
             disable={current.posted}
             height={height}
             /* eslint-disable-next-line react/prop-types */
-            data={ccData.sort(sortById)}
+            data={accData_.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
             value={current.costcenter}
             placeholder={'cost center number'}
             onChange={(event, newValue) => {
-              setCurrent({ ...current, costcenter: newValue?.id, costcenterName: newValue?.name })
+              setCurrent({ ...current, account: newValue?.id, accountNName: newValue?.name })
             }}
           />
         </Col>
@@ -4174,12 +4158,12 @@ export const TransactionMainForm = (props) => {
             disable={current.posted}
             height={height}
             /* eslint-disable-next-line react/prop-types */
-            data={ccData.sort(sortByName)}
+            data={accData_.sort(sortByName)}
             /* eslint-disable-next-line react/prop-types */
-            value={currentCC ? currentCC.name : ''}
+            value={currentAcc ? currentAcc.name : ''}
             placeholder={'cost center name'}
             onChange={(event, newValue) => {
-              setCurrent({ ...current, costcenter: newValue?.id, accountName: newValue?.name })
+              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
             }}
           />
         </Col>

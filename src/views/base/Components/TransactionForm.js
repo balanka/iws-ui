@@ -12,16 +12,7 @@ import {
 } from '../tables/LineFinancialsProps'
 import { FormFactory, TransactionFormHead } from './FormsProps'
 import { formEnum } from '../utils/FORMS'
-import {
-  ARTICLE,
-  COSTCENTER,
-  FMODULE,
-  LOGIN,
-  MASTERFILE,
-  STORE,
-  TRANSACTION,
-  useStore,
-} from './Menu'
+import { ACCOUNT, ARTICLE, FMODULE, LOGIN, MASTERFILE, STORE, TRANSACTION, useStore } from './Menu'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import iwsStore from './Store'
@@ -41,23 +32,16 @@ const TransactionForm = (callback, deps) => {
   const url = module_.ctx.concat('/').concat(company)
   const artUrl = MASTERFILE.article.concat('/').concat(formEnum.ARTICLE).concat('/').concat(company)
   const storeUrl = MASTERFILE.store.concat('/').concat(formEnum.STORE).concat('/').concat(company)
-  const ccUrl = MASTERFILE.masterfile
-    .concat('/')
-    .concat(formEnum.COSTCENTER)
-    .concat('/')
-    .concat(company)
+  const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
   const fmoduleUrl = MASTERFILE.fmodule
     .concat('/')
     .concat(formEnum.FMODULE)
     .concat('/')
     .concat(company)
-    .concat('/')
-    .concat(TRANSACTION(t).id)
-  console.log('fmoduleUrl', fmoduleUrl)
-  console.log('module_', module_)
+
   const store_modelid = parseInt(STORE(t).id)
   const art_modelid = parseInt(ARTICLE(t).id)
-  const cc_modelid = parseInt(COSTCENTER(t).id)
+  const acc_modelid = parseInt(ACCOUNT(t).id)
   const fmodule_modelid = parseInt(FMODULE(t).id)
   const initCc = module_.state2
   const initArt = module_.state1
@@ -84,10 +68,20 @@ const TransactionForm = (callback, deps) => {
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
   const data_ = iwsState.get(parseInt(model))
   const data = () => (data_ ? data_ : initialState)
-  const fModuleData = iwsState.get(fmodule_modelid) ?? []
+  const fModuleData = (iwsState.get(fmodule_modelid) ?? []).filter(
+    (m) => m.parent === TRANSACTION(t).id,
+  )
+
   const artData = iwsState.get(art_modelid) ?? [...initArt]
   const storeData = iwsState.get(store_modelid) ?? [...initStore]
-  const ccData = iwsState.get(cc_modelid) ?? [...initCc]
+  const accData = iwsState.get(acc_modelid) ?? [...initCc]
+  const buildAmount = (row) => ({
+    ...row,
+    total: row.lines.reduce((acc, line) => {
+      return parseFloat(acc + parseFloat(line?.quality * line?.price), 0)
+    }),
+  })
+  const buildData = () => data().map((row) => (row.id === -1 ? 0.0 : buildAmount(row)))
   const columnsX = TransactionLinesColumns(
     artData,
     initLine,
@@ -98,8 +92,7 @@ const TransactionForm = (callback, deps) => {
     locale,
     currency,
   )
-  const columns = Transactioncolumns(storeData, ccData, initLine, current, t, locale, currency)
-
+  const columns = Transactioncolumns(storeData, accData, current, t, locale, currency)
   const toggleEdit = () => {
     if (current?.editing) {
       delete current.editing
@@ -184,9 +177,10 @@ const TransactionForm = (callback, deps) => {
     event.preventDefault()
     const url_ = url.concat('/').concat(modelid)
     storeUrl && Get1(storeUrl, token, store_modelid)
-    ccUrl && Get1(ccUrl, token, cc_modelid)
+    accUrl && Get1(accUrl, token, acc_modelid)
     artUrl && Get1(artUrl, token, art_modelid)
     url_ && Get1(url_, token, parseInt(modelid))
+    fmoduleUrl && Get1(fmoduleUrl, token, parseInt(fmodule_modelid))
   }
   const handleModuleChange = (event, value) => {
     event.preventDefault()
@@ -197,12 +191,6 @@ const TransactionForm = (callback, deps) => {
     setTitle(title_)
     setCurrent(current_)
   }
-
-  const buildAmount = (row) => ({
-    ...row,
-    total: row.lines.reduce((acc, line) => acc + line.quality * line.price, 0),
-  })
-  const buildData = () => data().map((row) => buildAmount(row))
 
   const edit = (editedRow) => {
     const isArray = Array.isArray(editedRow) && editedRow.length > 0
@@ -316,7 +304,7 @@ const TransactionForm = (callback, deps) => {
   const editable = () => ({ onRowAdd: addRow, onRowUpdate: updateRow, onRowDelete: deleteRow })
   function buildForm(current) {
     const stored = iwsState.get(store_modelid) ? iwsState.get(store_modelid) : [...initStore]
-    const ccd = iwsState.get(cc_modelid) ? iwsState.get(cc_modelid) : [...initCc]
+    const accd = iwsState.get(acc_modelid) ? iwsState.get(acc_modelid) : [...initCc]
 
     const lines_ = () =>
       Array.isArray(current.lines) && current.lines.length > 0 ? current.lines : [initLine]
@@ -352,8 +340,8 @@ const TransactionForm = (callback, deps) => {
       )
     }
 
-    const parentChildData = (row, rows) =>
-      Array.isArray(rows) && rows.length > 0 ? rows.find((a) => a?.id === row.transid) : rows
+    //const parentChildData = (row, rows) =>
+    //  Array.isArray(rows) && rows.length > 0 ? rows.find((a) => a?.id === row.transid) : rows
 
     return (
       <>
@@ -387,7 +375,7 @@ const TransactionForm = (callback, deps) => {
             setCurrent={setCurrent}
             t={t}
             storeData={stored}
-            ccData={ccd}
+            accData={accd}
             styles={styles}
             table={LinesTransaction}
             collapse={state.collapse}
@@ -410,7 +398,7 @@ const TransactionForm = (callback, deps) => {
               t={t}
               edit={edit}
               setSelectedRows={setSelectedRows}
-              parentChildData={parentChildData}
+              //parentChildData={parentChildData}
             />
           </Grid>
         </div>

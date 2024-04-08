@@ -281,7 +281,7 @@
     "postingdate": "Validée",
     "transdate":   "Date pièce",
     "store": "Magasin",
-    "costcenter":   "C.coûts",
+    "account":   "Client/Fourn.",
     "text" :       "Texte",
     "file_content":  "Contenu",
     "posted":     "Validée",

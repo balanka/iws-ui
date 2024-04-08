@@ -7,7 +7,7 @@ import { Add, Edit, EditRow, Get1, Get2, Post } from './CrudController'
 import { buildExportOption, columnsF, Linescolumns, Options } from '../tables/LineFinancialsProps'
 import { FinancialsFormHead, FormFactory } from './FormsProps'
 import { formEnum } from '../utils/FORMS'
-import { ACCOUNT, COSTCENTER, FMODULE, LOGIN, MASTERFILE, FINANCIALS, useStore } from './Menu'
+import { ACCOUNT, COSTCENTER, LOGIN, MASTERFILE, FINANCIALS, useStore } from './Menu'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import iwsStore from './Store'
@@ -36,11 +36,9 @@ const FinancialsForm = (callback, deps) => {
     .concat(formEnum.FMODULE)
     .concat('/')
     .concat(company)
-    .concat('/')
-    .concat(FINANCIALS(t).id)
   const acc_modelid = parseInt(ACCOUNT(t).id)
   const cc_modelid = parseInt(COSTCENTER(t).id)
-  const fmodule_modelid = parseInt(FMODULE(t).id)
+  const fmodule_modelid = parseInt(formEnum.FMODULE)
   const initCc = module_.state2
   const initAcc = module_.state1
   const initialState = module_.state
@@ -64,12 +62,14 @@ const FinancialsForm = (callback, deps) => {
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
   const data_ = iwsState.get(parseInt(model))
   const data = () => (data_ ? data_ : initialState)
-  const fModuleData = iwsState.get(fmodule_modelid) ?? []
+  const fModuleData = (iwsState.get(fmodule_modelid) ?? []).filter(
+    (m) => m.parent === FINANCIALS(t).id,
+  )
   const accData = iwsState.get(acc_modelid) ?? [...initAcc]
   const ccData = iwsState.get(cc_modelid) ?? [...initCc]
 
   const columnsX = Linescolumns(accData, initLine, current, fModuleData, model, t, locale, currency)
-  const columns = columnsF(ccData, initLine, current, t, locale, currency)
+  const columns = columnsF(ccData, current, t, locale, currency)
 
   const toggleEdit = () => {
     if (current?.editing) {
@@ -110,6 +110,7 @@ const FinancialsForm = (callback, deps) => {
   let init = useRef(false)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useLayoutEffect(() => {
+    console.log('init.current', init.current)
     if (!init.current) {
       iwsStore.subscribe(setIwsState)
       init.current = true
@@ -122,7 +123,7 @@ const FinancialsForm = (callback, deps) => {
     return () => {
       document.removeEventListener('keydown', handleKeyPress)
     }
-  }, [init, data_])
+  }, [init])
   const reload = () => {
     iwsStore.deleteKey(model)
     const url_ = url.concat('/').concat(model)
@@ -155,18 +156,19 @@ const FinancialsForm = (callback, deps) => {
   const submitQuery = (event, modelid) => {
     event.preventDefault()
     const url_ = url.concat('/').concat(modelid)
-    accUrl && Get1(accUrl, token, acc_modelid)
+    accUrl && !iwsState.get(acc_modelid) && Get1(accUrl, token, acc_modelid)
     ccUrl && Get1(ccUrl, token, cc_modelid)
     url_ && Get1(url_, token, parseInt(modelid))
   }
   const handleModuleChange = (event, value) => {
     event.preventDefault()
+    //console.log('valuevaluevaluevalue', value)
     setModel(value.id)
     submitQuery(event, value.id)
     const mx = fModuleData.find((m) => m.id === value.id)
     title_ = mx?.name ? mx.name : title_
     setTitle(title_)
-    setCurrent(current_)
+    //setCurrent(current_)
   }
 
   const buildAmount = (row) => ({
@@ -328,9 +330,6 @@ const FinancialsForm = (callback, deps) => {
       )
     }
 
-    const parentChildData = (row, rows) =>
-      Array.isArray(rows) && rows.length > 0 ? rows.find((a) => a?.id === row.transid) : rows
-
     return (
       <>
         <FinancialsFormHead
@@ -386,7 +385,7 @@ const FinancialsForm = (callback, deps) => {
               t={t}
               edit={edit}
               setSelectedRows={setSelectedRows}
-              parentChildData={parentChildData}
+              //parentChildData={parentChildData}
             />
           </Grid>
         </div>

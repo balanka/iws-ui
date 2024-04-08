@@ -914,7 +914,7 @@ export const initLtr = [
     oid: 0,
     id1: -1,
     store: '',
-    costcenter: '',
+    account: '',
     transdate: date,
     enterdate: date,
     postingdate: date,

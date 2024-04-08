@@ -277,7 +277,7 @@
     "postingdate": "Buchungsdatum",
     "transdate":   "Belegdatum",
     "account":      "Deb./Kred.",
-    "costcenter":   "Kostenstelle",
+    "store":   "Lager",
     "text" :       "Text",
     "type":         "B.Art",
     "posted":     "Gebucht",

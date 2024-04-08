@@ -12,10 +12,7 @@ console.log('SERVER_PORT', SERVER_PORT)
 console.log('SERVER_URL_', SERVER_URL)
 const getFn1 = (url, token) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
 const getFn = (url, token) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
-const putFn = (url, token, record) =>
-  axios.put(url, record, { headers: { Authorization: `Bearer ${token}` } })
-const postFn = (url, token, record) =>
-  axios.post(url, record, { headers: { Authorization: `Bearer ${token}` } })
+
 const post1Fn = (url, record) => axios.post(url, record)
 const Post = (url, profile, record) => patchFn(url, profile.token, record)
 
