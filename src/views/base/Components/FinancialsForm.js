@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useLayoutEffect, useRef, useState } from 'react'
+import React, { createRef, useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { CFormInput } from '@coreui/react'
 import Grid from 'react-fast-grid'
 import EditableTable from '../tables/EditableTable'
@@ -330,65 +330,90 @@ const FinancialsForm = (callback, deps) => {
       )
     }
 
-    return (
-      <>
-        <FinancialsFormHead
-          styles={styles}
-          title={title}
-          collapse={state.collapse}
-          initAdd={initAdd}
-          url={url}
-          accUrl={accUrl}
-          initialState={initialState}
-          cancelEdit={cancelEdit}
-          submitEdit={submitEdit}
-          submitCanceln={submitCanceln}
-          module={model}
-          modules={fModuleData}
-          handleModuleChange={handleModuleChange}
-          onNewLine={onNewLine}
-          submitPost={submitPost}
-          submitCopy={submitCopy}
-          reload={reload}
-          toggle={toggle}
-          toggleToolbar={toggleToolbar}
-          current={current}
-        />
-        <Grid item>
-          <FormFactory
-            formid={formEnum.FINANCIALS}
-            current={current}
-            current_={current_}
-            setCurrent={setCurrent}
-            t={t}
-            accData={accd}
-            ccData={ccd}
+    const getHeader = (fModuleData, initialState) =>
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useMemo(
+        () => (
+          <FinancialsFormHead
             styles={styles}
-            table={LinesFinancials}
+            title={title}
             collapse={state.collapse}
+            initAdd={initAdd}
+            url={url}
+            accUrl={accUrl}
+            initialState={initialState}
+            cancelEdit={cancelEdit}
+            submitEdit={submitEdit}
+            submitCanceln={submitCanceln}
+            module={model}
+            modules={fModuleData}
+            handleModuleChange={handleModuleChange}
+            onNewLine={onNewLine}
+            submitPost={submitPost}
+            submitCopy={submitCopy}
+            reload={reload}
+            toggle={toggle}
+            toggleToolbar={toggleToolbar}
+            current={current}
           />
-        </Grid>
-        <div style={{ paddingTop: 5 }}>
-          <Grid item xs spacing={0.5}>
-            <EditableTable
-              Options={{
-                ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),
-                toolbar: toolbar,
-                maxBodyHeight: '960px',
-                pageSize: 10,
-                pageSizeOptions: [5, 10, 20, 50],
-                showFirstLastPageButtons: true,
-              }}
-              flag={current ? current.posted : false}
-              data={buildData()}
-              columns={columns}
+        ),
+        [fModuleData, url, accUrl, model],
+      )
+    const getTable = (current, tableData, title) =>
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useMemo(
+        () => (
+          <div style={{ paddingTop: 5 }}>
+            <Grid item xs spacing={0.5}>
+              <EditableTable
+                Options={{
+                  ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),
+                  toolbar: toolbar,
+                  maxBodyHeight: '960px',
+                  pageSize: 10,
+                  pageSizeOptions: [5, 10, 20, 50],
+                  showFirstLastPageButtons: true,
+                }}
+                flag={current ? current.posted : false}
+                data={tableData}
+                columns={columns}
+                t={t}
+                edit={edit}
+                setSelectedRows={setSelectedRows}
+                //parentChildData={parentChildData}
+              />
+            </Grid>
+          </div>
+        ),
+        [tableData],
+      )
+    const getMainForm = (formId, current, current_, mainTable, accountData, ccData) =>
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useMemo(
+        () => (
+          <Grid item>
+            <FormFactory
+              formid={formId}
+              current={current}
+              current_={current_}
+              setCurrent={setCurrent}
               t={t}
-              edit={edit}
-              setSelectedRows={setSelectedRows}
-              //parentChildData={parentChildData}
+              accData={accountData}
+              ccData={ccData}
+              styles={styles}
+              table={mainTable}
+              collapse={state.collapse}
             />
           </Grid>
-        </div>
+        ),
+        [formId, current_, current, accd, ccd],
+      )
+
+    return (
+      <>
+        {getHeader(fModuleData, initialState)}
+        {getMainForm(formEnum.FINANCIALS, current, current_, LinesFinancials, accd, ccd)}
+        {getTable(current, buildData(), title)}
       </>
     )
   }
