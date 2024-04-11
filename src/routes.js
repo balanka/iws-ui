@@ -39,6 +39,7 @@ const routes = [
     element: Masterfile(),
   },
   { path: MASTERFILE.article, name: 'Article', element: Masterfile() },
+  { path: MASTERFILE.articleGroup, name: 'Article group', element: Masterfile() },
   { path: MASTERFILE.cc, name: 'Cost center', element: Masterfile() },
   { path: MASTERFILE.cust, name: 'Customer', element: Masterfile() },
   { path: MASTERFILE.sup, name: 'Supplier', element: Masterfile() },

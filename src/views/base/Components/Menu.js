@@ -34,6 +34,7 @@ export const MASTERFILE = {
   acc: '/acc',
   asset: '/asset',
   article: '/art',
+  articleGroup: '/articleGroup',
   bank: '/bank',
   cc: '/cc',
   module: '/module',
@@ -245,6 +246,7 @@ export const ACCOUNT_CLASS = (t, locale) => ({
   modelid: formEnum.ACCOUNT_CLASS,
   columns: ColumnsM(initAccountClass, t, locale),
 })
+
 export const ACCOUNT_GROUP = (t, locale) => ({
   id: '37',
   name: 'Account group',
@@ -256,6 +258,18 @@ export const ACCOUNT_GROUP = (t, locale) => ({
   state3: '/group',
   modelid: formEnum.ACCOUNT_GROUP,
   columns: ColumnsM([...initAccountGroup, ...initAccountClass], t, locale),
+})
+export const ARTICLE_GROUP = (t, locale) => ({
+  id: '13',
+  name: 'Article group',
+  title: 'articleGroupe.title',
+  ctx: MASTERFILE.masterfile,
+  state: initArticleGroup,
+  state1: initArticleGroup,
+  state2: '',
+  state3: '/articleGroup',
+  modelid: formEnum.ARTICLE_GROUP,
+  columns: ColumnsM(initArticleGroup, t, locale),
 })
 export const CLOSE_ACCOUNT_PERIOD = (t, locale) => ({
   id: '38',
@@ -619,6 +633,19 @@ export const initAccountGroup = [
     changedate: date,
     company: '',
     modelid: 37,
+  },
+]
+export const initArticleGroup = [
+  {
+    id: '',
+    name: '',
+    description: '',
+    parent: -1,
+    enterdate: date,
+    postingdate: date,
+    changedate: date,
+    company: '',
+    modelid: 13,
   },
 ]
 export const initCC = [
@@ -1029,6 +1056,7 @@ export const initfModule = [
 export const MENU = (t, locale, currency) =>
   new Map([
     [MASTERFILE.article, ARTICLE(t, locale, currency)],
+    [MASTERFILE.articleGroup, ARTICLE_GROUP(t, locale, currency)],
     [MASTERFILE.asset, ASSET(t, locale, currency)],
     [MASTERFILE.journal, JOURNAL(t, locale, currency)],
     [MASTERFILE.pac, PACB(t, locale, currency)],

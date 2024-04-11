@@ -229,6 +229,7 @@
     "quantityUnit": "QtyUnit",
     "packUnit": "PackUnit",
     "stocked": "Stocked ?",
+    "group": "Group",
     "stock": {
       "account": "stock Acc."
     },
@@ -386,6 +387,7 @@
     },
     "admin": "Administration",
     "article": "Article",
+    "articleGroup": "Art.group",
     "asset": "Asset",
     "dashboard": "Dashboard",
     "accounting": "Accounting",

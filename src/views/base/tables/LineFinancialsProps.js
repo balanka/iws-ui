@@ -1380,7 +1380,7 @@ export const ColumnsArticle = (data, t, locale, currency) => [
   },
   {
     field: 'stockAccount',
-    title: t('article.stockAccount'),
+    title: t('article.stock.account'),
     editComponent: ({ value, onRowDataChange, rowData }) =>
       ACCOUNT(data, value, onRowDataChange, rowData, 'stockAccount'),
     width: 20,
@@ -1388,7 +1388,7 @@ export const ColumnsArticle = (data, t, locale, currency) => [
   },
   {
     field: 'expenseAccount',
-    title: t('article.expenseAccount'),
+    title: t('article.expense.account'),
     editComponent: ({ value, onRowDataChange, rowData }) =>
       ACCOUNT(data, value, onRowDataChange, rowData, 'expenseAccount'),
     width: 20,
@@ -1429,6 +1429,12 @@ export const ColumnsArticle = (data, t, locale, currency) => [
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     },
+  },
+  {
+    field: 'vatCode',
+    title: t('common.vatCode'),
+    type: 'string',
+    export: true,
   },
   {
     field: 'enterdate',
@@ -2486,6 +2492,7 @@ export const ColumnFactory = (formid, data, t, locale, currency) => {
     case formEnum.QUANTITYUNIT:
     case formEnum.ACCOUNT_CLASS:
     case formEnum.ACCOUNT_GROUP:
+    case formEnum.ARTICLE_GROUP:
     case formEnum.FMODULE:
     case formEnum.ROLE:
     case formEnum.PERMISSION:

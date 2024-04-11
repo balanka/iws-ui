@@ -561,6 +561,7 @@ const getForm = (formId) => {
     case formEnum.PERMISSION:
     case formEnum.ACCOUNT_CLASS:
     case formEnum.ACCOUNT_GROUP:
+    case formEnum.ARTICLE_GROUP:
       return MasterfilesMainForm
     case formEnum.PAYROLL_TAX_RANGE:
       return PayrollTaxForm
@@ -742,6 +743,7 @@ export const FormFactory = (props) => {
     case formEnum.MODULE:
     case formEnum.FMODULE:
     case formEnum.ARTICLE:
+    case formEnum.ARTICLE_GROUP:
     case formEnum.STORE:
     case formEnum.SALARY_ITEM:
     case formEnum.PERMISSION:
@@ -770,7 +772,7 @@ export const FormFactory = (props) => {
     case formEnum.COMPANY_ACCOUNT_FORM:
       return companyAccountForm(props)
     case formEnum.ARTICLE_GENERAL_INFO_FORM:
-      return articleGeneralInfoForm(props)
+      return <FormInCollapsibleWrapper2 {...props} form={articleGeneralInfoForm} />
     case formEnum.ARTICLE_ACCOUNT_FORM:
       return <FormInCollapsibleWrapper2 {...props} form={ArticleAccountForm} />
     default:
@@ -781,6 +783,7 @@ export const FormFactory = (props) => {
 export const FormWrapper = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { form, table, collapse } = props
+  console.log('collapse>>>>>>>', collapse)
   return (
     <Grid
       container
@@ -789,7 +792,7 @@ export const FormWrapper = (props) => {
       direction="column"
     >
       <CCollapse
-        visible={collapse}
+        visible={true}
         id="JScollapse"
         style={{ ...styles.inner, backgroundColor: lightGreen }}
       >
@@ -2123,7 +2126,7 @@ export const MasterfilesMainForm = (props) => {
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
-            {t('costcenter.name')}
+            {t('common.name')}
           </CFormLabel>
         </Col>
         <Col sm="6">
@@ -2165,7 +2168,7 @@ export const MasterfilesMainForm = (props) => {
         {/* eslint-disable-next-line react/prop-types */}
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.account')}
+            {t('article.parent')}
           </CFormLabel>
         </Col>
         <Col sm="2">{accountIdField(props)}</Col>
@@ -3279,7 +3282,10 @@ export const ArticleAccountForm = (props) => {
   // eslint-disable-next-line react/prop-types
   const currentVat = vatData.find((vat) => vat.id === current.vatCode)
   const expenseAccountLabel = t('article.expense.account')
+  console.log('accData>>>>>', accData)
   console.log('current>>>>>', current)
+  console.log('currentAccount>>>>>', currentAccount)
+  console.log('currentOAccount>>>>>', currentOAccount)
 
   return (
     <div style={{ height: 100 }}>

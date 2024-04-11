@@ -50,7 +50,7 @@ const ArticleTabs = (props) => {
   const GetTabContent = () => {
     return [
       { title: t('common.general'), id: 1, form: getGeneralForm() },
-      { title: t('common.accounts'), id: 3, form: getAccountForm() },
+      { title: t('common.accounts'), id: 2, form: getAccountForm() },
     ]
   }
 

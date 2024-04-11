@@ -211,6 +211,7 @@
     "quantityUnit": "M.E.",
     "packUnit": "V.E.",
     "stocked": "Bestand ?",
+    "group": "W.gruppe",
     "stock": {
       "account": "Best.Konto"
     },
@@ -367,6 +368,7 @@
     },
     "admin": "Verwaltung",
     "article": "Artikel",
+    "articleGroup": "Artikelgruppe",
     "asset": "Anlage",
     "dashboard": "Dashboard",
     "accounting": "Buchhaltung",
