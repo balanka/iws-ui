@@ -2168,7 +2168,7 @@ export const MasterfilesMainForm = (props) => {
         {/* eslint-disable-next-line react/prop-types */}
         <Col sm="2">
           <CFormLabel size="sm" htmlFor="input-small">
-            {t('article.parent')}
+            {t('account.parent')}
           </CFormLabel>
         </Col>
         <Col sm="2">{accountIdField(props)}</Col>
