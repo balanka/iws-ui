@@ -772,9 +772,9 @@ export const FormFactory = (props) => {
     case formEnum.COMPANY_ACCOUNT_FORM:
       return companyAccountForm(props)
     case formEnum.ARTICLE_GENERAL_INFO_FORM:
-      return <FormInCollapsibleWrapper2 {...props} form={articleGeneralInfoForm} />
+      return <FormInCollapsibleWrapper {...props} form={articleGeneralInfoForm} />
     case formEnum.ARTICLE_ACCOUNT_FORM:
-      return <FormInCollapsibleWrapper2 {...props} form={ArticleAccountForm} />
+      return <FormInCollapsibleWrapper {...props} form={ArticleAccountForm} />
     default:
       return <>NODATA</>
   }
@@ -782,8 +782,7 @@ export const FormFactory = (props) => {
 
 export const FormWrapper = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { form, table, collapse } = props
-  console.log('collapse>>>>>>>', collapse)
+  const { form, table } = props
   return (
     <Grid
       container
@@ -805,7 +804,7 @@ export const FormWrapper = (props) => {
   )
 }
 
-export const FormInCollapsibleWrapper = (props) => {
+export const FormInCollapsibleWrapper_ = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { form, table, collapse } = props
   return (
@@ -821,7 +820,7 @@ export const FormInCollapsibleWrapper = (props) => {
     </CCollapse>
   )
 }
-export const FormInCollapsibleWrapper2 = (props) => {
+export const FormInCollapsibleWrapper = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { form } = props
   return (
