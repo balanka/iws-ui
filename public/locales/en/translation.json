@@ -154,6 +154,7 @@
   "company": {
     "title":      "Company",
     "name":       "Name",
+    "locale":      "Locale",
     "description": "Description",
     "bankAccount": "Bank Acc.",
     "cashAccount": "Cash Acc.",

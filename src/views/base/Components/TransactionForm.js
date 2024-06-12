@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, { createRef, useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { CFormInput } from '@coreui/react'
 import Grid from 'react-fast-grid'
 import EditableTable from '../tables/EditableTable'
@@ -12,10 +12,11 @@ import {
 } from '../tables/LineFinancialsProps'
 import { FormFactory, TransactionFormHead } from './FormsProps'
 import { formEnum } from '../utils/FORMS'
-import { ACCOUNT, ARTICLE, FMODULE, LOGIN, MASTERFILE, STORE, TRANSACTION, useStore } from './Menu'
+import { LOGIN, MASTERFILE, TRANSACTION, useStore } from './Menu'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import iwsStore from './Store'
+import { fetchData, getData, getPeriod, toggleEdit } from './TransactionFormLib'
 
 const TransactionForm = (callback, deps) => {
   const { profile, selected, menu } = useStore()
@@ -33,19 +34,13 @@ const TransactionForm = (callback, deps) => {
   const artUrl = MASTERFILE.article.concat('/').concat(formEnum.ARTICLE).concat('/').concat(company)
   const storeUrl = MASTERFILE.store.concat('/').concat(formEnum.STORE).concat('/').concat(company)
   const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
+  const custUrl = MASTERFILE.cust.concat('/').concat(formEnum.CUSTOMER).concat('/').concat(company)
+  const supUrl = MASTERFILE.sup.concat('/').concat(formEnum.SUPPLIER).concat('/').concat(company)
   const fmoduleUrl = MASTERFILE.fmodule
     .concat('/')
     .concat(formEnum.FMODULE)
     .concat('/')
     .concat(company)
-
-  const store_modelid = parseInt(STORE(t).id)
-  const art_modelid = parseInt(ARTICLE(t).id)
-  const acc_modelid = parseInt(ACCOUNT(t).id)
-  const fmodule_modelid = parseInt(FMODULE(t).id)
-  const initCc = module_.state2
-  const initArt = module_.state1
-  const initStore = module_.state1
   const initialState = module_.state
   const current_ = initialState[0]
   console.log('current_', current_)
@@ -57,6 +52,8 @@ const TransactionForm = (callback, deps) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [model, setModel] = useState('')
   // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [partnerId, setPartnerId] = useState('')
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [title, setTitle] = useState(title_)
   const tableRef = createRef()
   const initLine = current_ && current_?.lines[0] ? current_?.lines[0] : []
@@ -66,15 +63,16 @@ const TransactionForm = (callback, deps) => {
   const [current, setCurrent] = useState(current_)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
-  const data_ = iwsState.get(parseInt(model))
-  const data = () => (data_ ? data_ : initialState)
-  const fModuleData = (iwsState.get(fmodule_modelid) ?? []).filter(
+  const fModuleData = (iwsState.get(formEnum.FMODULE) ?? []).filter(
     (m) => m.parent === TRANSACTION(t).id,
   )
+  const { data, artData, storeData, accData, partnerData } = getData(
+    iwsState,
+    parseInt(model),
+    partnerId,
+    initialState,
+  )
 
-  const artData = iwsState.get(art_modelid) ?? [...initArt]
-  const storeData = iwsState.get(store_modelid) ?? [...initStore]
-  const accData = iwsState.get(acc_modelid) ?? [...initCc]
   const buildAmount = (row) => ({
     ...row,
     total: row.lines.reduce((acc, line) => {
@@ -93,12 +91,6 @@ const TransactionForm = (callback, deps) => {
     currency,
   )
   const columns = Transactioncolumns(storeData, accData, current, t, locale, currency)
-  const toggleEdit = () => {
-    if (current?.editing) {
-      delete current.editing
-    }
-  }
-
   const onNewLine = () => {
     const ref = tableRef.current
     ref.dataManager.changeRowEditing()
@@ -106,16 +98,16 @@ const TransactionForm = (callback, deps) => {
   }
   const submitEdit = (event) => {
     event.preventDefault()
-    toggleEdit()
+    toggleEdit(current)
     if (current.id > 0) {
       Edit(modifyUrl, token, current, data(), setCurrent)
     } else {
       submitAdd(event)
     }
   }
-  const submitCanceln = (event) => {
+  const submitCancel = (event) => {
     event.preventDefault()
-    toggleEdit()
+    toggleEdit(current)
     const url_ = modifyUrl.replace('ltr', 'cancelnLtr')
     // eslint-disable-next-line no-unused-expressions
     current.id > 0 ? Edit(url_, token, current, data(), setCurrent) : current
@@ -135,7 +127,7 @@ const TransactionForm = (callback, deps) => {
     if (!init.current) {
       iwsStore.subscribe(setIwsState)
       init.current = true
-      Get1(fmoduleUrl, token, fmodule_modelid)
+      fetchData(fmoduleUrl, token, formEnum.FMODULE)
       // attach the event listener
       document.addEventListener('keydown', handleKeyPress)
     }
@@ -144,7 +136,7 @@ const TransactionForm = (callback, deps) => {
     return () => {
       document.removeEventListener('keydown', handleKeyPress)
     }
-  }, [init, data_])
+  }, [init])
   const reload = () => {
     iwsStore.deleteKey(model)
     const url_ = url.concat('/').concat(model)
@@ -176,19 +168,24 @@ const TransactionForm = (callback, deps) => {
   const submitQuery = (event, modelid) => {
     event.preventDefault()
     const url_ = url.concat('/').concat(modelid)
-    storeUrl && Get1(storeUrl, token, store_modelid)
-    accUrl && Get1(accUrl, token, acc_modelid)
-    artUrl && Get1(artUrl, token, art_modelid)
-    url_ && Get1(url_, token, parseInt(modelid))
-    fmoduleUrl && Get1(fmoduleUrl, token, parseInt(fmodule_modelid))
+    !iwsState.get(formEnum.STORE) && fetchData(storeUrl, token, formEnum.STORE)
+    !iwsState.get(formEnum.ACCOUNT) && fetchData(accUrl, token, formEnum.ACCOUNT)
+    !iwsState.get(formEnum.ARTICLE) && fetchData(artUrl, token, formEnum.ARTICLE)
+    !iwsState.get(formEnum.CUSTOMER) && fetchData(custUrl, token, formEnum.CUSTOMER)
+    !iwsState.get(formEnum.SUPPLIER) && fetchData(supUrl, token, formEnum.SUPPLIER)
+    !iwsState.get(formEnum.FMODULE) && fetchData(fmoduleUrl, token, formEnum.FMODULE)
+    fetchData(url_, token, parseInt(modelid))
   }
   const handleModuleChange = (event, value) => {
     event.preventDefault()
     setModel(value.id)
-    submitQuery(event, value.id)
+    //submitQuery(event, value.id)
     const mx = fModuleData.find((m) => m.id === value.id)
+    console.log('mx>>>>', mx)
     title_ = mx?.name ? mx.name : title_
     setTitle(title_)
+    setPartnerId(mx.account)
+    submitQuery(event, value.id)
     setCurrent(current_)
   }
 
@@ -214,14 +211,6 @@ const TransactionForm = (callback, deps) => {
     const url_ = modifyUrl.concat('/copy')
     Post(url_, token, rows)
   }
-
-  const getCurrentMonth = (date) => {
-    const p = date.getUTCMonth() + 1
-    return p <= 10 ? '0'.concat(p.toString()) : p.toString()
-  }
-  const getPeriod = (date) => {
-    return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))
-  }
   const submitAdd = (event) => {
     event.preventDefault()
     const row = {
@@ -229,7 +218,7 @@ const TransactionForm = (callback, deps) => {
       oid: current.oid,
       id1: current.id1,
       store: current.store,
-      costcenter: current.costcenter,
+      account: current.account,
       transdate: new Date(current.transdate).toISOString(),
       enterdate: new Date().toISOString(),
       postingdate: new Date().toISOString(),
@@ -303,9 +292,6 @@ const TransactionForm = (callback, deps) => {
   }
   const editable = () => ({ onRowAdd: addRow, onRowUpdate: updateRow, onRowDelete: deleteRow })
   function buildForm(current) {
-    const stored = iwsState.get(store_modelid) ? iwsState.get(store_modelid) : [...initStore]
-    const accd = iwsState.get(acc_modelid) ? iwsState.get(acc_modelid) : [...initCc]
-
     const lines_ = () =>
       Array.isArray(current.lines) && current.lines.length > 0 ? current.lines : [initLine]
 
@@ -340,88 +326,86 @@ const TransactionForm = (callback, deps) => {
       )
     }
 
-    const getHeader = (fModuleData, initialState) =>
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useMemo(
-        () => (
-          <TransactionFormHead
-            styles={styles}
-            title={title}
-            collapse={state.collapse}
-            initAdd={initAdd}
-            url={url}
-            storeUrl={storeUrl}
-            initialState={initialState}
-            cancelEdit={cancelEdit}
-            submitEdit={submitEdit}
-            submitCanceln={submitCanceln}
-            module={model}
-            modules={fModuleData}
-            handleModuleChange={handleModuleChange}
-            onNewLine={onNewLine}
-            submitPost={submitPost}
-            submitCopy={submitCopy}
-            reload={reload}
-            toggle={toggle}
-            toggleToolbar={toggleToolbar}
-            current={current}
-          />
-        ),
-        [fModuleData, url, accUrl, model],
+    const getHeader = (fModuleData, initialState) => {
+      return (
+        <TransactionFormHead
+          styles={styles}
+          title={title}
+          collapse={state.collapse}
+          initAdd={initAdd}
+          url={url}
+          storeUrl={storeUrl}
+          initialState={initialState}
+          cancelEdit={cancelEdit}
+          submitEdit={submitEdit}
+          submitCancel={submitCancel}
+          module={model}
+          modules={fModuleData}
+          handleModuleChange={handleModuleChange}
+          onNewLine={onNewLine}
+          submitPost={submitPost}
+          submitCopy={submitCopy}
+          reload={reload}
+          toggle={toggle}
+          toggleToolbar={toggleToolbar}
+          current={current}
+        />
       )
-    const getTable = (current, tableData, title) =>
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useMemo(
-        () => (
-          <div style={{ paddingTop: 5 }}>
-            <Grid item xs spacing={0.5}>
-              <EditableTable
-                Options={{
-                  ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),
-                  toolbar: toolbar,
-                  maxBodyHeight: '960px',
-                  pageSize: 10,
-                  pageSizeOptions: [5, 10, 20, 50],
-                  showFirstLastPageButtons: true,
-                }}
-                flag={current ? current.posted : false}
-                data={tableData}
-                columns={columns}
-                t={t}
-                edit={edit}
-                setSelectedRows={setSelectedRows}
-                //parentChildData={parentChildData}
-              />
-            </Grid>
-          </div>
-        ),
-        [tableData],
-      )
-    const getMainForm = (formId, current, current_, mainTable, accountData, ccData) =>
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useMemo(
-        () => (
-          <Grid item>
-            <FormFactory
-              formid={formId}
-              current={current}
-              current_={current_}
-              setCurrent={setCurrent}
+    }
+    const getTable = (current, tableData, title) => {
+      return (
+        <div style={{ paddingTop: 5 }}>
+          <Grid item xs spacing={0.5}>
+            <EditableTable
+              Options={{
+                ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),
+                toolbar: toolbar,
+                maxBodyHeight: '960px',
+                pageSize: 10,
+                pageSizeOptions: [5, 10, 20, 50],
+                showFirstLastPageButtons: true,
+              }}
+              flag={current ? current.posted : false}
+              data={tableData}
+              columns={columns}
               t={t}
-              accData={accountData}
-              storeData={ccData}
-              styles={styles}
-              table={mainTable}
-              collapse={state.collapse}
+              edit={edit}
+              setSelectedRows={setSelectedRows}
+              //parentChildData={parentChildData}
             />
           </Grid>
-        ),
-        [formId, current_, current, accountData, ccData],
+        </div>
       )
+    }
+    const getMainForm = (formId, current, current_, mainTable, accountData, storeData) => {
+      return (
+        <Grid item>
+          <FormFactory
+            formid={formId}
+            current={current}
+            current_={current_}
+            setCurrent={setCurrent}
+            t={t}
+            accData={accountData}
+            storeData={storeData}
+            styles={styles}
+            table={mainTable}
+            collapse={state.collapse}
+          />
+        </Grid>
+      )
+    }
     return (
       <>
         {getHeader(fModuleData, initialState)}
-        {getMainForm(formEnum.TRANSACTION, current, current_, buildLinesTransaction, accd, stored)}
+        {getMainForm(
+          formEnum.TRANSACTION,
+          current,
+          current_,
+          buildLinesTransaction,
+          partnerData,
+          storeData,
+        )}
         {getTable(current, buildData(), title)}
       </>
     )

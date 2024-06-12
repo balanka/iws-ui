@@ -341,7 +341,7 @@ export const FinancialsFormHead = (props) => {
     // eslint-disable-next-line react/prop-types
     submitEdit,
     // eslint-disable-next-line react/prop-types
-    submitCanceln,
+    submitCancel,
     // eslint-disable-next-line react/prop-types
     toggle,
     // eslint-disable-next-line react/prop-types
@@ -400,7 +400,7 @@ export const FinancialsFormHead = (props) => {
         {wrapIcon('Cancel editing', svgIcons.highlightOff, (e) => cancelEdit(e), posted)}
         {wrapIcon('Add new transaction', svgIcons.addCircleOutline, initAdd, false)}
         {wrapIcon('Save transaction', svgIcons.save, (e) => submitEdit(e), posted)}
-        {wrapIcon('Canceln transaction', svgIcons.save, (e) => submitCanceln(e), false)}
+        {wrapIcon('Canceln transaction', svgIcons.save, (e) => submitCancel(e), false)}
         {wrapIcon('Post', svgIcons.done, submitPost, posted)}
         <div className="card-header-actions">
           <Button
@@ -428,7 +428,7 @@ export const TransactionFormHead = (props) => {
     onNewLine, // eslint-disable-next-line react/prop-types
     cancelEdit, // eslint-disable-next-line react/prop-types
     submitEdit, // eslint-disable-next-line react/prop-types
-    submitCanceln, // eslint-disable-next-line react/prop-types
+    submitCancel, // eslint-disable-next-line react/prop-types
     toggle, // eslint-disable-next-line react/prop-types
     submitCopy, // eslint-disable-next-line react/prop-types
     submitPost, // eslint-disable-next-line react/prop-types
@@ -479,7 +479,7 @@ export const TransactionFormHead = (props) => {
         {wrapIcon('Cancel editing', svgIcons.highlightOff, (e) => cancelEdit(e), posted)}
         {wrapIcon('Add new transaction', svgIcons.addCircleOutline, initAdd, false)}
         {wrapIcon('Save transaction', svgIcons.save, (e) => submitEdit(e), posted)}
-        {wrapIcon('Canceln transaction', svgIcons.save, (e) => submitCanceln(e), false)}
+        {wrapIcon('Canceln transaction', svgIcons.save, (e) => submitCancel(e), false)}
         {wrapIcon('Post', svgIcons.done, submitPost, posted)}
         <div className="card-header-actions">
           <Button
@@ -4326,7 +4326,7 @@ export const TransactionMainForm = (props) => {
         </Col>
         <Col sm="2">
           <ComboBox
-            id="costcenter"
+            id="account"
             idCol={true}
             sm="4"
             /* eslint-disable-next-line react/prop-types */
@@ -4335,8 +4335,8 @@ export const TransactionMainForm = (props) => {
             /* eslint-disable-next-line react/prop-types */
             data={accData_.sort(sortById)}
             /* eslint-disable-next-line react/prop-types */
-            value={current.costcenter}
-            placeholder={'cost center number'}
+            value={current.account}
+            placeholder={'account number'}
             onChange={(event, newValue) => {
               setCurrent({ ...current, account: newValue?.id, accountNName: newValue?.name })
             }}

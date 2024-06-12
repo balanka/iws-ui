@@ -151,9 +151,17 @@
   "company": {
     "title":      "Société",
     "locale":      "Locale",
-    "companyIban" : "IBAN"
+    "companyIban" : "IBAN",
+    "description": "Description",
+    "bankAccount": "Bank Acc.",
+    "cashAccount": "Cash Acc.",
+    "balanceSheetAcc":"Balance sheet Acc",
+    "incomeStmtAcc": "IncomeStmtAcc",
+    "purchasingClearingAcc": "PurchasingClearingAcc",
+    "salesClearingAcc":"SalesClearingAcc.",
+    "paymentClearingAcc":"PaymentClearingAcc",
+    "settlementClearingAcc": "SetlmtClearingAcc."
   },
-
   "customer": {
     "title":      "Client",
     "account":  "Compte Client",
@@ -217,11 +225,12 @@
     "stocked": "Stocké ?",
     "group": "Groupe",
     "stock": {
-          "account": "Cpte. Stock"
+      "account": "Cpte. Stock"
     },
     "expense": {
       "account": "Cpte. Charge"
-    },
+    }
+  },
   "store": {
     "title": "Store"
   },
@@ -398,12 +407,6 @@
     "permission": "Permission",
     "fmodule": "Journaux",
     "bankstatement": "Rélévé bancaire",
-    "balancesheet": "Bilan/Résultat",
-    "financials": "Journaux",
-    "transaction": "Pièces",
-    "financials_stmt": "Clôture/Etat financiers",
-    "payroll.tax.range": "Table impôt sur salaire",
-    "closeAccountingPeriod": "Clôturer periode comptable",
     "createPayrollTransaction": "Générer les journaux de paie",
     "createDepreciationTransaction": "Générer les journaux  amort."
 

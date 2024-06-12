@@ -118,7 +118,7 @@ export const COSTCENTER = (t, locale) => ({
   name: 'CostCenter',
   title: 'costcenter.title',
   ctx: MASTERFILE.masterfile,
-  state: initCC,
+  state: initCc,
   state1: initAcc,
   state2: '',
   state3: '/mf',
@@ -387,7 +387,7 @@ export const FINANCIALS = (t) => ({
   ctx: MASTERFILE.ftr,
   state: initFtr,
   state1: initAcc,
-  state2: initCC,
+  state2: initCc,
   state3: '',
   modelid: formEnum.FINANCIALS,
 })
@@ -399,7 +399,7 @@ export const TRANSACTION = (t) => ({
   ctx: MASTERFILE.ltr,
   state: initLtr,
   state1: initStore,
-  state2: initCC,
+  state2: initCc,
   state3: '',
   modelid: formEnum.TRANSACTION,
 })
@@ -648,7 +648,7 @@ export const initArticleGroup = [
     modelid: 13,
   },
 ]
-export const initCC = [
+export const initCc = [
   {
     id: '6',
     name: '',

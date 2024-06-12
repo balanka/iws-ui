@@ -1,4 +1,4 @@
-import React, { createRef, memo, useCallback, useLayoutEffect, useState } from 'react'
+import React, { createRef, useCallback, useLayoutEffect, useState } from 'react'
 import { MASTERFILE, useStore, ACCOUNT, BANK, VAT, LOGIN } from './Menu'
 import Grid from 'react-fast-grid'
 import { CommonFormHead, FormFactory } from './FormsProps'
@@ -123,30 +123,27 @@ const MasterfileForm = (callback, deps) => {
       setCurrent({ ...record, editing: true })
     }
   }
-  const load = (event) => submitQuery(event)
-  const submitQuery = (event) => {
-    event.preventDefault()
+  const fetchData = (url, data_, modelId_, token) => {
     isNotArrayOrEmpty(accd) &&
       accUrl &&
       current.modelid !== acc_modelId &&
       Get1(accUrl, token, acc_modelId)
-    isNotArrayOrEmpty(vatd) &&
-      vatUrl &&
-      current.modelid !== vat_modelId &&
-      Get1(vatUrl, token, vat_modelId)
-    isNotArrayOrEmpty(bankd) &&
-      bankUrl &&
-      current.modelid !== bank_modelId &&
-      Get1(bankUrl, token, bank_modelId)
-    isNotArrayOrEmpty(accClassd) &&
-      classUrl &&
-      current.modelid !== formEnum.ACCOUNT_CLASS &&
-      Get1(classUrl, token, formEnum.ACCOUNT_CLASS)
-    isNotArrayOrEmpty(accClassd) &&
-      groupUrl &&
-      current.modelid !== formEnum.ACCOUNT_GROUP &&
-      Get1(groupUrl, token, formEnum.ACCOUNT_GROUP)
-    moduleUrl && current.modelid !== module_modelId && Get1(moduleUrl, token, module_modelId)
+  }
+  const load = (event) => submitQuery(event)
+  const submitQuery = (event) => {
+    event.preventDefault()
+    // fetch  account data
+    fetchData(accUrl, accd, acc_modelId, token)
+    // fetch  vat data
+    fetchData(vatUrl, vatd, vat_modelId, token)
+    // fetch  bank data
+    fetchData(bankUrl, bankd, bank_modelId, token)
+    // fetch  accountClass data
+    fetchData(classUrl, accClassd, formEnum.ACCOUNT_CLASS, token)
+    // fetch  accountGroup data
+    fetchData(groupUrl, accGroupd, formEnum.ACCOUNT_GROUP, token)
+    // fetch  module data
+    fetchData(moduleUrl, [], module_modelId, token)
     url && Get1(url, token, current_.modelid)
   }
 
@@ -242,4 +239,4 @@ const MasterfileForm = (callback, deps) => {
 
   return buildForm(current ? current : current_)
 }
-export default memo(MasterfileForm)
+export default MasterfileForm
