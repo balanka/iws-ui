@@ -2,7 +2,7 @@ import React, { createRef, useCallback, useLayoutEffect, useRef, useState } from
 import { CFormInput } from '@coreui/react'
 import Grid from 'react-fast-grid'
 import EditableTable from '../tables/EditableTable'
-import { styles } from '../Tree/BasicTreeTableProps'
+import { rowStyle, styles } from '../Tree/BasicTreeTableProps'
 import { Add, Edit, EditRow, Get1, Get2, Post } from './CrudController'
 import { buildExportOption, columnsF, Linescolumns, Options } from '../tables/LineFinancialsProps'
 import { FinancialsFormHead, FormFactory } from './FormsProps'
@@ -275,18 +275,38 @@ const FinancialsForm = (callback, deps) => {
       Array.isArray(current.lines) && current.lines.length > 0 ? current.lines : [initLine]
 
     const LinesFinancials = () => {
+      const renderSummaryRow = ({ column, data }) => {
+        console.log('Width >>>>>', new Array(column.width).fill(''))
+        const total = t('common.total')
+        console.log('total >>>>>', t('common.total'))
+        const formatIt = (number, currency, locale) =>
+          new Intl.NumberFormat(locale, { style: 'currency', currency: currency }).format(number)
+        return column.field === 'oaccountName'
+          ? { value: total, style: styles.fieldStyle }
+          : column.field === 'amount'
+            ? {
+                value: formatIt(
+                  data.reduce((sum, row) => sum + row.amount, 0),
+                  currency,
+                  locale,
+                ),
+                style: styles.fieldStyle,
+              }
+            : new Array(column.width).fill(' ')
+      }
       return (
         <>
           <Grid item>
             <EditableTable
               id="LineTable"
-              Options={{ ...Options, paging: lines_().length > 5 }}
+              Options={{ ...Options, rowStyle: rowStyle, paging: lines_().length > 5 }}
               flag={current.posted}
               data={lines_()}
               columns={columnsX}
               editable={editable()}
               t={t}
               tableRef={tableRef}
+              renderSummaryRow={renderSummaryRow}
             />
             <CFormInput
               disabled={current.posted}

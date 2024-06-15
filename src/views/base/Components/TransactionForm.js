@@ -296,6 +296,25 @@ const TransactionForm = (callback, deps) => {
       Array.isArray(current.lines) && current.lines.length > 0 ? current.lines : [initLine]
 
     const buildLinesTransaction = () => {
+      const renderSummaryRow = ({ column, data }) => {
+        console.log('Width >>>>>', new Array(column.width).fill(''))
+        const total = t('common.total')
+        console.log('total >>>>>', t('common.total'))
+        const formatIt = (number, currency, locale) =>
+          new Intl.NumberFormat(locale, { style: 'currency', currency: currency }).format(number)
+        return column.field === 'articleName'
+          ? { value: total, style: styles.fieldStyle }
+          : column.field === 'price'
+            ? {
+                value: formatIt(
+                  data.reduce((sum, row) => sum + row.quantity * row.price, 0),
+                  currency,
+                  locale,
+                ),
+                style: styles.fieldStyle,
+              }
+            : new Array(column.width).fill(' ')
+      }
       return (
         <>
           <Grid item>
@@ -308,6 +327,7 @@ const TransactionForm = (callback, deps) => {
               editable={editable()}
               t={t}
               tableRef={tableRef}
+              renderSummaryRow={renderSummaryRow}
             />
             <CFormInput
               disabled={current.posted}

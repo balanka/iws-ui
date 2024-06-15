@@ -794,6 +794,7 @@ export const Options = {
   filtering: false,
   //search: false,
   selection: false,
+
   cellStyle: { padding: '0.3em', fontSize: 10 },
   headerStyle: {
     padding: '0.3em',
@@ -802,6 +803,7 @@ export const Options = {
     backgroundColor: theme.palette.common.black,
     color: '#eee',
   },
+  //rowStyle: rowStyle,
   root: {
     '&:nth-child(odd)': {
       backgroundColor: theme.palette.background.default,
@@ -811,7 +813,6 @@ export const Options = {
     height: 3,
     hover: true,
   },
-  rowStyle: rowStyle,
 }
 export const buildExportOption = (csvMenu, pdfMenu, fileName) => ({
   ...OptionsM,

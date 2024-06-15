@@ -16,7 +16,8 @@ export default function EditableTable(props) {
     edit, // eslint-disable-next-line react/prop-types
     editable, // eslint-disable-next-line react/prop-types
     setSelectedRows, // eslint-disable-next-line react/prop-types
-    parentChildData,
+    parentChildData, // eslint-disable-next-line react/prop-types
+    renderSummaryRow,
   } = props
   var editFunction = typeof edit === 'function'
 
@@ -36,6 +37,7 @@ export default function EditableTable(props) {
       tableRef={tableRef}
       columns={columns}
       data={data}
+      renderSummaryRow={renderSummaryRow}
       icons={tableIcons}
       options={Options} //, columnResizable:true, doubleHorizontalScroll:true, padding:'dense'
       parentChildData={parentChildData}
