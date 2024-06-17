@@ -98,7 +98,7 @@ export const styles = {
     width: 'inherit',
   },
   fieldStyle: {
-    color: 'black',
+    //color: 'black',
     padding: 0.5,
     height: 3,
     fontsize: 8,

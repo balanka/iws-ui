@@ -3,7 +3,7 @@ import { CFormInput } from '@coreui/react'
 import Grid from 'react-fast-grid'
 import EditableTable from '../tables/EditableTable'
 import { styles } from '../Tree/BasicTreeTableProps'
-import { Add, Edit, EditRow, Get1, Get2, Post } from './CrudController'
+import { Add, Edit } from './CrudController'
 import {
   buildExportOption,
   Options,
@@ -16,7 +16,25 @@ import { LOGIN, MASTERFILE, TRANSACTION, useStore } from './Menu'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import iwsStore from './Store'
-import { fetchData, formatCurrency, getData, getPeriod, toggleEdit } from './TransactionFormLib'
+import {
+  callOnNewLine,
+  callReload,
+  callSubmitCancel,
+  callSubmitEdit,
+  fetchData,
+  formatCurrency,
+  getData,
+  getPeriod,
+  callSetSelectedRows,
+  callInitAdd,
+  callAddRow,
+  callDeleteRow,
+  callSubmitPost,
+  callEdit,
+  callCancelEdit,
+  callSubmitQuery,
+  callSubmitCopy,
+} from './TransactionFormLib'
 
 const TransactionForm = (callback, deps) => {
   const { profile, selected, menu } = useStore()
@@ -92,27 +110,12 @@ const TransactionForm = (callback, deps) => {
     currency,
   )
   const columns = Transactioncolumns(storeData, accData, current, t, locale, currency)
-  const onNewLine = () => {
-    const ref = tableRef.current
-    ref.dataManager.changeRowEditing()
-    ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
-  }
-  const submitEdit = (event) => {
-    event.preventDefault()
-    toggleEdit(current)
-    if (current.id > 0) {
-      Edit(modifyUrl, token, current, data(), setCurrent)
-    } else {
-      submitAdd(event)
-    }
-  }
-  const submitCancel = (event) => {
-    event.preventDefault()
-    toggleEdit(current)
-    const url_ = modifyUrl.replace('ltr', 'cancelnLtr')
-    // eslint-disable-next-line no-unused-expressions
-    current.id > 0 ? Edit(url_, token, current, data(), setCurrent) : current
-  }
+  const onNewLine = () => callOnNewLine(tableRef)
+  const submitEdit = (event) =>
+    callSubmitEdit(event, modifyUrl, token, current, setCurrent, data, submitAdd)
+  const submitCancel = (event) =>
+    callSubmitCancel(event, modifyUrl, token, current, setCurrent, data)
+
   // eslint-disable-next-line react-hooks/rules-of-hooks,react-hooks/exhaustive-deps
   const handleKeyPress = useCallback((event) => {
     if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
@@ -138,45 +141,21 @@ const TransactionForm = (callback, deps) => {
       document.removeEventListener('keydown', handleKeyPress)
     }
   }, [init])
-  const reload = () => {
-    iwsStore.deleteKey(model)
-    const url_ = url.concat('/').concat(model)
-    url_ && Get1(url_, token, parseInt(model))
-  }
+  const reload = () => callReload(url, token, model)
   const toggleToolbar = () => setToolbar(!toolbar)
   const toggle = () => setState({ ...state, collapse: !state.collapse })
-  const setSelectedRows = (rows_) => {
-    setRows(rows_.map((item) => ({ id: item.id, modelid: item.modelid })))
-  }
-
-  const initAdd = () => {
-    const line = [
-      {
-        ...current_.lines[0],
-        id: -1,
-        transid: current_.id1,
-      },
-    ]
-    const record = { ...current_, modelid: parseInt(model), lines: line }
-    EditRow(record, true, setCurrent)
-  }
-
-  const cancelEdit = (e) => {
-    e.preventDefault()
-    initAdd()
-  }
-
-  const submitQuery = (event, modelid) => {
-    event.preventDefault()
-    const url_ = url.concat('/').concat(modelid)
-    !iwsState.get(formEnum.STORE) && fetchData(storeUrl, token, formEnum.STORE)
-    !iwsState.get(formEnum.ACCOUNT) && fetchData(accUrl, token, formEnum.ACCOUNT)
-    !iwsState.get(formEnum.ARTICLE) && fetchData(artUrl, token, formEnum.ARTICLE)
-    !iwsState.get(formEnum.CUSTOMER) && fetchData(custUrl, token, formEnum.CUSTOMER)
-    !iwsState.get(formEnum.SUPPLIER) && fetchData(supUrl, token, formEnum.SUPPLIER)
-    !iwsState.get(formEnum.FMODULE) && fetchData(fmoduleUrl, token, formEnum.FMODULE)
-    fetchData(url_, token, parseInt(modelid))
-  }
+  const setSelectedRows = (rows_) => callSetSelectedRows(rows_, setRows)
+  const initAdd = () => callInitAdd(current_, model, setCurrent)
+  const cancelEdit = (event) => callCancelEdit(event, initAdd)
+  const allUrls = [
+    { url: storeUrl, modelid: formEnum.STORE },
+    { url: accUrl, modelid: formEnum.ACCOUNT },
+    { url: artUrl, modelid: formEnum.ARTICLE },
+    { url: custUrl, modelid: formEnum.CUSTOMER },
+    { url: supUrl, modelid: formEnum.SUPPLIER },
+    { url: fmoduleUrl, modelid: formEnum.FMODULE },
+  ]
+  const submitQuery = (event, modelid) => callSubmitQuery(event, url, token, modelid, allUrls)
   const handleModuleChange = (event, value) => {
     event.preventDefault()
     setModel(value.id)
@@ -191,28 +170,9 @@ const TransactionForm = (callback, deps) => {
     setCurrent(current_)
   }
 
-  const edit = (editedRow) => {
-    const isArray = Array.isArray(editedRow) && editedRow.length > 0
-    const row = isArray ? editedRow[0] : editedRow
-    if (row) {
-      const data = iwsState.get(row.modelid)
-      const record = data.find((obj) => obj.id === row.id)
-      setCurrent({ ...record, editing: true })
-    }
-  }
-
-  const submitPost = (event) => {
-    event.preventDefault()
-    const ids = rows.length > 0 ? rows.map((c) => c.id) : [current.id]
-    const url_ = modifyUrl.concat('/post/').concat(ids).concat('/').concat(current.company)
-    Get2(url_, token, setCurrent)
-  }
-
-  const submitCopy = (event) => {
-    event.preventDefault()
-    const url_ = modifyUrl.concat('/copy')
-    Post(url_, token, rows)
-  }
+  const edit = (editedRow) => callEdit(editedRow, setCurrent)
+  const submitPost = (event) => callSubmitPost(event, modifyUrl, token, current, setCurrent, rows)
+  const submitCopy = (event) => callSubmitCopy(event, modifyUrl, token, rows)
   const submitAdd = (event) => {
     event.preventDefault()
     const row = {
@@ -234,32 +194,8 @@ const TransactionForm = (callback, deps) => {
     Add(modifyUrl, token, row, data(), setCurrent)
   }
 
-  const addRow = async (newData) => {
-    if (newData) {
-      const dx = { ...current }
-      const dx1 =
-        current.lines.length === 0
-          ? {
-              ...current,
-              lines: [
-                {
-                  ...current.lines.filter((e) => !e.article.isEmpty),
-                  ...newData,
-                  id: -1,
-                  transid: current.id1,
-                },
-              ],
-            }
-          : (dx.lines[current.lines.length] = { ...newData, id: -1, transid: current.id1 })
-      const record = current.lines.length > 1 ? dx : dx1
-      delete record.editing
-      const result =
-        record.id > 0
-          ? Edit(modifyUrl, token, record, data(), setCurrent)
-          : Add(modifyUrl, token, record, data(), setCurrent)
-      setCurrent(result)
-    }
-  }
+  const addRow = (newData) => callAddRow(newData, current, data, modifyUrl, token, setCurrent)
+  const deleteRow = (oldData) => callDeleteRow(oldData, current, modifyUrl, token, data, setCurrent)
   const updateRow = async (newData, oldData) => {
     if (oldData) {
       const dx = { ...current, company: company }
@@ -283,15 +219,7 @@ const TransactionForm = (callback, deps) => {
       } else Add(modifyUrl, token, dx, data(), setCurrent)
     }
   }
-  const deleteRow = async (oldData) => {
-    if (oldData) {
-      const dx = { ...current }
-      const index = dx.lines.findIndex((obj) => obj.id === oldData.id)
-      const deleted = dx.lines[index]
-      dx.lines[index] = { ...deleted, transid: -2 }
-      Edit(modifyUrl, token, dx, data(), setCurrent)
-    }
-  }
+
   const editable = () => ({ onRowAdd: addRow, onRowUpdate: updateRow, onRowDelete: deleteRow })
   function buildForm(current) {
     const lines_ = () =>
