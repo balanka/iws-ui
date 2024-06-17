@@ -28,5 +28,7 @@ const getData = (iwsState, modelId, partnerId, initData) => {
   const data = () => (data_ ? data_ : initData)
   return { data, artData, storeData, accData, partnerData, ccData }
 }
+const formatCurrency = (number, currency, locale) =>
+  new Intl.NumberFormat(locale, { style: 'currency', currency: currency }).format(number)
 
-export { getData, getPeriod, toggleEdit, fetchData }
+export { getData, getPeriod, toggleEdit, fetchData, formatCurrency }
