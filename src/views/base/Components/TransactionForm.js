@@ -16,7 +16,7 @@ import { LOGIN, MASTERFILE, TRANSACTION, useStore } from './Menu'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import iwsStore from './Store'
-import { fetchData, getData, getPeriod, toggleEdit } from './TransactionFormLib'
+import { fetchData, formatCurrency, getData, getPeriod, toggleEdit } from './TransactionFormLib'
 
 const TransactionForm = (callback, deps) => {
   const { profile, selected, menu } = useStore()
@@ -72,12 +72,13 @@ const TransactionForm = (callback, deps) => {
     partnerId,
     initialState,
   )
-
+  const total = (lines) =>
+    lines
+      .map((l) => (l === undefined ? 0.0 : l.quantity * l.price))
+      .reduce((sum, amount) => sum + amount)
   const buildAmount = (row) => ({
     ...row,
-    total: row.lines.reduce((acc, line) => {
-      return parseFloat(acc + parseFloat(line?.quality * line?.price), 0)
-    }),
+    total: total(row.lines), //row.lines.reduce((acc, line) => acc + line.quality * line.price),
   })
   const buildData = () => data().map((row) => (row.id === -1 ? 0.0 : buildAmount(row)))
   const columnsX = TransactionLinesColumns(
@@ -182,6 +183,7 @@ const TransactionForm = (callback, deps) => {
     //submitQuery(event, value.id)
     const mx = fModuleData.find((m) => m.id === value.id)
     console.log('mx>>>>', mx)
+    console.log('current_', current_)
     title_ = mx?.name ? mx.name : title_
     setTitle(title_)
     setPartnerId(mx.account)
@@ -297,23 +299,19 @@ const TransactionForm = (callback, deps) => {
 
     const buildLinesTransaction = () => {
       const renderSummaryRow = ({ column, data }) => {
-        console.log('Width >>>>>', new Array(column.width).fill(''))
         const total = t('common.total')
-        console.log('total >>>>>', t('common.total'))
-        const formatIt = (number, currency, locale) =>
-          new Intl.NumberFormat(locale, { style: 'currency', currency: currency }).format(number)
         return column.field === 'articleName'
           ? { value: total, style: styles.fieldStyle }
           : column.field === 'price'
             ? {
-                value: formatIt(
+                value: formatCurrency(
                   data.reduce((sum, row) => sum + row.quantity * row.price, 0),
                   currency,
                   locale,
                 ),
                 style: styles.fieldStyle,
               }
-            : new Array(column.width).fill(' ')
+            : new Array(column.width).fill('')
       }
       return (
         <>

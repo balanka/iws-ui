@@ -11,7 +11,7 @@ import { LOGIN, MASTERFILE, FINANCIALS, useStore } from './Menu'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import iwsStore from './Store'
-import { getData, getPeriod, toggleEdit, fetchData } from './TransactionFormLib'
+import { getData, getPeriod, toggleEdit, fetchData, formatCurrency } from './TransactionFormLib'
 
 const FinancialsForm = (callback, deps) => {
   const { profile, selected, menu } = useStore()
@@ -276,23 +276,19 @@ const FinancialsForm = (callback, deps) => {
 
     const LinesFinancials = () => {
       const renderSummaryRow = ({ column, data }) => {
-        console.log('Width >>>>>', new Array(column.width).fill(''))
         const total = t('common.total')
-        console.log('total >>>>>', t('common.total'))
-        const formatIt = (number, currency, locale) =>
-          new Intl.NumberFormat(locale, { style: 'currency', currency: currency }).format(number)
         return column.field === 'oaccountName'
           ? { value: total, style: styles.fieldStyle }
           : column.field === 'amount'
             ? {
-                value: formatIt(
+                value: formatCurrency(
                   data.reduce((sum, row) => sum + row.amount, 0),
                   currency,
                   locale,
                 ),
                 style: styles.fieldStyle,
               }
-            : new Array(column.width).fill(' ')
+            : new Array(column.width).fill('')
       }
       return (
         <>
