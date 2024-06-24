@@ -10,7 +10,7 @@ import {
   Transactioncolumns,
   TransactionLinesColumns,
 } from '../tables/LineFinancialsProps'
-import { FormFactory, TransactionFormHead } from './FormsProps'
+import { FinancialsFormHead, FormFactory } from './FormsProps'
 import { formEnum } from '../utils/FORMS'
 import { LOGIN, MASTERFILE, TRANSACTION, useStore } from './Menu'
 import { useNavigate } from 'react-router-dom'
@@ -274,7 +274,7 @@ const TransactionForm = (callback, deps) => {
 
     const getHeader = (fModuleData, initialState) => {
       return (
-        <TransactionFormHead
+        <FinancialsFormHead
           styles={styles}
           title={title}
           collapse={state.collapse}
@@ -295,6 +295,7 @@ const TransactionForm = (callback, deps) => {
           toggle={toggle}
           toggleToolbar={toggleToolbar}
           current={current}
+          t={t}
         />
       )
     }

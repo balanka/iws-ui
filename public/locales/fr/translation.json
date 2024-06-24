@@ -375,6 +375,16 @@
     "menu": "Menu",
     "email": "Ad. mail"
   },
+  "toolBar":{
+    "reload":"Lire tous les journaux",
+    "duplicate":"Dupliquer le journal",
+    "add":"Créer un journal",
+    "addLine":"Créer une nouvelle ligne",
+    "cancel":"Annuler la création ou l'édition",
+    "void":"void a transaction",
+    "save":"Save transaction",
+    "post":"validate or post a transaction"
+  },
   "menu": {
     "salary":{
       "item": "Composantes du salaire"

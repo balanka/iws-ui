@@ -273,6 +273,7 @@ const FinancialsForm = (callback, deps) => {
           toggle={toggle}
           toggleToolbar={toggleToolbar}
           current={current}
+          t={t}
         />
       )
     }

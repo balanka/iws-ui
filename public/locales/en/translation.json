@@ -382,6 +382,16 @@
     "menu": "Menu",
     "email": "Email"
    },
+  "toolBar":{
+    "reload":"Reload all transaction",
+    "duplicate":"Duplicate transaction",
+    "add":"Add new transaction",
+    "addLine":"Add new line transaction",
+    "cancel":"Cancel adding or editing",
+    "void":"void a transaction",
+    "save":"Save transaction",
+    "post":"validate or post a transaction"
+  },
   "menu": {
     "salary":{
       "item": "Salary items"

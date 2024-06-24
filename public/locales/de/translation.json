@@ -362,6 +362,16 @@
     "menu": "Menü",
     "email": "Email"
   },
+  "toolBar":{
+    "reload":"Neuladen aller Belege ",
+    "duplicate":"Beleg kopieren",
+    "add":"Anlegen",
+    "addLine":"Neue Zeile anlegen",
+    "cancel":"Anlegen bzw. Aenderung abbrechen",
+    "void":"Beleg stornieren",
+    "save":"Beleg speichern",
+    "post":"Beleg buchen "
+  },
   "menu": {
     "salary":{
       "item": "Komponenten des Gehalts"
