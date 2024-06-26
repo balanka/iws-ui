@@ -3726,12 +3726,9 @@ export const FinancialsMainForm = (props) => {
 export const TransactionMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   let { current, current_, setCurrent, t, storeData, accData, height } = props
-  current = current ? current : current_
-  // eslint-disable-next-line react/prop-types
-  const currentStore = storeData.find((store) => store.id === current.store)
-  // eslint-disable-next-line react/prop-types
-  const accData_ = accData ? accData : []
-  // eslint-disable-next-line react/prop-types
+  current = current ? current : current_ //eslint-disable-next-line react/prop-types
+  const currentStore = storeData.find((store) => store.id === current.store) //eslint-disable-next-line react/prop-types
+  const accData_ = accData ? accData : [] //eslint-disable-next-line react/prop-types
   const currentAcc = accData_.find((acc) => acc.id === current.account)
   return (
     <>
@@ -3795,27 +3792,13 @@ export const TransactionMainForm = (props) => {
         </Col>
         <Col sm="2">
           <InputField
-            fieldName="company"
-            fieldId="company-Id"
+            fieldName="oid"
+            fieldId="oid"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-            value={current.company} //eslint-disable-next-line react/prop-types
+            value={current.oid} //eslint-disable-next-line react/prop-types
             disabled={true}
-            style={{ textAlign: 'right', height: 30 }}
-          />
-          <Input
-            /* eslint-disable-next-line react/prop-types */
-            disabled={current.posted}
-            bssize="sm"
-            type="text"
-            id="oid-input"
-            name="oid"
-            className="input-sm"
-            placeholder="oid"
             style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.oid}
-            onChange={(event) => setCurrent({ ...current, oid: event.target.value })}
           />
         </Col>
         <Col sm="4" />
@@ -3975,10 +3958,8 @@ export const JournalMainForm = (props) => {
             id="account-id"
             idCol={true}
             sm="4"
-            height={height}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortById)} //eslint-disable-next-line react/prop-types
             value={current.account}
             placeholder={'account number'}
             onChange={(event, newValue) => {
@@ -3991,10 +3972,8 @@ export const JournalMainForm = (props) => {
             id="account2-id"
             idCol={false}
             sm="4"
-            height={height}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} //eslint-disable-next-line react/prop-types
             value={currentAccount ? currentAccount.name : ''}
             placeholder={'account name'}
             onChange={(event, newValue) => {
@@ -4056,8 +4035,7 @@ export const JournalMainForm = (props) => {
 }
 export const VatMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, disable, t, accData, height } = props
-  // eslint-disable-next-line react/prop-types
+  const { current, setCurrent, disable, t, accData, height } = props //eslint-disable-next-line react/prop-types
   const currentInputAccount = accData.find((acc) => acc.id === current.inputVatAccount)
   // eslint-disable-next-line react/prop-types
   const currentOutputAccount = accData.find((acc) => acc.id === current.outputVatAccount)
@@ -4147,11 +4125,8 @@ export const VatMainForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
-            height={height}
-            //style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortById)} //eslint-disable-next-line react/prop-types
             value={current.inputVatAccount}
             placeholder={'input vat account Nr'}
             onChange={(event, newValue) => {
@@ -4169,11 +4144,8 @@ export const VatMainForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
-            height={height}
-            //style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} //eslint-disable-next-line react/prop-types
             value={currentInputAccount ? currentInputAccount.name : ''}
             placeholder={'account name'}
             onChange={(event, newValue) => {
@@ -4215,10 +4187,8 @@ export const VatMainForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
-            height={height}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortById)} //eslint-disable-next-line react/prop-types
             value={current.outputVatAccount}
             placeholder={'output vat account Nr'}
             onChange={(event, newValue) => {
@@ -4236,10 +4206,8 @@ export const VatMainForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
-            height={height}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} //eslint-disable-next-line react/prop-types
             value={currentOutputAccount ? currentOutputAccount.name : ''}
             placeholder={'Output vat account name'}
             onChange={(event, newValue) => {
@@ -4280,8 +4248,7 @@ export const VatMainForm = (props) => {
             rows="1"
             placeholder="Content..."
             disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+            style={{ height: 30 }} //eslint-disable-next-line react/prop-types
             value={current.description}
             onChange={(event) => setCurrent({ ...current, description: event.target.value })}
           />
