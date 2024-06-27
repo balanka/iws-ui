@@ -700,10 +700,11 @@ export const FormFactory = (props) => {
 }
 const BooleanField = (props) => {
   //eslint-disable-next-line react/prop-types
-  const { fieldName, fieldId, label, checked, disabled, style } = props
+  const { fieldName, label, checked, disabled, style } = props
   return (
     <FormControlLabel
-      id={fieldId}
+      //eslint-disable-next-line react/prop-types
+      id={fieldName.concat('id')}
       name={fieldName}
       disabled={disabled}
       style={style ? style : { paddingLeft: 60 }} // eslint-disable-next-line react/prop-types
@@ -714,12 +715,11 @@ const BooleanField = (props) => {
 }
 const TextareaField = (props) => {
   //eslint-disable-next-line react/prop-types
-  const { fieldName, fieldId, value, current, setCurrent, rows, disabled, style, placeholder } =
-    props
+  const { fieldName, value, current, setCurrent, rows, disabled, style, placeholder } = props
   return (
     <CFormTextarea
-      type="textarea"
-      id={fieldId}
+      type="textarea" //eslint-disable-next-line react/prop-types
+      id={fieldName.concat('id')}
       name={fieldName}
       disabled={disabled}
       rows={rows ? rows : '1'}
@@ -732,14 +732,13 @@ const TextareaField = (props) => {
 }
 const InputField = (props) => {
   //eslint-disable-next-line react/prop-types
-  const { fieldName, fieldId, type, current, setCurrent, value, placeholder, disabled, style } =
-    props
+  const { fieldName, type, current, setCurrent, value, placeholder, disabled, style } = props
   const style_ = style ? style : { height: 30 }
   return (
     <Input
       bssize="sm"
-      type={type ? type : 'text'}
-      id={fieldId}
+      type={type ? type : 'text'} // eslint-disable-next-line react/prop-types
+      id={fieldName.concat('id')}
       name={fieldName}
       className="input-sm"
       placeholder={placeholder ? placeholder : fieldName}
@@ -810,17 +809,17 @@ const accountNameField = (props) => {
 }
 const DatePickerField = (props) => {
   //eslint-disable-next-line react/prop-types
-  const { fieldName, fieldId, label, current, setCurrent, selected, t, disabled } = props
+  const { fieldName, label, current, setCurrent, selected, disabled } = props
   return (
     <CDatePicker
       size="xs" //eslint-disable-next-line react/prop-types
       disabled={disabled} //eslint-disable-next-line react/prop-types
       selected={selected}
-      label={t(label)} //t('financials.transdate')}
+      label={label}
       showTimeInput
       footer
-      dateFormat="dd.MM.yyyy"
-      id={fieldId}
+      dateFormat="dd.MM.yyyy" //eslint-disable-next-line react/prop-types
+      id={fieldName.concat('id')}
       onChange={(newValue) => setCurrent({ ...current, [fieldName]: newValue })}
     />
   )
@@ -895,7 +894,6 @@ export const AccountMainForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="Id"
-            fieldId="account-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
@@ -911,12 +909,10 @@ export const AccountMainForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="enterdate"
-            fieldId="enterdate-id"
-            label="common.enterdate" //eslint-disable-next-line react/prop-types
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -930,7 +926,6 @@ export const AccountMainForm = (props) => {
         <Col sm="6">
           <InputField
             fieldName="name"
-            fieldId="name-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.name}
@@ -945,12 +940,10 @@ export const AccountMainForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="changedate"
-            fieldId="changedate-id"
-            label="common.changedate" //eslint-disable-next-line react/prop-types
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.changedate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -1003,12 +996,10 @@ export const AccountMainForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="postingdate"
-            fieldId="postingdate-id"
-            label="common.postingdate" //eslint-disable-next-line react/prop-types
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -1022,7 +1013,6 @@ export const AccountMainForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="company"
-            fieldId="company-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company}
@@ -1031,7 +1021,6 @@ export const AccountMainForm = (props) => {
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 20 }}>
           <BooleanField
-            id="isDebit"
             name="isDebit"
             label={t('account.debit_credit')}
             disabled={disable} //eslint-disable-next-line react/prop-types
@@ -1041,7 +1030,6 @@ export const AccountMainForm = (props) => {
         </Col>
         <Col sm="1">
           <BooleanField
-            id="balancesheet"
             name="balancesheet"
             label={t('account.balancesheet')}
             disabled={disable} //eslint-disable-next-line react/prop-types
@@ -1052,7 +1040,6 @@ export const AccountMainForm = (props) => {
         <Col sm="1">
           <InputField
             fieldName="currency"
-            fieldId="currency-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.currency}
@@ -1068,7 +1055,6 @@ export const AccountMainForm = (props) => {
           <TextareaField
             type="textarea"
             fieldName="description"
-            fieldId="description"
             placeholder={t('common.description')}
             disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
@@ -1106,7 +1092,6 @@ export const CloseAccountingPeriodForm = (props) => {
         <Col sm="1.5" style={{ height: 30 }}>
           <InputField
             fieldName="account"
-            fieldId="account-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={incomeStmtAcc}
@@ -1122,7 +1107,6 @@ export const CloseAccountingPeriodForm = (props) => {
         <Col sm="1" style={{ height: height }}>
           <InputField
             fieldName="period"
-            fieldId="period-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.period}
@@ -1138,7 +1122,6 @@ export const CloseAccountingPeriodForm = (props) => {
         <Col sm="1" style={{ height: height }}>
           <InputField
             fieldName="company"
-            fieldId="company-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company}
@@ -1187,7 +1170,6 @@ export const CreateDepreciationTransactionForm = (props) => {
         <Col sm="1" style={{ height: height }}>
           <InputField
             fieldName="period"
-            fieldId="period-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.period}
@@ -1203,7 +1185,6 @@ export const CreateDepreciationTransactionForm = (props) => {
         <Col sm="1" style={{ height: height }}>
           <InputField
             fieldName="company"
-            fieldId="company-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company}
@@ -1250,7 +1231,6 @@ export const CreatePayrollTransactionForm = (props) => {
         <Col sm="1.5" style={{ height: height }}>
           <InputField
             fieldName="id"
-            fieldId="modelid-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
@@ -1266,7 +1246,6 @@ export const CreatePayrollTransactionForm = (props) => {
         <Col sm="1">
           <InputField
             fieldName="company"
-            fieldId="company-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company}
@@ -1303,7 +1282,6 @@ export const BankStatementParameterForm = (props) => {
         <Col sm="1.5" style={{ height: 30 }}>
           <InputField
             fieldName="header"
-            fieldId="Auftragskonto"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.header}
@@ -1319,7 +1297,6 @@ export const BankStatementParameterForm = (props) => {
         <Col sm="1" style={{ height: 30 }}>
           <InputField
             fieldName="char"
-            fieldId="chart-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.char}
@@ -1335,7 +1312,6 @@ export const BankStatementParameterForm = (props) => {
         <Col sm="1" style={{ height: 30 }}>
           <InputField
             fieldName="extension"
-            fieldId="extension-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.extension}
@@ -1354,7 +1330,6 @@ export const BankStatementParameterForm = (props) => {
         <Col sm="12" md="10">
           <InputField
             fieldName="path"
-            fieldId="path-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.path}
@@ -1380,7 +1355,6 @@ export const BankStatementMainForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="id"
-            fieldId="id-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
@@ -1396,12 +1370,10 @@ export const BankStatementMainForm = (props) => {
         <Col sm="1.5">
           <DatePickerField
             fieldName="postingdate"
-            fieldId="postingdate-id"
-            label="common.postingdate" //eslint-disable-next-line react/prop-types
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -1415,7 +1387,6 @@ export const BankStatementMainForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="depositor"
-            fieldId="depositor-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.depositor} //eslint-disable-next-line react/prop-types
@@ -1429,13 +1400,10 @@ export const BankStatementMainForm = (props) => {
         </Col>
         <Col sm="1.5">
           <DatePickerField
-            fieldName="valuedate"
-            fieldId="valuedate-id"
-            label="bankstatement.valuedate" //eslint-disable-next-line react/prop-types
+            label={t('bankstatement.valuedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.valuedate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
             style={{ textAlign: 'right' }}
           />
@@ -1450,7 +1418,6 @@ export const BankStatementMainForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="beneficiary"
-            fieldId="beneficiary-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.beneficiary} //eslint-disable-next-line react/prop-types
@@ -1465,7 +1432,6 @@ export const BankStatementMainForm = (props) => {
         <Col sm="1.5">
           <InputField
             fieldName="postingtext"
-            fieldId="postingtext-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.postingtext} //eslint-disable-next-line react/prop-types
@@ -1482,7 +1448,6 @@ export const BankStatementMainForm = (props) => {
         <Col xs="4">
           <InputField
             fieldName="info"
-            fieldId="info-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.info} //eslint-disable-next-line react/prop-types
@@ -1497,7 +1462,6 @@ export const BankStatementMainForm = (props) => {
         <Col sm="1.5">
           <InputField
             fieldName="amount"
-            fieldId="amount-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={Number(current.amount).toLocaleString(locale, {
@@ -1520,7 +1484,6 @@ export const BankStatementMainForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="accountno"
-            fieldId="companyIban"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.companyIban} //eslint-disable-next-line react/prop-types
@@ -1535,7 +1498,6 @@ export const BankStatementMainForm = (props) => {
         <Col sm="1.5">
           <InputField
             fieldName="company"
-            fieldId="company-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company} //eslint-disable-next-line react/prop-types
@@ -1553,7 +1515,6 @@ export const BankStatementMainForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="accountno"
-            fieldId="accountno-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.accountno} //eslint-disable-next-line react/prop-types
@@ -1568,7 +1529,6 @@ export const BankStatementMainForm = (props) => {
         <Col sm="1.5">
           <InputField
             fieldName="bankCode"
-            fieldId="bankCode-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.bankCode} //eslint-disable-next-line react/prop-types
@@ -1578,7 +1538,6 @@ export const BankStatementMainForm = (props) => {
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 20 }}>
           <BooleanField
-            id="posted"
             name="posted"
             label={t('bankstatement.posted')} //eslint-disable-next-line react/prop-types
             disabled={current.posted} //eslint-disable-next-line react/prop-types
@@ -1596,7 +1555,6 @@ export const BankStatementMainForm = (props) => {
         <Col xs="12" md="10">
           <TextareaField
             fieldName="purpose"
-            fieldId="purpose"
             rows="2"
             placeholder={t('bankstatement.description')} // eslint-disable-next-line react/prop-types
             disabled={current.posted} // eslint-disable-next-line react/prop-types
@@ -1624,7 +1582,6 @@ export const AssetForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="id"
-            fieldId="id-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id} //eslint-disable-next-line react/prop-types
@@ -1640,12 +1597,10 @@ export const AssetForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="enterdate"
-            fieldId="enterdate-id"
-            label="common.enterdate" //eslint-disable-next-line react/prop-types
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -1659,7 +1614,6 @@ export const AssetForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="name"
-            fieldId="name-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.name} //eslint-disable-next-line react/prop-types
@@ -1675,12 +1629,10 @@ export const AssetForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="changedate"
-            fieldId="changedate-id"
-            label="common.changedate" //eslint-disable-next-line react/prop-types
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -1716,12 +1668,10 @@ export const AssetForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="postingdate"
-            fieldId="postingdate-id"
-            label="common.postingdate" //eslint-disable-next-line react/prop-types
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -1757,7 +1707,6 @@ export const AssetForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="company"
-            fieldId="company-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company} //eslint-disable-next-line react/prop-types
@@ -1775,7 +1724,7 @@ export const AssetForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="amount"
-            fieldId="amount-input"
+            type="Currency"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={Number(current.amount).toLocaleString(locale, {
@@ -1791,7 +1740,6 @@ export const AssetForm = (props) => {
         <Col sm="2" style={{ height: height, paddingLeft: 5 }}>
           <InputField
             fieldName="scrap_value"
-            fieldId="scrap_value-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={Number(current.scrapValue).toLocaleString(locale, {
@@ -1812,7 +1760,6 @@ export const AssetForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="life_span"
-            fieldId="life_span-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.lifeSpan} //eslint-disable-next-line react/prop-types
@@ -1830,7 +1777,6 @@ export const AssetForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="dep_Method"
-            fieldId="dep_Method-input"
             type="number"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
@@ -1848,7 +1794,6 @@ export const AssetForm = (props) => {
         <Col sm="1">
           <InputField
             fieldName="frequency"
-            fieldId="frequency-input"
             type="number"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
@@ -1861,7 +1806,6 @@ export const AssetForm = (props) => {
         <Col sm="1" style={{ height: height, paddingLeft: 6 }}>
           <InputField
             fieldName="rate"
-            fieldId="rate-input"
             type="number"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
@@ -1879,7 +1823,6 @@ export const AssetForm = (props) => {
         <Col xs="12" md="9">
           <TextareaField
             fieldName="description"
-            fieldId="description"
             placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
             disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
@@ -1906,7 +1849,6 @@ export const MasterfilesMainForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="id"
-            fieldId="id-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id} //eslint-disable-next-line react/prop-types
@@ -1922,12 +1864,10 @@ export const MasterfilesMainForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="enterdate"
-            fieldId="enterdate-id"
-            label="common.enterdate" //eslint-disable-next-line react/prop-types
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={disable}
           />
         </Col>
@@ -1941,7 +1881,6 @@ export const MasterfilesMainForm = (props) => {
         <Col sm="6">
           <InputField
             fieldName="name"
-            fieldId="name-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.name} //eslint-disable-next-line react/prop-types
@@ -1957,12 +1896,10 @@ export const MasterfilesMainForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="changedate"
-            fieldId="changedate-id"
-            label="common.changedate" //eslint-disable-next-line react/prop-types
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.changedate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -1985,12 +1922,10 @@ export const MasterfilesMainForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="postingdate"
-            fieldId="postingdate-id"
-            label="common.postingdate" //eslint-disable-next-line react/prop-types
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -2004,7 +1939,6 @@ export const MasterfilesMainForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="company"
-            fieldId="company-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company} //eslint-disable-next-line react/prop-types
@@ -2020,7 +1954,6 @@ export const MasterfilesMainForm = (props) => {
         <Col xs="12" md="9">
           <TextareaField
             fieldName="description"
-            fieldId="description"
             placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
             disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
@@ -2047,7 +1980,6 @@ export const PayrollTaxForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="id"
-            fieldId="id-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id} //eslint-disable-next-line react/prop-types
@@ -2065,7 +1997,6 @@ export const PayrollTaxForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="fromAmount"
-            fieldId="from-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             disabled={disable} //eslint-disable-next-line react/prop-types
@@ -2087,7 +2018,6 @@ export const PayrollTaxForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="toAmount"
-            fieldId="to-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             disabled={disable} //eslint-disable-next-line react/prop-types
@@ -2111,7 +2041,6 @@ export const PayrollTaxForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="tax"
-            fieldId="tax-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             disabled={disable} //eslint-disable-next-line react/prop-types
@@ -2133,7 +2062,6 @@ export const PayrollTaxForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="taxClass"
-            fieldId="taxClass-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.taxClass} //eslint-disable-next-line react/prop-types
@@ -2151,7 +2079,6 @@ export const PayrollTaxForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="company"
-            fieldId="company-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company} //eslint-disable-next-line react/prop-types
@@ -2177,7 +2104,6 @@ export const MasterfilesMainForm2 = (props) => {
         <Col sm="2">
           <InputField
             fieldName="id"
-            fieldId="id-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id} //eslint-disable-next-line react/prop-types
@@ -2194,12 +2120,10 @@ export const MasterfilesMainForm2 = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="enterdate"
-            fieldId="enterdate-id"
-            label="common.enterdate" //eslint-disable-next-line react/prop-types
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -2213,7 +2137,6 @@ export const MasterfilesMainForm2 = (props) => {
         <Col sm="6">
           <InputField
             fieldName="name"
-            fieldId="name-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.name} //eslint-disable-next-line react/prop-types
@@ -2229,12 +2152,10 @@ export const MasterfilesMainForm2 = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="changedate"
-            fieldId="changedate-id"
-            label="common.changedate" //eslint-disable-next-line react/prop-types
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.changedate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -2249,7 +2170,6 @@ export const MasterfilesMainForm2 = (props) => {
         <Col sm="2">
           <InputField
             fieldName="company"
-            fieldId="company-input"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company} //eslint-disable-next-line react/prop-types
@@ -2265,12 +2185,10 @@ export const MasterfilesMainForm2 = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="postingdate"
-            fieldId="postingdate-id"
-            label="common.postingdate" //eslint-disable-next-line react/prop-types
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -2282,7 +2200,6 @@ export const MasterfilesMainForm2 = (props) => {
         <Col xs="12" md="9" style={{ height: height, paddingTop: 8 }}>
           <TextareaField
             fieldName="description"
-            fieldId="description"
             placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
             disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
@@ -2310,7 +2227,6 @@ export const ArticleForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="pprice"
-            fieldId="pptice-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={Number(current.pprice).toLocaleString(locale, {
@@ -2332,7 +2248,6 @@ export const ArticleForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="sprice"
-            fieldId="sprice-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={Number(current.sprice).toLocaleString(locale, {
@@ -2354,7 +2269,6 @@ export const ArticleForm = (props) => {
         <Col sm="1">
           <InputField
             fieldName="avgPrice"
-            fieldId="avgPrice-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={Number(current.avgPrice).toLocaleString(locale, {
@@ -2371,7 +2285,6 @@ export const ArticleForm = (props) => {
         <Col sm="1" style={{ height: height, paddingLeft: 3 }}>
           <InputField
             fieldName="currency"
-            fieldId="currency-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.currency} //eslint-disable-next-line react/prop-types
@@ -2389,7 +2302,6 @@ export const ArticleForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="quantityUnit"
-            fieldId="quantityUnit-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.quantityUnit} //eslint-disable-next-line react/prop-types
@@ -2406,7 +2318,6 @@ export const ArticleForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="packUnit"
-            fieldId="packUnit-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.packUnit} //eslint-disable-next-line react/prop-types
@@ -2423,7 +2334,6 @@ export const ArticleForm = (props) => {
         <Col sm="1">
           <InputField
             fieldName="stocked"
-            fieldId="stocked-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.stocked} //eslint-disable-next-line react/prop-types
@@ -2451,7 +2361,6 @@ export const SalaryItemForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="amount"
-            fieldId="amount-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={Number(current.amount).toLocaleString(locale, {
@@ -2468,7 +2377,6 @@ export const SalaryItemForm = (props) => {
         <Col sm="1" style={{ height: height, paddingLeft: 5 }}>
           <InputField
             fieldName="currency"
-            fieldId="currency-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.currency}
@@ -2485,7 +2393,6 @@ export const SalaryItemForm = (props) => {
         <Col sm="1">
           <InputField
             fieldName="percentage"
-            fieldId="percentage-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={Number(current.percentage).toLocaleString(locale, {
@@ -2515,7 +2422,6 @@ export const UserForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="id"
-            fieldId="user-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
@@ -2532,7 +2438,6 @@ export const UserForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="role"
-            fieldId="role-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.role}
@@ -2550,7 +2455,6 @@ export const UserForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="userName"
-            fieldId="userName-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.userName}
@@ -2565,24 +2469,11 @@ export const UserForm = (props) => {
         </Col>
         <Col sm="2">
           <InputField
-            fieldName="userName"
-            fieldId="userName-id"
+            fieldName="firstName"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-            value={current.userName}
-            placeholder="user Name"
-            disabled={disable}
-          />
-          <Input
-            bssize="sm"
-            type="text"
-            id="firstName-id"
-            name="firstName"
-            className="input-sm"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
             value={current.firstName}
-            onChange={(event) => setCurrent({ ...current, firstName: event.target.value })}
+            disabled={disable}
           />
         </Col>
       </CInputGroup>
@@ -2595,11 +2486,9 @@ export const UserForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="lastName"
-            fieldId="lastName-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.lastName}
-            placeholder="Last Name"
             disabled={disable}
           />
         </Col>
@@ -2611,7 +2500,6 @@ export const UserForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="email"
-            fieldId="email-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.email}
@@ -2630,7 +2518,6 @@ export const UserForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="company"
-            fieldId="company-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company}
@@ -2646,7 +2533,6 @@ export const UserForm = (props) => {
         <Col xs="12" md="9">
           <InputField
             fieldName="menu"
-            fieldId="menu-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.menu}
@@ -2672,7 +2558,6 @@ export const AddressForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="street"
-            fieldId="street-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.street}
@@ -2689,7 +2574,6 @@ export const AddressForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="zip"
-            fieldId="zip-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.zip}
@@ -2707,7 +2591,6 @@ export const AddressForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="city"
-            fieldId="city-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.city}
@@ -2723,7 +2606,6 @@ export const AddressForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="country"
-            fieldId="country-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.country}
@@ -2749,7 +2631,6 @@ export const CustomerGeneralForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="id"
-            fieldId="Id-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
@@ -2764,12 +2645,10 @@ export const CustomerGeneralForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="enterdate"
-            fieldId="enterdate-id"
-            label="common.enterdate" //eslint-disable-next-line react/prop-types
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -2783,7 +2662,6 @@ export const CustomerGeneralForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="name"
-            fieldId="name-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.name}
@@ -2798,12 +2676,10 @@ export const CustomerGeneralForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="changedate"
-            fieldId="changedate-id"
-            label="common.changedate" //eslint-disable-next-line react/prop-types
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -2817,7 +2693,6 @@ export const CustomerGeneralForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="email"
-            fieldId="email-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.email}
@@ -2832,12 +2707,10 @@ export const CustomerGeneralForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="postingdate"
-            fieldId="postingdate-id"
-            label="common.postingdate" //eslint-disable-next-line react/prop-types
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -2851,7 +2724,6 @@ export const CustomerGeneralForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="phone"
-            fieldId="phone-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.phone}
@@ -2866,8 +2738,6 @@ export const CustomerGeneralForm = (props) => {
         <Col xs="12" md="9">
           <TextareaField
             fieldName="description"
-            fieldId="description"
-            rows="1"
             placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
             disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
@@ -2891,7 +2761,7 @@ const BuildLabel = (props) => {
 }
 const FromPeriod = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { id, name, label, value, current, setCurrent, balancesheet, t, labelStyle, style } = props
+  const { name, label, value, current, setCurrent, balancesheet, t, labelStyle, style } = props
   /* eslint-disable-next-line react/prop-types */
   return (
     !balancesheet && (
@@ -2904,7 +2774,6 @@ const FromPeriod = (props) => {
         <Col sm="1" style={{ paddingLeft: 10 }}>
           <InputField
             fieldName={name}
-            fieldId={id}
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={value}
@@ -2930,7 +2799,6 @@ const salaryField = (props) => {
         <Col sm="2">
           <InputField
             fieldName="salary"
-            fieldId="salary-id"
             type="number"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
@@ -3236,7 +3104,6 @@ export const CompanyGeneralForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="id"
-            fieldId="account-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
@@ -3251,12 +3118,10 @@ export const CompanyGeneralForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="enterdate"
-            fieldId="enterdate-id"
-            label="common.enterdate" //eslint-disable-next-line react/prop-types
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -3270,7 +3135,6 @@ export const CompanyGeneralForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="name"
-            fieldId="name-id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.name}
@@ -3286,12 +3150,10 @@ export const CompanyGeneralForm = (props) => {
         <Col sm="2">
           <DatePickerField
             fieldName="changedate"
-            fieldId="changedate-id"
-            label="common.changedate" //eslint-disable-next-line react/prop-types
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.changedate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -3303,7 +3165,6 @@ export const CompanyGeneralForm = (props) => {
         <Col xs="12" md="9">
           <TextareaField
             fieldName="description"
-            fieldId="description"
             placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
             disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
@@ -3522,7 +3383,6 @@ export const FinancialsMainForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="id"
-            fieldId="Id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id} //eslint-disable-next-line react/prop-types
@@ -3539,12 +3399,10 @@ export const FinancialsMainForm = (props) => {
         <Col sm="1">
           <DatePickerField
             fieldName="postingdate"
-            fieldId="postingdate-id"
-            label="financials.postingdate" //eslint-disable-next-line react/prop-types
+            label={t('financials.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -3556,7 +3414,6 @@ export const FinancialsMainForm = (props) => {
         <Col sm="1">
           <InputField
             fieldName="period"
-            fieldId="period"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.period} //eslint-disable-next-line react/prop-types
@@ -3574,7 +3431,6 @@ export const FinancialsMainForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="oid"
-            fieldId="oid"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.oid} //eslint-disable-next-line react/prop-types
@@ -3591,12 +3447,10 @@ export const FinancialsMainForm = (props) => {
         <Col sm="1">
           <DatePickerField
             fieldName="enterdate"
-            fieldId="enterdate-id"
-            label="common.enterdate" //eslint-disable-next-line react/prop-types
+            label={t('financials.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -3608,7 +3462,6 @@ export const FinancialsMainForm = (props) => {
         <Col sm="1">
           <InputField
             fieldName="company"
-            fieldId="company-Id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company} //eslint-disable-next-line react/prop-types
@@ -3661,12 +3514,10 @@ export const FinancialsMainForm = (props) => {
         <Col sm="1">
           <DatePickerField
             fieldName="transdate"
-            fieldId="transdate-id"
-            label="financials.transdate" //eslint-disable-next-line react/prop-types
+            label={t('financials.transdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.transdate)}
             current={current}
-            setCurrent={setCurrent}
-            t={t} //eslint-disable-next-line react/prop-types
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             disabled={current.posted}
           />
         </Col>
@@ -3709,7 +3560,6 @@ export const FinancialsMainForm = (props) => {
         </Col>
         <Col sm="1">
           <BooleanField
-            id="posted"
             name="posted"
             label={t('financials.posted')} //eslint-disable-next-line react/prop-types
             disabled={true} //eslint-disable-next-line react/prop-types
@@ -3739,7 +3589,6 @@ export const TransactionMainForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="id"
-            fieldId="Id"
             current={current}
             placeholder={t('transaction.id')}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
@@ -3756,12 +3605,10 @@ export const TransactionMainForm = (props) => {
         <Col sm="1">
           <DatePickerField
             fieldName="postingdate"
-            fieldId="postingdate-id"
-            label="financials.postingdate" //eslint-disable-next-line react/prop-types
+            label={t('transaction.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -3773,7 +3620,6 @@ export const TransactionMainForm = (props) => {
         <Col sm="1">
           <InputField
             fieldName="period"
-            fieldId="period-Id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.period} //eslint-disable-next-line react/prop-types
@@ -3791,7 +3637,6 @@ export const TransactionMainForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="oid"
-            fieldId="oid"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.oid} //eslint-disable-next-line react/prop-types
@@ -3808,12 +3653,10 @@ export const TransactionMainForm = (props) => {
         <Col sm="1">
           <DatePickerField
             fieldName="enterdate"
-            fieldId="enterdate-id"
-            label="transaction.enterdate" //eslint-disable-next-line react/prop-types
+            label={t('transaction.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -3825,7 +3668,6 @@ export const TransactionMainForm = (props) => {
         <Col sm="1">
           <InputField
             fieldName="company"
-            fieldId="company-Id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company} //eslint-disable-next-line react/prop-types
@@ -3878,12 +3720,10 @@ export const TransactionMainForm = (props) => {
         <Col sm="1">
           <DatePickerField
             fieldName="transdate"
-            fieldId="transdate-id"
-            label="financials.transdate" //eslint-disable-next-line react/prop-types
+            label={t('transaction.transdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.transdate)}
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-            t={t} //eslint-disable-next-line react/prop-types
             disabled={current.posted}
           />
         </Col>
@@ -3926,7 +3766,6 @@ export const TransactionMainForm = (props) => {
         </Col>
         <Col sm="1">
           <BooleanField
-            id="posted"
             name="posted"
             label={t('transaction.posted')} //eslint-disable-next-line react/prop-types
             disabled={true} //eslint-disable-next-line react/prop-types
@@ -4048,7 +3887,6 @@ export const VatMainForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="id"
-            fieldId="Id"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id} //eslint-disable-next-line react/prop-types
@@ -4059,18 +3897,16 @@ export const VatMainForm = (props) => {
         <Col sm="4" />
         <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
-            {t('vat.enterdate')}
+            {t('common.enterdate')}
           </CFormLabel>
         </Col>
         <Col sm="2">
           <DatePickerField
             fieldName="enterdate"
-            fieldId="enterdate-id"
-            label="common.enterdate" //eslint-disable-next-line react/prop-types
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -4084,7 +3920,6 @@ export const VatMainForm = (props) => {
         <Col sm="4">
           <InputField
             fieldName="name"
-            fieldId="name"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.name} //eslint-disable-next-line react/prop-types
@@ -4095,18 +3930,16 @@ export const VatMainForm = (props) => {
         <Col sm="2" />
         <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
-            {t('vat.changedate')}
+            {t('common.changedate')}
           </CFormLabel>
         </Col>
         <Col sm="2">
           <DatePickerField
             fieldName="changedate"
-            fieldId="changedate-id"
-            label="common.changedate" //eslint-disable-next-line react/prop-types
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.changedate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -4157,18 +3990,16 @@ export const VatMainForm = (props) => {
         </Col>
         <Col sm="2" style={{ paddingLeft: 10 }}>
           <CFormLabel size="sm" htmlFor="input-small">
-            {t('vat.postingdate')}
+            {t('common.postingdate')}
           </CFormLabel>
         </Col>
         <Col sm="2">
           <DatePickerField
             fieldName="postingdate"
-            fieldId="postingdate-id"
-            label="common.postingdate" //eslint-disable-next-line react/prop-types
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
             current={current}
             setCurrent={setCurrent}
-            t={t}
             disabled={true}
           />
         </Col>
@@ -4225,7 +4056,6 @@ export const VatMainForm = (props) => {
         <Col sm="1">
           <InputField
             fieldName="percent"
-            fieldId="percent"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.percent} //eslint-disable-next-line react/prop-types
@@ -4241,8 +4071,6 @@ export const VatMainForm = (props) => {
         <Col xs="12" md="9">
           <TextareaField
             fieldName="description"
-            fieldId="description"
-            rows="1"
             placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
             disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
