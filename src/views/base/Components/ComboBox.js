@@ -65,7 +65,7 @@ export default function ComboBox(props) {
             {...params}
             placeholder={placeholder}
             value={value}
-            id="combo=text-id"
+            id={'comboBox'.concat(id)}
             disabled={disable}
             fullWidth
             variant="standard"

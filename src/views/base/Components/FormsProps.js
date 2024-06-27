@@ -102,15 +102,14 @@ export function IwsIcon(props) {
 
 const wrapIcon = (title, icon, action, isDisabled) => (
   <div className="card-header-actions">
-    <Button
+    <ToolBarButton
+      label={title}
       color="link"
+      icon={icon}
       disabled={isDisabled}
-      className="card-header-action btn-minimize"
-      title={title}
       onClick={action}
-    >
-      <IwsIcon style={{ style: styles.imageIcon, textAlign: 'end' }} d={icon} />
-    </Button>
+      className="card-header-action btn-minimize"
+    />
   </div>
 )
 const wrapFontAwesomeIcon = (title, icon, action, isDisabled) => (
@@ -137,32 +136,19 @@ const isNullOrUndef = (value) => value === null || value === 'undefined'
 export const CommonFormHead = (props) => {
   const {
     // eslint-disable-next-line react/prop-types
-    styles,
-    // eslint-disable-next-line react/prop-types
-    title,
-    // eslint-disable-next-line react/prop-types
-    collapse,
-    // eslint-disable-next-line react/prop-types
-    initAdd,
-    // eslint-disable-next-line react/prop-types
-    cancelEdit,
-    // eslint-disable-next-line react/prop-types
-    submitEdit,
-    // eslint-disable-next-line react/prop-types
-    submitQuery,
-    // eslint-disable-next-line react/prop-types
-    reload,
-    // eslint-disable-next-line react/prop-types
-    toggle,
-    // eslint-disable-next-line react/prop-types
-    toggleToolbar,
-    // eslint-disable-next-line react/prop-types
-    onNewBankAccount,
-    // eslint-disable-next-line react/prop-types
-    onNewSalaryItem,
-    // eslint-disable-next-line react/prop-types
-    disable,
-    // eslint-disable-next-line react/prop-types
+    styles, // eslint-disable-next-line react/prop-types
+    title, // eslint-disable-next-line react/prop-types
+    collapse, // eslint-disable-next-line react/prop-types
+    initAdd, // eslint-disable-next-line react/prop-types
+    cancelEdit, // eslint-disable-next-line react/prop-types
+    submitEdit, // eslint-disable-next-line react/prop-types
+    submitQuery, // eslint-disable-next-line react/prop-types
+    reload, // eslint-disable-next-line react/prop-types
+    toggle, // eslint-disable-next-line react/prop-types
+    toggleToolbar, // eslint-disable-next-line react/prop-types
+    onNewBankAccount, // eslint-disable-next-line react/prop-types
+    onNewSalaryItem, // eslint-disable-next-line react/prop-types
+    disable, // eslint-disable-next-line react/prop-types
     setDisable,
   } = props
   return (
@@ -178,8 +164,7 @@ export const CommonFormHead = (props) => {
         container
         xs
         spacing={0.5}
-        justify="flex-end"
-        /* eslint-disable-next-line react/prop-types */
+        justify="flex-end" // eslint-disable-next-line react/prop-types
         style={{ ...styles.header }}
         alignItems="right"
       >
@@ -236,26 +221,16 @@ export const CommonFormHead = (props) => {
 export const BSFormHead = (props) => {
   const {
     // eslint-disable-next-line react/prop-types
-    styles,
-    // eslint-disable-next-line react/prop-types
-    title,
-    // eslint-disable-next-line react/prop-types
-    collapse,
-    // eslint-disable-next-line react/prop-types
-    importData,
-    // eslint-disable-next-line react/prop-types
-    submitEdit,
-    // eslint-disable-next-line react/prop-types
-    reload,
-    // eslint-disable-next-line react/prop-types
-    submitQuery,
-    // eslint-disable-next-line react/prop-types
-    submitPost,
-    // eslint-disable-next-line react/prop-types
-    toggle,
-    // eslint-disable-next-line react/prop-types
-    toggleToolbar,
-    // eslint-disable-next-line react/prop-types
+    styles, // eslint-disable-next-line react/prop-types
+    title, // eslint-disable-next-line react/prop-types
+    collapse, // eslint-disable-next-line react/prop-types
+    importData, // eslint-disable-next-line react/prop-types
+    submitEdit, // eslint-disable-next-line react/prop-types
+    reload, // eslint-disable-next-line react/prop-types
+    submitQuery, // eslint-disable-next-line react/prop-types
+    submitPost, // eslint-disable-next-line react/prop-types
+    toggle, // eslint-disable-next-line react/prop-types
+    toggleToolbar, // eslint-disable-next-line react/prop-types
     current,
   } = props
   // eslint-disable-next-line react/prop-types
@@ -273,8 +248,7 @@ export const BSFormHead = (props) => {
         container
         xs
         spacing={0.5}
-        justify="flex-end"
-        /* eslint-disable-next-line react/prop-types */
+        justify="flex-end" // eslint-disable-next-line react/prop-types
         style={{ ...styles.header }}
         alignItems="right"
       >
@@ -323,36 +297,21 @@ export const BSFormHead = (props) => {
 export const FinancialsFormHead = (props) => {
   const {
     // eslint-disable-next-line react/prop-types
-    styles,
-    // eslint-disable-next-line react/prop-types
-    title,
-    // eslint-disable-next-line react/prop-types
-    collapse,
-    // eslint-disable-next-line react/prop-types
-    modules,
-    // eslint-disable-next-line react/prop-types
-    initAdd,
-    // eslint-disable-next-line react/prop-types
-    onNewLine,
-    // eslint-disable-next-line react/prop-types
-    cancelEdit,
-    // eslint-disable-next-line react/prop-types
-    submitEdit,
-    // eslint-disable-next-line react/prop-types
-    submitCancel,
-    // eslint-disable-next-line react/prop-types
-    toggle,
-    // eslint-disable-next-line react/prop-types
-    submitCopy,
-    // eslint-disable-next-line react/prop-types
-    submitPost,
-    // eslint-disable-next-line react/prop-types
-    handleModuleChange,
-    // eslint-disable-next-line react/prop-types
-    toggleToolbar,
-    // eslint-disable-next-line react/prop-types
-    reload,
-    // eslint-disable-next-line react/prop-types
+    styles, // eslint-disable-next-line react/prop-types
+    title, // eslint-disable-next-line react/prop-types
+    collapse, // eslint-disable-next-line react/prop-types
+    modules, // eslint-disable-next-line react/prop-types
+    initAdd, // eslint-disable-next-line react/prop-types
+    onNewLine, // eslint-disable-next-line react/prop-types
+    cancelEdit, // eslint-disable-next-line react/prop-types
+    submitEdit, // eslint-disable-next-line react/prop-types
+    submitCancel, // eslint-disable-next-line react/prop-types
+    toggle, // eslint-disable-next-line react/prop-types
+    submitCopy, // eslint-disable-next-line react/prop-types
+    submitPost, // eslint-disable-next-line react/prop-types
+    handleModuleChange, // eslint-disable-next-line react/prop-types
+    toggleToolbar, // eslint-disable-next-line react/prop-types
+    reload, // eslint-disable-next-line react/prop-types
     current, // eslint-disable-next-line react/prop-types
     t,
   } = props
@@ -373,8 +332,7 @@ export const FinancialsFormHead = (props) => {
         container
         xs
         spacing={0.5}
-        justify="flex-end"
-        /* eslint-disable-next-line react/prop-types */
+        justify="flex-end" //eslint-disable-next-line react/prop-types
         style={{ ...styles.header }}
         alignItems="right"
       >
@@ -382,10 +340,8 @@ export const FinancialsFormHead = (props) => {
           <ComboBox
             id="module-id"
             idCol={true}
-            sm="4"
-            /* eslint-disable-next-line react/prop-types */
-            data={modules.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            sm="4" // eslint-disable-next-line react/prop-types
+            data={modules.sort(sortById)} // eslint-disable-next-line react/prop-types
             //value={module}
             placeholder={'Module number'}
             onChange={handleModuleChange}
@@ -422,8 +378,7 @@ export const JournalFormHead = (props) => {
     <Grid
       container
       spacing={2}
-      justify="space-between"
-      /* eslint-disable-next-line react/prop-types */
+      justify="space-between" // eslint-disable-next-line react/prop-types
       style={{ ...styles.inner }}
       direction="column"
     >
@@ -532,18 +487,12 @@ const articleGeneralInfoForm = (props) => (
   >
     <ArticleForm
       /* eslint-disable-next-line react/prop-types */
-      current={props.current}
-      /* eslint-disable-next-line react/prop-types */
-      setCurrent={props.setCurrent}
-      /* eslint-disable-next-line react/prop-types */
-      locale={props.locale}
-      /* eslint-disable-next-line react/prop-types */
-      currency={props.currency}
-      /* eslint-disable-next-line react/prop-types */
-      t={props.t}
-      /* eslint-disable-next-line react/prop-types */
-      height={props.height}
-      /* eslint-disable-next-line react/prop-types */
+      current={props.current} // eslint-disable-next-line react/prop-types
+      setCurrent={props.setCurrent} // eslint-disable-next-line react/prop-types
+      locale={props.locale} // eslint-disable-next-line react/prop-types
+      currency={props.currency} // eslint-disable-next-line react/prop-types
+      t={props.t} // eslint-disable-next-line react/prop-types
+      height={props.height} // eslint-disable-next-line react/prop-types
       disable={props.disable}
     />
   </Grid>
@@ -557,14 +506,10 @@ const companyGeneralInfoForm = (props) => (
   >
     <CompanyGeneralForm
       /* eslint-disable-next-line react/prop-types */
-      current={props.current}
-      /* eslint-disable-next-line react/prop-types */
-      setCurrent={props.setCurrent}
-      /* eslint-disable-next-line react/prop-types */
-      t={props.t}
-      /* eslint-disable-next-line react/prop-types */
-      height={props.height}
-      /* eslint-disable-next-line react/prop-types */
+      current={props.current} // eslint-disable-next-line react/prop-types
+      setCurrent={props.setCurrent} // eslint-disable-next-line react/prop-types
+      t={props.t} // eslint-disable-next-line react/prop-types
+      height={props.height} // eslint-disable-next-line react/prop-types
       disable={props.disable}
     />
   </Grid>
@@ -578,14 +523,10 @@ const businessPartnerGeneralInfoForm = (props) => (
   >
     <CustomerGeneralForm
       /* eslint-disable-next-line react/prop-types */
-      current={props.current}
-      /* eslint-disable-next-line react/prop-types */
-      setCurrent={props.setCurrent}
-      /* eslint-disable-next-line react/prop-types */
-      t={props.t}
-      /* eslint-disable-next-line react/prop-types */
-      height={props.height}
-      /* eslint-disable-next-line react/prop-types */
+      current={props.current} // eslint-disable-next-line react/prop-types
+      setCurrent={props.setCurrent} // eslint-disable-next-line react/prop-types
+      t={props.t} // eslint-disable-next-line react/prop-types
+      height={props.height} // eslint-disable-next-line react/prop-types
       disable={props.disable}
     />
   </Grid>
@@ -599,22 +540,14 @@ const businessPartnerAccountForm = (props) => (
   >
     <CustomerAccountForm
       /* eslint-disable-next-line react/prop-types */
-      current={props.current}
-      /* eslint-disable-next-line react/prop-types */
-      setCurrent={props.setCurrent}
-      /* eslint-disable-next-line react/prop-types */
-      t={props.t}
-      /* eslint-disable-next-line react/prop-types */
-      locale={props.locale}
-      /* eslint-disable-next-line react/prop-types */
-      currency={props.currency}
-      /* eslint-disable-next-line react/prop-types */
-      accData={props.accData}
-      /* eslint-disable-next-line react/prop-types */
-      vatData={props.vatData}
-      /* eslint-disable-next-line react/prop-types */
-      height={props.height}
-      /* eslint-disable-next-line react/prop-types */
+      current={props.current} // eslint-disable-next-line react/prop-types
+      setCurrent={props.setCurrent} // eslint-disable-next-line react/prop-types
+      t={props.t} // eslint-disable-next-line react/prop-types
+      locale={props.locale} // eslint-disable-next-line react/prop-types
+      currency={props.currency} // eslint-disable-next-line react/prop-types
+      accData={props.accData} // eslint-disable-next-line react/prop-types
+      vatData={props.vatData} // eslint-disable-next-line react/prop-types
+      height={props.height} // eslint-disable-next-line react/prop-types
       disable={props.disable}
     />
   </Grid>
@@ -628,18 +561,12 @@ const companyAccountForm = (props) => (
   >
     <CompanyAccountForm
       /* eslint-disable-next-line react/prop-types */
-      current={props.current}
-      /* eslint-disable-next-line react/prop-types */
-      setCurrent={props.setCurrent}
-      /* eslint-disable-next-line react/prop-types */
-      t={props.t}
-      /* eslint-disable-next-line react/prop-types */
-      accData={props.accData}
-      /* eslint-disable-next-line react/prop-types */
-      vatData={props.vatData}
-      /* eslint-disable-next-line react/prop-types */
-      height={props.height}
-      /* eslint-disable-next-line react/prop-types */
+      current={props.current} // eslint-disable-next-line react/prop-types
+      setCurrent={props.setCurrent} // eslint-disable-next-line react/prop-types
+      t={props.t} // eslint-disable-next-line react/prop-types
+      accData={props.accData} // eslint-disable-next-line react/prop-types
+      vatData={props.vatData} // eslint-disable-next-line react/prop-types
+      height={props.height} // eslint-disable-next-line react/prop-types
       disable={props.disable}
     />
   </Grid>
@@ -704,7 +631,7 @@ const BooleanField = (props) => {
   return (
     <FormControlLabel
       //eslint-disable-next-line react/prop-types
-      id={fieldName.concat('id')}
+      id={fieldName?.concat('id')}
       name={fieldName}
       disabled={disabled}
       style={style ? style : { paddingLeft: 60 }} // eslint-disable-next-line react/prop-types
@@ -719,7 +646,7 @@ const TextareaField = (props) => {
   return (
     <CFormTextarea
       type="textarea" //eslint-disable-next-line react/prop-types
-      id={fieldName.concat('id')}
+      id={fieldName?.concat('id')}
       name={fieldName}
       disabled={disabled}
       rows={rows ? rows : '1'}
@@ -738,7 +665,7 @@ const InputField = (props) => {
     <Input
       bssize="sm"
       type={type ? type : 'text'} // eslint-disable-next-line react/prop-types
-      id={fieldName.concat('id')}
+      id={fieldName?.concat('id')}
       name={fieldName}
       className="input-sm"
       placeholder={placeholder ? placeholder : fieldName}
@@ -747,6 +674,38 @@ const InputField = (props) => {
       value={value}
       onChange={(event) => setCurrent({ ...current, [fieldName]: event.target.value })}
     />
+  )
+}
+const ButtonField = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { title, color, style, size, height, onClick, className, titleClass, disable } = props
+  return (
+    <Button
+      type="submit"
+      size={size ? size : 'sm'}
+      color={color}
+      disabled={disable ? disable : false}
+      className={className ? className : 'px-4'}
+      style={style ? style : { height: height, align: 'right' }}
+      onClick={onClick}
+    >
+      {titleClass ? <i className={titleClass}>{title}</i> : { title }}
+    </Button>
+  )
+}
+const ToolBarButton = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { color, size, onClick, icon, disable } = props
+  return (
+    <Button
+      size={size ? size : 'sm'}
+      color={color}
+      disabled={disable ? disable : false}
+      //className={className ? className : 'px-4'}
+      onClick={onClick}
+    >
+      <IwsIcon style={{ style: styles.imageIcon, textAlign: 'end' }} d={icon} />
+    </Button>
   )
 }
 
@@ -762,15 +721,12 @@ const accountIdField = (props) => {
   return (
     <>
       <ComboBox
-        id="account"
+        id="account-id"
         idCol={true}
-        sm="4"
-        /* eslint-disable-next-line no-undef */
+        sm="4" /* eslint-disable-next-line no-undef */
         disable={disable}
-        height={height}
-        /* eslint-disable-next-line react/prop-types */
-        data={data.sort(sortById)}
-        /* eslint-disable-next-line react/prop-types */
+        height={height} /* eslint-disable-next-line react/prop-types */
+        data={data.sort(sortById)} /* eslint-disable-next-line react/prop-types */
         value={currentAccount ? currentAccount.id : ''}
         placeholder={'account number'}
         onChange={(event, newValue) => {
@@ -819,7 +775,7 @@ const DatePickerField = (props) => {
       showTimeInput
       footer
       dateFormat="dd.MM.yyyy" //eslint-disable-next-line react/prop-types
-      id={fieldName.concat('id')}
+      id={fieldName?.concat('id')}
       onChange={(newValue) => setCurrent({ ...current, [fieldName]: newValue })}
     />
   )
@@ -960,10 +916,8 @@ export const AccountMainForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
-            height={height}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} // eslint-disable-next-line react/prop-types
+            data={accData.sort(sortById)} // eslint-disable-next-line react/prop-types
             value={current.account}
             placeholder={'account number'}
             onChange={(event, newValue) => {
@@ -977,10 +931,8 @@ export const AccountMainForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
-            height={height}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} // eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} // eslint-disable-next-line react/prop-types
             value={currentAccount ? currentAccount.name : ''}
             placeholder={'account name'}
             onChange={(event, newValue) => {
@@ -1130,16 +1082,7 @@ export const CloseAccountingPeriodForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
-          <Button
-            type="submit"
-            size="md"
-            color="primary"
-            className="px-4"
-            style={{ height: height, align: 'right' }}
-            onClick={(e) => submitQuery(e)}
-          >
-            {t('closeAccountingPeriod.close')}
-          </Button>
+          <ButtonField label={t('closeAccountingPeriod.close')} onClick={(e) => submitQuery(e)} />
         </Col>
       </CInputGroup>
     </>
@@ -1152,8 +1095,7 @@ export const CreateDepreciationTransactionForm = (props) => {
   const submitQuery = (event) => {
     event.preventDefault()
     const url = MASTERFILE.createDepreciationTransaction
-      .concat('/')
-      // eslint-disable-next-line react/prop-types
+      .concat('/') // eslint-disable-next-line react/prop-types
       .concat(current.period)
       .concat('/')
       .concat(company)
@@ -1193,16 +1135,10 @@ export const CreateDepreciationTransactionForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
-          <Button
-            type="submit"
-            size="md"
-            color="primary"
-            className="px-4"
-            style={{ height: height, align: 'right' }}
+          <ButtonField
+            label={t('createDepreciationTransaction.generate')}
             onClick={(e) => submitQuery(e)}
-          >
-            {t('createDepreciationTransaction.generate')}
-          </Button>
+          />
         </Col>
       </CInputGroup>
     </>
@@ -1254,15 +1190,11 @@ export const CreatePayrollTransactionForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
-          <Button
-            type="submit"
+          <ButtonField
+            label={t('createPayrollTransaction.generate')}
+            onClick={(e) => submitQuery(e)}
             size="xs"
-            color="primary"
-            style={{ height: height, align: 'right' }}
-            onClick={(event) => submitQuery(event)}
-          >
-            {t('createPayrollTransaction.generate')}
-          </Button>
+          />
         </Col>
       </CInputGroup>
     </>
@@ -2849,7 +2781,7 @@ export const ArticleAccountForm = (props) => {
             data={accData}
             disable={disable}
             height={height} //eslint-disable-next-line react/prop-types
-            value={current.stockAccount}
+            value={currentAccount.stockAccount}
             placeholder={'account number'}
             onChange={(event, newValue) => {
               setCurrent({ ...current, stockAccount: newValue?.id, accountName: newValue?.name })
@@ -3435,7 +3367,7 @@ export const FinancialsMainForm = (props) => {
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.oid} //eslint-disable-next-line react/prop-types
             disabled={current.posted}
-            style={{ height: height }}
+            style={{ height: 30 }}
           />
         </Col>
         <Col sm="4" />
@@ -3640,7 +3572,7 @@ export const TransactionMainForm = (props) => {
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.oid} //eslint-disable-next-line react/prop-types
-            disabled={true}
+            disabled={current.posted}
             style={{ height: 30 }}
           />
         </Col>
@@ -3843,27 +3775,21 @@ export const JournalMainForm = (props) => {
           style={{ height: 30, padding: 1, textAlign: 'right' }}
         />
         <Col sm="1" style={{ paddingLeft: 10, align: 'right' }}>
-          <Button
-            type="submit"
-            size="sm"
-            color="primary"
-            style={{ align: 'right' }}
+          <ButtonField
+            label={t('common.run')}
             onClick={submitQuery}
-          >
-            <i className="fa fa-dot-circle-o">{t('common.run')}</i>
-          </Button>
+            style={{ align: 'right' }}
+            titleClass="fa fa-dot-circle-o"
+          />
         </Col>
         {submitQuery2 ? (
           <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
-            <Button
-              type="submit"
-              size="sm"
-              color="primary"
-              style={{ align: 'right' }}
+            <ButtonField
+              label={t('common.runAll')}
               onClick={submitQuery2}
-            >
-              <i className="fa fa-dot-circle-o">{t('common.runAll')}</i>
-            </Button>
+              style={{ align: 'right' }}
+              titleClass="fa fa-dot-circle-o"
+            />
           </Col>
         ) : null}
       </CInputGroup>
