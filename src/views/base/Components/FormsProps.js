@@ -698,6 +698,38 @@ export const FormFactory = (props) => {
       return <>NODATA</>
   }
 }
+const BooleanField = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { fieldName, fieldId, label, checked, disabled, style } = props
+  return (
+    <FormControlLabel
+      id={fieldId}
+      name={fieldName}
+      disabled={disabled}
+      style={style ? style : { paddingLeft: 60 }} // eslint-disable-next-line react/prop-types
+      control={<Switch checked={checked} />}
+      label={label}
+    />
+  )
+}
+const TextareaField = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { fieldName, fieldId, value, current, setCurrent, rows, disabled, style, placeholder } =
+    props
+  return (
+    <CFormTextarea
+      type="textarea"
+      id={fieldId}
+      name={fieldName}
+      disabled={disabled}
+      rows={rows ? rows : '1'}
+      style={style ? style : { height: 30 }} // eslint-disable-next-line react/prop-types
+      placeholder={placeholder ? placeholder : fieldName} // eslint-disable-next-line react/prop-types
+      value={value} //eslint-disable-next-line react/prop-types
+      onChange={(event) => setCurrent({ ...current, [fieldName]: event.target.value })}
+    />
+  )
+}
 const InputField = (props) => {
   //eslint-disable-next-line react/prop-types
   const { fieldName, fieldId, type, current, setCurrent, value, placeholder, disabled, style } =
@@ -998,35 +1030,23 @@ export const AccountMainForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 20 }}>
-          <FormControlLabel
+          <BooleanField
             id="isDebit"
             name="isDebit"
-            control={
-              <Switch
-                disabled={disable}
-                style={{ height: 30, paddingLeft: 2 }}
-                /* eslint-disable-next-line react/prop-types */
-                checked={current.isDebit}
-                onChange={(event) => setCurrent({ ...current, isDebit: event.target.checked })}
-              />
-            }
             label={t('account.debit_credit')}
+            disabled={disable} //eslint-disable-next-line react/prop-types
+            checked={current.isDebit}
+            style={{ height: 30, paddingLeft: 2 }}
           />
         </Col>
         <Col sm="1">
-          <FormControlLabel
+          <BooleanField
             id="balancesheet"
             name="balancesheet"
-            control={
-              <Switch
-                disabled={disable}
-                style={{ height: 30, paddingLeft: 2 }}
-                /* eslint-disable-next-line react/prop-types */
-                checked={current.balancesheet}
-                onChange={(event) => setCurrent({ ...current, balancesheet: event.target.checked })}
-              />
-            }
             label={t('account.balancesheet')}
+            disabled={disable} //eslint-disable-next-line react/prop-types
+            checked={current.balancesheet}
+            style={{ height: 30, paddingLeft: 2 }}
           />
         </Col>
         <Col sm="1">
@@ -1045,17 +1065,15 @@ export const AccountMainForm = (props) => {
           <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
+          <TextareaField
             type="textarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..."
-            disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+            fieldName="description"
+            fieldId="description"
+            placeholder={t('common.description')}
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
           />
         </Col>
       </CInputGroup>
@@ -1071,8 +1089,7 @@ export const CloseAccountingPeriodForm = (props) => {
     const url = MASTERFILE.closeAccountPeriod
       .concat('/')
       .concat(incomeStmtAcc)
-      .concat('/')
-      // eslint-disable-next-line react/prop-types
+      .concat('/') // eslint-disable-next-line react/prop-types
       .concat(current.period)
       .concat('/')
       .concat(company)
@@ -1560,13 +1577,12 @@ export const BankStatementMainForm = (props) => {
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 20 }}>
-          <FormControlLabel
+          <BooleanField
             id="posted"
             name="posted"
-            bssize="sm"
-            /* eslint-disable-next-line react/prop-types */
-            control={<Switch checked={current.posted} />}
-            label={t('bankstatement.posted')}
+            label={t('bankstatement.posted')} //eslint-disable-next-line react/prop-types
+            disabled={current.posted} //eslint-disable-next-line react/prop-types
+            checked={current.posted}
           />
         </Col>
       </CInputGroup>
@@ -1578,19 +1594,15 @@ export const BankStatementMainForm = (props) => {
           </CFormLabel>
         </Col>
         <Col xs="12" md="10">
-          <CFormTextarea
-            /* eslint-disable-next-line react/prop-types */
-            disabled={current.posted}
-            bssize="sm"
-            type="textarea"
-            id="purpose-input"
-            name="purpose"
-            className="input-sm"
-            placeholder="purpose"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.purpose}
-            onChange={(event) => setCurrent({ ...current, purpose: event.target.value })}
+          <TextareaField
+            fieldName="purpose"
+            fieldId="purpose"
             rows="2"
+            placeholder={t('bankstatement.description')} // eslint-disable-next-line react/prop-types
+            disabled={current.posted} // eslint-disable-next-line react/prop-types
+            value={current.description}
+            current={current}
+            setCurrent={setCurrent}
           />
         </Col>
       </CInputGroup>
@@ -1865,16 +1877,14 @@ export const AssetForm = (props) => {
           <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
-            type="texarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..."
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <TextareaField
+            fieldName="description"
+            fieldId="description"
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
           />
         </Col>
       </CInputGroup>
@@ -2008,15 +2018,14 @@ export const MasterfilesMainForm = (props) => {
           <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
-            type="texarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..." //eslint-disable-next-line react/prop-types
-            disabled={disable} //eslint-disable-next-line react/prop-types
+          <TextareaField
+            fieldName="description"
+            fieldId="description"
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
           />
         </Col>
       </CInputGroup>
@@ -2271,16 +2280,14 @@ export const MasterfilesMainForm2 = (props) => {
           <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
         </Col>
         <Col xs="12" md="9" style={{ height: height, paddingTop: 8 }}>
-          <CFormTextarea
-            type="texarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..."
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <TextareaField
+            fieldName="description"
+            fieldId="description"
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
           />
         </Col>
       </CInputGroup>
@@ -2634,7 +2641,7 @@ export const UserForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('common.phone')}</CFormLabel>
+          <CFormLabel htmlFor="text-input">{t('common.phone')}</CFormLabel>
         </Col>
         <Col xs="12" md="9">
           <InputField
@@ -2857,17 +2864,16 @@ export const CustomerGeneralForm = (props) => {
           <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
-            style={{ height: height }}
-            type="texarea"
-            name="description"
-            id="description-id"
+          <TextareaField
+            fieldName="description"
+            fieldId="description"
             rows="1"
-            placeholder="Content..."
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
+            style={{ height: height }}
           />
         </Col>
       </CInputGroup>
@@ -3295,15 +3301,14 @@ export const CompanyGeneralForm = (props) => {
           <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
-            type="texarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..."
-            disabled={disable} //eslint-disable-next-line react/prop-types
+          <TextareaField
+            fieldName="description"
+            fieldId="description"
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
           />
         </Col>
       </CInputGroup>
@@ -3676,13 +3681,10 @@ export const FinancialsMainForm = (props) => {
           <ComboBox
             id="costcenter"
             idCol={true}
-            sm="4"
-            /* eslint-disable-next-line react/prop-types */
+            sm="4" // eslint-disable-next-line react/prop-types
             disable={current.posted}
-            height={height}
-            /* eslint-disable-next-line react/prop-types */
-            data={ccData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} // eslint-disable-next-line react/prop-types
+            data={ccData.sort(sortById)} // eslint-disable-next-line react/prop-types
             value={current.costcenter}
             placeholder={'cost center number'}
             onChange={(event, newValue) => {
@@ -3694,13 +3696,10 @@ export const FinancialsMainForm = (props) => {
           <ComboBox
             id="costCenterName"
             idCol={false}
-            sm="4"
-            /* eslint-disable-next-line react/prop-types */
+            sm="4" // eslint-disable-next-line react/prop-types
             disable={current.posted}
-            height={height}
-            /* eslint-disable-next-line react/prop-types */
-            data={ccData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} // eslint-disable-next-line react/prop-types
+            data={ccData.sort(sortByName)} // eslint-disable-next-line react/prop-types
             value={currentCC ? currentCC.name : ''}
             placeholder={'cost center name'}
             onChange={(event, newValue) => {
@@ -3709,14 +3708,13 @@ export const FinancialsMainForm = (props) => {
           />
         </Col>
         <Col sm="1">
-          <FormControlLabel
-            disabled={true}
+          <BooleanField
             id="posted"
             name="posted"
+            label={t('financials.posted')} //eslint-disable-next-line react/prop-types
+            disabled={true} //eslint-disable-next-line react/prop-types
+            checked={current.posted}
             style={{ paddingLeft: 60 }}
-            /* eslint-disable-next-line react/prop-types */
-            control={<Switch checked={current.posted} />}
-            label={t('financials.posted')}
           />
         </Col>
       </CInputGroup>
@@ -3927,13 +3925,13 @@ export const TransactionMainForm = (props) => {
           />
         </Col>
         <Col sm="1">
-          <FormControlLabel
-            disabled={true}
+          <BooleanField
             id="posted"
             name="posted"
-            style={{ paddingLeft: 60 }} //eslint-disable-next-line react/prop-types
-            control={<Switch checked={current.posted} />}
-            label={t('transaction.posted')}
+            label={t('transaction.posted')} //eslint-disable-next-line react/prop-types
+            disabled={true} //eslint-disable-next-line react/prop-types
+            checked={current.posted}
+            style={{ paddingLeft: 60 }}
           />
         </Col>
       </CInputGroup>
@@ -4238,19 +4236,19 @@ export const VatMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('vat.description')}</CFormLabel>
+          <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
-            type="textarea"
-            name="description"
-            id="description-id"
+          <TextareaField
+            fieldName="description"
+            fieldId="description"
             rows="1"
-            placeholder="Content..."
-            disabled={disable}
-            style={{ height: 30 }} //eslint-disable-next-line react/prop-types
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
+            style={{ height: height }}
           />
         </Col>
       </CInputGroup>
