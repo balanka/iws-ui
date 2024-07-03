@@ -678,6 +678,15 @@ const InputField = (props) => {
     />
   )
 }
+const FieldLabel = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { title, size } = props
+  return (
+    <CFormLabel size={size ? size : 'sm'} htmlFor="input-small">
+      {title}
+    </CFormLabel>
+  )
+}
 const ButtonField = (props) => {
   //eslint-disable-next-line react/prop-types
   const { title, color, style, size, height, onClick, className, titleClass, disable } = props
@@ -849,9 +858,7 @@ export const AccountMainForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} size="sm" />
         </Col>
         <Col sm="2">
           <InputField
@@ -864,9 +871,7 @@ export const AccountMainForm = (props) => {
         </Col>
         <Col sm="4" />
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.enterdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.enterdate')} size="sm" />
         </Col>
         <Col sm="2">
           <DatePickerField
@@ -881,9 +886,7 @@ export const AccountMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.name')}
-          </CFormLabel>
+          <FieldLabel title={t('common.name')} size="sm" />
         </Col>
         <Col sm="6">
           <InputField
@@ -895,9 +898,7 @@ export const AccountMainForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.changedate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.changedate')} size="sm" />
         </Col>
         <Col sm="2">
           <DatePickerField
@@ -912,9 +913,7 @@ export const AccountMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.account')}
-          </CFormLabel>
+          <FieldLabel title={t('common.account')} size="sm" />
         </Col>
         <Col sm="2">
           <ComboBox
@@ -947,9 +946,7 @@ export const AccountMainForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.postingdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.postingdate')} size="sm" />
         </Col>
         <Col sm="2">
           <DatePickerField
@@ -964,9 +961,7 @@ export const AccountMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} size="sm" />
         </Col>
         <Col sm="2">
           <InputField
@@ -1007,7 +1002,7 @@ export const AccountMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
+          <FieldLabel title={t('common.description')} size="sm" />
         </Col>
         <Col xs="12" md="9">
           <TextareaField
@@ -1043,9 +1038,7 @@ export const CloseAccountingPeriodForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('closeAccountingPeriod.account')}
-          </CFormLabel>
+          <FieldLabel title={t('closeAccountingPeriod.account')} size="sm" />
         </Col>
         <Col sm="1.5" style={{ height: 30 }}>
           <InputField
@@ -1058,9 +1051,7 @@ export const CloseAccountingPeriodForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10, paddingTop: 5 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.period')}
-          </CFormLabel>
+          <FieldLabel title={t('common.period')} size="sm" />
         </Col>
         <Col sm="1" style={{ height: height }}>
           <InputField
@@ -1073,9 +1064,7 @@ export const CloseAccountingPeriodForm = (props) => {
           />
         </Col>
         <Col sm="1" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} size="sm" />
         </Col>
         <Col sm="1" style={{ height: height }}>
           <InputField
@@ -1111,9 +1100,7 @@ export const CreateDepreciationTransactionForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2" style={{ height: 30, paddingLeft: 10, paddingTop: 5 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.period')}
-          </CFormLabel>
+          <FieldLabel title={t('common.period')} size="sm" />
         </Col>
         <Col sm="1" style={{ height: height }}>
           <InputField
@@ -1126,9 +1113,7 @@ export const CreateDepreciationTransactionForm = (props) => {
           />
         </Col>
         <Col sm="1" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} size="sm" />
         </Col>
         <Col sm="1" style={{ height: height }}>
           <InputField
@@ -1154,11 +1139,9 @@ export const CreatePayrollTransactionForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, company, token, navigate, t, height } = props
   const submitQuery = (event) => {
-    event.preventDefault()
-    // eslint-disable-next-line react/prop-types
+    event.preventDefault() // eslint-disable-next-line react/prop-types
     const url = MASTERFILE.createPayrollTransaction
-      .concat('/')
-      // eslint-disable-next-line react/prop-types
+      .concat('/') // eslint-disable-next-line react/prop-types
       .concat(company)
     Get(url, token, navigate, null)
   }
@@ -1166,9 +1149,7 @@ export const CreatePayrollTransactionForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="1" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} size="sm" />
         </Col>
         <Col sm="1.5" style={{ height: height }}>
           <InputField
@@ -1181,9 +1162,7 @@ export const CreatePayrollTransactionForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} size="sm" />
         </Col>
         <Col sm="1">
           <InputField
@@ -1213,9 +1192,7 @@ export const BankStatementParameterForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.header')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.header')} size="sm" />
         </Col>
         <Col sm="1.5" style={{ height: 30 }}>
           <InputField
@@ -1228,9 +1205,7 @@ export const BankStatementParameterForm = (props) => {
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.char')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.char')} size="sm" />
         </Col>
         <Col sm="1" style={{ height: 30 }}>
           <InputField
@@ -1243,9 +1218,7 @@ export const BankStatementParameterForm = (props) => {
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.extension')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.extension')} size="sm" />
         </Col>
         <Col sm="1" style={{ height: 30 }}>
           <InputField
@@ -1261,9 +1234,7 @@ export const BankStatementParameterForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height, paddingTop: 5 }}>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.path')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.path')} size="sm" />
         </Col>
         <Col sm="12" md="10">
           <InputField
@@ -1286,9 +1257,7 @@ export const BankStatementMainForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} size="sm" />
         </Col>
         <Col sm="4">
           <InputField
@@ -1297,13 +1266,10 @@ export const BankStatementMainForm = (props) => {
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
             disabled={true}
-            style={{ paddingLeft: 0 }}
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.postingdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.postingdate')} size="sm" />
         </Col>
         <Col sm="1.5">
           <DatePickerField
@@ -1318,9 +1284,7 @@ export const BankStatementMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.depositor')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.depositor')} size="sm" />
         </Col>
         <Col sm="4">
           <InputField
@@ -1331,10 +1295,8 @@ export const BankStatementMainForm = (props) => {
             disabled={current.posted}
           />
         </Col>
-        <Col sm="1.5" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.valuedate')}
-          </CFormLabel>
+        <Col sm="1" style={{ height: height }}>
+          <FieldLabel title={t('bankstatement.valuedate')} size="sm" />
         </Col>
         <Col sm="1.5">
           <DatePickerField
@@ -1343,15 +1305,12 @@ export const BankStatementMainForm = (props) => {
             current={current}
             setCurrent={setCurrent}
             disabled={true}
-            style={{ textAlign: 'right' }}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.beneficiary')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.beneficiary')} size="sm" />
         </Col>
         <Col sm="4">
           <InputField
@@ -1363,9 +1322,7 @@ export const BankStatementMainForm = (props) => {
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.postingtext')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.postingtext')} size="sm" />
         </Col>
         <Col sm="1.5">
           <InputField
@@ -1379,9 +1336,7 @@ export const BankStatementMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.info')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.info')} size="sm" />
         </Col>
         <Col xs="4">
           <InputField
@@ -1393,9 +1348,7 @@ export const BankStatementMainForm = (props) => {
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.amount')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.amount')} size="sm" />
         </Col>
         <Col sm="1.5">
           <InputField
@@ -1415,9 +1368,7 @@ export const BankStatementMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.companyIban')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.companyIban')} size="sm" />
         </Col>
         <Col sm="4">
           <InputField
@@ -1429,9 +1380,7 @@ export const BankStatementMainForm = (props) => {
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} size="sm" />
         </Col>
         <Col sm="1.5">
           <InputField
@@ -1446,9 +1395,7 @@ export const BankStatementMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.accountno')}{' '}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.accountno')} size="sm" />
         </Col>
         <Col sm="4">
           <InputField
@@ -1460,9 +1407,7 @@ export const BankStatementMainForm = (props) => {
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.bankCode')}{' '}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.bankCode')} size="sm" />
         </Col>
         <Col sm="1.5">
           <InputField
@@ -1471,7 +1416,6 @@ export const BankStatementMainForm = (props) => {
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.bankCode} //eslint-disable-next-line react/prop-types
             disabled={current.posted}
-            style={{ paddingLeft: 0 }}
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 20 }}>
@@ -1485,18 +1429,15 @@ export const BankStatementMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height, paddingTop: 5 }}>
         <Col sm="2">
-          {/* eslint-disable-next-line react/prop-types */}
-          <CFormLabel disabled={current.posted} size="sm" htmlFor="input-small">
-            {t('bankstatement.purpose')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.purpose')} size="sm" />
         </Col>
         <Col xs="12" md="10">
           <TextareaField
             fieldName="purpose"
             rows="2"
-            placeholder={t('bankstatement.description')} // eslint-disable-next-line react/prop-types
+            placeholder={t('bankstatement.purpose')} // eslint-disable-next-line react/prop-types
             disabled={current.posted} // eslint-disable-next-line react/prop-types
-            value={current.description}
+            value={current.purpose}
             current={current}
             setCurrent={setCurrent}
           />
@@ -1513,9 +1454,7 @@ export const AssetForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} />
         </Col>
         <Col sm="4">
           <InputField
@@ -1528,9 +1467,7 @@ export const AssetForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.enterdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.enterdate')} />
         </Col>
         <Col sm="2">
           <DatePickerField
@@ -1545,9 +1482,7 @@ export const AssetForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.name')}
-          </CFormLabel>
+          <FieldLabel title={t('common.name')} />
         </Col>
         <Col sm="4">
           <InputField
@@ -1560,9 +1495,7 @@ export const AssetForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.changedate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.changedate')} />
         </Col>
         <Col sm="2">
           <DatePickerField
@@ -1577,9 +1510,7 @@ export const AssetForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.account')}
-          </CFormLabel>
+          <FieldLabel title={t('common.account')} />
         </Col>
         <Col sm="4">
           <CFormSelect
@@ -1599,9 +1530,7 @@ export const AssetForm = (props) => {
           </CFormSelect>
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.postingdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.postingdate')} />
         </Col>
         <Col sm="2">
           <DatePickerField
@@ -1616,9 +1545,7 @@ export const AssetForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.oaccount')}
-          </CFormLabel>
+          <FieldLabel title={t('common.oaccount')} />
         </Col>
         <Col sm="4">
           <CFormSelect
@@ -1638,9 +1565,7 @@ export const AssetForm = (props) => {
           </CFormSelect>
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} />
         </Col>
         <Col sm="2">
           <InputField
@@ -1655,9 +1580,7 @@ export const AssetForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('asset.amount').concat('/').concat(t('asset.scrapValue'))}
-          </CFormLabel>
+          <FieldLabel title={t('asset.amount').concat('/').concat(t('asset.scrapValue'))} />
         </Col>
         <Col sm="2">
           <InputField
@@ -1691,9 +1614,7 @@ export const AssetForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('asset.lifeSpan')}
-          </CFormLabel>
+          <FieldLabel title={t('asset.lifeSpan')} />
         </Col>
         <Col sm="2">
           <InputField
@@ -1708,9 +1629,7 @@ export const AssetForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('asset.depreciation')}
-          </CFormLabel>
+          <FieldLabel title={t('asset.depreciation')} />
         </Col>
         <Col sm="4">
           <InputField
@@ -1725,9 +1644,7 @@ export const AssetForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('asset.frequency')}/{t('asset.rate')}
-          </CFormLabel>
+          <FieldLabel title={t('asset.frequency').concat('/').concat(t('asset.rate'))} size="sm" />
         </Col>
         <Col sm="1">
           <InputField
@@ -1756,7 +1673,7 @@ export const AssetForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
+          <FieldLabel title={t('common.description')} />
         </Col>
         <Col xs="12" md="9">
           <TextareaField
@@ -1780,9 +1697,7 @@ export const MasterfilesMainForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} />
         </Col>
         <Col sm="2">
           <InputField
@@ -1795,9 +1710,7 @@ export const MasterfilesMainForm = (props) => {
         </Col>
         <Col sm="4" />
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
-            {t('common.enterdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.enterdate')} style={{ height: 30, paddingLeft: 10 }} />
         </Col>
         <Col sm="2">
           <DatePickerField
@@ -1827,9 +1740,7 @@ export const MasterfilesMainForm = (props) => {
           />
         </Col>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
-            {t('common.changedate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.changedate')} style={{ height: 30, paddingLeft: 10 }} />
         </Col>
         <Col sm="2">
           <DatePickerField
@@ -1844,9 +1755,7 @@ export const MasterfilesMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('account.parent')}
-          </CFormLabel>
+          <FieldLabel title={t('account.parent')} />
         </Col>
         <Col sm="2">{accountIdField(props)}</Col>
         <Col sm="4" style={{ paddingLeft: 10 }}>
@@ -1870,9 +1779,7 @@ export const MasterfilesMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} />
         </Col>
         <Col sm="2">
           <InputField
@@ -1887,7 +1794,7 @@ export const MasterfilesMainForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height, paddingTop: 3 }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
+          <FieldLabel title={t('common.description')} />
         </Col>
         <Col xs="12" md="9">
           <TextareaField
