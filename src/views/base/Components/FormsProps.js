@@ -184,28 +184,30 @@ export const CommonFormHead = (props) => {
         )}
         {wrapIcon('Add Item', svgIcons.plusCircle, initAdd, false)}
         <div className="card-header-actions">
-          <Button
+          <ToolBarButton2
+            type="submit"
+            label="Save entry"
             color="link"
-            className="card-header-action btn-minimize"
-            title="Save entry"
+            icon={faSave}
+            disabled={disable}
             onClick={(e) => submitEdit(e)}
-          >
-            <FontAwesomeIcon icon={faSave} />
-          </Button>
+            className="card-header-action btn-minimize"
+          />
         </div>
         <div>
-          <Button
-            block
-            color="link"
+          <ToolBarButton2
             type="submit"
-            className="card-header-action btn-minimize"
+            label="Reload all"
+            color="link"
+            icon={faSpinner}
+            disabled={disable}
             onClick={(event) => {
               event.preventDefault()
               submitQuery(event)
             }}
-          >
-            <FontAwesomeIcon icon={faSpinner} rotation={90} />
-          </Button>
+            rotation={90}
+            className="card-header-action btn-minimize"
+          />
         </div>
         {wrapIcon('Edit', svgIcons.plusCircle, () => setDisable(!disable), false)}
         <div className="card-header-actions" style={{ align: 'right' }}>
@@ -698,6 +700,7 @@ const ToolBarButton = (props) => {
   const { color, size, onClick, icon, disable } = props
   return (
     <Button
+      style={{ padding: 5, height: 30 }}
       size={size ? size : 'sm'}
       color={color}
       disabled={disable ? disable : false}
@@ -705,6 +708,25 @@ const ToolBarButton = (props) => {
       onClick={onClick}
     >
       <IwsIcon style={{ style: styles.imageIcon, textAlign: 'end' }} d={icon} />
+    </Button>
+  )
+}
+const ToolBarButton2 = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { color, size, onClick, icon, disable, type, rotation, className } = props
+  return (
+    <Button
+      block
+      style={{ padding: 5, height: 30 }}
+      type={type ? type : 'submit'}
+      size={size ? size : 'xs'}
+      color={color ? color : 'link'}
+      disabled={disable ? disable : false}
+      //className={className ? className : 'px-4'}
+      className={className ? className : 'card-header-action btn-minimize'}
+      onClick={onClick}
+    >
+      <FontAwesomeIcon icon={icon} rotation={rotation} />
     </Button>
   )
 }
@@ -782,7 +804,7 @@ const DatePickerField = (props) => {
 }
 export const FormWrapper = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { form, table } = props
+  const { form, table, collapse } = props
   return (
     <Grid
       container
@@ -791,7 +813,7 @@ export const FormWrapper = (props) => {
       direction="column"
     >
       <CCollapse
-        visible={true}
+        visible={collapse}
         id="JScollapse"
         style={{ ...styles.inner, backgroundColor: lightGreen }}
       >
@@ -804,28 +826,12 @@ export const FormWrapper = (props) => {
   )
 }
 
-export const FormInCollapsibleWrapper_ = (props) => {
+export const FormInCollapsibleWrapper = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { form, table, collapse } = props
+  const { form, collapse } = props
   return (
     <CCollapse
       visible={collapse}
-      id="JScollapse"
-      style={{ ...styles.inner, backgroundColor: lightGreen }}
-    >
-      <>
-        {form && form(props)}
-        {table && table(props)}
-      </>
-    </CCollapse>
-  )
-}
-export const FormInCollapsibleWrapper = (props) => {
-  /* eslint-disable-next-line react/prop-types */
-  const { form } = props
-  return (
-    <CCollapse
-      visible={true}
       id="JScollapse"
       style={{ ...styles.inner, backgroundColor: lightGreen }}
     >

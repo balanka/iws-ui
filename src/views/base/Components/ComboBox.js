@@ -21,15 +21,13 @@ const StyledAutocomplete = styled(Autocomplete, {
 export default function ComboBox(props) {
   // eslint-disable-next-line react/prop-types
   const { id, data, onChange, value, placeholder, idCol, disable, height } = props
-  //console.log('props', props)
   const entryRef = useRef()
   return (
     <StyledAutocomplete
       fullWidth={true}
       disableClearable
       id={id}
-      disabled={disable}
-      /* eslint-disable-next-line react/prop-types */
+      disabled={disable} // eslint-disable-next-line react/prop-types
       options={idCol ? data.sort(sortById) : data.sort(sortByName)}
       value={value}
       //autoSelect={true}
@@ -50,8 +48,7 @@ export default function ComboBox(props) {
           {...props}
           key={idCol ? option.id : option.name}
           style={{
-            fontSize: 10,
-            // eslint-disable-next-line react/prop-types
+            fontSize: 10, // eslint-disable-next-line react/prop-types
             backgroundColor: props['data-option-index'] % 2 === 0 ? '#DEEFFF' : 'lightblue',
           }}
         >
