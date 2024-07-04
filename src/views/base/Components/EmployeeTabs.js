@@ -13,46 +13,30 @@ import { blue } from '@material-ui/core/colors'
 const EmployeeTabs = (props) => {
   const {
     // eslint-disable-next-line react/prop-types
-    formid,
-    // eslint-disable-next-line react/prop-types
-    current,
-    // eslint-disable-next-line react/prop-types
-    setCurrent,
-    // eslint-disable-next-line react/prop-types
-    accData,
-    // eslint-disable-next-line react/prop-types
-    vatData,
-    // eslint-disable-next-line react/prop-types
-    bankData,
-    // eslint-disable-next-line react/prop-types
-    modifyUrl,
-    // eslint-disable-next-line react/prop-types
-    data,
-    // eslint-disable-next-line react/prop-types
-    tableRef,
-    // eslint-disable-next-line react/prop-types
-    tableRef2,
-    // eslint-disable-next-line react/prop-types
-    locale,
-    // eslint-disable-next-line react/prop-types
-    currency,
-    // eslint-disable-next-line react/prop-types
-    token,
-    // eslint-disable-next-line react/prop-types
-    company,
-    // eslint-disable-next-line react/prop-types
+    formid, // eslint-disable-next-line react/prop-types
+    current, // eslint-disable-next-line react/prop-types
+    setCurrent, // eslint-disable-next-line react/prop-types
+    accData, // eslint-disable-next-line react/prop-types
+    vatData, // eslint-disable-next-line react/prop-types
+    bankData, // eslint-disable-next-line react/prop-types
+    modifyUrl, // eslint-disable-next-line react/prop-types
+    data, // eslint-disable-next-line react/prop-types
+    tableRef, // eslint-disable-next-line react/prop-types
+    tableRef2, // eslint-disable-next-line react/prop-types
+    locale, // eslint-disable-next-line react/prop-types
+    currency, // eslint-disable-next-line react/prop-types
+    token, // eslint-disable-next-line react/prop-types
+    company, // eslint-disable-next-line react/prop-types
     disable,
   } = props
   const { t } = useTranslation()
   const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
   const columnsY = (formid) => ColumnFactory(formid, accData, t, locale, currency)
   const addRow = (newData) => {
-    const dx = { ...current }
-    // eslint-disable-next-line react/prop-types
+    const dx = { ...current } // eslint-disable-next-line react/prop-types
     const companyx = formid === formEnum.COMPANY ? current.id : company
     dx.bankaccounts[dx.bankaccounts.length] = {
-      ...newData,
-      // eslint-disable-next-line react/prop-types
+      ...newData, // eslint-disable-next-line react/prop-types
       owner: current.id,
       company: companyx,
       modelid: -3,
@@ -79,14 +63,11 @@ const EmployeeTabs = (props) => {
 
   const addSalaryItem = (newData) => {
     const dx = { ...current }
-    console.log('dx', dx)
-    // eslint-disable-next-line react/prop-types
+    console.log('dx', dx) // eslint-disable-next-line react/prop-types
     dx.salaryItems[dx.salaryItems.length] = {
       ...newData,
-      id: '-3',
-      // eslint-disable-next-line react/prop-types
-      owner: current.id,
-      // eslint-disable-next-line react/prop-types
+      id: '-3', // eslint-disable-next-line react/prop-types
+      owner: current.id, // eslint-disable-next-line react/prop-types
       company: current.company,
     }
     Add(modifyUrl, token, dx, data, setCurrent)
@@ -98,8 +79,7 @@ const EmployeeTabs = (props) => {
     const index = dx.salaryItems.findIndex(
       (obj) => obj.id === oldData.id && obj.owner === oldData.owner,
     )
-    console.log('index', index)
-    // eslint-disable-next-line react/prop-types
+    console.log('index', index) // eslint-disable-next-line react/prop-types
     dx.salaryItems[index] = { ...newData, id: '-2' }
     Edit(modifyUrl, token, dx, data, setCurrent)
   }
@@ -175,7 +155,7 @@ const EmployeeTabs = (props) => {
 
   const getSalaryItemTable = (formid) => {
     // eslint-disable-next-line react/prop-types
-    console.log('current.salaryItem', current.salaryItems)
+    console.log('current.salaryItem', current)
     return (
       <Grid
         container
@@ -186,9 +166,8 @@ const EmployeeTabs = (props) => {
         <EditableTable
           id="salaryItems"
           Options={{ ...Options, paging: false }}
-          flag={false}
-          /* eslint-disable-next-line react/prop-types */
-          data={current ? current.salaryItems : []}
+          flag={false} //eslint-disable-next-line react/prop-types
+          data={current ? current.salaryItem : [...current]}
           columns={columnsY(formid)}
           editable={SalaryItemEditable()}
           t={t}
