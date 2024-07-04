@@ -13,45 +13,28 @@ const CustomerTabs = (props) => {
   // eslint-disable-next-line react/prop-types
   const {
     // eslint-disable-next-line react/prop-types
-    formid,
-    // eslint-disable-next-line react/prop-types
-    current,
-    // eslint-disable-next-line react/prop-types
-    setCurrent,
-    // eslint-disable-next-line react/prop-types
-    accData,
-    // eslint-disable-next-line react/prop-types
-    vatData,
-    // eslint-disable-next-line react/prop-types
-    bankData,
-    // eslint-disable-next-line react/prop-types
-    modifyUrl,
-    // eslint-disable-next-line react/prop-types
-    data,
-    // eslint-disable-next-line react/prop-types
-    tableRef,
-    // eslint-disable-next-line react/prop-types
-    t,
-    // eslint-disable-next-line react/prop-types
-    locale,
-    // eslint-disable-next-line react/prop-types
-    currency,
-    // eslint-disable-next-line react/prop-types
-    token,
-    /* eslint-disable-next-line react/prop-types */
-    disable,
-
-    // eslint-disable-next-line react/prop-types
+    formid, // eslint-disable-next-line react/prop-types
+    current, // eslint-disable-next-line react/prop-types
+    setCurrent, // eslint-disable-next-line react/prop-types
+    accData, // eslint-disable-next-line react/prop-types
+    vatData, // eslint-disable-next-line react/prop-types
+    bankData, // eslint-disable-next-line react/prop-types
+    modifyUrl, // eslint-disable-next-line react/prop-types
+    data, // eslint-disable-next-line react/prop-types
+    tableRef, // eslint-disable-next-line react/prop-types
+    t, // eslint-disable-next-line react/prop-types
+    locale, // eslint-disable-next-line react/prop-types
+    currency, // eslint-disable-next-line react/prop-types
+    token, // eslint-disable-next-line react/prop-types
+    disable, // eslint-disable-next-line react/prop-types
     height,
   } = props
   const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
   const addRow = (newData) => {
-    const dx = { ...current }
-    // eslint-disable-next-line react/prop-types
+    const dx = { ...current } // eslint-disable-next-line react/prop-types
     const company = formid === formEnum.COMPANY ? current.id : current.company
     dx.bankaccounts[dx.bankaccounts.length] = {
-      ...newData,
-      // eslint-disable-next-line react/prop-types
+      ...newData, // eslint-disable-next-line react/prop-types
       owner: current.id,
       company: company,
       modelid: -3,

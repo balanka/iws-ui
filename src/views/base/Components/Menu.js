@@ -697,6 +697,15 @@ export const initComp = [
     fax: '',
     email: '',
     locale: 'de',
+    bankaccounts: [
+      {
+        id: '',
+        bic: '',
+        owner: '',
+        modelid: 12,
+        company: '',
+      },
+    ],
   },
 ]
 export const initVat = [
