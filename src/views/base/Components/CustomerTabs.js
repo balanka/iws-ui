@@ -126,14 +126,12 @@ const CustomerTabs = (props) => {
         id="bankaccouts"
         Options={{
           ...Options,
-          tableLayout: 'auto',
-          // eslint-disable-next-line react/prop-types
+          tableLayout: 'auto', // eslint-disable-next-line react/prop-types
           paging: current ? current.bankaccounts?.length > 8 : false,
           search: true,
           pageSizeOptions: [5, 10, 20],
         }}
-        flag={false}
-        /* eslint-disable-next-line react/prop-types */
+        flag={false} // eslint-disable-next-line react/prop-types
         data={current ? current.bankaccounts : []}
         columns={columnsX(formid)}
         editable={editable()}
