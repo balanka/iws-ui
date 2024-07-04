@@ -167,7 +167,7 @@ const EmployeeTabs = (props) => {
           id="salaryItems"
           Options={{ ...Options, paging: false }}
           flag={false} //eslint-disable-next-line react/prop-types
-          data={current ? current.salaryItem : [...current]}
+          data={current ? current.salaryItem : []}
           columns={columnsY(formid)}
           editable={SalaryItemEditable()}
           t={t}
