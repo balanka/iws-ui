@@ -1,5 +1,5 @@
 import React, { createRef, useCallback, useLayoutEffect, useState } from 'react'
-import { MASTERFILE, useStore, ACCOUNT, BANK, VAT, LOGIN } from './Menu'
+import { MASTERFILE, useStore } from './Menu'
 import Grid from 'react-fast-grid'
 import { CommonFormHead, FormFactory } from './FormsProps'
 import { ColumnFactory, buildExportOption } from '../tables/LineFinancialsProps'
@@ -23,7 +23,7 @@ const MasterfileForm = (callback, deps) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [disable, setDisable] = useState(true)
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ = typeof module_ !== 'undefined' && module_ ? module_ : LOGIN(t)
+  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   if (typeof module_ === 'undefined' || !module_ || module_.id === '11111')
     return navigate('/login')
   const url =
@@ -55,9 +55,9 @@ const MasterfileForm = (callback, deps) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [, setRows] = useState([])
   const modelid_ = module_.modelid
-  const acc_modelId = parseInt(ACCOUNT(t, locale, currency).id)
-  const bank_modelId = parseInt(BANK(t, locale).id)
-  const vat_modelId = parseInt(VAT(t, locale).id)
+  const acc_modelId = formEnum.ACCOUNT
+  const bank_modelId = formEnum.BANK
+  const vat_modelId = formEnum.VAT
   const module_modelId = formEnum.MODULE
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [current, setCurrent] = useState(current_)
@@ -123,11 +123,8 @@ const MasterfileForm = (callback, deps) => {
       setCurrent({ ...record, editing: true })
     }
   }
-  const fetchData = (url, data_, modelId_, token) => {
-    isNotArrayOrEmpty(accd) &&
-      accUrl &&
-      current.modelid !== acc_modelId &&
-      Get1(accUrl, token, acc_modelId)
+  const fetchData = (urlx, datax, modelIdx, token) => {
+    isNotArrayOrEmpty(datax) && urlx && current.modelid !== modelIdx && Get1(urlx, token, modelIdx)
   }
   const load = (event) => submitQuery(event)
   const submitQuery = (event) => {

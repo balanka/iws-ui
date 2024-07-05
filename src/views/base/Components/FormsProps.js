@@ -2581,6 +2581,7 @@ export const ArticleAccountForm = (props) => {
   const currentVat = vatData.find((vat) => vat.id === current.vatCode)
   console.log('accData>>>>>', accData)
   console.log('current>>>>>', current)
+  console.log('currentVat>>>>>', currentVat)
   console.log('currentAccount>>>>>', currentAccount)
   console.log('currentOAccount>>>>>', currentOAccount)
 
