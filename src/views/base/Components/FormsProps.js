@@ -2555,7 +2555,7 @@ const salaryField = (props) => {
         <Col sm="2">
           <InputField
             fieldName="salary"
-            type="number"
+            type="currency"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={Number(current.salary ?? 0.0).toLocaleString(locale, {
