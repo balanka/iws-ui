@@ -660,6 +660,7 @@ const TextareaField = (props) => {
   )
 }
 const InputField = (props) => {
+  console.log('propsX', props)
   //eslint-disable-next-line react/prop-types
   const { fieldName, type, current, setCurrent, value, placeholder, disabled, style } = props
   const style_ = style ? style : { height: 30 }
@@ -1834,10 +1835,11 @@ export const PayrollTaxForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="fromAmount"
+            type="currency"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             disabled={disable} //eslint-disable-next-line react/prop-types
-            value={Number(current.fromAmount).toLocaleString(locale, {
+            value={Number(current.fromAmount ?? 0.0).toLocaleString(locale, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
               style: 'currency',
@@ -1853,10 +1855,11 @@ export const PayrollTaxForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="toAmount"
+            type="currency"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             disabled={disable} //eslint-disable-next-line react/prop-types
-            value={Number(current.toAmount).toLocaleString(locale, {
+            value={Number(current.toAmount ?? 0.0).toLocaleString(locale, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
               style: 'currency',
@@ -1874,10 +1877,11 @@ export const PayrollTaxForm = (props) => {
         <Col sm="2">
           <InputField
             fieldName="tax"
+            type="currency"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             disabled={disable} //eslint-disable-next-line react/prop-types
-            value={Number(current.tax).toLocaleString(locale, {
+            value={Number(current.tax ?? 0.0).toLocaleString(locale, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
               style: 'currency',
@@ -2554,7 +2558,7 @@ const salaryField = (props) => {
             type="number"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-            value={Number(current.salary).toLocaleString(locale, {
+            value={Number(current.salary ?? 0.0).toLocaleString(locale, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
               style: 'currency',
@@ -2573,18 +2577,11 @@ export const ArticleAccountForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, accData, vatData, height } = props
   // eslint-disable-next-line react/prop-types
-  console.log('current>>>>>', current) // eslint-disable-next-line react/prop-types
   const currentAccount = accData.find((acc) => acc.id === current.stockAccount)
   // eslint-disable-next-line react/prop-types
   const currentOAccount = accData.find((acc) => acc.id === current.expenseAccount)
   // eslint-disable-next-line react/prop-types
   const currentVat = vatData.find((vat) => vat.id === current.vatCode)
-  console.log('accData>>>>>', accData)
-  console.log('current>>>>>', current)
-  console.log('currentVat>>>>>', currentVat)
-  console.log('currentAccount>>>>>', currentAccount)
-  console.log('currentOAccount>>>>>', currentOAccount)
-
   return (
     <div style={{ height: 100 }}>
       <CInputGroup row style={{ height: height }}>
@@ -2697,7 +2694,7 @@ export const ArticleAccountForm = (props) => {
 }
 export const CustomerAccountForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, disable, t, accData, vatData, height } = props
+  const { current, setCurrent, disable, t, accData, vatData, height, currency, locale } = props
   const accountLabel =
     /* eslint-disable-next-line react/prop-types */
     current.modelid === 1
@@ -2788,7 +2785,7 @@ export const CustomerAccountForm = (props) => {
             }}
           />
         </Col>
-        {/*eslint-disable-next-line react/prop-types */}
+        {/* eslint-disable-next-line react/prop-types */}
         {current.modelid === formEnum.EMPLOYEE ? salaryField(props) : null}
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>

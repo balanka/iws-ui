@@ -512,6 +512,17 @@ export const initArticle = [
     enterdate: date,
     changedate: date,
     postingdate: date,
+    stocks: [
+      {
+        article: '',
+        store: '',
+        quantity: 0.0,
+        unit: '',
+        price: 0.0,
+        amount: 0.0,
+        charge: '',
+      },
+    ],
   },
 ]
 export const initAsset = [
@@ -796,6 +807,7 @@ export const initEmp = [
     oaccount: '-1',
     vatcode: '-1',
     company: '',
+    salary: 0.0,
     modelid: 33,
     enterdate: date,
     postingdate: date,
@@ -1102,20 +1114,6 @@ export const MENU = (t, locale, currency) =>
     ],
   ])
 
-const initialState = {
-  profile: {
-    token: 'noTOken',
-    company: '',
-    currency: '',
-    language: '',
-    incomeStmtAcc: '',
-    modules: [],
-  },
-  selected: '',
-  userMenu: [],
-  history_: '',
-  routes: () => LoginRoute,
-}
 const importFn = (str) => React.lazy(() => import(`./${str}`))
 //console.log('import ====', importFn('Login') === importFn('views/base/Components/Login'))
 const LoginRoute = [
@@ -1127,7 +1125,14 @@ const LoginRoute = [
   },
 ]
 export const useStore = create((set) => ({
-  profile: initialState,
+  profile: {
+    token: 'noTOken',
+    company: '',
+    currency: '',
+    language: '',
+    incomeStmtAcc: '',
+    modules: [],
+  },
   selected: '',
   menu: '',
   routes: '',

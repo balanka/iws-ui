@@ -55,6 +55,8 @@
     "credit": "Haben",
     "balance": "Saldo",
     "amount"      : "Betrag",
+    "quantity":  "Menge",
+    "charge": "Charge",
     "street"      : "Strasse",
     "period"      : "Buchungsperiode",
     "zip"         : "PLZ",
@@ -204,7 +206,7 @@
     }
   },
   "article": {
-    "title":      "Artikel",
+    "title": "Artikel",
     "sprice": "Verkaufspreis",
     "pprice": "Einkaufspreis",
     "avgPrice": "G.D.P",
@@ -221,6 +223,9 @@
   },
   "store": {
     "title":      "Lager"
+  },
+  "stock": {
+    "title":  "Bestand"
   },
   "vat": {
     "title":      "MwSt.",

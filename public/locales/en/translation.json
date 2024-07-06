@@ -54,6 +54,8 @@
     "icredit": "Init credit",
     "credit": "Credit",
     "balance": "Balance",
+    "quantity":  "Qtty",
+    "charge": "Charge",
     "amount"      : "Amount",
     "street"      : "Street",
     "period"      : "Period",
@@ -240,6 +242,9 @@
   },
   "store": {
     "title": "Store"
+  },
+  "stock": {
+    "title":      "Stock"
   },
   "vat": {
     "title":      "VAT",

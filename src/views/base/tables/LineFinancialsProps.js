@@ -931,6 +931,56 @@ export const ColumnsModule = (t, locale) => [
     export: true,
   },
 ]
+export const StockColumns = (data, t, locale, currency) => [
+  // {
+  //   field: 'id',
+  //   title: t('common.id'),
+  //   export: false,
+  // },
+  {
+    field: 'article',
+    title: t('article.title'),
+    type: 'text',
+    export: true,
+  },
+  {
+    field: 'store',
+    title: t('store.title'),
+    type: 'string',
+    export: true,
+  },
+  {
+    field: 'quantity',
+    title: t('common.quantity'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    export: true,
+  },
+  {
+    field: 'price',
+    title: t('common.amount'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    export: true,
+  },
+  {
+    field: 'charge',
+    title: t('common.charge'),
+    type: 'string',
+    export: true,
+  },
+]
 export const ColumnsAsset = (data, t, locale, currency) => [
   {
     field: 'id',
@@ -2515,6 +2565,8 @@ export const ColumnFactory = (formid, data, t, locale, currency) => {
       return ColumnsVAT(data, t, locale, currency)
     case formEnum.SALARY_ITEM:
       return ColumnsSalaryItem(data, t, locale, currency)
+    case formEnum.STOCK:
+      return StockColumns(data, t, locale, currency)
     default:
       return <>NODATA</>
   }

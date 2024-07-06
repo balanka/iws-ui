@@ -54,6 +54,8 @@
     "icredit": "R. crédit",
     "credit": "Crédit",
     "balance": "Balance",
+    "quantity":  "Qtté",
+    "charge": "Charge",
     "amount"      : "Montant",
     "street"      : "Rue",
     "period"      : "Periode",
@@ -231,9 +233,8 @@
       "account": "Cpte. Charge"
     }
   },
-  "store": {
-    "title": "Store"
-  },
+  "store": {"title": "Magasin"},
+  "stock": {"title": "Stock"},
   "vat": {
     "title":      "TVA",
     "name":       "Nom",

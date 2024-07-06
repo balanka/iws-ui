@@ -13,6 +13,7 @@ export const formEnum = {
   QUANTITYUNIT: 15,
   BANKSTATEMENT: 18,
   ASSET: 19,
+  STOCK: 31,
   EMPLOYEE: 33,
   ARTICLE: 34,
   STORE: 35,
