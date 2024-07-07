@@ -62,6 +62,11 @@ const MasterfileForm = (callback, deps) => {
       .concat(formEnum.BANK)
       .concat('/')
       .concat(company)
+    const storeUrl = MASTERFILE?.store
+      .concat('/')
+      .concat(formEnum.STORE)
+      .concat('/')
+      .concat(company)
     const moduleUrl = MASTERFILE?.module.concat('/').concat(company)
     const modifyUrl = module_.ctx //selected
     const initialState = module_.state
@@ -73,6 +78,7 @@ const MasterfileForm = (callback, deps) => {
     const acc_modelId = formEnum.ACCOUNT
     const bank_modelId = formEnum.BANK
     const vat_modelId = formEnum.VAT
+    const store_modelId = formEnum.STORE
     const module_modelId = formEnum.MODULE
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [current, setCurrent] = useState(current_)
@@ -85,8 +91,8 @@ const MasterfileForm = (callback, deps) => {
     const accd = iwsState.get(acc_modelId) ?? []
     const bankd = iwsState.get(bank_modelId) ?? []
     const vatd = iwsState.get(vat_modelId) ?? []
-    const accClassd = iwsState.get(formEnum.ACCOUNT_CLASS) ?? []
-    const accGroupd = iwsState.get(formEnum.ACCOUNT_GROUP) ?? []
+    const stored = iwsState.get(store_modelId) ?? []
+
     const submitEdit = (event) => {
       event.preventDefault()
       if (current.editing && !disable) {
@@ -153,10 +159,8 @@ const MasterfileForm = (callback, deps) => {
       fetchData(vatUrl, vatd, vat_modelId, token)
       // fetch  bank data
       fetchData(bankUrl, bankd, bank_modelId, token)
-      // fetch  accountClass data
-      fetchData(classUrl, accClassd, formEnum.ACCOUNT_CLASS, token)
-      // fetch  accountGroup data
-      fetchData(groupUrl, accGroupd, formEnum.ACCOUNT_GROUP, token)
+      // fetch  store data
+      fetchData(storeUrl, stored, store_modelId, token)
       // fetch  module data
       fetchData(moduleUrl, [], module_modelId, token)
       url && Get1(url, token, current_.modelid)
@@ -214,8 +218,7 @@ const MasterfileForm = (callback, deps) => {
             accData={accd}
             vatData={vatd}
             bankData={bankd}
-            accClassData={accClassd}
-            accGroupData={accGroupd}
+            storeData={stored}
             onNewLine={onNewSalaryItem}
             tableRef={tableRef}
             tableRef2={tableRef2}

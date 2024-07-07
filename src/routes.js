@@ -10,6 +10,7 @@ const Modals = React.lazy(() => import('./views/notifications/modals/Modals'))
 const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
+const Article = (path) => React.lazy(() => import('./views/base/Components/ArticleForm'))
 const Masterfile = (path) => React.lazy(() => import('./views/base/Components/MasterfileForm'))
 const FINANCIALS = (path) => React.lazy(() => import('./views/base/Components/FinancialsForm'))
 const TRANSACTION = (path) => React.lazy(() => import('./views/base/Components/TransactionForm'))
@@ -26,20 +27,20 @@ const routes = [
   { path: MASTERFILE.journal, name: 'Journal', element: JFORM() },
   { path: '/Masterfiles', exact: true, name: 'Masterfiles' },
   { path: '/admin', name: 'Admin' },
-  { path: MASTERFILE.acc, name: 'Account', element: Masterfile() },
-  { path: MASTERFILE.closeAccountPeriod, name: 'Close accounting period', element: Masterfile() },
+  { path: MASTERFILE.acc, name: 'Account', element: Article() },
+  { path: MASTERFILE.closeAccountPeriod, name: 'Close accounting period', element: Article() },
   {
     path: MASTERFILE.createPayrollTransaction,
     name: 'Generate payroll transaction',
-    element: Masterfile(),
+    element: Article(),
   },
   {
     path: MASTERFILE.createDepreciationTransaction,
     name: 'Generate depreciation transaction',
     element: Masterfile(),
   },
-  { path: MASTERFILE.article, name: 'Article', element: Masterfile() },
-  { path: MASTERFILE.articleGroup, name: 'Article group', element: Masterfile() },
+  { path: MASTERFILE.article, name: 'Article', element: Article() },
+  { path: MASTERFILE.articleGroup, name: 'Article group', element: Article() },
   { path: MASTERFILE.cc, name: 'Cost center', element: Masterfile() },
   { path: MASTERFILE.cust, name: 'Customer', element: Masterfile() },
   { path: MASTERFILE.sup, name: 'Supplier', element: Masterfile() },
@@ -47,11 +48,11 @@ const routes = [
   { path: MASTERFILE.emp, name: 'Employee', element: Masterfile() },
   { path: MASTERFILE.user, name: 'Users', element: Masterfile() },
   { path: MASTERFILE.vat, name: 'VAT', element: Masterfile() },
-  { path: '/bank', name: 'Bank', element: Masterfile() },
-  { path: '/qty', name: 'Quantity unit', element: Masterfile() },
-  { path: MASTERFILE.accountClass, name: 'Account class', element: Masterfile() },
-  { path: MASTERFILE.accountGroup, name: 'Account group', element: Masterfile() },
-  { path: MASTERFILE.payrollTaxRange, name: 'Account group', element: Masterfile() },
+  { path: MASTERFILE.bank, name: 'Bank', element: Masterfile() },
+  { path: MASTERFILE.qty, name: 'Quantity unit', element: Masterfile() },
+  { path: MASTERFILE.accountClass, name: 'Account class', element: Article() },
+  { path: MASTERFILE.accountGroup, name: 'Account group', element: Article() },
+  { path: MASTERFILE.payrollTaxRange, name: 'PayRoll tax range', element: Masterfile() },
   { path: MASTERFILE.role, name: 'Role', element: Masterfile() },
   { path: MASTERFILE.bs, name: 'Bankstatement', element: BANKSTATEMENT() },
   { path: MASTERFILE.pac, name: 'Pac', element: JFORM() },
@@ -59,7 +60,7 @@ const routes = [
   { path: MASTERFILE.module, name: 'Module', element: Masterfile() },
   { path: MASTERFILE.comp, name: 'Company', element: Masterfile() },
   { path: MASTERFILE.asset, name: 'Assets', element: Masterfile() },
-  { path: MASTERFILE.salaryItem, name: 'Salary item', element: Masterfile() },
+  { path: MASTERFILE.salaryItem, name: 'Salary item', element: Article() },
   { path: '/users/login', name: 'Login', element: LOGIN() },
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },

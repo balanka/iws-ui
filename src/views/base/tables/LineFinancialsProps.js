@@ -952,7 +952,7 @@ export const StockColumns = (data, t, locale, currency) => [
   {
     field: 'quantity',
     title: t('common.quantity'),
-    type: 'currency',
+    type: 'number',
     initialEditValue: 0,
     currencySetting: {
       locale: locale,

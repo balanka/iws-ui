@@ -11,7 +11,7 @@ import {
   CFormTextarea,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { formEnum } from '../utils/FORMS'
+import { formEnum as FormEnum, formEnum } from '../utils/FORMS'
 import { sortById, sortByName } from '../utils/utils'
 import CustomerTabs from './CustomerTabs'
 import {
@@ -37,6 +37,7 @@ import ComboBox from './ComboBox'
 import { Get } from './CrudController'
 import { MASTERFILE } from './Menu'
 import ArticleTabs from './ArticleTabs'
+import StoreTabs from './StoreTabs'
 export const svgIcons = {
   plusCircle:
     'M10 3a7 7 0 100 14 7 7 0 000-14zm-9 7a9 9 0 1118 0 9 9 0 01-18 0zm14 .069a1 1 0 01-1 1h-2.931V14a1 1 0 11-2 0v-2.931H6a1 1 0 110-2h3.069V6a1 1 0 112 0v3.069H14a1 1 0 011 1z',
@@ -426,6 +427,7 @@ const getForm = (formId) => {
     case formEnum.COSTCENTER:
     case formEnum.BANK:
     case formEnum.QUANTITYUNIT:
+    case formEnum.STORE_GENERAL_INFO_FORM:
       return MasterfilesMainForm2
     case formEnum.ARTICLE:
       return ArticleTabs
@@ -433,12 +435,13 @@ const getForm = (formId) => {
       return SalaryItemForm
     case formEnum.MODULE:
     case formEnum.FMODULE:
-    case formEnum.STORE:
     case formEnum.PERMISSION:
     case formEnum.ACCOUNT_CLASS:
     case formEnum.ACCOUNT_GROUP:
     case formEnum.ARTICLE_GROUP:
       return MasterfilesMainForm
+    case formEnum.STORE:
+      return StoreTabs
     case formEnum.PAYROLL_TAX_RANGE:
       return PayrollTaxForm
     case formEnum.USER:
@@ -607,6 +610,7 @@ export const FormFactory = (props) => {
     case formEnum.BALANCETREE:
     case formEnum.VAT:
     case formEnum.TRANSACTION:
+    case formEnum.STORE_GENERAL_INFO_FORM:
       // eslint-disable-next-line react/prop-types
       return <FormWrapper {...props} form={getForm(props.formid)} />
     case formEnum.BUSINESS_PARTNER_ADDRESS_FORM:
@@ -623,6 +627,7 @@ export const FormFactory = (props) => {
       return <FormInCollapsibleWrapper {...props} form={articleGeneralInfoForm} />
     case formEnum.ARTICLE_ACCOUNT_FORM:
       return <FormInCollapsibleWrapper {...props} form={ArticleAccountForm} />
+
     default:
       return <>NODATA</>
   }
@@ -1447,7 +1452,6 @@ export const BankStatementMainForm = (props) => {
     </>
   )
 }
-
 export const AssetForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, t, accData, height, disable, locale, currency } = props
@@ -1690,7 +1694,6 @@ export const AssetForm = (props) => {
     </>
   )
 }
-
 export const MasterfilesMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, height } = props
@@ -1756,9 +1759,11 @@ export const MasterfilesMainForm = (props) => {
         <Col sm="2">
           <FieldLabel title={t('account.parent')} />
         </Col>
-        <Col sm="2">{accountIdField(props)}</Col>
+        {/* eslint-disable-next-line react/prop-types */}
+        <Col sm="2">{current.modelid !== FormEnum.STORE ? accountIdField(props) : null}</Col>
         <Col sm="4" style={{ paddingLeft: 10 }}>
-          {accountNameField(props)}
+          {/* eslint-disable-next-line react/prop-types */}
+          {current.modelid !== FormEnum.STORE ? accountNameField(props) : null}
         </Col>
         <Col sm="2">
           <FieldLabel title={t('common.postingdate')} style={{ height: 30, paddingLeft: 10 }} />
@@ -1807,7 +1812,6 @@ export const MasterfilesMainForm = (props) => {
     </>
   )
 }
-
 export const PayrollTaxForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, locale, currency, height } = props
@@ -1924,6 +1928,7 @@ export const PayrollTaxForm = (props) => {
   )
 }
 export const MasterfilesMainForm2 = (props) => {
+  console.log('props>>>>>OOOO', props)
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, height } = props
   return (
@@ -2032,7 +2037,6 @@ export const MasterfilesMainForm2 = (props) => {
     </div>
   )
 }
-
 export const ArticleForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, locale, currency, disable, t, height } = props
@@ -3533,6 +3537,92 @@ export const JournalMainForm = (props) => {
             <ButtonField
               label={t('common.runAll')}
               onClick={submitQuery2}
+              style={{ align: 'right' }}
+              titleClass="fa fa-dot-circle-o"
+            />
+          </Col>
+        ) : null}
+      </CInputGroup>
+    </>
+  )
+}
+export const StockMainForm = (props) => {
+  // eslint-disable-next-line react/prop-types
+  const { current, setCurrent, t, storeData, articleData, submitQuery, height } = props
+  // eslint-disable-next-line react/prop-types
+  const currentStore = storeData.find((store) => store.id === current.store)
+  // eslint-disable-next-line react/prop-types
+  const currentArticle = articleData.find((article) => article.id === current.article)
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1">
+          <FieldLabel title={t('common.store')} />
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="store-id"
+            idCol={true}
+            sm="4"
+            height={height} //eslint-disable-next-line react/prop-types
+            data={storeData.sort(sortById)} //eslint-disable-next-line react/prop-types
+            value={current.store}
+            placeholder={'store number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, store: newValue?.id, store2: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="account2-id"
+            idCol={false}
+            sm="4"
+            height={height} //eslint-disable-next-line react/prop-types
+            data={storeData.sort(sortByName)} //eslint-disable-next-line react/prop-types
+            value={currentStore ? currentStore.name : ''}
+            placeholder={'store name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, store: newValue?.id, store2: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="1">
+          <FieldLabel title={t('common.article')} />
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="article-id"
+            idCol={true}
+            sm="4"
+            height={height} //eslint-disable-next-line react/prop-types
+            data={storeData.sort(sortById)} //eslint-disable-next-line react/prop-types
+            value={current.article}
+            placeholder={'article number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, article: newValue?.id, article2: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="article2-id"
+            idCol={false}
+            sm="4"
+            height={height} //eslint-disable-next-line react/prop-types
+            data={storeData.sort(sortByName)} //eslint-disable-next-line react/prop-types
+            value={currentArticle ? currentArticle.name : ''}
+            placeholder={'article name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, article: newValue?.id, article2: newValue?.name })
+            }}
+          />
+        </Col>
+        {submitQuery ? (
+          <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
+            <ButtonField
+              label={t('common.run')}
+              onClick={submitQuery}
               style={{ align: 'right' }}
               titleClass="fa fa-dot-circle-o"
             />

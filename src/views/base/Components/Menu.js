@@ -583,6 +583,17 @@ export const initStore = [
     modelid: 35,
     account: '-1',
     company: '',
+    stocks: [
+      {
+        article: '',
+        store: '',
+        quantity: 0.0,
+        unit: '',
+        price: 0.0,
+        amount: 0.0,
+        charge: '',
+      },
+    ],
   },
 ]
 export const initCloseAccPeriod = [
