@@ -2558,7 +2558,7 @@ const salaryField = (props) => {
             type="currency"
             current={current}
             setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-            value={Number(current.salary ?? 0.0).toLocaleString(locale, {
+            value={Number(current?.salary ?? 0.0).toLocaleString(locale, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
               style: 'currency',

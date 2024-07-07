@@ -44,7 +44,7 @@ const ArticleTabs = (props) => {
           pageSizeOptions: [5, 10, 20],
         }}
         flag={false} // eslint-disable-next-line react/prop-types
-        data={current ? current.stocks : []}
+        data={current ? current.stocks ?? [] : []}
         columns={columnsX(formid)}
         //editable={editable()}
         t={t}
@@ -78,6 +78,7 @@ const ArticleTabs = (props) => {
     />
   )
   const GetTabContent = () => {
+    console.log('current>>>>>', current)
     return [
       { title: t('common.general'), id: 1, form: getGeneralForm() },
       { title: t('common.accounts'), id: 2, form: getAccountForm() },

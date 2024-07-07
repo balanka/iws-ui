@@ -30,6 +30,7 @@ const EmployeeTabs = (props) => {
     disable,
   } = props
   const { t } = useTranslation()
+  // eslint-disable-next-line react/display-name
   const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
   const columnsY = (formid) => ColumnFactory(formid, accData, t, locale, currency)
   const addRow = (newData) => {
@@ -144,7 +145,7 @@ const EmployeeTabs = (props) => {
         Options={{ ...Options, paging: false }}
         flag={false}
         /* eslint-disable-next-line react/prop-types */
-        data={current ? current.bankaccounts : []}
+        data={current ? current.bankaccounts ?? [] : []}
         columns={columnsX(formid)}
         editable={editable()}
         t={t}
@@ -167,7 +168,7 @@ const EmployeeTabs = (props) => {
           id="salaryItems"
           Options={{ ...Options, paging: false }}
           flag={false} //eslint-disable-next-line react/prop-types
-          data={current ? current.salaryItem : []}
+          data={current ? current.salaryItem ?? [] : []}
           columns={columnsY(formid)}
           editable={SalaryItemEditable()}
           t={t}
