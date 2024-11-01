@@ -40,8 +40,7 @@ const BasicTreeTable = () => {
   const [toolbar, setToolbar] = useState(false)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
-  const acc_modelid = parseInt(ACCOUNT(t).id)
-  const accData_ = iwsState.get(acc_modelid) ? iwsState.get(acc_modelid) : [...initAcc]
+  const accData_ = iwsState.get(formEnum.ACCOUNT) ?? [...initAcc]
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const init = useRef(false)
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -51,9 +50,9 @@ const BasicTreeTable = () => {
       init.current = true
     }
     // load account data as they are needed
-    accUrl && Get1(accUrl, token, acc_modelid)
+    accUrl && Get1(accUrl, token, formEnum.ACCOUNT)
     setCurrent(current_)
-  }, [current_, accUrl, token, acc_modelid])
+  }, [current_, accUrl, token, formEnum.ACCOUNT])
   const toggleToolbar = () => setToolbar(!toolbar)
   const toggle = () => setState({ ...state, collapse: !state.collapse })
   const columnsX = columns(t, locale, currency)

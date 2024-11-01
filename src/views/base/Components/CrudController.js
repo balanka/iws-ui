@@ -6,7 +6,7 @@ import { formEnum } from '../utils/FORMS'
 
 const SERVER_IP = 'REACT_APP_HOST_IP_ADDRESS'
 const SERVER_PORT = 'REACT_APP_PORT'
-const SERVER_URL = 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT) //'http://0.0.0.0:8091'
+const SERVER_URL = 'http://0.0.0.0:8091' // 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT) //'http://0.0.0.0:8091'
 
 const getFn1 = (url, token) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
 const getFn = (url, token) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
@@ -103,6 +103,8 @@ const Login = (
         const locale = response.data.locale
         const currency = response.data.currency
         const incomeStmtAcc = response.data.incomeStmtAcc
+        console.log('company_response', response)
+        console.log('moduleURL', moduleURL)
         getFn(moduleURL, token)
           .then((response) => {
             const module_ = response.data

@@ -39,6 +39,10 @@ import { MASTERFILE } from './Menu'
 import ArticleTabs from './ArticleTabs'
 import StoreTabs from './StoreTabs'
 export const svgIcons = {
+  cubeLoader:
+    'M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z',
+  loader2:
+    'M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z',
   plusCircle:
     'M10 3a7 7 0 100 14 7 7 0 000-14zm-9 7a9 9 0 1118 0 9 9 0 01-18 0zm14 .069a1 1 0 01-1 1h-2.931V14a1 1 0 11-2 0v-2.931H6a1 1 0 110-2h3.069V6a1 1 0 112 0v3.069H14a1 1 0 011 1z',
   plus: 'M38 6H10c-2.21 0-4 1.79-4 4v28c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4zm-4 20h-8v8h-4v-8h-8v-4h8v-8h4v8h8v4z',
@@ -185,15 +189,14 @@ export const CommonFormHead = (props) => {
         )}
         {wrapIcon('Add Item', svgIcons.plusCircle, initAdd, false)}
         <div className="card-header-actions">
-          <ToolBarButton2
-            type="submit"
-            label="Save entry"
+          <Button
             color="link"
-            icon={faSave}
-            disabled={disable}
-            onClick={(e) => submitEdit(e)}
             className="card-header-action btn-minimize"
-          />
+            title="Save entry"
+            onClick={(e) => submitEdit(e)}
+          >
+            <FontAwesomeIcon icon={faSave} />
+          </Button>
         </div>
         <div>
           <ToolBarButton2
@@ -693,23 +696,26 @@ const FieldLabel = (props) => {
     </CFormLabel>
   )
 }
-const ButtonField = (props) => {
-  //eslint-disable-next-line react/prop-types
-  const { title, color, style, size, height, onClick, className, titleClass, disable } = props
+
+const FormButton = (props) => {
+  console.log('props', props)
+  // eslint-disable-next-line react/prop-types
+  const { title, type, color, style, size, height, onClick, className, titleClass, disable } = props
   return (
     <Button
-      type="submit"
-      size={size ? size : 'sm'}
-      color={color}
+      type={type ?? 'submit'}
+      size={size ?? 'sm'}
+      color={color ?? 'primary'}
       disabled={disable ? disable : false}
-      className={className ? className : 'px-4'}
-      style={style ? style : { height: height, align: 'right' }}
+      className={className ? className : null}
+      style={style ?? { height: height, align: 'right' }}
       onClick={onClick}
     >
-      {titleClass ? <i className={titleClass}>{title}</i> : { title }}
+      <i className="fa fa-dot-circle-o">{title}</i>
     </Button>
   )
 }
+
 const ToolBarButton = (props) => {
   //eslint-disable-next-line react/prop-types
   const { color, size, onClick, icon, disable } = props
@@ -1083,7 +1089,7 @@ export const CloseAccountingPeriodForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
-          <ButtonField label={t('closeAccountingPeriod.close')} onClick={(e) => submitQuery(e)} />
+          <FormButton title={t('closeAccountingPeriod.close')} onClick={(e) => submitQuery(e)} />
         </Col>
       </CInputGroup>
     </>
@@ -1132,8 +1138,8 @@ export const CreateDepreciationTransactionForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
-          <ButtonField
-            label={t('createDepreciationTransaction.generate')}
+          <FormButton
+            title={t('createDepreciationTransaction.generate')}
             onClick={(e) => submitQuery(e)}
           />
         </Col>
@@ -1181,8 +1187,8 @@ export const CreatePayrollTransactionForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
-          <ButtonField
-            label={t('createPayrollTransaction.generate')}
+          <FormButton
+            title={t('createPayrollTransaction.generate')}
             onClick={(e) => submitQuery(e)}
             size="xs"
           />
@@ -2528,22 +2534,22 @@ const FromPeriod = (props) => {
   const { name, label, value, current, setCurrent, balancesheet, t, labelStyle, style } = props
   /* eslint-disable-next-line react/prop-types */
   return (
-    !balancesheet && (
-      <>
-        <Col sm="0.5" style={labelStyle}>
-          <FieldLabel title={t(label)} />
-        </Col>
-        <Col sm="1" style={{ paddingLeft: 10 }}>
-          <InputField
-            fieldName={name}
-            current={current}
-            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-            value={value}
-            style={style ? style : { height: 30, padding: 1, textAlign: 'right' }}
-          />
-        </Col>
-      </>
-    )
+    /* !balancesheet && ( */
+    <>
+      <Col sm="0.5" style={labelStyle}>
+        <FieldLabel title={t(label)} />
+      </Col>
+      <Col sm="1" style={{ paddingLeft: 10 }}>
+        <InputField
+          fieldName={name}
+          current={current}
+          setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+          value={value}
+          style={style ? style : { height: 30, padding: 1, textAlign: 'right' }}
+        />
+      </Col>
+    </>
+    /* ) */
   )
 }
 
@@ -3525,17 +3531,26 @@ export const JournalMainForm = (props) => {
           style={{ height: 30, padding: 1, textAlign: 'right' }}
         />
         <Col sm="1" style={{ paddingLeft: 10, align: 'right' }}>
-          <ButtonField
-            label={t('common.run')}
+          <FormButton
+            title={t('common.run')}
             onClick={submitQuery}
             style={{ align: 'right' }}
-            titleClass="fa fa-dot-circle-o"
+            className="fa fa-dot-circle-o"
           />
+          {/*<Button*/}
+          {/*  type="submit"*/}
+          {/*  size="sm"*/}
+          {/*  color="primary"*/}
+          {/*  style={{ align: 'right' }}*/}
+          {/*  onClick={submitQuery}*/}
+          {/*>*/}
+          {/*  <i className="fa fa-dot-circle-o">{t('common.run')}</i>*/}
+          {/*</Button>*/}
         </Col>
         {submitQuery2 ? (
           <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
-            <ButtonField
-              label={t('common.runAll')}
+            <FormButton
+              title={t('common.runAll')}
               onClick={submitQuery2}
               style={{ align: 'right' }}
               titleClass="fa fa-dot-circle-o"
@@ -3620,8 +3635,8 @@ export const StockMainForm = (props) => {
         </Col>
         {submitQuery ? (
           <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
-            <ButtonField
-              label={t('common.run')}
+            <FormButton
+              title={t('common.run')}
               onClick={submitQuery}
               style={{ align: 'right' }}
               titleClass="fa fa-dot-circle-o"

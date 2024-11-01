@@ -1,4 +1,4 @@
-import React, { useState, memo, useRef, useLayoutEffect } from 'react'
+import React, { useState, useRef, useLayoutEffect } from 'react'
 import Grid from 'react-fast-grid'
 import { useTranslation } from 'react-i18next'
 import { FormFactory, JournalFormHead } from './FormsProps'
@@ -7,7 +7,7 @@ import { formEnum } from '../utils/FORMS'
 import { styles, theme } from '../Tree/BasicTreeTableProps'
 import EditableTable from '../tables/EditableTable'
 import { Get, Get1 } from './CrudController'
-import { ACCOUNT, LOGIN, MASTERFILE, useStore } from './Menu'
+import { LOGIN, MASTERFILE, useStore } from './Menu'
 import { useNavigate } from 'react-router-dom'
 import iwsStore from './Store'
 
@@ -226,8 +226,7 @@ const JForm = () => {
       : ColumnJournal(t, locale, currency)
   const toggleToolbar = () => setToolbar(!toolbar)
   const toggle = () => setState({ ...state, collapse: !state.collapse })
-  const acc_modelid = parseInt(ACCOUNT(t).id)
-  const accData_ = iwsState.get(acc_modelid) ? iwsState.get(acc_modelid) : [...initAcc]
+  const accData_ = iwsState.get(formEnum.ACCOUNT) ?? [...initAcc]
   // eslint-disable-next-line react-hooks/rules-of-hooks
   let init = useRef(false)
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -237,8 +236,8 @@ const JForm = () => {
       init.current = true
     }
     // load account data as they are needed
-    accUrl && Get1(accUrl, token, acc_modelid)
-  }, [init, accUrl, token, acc_modelid])
+    accUrl && Get1(accUrl, token, formEnum.ACCOUNT)
+  }, [init, accUrl, token, formEnum.ACCOUNT])
 
   const buildUrl = () =>
     url.concat('/').concat(current.account).concat('/').concat(current.toPeriod)
@@ -279,4 +278,4 @@ const JForm = () => {
     columnsX,
   )
 }
-export default memo(JForm)
+export default JForm
