@@ -43,7 +43,7 @@ const FinancialsForm = (callback, deps) => {
   if (typeof module_ === 'undefined' || !module_ || module_.id === '11111')
     return navigate('/login')
   const modifyUrl = selected
-  const url = module_.ctx.concat('/').concat(company)
+  const url = module_.ctx //.concat('/').concat(company)
   const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
   const ccUrl = MASTERFILE.masterfile
     .concat('/')
@@ -115,7 +115,7 @@ const FinancialsForm = (callback, deps) => {
     }
   }, [init])
 
-  const reload = () => callReload(url, token, model)
+  const reload = () => callReload(url, token, model, company)
   const toggleToolbar = () => setToolbar(!toolbar)
   const toggle = () => setState({ ...state, collapse: !state.collapse })
   const setSelectedRows = (rows_) => callSetSelectedRows(rows_, setRows)
@@ -125,12 +125,13 @@ const FinancialsForm = (callback, deps) => {
     { url: accUrl, modelid: formEnum.ACCOUNT },
     { url: ccUrl, modelid: formEnum.COSTCENTER },
   ]
-  const submitQuery = (event, modelid) => callSubmitQuery(event, url, token, modelid, allUrls)
+  const submitQuery = (event, url, token, modelid, company, allUrls) =>
+    callSubmitQuery(event, url, token, modelid, company, allUrls)
 
   const handleModuleChange = (event, value) => {
     event.preventDefault()
     setModel(value.id)
-    submitQuery(event, value.id)
+    submitQuery(event, url, token, value.id, company, allUrls)
     const mx = fModuleData.find((m) => m.id === value.id)
     title_ = mx?.name ? mx.name : title_
     setTitle(title_)
@@ -139,7 +140,7 @@ const FinancialsForm = (callback, deps) => {
 
   const buildAmount = (row) => ({
     ...row,
-    total: row.lines.reduce((acc, line) => acc + line.amount, 0),
+    total: row.lines ? row.lines.reduce((acc, line) => acc + line.amount, 0) : 0,
   })
   const buildData = () => data().map((row) => buildAmount(row))
 

@@ -8,7 +8,7 @@ const SERVER_IP = 'REACT_APP_HOST_IP_ADDRESS'
 const SERVER_PORT = 'REACT_APP_PORT'
 const SERVER_URL = 'http://0.0.0.0:8091' // 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT) //'http://0.0.0.0:8091'
 
-const getFn1 = (url, token) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
+// const getFn1 = (url, token) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
 const getFn = (url, token) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
 
 const post1Fn = (url, record) => axios.post(url, record)
@@ -85,7 +85,15 @@ const Login = (
   console.log(' url_', url_)
   post1Fn(url_, data).then((response) => {
     const token = response.data.hash
-    const result = Map.groupBy(response.data.rights, ({ moduleid }) => moduleid)
+    console.log(' response.data', response.data)
+    const dataR = response.data ?? []
+    const rights = dataR.rights
+    const roleRights = dataR.roles.map((r) => r.rights).flat()
+    console.log(' roleRights', roleRights)
+    console.log(' response.data.rights', dataR.rights)
+    const allRights = [...roleRights, ...rights]
+    console.log(' allRights', allRights)
+    const result = Map.groupBy(allRights, ({ moduleid }) => moduleid)
     console.log(' result', result)
     const userRights = Array.from(result, (entry) => ({
       key: entry[0],
@@ -97,8 +105,12 @@ const Login = (
       .concat(formEnum.MODULE)
       .concat('/')
       .concat(company)
-    const companyURL = SERVER_URL.concat(MASTERFILE.comp).concat('/').concat(company)
-    getFn1(companyURL, token, navigate)
+    const companyURL = SERVER_URL.concat(MASTERFILE.comp)
+      .concat('/')
+      .concat(company)
+      .concat('/')
+      .concat(formEnum.COMPANY)
+    getFn(companyURL, token)
       .then((response) => {
         const locale = response.data.locale
         const currency = response.data.currency

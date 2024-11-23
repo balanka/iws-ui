@@ -48,7 +48,7 @@ const TransactionForm = (callback, deps) => {
   if (typeof module_ === 'undefined' || !module_ || module_.id === '11111')
     return navigate('/login')
   const modifyUrl = selected
-  const url = module_.ctx.concat('/').concat(company)
+  const url = module_.ctx //.concat('/').concat(company)
   const artUrl = MASTERFILE.article.concat('/').concat(formEnum.ARTICLE).concat('/').concat(company)
   const storeUrl = MASTERFILE.store.concat('/').concat(formEnum.STORE).concat('/').concat(company)
   const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
@@ -96,7 +96,7 @@ const TransactionForm = (callback, deps) => {
       .reduce((sum, amount) => sum + amount)
   const buildAmount = (row) => ({
     ...row,
-    total: total(row.lines), //row.lines.reduce((acc, line) => acc + line.quality * line.price),
+    total: row.lines ? total(row.lines ?? []) : 0,
   })
   const buildData = () => data().map((row) => (row.id === -1 ? 0.0 : buildAmount(row)))
   const columnsX = TransactionLinesColumns(
@@ -141,7 +141,7 @@ const TransactionForm = (callback, deps) => {
       document.removeEventListener('keydown', handleKeyPress)
     }
   }, [init])
-  const reload = () => callReload(url, token, model)
+  const reload = () => callReload(url, token, model, company)
   const toggleToolbar = () => setToolbar(!toolbar)
   const toggle = () => setState({ ...state, collapse: !state.collapse })
   const setSelectedRows = (rows_) => callSetSelectedRows(rows_, setRows)
@@ -155,7 +155,8 @@ const TransactionForm = (callback, deps) => {
     { url: supUrl, modelid: formEnum.SUPPLIER },
     { url: fmoduleUrl, modelid: formEnum.FMODULE },
   ]
-  const submitQuery = (event, modelid) => callSubmitQuery(event, url, token, modelid, allUrls)
+  const submitQuery = (event, url, token, modelid, company, allUrls) =>
+    callSubmitQuery(event, url, token, modelid, company, allUrls)
   const handleModuleChange = (event, value) => {
     event.preventDefault()
     setModel(value.id)
@@ -166,7 +167,7 @@ const TransactionForm = (callback, deps) => {
     title_ = mx?.name ? mx.name : title_
     setTitle(title_)
     setPartnerId(mx.account)
-    submitQuery(event, value.id)
+    submitQuery(event, url, token, value.id, company, allUrls)
     setCurrent(current_)
   }
 

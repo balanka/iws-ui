@@ -1098,7 +1098,7 @@ export const CloseAccountingPeriodForm = (props) => {
 export const CreateDepreciationTransactionForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, token, company, navigate, t, height } = props
-  console.log('props', props)
+  //console.log('props', props)
   const submitQuery = (event) => {
     event.preventDefault()
     const url = MASTERFILE.createDepreciationTransaction

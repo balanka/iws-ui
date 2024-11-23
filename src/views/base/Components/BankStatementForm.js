@@ -24,7 +24,7 @@ const BankStatementForm = () => {
   const [state, setState] = useState({ collapse: true, fadeIn: true, timeout: 300 })
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [rows, setRows] = useState([])
-  const url = module_.ctx.concat('/').concat(company)
+  const url = module_.ctx.concat('/').concat(module_.modelid).concat('/').concat(company)
   const initialState = module_.state
   const current_ = initialState[0]
   const title = t(module_.title)

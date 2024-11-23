@@ -338,7 +338,9 @@ export const columnsF = (data, current, t, locale, currency) => {
 
 export const Transactioncolumns = (storeData, ccData, current, t, locale, currency) => {
   const total = current
-    ? current.lines.reduce((acc, line) => acc + line.quantity * line.price, 0.0)
+    ? current.lines
+      ? current.lines.reduce((acc, line) => acc + line.quantity * line.price, 0.0)
+      : 0.0
     : 0.0
   console.log('total', total)
   return [

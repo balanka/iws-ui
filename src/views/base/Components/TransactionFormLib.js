@@ -58,9 +58,9 @@ const callOnNewLine = (tableRef) => {
   ref.dataManager.changeRowEditing()
   ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
 }
-const callReload = (url, token, model) => {
+const callReload = (url, token, model, company) => {
   iwsStore.deleteKey(model)
-  const url_ = url.concat('/').concat(model)
+  const url_ = url.concat('/').concat(model).concat('/').concat(company)
   url_ && Get1(url_, token, parseInt(model))
 }
 const callSetSelectedRows = (rows_, setRows) => {
@@ -87,9 +87,10 @@ const callEdit = (editedRow, setCurrent) => {
     setCurrent({ ...record, editing: true })
   }
 }
-const callSubmitQuery = (event, url, token, modelid, allUrls) => {
+const callSubmitQuery = (event, url, token, modelid, company, allUrls) => {
   event.preventDefault()
-  const url_ = url.concat('/').concat(modelid)
+  const url_ = url.concat('/').concat(modelid).concat('/').concat(company)
+  console.log(' allUrls', allUrls)
   allUrls.forEach((o) => !iwsState.get(o.modelid) && fetchData(o.url, token, o.modelid))
   fetchData(url_, token, parseInt(modelid))
 }

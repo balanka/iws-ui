@@ -95,11 +95,11 @@ const MasterfileForm = (callback, deps) => {
 
     const submitEdit = (event) => {
       event.preventDefault()
-      if (current.editing && !disable) {
-        delete current.editing
+      const editing = current.editing
+      delete current.editing
+      if (editing && !disable) {
         Edit(modifyUrl, token, { ...current }, data, setCurrent)
       } else {
-        delete current.editing
         Add(modifyUrl, token, { ...current }, data, setCurrent)
       }
       setDisable(true)

@@ -10,7 +10,7 @@ const iwsStore = {
   subscribe: (setState) => subject.subscribe(setState),
   put: (key, message) => {
     const temp = store instanceof Map ? store.get(key) : new Set()
-    const temp1 = temp ? temp : []
+    const temp1 = temp ?? []
     const temp2 = Array.isArray(temp1) && temp1.length > 0 ? [...temp1] : [...message]
     store.set(key, temp2)
     store = new Map([...store.entries()])
