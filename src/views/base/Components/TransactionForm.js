@@ -17,22 +17,20 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import iwsStore from './Store'
 import {
-  callOnNewLine,
-  callReload,
-  callSubmitCancel,
-  callSubmitEdit,
-  fetchData,
-  formatCurrency,
   getData,
   getPeriod,
+  fetchData,
+  formatCurrency,
+  callSubmitEdit,
+  callSubmitCancel,
+  callOnNewLine,
+  callReload,
   callSetSelectedRows,
   callInitAdd,
+  callCancelEdit,
   callAddRow,
   callDeleteRow,
   callSubmitPost,
-  callEdit,
-  callCancelEdit,
-  callSubmitQuery,
   callSubmitCopy,
 } from './TransactionFormLib'
 
@@ -155,6 +153,23 @@ const TransactionForm = (callback, deps) => {
     { url: supUrl, modelid: formEnum.SUPPLIER },
     { url: fmoduleUrl, modelid: formEnum.FMODULE },
   ]
+  const callEdit = (editedRow, setCurrent) => {
+    const isArray = Array.isArray(editedRow) && editedRow.length > 0
+    const row = isArray ? editedRow[0] : editedRow
+    if (row) {
+      const data = iwsState.get(row.modelid)
+      const record = data.find((obj) => obj.id === row.id)
+      setCurrent({ ...record, editing: true })
+    }
+  }
+  const callSubmitQuery = (event, url, token, modelid, company, allUrls) => {
+    event.preventDefault()
+    const url_ = url.concat('/').concat(modelid).concat('/').concat(company)
+    console.log(' allUrls', allUrls)
+    allUrls.forEach((o) => !iwsState.get(o.modelid) && fetchData(o.url, token, o.modelid))
+    fetchData(url_, token, parseInt(modelid))
+  }
+
   const submitQuery = (event, url, token, modelid, company, allUrls) =>
     callSubmitQuery(event, url, token, modelid, company, allUrls)
   const handleModuleChange = (event, value) => {
@@ -167,8 +182,9 @@ const TransactionForm = (callback, deps) => {
     title_ = mx?.name ? mx.name : title_
     setTitle(title_)
     setPartnerId(mx.account)
-    submitQuery(event, url, token, value.id, company, allUrls)
     setCurrent(current_)
+    submitQuery(event, url, token, value.id, company, allUrls)
+    //setCurrent(current_)
   }
 
   const edit = (editedRow) => callEdit(editedRow, setCurrent)
@@ -204,14 +220,16 @@ const TransactionForm = (callback, deps) => {
       delete newData.tableData
       const articleChanged = newData.article !== oldData.article
       const articleId = articleChanged ? newData.article : oldData.article
-
+      const artIdx = artData.findIndex((obj) => obj.id === articleId)
+      const article = artData[artIdx]
+      const artName = article ? article.name : 'article notfound'
       if (idx === -1) {
-        dx.lines.push({ ...newData, transid: dx.id1 })
+        dx.lines.push({ ...newData, articleName: artName, transid: dx.id1 })
       } else {
         dx.lines[idx] = {
           ...newData,
           transid: dx.id1,
-          ...(articleChanged && { article: articleId }),
+          ...(articleChanged && { article: articleId, articleName: artName }),
         }
       }
       delete dx.editing
