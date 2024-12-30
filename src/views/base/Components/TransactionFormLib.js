@@ -1,8 +1,8 @@
 import { initAcc, initArticle, initCc, initStore } from './Menu'
 import { formEnum } from '../utils/FORMS'
 import { Add, Edit, EditRow, Get1, Get2, Post } from './CrudController'
+import { LOGIN, MASTERFILE, TRANSACTION, useStore } from './Menu'
 import iwsStore from './Store'
-import iwsState from './Store'
 
 const getCurrentMonth = (date) => {
   const p = date.getUTCMonth() + 1
@@ -78,23 +78,6 @@ const callInitAdd = (current_, model, setCurrent) => {
   const record = { ...current_, modelid: parseInt(model), lines: line }
   EditRow(record, true, setCurrent)
 }
-const callEdit = (editedRow, setCurrent) => {
-  const isArray = Array.isArray(editedRow) && editedRow.length > 0
-  const row = isArray ? editedRow[0] : editedRow
-  if (row) {
-    const data = iwsState.get(row.modelid)
-    const record = data.find((obj) => obj.id === row.id)
-    setCurrent({ ...record, editing: true })
-  }
-}
-const callSubmitQuery = (event, url, token, modelid, company, allUrls) => {
-  event.preventDefault()
-  const url_ = url.concat('/').concat(modelid).concat('/').concat(company)
-  console.log(' allUrls', allUrls)
-  allUrls.forEach((o) => !iwsState.get(o.modelid) && fetchData(o.url, token, o.modelid))
-  fetchData(url_, token, parseInt(modelid))
-}
-
 const callAddRow = async (newData, current, data, modifyUrl, token, setCurrent) => {
   if (newData) {
     const dx = { ...current }
@@ -151,11 +134,9 @@ export {
   callReload,
   callSetSelectedRows,
   callInitAdd,
-  callEdit,
   callCancelEdit,
   callAddRow,
   callDeleteRow,
   callSubmitPost,
-  callSubmitQuery,
   callSubmitCopy,
 }

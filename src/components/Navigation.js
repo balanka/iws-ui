@@ -4,10 +4,12 @@ import iwsStore from '../views/base/Components/Store'
 import { formEnum } from '../views/base/utils/FORMS'
 import { CNavGroup, CNavItem } from '@coreui/react'
 import { cilPuzzle } from '@coreui/icons/dist/esm/free/cil-puzzle'
+import { useTranslation } from 'react-i18next'
 import CIcon from '@coreui/icons-react'
 
-const Navigation = (t) => {
+const Navigation = () => {
   const { profile, module, setModule } = useStore()
+  const { t } = useTranslation()
   const userMenu = profile.modules ? profile.modules : [1010, 11111]
   const DEFAULT = [
     {

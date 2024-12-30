@@ -131,10 +131,11 @@ const FinancialsForm = (callback, deps) => {
   const handleModuleChange = (event, value) => {
     event.preventDefault()
     setModel(value.id)
-    submitQuery(event, url, token, value.id, company, allUrls)
     const mx = fModuleData.find((m) => m.id === value.id)
     title_ = mx?.name ? mx.name : title_
     setTitle(title_)
+    setCurrent(current_)
+    submitQuery(event, url, token, value.id, company, allUrls)
     //setCurrent(current_)
   }
 
@@ -143,9 +144,23 @@ const FinancialsForm = (callback, deps) => {
     total: row.lines ? row.lines.reduce((acc, line) => acc + line.amount, 0) : 0,
   })
   const buildData = () => data().map((row) => buildAmount(row))
-
   const edit = (editedRow) => callEdit(editedRow, setCurrent)
-
+  const callEdit = (editedRow, setCurrent) => {
+    const isArray = Array.isArray(editedRow) && editedRow.length > 0
+    const row = isArray ? editedRow[0] : editedRow
+    if (row) {
+      const data = iwsState.get(row.modelid)
+      const record = data.find((obj) => obj.id === row.id)
+      setCurrent({ ...record, editing: true })
+    }
+  }
+  const callSubmitQuery = (event, url, token, modelid, company, allUrls) => {
+    event.preventDefault()
+    const url_ = url.concat('/').concat(modelid).concat('/').concat(company)
+    console.log(' allUrls', allUrls)
+    allUrls.forEach((o) => !iwsState.get(o.modelid) && fetchData(o.url, token, o.modelid))
+    fetchData(url_, token, parseInt(modelid))
+  }
   const submitPost = (event) => callSubmitPost(event, modifyUrl, token, current, setCurrent, rows)
   const submitCopy = (event) => callSubmitCopy(event, modifyUrl, token, rows)
   const submitAdd = (event) => {
@@ -182,6 +197,12 @@ const FinancialsForm = (callback, deps) => {
       const oaccountChanged = newData.oaccount !== oldData.oaccount
       const accountId = accountChanged ? newData.account : oldData.account
       const oaccountId = oaccountChanged ? newData.oaccount : oldData.oaccount
+      const accIdx = accData.findIndex((obj) => obj.id === accountId)
+      const oaccIdx = accData.findIndex((obj) => obj.id === oaccountId)
+      const account = accData[accIdx]
+      const oaccount = accData[oaccIdx]
+      const accName = account ? account.name : 'account notfound'
+      const oaccName = oaccount ? oaccount.name : 'oaccount notfound'
 
       if (idx === -1) {
         dx.lines.push({ ...newData, transid: dx.id1 })
@@ -189,8 +210,8 @@ const FinancialsForm = (callback, deps) => {
         dx.lines[idx] = {
           ...newData,
           transid: dx.id1,
-          ...(accountChanged && { account: accountId }),
-          ...(oaccountChanged && { oaccount: oaccountId }),
+          ...(accountChanged && { account: accountId, accountName: accName }),
+          ...(oaccountChanged && { oaccount: oaccountId, oaccountName: oaccName }),
         }
       }
       delete dx.editing

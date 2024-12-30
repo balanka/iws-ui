@@ -668,7 +668,6 @@ const TextareaField = (props) => {
   )
 }
 const InputField = (props) => {
-  console.log('propsX', props)
   //eslint-disable-next-line react/prop-types
   const { fieldName, type, current, setCurrent, value, placeholder, disabled, style } = props
   const style_ = style ? style : { height: 30 }
@@ -754,7 +753,9 @@ const ToolBarButton2 = (props) => {
 
 const accountIdField = (props) => {
   const { accClassData, accGroupData, accData, current, setCurrent, disable, height } = props
-  const data = [...accClassData, ...accGroupData]
+  const accClassData_ = accClassData ?? []
+  const accGroupData_ = accGroupData ?? []
+  const data = [...accClassData_, ...accGroupData_]
   const id = current.modelid === formEnum.SALARY_ITEM ? current.account : current.parent
   const fieldName = current.modelid === formEnum.SALARY_ITEM ? 'account' : 'parent'
   const currentAccount =
@@ -781,7 +782,9 @@ const accountIdField = (props) => {
 }
 const accountNameField = (props) => {
   const { accClassData, accGroupData, accData, current, setCurrent, disable, height } = props
-  const data = [...accClassData, ...accGroupData]
+  const accClassData_ = accClassData ?? []
+  const accGroupData_ = accGroupData ?? []
+  const data = [...accClassData_, ...accGroupData_]
   const id = current.modelid === formEnum.SALARY_ITEM ? current.account : current.parent
   const fieldName = current.modelid === formEnum.SALARY_ITEM ? 'account' : 'parent'
   const currentAccount =
@@ -3280,7 +3283,7 @@ export const TransactionMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   let { current, current_, setCurrent, t, storeData, accData, height } = props
   current = current ? current : current_ //eslint-disable-next-line react/prop-types
-  const currentStore = storeData.find((store) => store.id === current.store) //eslint-disable-next-line react/prop-types
+  const currentStore = (storeData ?? []).find((store) => store.id === current.store) //eslint-disable-next-line react/prop-types
   const accData_ = accData ? accData : [] //eslint-disable-next-line react/prop-types
   const currentAcc = accData_.find((acc) => acc.id === current.account)
   return (

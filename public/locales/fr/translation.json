@@ -417,6 +417,8 @@
     "role": "Role",
     "permission": "Permission",
     "fmodule": "Journaux",
+    "financials": "Journaux",
+    "transaction": "Logistique",
     "bankstatement": "Rélévé bancaire",
     "createPayrollTransaction": "Générer les journaux de paie",
     "createDepreciationTransaction": "Générer les journaux  amort."

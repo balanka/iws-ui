@@ -1,4 +1,5 @@
-import React, { createRef, useCallback, useLayoutEffect, useState } from 'react'
+import React, { createRef, Suspense, useCallback, useLayoutEffect, useState } from 'react'
+import { CContainer, CSpinner } from '@coreui/react'
 import { MASTERFILE, useStore } from './Menu'
 import Grid from 'react-fast-grid'
 import { CommonFormHead, FormFactory } from './FormsProps'
@@ -177,11 +178,11 @@ const MasterfileForm = (callback, deps) => {
       ref.dataManager.changeRowEditing()
       ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
     }
-    const parentChildFn = (row, rows) => rows.find((a) => a.id === row?.parent)
+    const parentChildFn = (row, rows) => rows.find((a) => (a?.id ? a.id === row?.parent : false))
 
     function buildForm(current) {
       return (
-        <>
+        <Suspense fallback={<CSpinner color="primary" />}>
           <CommonFormHead
             styles={styles}
             title={title}
@@ -249,10 +250,10 @@ const MasterfileForm = (callback, deps) => {
               t={t}
               edit={edit}
               setSelectedRows={setSelectedRows}
-              parentChildData={parentChildFn}
+              parentChildData={current_.modelid === formEnum.VAT ? parentChildFn : null}
             />
           </Grid>
-        </>
+        </Suspense>
       )
     }
 
