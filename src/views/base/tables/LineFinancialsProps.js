@@ -293,7 +293,7 @@ export const columnsF = (data, current, t, locale, currency) => {
       },
       minWidth: 80,
       maxWidth: 150,
-      initialEditValue: current ? current.lines.reduce((acc, line) => acc + line.amount, 0) : 0,
+      initialEditValue: current ? current.lines?.reduce((acc, line) => acc + line.amount, 0) : 0,
       export: true,
     },
     {
@@ -339,7 +339,7 @@ export const columnsF = (data, current, t, locale, currency) => {
 export const Transactioncolumns = (storeData, ccData, current, t, locale, currency) => {
   const total = current
     ? current.lines
-      ? current.lines.reduce((acc, line) => acc + line.quantity * line.price, 0.0)
+      ? current.lines?.reduce((acc, line) => acc + line.quantity * line.price, 0.0)
       : 0.0
     : 0.0
   console.log('total', total)
@@ -756,6 +756,16 @@ export const TransactionLinesColumns = (
       width: 10,
       minWidth: 10,
       maxWidth: 50,
+      editable: 'never',
+    },
+    {
+      field: 'vatCode',
+      title: t('common.vatCode'),
+      hidden: false,
+      initialEditValue: line.vatCode,
+      width: 5,
+      minWidth: 5,
+      maxWidth: 5,
       editable: 'never',
     },
     {

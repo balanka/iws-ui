@@ -98,7 +98,9 @@ const MasterfileForm = (callback, deps) => {
       event.preventDefault()
       const editing = current.editing
       delete current.editing
-      if (editing && !disable) {
+      console.log('disable', disable)
+      console.log('current.editing', current.editing)
+      if (editing) {
         Edit(modifyUrl, token, { ...current }, data, setCurrent)
       } else {
         Add(modifyUrl, token, { ...current }, data, setCurrent)

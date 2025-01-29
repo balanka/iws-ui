@@ -223,8 +223,10 @@ const TransactionForm = (callback, deps) => {
       const artIdx = artData.findIndex((obj) => obj.id === articleId)
       const article = artData[artIdx]
       const artName = article ? article.name : 'article notfound'
+      console.log('article', article)
+      console.log('artName', artName)
       if (idx === -1) {
-        dx.lines.push({ ...newData, articleName: artName, transid: dx.id1 })
+        dx.lines.push({ ...newData, articleName: artName, transid: dx.id1, company: company })
       } else {
         dx.lines[idx] = {
           ...newData,
