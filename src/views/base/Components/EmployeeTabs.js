@@ -42,7 +42,7 @@ const EmployeeTabs = (props) => {
       company: companyx,
       modelid: -3,
     }
-    Add(modifyUrl, token, dx, data, setCurrent)
+    Edit(modifyUrl, token, dx, data, setCurrent)
     setCurrent({ ...dx })
   }
   const updateRow = (newData, oldData) => {
@@ -71,7 +71,7 @@ const EmployeeTabs = (props) => {
       owner: current.id, // eslint-disable-next-line react/prop-types
       company: current.company,
     }
-    Add(modifyUrl, token, dx, data, setCurrent)
+    Edit(modifyUrl, token, dx, data, setCurrent)
     setCurrent({ ...dx })
   }
   const updateSalaryItem = (newData, oldData) => {

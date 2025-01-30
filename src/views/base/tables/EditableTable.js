@@ -3,7 +3,10 @@ import MaterialTable from '@material-table/core'
 import tableIcons from './TableIcons.js'
 
 export default function EditableTable(props) {
-  const handleClick = (event, rowData) => (edit ? edit(rowData) : void 0)
+  const handleClick = (event, rowData) => {
+    console.log('rowData>>>>', rowData)
+    edit ? edit(rowData) : void 0
+  }
   // eslint-disable-next-line react/prop-types
   const {
     // eslint-disable-next-line react/prop-types
@@ -43,11 +46,16 @@ export default function EditableTable(props) {
       parentChildData={parentChildData}
       onRowClick={handleClick}
       onSelectionChange={(rows, rowData) => {
-        setSelectedRows(rows)
-        // eslint-disable-next-line react/prop-types
-        if (Options.selection && editFunction && rows.length > 0) {
+        if (
+          Options.selection &&
+          typeof rowData === 'undefined' &&
+          editFunction &&
+          rows.length > 0
+        ) {
           edit({ ...(rowData ? rowData : rows[0]) })
         } else editFunction && rows.length > 0 ? edit(rows) : void false
+        // eslint-disable-next-line react/prop-types
+        setSelectedRows(rows)
       }}
       localization={{
         body: {

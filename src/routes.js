@@ -19,7 +19,7 @@ const BANKSTATEMENT = (path) =>
   React.lazy(() => import('./views/base/Components/BankStatementForm'))
 const BALANCESHEET = (path) => React.lazy(() => import('./views/base/Components/BasicTreeTable'))
 const LOGIN = () => React.lazy(() => import('./views/base/Components/Login'))
-//const Example = () => React.lazy(() => import('./views/base/Components/Example2'))
+const Example = () => React.lazy(() => import('./views/base/Components/Example2'))
 
 const routes = [
   { path: '/accounting', exact: true, name: 'Accounting' },
@@ -50,7 +50,8 @@ const routes = [
   { path: MASTERFILE.user, name: 'Users', element: Masterfile() },
   { path: MASTERFILE.vat, name: 'VAT', element: Masterfile() },
   { path: MASTERFILE.bank, name: 'Bank', element: Masterfile() },
-  { path: MASTERFILE.qty, name: 'Quantity unit', element: Masterfile() },
+  //{ path: MASTERFILE.qty, name: 'Quantity unit', element: Masterfile() },
+  { path: MASTERFILE.qty, name: 'Quantity unit', element: Example() },
   { path: MASTERFILE.accountClass, name: 'Account class', element: Article() },
   { path: MASTERFILE.accountGroup, name: 'Account group', element: Article() },
   { path: MASTERFILE.payrollTaxRange, name: 'PayRoll tax range', element: Masterfile() },

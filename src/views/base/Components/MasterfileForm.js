@@ -1,5 +1,5 @@
 import React, { createRef, Suspense, useCallback, useLayoutEffect, useState } from 'react'
-import { CContainer, CSpinner } from '@coreui/react'
+import { CSpinner } from '@coreui/react'
 import { MASTERFILE, useStore } from './Menu'
 import Grid from 'react-fast-grid'
 import { CommonFormHead, FormFactory } from './FormsProps'
@@ -98,8 +98,6 @@ const MasterfileForm = (callback, deps) => {
       event.preventDefault()
       const editing = current.editing
       delete current.editing
-      console.log('disable', disable)
-      console.log('current.editing', current.editing)
       if (editing) {
         Edit(modifyUrl, token, { ...current }, data, setCurrent)
       } else {
@@ -180,7 +178,7 @@ const MasterfileForm = (callback, deps) => {
       ref.dataManager.changeRowEditing()
       ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
     }
-    const parentChildFn = (row, rows) => rows.find((a) => (a?.id ? a.id === row?.parent : false))
+    const parentChildFn = (row, rows) => rows?.find((a) => (a?.id ? a.id === row?.parent : false))
 
     function buildForm(current) {
       return (

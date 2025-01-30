@@ -8,6 +8,7 @@ import Grid from 'react-fast-grid'
 import { Add, Edit } from './CrudController'
 import { styles } from '../Tree/BasicTreeTableProps'
 import { blue } from '@material-ui/core/colors'
+import Example2 from './Example2'
 
 const CustomerTabs = (props) => {
   // eslint-disable-next-line react/prop-types
@@ -39,7 +40,7 @@ const CustomerTabs = (props) => {
       company: company,
       modelid: -3,
     }
-    Add(modifyUrl, token, dx, data, setCurrent)
+    Edit(modifyUrl, token, dx, data, setCurrent)
     setCurrent({ ...dx })
   }
   const updateRow = (newData, oldData) => {
@@ -146,6 +147,7 @@ const CustomerTabs = (props) => {
       { title: t('common.address'), id: 2, form: getAddressForm() },
       { title: t('common.accounts'), id: 3, form: getAccountForm(mainFormId) },
       { title: t('common.bankaccounts'), id: 4, form: getTable(formEnum.BANKACCOUNT) },
+      //{ title: t('common.bankaccounts'), id: 4, form: Example2() },
     ]
   }
 
