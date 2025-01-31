@@ -212,6 +212,7 @@ const FinancialsForm = (callback, deps) => {
           transid: dx.id1,
           ...(accountChanged && { account: accountId, accountName: accName }),
           ...(oaccountChanged && { oaccount: oaccountId, oaccountName: oaccName }),
+          company: company,
         }
       }
       delete dx.editing

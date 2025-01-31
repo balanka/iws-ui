@@ -27,6 +27,7 @@ export const MuiTable = (props) => {
         enableExpanding: true, //enable expanding column
         enableStickyHeader: true,
         enableFilters: false,
+        enableRowNumbers: true,
         layoutMode: 'grid', //'grid-no-grow',
         //tell MRT which rows have additional sub-rows that can be fetched
         getRowCanExpand: (row) => (!!row ? row?.original?.subordinateIds?.length : 0), //just some type of boolean

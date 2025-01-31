@@ -964,6 +964,7 @@ export const initFtr = [
         duedate: date,
         text: '',
         currency: 'EUR',
+        company: '',
       },
     ],
   },
