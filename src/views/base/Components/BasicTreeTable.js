@@ -25,7 +25,6 @@ const BasicTreeTable = () => {
   const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
   const initAcc = module_.state1
   const initialState = module_.state
-
   const current_ = initialState
   const title = t(module_.title)
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -41,8 +40,7 @@ const BasicTreeTable = () => {
   const [toolbar, setToolbar] = useState(false)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
-  const acc_modelid = parseInt(ACCOUNT(t).id)
-  const accData_ = iwsState.get(acc_modelid) ? iwsState.get(acc_modelid) : [...initAcc]
+  const accData_ = iwsState.get(formEnum.ACCOUNT) ?? [...initAcc]
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const init = useRef(false)
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -52,9 +50,9 @@ const BasicTreeTable = () => {
       init.current = true
     }
     // load account data as they are needed
-    accUrl && Get1(accUrl, token, acc_modelid)
+    accUrl && Get1(accUrl, token, formEnum.ACCOUNT)
     setCurrent(current_)
-  }, [current_, accUrl, token, acc_modelid])
+  }, [current_, accUrl, token, formEnum.ACCOUNT])
   const toggleToolbar = () => setToolbar(!toolbar)
   const toggle = () => setState({ ...state, collapse: !state.collapse })
   const columnsX = columns(t, locale, currency)
@@ -62,8 +60,8 @@ const BasicTreeTable = () => {
     url
       .concat('/')
       .concat(current.account)
-      .concat('/')
-      .concat(current.fromPeriod)
+      //.concat('/')
+      //.concat(current.fromPeriod)
       .concat('/')
       .concat(current.toPeriod)
 
@@ -151,6 +149,7 @@ const BasicTreeTable = () => {
           height={35}
           styles={styles}
           submitQuery={submitQuery_}
+          balancesheet={true}
         />
 
         <Grid container spacing={2} style={{ ...styles.inner }} direction="column">

@@ -5,14 +5,14 @@ import { OptionsM, RightsColumns } from '../tables/LineFinancialsProps'
 import EditableTable from '../tables/EditableTable'
 import Grid from 'react-fast-grid'
 import { Add, Edit } from './CrudController'
-import { useStore } from './Menu'
+import { useStore, initRole } from './Menu'
 import { useTranslation } from 'react-i18next'
 import { styles } from '../Tree/BasicTreeTableProps'
 import { blue } from '@material-ui/core/colors'
 
 const RoleTabs = (props) => {
   // eslint-disable-next-line react/prop-types
-  const { current, setCurrent, modifyUrl, data } = props
+  const { current, current_, setCurrent, modifyUrl, data } = props
   const { profile } = useStore()
   const { t } = useTranslation()
   const { token } = profile
@@ -100,10 +100,23 @@ const RoleTabs = (props) => {
   )
 
   // eslint-disable-next-line react/prop-types
-  let current_
-  const rights_ = () =>
-    // eslint-disable-next-line react/prop-types
-    Array.isArray(current?.rights) && current.rights?.length > 0 ? current.rights : current_.rights
+  const isNonEmptyArray = (arr) => Array.isArray(arr) && arr?.length > 0
+  // eslint-disable-next-line react/prop-types
+  const rights_ = () => (isNonEmptyArray(current?.rights) ? current.rights : current_.rights)
+  // const current_rights =
+  //   typeof current.rights === 'undefined' || typeof current.rights === 'undefined'
+  //     ? initRole.rights
+  //     : current.rights
+  // console.log('current.rights_>>', current_rights)
+  // console.log('current.rights_111>>', typeof current_rights === 'undefined')
+  // console.log('initRole.rights_112>>', initRole.rights[0])
+  //console.log('rights_>>', typeof current.rights() === 'undefined' ? [] : current.rights)
+
+  // const DEFAULT_RIGHT = () =>
+  //   typeof current_rights === 'undefined' ? initRole.rights[0] : current_rights[0]
+  console.log('current>>', current)
+  // console.log('DEFAULT_RIGHT>>', DEFAULT_RIGHT())
+  // eslint-disable-next-line react/prop-types
   const getTable = () => (
     <Grid
       container
@@ -117,7 +130,12 @@ const RoleTabs = (props) => {
         flag={false}
         data={rights_()}
         /* eslint-disable-next-line react/prop-types */
-        columns={RightsColumns(data, current.rights[0], current, t)}
+        columns={RightsColumns(
+          data,
+          typeof current.rights === 'undefined' ? initRole.rights[0] : current?.rights[0],
+          current,
+          t,
+        )}
         t={t}
         editable={editable()}
         tableRef={tableRef}

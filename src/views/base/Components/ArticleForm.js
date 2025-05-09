@@ -1,5 +1,4 @@
-import React, { createRef, Suspense, useCallback, useLayoutEffect, useState } from 'react'
-import { CSpinner } from '@coreui/react'
+import React, { createRef, useCallback, useLayoutEffect, useState } from 'react'
 import { MASTERFILE, useStore } from './Menu'
 import Grid from 'react-fast-grid'
 import { CommonFormHead, FormFactory } from './FormsProps'
@@ -12,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import iwsStore from './Store'
 import { formEnum } from '../utils/FORMS'
 
-const MasterfileForm = (callback, deps) => {
+const ArticleForm = (callback, deps) => {
   const { profile, menu, selected } = useStore()
   const { t } = useTranslation()
   const { token, company, locale, currency, incomeStmtAcc } = profile
@@ -63,11 +62,6 @@ const MasterfileForm = (callback, deps) => {
       .concat(formEnum.BANK)
       .concat('/')
       .concat(company)
-    const storeUrl = MASTERFILE?.store
-      .concat('/')
-      .concat(formEnum.STORE)
-      .concat('/')
-      .concat(company)
     const moduleUrl = MASTERFILE?.module.concat('/').concat(company)
     const modifyUrl = module_.ctx //selected
     const initialState = module_.state
@@ -79,7 +73,6 @@ const MasterfileForm = (callback, deps) => {
     const acc_modelId = formEnum.ACCOUNT
     const bank_modelId = formEnum.BANK
     const vat_modelId = formEnum.VAT
-    const store_modelId = formEnum.STORE
     const module_modelId = formEnum.MODULE
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [current, setCurrent] = useState(current_)
@@ -92,15 +85,15 @@ const MasterfileForm = (callback, deps) => {
     const accd = iwsState.get(acc_modelId) ?? []
     const bankd = iwsState.get(bank_modelId) ?? []
     const vatd = iwsState.get(vat_modelId) ?? []
-    const stored = iwsState.get(store_modelId) ?? []
-
+    const accClassd = iwsState.get(formEnum.ACCOUNT_CLASS) ?? []
+    const accGroupd = iwsState.get(formEnum.ACCOUNT_GROUP) ?? []
     const submitEdit = (event) => {
       event.preventDefault()
-      const editing = current.editing
-      delete current.editing
-      if (editing) {
+      if (current.editing && !disable) {
+        delete current.editing
         Edit(modifyUrl, token, { ...current }, data, setCurrent)
       } else {
+        delete current.editing
         Add(modifyUrl, token, { ...current }, data, setCurrent)
       }
       setDisable(true)
@@ -160,8 +153,10 @@ const MasterfileForm = (callback, deps) => {
       fetchData(vatUrl, vatd, vat_modelId, token)
       // fetch  bank data
       fetchData(bankUrl, bankd, bank_modelId, token)
-      // fetch  store data
-      fetchData(storeUrl, stored, store_modelId, token)
+      // fetch  accountClass data
+      fetchData(classUrl, accClassd, formEnum.ACCOUNT_CLASS, token)
+      // fetch  accountGroup data
+      fetchData(groupUrl, accGroupd, formEnum.ACCOUNT_GROUP, token)
       // fetch  module data
       fetchData(moduleUrl, [], module_modelId, token)
       url && Get1(url, token, current_.modelid)
@@ -178,11 +173,11 @@ const MasterfileForm = (callback, deps) => {
       ref.dataManager.changeRowEditing()
       ref.setState({ ...ref.dataManager.getRenderState(), showAddRow: !ref.state.showAddRow })
     }
-    const parentChildFn = (row, rows) => rows?.find((a) => (a?.id ? a.id === row?.parent : false))
+    const parentChildFn = (row, rows) => rows.find((a) => a.id === row?.parent)
 
     function buildForm(current) {
       return (
-        <Suspense fallback={<CSpinner color="primary" />}>
+        <>
           <CommonFormHead
             styles={styles}
             title={title}
@@ -219,7 +214,8 @@ const MasterfileForm = (callback, deps) => {
             accData={accd}
             vatData={vatd}
             bankData={bankd}
-            storeData={stored}
+            accClassData={accClassd}
+            accGroupData={accGroupd}
             onNewLine={onNewSalaryItem}
             tableRef={tableRef}
             tableRef2={tableRef2}
@@ -250,14 +246,14 @@ const MasterfileForm = (callback, deps) => {
               t={t}
               edit={edit}
               setSelectedRows={setSelectedRows}
-              parentChildData={current_.modelid === formEnum.VAT ? parentChildFn : null}
+              parentChildData={parentChildFn}
             />
           </Grid>
-        </Suspense>
+        </>
       )
     }
 
     return buildForm(current ? current : current_)
   }
 }
-export default MasterfileForm
+export default ArticleForm

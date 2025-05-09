@@ -2,12 +2,17 @@ import React, { createRef, useCallback, useLayoutEffect, useRef, useState } from
 import { CFormInput } from '@coreui/react'
 import Grid from 'react-fast-grid'
 import EditableTable from '../tables/EditableTable'
-import { rowStyle, styles } from '../Tree/BasicTreeTableProps'
+import { styles } from '../Tree/BasicTreeTableProps'
 import { Add, Edit } from './CrudController'
-import { buildExportOption, columnsF, Linescolumns, Options } from '../tables/LineFinancialsProps'
+import {
+  buildExportOption,
+  Options,
+  Transactioncolumns,
+  TransactionLinesColumns,
+} from '../tables/LineFinancialsProps'
 import { FinancialsFormHead, FormFactory } from './FormsProps'
 import { formEnum } from '../utils/FORMS'
-import { LOGIN, MASTERFILE, FINANCIALS, useStore } from './Menu'
+import { LOGIN, MASTERFILE, TRANSACTION, useStore } from './Menu'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import iwsStore from './Store'
@@ -22,16 +27,14 @@ import {
   callReload,
   callSetSelectedRows,
   callInitAdd,
-  callEdit,
   callCancelEdit,
   callAddRow,
   callDeleteRow,
   callSubmitPost,
-  callSubmitQuery,
   callSubmitCopy,
 } from './TransactionFormLib'
 
-const FinancialsForm = (callback, deps) => {
+const TransactionForm = (callback, deps) => {
   const { profile, selected, menu } = useStore()
   const { token, company, locale, currency } = profile
   let navigate = useNavigate()
@@ -44,12 +47,11 @@ const FinancialsForm = (callback, deps) => {
     return navigate('/login')
   const modifyUrl = selected
   const url = module_.ctx //.concat('/').concat(company)
+  const artUrl = MASTERFILE.article.concat('/').concat(formEnum.ARTICLE).concat('/').concat(company)
+  const storeUrl = MASTERFILE.store.concat('/').concat(formEnum.STORE).concat('/').concat(company)
   const accUrl = MASTERFILE.acc.concat('/').concat(formEnum.ACCOUNT).concat('/').concat(company)
-  const ccUrl = MASTERFILE.masterfile
-    .concat('/')
-    .concat(formEnum.COSTCENTER)
-    .concat('/')
-    .concat(company)
+  const custUrl = MASTERFILE.cust.concat('/').concat(formEnum.CUSTOMER).concat('/').concat(company)
+  const supUrl = MASTERFILE.sup.concat('/').concat(formEnum.SUPPLIER).concat('/').concat(company)
   const fmoduleUrl = MASTERFILE.fmodule
     .concat('/')
     .concat(formEnum.FMODULE)
@@ -57,6 +59,7 @@ const FinancialsForm = (callback, deps) => {
     .concat(company)
   const initialState = module_.state
   const current_ = initialState[0]
+  console.log('current_', current_)
   let title_ = t(module_.title)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [state, setState] = useState({ collapse: true, fadeIn: true, timeout: 300 })
@@ -64,6 +67,8 @@ const FinancialsForm = (callback, deps) => {
   const [rows, setRows] = useState([])
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [model, setModel] = useState('')
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [partnerId, setPartnerId] = useState('')
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [title, setTitle] = useState(title_)
   const tableRef = createRef()
@@ -75,13 +80,34 @@ const FinancialsForm = (callback, deps) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
   const fModuleData = (iwsState.get(formEnum.FMODULE) ?? []).filter(
-    (m) => m.parent === FINANCIALS(t).id,
+    (m) => m.parent === TRANSACTION(t).id,
   )
-
-  const { data, accData, ccData } = getData(iwsState, parseInt(model), -1, initialState)
-
-  const columnsX = Linescolumns(accData, initLine, current, fModuleData, model, t, locale, currency)
-  const columns = columnsF(ccData, current, t, locale, currency)
+  const { data, artData, storeData, accData, partnerData } = getData(
+    iwsState,
+    parseInt(model),
+    partnerId,
+    initialState,
+  )
+  const total = (lines) =>
+    lines
+      .map((l) => (l === undefined ? 0.0 : l.quantity * l.price))
+      .reduce((sum, amount) => sum + amount)
+  const buildAmount = (row) => ({
+    ...row,
+    total: row.lines ? total(row.lines ?? []) : 0,
+  })
+  const buildData = () => data().map((row) => (row.id === -1 ? 0.0 : buildAmount(row)))
+  const columnsX = TransactionLinesColumns(
+    artData,
+    initLine,
+    current,
+    fModuleData,
+    model,
+    t,
+    locale,
+    currency,
+  )
+  const columns = Transactioncolumns(storeData, accData, current, t, locale, currency)
   const onNewLine = () => callOnNewLine(tableRef)
   const submitEdit = (event) =>
     callSubmitEdit(event, modifyUrl, token, current, setCurrent, data, submitAdd)
@@ -100,7 +126,6 @@ const FinancialsForm = (callback, deps) => {
   let init = useRef(false)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useLayoutEffect(() => {
-    console.log('init.current', init.current)
     if (!init.current) {
       iwsStore.subscribe(setIwsState)
       init.current = true
@@ -114,7 +139,6 @@ const FinancialsForm = (callback, deps) => {
       document.removeEventListener('keydown', handleKeyPress)
     }
   }, [init])
-
   const reload = () => callReload(url, token, model, company)
   const toggleToolbar = () => setToolbar(!toolbar)
   const toggle = () => setState({ ...state, collapse: !state.collapse })
@@ -122,29 +146,13 @@ const FinancialsForm = (callback, deps) => {
   const initAdd = () => callInitAdd(current_, model, setCurrent)
   const cancelEdit = (event) => callCancelEdit(event, initAdd)
   const allUrls = [
+    { url: storeUrl, modelid: formEnum.STORE },
     { url: accUrl, modelid: formEnum.ACCOUNT },
-    { url: ccUrl, modelid: formEnum.COSTCENTER },
+    { url: artUrl, modelid: formEnum.ARTICLE },
+    { url: custUrl, modelid: formEnum.CUSTOMER },
+    { url: supUrl, modelid: formEnum.SUPPLIER },
+    { url: fmoduleUrl, modelid: formEnum.FMODULE },
   ]
-  const submitQuery = (event, url, token, modelid, company, allUrls) =>
-    callSubmitQuery(event, url, token, modelid, company, allUrls)
-
-  const handleModuleChange = (event, value) => {
-    event.preventDefault()
-    setModel(value.id)
-    const mx = fModuleData.find((m) => m.id === value.id)
-    title_ = mx?.name ? mx.name : title_
-    setTitle(title_)
-    setCurrent(current_)
-    submitQuery(event, url, token, value.id, company, allUrls)
-    //setCurrent(current_)
-  }
-
-  const buildAmount = (row) => ({
-    ...row,
-    total: row.lines ? row.lines.reduce((acc, line) => acc + line.amount, 0) : 0,
-  })
-  const buildData = () => data().map((row) => buildAmount(row))
-  const edit = (editedRow) => callEdit(editedRow, setCurrent)
   const callEdit = (editedRow, setCurrent) => {
     const isArray = Array.isArray(editedRow) && editedRow.length > 0
     const row = isArray ? editedRow[0] : editedRow
@@ -161,6 +169,25 @@ const FinancialsForm = (callback, deps) => {
     allUrls.forEach((o) => !iwsState.get(o.modelid) && fetchData(o.url, token, o.modelid))
     fetchData(url_, token, parseInt(modelid))
   }
+
+  const submitQuery = (event, url, token, modelid, company, allUrls) =>
+    callSubmitQuery(event, url, token, modelid, company, allUrls)
+  const handleModuleChange = (event, value) => {
+    event.preventDefault()
+    setModel(value.id)
+    //submitQuery(event, value.id)
+    const mx = fModuleData.find((m) => m.id === value.id)
+    console.log('mx>>>>', mx)
+    console.log('current_', current_)
+    title_ = mx?.name ? mx.name : title_
+    setTitle(title_)
+    setPartnerId(mx.account)
+    setCurrent(current_)
+    submitQuery(event, url, token, value.id, company, allUrls)
+    //setCurrent(current_)
+  }
+
+  const edit = (editedRow) => callEdit(editedRow, setCurrent)
   const submitPost = (event) => callSubmitPost(event, modifyUrl, token, current, setCurrent, rows)
   const submitCopy = (event) => callSubmitCopy(event, modifyUrl, token, rows)
   const submitAdd = (event) => {
@@ -169,7 +196,7 @@ const FinancialsForm = (callback, deps) => {
       id: current.id,
       oid: current.oid,
       id1: current.id1,
-      costcenter: current.costcenter,
+      store: current.store,
       account: current.account,
       transdate: new Date(current.transdate).toISOString(),
       enterdate: new Date().toISOString(),
@@ -179,8 +206,6 @@ const FinancialsForm = (callback, deps) => {
       modelid: parseInt(model),
       company: company,
       text: current.text,
-      typeJournal: current.typeJournal,
-      file_content: current.file_content,
       lines: current.lines,
     }
     Add(modifyUrl, token, row, data(), setCurrent)
@@ -193,26 +218,20 @@ const FinancialsForm = (callback, deps) => {
       const dx = { ...current, company: company }
       const idx = dx.lines.findIndex((obj) => obj.id === newData.id)
       delete newData.tableData
-      const accountChanged = newData.account !== oldData.account
-      const oaccountChanged = newData.oaccount !== oldData.oaccount
-      const accountId = accountChanged ? newData.account : oldData.account
-      const oaccountId = oaccountChanged ? newData.oaccount : oldData.oaccount
-      const accIdx = accData.findIndex((obj) => obj.id === accountId)
-      const oaccIdx = accData.findIndex((obj) => obj.id === oaccountId)
-      const account = accData[accIdx]
-      const oaccount = accData[oaccIdx]
-      const accName = account ? account.name : 'account notfound'
-      const oaccName = oaccount ? oaccount.name : 'oaccount notfound'
-
+      const articleChanged = newData.article !== oldData.article
+      const articleId = articleChanged ? newData.article : oldData.article
+      const artIdx = artData.findIndex((obj) => obj.id === articleId)
+      const article = artData[artIdx]
+      const artName = article ? article.name : 'article notfound'
+      console.log('article', article)
+      console.log('artName', artName)
       if (idx === -1) {
-        dx.lines.push({ ...newData, transid: dx.id1 })
+        dx.lines.push({ ...newData, articleName: artName, transid: dx.id1, company: company })
       } else {
         dx.lines[idx] = {
           ...newData,
           transid: dx.id1,
-          ...(accountChanged && { account: accountId, accountName: accName }),
-          ...(oaccountChanged && { oaccount: oaccountId, oaccountName: oaccName }),
-          company: company,
+          ...(articleChanged && { article: articleId, articleName: artName }),
         }
       }
       delete dx.editing
@@ -221,20 +240,21 @@ const FinancialsForm = (callback, deps) => {
       } else Add(modifyUrl, token, dx, data(), setCurrent)
     }
   }
+
   const editable = () => ({ onRowAdd: addRow, onRowUpdate: updateRow, onRowDelete: deleteRow })
   function buildForm(current) {
     const lines_ = () =>
       Array.isArray(current.lines) && current.lines.length > 0 ? current.lines : [initLine]
 
-    const LinesFinancials = () => {
+    const buildLinesTransaction = () => {
       const renderSummaryRow = ({ column, data }) => {
         const total = t('common.total')
-        return column.field === 'oaccountName'
+        return column.field === 'articleName'
           ? { value: total, style: styles.fieldStyle }
-          : column.field === 'amount'
+          : column.field === 'price'
             ? {
                 value: formatCurrency(
-                  data.reduce((sum, row) => sum + row.amount, 0),
+                  data.reduce((sum, row) => sum + row.quantity * row.price, 0),
                   currency,
                   locale,
                 ),
@@ -247,7 +267,7 @@ const FinancialsForm = (callback, deps) => {
           <Grid item>
             <EditableTable
               id="LineTable"
-              Options={{ ...Options, rowStyle: rowStyle, paging: lines_().length > 5 }}
+              Options={{ ...Options, paging: lines_().length > 5 }}
               flag={current.posted}
               data={lines_()}
               columns={columnsX}
@@ -281,7 +301,7 @@ const FinancialsForm = (callback, deps) => {
           collapse={state.collapse}
           initAdd={initAdd}
           url={url}
-          accUrl={accUrl}
+          storeUrl={storeUrl}
           initialState={initialState}
           cancelEdit={cancelEdit}
           submitEdit={submitEdit}
@@ -325,7 +345,7 @@ const FinancialsForm = (callback, deps) => {
         </div>
       )
     }
-    const getMainForm = (formId, current, current_, mainTable, accountData, ccData) => {
+    const getMainForm = (formId, current, current_, mainTable, accountData, storeData) => {
       return (
         <Grid item>
           <FormFactory
@@ -335,7 +355,7 @@ const FinancialsForm = (callback, deps) => {
             setCurrent={setCurrent}
             t={t}
             accData={accountData}
-            ccData={ccData}
+            storeData={storeData}
             styles={styles}
             table={mainTable}
             collapse={state.collapse}
@@ -346,12 +366,20 @@ const FinancialsForm = (callback, deps) => {
     return (
       <>
         {getHeader(fModuleData, initialState)}
-        {getMainForm(formEnum.FINANCIALS, current, current_, LinesFinancials, accData, ccData)}
+        {getMainForm(
+          formEnum.TRANSACTION,
+          current,
+          current_,
+          buildLinesTransaction,
+          partnerData,
+          storeData,
+        )}
         {getTable(current, buildData(), title)}
       </>
     )
   }
+
   return buildForm(current ? current : current_)
 }
 
-export default FinancialsForm
+export default TransactionForm

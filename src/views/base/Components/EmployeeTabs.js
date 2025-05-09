@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from '../tabs/Tabs'
-import { AddressForm, FormFactory } from './FormsProps'
+import { AddressForm, FormFactory, FormInCollapsibleWrapper } from './FormsProps'
 import { ColumnFactory, Options } from '../tables/LineFinancialsProps'
 import EditableTable from '../tables/EditableTable'
 import { formEnum } from '../utils/FORMS'
@@ -13,51 +13,36 @@ import { blue } from '@material-ui/core/colors'
 const EmployeeTabs = (props) => {
   const {
     // eslint-disable-next-line react/prop-types
-    formid,
-    // eslint-disable-next-line react/prop-types
-    current,
-    // eslint-disable-next-line react/prop-types
-    setCurrent,
-    // eslint-disable-next-line react/prop-types
-    accData,
-    // eslint-disable-next-line react/prop-types
-    vatData,
-    // eslint-disable-next-line react/prop-types
-    bankData,
-    // eslint-disable-next-line react/prop-types
-    modifyUrl,
-    // eslint-disable-next-line react/prop-types
-    data,
-    // eslint-disable-next-line react/prop-types
-    tableRef,
-    // eslint-disable-next-line react/prop-types
-    tableRef2,
-    // eslint-disable-next-line react/prop-types
-    locale,
-    // eslint-disable-next-line react/prop-types
-    currency,
-    // eslint-disable-next-line react/prop-types
-    token,
-    // eslint-disable-next-line react/prop-types
-    company,
-    // eslint-disable-next-line react/prop-types
+    formid, // eslint-disable-next-line react/prop-types
+    current, // eslint-disable-next-line react/prop-types
+    setCurrent, // eslint-disable-next-line react/prop-types
+    accData, // eslint-disable-next-line react/prop-types
+    vatData, // eslint-disable-next-line react/prop-types
+    bankData, // eslint-disable-next-line react/prop-types
+    modifyUrl, // eslint-disable-next-line react/prop-types
+    data, // eslint-disable-next-line react/prop-types
+    tableRef, // eslint-disable-next-line react/prop-types
+    tableRef2, // eslint-disable-next-line react/prop-types
+    locale, // eslint-disable-next-line react/prop-types
+    currency, // eslint-disable-next-line react/prop-types
+    token, // eslint-disable-next-line react/prop-types
+    company, // eslint-disable-next-line react/prop-types
     disable,
   } = props
   const { t } = useTranslation()
+  // eslint-disable-next-line react/display-name
   const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
   const columnsY = (formid) => ColumnFactory(formid, accData, t, locale, currency)
   const addRow = (newData) => {
-    const dx = { ...current }
-    // eslint-disable-next-line react/prop-types
+    const dx = { ...current } // eslint-disable-next-line react/prop-types
     const companyx = formid === formEnum.COMPANY ? current.id : company
     dx.bankaccounts[dx.bankaccounts.length] = {
-      ...newData,
-      // eslint-disable-next-line react/prop-types
+      ...newData, // eslint-disable-next-line react/prop-types
       owner: current.id,
       company: companyx,
       modelid: -3,
     }
-    Add(modifyUrl, token, dx, data, setCurrent)
+    Edit(modifyUrl, token, dx, data, setCurrent)
     setCurrent({ ...dx })
   }
   const updateRow = (newData, oldData) => {
@@ -79,17 +64,14 @@ const EmployeeTabs = (props) => {
 
   const addSalaryItem = (newData) => {
     const dx = { ...current }
-    console.log('dx', dx)
-    // eslint-disable-next-line react/prop-types
+    console.log('dx', dx) // eslint-disable-next-line react/prop-types
     dx.salaryItems[dx.salaryItems.length] = {
       ...newData,
-      id: '-3',
-      // eslint-disable-next-line react/prop-types
-      owner: current.id,
-      // eslint-disable-next-line react/prop-types
+      id: '-3', // eslint-disable-next-line react/prop-types
+      owner: current.id, // eslint-disable-next-line react/prop-types
       company: current.company,
     }
-    Add(modifyUrl, token, dx, data, setCurrent)
+    Edit(modifyUrl, token, dx, data, setCurrent)
     setCurrent({ ...dx })
   }
   const updateSalaryItem = (newData, oldData) => {
@@ -98,8 +80,7 @@ const EmployeeTabs = (props) => {
     const index = dx.salaryItems.findIndex(
       (obj) => obj.id === oldData.id && obj.owner === oldData.owner,
     )
-    console.log('index', index)
-    // eslint-disable-next-line react/prop-types
+    console.log('index', index) // eslint-disable-next-line react/prop-types
     dx.salaryItems[index] = { ...newData, id: '-2' }
     Edit(modifyUrl, token, dx, data, setCurrent)
   }
@@ -124,27 +105,9 @@ const EmployeeTabs = (props) => {
     onRowUpdate: async (newData, oldData) => updateRow(newData, oldData),
     onRowDelete: async (oldData) => deleteRow(oldData),
   })
-
-  const getSubFormId = (mainFormId) => {
-    switch (mainFormId) {
-      case formEnum.EMPLOYEE:
-        return formEnum.BUSINESS_PARTNER_GENERAL_INFO_FORM
-      default:
-        return <>Invalid Tab</>
-    }
-  }
-  const getAccountFormId = (mainFormId) => {
-    switch (mainFormId) {
-      case formEnum.EMPLOYEE:
-        return formEnum.BUSINESS_PARTNER_ACCOUNT_FORM
-      default:
-        return <>Invalid Tab</>
-    }
-  }
-
-  const getGeneralForm = (mainFormId) => (
+  const getGeneralForm = () => (
     <FormFactory
-      formid={getSubFormId(mainFormId)}
+      formid={formEnum.BUSINESS_PARTNER_GENERAL_INFO_FORM}
       current={current}
       setCurrent={setCurrent}
       t={t}
@@ -155,9 +118,9 @@ const EmployeeTabs = (props) => {
     />
   )
 
-  const getAccountForm = (mainFormId) => (
+  const getAccountForm = () => (
     <FormFactory
-      formid={getAccountFormId(mainFormId)}
+      formid={formEnum.BUSINESS_PARTNER_ACCOUNT_FORM}
       current={current}
       setCurrent={setCurrent}
       t={t}
@@ -182,7 +145,7 @@ const EmployeeTabs = (props) => {
         Options={{ ...Options, paging: false }}
         flag={false}
         /* eslint-disable-next-line react/prop-types */
-        data={current ? current.bankaccounts : []}
+        data={current ? current.bankaccounts ?? [] : []}
         columns={columnsX(formid)}
         editable={editable()}
         t={t}
@@ -193,7 +156,7 @@ const EmployeeTabs = (props) => {
 
   const getSalaryItemTable = (formid) => {
     // eslint-disable-next-line react/prop-types
-    console.log('current.salaryItem', current.salaryItems)
+    console.log('current.salaryItem', current)
     return (
       <Grid
         container
@@ -204,9 +167,8 @@ const EmployeeTabs = (props) => {
         <EditableTable
           id="salaryItems"
           Options={{ ...Options, paging: false }}
-          flag={false}
-          /* eslint-disable-next-line react/prop-types */
-          data={current ? current.salaryItems : []}
+          flag={false} //eslint-disable-next-line react/prop-types
+          data={current ? current.salaryItem ?? [] : []}
           columns={columnsY(formid)}
           editable={SalaryItemEditable()}
           t={t}
@@ -215,15 +177,12 @@ const EmployeeTabs = (props) => {
       </Grid>
     )
   }
+  const getAddressForm = () => <FormInCollapsibleWrapper {...props} form={AddressForm} />
   const GetTabContent = (mainFormId, subFormId) => {
     return [
-      { title: t('common.general'), id: 1, form: getGeneralForm(mainFormId) },
-      {
-        title: t('common.address'),
-        id: 2,
-        form: <AddressForm current={current} setCurrent={setCurrent} t={t} />,
-      },
-      { title: t('common.accounts'), id: 3, form: getAccountForm(mainFormId) },
+      { title: t('common.general'), id: 1, form: getGeneralForm() },
+      { title: t('common.address'), id: 2, form: getAddressForm() },
+      { title: t('common.accounts'), id: 3, form: getAccountForm() },
       { title: t('common.bankaccounts'), id: 4, form: getTable(formEnum.BANKACCOUNT) },
       { title: t('salary.item.title'), id: 5, form: getSalaryItemTable(subFormId) },
     ]

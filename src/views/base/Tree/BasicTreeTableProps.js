@@ -97,4 +97,70 @@ export const styles = {
     height: 'inherit',
     width: 'inherit',
   },
+  fieldStyle: {
+    //color: 'black',
+    padding: 0.5,
+    height: 3,
+    fontsize: 8,
+  },
+}
+export const formStyles = {
+  form: {
+    display: 'flex',
+    'flex-direction': 'column',
+    gap: '10px',
+    background: 'linear-gradient(to right ,grey,silver)',
+    padding: '40px',
+    'border-radius': '10px',
+  },
+  login: {
+    'font-size': '25px',
+    'font-weight': 'bold',
+    'text-align': 'center',
+    'margin-bottom': '20px',
+  },
+  flex: {
+    display: 'flex',
+    'flex-direction': 'column',
+  },
+
+  'form button': {
+    'margin-top': '25px',
+    'margin-bottom': '6px',
+    'border-radius': '10px',
+    border: 'none',
+    'padding-top': '4px',
+    'padding-bottom': '4px',
+    'font-size': '19px',
+    'font-weight': 'bold',
+    color: 'grey',
+  },
+
+  'form label': {
+    'margin-top': '20px',
+    'margin-bottom': '5px',
+  },
+
+  'form button:hover': {
+    'box-shadow': '2px 2px 12px white',
+  },
+  input: {
+    height: '30px',
+    outline: 'none',
+    padding: '15px',
+    'border-radius': '10px',
+    border: 'none',
+    'font-weight': 'bold',
+    'font-size': '15px',
+    'box-shadow': '2px 2px 12px inset black',
+  },
+  'span:hover': {
+    'font-weight': 'bold',
+  },
+  color: {
+    color: 'white',
+  },
+  align: {
+    'text-align': 'center',
+  },
 }

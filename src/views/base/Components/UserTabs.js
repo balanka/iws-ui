@@ -5,7 +5,7 @@ import { OptionsM, RightsColumns, RoleColumns } from '../tables/LineFinancialsPr
 import EditableTable from '../tables/EditableTable'
 import Grid from 'react-fast-grid'
 import { Add, Edit } from './CrudController'
-import { useStore } from './Menu'
+import { useStore, initRole } from './Menu'
 import { useTranslation } from 'react-i18next'
 import { styles } from '../Tree/BasicTreeTableProps'
 import { blue } from '@material-ui/core/colors'
@@ -103,26 +103,31 @@ const UserTabs = (props) => {
   const roles_ = () =>
     // eslint-disable-next-line react/prop-types
     Array.isArray(current?.roles) && current.roles?.length > 0 ? current.roles : []
-  const getRightTable = () => (
-    <Grid
-      container
-      spacing={0.5}
-      style={{ ...styles.inner, backgroundColor: blue }}
-      direction="column"
-    >
-      <EditableTable
-        id="LineTable"
-        Options={{ ...OptionsM, paging: rights_().length > 5 }}
-        flag={false}
-        data={rights_()}
-        /* eslint-disable-next-line react/prop-types */
-        columns={RightsColumns(data, current.rights[0], current, t)}
-        editable={editable()}
-        t={t}
-        tableRef={tableRef}
-      />
-    </Grid>
-  )
+  const getRightTable = () => {
+    const current_right =
+      typeof current.roles === 'undefined' ? initRole.rights[0] : current?.roles[0]
+    return (
+      <Grid
+        container
+        spacing={0.5}
+        style={{ ...styles.inner, backgroundColor: blue }}
+        direction="column"
+      >
+        <EditableTable
+          id="LineTable"
+          Options={{ ...OptionsM, paging: rights_().length > 5 }}
+          flag={false}
+          data={rights_()}
+          /* eslint-disable-next-line react/prop-types */
+          columns={RightsColumns(data, current_right, current, t)}
+          editable={editable()}
+          t={t}
+          tableRef={tableRef}
+        />
+      </Grid>
+    )
+  }
+
   const getRoleTable = () => (
     <Grid
       container
@@ -136,7 +141,7 @@ const UserTabs = (props) => {
         flag={false}
         data={roles_()}
         /* eslint-disable-next-line react/prop-types */
-        columns={RoleColumns(data, current.roles[0], current, t)}
+        columns={RoleColumns(data, current?.roles[0] ?? [], current, t)}
         editable={editable()}
         t={t}
         tableRef={roleTableRef}

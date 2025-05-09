@@ -11,7 +11,7 @@ import {
   CFormTextarea,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { formEnum } from '../utils/FORMS'
+import { formEnum as FormEnum, formEnum } from '../utils/FORMS'
 import { sortById, sortByName } from '../utils/utils'
 import CustomerTabs from './CustomerTabs'
 import {
@@ -23,6 +23,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import CDatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import './width-datepicker.css'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
 import { blue, lightGreen } from '@material-ui/core/colors'
@@ -33,8 +34,15 @@ import UserTabs from './UserTabs'
 import BankStatementTabs from './BankStatementTabs'
 import EmployeeTabs from './EmployeeTabs'
 import ComboBox from './ComboBox'
-
+import { Get } from './CrudController'
+import { MASTERFILE } from './Menu'
+import ArticleTabs from './ArticleTabs'
+import StoreTabs from './StoreTabs'
 export const svgIcons = {
+  cubeLoader:
+    'M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z',
+  loader2:
+    'M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z',
   plusCircle:
     'M10 3a7 7 0 100 14 7 7 0 000-14zm-9 7a9 9 0 1118 0 9 9 0 01-18 0zm14 .069a1 1 0 01-1 1h-2.931V14a1 1 0 11-2 0v-2.931H6a1 1 0 110-2h3.069V6a1 1 0 112 0v3.069H14a1 1 0 011 1z',
   plus: 'M38 6H10c-2.21 0-4 1.79-4 4v28c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4zm-4 20h-8v8h-4v-8h-8v-4h8v-8h4v8h8v4z',
@@ -96,7 +104,20 @@ export function IwsIcon(props) {
     </SvgIcon>
   )
 }
+
 const wrapIcon = (title, icon, action, isDisabled) => (
+  <div className="card-header-actions">
+    <ToolBarButton
+      label={title}
+      color="link"
+      icon={icon}
+      disabled={isDisabled}
+      onClick={action}
+      className="card-header-action btn-minimize"
+    />
+  </div>
+)
+const wrapFontAwesomeIcon = (title, icon, action, isDisabled) => (
   <div className="card-header-actions">
     <Button
       color="link"
@@ -105,7 +126,7 @@ const wrapIcon = (title, icon, action, isDisabled) => (
       title={title}
       onClick={action}
     >
-      <IwsIcon style={{ style: styles.imageIcon, textAlign: 'end' }} d={icon} />
+      <FontAwesomeIcon icon={icon} />
     </Button>
   </div>
 )
@@ -120,35 +141,21 @@ const isNullOrUndef = (value) => value === null || value === 'undefined'
 export const CommonFormHead = (props) => {
   const {
     // eslint-disable-next-line react/prop-types
-    styles,
-    // eslint-disable-next-line react/prop-types
-    title,
-    // eslint-disable-next-line react/prop-types
-    collapse,
-    // eslint-disable-next-line react/prop-types
-    initAdd,
-    // eslint-disable-next-line react/prop-types
-    cancelEdit,
-    // eslint-disable-next-line react/prop-types
-    submitEdit,
-    // eslint-disable-next-line react/prop-types
-    submitQuery,
-    // eslint-disable-next-line react/prop-types
-    reload,
-    // eslint-disable-next-line react/prop-types
-    toggle,
-    // eslint-disable-next-line react/prop-types
-    toggleToolbar,
-    // eslint-disable-next-line react/prop-types
-    onNewBankAccount,
-    // eslint-disable-next-line react/prop-types
-    onNewSalaryItem,
-    // eslint-disable-next-line react/prop-types
-    disable,
-    // eslint-disable-next-line react/prop-types
+    styles, // eslint-disable-next-line react/prop-types
+    title, // eslint-disable-next-line react/prop-types
+    collapse, // eslint-disable-next-line react/prop-types
+    initAdd, // eslint-disable-next-line react/prop-types
+    cancelEdit, // eslint-disable-next-line react/prop-types
+    submitEdit, // eslint-disable-next-line react/prop-types
+    submitQuery, // eslint-disable-next-line react/prop-types
+    reload, // eslint-disable-next-line react/prop-types
+    toggle, // eslint-disable-next-line react/prop-types
+    toggleToolbar, // eslint-disable-next-line react/prop-types
+    onNewBankAccount, // eslint-disable-next-line react/prop-types
+    onNewSalaryItem, // eslint-disable-next-line react/prop-types
+    disable, // eslint-disable-next-line react/prop-types
     setDisable,
   } = props
-
   return (
     // eslint-disable-next-line react/prop-types
     <Grid container xs style={{ ...styles.header }} justify="flex-start">
@@ -162,33 +169,23 @@ export const CommonFormHead = (props) => {
         container
         xs
         spacing={0.5}
-        justify="flex-end"
-        /* eslint-disable-next-line react/prop-types */
+        justify="flex-end" // eslint-disable-next-line react/prop-types
         style={{ ...styles.header }}
         alignItems="right"
       >
         {wrapIcon('Reload', svgIcons.refresh, reload, false)}
-        <div className="card-header-actions">
-          <Button
-            color="link"
-            className="card-header-action btn-minimize"
-            title="Cancel edit"
-            onClick={(e) => cancelEdit(e)}
-          >
-            <FontAwesomeIcon icon={faWindowClose} />
-          </Button>
-        </div>
+        {wrapFontAwesomeIcon('Cancel edit', faWindowClose, (e) => cancelEdit(e), disable)}
         {wrapIcon(
           'Add Bank Account',
           svgIcons.libraryAdd,
           onNewBankAccount,
-          isNullOrUndef(onNewBankAccount),
+          isNullOrUndef(onNewBankAccount) || disable,
         )}
         {wrapIcon(
           'Add salary item ',
           svgIcons.libraryAdd,
           onNewSalaryItem,
-          isNullOrUndef(onNewSalaryItem),
+          isNullOrUndef(onNewSalaryItem) || disable,
         )}
         {wrapIcon('Add Item', svgIcons.plusCircle, initAdd, false)}
         <div className="card-header-actions">
@@ -202,18 +199,19 @@ export const CommonFormHead = (props) => {
           </Button>
         </div>
         <div>
-          <Button
-            block
-            color="link"
+          <ToolBarButton2
             type="submit"
-            className="card-header-action btn-minimize"
+            label="Reload all"
+            color="link"
+            icon={faSpinner}
+            disabled={disable}
             onClick={(event) => {
               event.preventDefault()
               submitQuery(event)
             }}
-          >
-            <FontAwesomeIcon icon={faSpinner} rotation={90} />
-          </Button>
+            rotation={90}
+            className="card-header-action btn-minimize"
+          />
         </div>
         {wrapIcon('Edit', svgIcons.plusCircle, () => setDisable(!disable), false)}
         <div className="card-header-actions" style={{ align: 'right' }}>
@@ -229,26 +227,16 @@ export const CommonFormHead = (props) => {
 export const BSFormHead = (props) => {
   const {
     // eslint-disable-next-line react/prop-types
-    styles,
-    // eslint-disable-next-line react/prop-types
-    title,
-    // eslint-disable-next-line react/prop-types
-    collapse,
-    // eslint-disable-next-line react/prop-types
-    importData,
-    // eslint-disable-next-line react/prop-types
-    submitEdit,
-    // eslint-disable-next-line react/prop-types
-    reload,
-    // eslint-disable-next-line react/prop-types
-    submitQuery,
-    // eslint-disable-next-line react/prop-types
-    submitPost,
-    // eslint-disable-next-line react/prop-types
-    toggle,
-    // eslint-disable-next-line react/prop-types
-    toggleToolbar,
-    // eslint-disable-next-line react/prop-types
+    styles, // eslint-disable-next-line react/prop-types
+    title, // eslint-disable-next-line react/prop-types
+    collapse, // eslint-disable-next-line react/prop-types
+    importData, // eslint-disable-next-line react/prop-types
+    submitEdit, // eslint-disable-next-line react/prop-types
+    reload, // eslint-disable-next-line react/prop-types
+    submitQuery, // eslint-disable-next-line react/prop-types
+    submitPost, // eslint-disable-next-line react/prop-types
+    toggle, // eslint-disable-next-line react/prop-types
+    toggleToolbar, // eslint-disable-next-line react/prop-types
     current,
   } = props
   // eslint-disable-next-line react/prop-types
@@ -266,8 +254,7 @@ export const BSFormHead = (props) => {
         container
         xs
         spacing={0.5}
-        justify="flex-end"
-        /* eslint-disable-next-line react/prop-types */
+        justify="flex-end" // eslint-disable-next-line react/prop-types
         style={{ ...styles.header }}
         alignItems="right"
       >
@@ -316,41 +303,24 @@ export const BSFormHead = (props) => {
 export const FinancialsFormHead = (props) => {
   const {
     // eslint-disable-next-line react/prop-types
-    styles,
-    // eslint-disable-next-line react/prop-types
-    title,
-    // eslint-disable-next-line react/prop-types
-    collapse,
-    // eslint-disable-next-line react/prop-types
-    module,
-    // eslint-disable-next-line react/prop-types
-    modules,
-    // eslint-disable-next-line react/prop-types
-    initAdd,
-    // eslint-disable-next-line react/prop-types
-    onNewLine,
-    // eslint-disable-next-line react/prop-types
-    cancelEdit,
-    // eslint-disable-next-line react/prop-types
-    submitEdit,
-    // eslint-disable-next-line react/prop-types
-    submitCanceln,
-    // eslint-disable-next-line react/prop-types
-    toggle,
-    // eslint-disable-next-line react/prop-types
-    submitCopy,
-    // eslint-disable-next-line react/prop-types
-    submitPost,
-    // eslint-disable-next-line react/prop-types
-    handleModuleChange,
-    // eslint-disable-next-line react/prop-types
-    toggleToolbar,
-    // eslint-disable-next-line react/prop-types
-    reload,
-    // eslint-disable-next-line react/prop-types
-    current,
+    styles, // eslint-disable-next-line react/prop-types
+    title, // eslint-disable-next-line react/prop-types
+    collapse, // eslint-disable-next-line react/prop-types
+    modules, // eslint-disable-next-line react/prop-types
+    initAdd, // eslint-disable-next-line react/prop-types
+    onNewLine, // eslint-disable-next-line react/prop-types
+    cancelEdit, // eslint-disable-next-line react/prop-types
+    submitEdit, // eslint-disable-next-line react/prop-types
+    submitCancel, // eslint-disable-next-line react/prop-types
+    toggle, // eslint-disable-next-line react/prop-types
+    submitCopy, // eslint-disable-next-line react/prop-types
+    submitPost, // eslint-disable-next-line react/prop-types
+    handleModuleChange, // eslint-disable-next-line react/prop-types
+    toggleToolbar, // eslint-disable-next-line react/prop-types
+    reload, // eslint-disable-next-line react/prop-types
+    current, // eslint-disable-next-line react/prop-types
+    t,
   } = props
-  console.log('module', module)
   // eslint-disable-next-line react/prop-types
   const posted = current ? current.posted : false
   return (
@@ -368,8 +338,7 @@ export const FinancialsFormHead = (props) => {
         container
         xs
         spacing={0.5}
-        justify="flex-end"
-        /* eslint-disable-next-line react/prop-types */
+        justify="flex-end" //eslint-disable-next-line react/prop-types
         style={{ ...styles.header }}
         alignItems="right"
       >
@@ -377,22 +346,20 @@ export const FinancialsFormHead = (props) => {
           <ComboBox
             id="module-id"
             idCol={true}
-            sm="4"
-            /* eslint-disable-next-line react/prop-types */
-            data={modules.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            sm="4" // eslint-disable-next-line react/prop-types
+            data={modules.sort(sortById)} // eslint-disable-next-line react/prop-types
             //value={module}
             placeholder={'Module number'}
             onChange={handleModuleChange}
           />
         </div>
-        {wrapIcon('Reload all transaction', svgIcons.refresh, reload, false)}
+        {wrapIcon(t('toolBar.reload'), svgIcons.refresh, reload, false)}
         {wrapIcon('Copy transaction', svgIcons.copyContent, submitCopy, posted)}
         {wrapIcon('Add new line transaction', svgIcons.libraryAdd, onNewLine, posted)}
         {wrapIcon('Cancel editing', svgIcons.highlightOff, (e) => cancelEdit(e), posted)}
         {wrapIcon('Add new transaction', svgIcons.addCircleOutline, initAdd, false)}
         {wrapIcon('Save transaction', svgIcons.save, (e) => submitEdit(e), posted)}
-        {wrapIcon('Canceln transaction', svgIcons.save, (e) => submitCanceln(e), false)}
+        {wrapIcon('Cancel transaction', svgIcons.save, (e) => submitCancel(e), false)}
         {wrapIcon('Post', svgIcons.done, submitPost, posted)}
         <div className="card-header-actions">
           <Button
@@ -409,6 +376,7 @@ export const FinancialsFormHead = (props) => {
     </Grid>
   )
 }
+
 export const JournalFormHead = (props) => {
   // eslint-disable-next-line react/prop-types
   const { styles, title, collapse, toggle, toggleToolbar } = props
@@ -416,8 +384,7 @@ export const JournalFormHead = (props) => {
     <Grid
       container
       spacing={2}
-      justify="space-between"
-      /* eslint-disable-next-line react/prop-types */
+      justify="space-between" // eslint-disable-next-line react/prop-types
       style={{ ...styles.inner }}
       direction="column"
     >
@@ -448,6 +415,12 @@ export const JournalFormHead = (props) => {
 
 const getForm = (formId) => {
   switch (formId) {
+    case formEnum.CLOSE_ACCOUNT_PERIOD:
+      return CloseAccountingPeriodForm
+    case formEnum.CREATE_PAYROLL_TRANSACTION:
+      return CreatePayrollTransactionForm
+    case formEnum.CREATE_DEPRECIATION_TRANSACTION:
+      return CreateDepreciationTransactionForm
     case formEnum.ASSET:
       return AssetForm
     case formEnum.ACCOUNT:
@@ -456,14 +429,24 @@ const getForm = (formId) => {
       return BankStatementTabs
     case formEnum.COSTCENTER:
     case formEnum.BANK:
+    case formEnum.QUANTITYUNIT:
+    case formEnum.STORE_GENERAL_INFO_FORM:
       return MasterfilesMainForm2
+    case formEnum.ARTICLE:
+      return ArticleTabs
+    case formEnum.SALARY_ITEM:
+      return SalaryItemForm
     case formEnum.MODULE:
     case formEnum.FMODULE:
-    case formEnum.ARTICLE:
-    case formEnum.STORE:
-    case formEnum.SALARY_ITEM:
     case formEnum.PERMISSION:
+    case formEnum.ACCOUNT_CLASS:
+    case formEnum.ACCOUNT_GROUP:
+    case formEnum.ARTICLE_GROUP:
       return MasterfilesMainForm
+    case formEnum.STORE:
+      return StoreTabs
+    case formEnum.PAYROLL_TAX_RANGE:
+      return PayrollTaxForm
     case formEnum.USER:
       return UserTabs
     case formEnum.ROLE:
@@ -476,6 +459,8 @@ const getForm = (formId) => {
       return EmployeeTabs
     case formEnum.FINANCIALS:
       return FinancialsMainForm
+    case formEnum.TRANSACTION:
+      return TransactionMainForm
     case formEnum.JOURNAL:
     case formEnum.PACB:
     case formEnum.BALANCETREE:
@@ -492,10 +477,34 @@ const getForm = (formId) => {
       return AddressForm
     case formEnum.COMPANY_ACCOUNT_FORM:
       return CompanyAccountForm
+    case formEnum.ARTICLE_GENERAL_INFO_FORM:
+      return articleGeneralInfoForm
+    case formEnum.ARTICLE_ACCOUNT_FORM:
+      return ArticleAccountForm
     default:
       return <>NODATA</>
   }
 }
+
+const articleGeneralInfoForm = (props) => (
+  <Grid
+    container
+    spacing={0.5}
+    style={{ ...styles.inner, backgroundColor: blue, height: 250 }}
+    direction="column"
+  >
+    <ArticleForm
+      /* eslint-disable-next-line react/prop-types */
+      current={props.current} // eslint-disable-next-line react/prop-types
+      setCurrent={props.setCurrent} // eslint-disable-next-line react/prop-types
+      locale={props.locale} // eslint-disable-next-line react/prop-types
+      currency={props.currency} // eslint-disable-next-line react/prop-types
+      t={props.t} // eslint-disable-next-line react/prop-types
+      height={props.height} // eslint-disable-next-line react/prop-types
+      disable={props.disable}
+    />
+  </Grid>
+)
 const companyGeneralInfoForm = (props) => (
   <Grid
     container
@@ -505,14 +514,10 @@ const companyGeneralInfoForm = (props) => (
   >
     <CompanyGeneralForm
       /* eslint-disable-next-line react/prop-types */
-      current={props.current}
-      /* eslint-disable-next-line react/prop-types */
-      setCurrent={props.setCurrent}
-      /* eslint-disable-next-line react/prop-types */
-      t={props.t}
-      /* eslint-disable-next-line react/prop-types */
-      height={props.height}
-      /* eslint-disable-next-line react/prop-types */
+      current={props.current} // eslint-disable-next-line react/prop-types
+      setCurrent={props.setCurrent} // eslint-disable-next-line react/prop-types
+      t={props.t} // eslint-disable-next-line react/prop-types
+      height={props.height} // eslint-disable-next-line react/prop-types
       disable={props.disable}
     />
   </Grid>
@@ -521,19 +526,15 @@ const businessPartnerGeneralInfoForm = (props) => (
   <Grid
     container
     spacing={0.5}
-    style={{ ...styles.inner, backgroundColor: blue }}
+    style={{ ...styles.inner, backgroundColor: blue, height: 250 }}
     direction="column"
   >
     <CustomerGeneralForm
       /* eslint-disable-next-line react/prop-types */
-      current={props.current}
-      /* eslint-disable-next-line react/prop-types */
-      setCurrent={props.setCurrent}
-      /* eslint-disable-next-line react/prop-types */
-      t={props.t}
-      /* eslint-disable-next-line react/prop-types */
-      height={props.height}
-      /* eslint-disable-next-line react/prop-types */
+      current={props.current} // eslint-disable-next-line react/prop-types
+      setCurrent={props.setCurrent} // eslint-disable-next-line react/prop-types
+      t={props.t} // eslint-disable-next-line react/prop-types
+      height={props.height} // eslint-disable-next-line react/prop-types
       disable={props.disable}
     />
   </Grid>
@@ -547,22 +548,14 @@ const businessPartnerAccountForm = (props) => (
   >
     <CustomerAccountForm
       /* eslint-disable-next-line react/prop-types */
-      current={props.current}
-      /* eslint-disable-next-line react/prop-types */
-      setCurrent={props.setCurrent}
-      /* eslint-disable-next-line react/prop-types */
-      t={props.t}
-      /* eslint-disable-next-line react/prop-types */
-      locale={props.locale}
-      /* eslint-disable-next-line react/prop-types */
-      currency={props.currency}
-      /* eslint-disable-next-line react/prop-types */
-      accData={props.accData}
-      /* eslint-disable-next-line react/prop-types */
-      vatData={props.vatData}
-      /* eslint-disable-next-line react/prop-types */
-      height={props.height}
-      /* eslint-disable-next-line react/prop-types */
+      current={props.current} // eslint-disable-next-line react/prop-types
+      setCurrent={props.setCurrent} // eslint-disable-next-line react/prop-types
+      t={props.t} // eslint-disable-next-line react/prop-types
+      locale={props.locale} // eslint-disable-next-line react/prop-types
+      currency={props.currency} // eslint-disable-next-line react/prop-types
+      accData={props.accData} // eslint-disable-next-line react/prop-types
+      vatData={props.vatData} // eslint-disable-next-line react/prop-types
+      height={props.height} // eslint-disable-next-line react/prop-types
       disable={props.disable}
     />
   </Grid>
@@ -576,18 +569,12 @@ const companyAccountForm = (props) => (
   >
     <CompanyAccountForm
       /* eslint-disable-next-line react/prop-types */
-      current={props.current}
-      /* eslint-disable-next-line react/prop-types */
-      setCurrent={props.setCurrent}
-      /* eslint-disable-next-line react/prop-types */
-      t={props.t}
-      /* eslint-disable-next-line react/prop-types */
-      accData={props.accData}
-      /* eslint-disable-next-line react/prop-types */
-      vatData={props.vatData}
-      /* eslint-disable-next-line react/prop-types */
-      height={props.height}
-      /* eslint-disable-next-line react/prop-types */
+      current={props.current} // eslint-disable-next-line react/prop-types
+      setCurrent={props.setCurrent} // eslint-disable-next-line react/prop-types
+      t={props.t} // eslint-disable-next-line react/prop-types
+      accData={props.accData} // eslint-disable-next-line react/prop-types
+      vatData={props.vatData} // eslint-disable-next-line react/prop-types
+      height={props.height} // eslint-disable-next-line react/prop-types
       disable={props.disable}
     />
   </Grid>
@@ -595,14 +582,22 @@ const companyAccountForm = (props) => (
 export const FormFactory = (props) => {
   // eslint-disable-next-line react/prop-types
   switch (props.formid) {
+    case formEnum.CLOSE_ACCOUNT_PERIOD:
+    case formEnum.CREATE_PAYROLL_TRANSACTION:
+    case formEnum.CREATE_DEPRECIATION_TRANSACTION:
     case formEnum.ASSET:
     case formEnum.ACCOUNT:
     case formEnum.BANKSTATEMENT:
     case formEnum.COSTCENTER:
     case formEnum.BANK:
+    case formEnum.QUANTITYUNIT:
+    case formEnum.ACCOUNT_CLASS:
+    case formEnum.ACCOUNT_GROUP:
+    case formEnum.PAYROLL_TAX_RANGE:
     case formEnum.MODULE:
     case formEnum.FMODULE:
     case formEnum.ARTICLE:
+    case formEnum.ARTICLE_GROUP:
     case formEnum.STORE:
     case formEnum.SALARY_ITEM:
     case formEnum.PERMISSION:
@@ -616,10 +611,13 @@ export const FormFactory = (props) => {
     case formEnum.JOURNAL:
     case formEnum.PACB:
     case formEnum.BALANCETREE:
-    case formEnum.BUSINESS_PARTNER_ADDRESS_FORM:
     case formEnum.VAT:
+    case formEnum.TRANSACTION:
+    case formEnum.STORE_GENERAL_INFO_FORM:
       // eslint-disable-next-line react/prop-types
       return <FormWrapper {...props} form={getForm(props.formid)} />
+    case formEnum.BUSINESS_PARTNER_ADDRESS_FORM:
+      return AddressForm(props)
     case formEnum.BUSINESS_PARTNER_GENERAL_INFO_FORM:
       return businessPartnerGeneralInfoForm(props)
     case formEnum.COMPANY_GENERAL_INFO_FORM:
@@ -628,11 +626,206 @@ export const FormFactory = (props) => {
       return businessPartnerAccountForm(props)
     case formEnum.COMPANY_ACCOUNT_FORM:
       return companyAccountForm(props)
+    case formEnum.ARTICLE_GENERAL_INFO_FORM:
+      return <FormInCollapsibleWrapper {...props} form={articleGeneralInfoForm} />
+    case formEnum.ARTICLE_ACCOUNT_FORM:
+      return <FormInCollapsibleWrapper {...props} form={ArticleAccountForm} />
+
     default:
       return <>NODATA</>
   }
 }
+const BooleanField = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { fieldName, label, checked, disabled, style } = props
+  return (
+    <FormControlLabel
+      //eslint-disable-next-line react/prop-types
+      id={fieldName?.concat('id')}
+      name={fieldName}
+      disabled={disabled}
+      style={style ? style : { paddingLeft: 60 }} // eslint-disable-next-line react/prop-types
+      control={<Switch checked={checked} />}
+      label={label}
+    />
+  )
+}
+const TextareaField = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { fieldName, value, current, setCurrent, rows, disabled, style, placeholder } = props
+  return (
+    <CFormTextarea
+      type="textarea" //eslint-disable-next-line react/prop-types
+      id={fieldName?.concat('id')}
+      name={fieldName}
+      disabled={disabled}
+      rows={rows ? rows : '1'}
+      style={style ? style : { height: 30 }} // eslint-disable-next-line react/prop-types
+      placeholder={placeholder ? placeholder : fieldName} // eslint-disable-next-line react/prop-types
+      value={value} //eslint-disable-next-line react/prop-types
+      onChange={(event) => setCurrent({ ...current, [fieldName]: event.target.value })}
+    />
+  )
+}
+const InputField = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { fieldName, type, current, setCurrent, value, placeholder, disabled, style } = props
+  const style_ = style ? style : { height: 30 }
+  return (
+    <Input
+      bssize="sm"
+      type={type ? type : 'text'} // eslint-disable-next-line react/prop-types
+      id={fieldName?.concat('id')}
+      name={fieldName}
+      className="input-sm"
+      placeholder={placeholder ? placeholder : fieldName}
+      disabled={disabled}
+      style={style_}
+      value={value}
+      onChange={(event) => setCurrent({ ...current, [fieldName]: event.target.value })}
+    />
+  )
+}
+const FieldLabel = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { title, size } = props
+  return (
+    <CFormLabel size={size ? size : 'sm'} htmlFor="input-small">
+      {title}
+    </CFormLabel>
+  )
+}
 
+const FormButton = (props) => {
+  console.log('props', props)
+  // eslint-disable-next-line react/prop-types
+  const { title, type, color, style, size, height, onClick, className, titleClass, disable } = props
+  return (
+    <Button
+      type={type ?? 'submit'}
+      size={size ?? 'sm'}
+      color={color ?? 'primary'}
+      disabled={disable ? disable : false}
+      className={className ? className : null}
+      style={style ?? { height: height, align: 'right' }}
+      onClick={onClick}
+    >
+      <i className="fa fa-dot-circle-o">{title}</i>
+    </Button>
+  )
+}
+
+const ToolBarButton = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { color, size, onClick, icon, disable } = props
+  return (
+    <Button
+      style={{ padding: 5, height: 30 }}
+      size={size ? size : 'sm'}
+      color={color}
+      disabled={disable ? disable : false}
+      //className={className ? className : 'px-4'}
+      onClick={onClick}
+    >
+      <IwsIcon style={{ style: styles.imageIcon, textAlign: 'end' }} d={icon} />
+    </Button>
+  )
+}
+const ToolBarButton2 = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { color, size, onClick, icon, disable, type, rotation, className } = props
+  return (
+    <Button
+      block
+      style={{ padding: 5, height: 30 }}
+      type={type ? type : 'submit'}
+      size={size ? size : 'xs'}
+      color={color ? color : 'link'}
+      disabled={disable ? disable : false}
+      //className={className ? className : 'px-4'}
+      className={className ? className : 'card-header-action btn-minimize'}
+      onClick={onClick}
+    >
+      <FontAwesomeIcon icon={icon} rotation={rotation} />
+    </Button>
+  )
+}
+
+const accountIdField = (props) => {
+  const { accClassData, accGroupData, accData, current, setCurrent, disable, height } = props
+  const accClassData_ = accClassData ?? []
+  const accGroupData_ = accGroupData ?? []
+  const data = [...accClassData_, ...accGroupData_]
+  const id = current.modelid === formEnum.SALARY_ITEM ? current.account : current.parent
+  const fieldName = current.modelid === formEnum.SALARY_ITEM ? 'account' : 'parent'
+  const currentAccount =
+    current.modelid === formEnum.ACCOUNT_CLASS || current.modelid === formEnum.ACCOUNT_GROUP
+      ? data.find((acc) => acc.id === id)
+      : accData.find((acc) => acc.id === id)
+  return (
+    <>
+      <ComboBox
+        id="account-id"
+        idCol={true}
+        sm="4" /* eslint-disable-next-line no-undef */
+        disable={disable}
+        height={height} /* eslint-disable-next-line react/prop-types */
+        data={data.sort(sortById)} /* eslint-disable-next-line react/prop-types */
+        value={currentAccount ? currentAccount.id : ''}
+        placeholder={'account number'}
+        onChange={(event, newValue) => {
+          setCurrent({ ...current, [fieldName]: newValue?.id, accountName: newValue?.name })
+        }}
+      />
+    </>
+  )
+}
+const accountNameField = (props) => {
+  const { accClassData, accGroupData, accData, current, setCurrent, disable, height } = props
+  const accClassData_ = accClassData ?? []
+  const accGroupData_ = accGroupData ?? []
+  const data = [...accClassData_, ...accGroupData_]
+  const id = current.modelid === formEnum.SALARY_ITEM ? current.account : current.parent
+  const fieldName = current.modelid === formEnum.SALARY_ITEM ? 'account' : 'parent'
+  const currentAccount =
+    current.modelid === formEnum.ACCOUNT_CLASS || current.modelid === formEnum.ACCOUNT_GROUP
+      ? data.find((acc) => acc.id === id)
+      : accData.find((acc) => acc.id === id)
+  return (
+    <>
+      <ComboBox
+        id="accountName"
+        idCol={false}
+        sm="4" //* eslint-disable-next-line no-undef */
+        disable={disable}
+        height={height} //* eslint-disable-next-line react/prop-types */
+        data={data.sort(sortByName)} //* eslint-disable-next-line react/prop-types */
+        value={currentAccount ? currentAccount.name : ''}
+        placeholder={'account name'}
+        onChange={(event, newValue) => {
+          setCurrent({ ...current, [fieldName]: newValue?.id, accountName: newValue?.name })
+        }}
+      />
+    </>
+  )
+}
+const DatePickerField = (props) => {
+  //eslint-disable-next-line react/prop-types
+  const { fieldName, label, current, setCurrent, selected, disabled } = props
+  return (
+    <CDatePicker
+      size="xs" //eslint-disable-next-line react/prop-types
+      disabled={disabled} //eslint-disable-next-line react/prop-types
+      selected={selected}
+      label={label}
+      showTimeInput
+      footer
+      dateFormat="dd.MM.yyyy" //eslint-disable-next-line react/prop-types
+      id={fieldName?.concat('id')}
+      onChange={(newValue) => setCurrent({ ...current, [fieldName]: newValue })}
+    />
+  )
+}
 export const FormWrapper = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { form, table, collapse } = props
@@ -657,6 +850,20 @@ export const FormWrapper = (props) => {
   )
 }
 
+export const FormInCollapsibleWrapper = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { form, collapse } = props
+  return (
+    <CCollapse
+      visible={collapse}
+      id="JScollapse"
+      style={{ ...styles.inner, backgroundColor: lightGreen }}
+    >
+      {form(props)}
+    </CCollapse>
+  )
+}
+
 export const AccountMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, accData, height } = props
@@ -666,94 +873,62 @@ export const AccountMainForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} size="sm" />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="account-id"
-            name="id"
-            className="input-sm"
-            placeholder="Id"
-            disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="Id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
-            onChange={(event) => setCurrent({ ...current, id: event.target.value })}
+            disabled={disable}
           />
         </Col>
         <Col sm="4" />
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.enterdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.enterdate')} size="sm" />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            bssize="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="enterdate"
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
-            label={t('common.enterdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="enterdate-id"
-            className="text-center"
-            placeholder="date"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.name')}
-          </CFormLabel>
+          <FieldLabel title={t('common.name')} size="sm" />
         </Col>
         <Col sm="6">
-          <Input
-            bssize="sm"
-            type="text"
-            id="name-input"
-            name="name"
-            className="input-sm"
-            placeholder="Name"
-            disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="name"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.name}
-            onChange={(event) => setCurrent({ ...current, name: event.target.value })}
+            disabled={disable}
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.changedate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.changedate')} size="sm" />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="changedate"
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.changedate)}
-            label={t('common.changedate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="changedate-id"
-            className="text-center"
-            placeholder="date"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.account')}
-          </CFormLabel>
+          <FieldLabel title={t('common.account')} size="sm" />
         </Col>
         <Col sm="2">
           <ComboBox
@@ -761,9 +936,8 @@ export const AccountMainForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} // eslint-disable-next-line react/prop-types
+            data={accData.sort(sortById)} // eslint-disable-next-line react/prop-types
             value={current.account}
             placeholder={'account number'}
             onChange={(event, newValue) => {
@@ -777,9 +951,8 @@ export const AccountMainForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} // eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} // eslint-disable-next-line react/prop-types
             value={currentAccount ? currentAccount.name : ''}
             placeholder={'account name'}
             onChange={(event, newValue) => {
@@ -788,118 +961,245 @@ export const AccountMainForm = (props) => {
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.postingdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.postingdate')} size="sm" />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="postingdate"
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
-            label={t('common.postingdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="postingdate-id"
-            className="text-center"
-            placeholder="date"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} size="sm" />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="company-id"
-            name="company"
-            className="input-sm"
-            placeholder="company"
-            disabled={true}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company}
-            onChange={(event) => setCurrent({ ...current, company: event.target.value })}
+            disabled={disable}
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 20 }}>
-          <FormControlLabel
-            id="isDebit"
+          <BooleanField
             name="isDebit"
-            control={
-              <Switch
-                disabled={disable}
-                style={{ height: 30, paddingLeft: 2 }}
-                /* eslint-disable-next-line react/prop-types */
-                checked={current.isDebit}
-                onChange={(event) => setCurrent({ ...current, isDebit: event.target.checked })}
-              />
-            }
             label={t('account.debit_credit')}
+            disabled={disable} //eslint-disable-next-line react/prop-types
+            checked={current.isDebit}
+            style={{ height: 30, paddingLeft: 2 }}
           />
         </Col>
         <Col sm="1">
-          <FormControlLabel
-            id="balancesheet"
+          <BooleanField
             name="balancesheet"
-            control={
-              <Switch
-                disabled={disable}
-                style={{ height: 30, paddingLeft: 2 }}
-                /* eslint-disable-next-line react/prop-types */
-                checked={current.balancesheet}
-                onChange={(event) => setCurrent({ ...current, balancesheet: event.target.checked })}
-              />
-            }
             label={t('account.balancesheet')}
+            disabled={disable} //eslint-disable-next-line react/prop-types
+            checked={current.balancesheet}
+            style={{ height: 30, paddingLeft: 2 }}
           />
         </Col>
         <Col sm="1">
-          <Input
-            bssize="sm"
-            type="text"
-            id="currency-id"
-            name="currency"
-            className="input-sm"
-            placeholder="currency"
-            disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="currency"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.currency}
-            onChange={(event) => setCurrent({ ...current, currency: event.target.value })}
+            disabled={disable}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
+          <FieldLabel title={t('common.description')} size="sm" />
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
+          <TextareaField
             type="textarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..."
-            disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+            fieldName="description"
+            placeholder={t('common.description')}
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
           />
         </Col>
       </CInputGroup>
     </>
   )
 }
-
+export const CloseAccountingPeriodForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, token, company, incomeStmtAcc, navigate, t, height } = props
+  console.log('props', props)
+  const submitQuery = (event) => {
+    event.preventDefault()
+    const url = MASTERFILE.closeAccountPeriod
+      .concat('/')
+      .concat(incomeStmtAcc)
+      .concat('/') // eslint-disable-next-line react/prop-types
+      .concat(current.period)
+      .concat('/')
+      .concat(company)
+    Get(url, token, navigate, null)
+  }
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1">
+          <FieldLabel title={t('closeAccountingPeriod.account')} size="sm" />
+        </Col>
+        <Col sm="1.5" style={{ height: 30 }}>
+          <InputField
+            fieldName="account"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={incomeStmtAcc}
+            disabled={false}
+            style={{ paddingLeft: 0 }}
+          />
+        </Col>
+        <Col sm="2" style={{ height: 30, paddingLeft: 10, paddingTop: 5 }}>
+          <FieldLabel title={t('common.period')} size="sm" />
+        </Col>
+        <Col sm="1" style={{ height: height }}>
+          <InputField
+            fieldName="period"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.period}
+            disabled={false}
+            style={{ height: height, textAlign: 'right' }}
+          />
+        </Col>
+        <Col sm="1" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
+          <FieldLabel title={t('common.company')} size="sm" />
+        </Col>
+        <Col sm="1" style={{ height: height }}>
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.company}
+            disabled={false}
+            style={{ height: height, textAlign: 'right' }}
+          />
+        </Col>
+        <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
+          <FormButton title={t('closeAccountingPeriod.close')} onClick={(e) => submitQuery(e)} />
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
+export const CreateDepreciationTransactionForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, token, company, navigate, t, height } = props
+  //console.log('props', props)
+  const submitQuery = (event) => {
+    event.preventDefault()
+    const url = MASTERFILE.createDepreciationTransaction
+      .concat('/') // eslint-disable-next-line react/prop-types
+      .concat(current.period)
+      .concat('/')
+      .concat(company)
+    Get(url, token, navigate, null)
+  }
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2" style={{ height: 30, paddingLeft: 10, paddingTop: 5 }}>
+          <FieldLabel title={t('common.period')} size="sm" />
+        </Col>
+        <Col sm="1" style={{ height: height }}>
+          <InputField
+            fieldName="period"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.period}
+            disabled={false}
+            style={{ height: height, textAlign: 'right' }}
+          />
+        </Col>
+        <Col sm="1" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
+          <FieldLabel title={t('common.company')} size="sm" />
+        </Col>
+        <Col sm="1" style={{ height: height }}>
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.company}
+            disabled={false}
+            style={{ height: height, textAlign: 'right' }}
+          />
+        </Col>
+        <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
+          <FormButton
+            title={t('createDepreciationTransaction.generate')}
+            onClick={(e) => submitQuery(e)}
+          />
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
+export const CreatePayrollTransactionForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, company, token, navigate, t, height } = props
+  const submitQuery = (event) => {
+    event.preventDefault() // eslint-disable-next-line react/prop-types
+    const url = MASTERFILE.createPayrollTransaction
+      .concat('/') // eslint-disable-next-line react/prop-types
+      .concat(company)
+    Get(url, token, navigate, null)
+  }
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
+          <FieldLabel title={t('common.id')} size="sm" />
+        </Col>
+        <Col sm="1.5" style={{ height: height }}>
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.id}
+            disabled={false}
+            style={{ paddingLeft: 0 }}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10, paddingTop: 5 }}>
+          <FieldLabel title={t('common.company')} size="sm" />
+        </Col>
+        <Col sm="1">
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.company}
+            disabled={false}
+            style={{ height: height, textAlign: 'right' }}
+          />
+        </Col>
+        <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
+          <FormButton
+            title={t('createPayrollTransaction.generate')}
+            onClick={(e) => submitQuery(e)}
+            size="xs"
+          />
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
 export const BankStatementParameterForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, t, height } = props
@@ -907,80 +1207,57 @@ export const BankStatementParameterForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.header')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.header')} size="sm" />
         </Col>
         <Col sm="1.5" style={{ height: 30 }}>
-          <Input
-            bssize="sm"
-            type="text"
-            id="header-input"
-            name="header"
-            className="input-sm"
-            placeholder="Auftragskonto"
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="header"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.header}
-            onChange={(event) => setCurrent({ ...current, header: event.target.value })}
+            disabled={false}
             style={{ paddingLeft: 0 }}
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.char')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.char')} size="sm" />
         </Col>
         <Col sm="1" style={{ height: 30 }}>
-          <Input
-            bssize="sm"
-            type="text"
-            id="char-input"
-            name="char"
-            className="input-sm"
-            placeholder='"'
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="char"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.char}
-            onChange={(event) => setCurrent({ ...current, char: event.target.value })}
+            disabled={false}
             style={{ paddingLeft: 0 }}
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.extension')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.extension')} size="sm" />
         </Col>
         <Col sm="1" style={{ height: 30 }}>
-          <Input
-            bssize="sm"
-            type="text"
-            id="extension-input"
-            name="extension"
-            className="input-sm"
-            placeholder=".CSV"
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="extension"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.extension}
-            onChange={(event) => setCurrent({ ...current, extension: event.target.value })}
+            placeholder=".CSV"
+            disabled={false}
             style={{ paddingLeft: 0 }}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height, paddingTop: 5 }}>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.path')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.path')} size="sm" />
         </Col>
         <Col sm="12" md="10">
-          <Input
-            bssize="sm"
-            type="text"
-            id="path-input"
-            name="path"
-            className="input-sm"
-            placeholder="path"
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="path"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.path}
-            onChange={(event) => setCurrent({ ...current, path: event.target.value })}
+            disabled={false}
             style={{ paddingLeft: 0 }}
           />
         </Col>
@@ -995,385 +1272,259 @@ export const BankStatementMainForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} size="sm" />
         </Col>
         <Col sm="4">
-          <Input
-            disabled={true}
-            bssize="sm"
-            type="text"
-            id="account-id"
-            name="id"
-            className="input-sm"
-            placeholder="Id"
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
-          />
-        </Col>
-        <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.postingdate')}
-          </CFormLabel>
-        </Col>
-        <Col sm="1.5">
-          <CDatePicker
-            size="sm"
             disabled={true}
-            /* eslint-disable-next-line react/prop-types */
-            selected={Date.parse(current.postingdate)}
-            label={t('common.postingdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="postingdate-id"
-            className="text-center"
-            onChange={(newValue) => setCurrent({ ...current, postingdate: newValue })}
-          />
-        </Col>
-      </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.depositor')}
-          </CFormLabel>
-        </Col>
-        <Col sm="4">
-          <Input
-            /* eslint-disable-next-line react/prop-types */
-            disabled={current.posted}
-            bssize="sm"
-            type="text"
-            id="depositor-input"
-            name="depositor"
-            className="input-sm"
-            placeholder="depositor"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.depositor}
-          />
-        </Col>
-        <Col sm="1.5" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.valuedate')}
-          </CFormLabel>
-        </Col>
-        <Col sm="1.5">
-          <CDatePicker
-            size="sm"
-            inputReadOnly
-            /* eslint-disable-next-line react/prop-types */
-            selected={Date.parse(current.valuedate)}
-            label={t('bankstatement.valuedate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="enterdate-id"
-            className="text-center"
-            onChange={(newValue) => setCurrent({ ...current, valuedate: newValue })}
-          />
-        </Col>
-      </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.beneficiary')}
-          </CFormLabel>
-        </Col>
-        <Col sm="4">
-          <Input
-            /* eslint-disable-next-line react/prop-types */
-            disabled={current.posted}
-            type="text"
-            id="beneficiary-input"
-            name="beneficiary"
-            className="input-sm"
-            placeholder="beneficiary"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.beneficiary}
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.postingtext')}
-          </CFormLabel>
+          <FieldLabel title={t('common.postingdate')} size="sm" />
         </Col>
         <Col sm="1.5">
-          <Input
-            /* eslint-disable-next-line react/prop-types */
-            disabled={current.posted}
-            bssize="sm"
-            type="text"
-            id="postingtext-id"
-            name="postingtext"
-            className="input-sm"
-            placeholder="postingtext"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.postingtext}
+          <DatePickerField
+            fieldName="postingdate"
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
+            selected={Date.parse(current.postingdate)}
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.info')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.depositor')} size="sm" />
+        </Col>
+        <Col sm="4">
+          <InputField
+            fieldName="depositor"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.depositor} //eslint-disable-next-line react/prop-types
+            disabled={current.posted}
+          />
+        </Col>
+        <Col sm="1" style={{ height: height }}>
+          <FieldLabel title={t('bankstatement.valuedate')} size="sm" />
+        </Col>
+        <Col sm="1.5">
+          <DatePickerField
+            label={t('bankstatement.valuedate')} //eslint-disable-next-line react/prop-types
+            selected={Date.parse(current.valuedate)}
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <FieldLabel title={t('bankstatement.beneficiary')} size="sm" />
+        </Col>
+        <Col sm="4">
+          <InputField
+            fieldName="beneficiary"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.beneficiary} //eslint-disable-next-line react/prop-types
+            disabled={current.posted}
+          />
+        </Col>
+        <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
+          <FieldLabel title={t('bankstatement.postingtext')} size="sm" />
+        </Col>
+        <Col sm="1.5">
+          <InputField
+            fieldName="postingtext"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.postingtext} //eslint-disable-next-line react/prop-types
+            disabled={current.posted}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <FieldLabel title={t('bankstatement.info')} size="sm" />
         </Col>
         <Col xs="4">
-          <Input
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="info"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.info} //eslint-disable-next-line react/prop-types
             disabled={current.posted}
-            bssize="sm"
-            type="text"
-            id="info-input"
-            name="info"
-            className="input-sm"
-            placeholder="info"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.info}
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.amount')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.amount')} size="sm" />
         </Col>
         <Col sm="1.5">
-          <Input
-            /* eslint-disable-next-line react/prop-types */
-            disabled={current.posted}
-            bssize="sm"
-            type="text"
-            id="amount-input"
-            name="amount"
-            className="input-sm"
-            placeholder="amount"
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="amount"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={Number(current.amount).toLocaleString(locale, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
               style: 'currency',
               currency: currency,
-            })}
+            })} //eslint-disable-next-line react/prop-types
+            disabled={current.posted}
             style={{ textAlign: 'right' }}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.companyIban')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.companyIban')} size="sm" />
         </Col>
         <Col sm="4">
-          <Input
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="accountno"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.companyIban} //eslint-disable-next-line react/prop-types
             disabled={current.posted}
-            bssize="sm"
-            type="text"
-            id="companyIban-id"
-            name="companyIban"
-            className="input-sm"
-            placeholder="companyIban"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.companyIban}
-            onChange={(event) => setCurrent({ ...current, accountno: event.target.value })}
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} size="sm" />
         </Col>
         <Col sm="1.5">
-          <Input
-            /* eslint-disable-next-line react/prop-types */
-            disabled={current.posted}
-            bssize="sm"
-            type="text"
-            id="company-input"
-            name="company"
-            className="input-sm"
-            placeholder="company"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.company}
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.company} //eslint-disable-next-line react/prop-types
+            disabled={true}
             style={{ textAlign: 'right' }}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.accountno')}{' '}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.accountno')} size="sm" />
         </Col>
         <Col sm="4">
-          <Input
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="accountno"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.accountno} //eslint-disable-next-line react/prop-types
             disabled={current.posted}
-            bssize="sm"
-            type="text"
-            id="accountno-input"
-            name="accountno"
-            className="input-sm"
-            placeholder="accountno"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.accountno}
-            onChange={(event) => setCurrent({ ...current, accountno: event.target.value })}
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('bankstatement.bankCode')}{' '}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.bankCode')} size="sm" />
         </Col>
         <Col sm="1.5">
-          <Input
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="bankCode"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.bankCode} //eslint-disable-next-line react/prop-types
             disabled={current.posted}
-            bssize="sm"
-            type="text"
-            id="bankCode-input"
-            name="bankCode"
-            className="input-sm"
-            placeholder="bankCode"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.bankCode}
-            onChange={(event) => setCurrent({ ...current, bankCode: event.target.value })}
-            style={{ paddingLeft: 0 }}
           />
         </Col>
         <Col sm="1" style={{ height: 30, paddingLeft: 20 }}>
-          <FormControlLabel
-            id="posted"
+          <BooleanField
             name="posted"
-            bssize="sm"
-            /* eslint-disable-next-line react/prop-types */
-            control={<Switch checked={current.posted} />}
-            label={t('bankstatement.posted')}
+            label={t('bankstatement.posted')} //eslint-disable-next-line react/prop-types
+            disabled={current.posted} //eslint-disable-next-line react/prop-types
+            checked={current.posted}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height, paddingTop: 5 }}>
         <Col sm="2">
-          {/* eslint-disable-next-line react/prop-types */}
-          <CFormLabel disabled={current.posted} size="sm" htmlFor="input-small">
-            {t('bankstatement.purpose')}
-          </CFormLabel>
+          <FieldLabel title={t('bankstatement.purpose')} size="sm" />
         </Col>
         <Col xs="12" md="10">
-          <CFormTextarea
-            /* eslint-disable-next-line react/prop-types */
-            disabled={current.posted}
-            bssize="sm"
-            type="textarea"
-            id="purpose-input"
-            name="purpose"
-            className="input-sm"
-            placeholder="purpose"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.purpose}
-            onChange={(event) => setCurrent({ ...current, purpose: event.target.value })}
+          <TextareaField
+            fieldName="purpose"
             rows="2"
+            placeholder={t('bankstatement.purpose')} // eslint-disable-next-line react/prop-types
+            disabled={current.posted} // eslint-disable-next-line react/prop-types
+            value={current.purpose}
+            current={current}
+            setCurrent={setCurrent}
           />
         </Col>
       </CInputGroup>
     </>
   )
 }
-
 export const AssetForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, accData, height } = props
+  const { current, setCurrent, t, accData, height, disable, locale, currency } = props
   return (
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="account-id"
-            name="id"
-            className="input-sm"
-            placeholder="Id"
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.id} //eslint-disable-next-line react/prop-types
+            disabled={disable}
             style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.id}
-            onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.enterdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.enterdate')} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="enterdate"
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
-            label={t('common.enterdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="enterdate-id"
-            className="text-end"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('costcenter.name')}
-          </CFormLabel>
+          <FieldLabel title={t('common.name')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="name-input"
-            name="name"
-            className="input-sm"
-            placeholder="Name"
+          <InputField
+            fieldName="name"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.name} //eslint-disable-next-line react/prop-types
+            disabled={disable}
             style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.name}
-            onChange={(event) => setCurrent({ ...current, name: event.target.value })}
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.changedate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.changedate')} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
+          <DatePickerField
+            fieldName="changedate"
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
+            selected={Date.parse(current.enterdate)}
+            current={current}
+            setCurrent={setCurrent}
             disabled={true}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            selected={Date.parse(current.changedate)}
-            label={t('common.changedate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="changedate-id"
-            className="text-end"
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.account')}
-          </CFormLabel>
+          <FieldLabel title={t('common.account')} />
         </Col>
         <Col sm="4">
           <CFormSelect
@@ -1382,6 +1533,7 @@ export const AssetForm = (props) => {
             name="account"
             id="account-id"
             size="sm"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.account}
@@ -1392,31 +1544,22 @@ export const AssetForm = (props) => {
           </CFormSelect>
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.postingdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.postingdate')} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="postingdate"
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
-            label={t('common.postingdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="postingdate-id"
-            className="text-end"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.oaccount')}
-          </CFormLabel>
+          <FieldLabel title={t('common.oaccount')} />
         </Col>
         <Col sm="4">
           <CFormSelect
@@ -1425,6 +1568,7 @@ export const AssetForm = (props) => {
             name="oaccount"
             id="oaccount-id"
             size="sm"
+            disabled={disable}
             style={{ height: 30 }}
             /* eslint-disable-next-line react/prop-types */
             value={current.oaccount}
@@ -1435,134 +1579,124 @@ export const AssetForm = (props) => {
           </CFormSelect>
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} />
         </Col>
         <Col sm="2">
-          <Input
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.company} //eslint-disable-next-line react/prop-types
             disabled={true}
-            bssize="sm"
-            type="text"
-            id="company-id"
-            name="company"
-            className="input-sm"
-            placeholder="company"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.company}
             style={{ height: 30, textAlign: 'right', padding: 2 }}
-            readonly
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('asset.scrapValue')}
-          </CFormLabel>
+          <FieldLabel title={t('asset.amount').concat('/').concat(t('asset.scrapValue'))} />
         </Col>
-        <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="scrap_value-input"
-            name="scrap_value"
-            className="input-sm"
-            placeholder="scrap_value"
+        <Col sm="2">
+          <InputField
+            fieldName="amount"
+            type="Currency"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={Number(current.amount).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })} //eslint-disable-next-line react/prop-types
+            disabled={disable}
             style={{ height: 30, textAlign: 'right', padding: 2 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.scrapValue}
-            onChange={(event) => setCurrent({ ...current, scrap_value: event.target.value })}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 5 }}>
+          <InputField
+            fieldName="scrap_value"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={Number(current.scrapValue).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            style={{ height: 30, textAlign: 'right', padding: 2 }}
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('asset.lifeSpan')}
-          </CFormLabel>
+          <FieldLabel title={t('asset.lifeSpan')} />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="number"
-            id="life_span-input"
-            name="life_span"
-            className="input-sm"
-            placeholder="life span"
+          <InputField
+            fieldName="life_span"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.lifeSpan} //eslint-disable-next-line react/prop-types
+            disabled={disable}
             style={{ height: 30, textAlign: 'right', padding: 2 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.lifeSpan}
-            onChange={(event) => setCurrent({ ...current, life_span: event.target.value })}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('asset.depreciation')}
-          </CFormLabel>
+          <FieldLabel title={t('asset.depreciation')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
+          <InputField
+            fieldName="dep_Method"
             type="number"
-            id="depreciation-input"
-            name="depreciation"
-            className="input-sm"
-            placeholder="depreciation"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.depMethod} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            placeholder="depreciation method"
             style={{ height: 30, textAlign: 'right', padding: 2 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.depMethod}
-            onChange={(event) => setCurrent({ ...current, dep_Method: event.target.value })}
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('asset.frequency')}/{t('asset.rate')}
-          </CFormLabel>
+          <FieldLabel title={t('asset.frequency').concat('/').concat(t('asset.rate'))} size="sm" />
         </Col>
         <Col sm="1">
-          <Input
-            bssize="sm"
+          <InputField
+            fieldName="frequency"
             type="number"
-            id="frequency-input"
-            name="frequency"
-            className="input-sm"
-            placeholder="frequency"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.frequency} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            placeholder="depreciation frequency"
             style={{ height: 30, textAlign: 'right', padding: 2 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.frequency}
-            onChange={(event) => setCurrent({ ...current, frequency: event.target.value })}
           />
         </Col>
-        <Col sm="1">
-          <Input
-            bssize="sm"
+        <Col sm="1" style={{ height: height, paddingLeft: 6 }}>
+          <InputField
+            fieldName="rate"
             type="number"
-            id="rate-input"
-            name="rate"
-            className="input-sm"
-            placeholder="rate"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.rate} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            placeholder="depreciation rate"
             style={{ height: 30, textAlign: 'right', padding: 2 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.rate}
-            onChange={(event) => setCurrent({ ...current, rate: event.target.value })}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
+          <FieldLabel title={t('common.description')} />
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
-            type="texarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..."
-            /* eslint-disable-next-line react/prop-types */
+          <TextareaField
+            fieldName="description"
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
           />
         </Col>
       </CInputGroup>
@@ -1571,197 +1705,231 @@ export const AssetForm = (props) => {
 }
 export const MasterfilesMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, disable, t, accData, height } = props
-  // eslint-disable-next-line react/prop-types
-  const id = current.modelid === formEnum.SALARY_ITEM ? current.account : current.id
-  // eslint-disable-next-line react/prop-types
-  const currentAccount = accData.find((acc) => acc.id === id)
+  const { current, setCurrent, disable, t, height } = props
   return (
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="account-id"
-            name="id"
-            className="input-sm"
-            placeholder="Id"
-            style={{ height: 30 }}
-            /* eslint-disable-next-line no-undef */
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.id} //eslint-disable-next-line react/prop-types
             disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.id}
-            onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
         <Col sm="4" />
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
-            {t('common.enterdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.enterdate')} style={{ height: 30, paddingLeft: 10 }} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            /* eslint-disable-next-line no-undef */
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="enterdate"
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
-            label={t('common.enterdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={disable}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('costcenter.name')}
-          </CFormLabel>
+          <FieldLabel title={t('common.name')} />
         </Col>
         <Col sm="6">
-          <Input
-            bssize="sm"
-            type="text"
-            id="name-input"
-            name="name"
-            className="input-sm"
-            placeholder="Name"
+          <InputField
+            fieldName="name"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.name} //eslint-disable-next-line react/prop-types
+            disabled={disable}
             style={{ height: 30 }}
-            /* eslint-disable-next-line no-undef */
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.name}
-            onChange={(event) => setCurrent({ ...current, name: event.target.value })}
           />
         </Col>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
-            {t('common.changedate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.changedate')} style={{ height: 30, paddingLeft: 10 }} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="changedate"
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.changedate)}
-            label={t('common.changedate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <FieldLabel title={t('account.parent')} />
+        </Col>
         {/* eslint-disable-next-line react/prop-types */}
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.account')}
-          </CFormLabel>
-        </Col>
-        <Col sm="2">
-          <ComboBox
-            id="account"
-            idCol={true}
-            sm="4"
-            /* eslint-disable-next-line no-undef */
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.account}
-            placeholder={'account number'}
-            onChange={(event, newValue) => {
-              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
-            }}
-          />
-        </Col>
+        <Col sm="2">{current.modelid !== FormEnum.STORE ? accountIdField(props) : null}</Col>
         <Col sm="4" style={{ paddingLeft: 10 }}>
-          <ComboBox
-            id="accountName"
-            idCol={false}
-            sm="4"
-            /* eslint-disable-next-line no-undef */
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
-            value={currentAccount ? currentAccount.name : ''}
-            placeholder={'account name'}
-            onChange={(event, newValue) => {
-              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
-            }}
-          />
+          {/* eslint-disable-next-line react/prop-types */}
+          {current.modelid !== FormEnum.STORE ? accountNameField(props) : null}
         </Col>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
-            {t('common.postingdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.postingdate')} style={{ height: 30, paddingLeft: 10 }} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="postingdate"
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
-            label={t('common.postingdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            className="text-end w-50"
-          />
-        </Col>
-      </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
-        {/* eslint-disable-next-line react/prop-types */}
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
-        </Col>
-        <Col sm="2">
-          <Input
+            current={current}
+            setCurrent={setCurrent}
             disabled={true}
-            bssize="sm"
-            type="text"
-            id="company-id"
-            name="company"
-            className="input-sm"
-            placeholder="company"
-            style={{ height: 30, padding: 2 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.company}
-            readonly
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <FieldLabel title={t('common.company')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.company} //eslint-disable-next-line react/prop-types
+            disabled={true}
+            style={{ height: height }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height, paddingTop: 3 }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
+          <FieldLabel title={t('common.description')} />
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
-            type="texarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..."
-            style={{ height: 30 }}
-            /* eslint-disable-next-line no-undef */
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <TextareaField
+            fieldName="description"
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
+          />
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
+export const PayrollTaxForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, disable, t, locale, currency, height } = props
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <FieldLabel title={t('common.id')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.id} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            style={{ height: 30, textAlign: 'right' }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <FieldLabel title={t('payroll.tax.range.from')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="fromAmount"
+            type="currency"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            disabled={disable} //eslint-disable-next-line react/prop-types
+            value={Number(current.fromAmount ?? 0.0).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            placeholder="From amount"
+            style={{ height: 30, textAlign: 'right' }}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10, paddingTop: 2 }}>
+          <FieldLabel title={t('payroll.tax.range.to')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="toAmount"
+            type="currency"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            disabled={disable} //eslint-disable-next-line react/prop-types
+            value={Number(current.toAmount ?? 0.0).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            placeholder="From amount"
+            style={{ height: 30, textAlign: 'right' }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <FieldLabel title={t('payroll.tax.range.tax')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="tax"
+            type="currency"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            disabled={disable} //eslint-disable-next-line react/prop-types
+            value={Number(current.tax ?? 0.0).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            placeholder="From amount"
+            style={{ height: 30, textAlign: 'right' }}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10, paddingTop: 2 }}>
+          <FieldLabel title={t('payroll.tax.range.class')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="taxClass"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.taxClass} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            style={{ height: 30, textAlign: 'right' }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <FieldLabel title={t('common.company')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.company} //eslint-disable-next-line react/prop-types
+            disabled={true}
+            style={{ height: 30, padding: 2, textAlign: 'right' }}
           />
         </Col>
       </CInputGroup>
@@ -1769,153 +1937,293 @@ export const MasterfilesMainForm = (props) => {
   )
 }
 export const MasterfilesMainForm2 = (props) => {
+  console.log('props>>>>>OOOO', props)
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, height } = props
   return (
-    <>
+    <div style={{ height: 140 }}>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="id"
-            name="id"
-            className="input-sm"
-            placeholder="Id"
-            style={{ height: 30 }}
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.id} //eslint-disable-next-line react/prop-types
             disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.id}
-            onChange={(event) => setCurrent({ ...current, id: event.target.value })}
+            style={{ height: 30 }}
           />
         </Col>
         <Col sm="4" />
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
-            {t('common.enterdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.enterdate')} style={{ height: 30, paddingLeft: 10 }} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="enterdate"
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
-            label={t('common.enterdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.name')}
-          </CFormLabel>
+          <FieldLabel title={t('common.name')} />
         </Col>
         <Col sm="6">
-          <Input
-            bssize="sm"
-            type="text"
-            id="name-input"
-            name="name"
-            className="input-sm"
-            placeholder="Name"
-            style={{ height: 30 }}
+          <InputField
+            fieldName="name"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.name} //eslint-disable-next-line react/prop-types
             disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.name}
-            onChange={(event) => setCurrent({ ...current, name: event.target.value })}
+            style={{ height: 30 }}
           />
         </Col>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
-            {t('common.changedate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.changedate')} style={{ height: 30, paddingLeft: 10 }} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="changedate"
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.changedate)}
-            label={t('common.changedate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         {/* eslint-disable-next-line react/prop-types */}
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} />
         </Col>
         <Col sm="2">
-          <Input
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.company} //eslint-disable-next-line react/prop-types
             disabled={true}
-            bssize="sm"
-            type="text"
-            id="company-id"
-            name="company"
-            className="input-sm"
-            placeholder="company"
-            style={{ height: 30, padding: 2 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.company}
-            readonly
           />
         </Col>
         <Col sm="4" />
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
-            {t('common.postingdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.postingdate')} style={{ height: 30, paddingLeft: 10 }} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="postingdate"
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
-            label={t('common.postingdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
+          <FieldLabel title={t('common.description')} />
         </Col>
-        <Col xs="12" md="9">
-          <CFormTextarea
-            type="texarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..."
-            style={{ height: 30 }}
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+        <Col xs="12" md="9" style={{ height: height, paddingTop: 8 }}>
+          <TextareaField
+            fieldName="description"
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
           />
         </Col>
       </CInputGroup>
-    </>
+    </div>
+  )
+}
+export const ArticleForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, locale, currency, disable, t, height } = props
+  return (
+    <div style={{ height: 250 }}>
+      {MasterfilesMainForm(props)}
+      <CInputGroup row style={{ height: height, paddingTop: 11 }}>
+        <Col sm="2">
+          <FieldLabel title={t('article.pprice')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="pprice"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={Number(current.pprice).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            placeholder="Purchase price"
+            style={{ height: height, textAlign: 'right', padding: 2 }}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, padding: 2, paddingLeft: 12 }}>
+          <FieldLabel title={t('article.sprice')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="sprice"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={Number(current.sprice).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            placeholder="Sales price"
+            style={{ height: height, textAlign: 'right', padding: 2 }}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <FieldLabel title={t('article.avgPrice')} />
+        </Col>
+        <Col sm="1">
+          <InputField
+            fieldName="avgPrice"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={Number(current.avgPrice).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            placeholder="Average price"
+            style={{ height: height, textAlign: 'right', padding: 2 }}
+          />
+        </Col>
+        <Col sm="1" style={{ height: height, paddingLeft: 3 }}>
+          <InputField
+            fieldName="currency"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.currency} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            style={{ height: height, padding: 2 }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height, paddingTop: 14 }}>
+        <Col sm="2">
+          <FieldLabel title={t('article.quantityUnit')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="quantityUnit"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.quantityUnit} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            placeholder="quantity unit"
+            style={{ height: height, padding: 2 }}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <FieldLabel title={t('article.packUnit')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="packUnit"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.packUnit} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            placeholder="pack unit"
+            style={{ height: height, padding: 2 }}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <FieldLabel title={t('article.stocked')} />
+        </Col>
+        <Col sm="1">
+          <InputField
+            fieldName="stocked"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.stocked} //eslint-disable-next-line react/prop-types
+            disabled={disable}
+            placeholder="stocked"
+            style={{ height: height, padding: 2 }}
+          />
+        </Col>
+      </CInputGroup>
+    </div>
+  )
+}
+export const SalaryItemForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, locale, currency, disable, t, height } = props
+  return (
+    <div style={{ height: 210 }}>
+      {MasterfilesMainForm(props)}
+      <CInputGroup row style={{ height: height, paddingTop: 12 }}>
+        <Col sm="2">
+          <FieldLabel title={t('salary.item.amount')} />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="amount"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={Number(current.amount).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+              style: 'currency',
+              currency: currency,
+            })}
+            placeholder="Amount"
+            disabled={disable}
+            style={{ height: height, textAlign: 'right' }}
+          />
+        </Col>
+        <Col sm="1" style={{ height: height, paddingLeft: 5 }}>
+          <InputField
+            fieldName="currency"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.currency}
+            placeholder="Currency"
+            disabled={true}
+            style={{ height: height, padding: 2 }}
+          />
+        </Col>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <FieldLabel title={t('salary.item.percentage')} />
+        </Col>
+        <Col sm="1">
+          <InputField
+            fieldName="percentage"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={Number(current.percentage).toLocaleString(locale, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })}
+            placeholder="Percentage"
+            disabled={disable}
+            style={{ height: height, textAlign: 'right', padding: 2 }}
+          />
+        </Col>
+      </CInputGroup>
+    </div>
   )
 }
 export const UserForm = (props) => {
@@ -1925,159 +2233,115 @@ export const UserForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="user-id"
-            name="id"
-            className="input-sm"
-            placeholder="Id"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
-            onChange={(event) => setCurrent({ ...current, id: event.target.value })}
+            placeholder="User-id"
+            disabled={disable}
+            style={{ height: height, padding: 2 }}
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('user.role')}
-          </CFormLabel>
+          <FieldLabel title={t('user.role')} />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="role-id"
-            name="role"
-            className="input-sm"
-            placeholder="role"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="role"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.role}
-            onChange={(event) => setCurrent({ ...current, role: event.target.value })}
+            placeholder="role-id"
+            disabled={disable}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('user.userName')}
-          </CFormLabel>
+          <FieldLabel title={t('user.userName')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="userName-input"
-            name="userName"
-            className="input-sm"
-            placeholder="Name"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="userName"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.userName}
-            onChange={(event) => setCurrent({ ...current, userName: event.target.value })}
+            placeholder="user Name"
+            disabled={disable}
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('user.firstName')}
-          </CFormLabel>
+          <FieldLabel title={t('user.firstName')} />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="firstName-id"
-            name="firstName"
-            className="input-sm"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="firstName"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.firstName}
-            onChange={(event) => setCurrent({ ...current, firstName: event.target.value })}
+            disabled={disable}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('user.lastName')}
-          </CFormLabel>
+          <FieldLabel title={t('user.lastName')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="lastName-id"
-            name="lastName"
-            className="input-sm"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="lastName"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.lastName}
-            onChange={(event) => setCurrent({ ...current, lastName: event.target.value })}
+            disabled={disable}
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('user.email')}
-          </CFormLabel>
+          <FieldLabel title={t('user.email')} />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="email-id"
-            name="email"
-            className="input-sm"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="email"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.email}
-            onChange={(event) => setCurrent({ ...current, email: event.target.value })}
+            placeholder="email"
+            disabled={disable}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="6" />
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            disabled={true}
-            type="text"
-            id="company-id"
-            name="company"
-            className="input-sm"
-            placeholder="company"
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.company}
-            style={{ textAlign: 'right', padding: 2 }}
-            readonly
+            placeholder="user Name"
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('common.phone')}</CFormLabel>
+          <FieldLabel title={t('common.phone')} />
         </Col>
         <Col xs="12" md="9">
-          <Input
-            bssize="sm"
-            type="text"
-            id="menu-id"
-            name="menu"
-            className="input-sm"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="menu"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.menu}
-            onChange={(event) => setCurrent({ ...current, menu: event.target.value })}
+            placeholder="menu"
+            disabled={disable}
           />
         </Col>
       </CInputGroup>
@@ -2089,84 +2353,60 @@ export const AddressForm = (props) => {
   const { current, setCurrent, disable, t, height } = props
   return (
     <>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.street')}
-          </CFormLabel>
+          <FieldLabel title={t('common.street')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="street-id"
-            name="street"
-            className="input-sm"
-            placeholder="Id"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="street"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.street}
-            onChange={(event) => setCurrent({ ...current, street: event.target.value })}
+            placeholder="Street"
+            disabled={disable}
+            style={{ height: height, paddingTop: 2, paddingBottom: 2 }}
           />
         </Col>
-        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.zip')}
-          </CFormLabel>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <FieldLabel title={t('common.zip')} />
         </Col>
-        <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="zip-id"
-            name="zip"
-            className="input-sm"
-            placeholder="zip"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+        <Col sm="2">
+          <InputField
+            fieldName="zip"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.zip}
-            onChange={(event) => setCurrent({ ...current, zip: event.target.value })}
+            disabled={disable}
+            style={{ height: height, paddingTop: 2, paddingBottom: 2 }}
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 5 }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.city')}
-          </CFormLabel>
+          <FieldLabel title={t('common.city')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="city-input"
-            name="city"
-            className="input-sm"
-            placeholder="Name"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="city"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.city}
-            onChange={(event) => setCurrent({ ...current, city: event.target.value })}
+            disabled={disable}
+            style={{ height: height, paddingTop: 2, paddingBottom: 2 }}
           />
         </Col>
-        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.country')}
-          </CFormLabel>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <FieldLabel title={t('common.country')} />
         </Col>
-        <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="country-id"
-            name="country"
-            className="input-sm"
-            placeholder="country"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+        <Col sm="2">
+          <InputField
+            fieldName="country"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.country}
-            onChange={(event) => setCurrent({ ...current, country: event.target.value })}
-            style={{ padding: 2 }}
+            disabled={disable}
+            style={{ height: height, paddingTop: 2, paddingBottom: 2 }}
           />
         </Col>
       </CInputGroup>
@@ -2177,205 +2417,167 @@ export const CustomerGeneralForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, height } = props
   return (
-    <Grid
-      container
-      spacing={2}
-      justify="space-between"
-      style={{ ...styles.inner }}
-      direction="column"
-    >
-      <CInputGroup row style={{ height: height }}>
+    <div style={{ height: 200 }}>
+      <CInputGroup row>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="account-id"
-            name="id"
-            className="input-sm"
-            placeholder="Id"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
-            onChange={(event) => setCurrent({ ...current, id: event.target.value })}
+            disabled={disable}
           />
         </Col>
         <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.enterdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.enterdate')} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="enterdate"
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
-            label={t('common.enterdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="enterdate-id"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 2 }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.name')}
-          </CFormLabel>
+          <FieldLabel title={t('common.name')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="name-input"
-            name="name"
-            className="input-sm"
-            placeholder="Name"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="name"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.name}
-            onChange={(event) => setCurrent({ ...current, name: event.target.value })}
+            disabled={disable}
           />
         </Col>
-        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.changedate')}
-          </CFormLabel>
+        <Col sm="2" style={{ paddingLeft: 10 }}>
+          <FieldLabel title={t('common.changedate')} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
+          <DatePickerField
+            fieldName="changedate"
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
+            selected={Date.parse(current.enterdate)}
+            current={current}
+            setCurrent={setCurrent}
             disabled={true}
-            /* eslint-disable-next-line react/prop-types */
-            selected={Date.parse(current.changedate)}
-            label={t('common.changedate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="changedate-id"
-            className="text-end w-50"
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 10 }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.currency')}
-          </CFormLabel>
+          <FieldLabel title={t('common.email')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="currency-id"
-            name="currency"
-            className="input-sm"
-            placeholder="Currency"
+          <InputField
+            fieldName="email"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.email}
             disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.currency}
-            onChange={(event) => setCurrent({ ...current, currency: event.target.value })}
           />
         </Col>
-        <Col sm="2" style={{ height: 30, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.postingdate')}
-          </CFormLabel>
+        <Col sm="2" style={{ height: height, paddingLeft: 10 }}>
+          <FieldLabel title={t('common.postingdate')} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="postingdate"
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
-            label={t('common.postingdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="postingdate-id"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 18 }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.phone')}
-          </CFormLabel>
+          <FieldLabel title={t('common.phone')} />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="phone-id"
-            name="phone"
-            className="input-sm"
-            placeholder="phone"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="phone"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.phone}
-            onChange={(event) => setCurrent({ ...current, phone: event.target.value })}
+            disabled={disable}
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 25 }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
+          <FieldLabel title={t('common.description')} />
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
-            type="texarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..."
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <TextareaField
+            fieldName="description"
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
+            style={{ height: height }}
           />
         </Col>
       </CInputGroup>
-    </Grid>
+    </div>
   )
 }
+const FromPeriod = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { name, label, value, current, setCurrent, balancesheet, t, labelStyle, style } = props
+  /* eslint-disable-next-line react/prop-types */
+  return (
+    /* !balancesheet && ( */
+    <>
+      <Col sm="0.5" style={labelStyle}>
+        <FieldLabel title={t(label)} />
+      </Col>
+      <Col sm="1" style={{ paddingLeft: 10 }}>
+        <InputField
+          fieldName={name}
+          current={current}
+          setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+          value={value}
+          style={style ? style : { height: 30, padding: 1, textAlign: 'right' }}
+        />
+      </Col>
+    </>
+    /* ) */
+  )
+}
+
 const salaryField = (props) => {
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, locale, currency, t } = props
-  /* eslint-disable-next-line react/prop-types */
   return (
     current.modelid === formEnum.EMPLOYEE && (
       <>
         <Col sm="2" style={{ paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('employee.salary')}
-          </CFormLabel>
+          <FieldLabel title={t('employee.salary')} />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="salary-id"
-            name="salary"
-            className="input-sm form-select-bg-size"
-            placeholder="salary"
-            disabled={disable}
-            inputProps={{ type: 'number' }}
-            /* eslint-disable-next-line react/prop-types */
-            value={Number(current.salary).toLocaleString(locale, {
+          <InputField
+            fieldName="salary"
+            type="currency"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={Number(current?.salary ?? 0.0).toLocaleString(locale, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
               style: 'currency',
               currency: currency,
             })}
-            onChange={(event) => setCurrent({ ...current, salary: event.target.value })}
+            disabled={disable}
             style={{ textAlign: 'right', padding: 2 }}
           />
         </Col>
@@ -2383,9 +2585,129 @@ const salaryField = (props) => {
     )
   )
 }
-export const CustomerAccountForm = (props) => {
+export const ArticleAccountForm = (props) => {
+  console.log('props>>>>>', props)
   /* eslint-disable-next-line react/prop-types */
   const { current, setCurrent, disable, t, accData, vatData, height } = props
+  // eslint-disable-next-line react/prop-types
+  const currentAccount = accData.find((acc) => acc.id === current.stockAccount)
+  // eslint-disable-next-line react/prop-types
+  const currentOAccount = accData.find((acc) => acc.id === current.expenseAccount)
+  // eslint-disable-next-line react/prop-types
+  const currentVat = vatData.find((vat) => vat.id === current.vatCode)
+  return (
+    <div style={{ height: 100 }}>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <FieldLabel title={t('article.stock.account')} />
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="account"
+            idCol={true}
+            sm="4"
+            data={accData}
+            disable={disable}
+            height={height} //eslint-disable-next-line react/prop-types
+            value={current.stockAccount}
+            placeholder={'account number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, stockAccount: newValue?.id, accountName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="accountName"
+            idCol={false}
+            sm="4"
+            disable={disable}
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} //eslint-disable-next-line react/prop-types
+            value={currentAccount ? currentAccount.name : ''}
+            placeholder={'account name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, stockAccount: newValue?.id, accountName: newValue?.name })
+            }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <FieldLabel title={t('article.expense.account')} />
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="oaccount"
+            idCol={true}
+            sm="4"
+            data={accData}
+            disable={disable}
+            height={height} //eslint-disable-next-line react/prop-types
+            value={current.expenseAccount}
+            placeholder={' o acc number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, expenseAccount: newValue?.id, oaccountName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="oaccountName"
+            idCol={false}
+            sm="4"
+            disable={disable}
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} //eslint-disable-next-line react/prop-types
+            value={currentOAccount ? currentOAccount.name : ''}
+            placeholder={'oaccount name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, expenseAccount: newValue?.id, oaccountName: newValue?.name })
+            }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="2">
+          <FieldLabel title={t('common.vatCode')} />
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="vatcode"
+            idCol={true}
+            sm="4"
+            disable={disable}
+            height={height} //eslint-disable-next-line react/prop-types
+            data={vatData.sort(sortById)} //eslint-disable-next-line react/prop-types
+            value={current.vatCode}
+            placeholder={'vat code'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, vatCode: newValue?.id, vatName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="vatName"
+            idCol={false}
+            sm="4"
+            disable={disable}
+            height={height} //eslint-disable-next-line react/prop-types
+            data={vatData.sort(sortByName)} //eslint-disable-next-line react/prop-types
+            value={currentVat ? currentVat.name : ''}
+            placeholder={'vat name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, vatCode: newValue?.id, vatName: newValue?.name })
+            }}
+          />
+        </Col>
+      </CInputGroup>
+    </div>
+  )
+}
+export const CustomerAccountForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  const { current, setCurrent, disable, t, accData, vatData, height, currency, locale } = props
   const accountLabel =
     /* eslint-disable-next-line react/prop-types */
     current.modelid === 1
@@ -2393,12 +2715,9 @@ export const CustomerAccountForm = (props) => {
       : /* eslint-disable-next-line react/prop-types */
         current.modelid === 3
         ? t('customer.account')
-        : t('employee.account')
-  // eslint-disable-next-line react/prop-types
-  const currentAccount = accData.find((acc) => acc.id === current.account)
-  // eslint-disable-next-line react/prop-types
-  const currentOAccount = accData.find((acc) => acc.id === current.oaccount)
-  // eslint-disable-next-line react/prop-types
+        : t('employee.account') //eslint-disable-next-line react/prop-types
+  const currentAccount = accData.find((acc) => acc.id === current.account) //eslint-disable-next-line react/prop-types
+  const currentOAccount = accData.find((acc) => acc.id === current.oaccount) //eslint-disable-next-line react/prop-types
   const currentVat = vatData.find((vat) => vat.id === current.vatcode)
   const oaccountLabel =
     /* eslint-disable-next-line react/prop-types */
@@ -2409,18 +2728,10 @@ export const CustomerAccountForm = (props) => {
         ? t('customer.oaccount')
         : t('employee.oaccount')
   return (
-    <Grid
-      container
-      spacing={2}
-      justify="space-between"
-      style={{ ...styles.inner }}
-      direction="column"
-    >
+    <div style={{ height: 100 }}>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {accountLabel}
-          </CFormLabel>
+          <FieldLabel title={accountLabel} />
         </Col>
         <Col sm="2">
           <ComboBox
@@ -2429,7 +2740,7 @@ export const CustomerAccountForm = (props) => {
             sm="4"
             data={accData}
             disable={disable}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
             value={current.account}
             placeholder={'account number'}
             onChange={(event, newValue) => {
@@ -2443,9 +2754,8 @@ export const CustomerAccountForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} //eslint-disable-next-line react/prop-types
             value={currentAccount ? currentAccount.name : ''}
             placeholder={'account name'}
             onChange={(event, newValue) => {
@@ -2453,33 +2763,10 @@ export const CustomerAccountForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="2" style={{ paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
-        </Col>
-        <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="company-id"
-            name="company"
-            className="input-sm form-select-bg-size"
-            placeholder="company"
-            disabled={true}
-            //className="mb-3"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.company}
-            onChange={(event) => setCurrent({ ...current, company: event.target.value })}
-            style={{ textAlign: 'right', padding: 2 }}
-          />
-        </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {oaccountLabel}
-          </CFormLabel>
+          <FieldLabel title={oaccountLabel} />
         </Col>
         <Col sm="2">
           <ComboBox
@@ -2488,7 +2775,7 @@ export const CustomerAccountForm = (props) => {
             sm="4"
             data={accData}
             disable={disable}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
             value={current.oaccount}
             placeholder={' o acc number'}
             onChange={(event, newValue) => {
@@ -2502,9 +2789,8 @@ export const CustomerAccountForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} //eslint-disable-next-line react/prop-types
             value={currentOAccount ? currentOAccount.name : ''}
             placeholder={'oaccount name'}
             onChange={(event, newValue) => {
@@ -2517,9 +2803,7 @@ export const CustomerAccountForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.vatCode')}
-          </CFormLabel>
+          <FieldLabel title={t('common.vatCode')} />
         </Col>
         <Col sm="2">
           <ComboBox
@@ -2527,9 +2811,8 @@ export const CustomerAccountForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
-            /* eslint-disable-next-line react/prop-types */
-            data={vatData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={vatData.sort(sortById)} //eslint-disable-next-line react/prop-types
             value={current.vatcode}
             placeholder={'vat code'}
             onChange={(event, newValue) => {
@@ -2543,9 +2826,8 @@ export const CustomerAccountForm = (props) => {
             idCol={false}
             sm="4"
             disable={disable}
-            /* eslint-disable-next-line react/prop-types */
-            data={vatData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={vatData.sort(sortByName)} //eslint-disable-next-line react/prop-types
             value={currentVat ? currentVat.name : ''}
             placeholder={'vat name'}
             onChange={(event, newValue) => {
@@ -2554,7 +2836,7 @@ export const CustomerAccountForm = (props) => {
           />
         </Col>
       </CInputGroup>
-    </Grid>
+    </div>
   )
 }
 export const CompanyGeneralForm = (props) => {
@@ -2562,112 +2844,78 @@ export const CompanyGeneralForm = (props) => {
   const { current, setCurrent, disable, t, height } = props
   console.log('props', props)
   return (
-    <Grid
-      container
-      spacing={2}
-      justify="space-between"
-      style={{ ...styles.inner }}
-      direction="column"
-    >
+    <div style={{ height: 110 }}>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="account-id"
-            name="id"
-            className="input-sm"
-            placeholder="Id"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.id}
-            onChange={(event) => setCurrent({ ...current, id: event.target.value })}
+            disabled={disable}
           />
         </Col>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.enterdate')}
-          </CFormLabel>
+        <Col sm="2" style={{ paddingLeft: 8 }}>
+          <FieldLabel title={t('common.enterdate')} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="enterdate"
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
-            label={t('common.enterdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="enterdate-id"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 5 }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('company.name')}
-          </CFormLabel>
+          <FieldLabel title={t('company.name')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="name-input"
-            name="name"
-            className="input-sm"
-            placeholder="Name"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="name"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
             value={current.name}
-            onChange={(event) => setCurrent({ ...current, name: event.target.value })}
+            disabled={disable}
+            style={{ height: height }}
           />
         </Col>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.changedate')}
-          </CFormLabel>
+        <Col sm="2" style={{ paddingLeft: 10 }}>
+          <FieldLabel title={t('common.changedate')} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="changedate"
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.changedate)}
-            label={t('common.changedate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="changedate-id"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
+      <CInputGroup row style={{ height: height, paddingTop: 10 }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('common.description')}</CFormLabel>
+          <FieldLabel title={t('company.description')} />
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
-            type="texarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..."
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+          <TextareaField
+            fieldName="description"
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
           />
         </Col>
       </CInputGroup>
-    </Grid>
+    </div>
   )
 }
 export const CompanyAccountForm = (props) => {
@@ -2678,9 +2926,7 @@ export const CompanyAccountForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.bankAcc')}
-          </CFormLabel>
+          <FieldLabel title={t('common.bankAcc')} />
         </Col>
         <Col sm="4">
           <CFormSelect
@@ -2690,8 +2936,7 @@ export const CompanyAccountForm = (props) => {
             id="bankAcc-id"
             size="sm"
             disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+            style={{ height: 30 }} //eslint-disable-next-line react/prop-types
             value={current.bankAcc}
             onChange={(event) => setCurrent({ ...current, bankAcc: event.target.value })}
           >
@@ -2699,31 +2944,29 @@ export const CompanyAccountForm = (props) => {
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.postingdate')}
-          </CFormLabel>
+        <Col sm="2" style={{ paddingLeft: 10 }}>
+          <FieldLabel title={t('common.vatCode')} />
         </Col>
-        <Col sm="2">
-          <CDatePicker
+        <Col sm="4">
+          <CFormSelect
+            className="flex-row"
+            type="select"
+            name="vatcode"
+            id="vatcode-id"
             size="sm"
-            inputReadOnly
-            /* eslint-disable-next-line react/prop-types */
-            selected={Date.parse(current.postingdate)}
-            label={t('common.postingdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="postingdate-id"
-            className="text-end w-50"
-          />
+            disabled={disable}
+            style={{ height: 30 }} //eslint-disable-next-line react/prop-types
+            value={current.vatCode}
+            onChange={(event) => setCurrent({ ...current, vatCode: event.target.value })}
+          >
+            {/* eslint-disable-next-line react/prop-types */}
+            {vatData.sort(sortById).map((item) => mappingSelect(item))}
+          </CFormSelect>
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.paymentClearingAcc')}
-          </CFormLabel>
+          <FieldLabel title={t('common.paymentClearingAcc')} />
         </Col>
         <Col sm="4">
           <CFormSelect
@@ -2732,8 +2975,7 @@ export const CompanyAccountForm = (props) => {
             name="paymentClearingAcc"
             id="paymentClearingAcc-id"
             disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+            style={{ height: 30 }} //eslint-disable-next-line react/prop-types
             value={current.paymentClearingAcc}
             onChange={(event) => setCurrent({ ...current, paymentClearingAcc: event.target.value })}
           >
@@ -2741,10 +2983,8 @@ export const CompanyAccountForm = (props) => {
             {accData.map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.settlementClearingAcc')}
-          </CFormLabel>
+        <Col sm="2" style={{ paddingLeft: 10 }}>
+          <FieldLabel title={t('common.settlementClearingAcc')} />
         </Col>
         <Col sm="4">
           <CFormSelect
@@ -2754,8 +2994,7 @@ export const CompanyAccountForm = (props) => {
             id="settlementClearingAcc-id"
             size="sm"
             style={{ height: 30 }}
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
+            disabled={disable} //eslint-disable-next-line react/prop-types
             value={current.settlementClearingAcc}
             onChange={(event) =>
               setCurrent({ ...current, settlementClearingAcc: event.target.value })
@@ -2768,9 +3007,7 @@ export const CompanyAccountForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.cashAcc')}
-          </CFormLabel>
+          <FieldLabel title={t('common.cashAcc')} />
         </Col>
         <Col sm="4">
           <CFormSelect
@@ -2780,8 +3017,7 @@ export const CompanyAccountForm = (props) => {
             id="cashAcc-id"
             size="sm"
             disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+            style={{ height: 30 }} //eslint-disable-next-line react/prop-types
             value={current.cashAcc}
             onChange={(event) => setCurrent({ ...current, cashAcc: event.target.value })}
           >
@@ -2789,10 +3025,8 @@ export const CompanyAccountForm = (props) => {
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.purchasingClearingAcc')}
-          </CFormLabel>
+        <Col sm="2" style={{ paddingLeft: 10 }}>
+          <FieldLabel title={t('common.purchasingClearingAcc')} />
         </Col>
         <Col sm="4">
           <CFormSelect
@@ -2802,8 +3036,7 @@ export const CompanyAccountForm = (props) => {
             id="purchasingClearingAcc-id"
             size="sm"
             disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+            style={{ height: 30 }} //eslint-disable-next-line react/prop-types
             value={current.purchasingClearingAcc}
             onChange={(event) =>
               setCurrent({ ...current, purchasingClearingAcc: event.target.value })
@@ -2816,9 +3049,7 @@ export const CompanyAccountForm = (props) => {
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.balanceSheetAcc')}
-          </CFormLabel>
+          <FieldLabel title={t('common.balanceSheetAcc')} />
         </Col>
         <Col sm="4">
           <CFormSelect
@@ -2828,8 +3059,7 @@ export const CompanyAccountForm = (props) => {
             id="balanceSheetAcc-id"
             size="sm"
             disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+            style={{ height: 30 }} //eslint-disable-next-line react/prop-types
             value={current.balanceSheetAcc}
             onChange={(event) => setCurrent({ ...current, balanceSheetAcc: event.target.value })}
           >
@@ -2837,10 +3067,8 @@ export const CompanyAccountForm = (props) => {
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
         </Col>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.incomeStmtAcc')}
-          </CFormLabel>
+        <Col sm="2" style={{ paddingLeft: 10 }}>
+          <FieldLabel title={t('common.incomeStmtAcc')} />
         </Col>
         <Col sm="4">
           <CFormSelect
@@ -2850,57 +3078,13 @@ export const CompanyAccountForm = (props) => {
             id="incomeStmtAcc-id"
             size="sm"
             disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+            style={{ height: 30 }} //eslint-disable-next-line react/prop-types
             value={current.incomeStmtAcc}
             onChange={(event) => setCurrent({ ...current, incomeStmtAcc: event.target.value })}
           >
             {/* eslint-disable-next-line react/prop-types */}
             {accData.sort(sortById).map((item) => mappingSelect(item))}
           </CFormSelect>
-        </Col>
-      </CInputGroup>
-      <CInputGroup row style={{ height: height }}>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.vatCode')}
-          </CFormLabel>
-        </Col>
-        <Col sm="4">
-          <CFormSelect
-            className="flex-row"
-            type="select"
-            name="vatcode"
-            id="vatcode-id"
-            size="sm"
-            disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.vatCode}
-            onChange={(event) => setCurrent({ ...current, vatCode: event.target.value })}
-          >
-            {/* eslint-disable-next-line react/prop-types */}
-            {vatData.sort(sortById).map((item) => mappingSelect(item))}
-          </CFormSelect>
-        </Col>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.iban')}
-          </CFormLabel>
-        </Col>
-        <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="iban-id"
-            name="ibanid"
-            className="input-sm"
-            placeholder="Id"
-            disabled={disable}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.iban}
-            onChange={(event) => setCurrent({ ...current, iban: event.target.value })}
-          />
         </Col>
       </CInputGroup>
     </>
@@ -2910,161 +3094,108 @@ export const CompanyAccountForm = (props) => {
 export const FinancialsMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
   let { current, current_, setCurrent, t, accData, ccData, height } = props
-  current = current ? current : current_
-  // eslint-disable-next-line react/prop-types
-  const currentAccount = accData.find((acc) => acc.id === current.account)
-  // eslint-disable-next-line react/prop-types
-  const currentCC = ccData.find((cc) => cc.id === current.costcenter)
+  current = current ? current : current_ //eslint-disable-next-line react/prop-types
+  const currentAccount = accData.find((acc) => acc.id === current.account) //eslint-disable-next-line react/prop-types
+  const ccData_ = ccData ? ccData : [] //eslint-disable-next-line react/prop-types
+  const currentCC = ccData_.find((cc) => cc.id === current.costcenter)
   return (
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="1">
-          <CFormLabel size="xs" htmlFor="input-small">
-            {t('financials.id')}
-          </CFormLabel>
+          <FieldLabel title={t('financials.id')} size="xs" />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="id"
-            name="id"
-            className="sm"
-            placeholder={t('financials.id')}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.id}
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.id} //eslint-disable-next-line react/prop-types
+            disabled={current.posted}
+            style={{ height: height }}
           />
         </Col>
         <Col sm="4" />
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
-            {t('financials.postingdate')}
-          </CFormLabel>
+          <FieldLabel title={t('financials.postingdate')} style={{ height: 30, paddingLeft: 10 }} />
         </Col>
         <Col sm="1">
-          <CDatePicker
-            size="xs"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="postingdate"
+            label={t('financials.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
-            label={t('financials.postingdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="postingdate-id"
-            style={{
-              backgroundColor: 'aliceblue',
-              height: '24px',
-              width: '20',
-              //borderRadius: '8px',
-              fontSize: '14px',
-              //padding: '3px 10px',
-            }}
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 20 }}>
-            {t('financials.period')}
-          </CFormLabel>
+          <FieldLabel title={t('financials.period')} style={{ height: 30, paddingLeft: 20 }} />
         </Col>
         <Col sm="1">
-          <Input
+          <InputField
+            fieldName="period"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.period} //eslint-disable-next-line react/prop-types
             disabled={true}
-            bssize="sm"
-            className="input-sm"
-            type="text"
-            id="period"
-            name="period"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.period}
             style={{ textAlign: 'right', padding: 2 }}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="1" style={{ height: 30 }}>
-          <CFormLabel size="xs" htmlFor="input-small" style={{ height: 30 }}>
-            {t('financials.oid')}
-          </CFormLabel>
+          <FieldLabel title={t('financials.oid')} style={{ height: 30 }} />
         </Col>
         <Col sm="2">
-          <Input
-            /* eslint-disable-next-line react/prop-types */
+          <InputField
+            fieldName="oid"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.oid} //eslint-disable-next-line react/prop-types
             disabled={current.posted}
-            bssize="sm"
-            type="text"
-            id="oid-input"
-            name="oid"
-            className="input-sm"
-            placeholder="oid"
             style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.oid}
-            onChange={(event) => setCurrent({ ...current, oid: event.target.value })}
           />
         </Col>
         <Col sm="4" />
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
-            {t('financials.enterdate')}
-          </CFormLabel>
+          <FieldLabel title={t('financials.enterdate')} style={{ height: 30, paddingLeft: 10 }} />
         </Col>
         <Col sm="1">
-          <CDatePicker
-            size="xs"
-            disabled={true}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="enterdate"
+            label={t('financials.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
-            label={t('financials.enterdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="enterdate-id"
-            style={{
-              backgroundColor: 'aliceblue',
-              height: '24px',
-              width: '20',
-              //borderRadius: '8px',
-              fontSize: '14px',
-              //padding: '3px 10px',
-            }}
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 20 }}>
-            {t('common.company')}
-          </CFormLabel>
+          <FieldLabel title={t('common.company')} style={{ height: 30, paddingLeft: 20 }} />
         </Col>
         <Col sm="1">
-          <Input
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.company} //eslint-disable-next-line react/prop-types
             disabled={true}
-            bssize="sm"
-            type="text"
-            id="company-input"
-            name="company"
-            className="input-sm"
-            placeholder={t('common.company')}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.company}
             style={{ textAlign: 'right', height: 30 }}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('financials.account')}
-          </CFormLabel>
+          <FieldLabel title={t('financials.account')} />
         </Col>
         <Col sm="2">
           <ComboBox
             id="account"
             idCol={true}
-            sm="4"
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            sm="4" //eslint-disable-next-line react/prop-types
+            disable={current.posted}
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortById)} //eslint-disable-next-line react/prop-types
             value={current.account}
             placeholder={'account number'}
             onChange={(event, newValue) => {
@@ -3072,14 +3203,14 @@ export const FinancialsMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="4" style={{ paddingLeft: 10 }}>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
           <ComboBox
             id="accountName"
             idCol={false}
-            sm="4"
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            sm="4" //eslint-disable-next-line react/prop-types
+            disable={current.posted}
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} //eslint-disable-next-line react/prop-types
             value={currentAccount ? currentAccount.name : ''}
             placeholder={'account name'}
             onChange={(event, newValue) => {
@@ -3088,48 +3219,31 @@ export const FinancialsMainForm = (props) => {
           />
         </Col>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30, paddingLeft: 10 }}>
-            {t('financials.transdate')}
-          </CFormLabel>
+          <FieldLabel title={t('financials.transdate')} style={{ height: 30, paddingLeft: 10 }} />
         </Col>
         <Col sm="1">
-          <CDatePicker
-            size="xs"
-            /* eslint-disable-next-line react/prop-types */
-            disabled={current.posted}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="transdate"
+            label={t('financials.transdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.transdate)}
-            label={t('financials.transdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="transdate-id"
-            style={{
-              backgroundColor: 'aliceblue',
-              height: '24px',
-              width: '20',
-              //borderRadius: '8px',
-              fontSize: '14px',
-              //padding: '3px 10px',
-            }}
-            onChange={(newValue) => setCurrent({ ...current, transdate: newValue })}
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            disabled={current.posted}
           />
         </Col>
       </CInputGroup>
-      <CInputGroup row style={{ paddingBottom: 7, height: height }}>
+      <CInputGroup row style={{ height: height }}>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small" style={{ height: 30 }}>
-            {t('financials.costcenter')}
-          </CFormLabel>
+          <FieldLabel title={t('financials.costcenter')} />
         </Col>
         <Col sm="2">
           <ComboBox
             id="costcenter"
             idCol={true}
-            sm="4"
-            /* eslint-disable-next-line react/prop-types */
-            data={ccData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            sm="4" // eslint-disable-next-line react/prop-types
+            disable={current.posted}
+            height={height} // eslint-disable-next-line react/prop-types
+            data={ccData.sort(sortById)} // eslint-disable-next-line react/prop-types
             value={current.costcenter}
             placeholder={'cost center number'}
             onChange={(event, newValue) => {
@@ -3137,14 +3251,14 @@ export const FinancialsMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="4" style={{ paddingLeft: 10 }}>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
           <ComboBox
             id="costCenterName"
             idCol={false}
-            sm="4"
-            /* eslint-disable-next-line react/prop-types */
-            data={ccData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            sm="4" // eslint-disable-next-line react/prop-types
+            disable={current.posted}
+            height={height} // eslint-disable-next-line react/prop-types
+            data={ccData.sort(sortByName)} // eslint-disable-next-line react/prop-types
             value={currentCC ? currentCC.name : ''}
             placeholder={'cost center name'}
             onChange={(event, newValue) => {
@@ -3152,15 +3266,204 @@ export const FinancialsMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="2">
-          <FormControlLabel
-            disabled={true}
-            id="posted"
+        <Col sm="1">
+          <BooleanField
             name="posted"
-            style={{ height: 30, paddingLeft: 60 }}
-            /* eslint-disable-next-line react/prop-types */
-            control={<Switch checked={current.posted} />}
-            label={t('financials.posted')}
+            label={t('financials.posted')} //eslint-disable-next-line react/prop-types
+            disabled={true} //eslint-disable-next-line react/prop-types
+            checked={current.posted}
+            style={{ paddingLeft: 60 }}
+          />
+        </Col>
+      </CInputGroup>
+    </>
+  )
+}
+export const TransactionMainForm = (props) => {
+  /* eslint-disable-next-line react/prop-types */
+  let { current, current_, setCurrent, t, storeData, accData, height } = props
+  current = current ? current : current_ //eslint-disable-next-line react/prop-types
+  const currentStore = (storeData ?? []).find((store) => store.id === current.store) //eslint-disable-next-line react/prop-types
+  const accData_ = accData ? accData : [] //eslint-disable-next-line react/prop-types
+  const currentAcc = accData_.find((acc) => acc.id === current.account)
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1">
+          <FieldLabel title={t('transaction.id')} size="xs" />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="id"
+            current={current}
+            placeholder={t('transaction.id')}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.id} //eslint-disable-next-line react/prop-types
+            disabled={current.posted}
+          />
+        </Col>
+        <Col sm="4" />
+        <Col sm="1">
+          <FieldLabel
+            title={t('transaction.postingdate')}
+            style={{ height: 30, paddingLeft: 10 }}
+          />
+        </Col>
+        <Col sm="1">
+          <DatePickerField
+            fieldName="postingdate"
+            label={t('transaction.postingdate')} //eslint-disable-next-line react/prop-types
+            selected={Date.parse(current.postingdate)}
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
+          />
+        </Col>
+        <Col sm="1">
+          <FieldLabel title={t('transaction.period')} style={{ height: 30, paddingLeft: 20 }} />
+        </Col>
+        <Col sm="1">
+          <InputField
+            fieldName="period"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.period} //eslint-disable-next-line react/prop-types
+            disabled={true}
+            style={{ textAlign: 'right', height: 30 }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1" style={{ height: 30 }}>
+          <FieldLabel title={t('transaction.oid')} style={{ height: 30 }} size="xs" />
+        </Col>
+        <Col sm="2">
+          <InputField
+            fieldName="oid"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.oid} //eslint-disable-next-line react/prop-types
+            disabled={current.posted}
+            style={{ height: 30 }}
+          />
+        </Col>
+        <Col sm="4" />
+        <Col sm="1">
+          <FieldLabel title={t('transaction.enterdate')} style={{ height: 30, paddingLeft: 10 }} />
+        </Col>
+        <Col sm="1">
+          <DatePickerField
+            fieldName="enterdate"
+            label={t('transaction.enterdate')} //eslint-disable-next-line react/prop-types
+            selected={Date.parse(current.enterdate)}
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
+          />
+        </Col>
+        <Col sm="1">
+          <FieldLabel title={t('common.company')} style={{ height: 30, paddingLeft: 20 }} />
+        </Col>
+        <Col sm="1">
+          <InputField
+            fieldName="company"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.company} //eslint-disable-next-line react/prop-types
+            disabled={true}
+            style={{ textAlign: 'right', height: 30 }}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1">
+          <FieldLabel title={t('transaction.store')} />
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="store"
+            idCol={true}
+            sm="4" //eslint-disable-next-line react/prop-types
+            disable={current.posted}
+            height={height} //eslint-disable-next-line react/prop-types
+            data={storeData.sort(sortById)} //eslint-disable-next-line react/prop-types
+            value={current.store}
+            placeholder={'store number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, store: newValue?.id, storeName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
+          <ComboBox
+            id="StoreName"
+            idCol={false}
+            sm="4" //eslint-disable-next-line react/prop-types
+            disable={current.posted}
+            height={height} //eslint-disable-next-line react/prop-types
+            data={storeData.sort(sortByName)} //eslint-disable-next-line react/prop-types
+            value={currentStore ? currentStore.name : ''}
+            placeholder={'store name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, store: newValue?.id, storeName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="1">
+          <FieldLabel title={t('transaction.transdate')} style={{ height: 30, paddingLeft: 10 }} />
+        </Col>
+        <Col sm="1">
+          <DatePickerField
+            fieldName="transdate"
+            label={t('transaction.transdate')} //eslint-disable-next-line react/prop-types
+            selected={Date.parse(current.transdate)}
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            disabled={current.posted}
+          />
+        </Col>
+      </CInputGroup>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1">
+          <FieldLabel title={t('transaction.account')} />
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="account"
+            idCol={true}
+            sm="4" //eslint-disable-next-line react/prop-types
+            disable={current.posted}
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData_.sort(sortById)} //eslint-disable-next-line react/prop-types
+            value={current.account}
+            placeholder={'account number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
+          <ComboBox
+            id="costCenterName"
+            idCol={false}
+            sm="4" //eslint-disable-next-line react/prop-types
+            disable={current.posted}
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData_.sort(sortByName)} //eslint-disable-next-line react/prop-types
+            value={currentAcc ? currentAcc.name : ''}
+            placeholder={'cost center name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, account: newValue?.id, accountName: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="1">
+          <BooleanField
+            name="posted"
+            label={t('transaction.posted')} //eslint-disable-next-line react/prop-types
+            disabled={true} //eslint-disable-next-line react/prop-types
+            checked={current.posted}
+            style={{ paddingLeft: 60 }}
           />
         </Col>
       </CInputGroup>
@@ -3169,25 +3472,22 @@ export const FinancialsMainForm = (props) => {
 }
 export const JournalMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, t, accData, submitQuery, submitQuery2, height } = props
+  const { current, setCurrent, t, accData, submitQuery, submitQuery2, height, balancesheet } = props
   // eslint-disable-next-line react/prop-types
   const currentAccount = accData.find((acc) => acc.id === current.account)
   return (
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.account')}
-          </CFormLabel>
+          <FieldLabel title={t('common.account')} />
         </Col>
         <Col sm="2">
           <ComboBox
             id="account-id"
             idCol={true}
             sm="4"
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortById)} //eslint-disable-next-line react/prop-types
             value={current.account}
             placeholder={'account number'}
             onChange={(event, newValue) => {
@@ -3200,9 +3500,8 @@ export const JournalMainForm = (props) => {
             id="account2-id"
             idCol={false}
             sm="4"
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} //eslint-disable-next-line react/prop-types
             value={currentAccount ? currentAccount.name : ''}
             placeholder={'account name'}
             onChange={(event, newValue) => {
@@ -3210,74 +3509,150 @@ export const JournalMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="0.5" style={{ align: 'right', padding: 2, paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.from')}
-          </CFormLabel>
-        </Col>
-        <Col sm="1" style={{ paddingLeft: 10 }}>
-          <Input
-            bssize="sm"
-            type="text"
-            id="fromPeriod-id"
-            name="fromPeriod"
-            className="input-sm"
-            placeholder="fromPeriod"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.fromPeriod}
-            onChange={(event) => setCurrent({ ...current, fromPeriod: event.target.value })}
-            style={{ height: 30, padding: 1, textAlign: 'right' }}
-          />
-        </Col>
-        <Col sm="0.5" style={{ padding: 2, paddingLeft: 10, textAlign: 'right' }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.to')}
-          </CFormLabel>
-        </Col>
-        <Col sm="1" style={{ paddingLeft: 10, textAlign: 'right' }}>
-          <Input
-            bssize="sm"
-            type="text"
-            id="toPeriod-id"
-            name="toPeriod"
-            className="input-sm"
-            placeholder="toPeriod"
-            /* eslint-disable-next-line react/prop-types */
-            value={current.toPeriod}
-            onChange={(event) => setCurrent({ ...current, toPeriod: event.target.value })}
-            style={{ height: 30, padding: 1, textAlign: 'right' }}
-          />
-        </Col>
+        <FromPeriod
+          id="fromPeriod-id"
+          name="fromPeriod"
+          label="common.from"
+          current={current} //eslint-disable-next-line react/prop-types
+          value={current.fromPeriod}
+          setCurrent={setCurrent}
+          balancesheet={balancesheet}
+          t={t}
+          labelStyle={{ padding: 2, paddingLeft: 10, textAlign: 'right' }}
+          style={{ height: 30, padding: 1, textAlign: 'right' }}
+        />
+        <FromPeriod
+          id="toPeriod-id"
+          name="toPeriod"
+          label="common.to"
+          current={current} //eslint-disable-next-line react/prop-types
+          value={current.toPeriod}
+          setCurrent={setCurrent}
+          balancesheet={balancesheet}
+          t={t}
+          labelStyle={{ padding: 2, paddingLeft: 10, textAlign: 'right' }}
+          style={{ height: 30, padding: 1, textAlign: 'right' }}
+        />
         <Col sm="1" style={{ paddingLeft: 10, align: 'right' }}>
-          <Button
-            type="submit"
-            size="sm"
-            color="primary"
-            style={{ align: 'right' }}
+          <FormButton
+            title={t('common.run')}
             onClick={submitQuery}
-          >
-            <i className="fa fa-dot-circle-o"></i>
-          </Button>
-        </Col>
-        <Col sm="1" style={{ paddingLeft: 10, align: 'right' }}>
-          <Button
-            type="submit"
-            size="sm"
-            color="primary"
             style={{ align: 'right' }}
-            onClick={submitQuery2}
-          >
-            <i className="fa fa-dot-circle-o"></i>
-          </Button>
+            className="fa fa-dot-circle-o"
+          />
+          {/*<Button*/}
+          {/*  type="submit"*/}
+          {/*  size="sm"*/}
+          {/*  color="primary"*/}
+          {/*  style={{ align: 'right' }}*/}
+          {/*  onClick={submitQuery}*/}
+          {/*>*/}
+          {/*  <i className="fa fa-dot-circle-o">{t('common.run')}</i>*/}
+          {/*</Button>*/}
         </Col>
+        {submitQuery2 ? (
+          <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
+            <FormButton
+              title={t('common.runAll')}
+              onClick={submitQuery2}
+              style={{ align: 'right' }}
+              titleClass="fa fa-dot-circle-o"
+            />
+          </Col>
+        ) : null}
+      </CInputGroup>
+    </>
+  )
+}
+export const StockMainForm = (props) => {
+  // eslint-disable-next-line react/prop-types
+  const { current, setCurrent, t, storeData, articleData, submitQuery, height } = props
+  // eslint-disable-next-line react/prop-types
+  const currentStore = storeData.find((store) => store.id === current.store)
+  // eslint-disable-next-line react/prop-types
+  const currentArticle = articleData.find((article) => article.id === current.article)
+  return (
+    <>
+      <CInputGroup row style={{ height: height }}>
+        <Col sm="1">
+          <FieldLabel title={t('common.store')} />
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="store-id"
+            idCol={true}
+            sm="4"
+            height={height} //eslint-disable-next-line react/prop-types
+            data={storeData.sort(sortById)} //eslint-disable-next-line react/prop-types
+            value={current.store}
+            placeholder={'store number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, store: newValue?.id, store2: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="account2-id"
+            idCol={false}
+            sm="4"
+            height={height} //eslint-disable-next-line react/prop-types
+            data={storeData.sort(sortByName)} //eslint-disable-next-line react/prop-types
+            value={currentStore ? currentStore.name : ''}
+            placeholder={'store name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, store: newValue?.id, store2: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="1">
+          <FieldLabel title={t('common.article')} />
+        </Col>
+        <Col sm="2">
+          <ComboBox
+            id="article-id"
+            idCol={true}
+            sm="4"
+            height={height} //eslint-disable-next-line react/prop-types
+            data={storeData.sort(sortById)} //eslint-disable-next-line react/prop-types
+            value={current.article}
+            placeholder={'article number'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, article: newValue?.id, article2: newValue?.name })
+            }}
+          />
+        </Col>
+        <Col sm="4" style={{ paddingLeft: 10 }}>
+          <ComboBox
+            id="article2-id"
+            idCol={false}
+            sm="4"
+            height={height} //eslint-disable-next-line react/prop-types
+            data={storeData.sort(sortByName)} //eslint-disable-next-line react/prop-types
+            value={currentArticle ? currentArticle.name : ''}
+            placeholder={'article name'}
+            onChange={(event, newValue) => {
+              setCurrent({ ...current, article: newValue?.id, article2: newValue?.name })
+            }}
+          />
+        </Col>
+        {submitQuery ? (
+          <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
+            <FormButton
+              title={t('common.run')}
+              onClick={submitQuery}
+              style={{ align: 'right' }}
+              titleClass="fa fa-dot-circle-o"
+            />
+          </Col>
+        ) : null}
       </CInputGroup>
     </>
   )
 }
 export const VatMainForm = (props) => {
   /* eslint-disable-next-line react/prop-types */
-  const { current, setCurrent, disable, t, accData, height } = props
-  // eslint-disable-next-line react/prop-types
+  const { current, setCurrent, disable, t, accData, height } = props //eslint-disable-next-line react/prop-types
   const currentInputAccount = accData.find((acc) => acc.id === current.inputVatAccount)
   // eslint-disable-next-line react/prop-types
   const currentOutputAccount = accData.find((acc) => acc.id === current.outputVatAccount)
@@ -3285,95 +3660,65 @@ export const VatMainForm = (props) => {
     <>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.id')}
-          </CFormLabel>
+          <FieldLabel title={t('common.id')} />
         </Col>
         <Col sm="2">
-          <Input
-            bssize="sm"
-            type="text"
-            id="account-id"
-            name="id"
-            className="input-sm"
-            placeholder="Id"
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.id} //eslint-disable-next-line react/prop-types
             disabled={disable}
             style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.id}
-            onChange={(event) => setCurrent({ ...current, id: event.target.value })}
           />
         </Col>
         <Col sm="4" />
         <Col sm="2" style={{ paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('vat.enterdate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.enterdate')} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="enterdate"
+            label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.enterdate)}
-            label={t('common.enterdate')}
-            id="enterdate-id"
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('vat.name')}
-          </CFormLabel>
+          <FieldLabel title={t('vat.name')} />
         </Col>
         <Col sm="4">
-          <Input
-            bssize="sm"
-            type="text"
-            id="name-input"
-            name="name"
-            className="input-sm"
-            placeholder="Name"
+          <InputField
+            fieldName="name"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.name} //eslint-disable-next-line react/prop-types
             disabled={disable}
             style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.name}
-            onChange={(event) => setCurrent({ ...current, name: event.target.value })}
           />
         </Col>
         <Col sm="2" />
         <Col sm="2" style={{ paddingLeft: 10 }}>
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('vat.changedate')}
-          </CFormLabel>
+          <FieldLabel title={t('common.changedate')} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="changedate"
+            label={t('common.changedate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.changedate)}
-            label={t('common.changedate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="changedate-id"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('vat.input_account')}
-          </CFormLabel>
+          <FieldLabel title={t('vat.input_account')} />
         </Col>
         <Col sm="2">
           <ComboBox
@@ -3381,10 +3726,8 @@ export const VatMainForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortById)} //eslint-disable-next-line react/prop-types
             value={current.inputVatAccount}
             placeholder={'input vat account Nr'}
             onChange={(event, newValue) => {
@@ -3396,16 +3739,14 @@ export const VatMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="4" style={{ paddingLeft: 10 }}>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
           <ComboBox
             id="accountName"
             idCol={false}
             sm="4"
             disable={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} //eslint-disable-next-line react/prop-types
             value={currentInputAccount ? currentInputAccount.name : ''}
             placeholder={'account name'}
             onChange={(event, newValue) => {
@@ -3417,32 +3758,23 @@ export const VatMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('vat.postingdate')}
-          </CFormLabel>
+        <Col sm="2" style={{ paddingLeft: 10 }}>
+          <FieldLabel title={t('common.postingdate')} />
         </Col>
         <Col sm="2">
-          <CDatePicker
-            size="sm"
-            disabled={true}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+          <DatePickerField
+            fieldName="postingdate"
+            label={t('common.postingdate')} //eslint-disable-next-line react/prop-types
             selected={Date.parse(current.postingdate)}
-            label={t('common.postingdate')}
-            showTimeInput
-            footer
-            dateFormat="dd.MM.yyyy"
-            id="postingdate-id"
-            className="text-end w-50"
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col sm="2">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('vat.output_account')}
-          </CFormLabel>
+          <FieldLabel title={t('vat.output_account')} />
         </Col>
         <Col sm="2">
           <ComboBox
@@ -3450,10 +3782,8 @@ export const VatMainForm = (props) => {
             idCol={true}
             sm="4"
             disable={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortById)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortById)} //eslint-disable-next-line react/prop-types
             value={current.outputVatAccount}
             placeholder={'output vat account Nr'}
             onChange={(event, newValue) => {
@@ -3465,16 +3795,14 @@ export const VatMainForm = (props) => {
             }}
           />
         </Col>
-        <Col sm="4" style={{ paddingLeft: 10 }}>
+        <Col sm="4" style={{ paddingLeft: 5 }}>
           <ComboBox
             id="outputVataccountName"
             idCol={false}
             sm="4"
             disable={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            data={accData.sort(sortByName)}
-            /* eslint-disable-next-line react/prop-types */
+            height={height} //eslint-disable-next-line react/prop-types
+            data={accData.sort(sortByName)} //eslint-disable-next-line react/prop-types
             value={currentOutputAccount ? currentOutputAccount.name : ''}
             placeholder={'Output vat account name'}
             onChange={(event, newValue) => {
@@ -3486,62 +3814,33 @@ export const VatMainForm = (props) => {
             }}
           />
         </Col>
-        <Col md="1">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('vat.percent')}
-          </CFormLabel>
+        <Col md="2" style={{ paddingLeft: 10 }}>
+          <FieldLabel title={t('vat.percent')} />
         </Col>
         <Col sm="1">
-          <Input
-            bssize="sm"
-            type="text"
-            id="percent-id"
-            name="percent"
-            className="input-sm"
-            placeholder="percent"
+          <InputField
+            fieldName="percent"
+            current={current}
+            setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+            value={current.percent} //eslint-disable-next-line react/prop-types
             disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.percent}
-            onChange={(event) => setCurrent({ ...current, percent: event.target.value })}
-          />
-        </Col>
-        <Col sm="1">
-          <CFormLabel size="sm" htmlFor="input-small">
-            {t('common.company')}
-          </CFormLabel>
-        </Col>
-        <Col sm="1">
-          <Input
-            disabled={true}
-            bssize="sm"
-            type="text"
-            id="company-id"
-            name="company"
-            className="input-sm"
-            placeholder="company"
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
-            value={current.company}
+            style={{ height: 30, textAlign: 'right' }}
           />
         </Col>
       </CInputGroup>
       <CInputGroup row style={{ height: height }}>
         <Col md="2">
-          <CFormLabel htmlFor="textarea-input">{t('vat.description')}</CFormLabel>
+          <FieldLabel title={t('common.description')} />
         </Col>
         <Col xs="12" md="9">
-          <CFormTextarea
-            type="textarea"
-            name="description"
-            id="description-id"
-            rows="1"
-            placeholder="Content..."
-            disabled={disable}
-            style={{ height: 30 }}
-            /* eslint-disable-next-line react/prop-types */
+          <TextareaField
+            fieldName="description"
+            placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
+            disabled={disable} // eslint-disable-next-line react/prop-types
             value={current.description}
-            onChange={(event) => setCurrent({ ...current, description: event.target.value })}
+            current={current}
+            setCurrent={setCurrent}
+            style={{ height: height }}
           />
         </Col>
       </CInputGroup>

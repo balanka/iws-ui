@@ -54,8 +54,11 @@
     "icredit": "Init credit",
     "credit": "Credit",
     "balance": "Balance",
+    "quantity":  "Qtty",
+    "charge": "Charge",
     "amount"      : "Amount",
     "street"      : "Street",
+    "period"      : "Period",
     "zip"        : "Zip",
     "city"       : "City",
     "country"       : "Country",
@@ -84,7 +87,9 @@
     "bank":"Bank",
     "owner":"Owner",
     "exportCSV": "Export CSV",
-    "exportPDF": "Export PDF"
+    "exportPDF": "Export PDF",
+    "run": "run",
+    "runAll": "run 4 all"
   },
   "asset": {
     "title":      "Asset",
@@ -95,6 +100,7 @@
     "changedate":  "Change date.",
     "account": "Account",
     "oaccount": "O. Acc",
+    "amount": "Init. value",
     "rate":     "rate",
     "scrapValue": "Scrap value",
     "lifeSpan":   "Life span",
@@ -150,6 +156,7 @@
   "company": {
     "title":      "Company",
     "name":       "Name",
+    "locale":      "Locale",
     "description": "Description",
     "bankAccount": "Bank Acc.",
     "cashAccount": "Cash Acc.",
@@ -199,19 +206,45 @@
     "parent":"Gruppe",
     "path": "Path"
   },
+  "payroll": {
+    "tax": {
+      "range": {
+        "title": "Payroll tax table",
+        "from": "From ",
+        "to": "To",
+        "tax": "Tax",
+        "class": "Tax class"
+      }
+    }
+  },
   "salary": {
     "item": {
-      "title": "Salary items"
+      "title": "Salary items",
+      "amount" : "Amount",
+      "percentage": "Percentage"
     }
   },
   "article": {
     "title": "Article",
     "sprice": "Sales price",
     "pprice": "Purchase price",
-    "avgPrice": "Average price"
+    "avgPrice": "Average price",
+    "quantityUnit": "QtyUnit",
+    "packUnit": "PackUnit",
+    "stocked": "Stocked ?",
+    "group": "Group",
+    "stock": {
+      "account": "stock Acc."
+    },
+    "expense": {
+      "account": "Exp. Acc."
+    }
   },
   "store": {
     "title": "Store"
+  },
+  "stock": {
+    "title":      "Stock"
   },
   "vat": {
     "title":      "VAT",
@@ -267,7 +300,30 @@
       "text": "Text"
     }
   },
-
+  "transaction": {
+    "title":      "Transaction",
+    "id":        "Id",
+    "oid":        "O.Id",
+    "period":       "Periode",
+    "enterdate"  : "Created",
+    "postingdate": "Posted",
+    "transdate":   "Transdate",
+    "store": "Store",
+    "account" :   "Cust./Sup.",
+    "text" :       "Text",
+    "posted":     "Validée",
+    "line": {
+      "title": "Lines",
+      "id": "Nr",
+      "article": "Item",
+      "articleName": "Name",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "price": "Price",
+      "duedate": "Due date",
+      "text": "Text"
+    }
+  },
   "journal": {
     "title":      "Journal",
     "transid":    "TransId",
@@ -331,19 +387,33 @@
     "menu": "Menu",
     "email": "Email"
    },
+  "toolBar":{
+    "reload":"Reload all transaction",
+    "duplicate":"Duplicate transaction",
+    "add":"Add new transaction",
+    "addLine":"Add new line transaction",
+    "cancel":"Cancel adding or editing",
+    "void":"void a transaction",
+    "save":"Save transaction",
+    "post":"validate or post a transaction"
+  },
   "menu": {
     "salary":{
       "item": "Salary items"
     },
     "admin": "Administration",
     "article": "Article",
+    "articleGroup": "Art.group",
     "asset": "Asset",
     "dashboard": "Dashboard",
     "accounting": "Accounting",
     "journal": "Journal",
     "pacb": "Account balance",
     "account": "Accounts",
+    "accountGroup": "Account group",
+    "accountClass": "Account class",
     "bank": "Bank",
+    "quantityUnit": "Quantity unit",
     "module": "Module",
     "costcenter": "Cost center",
     "customer": "Customer",
@@ -361,6 +431,33 @@
     "masterfiles": "Master files",
     "balancesheet": "Balance sheet",
     "financials": "Payable/Receivable",
-    "financials_stmt": "Financials statements"
+    "transaction": "Transaction",
+    "financials_stmt": "Financials statements",
+    "payroll.tax.range": "Pay roll tax table",
+    "closeAccountingPeriod": "Close accounting period",
+    "createPayrollTransaction": "Generate payroll transaction",
+    "createDepreciationTransaction": "Generate depr. transaction"
+  },
+  "accountClass": {
+    "title":      "Account class"
+  },
+  "accountGroup": {
+    "title":      "Account group"
+  },
+  "quantityUnit": {
+    "title": "Quantity unit"
+  },
+  "closeAccountingPeriod": {
+    "title": "Close accounting period",
+    "account": "Account",
+    "close": "Close"
+  },
+  "createPayrollTransaction": {
+    "title": "Generate payroll transaction",
+    "generate": "Generate"
+  },
+  "createDepreciationTransaction": {
+    "title": "Generate depr. transaction",
+    "generate": "Generate"
   }
 }

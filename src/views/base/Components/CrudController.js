@@ -4,11 +4,30 @@ import iwsStore from './Store'
 import React from 'react'
 import { formEnum } from '../utils/FORMS'
 
-const API_SERVER_PORT = 8091
-const SERVER_URL = 'http://127.0.0.1:'.concat(API_SERVER_PORT)
+const SERVER_IP = 'REACT_APP_HOST_IP_ADDRESS'
+const SERVER_PORT = 'REACT_APP_PORT'
+const SERVER_URL = 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT) //'http://0.0.0.0:8091'
+
+// const getFn1 = (url, token) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
+const getFn = (url, token) => axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
+
+const post1Fn = (url, record) => axios.post(url, record)
+const Post = (url, profile, record) => patchFn(url, profile.token, record)
+
+const patchFn = (url, token, record) =>
+  axios
+    .patch(url, record, { headers: { Authorization: `Bearer ${token}` } })
+    .then((response) => {
+      console.log('responsex', response.data)
+    })
+    .catch(function (error) {
+      console.log('error', error)
+    })
 const Edit = (url, token, record, data, setCurrent) => {
-  const url_ = SERVER_URL.concat(url)
   var result
+  const url_ = SERVER_URL.concat(url)
+  console.log('url_', url_)
+  console.log('record', record)
   axios
     .put(url_, record, { headers: { Authorization: `Bearer ${token}` } })
     .then((response) => {
@@ -30,11 +49,10 @@ const Edit = (url, token, record, data, setCurrent) => {
 }
 
 const Add = (url, token, record, data, setCurrent) => {
-  const url_ = SERVER_URL.concat(url)
   let result
   console.log('Adding', record)
   axios
-    .post(url_, record, { headers: { Authorization: `Bearer ${token}` } })
+    .post(SERVER_URL.concat(url), record, { headers: { Authorization: `Bearer ${token}` } })
     .then((response) => {
       const resp = response.data
       const index = data.length + 1
@@ -48,20 +66,10 @@ const Add = (url, token, record, data, setCurrent) => {
     })
   return result
 }
-const Post = (url, profile, record) => {
-  axios
-    .patch(url, record, { headers: { Authorization: `Bearer ${profile.token}` } })
-    .then((response) => {
-      console.log('responsex', response.data)
-    })
-    .catch(function (error) {
-      console.log('error', error)
-    })
-}
 
 const importFn = (str) => React.lazy(() => import(`./${str}`))
 const Login = (
-  history,
+  navigate,
   url,
   data,
   setProfile,
@@ -75,80 +83,94 @@ const Login = (
   const url_ = SERVER_URL.concat(url)
   console.log(' url', url)
   console.log(' url_', url_)
-  axios
-    .post(url_, data)
-    .then((response) => {
-      const token = response.data.hash
-      const result = Map.groupBy(response.data.rights, ({ moduleid }) => moduleid)
-      const userRights = Array.from(result, (entry) => ({
-        key: entry[0],
-        value: entry[1].map((e) => e.short).reduce((a, b) => a.concat(b)),
-      }))
-      const company = response.data.company
-      let currency = ''
-      let locale = ''
-      const moduleURL = SERVER_URL.concat(MASTERFILE.module)
-        .concat('/')
-        .concat(formEnum.MODULE)
-        .concat('/')
-        .concat(data.company)
-      const companyURL = SERVER_URL.concat(MASTERFILE.comp).concat('/').concat(data.company)
-      axios.get(companyURL, { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
-        const company_ = response.data
-        locale = company_.locale
-        currency = company_.currency
-      })
-      axios
-        .get(moduleURL, { headers: { Authorization: `Bearer ${token}` } })
-        .then((response) => {
-          const module_ = response.data
-          iwsStore.put(400, module_)
-          const moduleIds = module_.filter((e) => result.has(parseInt(e.id)))
-          const userMenu = moduleIds.map((m) => parseInt(m.id))
-          const menu = moduleIds.map((m) => m.path).filter((p) => p !== '/')
-          const menu_t = MENU(t, locale, currency)
-          const routes_t = module_.map((e) => {
-            return {
-              ...e,
-              component: e.description,
-              element: e.description ? importFn(e.description) : undefined,
-            }
-          })
+  post1Fn(url_, data).then((response) => {
+    const token = response.data.hash
+    console.log(' response.data', response.data)
+    const dataR = response.data ?? []
+    const rights = dataR.rights
+    const roleRights = dataR.roles.map((r) => r.rights).flat()
+    console.log(' roleRights', roleRights)
+    console.log(' response.data.rights', dataR.rights)
+    const allRights = [...roleRights, ...rights]
+    console.log(' allRights', allRights)
+    const result = Map.groupBy(allRights, ({ moduleid }) => moduleid)
+    console.log(' result', result)
+    const userRights = Array.from(result, (entry) => ({
+      key: entry[0],
+      value: entry[1].map((e) => e.short).reduce((a, b) => a.concat(b)),
+    }))
+    const company = response.data.company
+    const moduleURL = SERVER_URL.concat(MASTERFILE.module)
+      .concat('/')
+      .concat(formEnum.MODULE)
+      .concat('/')
+      .concat(company)
+    const companyURL = SERVER_URL.concat(MASTERFILE.comp)
+      .concat('/')
+      .concat(company)
+      .concat('/')
+      .concat(formEnum.COMPANY)
+    getFn(companyURL, token)
+      .then((response) => {
+        const locale = response.data.locale
+        const currency = response.data.currency
+        const incomeStmtAcc = response.data.incomeStmtAcc
+        console.log('company_response', response)
+        console.log('moduleURL', moduleURL)
+        getFn(moduleURL, token)
+          .then((response) => {
+            const module_ = response.data
+            console.log('module_', module_)
+            iwsStore.put(formEnum.MODULE, module_)
+            const moduleIds = module_.filter((e) => result.has(parseInt(e.id)))
+            console.log('moduleIds', moduleIds)
+            const userMenu = moduleIds.map((m) => parseInt(m.id))
+            const menu = moduleIds.map((m) => m.path).filter((p) => p !== '/')
+            console.log('menu', menu)
+            const menu_t = MENU(t, locale, currency)
+            console.log('menu_t', menu_t)
+            const routes_t = module_.map((e) => {
+              return {
+                ...e,
+                component: e.description,
+                element: e.description ? importFn(e.description) : undefined,
+              }
+            })
 
-          const newMenu = new Map([...menu_t].filter(([k, _]) => menu.includes(k)))
-          const newRoutes = routes_t.filter((r) => menu.includes(r.path))
-          const profile = {
-            token: token,
-            company: company,
-            modules: userMenu,
-            rights: userRights,
-            locale: locale,
-            currency: currency,
-          }
-          setProfile(profile)
-          setModule(module_)
-          setMenu(newMenu)
-          setRoutes(newRoutes)
-        })
-        .catch(function (error) {
-          console.log('Error', error)
-          if (JSON.stringify(error).includes('401')) {
-            console.log('error', 'Session expired!!!!! Login again!!!!')
-            history('/login')
-          }
-          console.log('error', error)
-        })
-      history('/dashboard')
-    })
-    .catch(function (error) {
-      console.log('error', error)
-    })
+            const newMenu = new Map([...menu_t].filter(([k, _]) => menu.includes(k)))
+            const newRoutes = routes_t.filter((r) => menu.includes(r.path))
+            const profile = {
+              token: token,
+              company: company,
+              modules: userMenu,
+              rights: userRights,
+              locale: locale,
+              currency: currency,
+              incomeStmtAcc: incomeStmtAcc,
+            }
+            setProfile(profile)
+            setModule(module_)
+            setMenu(newMenu)
+            setRoutes(newRoutes)
+          })
+          .catch(function (error) {
+            console.log('Error', error)
+            if (JSON.stringify(error).includes('401')) {
+              console.log('error', 'Session expired!!!!! Login again!!!!')
+              navigate('/login')
+            }
+            console.log('error', error)
+          })
+        navigate('/dashboard')
+      })
+      .catch(function (error) {
+        console.log('error', error)
+      })
+  })
 }
 const Get = (url, token, history, func) => {
-  const url_ = SERVER_URL.concat(url)
   let result
-  axios
-    .get(url_, { headers: { Authorization: `Bearer ${token}` } })
+  getFn(SERVER_URL.concat(url), token)
     .then((response) => {
       const resp = response.data
       console.log('responseRRRRRR', resp)
@@ -170,18 +192,13 @@ const Get = (url, token, history, func) => {
 }
 
 const Get1 = (url, token, key_) => {
-  const url_ = SERVER_URL.concat(url)
   let result
-  console.log('url', url_)
-  console.log('key_', key_)
-  axios
-    .get(url_, { headers: { Authorization: `Bearer ${token}` } })
+  getFn(SERVER_URL.concat(url), token)
     .then((response) => {
       const resp = response.data
       console.log('key_', key_)
       console.log('respRRRRRR', resp)
       iwsStore.put(key_, resp)
-      console.log('iwsStore.get(key_)', iwsStore.get(key_))
       result = { ...resp }
     })
     .catch(function (error) {
@@ -192,11 +209,8 @@ const Get1 = (url, token, key_) => {
 }
 
 const Get2 = (url, token, setCurrent) => {
-  const url_ = SERVER_URL.concat(url)
   let result
-  console.log('url_', url_)
-  axios
-    .get(url_, { headers: { Authorization: `Bearer ${token}` } })
+  getFn(SERVER_URL.concat(url), token)
     .then((response) => {
       const resp = response.data
       console.log('responseRRRRRR2', resp)

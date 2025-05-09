@@ -18,12 +18,6 @@ const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
-  const { t } = useTranslation()
-  const handleClickOpen = (event) => {
-    console.log('handleClickOpen', event.target.childNodes[0].textContent)
-    console.log('handleClickOpen', event.target.childNodes[0].data)
-    console.log('handleClickOpen', event.target.value)
-  }
 
   return (
     <CSidebar
@@ -41,9 +35,9 @@ const AppSidebar = () => {
           <CIcon customClassName="sidebar-brand-full" icon={logo} height={100} width={300} />
         </CSidebarBrand>
       </CSidebarHeader>
-      <CSidebarNav onClick={handleClickOpen}>
+      <CSidebarNav>
         <SimpleBar>
-          <AppSidebarNav items={Navigation(t)} />
+          <AppSidebarNav items={Navigation()} />
         </SimpleBar>
       </CSidebarNav>
     </CSidebar>

@@ -40,8 +40,8 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     field: 'id',
     title: t('common.iban'),
     initialEditValue: '',
-    minWidth: 40,
-    maxWidth: 100,
+    minWidth: 200,
+    maxWidth: 500,
     export: true,
   },
   {
@@ -51,14 +51,16 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     editComponent: (tableData) => Autocomplete(data, tableData, true),
     initialEditValue: '',
     minWidth: 100,
-    align: 'right',
+    maxWidth: 300,
     export: true,
   },
   {
     field: 'owner',
     title: t('common.owner'),
     initialEditValue: '',
-    minWidth: 5,
+    minWidth: 30,
+    maxWidth: 100,
+    hidden: true,
     export: true,
   },
   {
@@ -74,6 +76,7 @@ export const columns_BANK_ACCOUNT = (data, t) => [
     initialEditValue: '',
     minWidth: 5,
     editable: 'never',
+    hidden: true,
     export: true,
   },
 ]
@@ -93,9 +96,23 @@ export const ColumnsLOGIN = () => [
   },
 ]
 export const columnsPACB = (t, locale, currency) => [
-  { field: 'id', title: t('common.id'), minWidth: 10, export: true },
-  { field: 'name', title: t('common.name'), minWidth: 40, export: true },
-  { field: 'period', title: t('pac.period'), type: 'numeric', export: true },
+  //{ field: 'id', title: t('common.id'), minWidth: 10, export: true },
+  {
+    field: 'account',
+    title: t('account.account'),
+    width: '4%',
+    export: true,
+    align: 'left',
+  },
+  { field: 'name', title: t('common.name'), width: '35%', align: 'left', export: true },
+  {
+    field: 'period',
+    title: t('pac.period'),
+    type: 'numeric',
+    width: '4%',
+    align: 'left',
+    export: true,
+  },
   {
     field: 'idebit',
     title: t('common.idebit'),
@@ -156,162 +173,325 @@ export const columnsPACB = (t, locale, currency) => [
     },
     export: true,
   },
-  { field: 'currency', title: t('common.currency'), export: true },
-  { field: 'company', title: t('common.company'), export: true },
+  { field: 'currency', title: t('common.currency'), width: '2%', export: true },
+  { field: 'company', title: t('common.company'), width: '4%', export: true },
 ]
 
-export const columnsF = (data, line, current, t, locale, currency) => [
-  {
-    field: 'id',
-    title: t('financials.id'),
-    initialEditValue: line.id,
-    align: 'right',
-    width: 40,
-    minWidth: 20,
-    maxWidth: 50,
-    export: true,
-  },
-  {
-    field: 'oid',
-    title: t('financials.oid'),
-    initialEditValue: current ? current.oid : -1,
-    align: 'right',
-    width: 40,
-    minWidth: 20,
-    maxWidth: 50,
-    export: true,
-  },
-  {
-    field: 'account',
-    title: t('financials.account'),
-    hidden: false,
-    editComponent: (tableData) => Autocomplete(data, tableData),
-    initialEditValue: '',
-    width: 20,
-    minWidth: 30,
-    maxWidth: 80,
-    align: 'right',
-    export: true,
-  },
-  {
-    field: 'costcenter',
-    title: t('financials.costcenter'),
-    hidden: false,
-    editComponent: (tableData) => Autocomplete(data, tableData),
-    initialEditValue: '',
-    width: 30,
-    minWidth: 30,
-    maxWidth: 80,
-    align: 'right',
-    export: true,
-  },
-  {
-    field: 'enterdate',
-    title: t('financials.enterdate'),
-    type: 'date',
-    align: 'right',
-    minWidth: 20,
-    width: 40,
-    maxWidth: 80,
-    initialEditValue: line.enterdate,
-    dateSetting: { locale: locale },
-    export: true,
-  },
-  {
-    field: 'postingdate',
-    title: t('financials.postingdate'),
-    type: 'date',
-    align: 'right',
-    minWidth: 20,
-    width: 40,
-    maxWidth: 80,
-    initialEditValue: line.postingdate,
-    dateSetting: { locale: locale },
-    export: true,
-  },
-  {
-    field: 'transdate',
-    title: t('financials.transdate'),
-    type: 'date',
-    align: 'right',
-    minWidth: 20,
-    width: 40,
-    maxWidth: 80,
-    initialEditValue: line.transdate,
-    dateSetting: { locale: locale },
-    export: true,
-  },
-  {
-    field: 'period',
-    title: t('financials.period'),
-    type: 'numeric',
-    align: 'right',
-    minWidth: 20,
-    width: 30,
-    maxWidth: 40,
-    export: true,
-  },
-  {
-    field: 'posted',
-    title: t('financials.posted'),
-    type: 'boolean',
-    width: 10,
-    minWidth: 10,
-    maxWidth: 20,
-    export: true,
-  },
-  {
-    field: 'total',
-    title: t('common.total'),
-    type: 'currency',
-    currencySetting: {
-      locale: locale,
-      currencyCode: currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+export const columnsF = (data, current, t, locale, currency) => {
+  console.log('current>>>', current)
+  return [
+    {
+      field: 'id',
+      title: t('financials.id'),
+      initialEditValue: current ? current.id : -1,
+      align: 'right',
+      width: 40,
+      minWidth: 20,
+      maxWidth: 50,
+      export: true,
     },
-    minWidth: 80,
-    maxWidth: 150,
-    export: true,
-  },
-  {
-    field: 'text',
-    title: t('financials.text'),
-    type: 'string',
-    minWidth: 100,
-    width: 300,
-    maxWidth: 3000,
-    export: true,
-  },
-  {
-    field: 'typeJournal',
-    title: t('financials.type'),
-    type: 'numeric',
-    export: true,
-  },
-  {
-    field: 'file_content',
-    title: t('financials.file_content'),
-    type: 'numeric',
-    export: true,
-  },
-  {
-    field: 'modelid',
-    title: t('common.modelid'),
-    type: 'numeric',
-    minWidth: 30,
-    maxWidth: 50,
-    export: true,
-  },
-  {
-    field: 'company',
-    title: t('common.company'),
-    type: 'numeric',
-    minWidth: 30,
-    maxWidth: 60,
-    export: true,
-  },
-]
+    {
+      field: 'oid',
+      title: t('financials.oid'),
+      initialEditValue: current ? current.oid : -1,
+      align: 'right',
+      width: 40,
+      minWidth: 20,
+      maxWidth: 50,
+      export: true,
+    },
+    {
+      field: 'account',
+      title: t('financials.account'),
+      hidden: false,
+      editComponent: (tableData) => Autocomplete(data, tableData),
+      initialEditValue: '',
+      width: 20,
+      minWidth: 30,
+      maxWidth: 80,
+      align: 'right',
+      export: true,
+    },
+    {
+      field: 'costcenter',
+      title: t('financials.costcenter'),
+      hidden: false,
+      editComponent: (tableData) => Autocomplete(data, tableData),
+      initialEditValue: '',
+      width: 30,
+      minWidth: 30,
+      maxWidth: 80,
+      align: 'right',
+      export: true,
+    },
+    {
+      field: 'enterdate',
+      title: t('financials.enterdate'),
+      type: 'date',
+      align: 'right',
+      minWidth: 20,
+      width: 40,
+      maxWidth: 80,
+      initialEditValue: current ? current.enterdate : new Date(),
+      dateSetting: { locale: locale },
+      export: true,
+    },
+    {
+      field: 'postingdate',
+      title: t('financials.postingdate'),
+      type: 'date',
+      align: 'right',
+      minWidth: 20,
+      width: 40,
+      maxWidth: 80,
+      initialEditValue: current ? current.postingdate : new Date(),
+      dateSetting: { locale: locale },
+      export: true,
+    },
+    {
+      field: 'transdate',
+      title: t('financials.transdate'),
+      type: 'date',
+      align: 'right',
+      minWidth: 20,
+      width: 40,
+      maxWidth: 80,
+      initialEditValue: current ? current.transdate : new Date(),
+      dateSetting: { locale: locale },
+      export: true,
+    },
+    {
+      field: 'period',
+      title: t('financials.period'),
+      type: 'numeric',
+      align: 'right',
+      minWidth: 20,
+      width: 30,
+      maxWidth: 40,
+      initialEditValue: current ? current.period : -1,
+      export: true,
+    },
+    {
+      field: 'posted',
+      title: t('financials.posted'),
+      type: 'boolean',
+      width: 10,
+      minWidth: 10,
+      maxWidth: 20,
+      initialEditValue: current ? current.posted : false,
+      export: true,
+    },
+    {
+      field: 'total',
+      title: t('common.total'),
+      type: 'currency',
+      currencySetting: {
+        locale: locale,
+        currencyCode: currency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      },
+      minWidth: 80,
+      maxWidth: 150,
+      initialEditValue: current ? current.lines?.reduce((acc, line) => acc + line.amount, 0) : 0,
+      export: true,
+    },
+    {
+      field: 'text',
+      title: t('financials.text'),
+      type: 'string',
+      minWidth: 100,
+      width: 300,
+      maxWidth: 3000,
+      export: true,
+    },
+    {
+      field: 'typeJournal',
+      title: t('financials.type'),
+      type: 'numeric',
+      export: true,
+    },
+    {
+      field: 'file_content',
+      title: t('financials.file_content'),
+      type: 'numeric',
+      export: true,
+    },
+    {
+      field: 'modelid',
+      title: t('common.modelid'),
+      type: 'numeric',
+      minWidth: 30,
+      maxWidth: 50,
+      export: true,
+    },
+    {
+      field: 'company',
+      title: t('common.company'),
+      type: 'numeric',
+      minWidth: 30,
+      maxWidth: 60,
+      export: true,
+    },
+  ]
+}
+
+export const Transactioncolumns = (storeData, ccData, current, t, locale, currency) => {
+  const total = current
+    ? current.lines
+      ? current.lines?.reduce((acc, line) => acc + line.quantity * line.price, 0.0)
+      : 0.0
+    : 0.0
+  console.log('total', total)
+  return [
+    {
+      field: 'id',
+      title: t('transaction.id'),
+      initialEditValue: current ? current.id : -1,
+      align: 'right',
+      width: 40,
+      minWidth: 20,
+      maxWidth: 50,
+      export: true,
+    },
+    {
+      field: 'oid',
+      title: t('transaction.oid'),
+      initialEditValue: current ? current.oid : -1,
+      align: 'right',
+      width: 40,
+      minWidth: 20,
+      maxWidth: 50,
+      export: true,
+    },
+    {
+      field: 'store',
+      title: t('transaction.store'),
+      hidden: false,
+      editComponent: (tableData) => Autocomplete(storeData, tableData),
+      initialEditValue: '',
+      width: 20,
+      minWidth: 30,
+      maxWidth: 80,
+      align: 'right',
+      export: true,
+    },
+    {
+      field: 'account',
+      title: t('transaction.account'),
+      hidden: false,
+      editComponent: (tableData) => Autocomplete(ccData, tableData),
+      initialEditValue: '',
+      width: 30,
+      minWidth: 30,
+      maxWidth: 80,
+      align: 'right',
+      export: true,
+    },
+    {
+      field: 'enterdate',
+      title: t('transaction.enterdate'),
+      type: 'date',
+      align: 'right',
+      minWidth: 20,
+      width: 40,
+      maxWidth: 80,
+      initialEditValue: current ? current.enterdate : new Date(),
+      dateSetting: { locale: locale },
+      export: true,
+    },
+    {
+      field: 'postingdate',
+      title: t('transaction.postingdate'),
+      type: 'date',
+      align: 'right',
+      minWidth: 20,
+      width: 40,
+      maxWidth: 80,
+      initialEditValue: current ? current.postingdate : new Date(),
+      dateSetting: { locale: locale },
+      export: true,
+    },
+    {
+      field: 'transdate',
+      title: t('transaction.transdate'),
+      type: 'date',
+      align: 'right',
+      minWidth: 20,
+      width: 40,
+      maxWidth: 80,
+      initialEditValue: current ? current.transdate : new Date(),
+      dateSetting: { locale: locale },
+      export: true,
+    },
+    {
+      field: 'period',
+      title: t('transaction.period'),
+      type: 'numeric',
+      align: 'right',
+      minWidth: 20,
+      width: 30,
+      maxWidth: 40,
+      initialEditValue: current ? current.period : -1,
+      export: true,
+    },
+    {
+      field: 'posted',
+      title: t('transaction.posted'),
+      type: 'boolean',
+      width: 10,
+      minWidth: 10,
+      maxWidth: 20,
+      initialEditValue: current ? current.posted : false,
+      export: true,
+    },
+    {
+      field: 'total',
+      title: t('common.total'),
+      type: 'currency',
+      currencySetting: {
+        locale: locale,
+        currencyCode: currency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      },
+      minWidth: 80,
+      maxWidth: 150,
+      initialEditValue: 0.0,
+      //current ? current.lines.reduce((acc, line) => acc + line.quantity * line.price, 0.0)
+      // : 0.0,
+      export: true,
+    },
+    {
+      field: 'text',
+      title: t('transaction.text'),
+      type: 'string',
+      minWidth: 100,
+      width: 300,
+      maxWidth: 3000,
+      initialEditValue: current ? current.text : '',
+      export: true,
+    },
+    {
+      field: 'modelid',
+      title: t('common.modelid'),
+      type: 'numeric',
+      minWidth: 30,
+      maxWidth: 50,
+      initialEditValue: current ? current.modelid : -1,
+      export: true,
+    },
+    {
+      field: 'company',
+      title: t('common.company'),
+      type: 'numeric',
+      minWidth: 30,
+      maxWidth: 60,
+      initialEditValue: current ? current.company : -1,
+      export: true,
+    },
+  ]
+}
 
 export const RoleColumns = (data, line, current, t) => {
   return [
@@ -384,7 +564,6 @@ export const Linescolumns = (data, line, current, models, model, t, locale, curr
   }
 
   return [
-    //  {field:'id', title:t('financials.line.id'), type:'numeric', minWidth:30, maxWidth:30, initialEditValue:line.id, align:'left', editable:'never'}
     {
       field: 'transid',
       title: t('financials.id'),
@@ -465,7 +644,7 @@ export const Linescolumns = (data, line, current, models, model, t, locale, curr
         maximumFractionDigits: 2,
       },
       width: 50,
-      minWidth: 30,
+      minWidth: 50,
       maxWidth: 100,
     },
     {
@@ -489,6 +668,128 @@ export const Linescolumns = (data, line, current, models, model, t, locale, curr
     },
   ]
 }
+export const TransactionLinesColumns = (
+  data,
+  line,
+  current,
+  models,
+  model,
+  t,
+  locale,
+  currency,
+) => {
+  //const model_ = models.find((obj) => obj.id === model)
+  let article = ''
+
+  return [
+    {
+      field: 'transid',
+      title: t('transaction.id'),
+      type: 'numeric',
+      hidden: true,
+      initialEditValue: current ? current.id : 0,
+      editable: 'never',
+    },
+    {
+      field: 'article',
+      title: t('transaction.line.article'),
+      type: 'string',
+      editComponent: (tableData) => Autocomplete(data, tableData, true),
+      initialEditValue: article,
+      align: 'left',
+      width: 15,
+      minWidth: 10,
+      maxWidth: 50,
+    },
+    {
+      field: 'articleName',
+      title: t('transaction.line.articleName'),
+      initialEditValue: '',
+      hidden: false,
+      width: 60,
+      minWidth: 30,
+      maxWidth: 80,
+    },
+    {
+      field: 'quantity',
+      title: t('transaction.line.quantity'),
+      type: 'numeric',
+      initialEditValue: 0,
+      currencySetting: {
+        locale: locale,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      },
+      width: 50,
+      minWidth: 50,
+      maxWidth: 100,
+    },
+    {
+      field: 'unit',
+      title: t('transaction.line.unit'),
+      initialEditValue: '',
+      hidden: false,
+      width: 10,
+      minWidth: 10,
+      maxWidth: 10,
+    },
+    {
+      field: 'price',
+      title: t('transaction.line.price'),
+      type: 'currency',
+      initialEditValue: 0,
+      currencySetting: {
+        locale: locale,
+        currencyCode: currency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      },
+      width: 50,
+      minWidth: 50,
+      maxWidth: 100,
+    },
+    {
+      field: 'currency',
+      title: t('common.currency'),
+      hidden: false,
+      initialEditValue: line.currency,
+      width: 10,
+      minWidth: 10,
+      maxWidth: 50,
+      editable: 'never',
+    },
+    {
+      field: 'vatCode',
+      title: t('common.vatCode'),
+      hidden: false,
+      initialEditValue: line.vatCode,
+      width: 5,
+      minWidth: 5,
+      maxWidth: 5,
+      editable: 'never',
+    },
+    {
+      field: 'duedate',
+      title: t('transaction.line.duedate'),
+      type: 'date',
+      align: 'right',
+      initialEditValue: line.duedate,
+      dateSetting: { locale: locale },
+      width: 40,
+      minWidth: 50,
+      maxWidth: 80,
+    },
+    {
+      field: 'text',
+      title: t('transaction.line.text'),
+      initialEditValue: '',
+      hidden: false,
+      width: 300,
+      minWidth: 50,
+      maxWidth: 3500,
+    },
+  ]
+}
 export const Options = {
   toolbar: false,
   draggable: false,
@@ -502,8 +803,9 @@ export const Options = {
   showTitle: false,
   padding: 'dense',
   filtering: false,
-  search: false,
+  //search: false,
   selection: false,
+
   cellStyle: { padding: '0.3em', fontSize: 10 },
   headerStyle: {
     padding: '0.3em',
@@ -512,6 +814,7 @@ export const Options = {
     backgroundColor: theme.palette.common.black,
     color: '#eee',
   },
+  //rowStyle: rowStyle,
   root: {
     '&:nth-child(odd)': {
       backgroundColor: theme.palette.background.default,
@@ -521,7 +824,6 @@ export const Options = {
     height: 3,
     hover: true,
   },
-  rowStyle: rowStyle,
 }
 export const buildExportOption = (csvMenu, pdfMenu, fileName) => ({
   ...OptionsM,
@@ -641,6 +943,56 @@ export const ColumnsModule = (t, locale) => [
     export: true,
   },
 ]
+export const StockColumns = (data, t, locale, currency) => [
+  // {
+  //   field: 'id',
+  //   title: t('common.id'),
+  //   export: false,
+  // },
+  {
+    field: 'article',
+    title: t('article.title'),
+    type: 'text',
+    export: true,
+  },
+  {
+    field: 'store',
+    title: t('store.title'),
+    type: 'string',
+    export: true,
+  },
+  {
+    field: 'quantity',
+    title: t('common.quantity'),
+    type: 'number',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    export: true,
+  },
+  {
+    field: 'price',
+    title: t('common.amount'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    export: true,
+  },
+  {
+    field: 'charge',
+    title: t('common.charge'),
+    type: 'string',
+    export: true,
+  },
+]
 export const ColumnsAsset = (data, t, locale, currency) => [
   {
     field: 'id',
@@ -676,6 +1028,19 @@ export const ColumnsAsset = (data, t, locale, currency) => [
     export: true,
   },
   {
+    field: 'amount',
+    title: t('asset.amount'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    export: true,
+  },
+  {
     field: 'scrapValue',
     title: t('asset.scrapValue'),
     type: 'currency',
@@ -686,6 +1051,7 @@ export const ColumnsAsset = (data, t, locale, currency) => [
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     },
+    export: true,
   },
   {
     field: 'lifeSpan',
@@ -696,7 +1062,14 @@ export const ColumnsAsset = (data, t, locale, currency) => [
   {
     field: 'depMethod',
     title: t('asset.depreciation'),
-    type: 'number',
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
     export: true,
   },
   {
@@ -855,13 +1228,7 @@ export const ColumnsM = (data, t, locale) => [
     export: true,
   },
 ]
-
 export const ColumnsEmployeeSalaryItem = (data, t, locale, currency) => [
-  {
-    field: 'id',
-    title: t('common.id'),
-    export: true,
-  },
   {
     field: 'account',
     title: t('common.account'),
@@ -869,7 +1236,17 @@ export const ColumnsEmployeeSalaryItem = (data, t, locale, currency) => [
     editComponent: (tableData) => Autocomplete(data, tableData, true),
     initialEditValue: '',
     minWidth: 100,
-    align: 'right',
+    align: 'left',
+    export: true,
+  },
+  {
+    field: 'accountName',
+    title: t('common.name'),
+    hidden: false,
+    //editComponent: (tableData) => Autocomplete(data, tableData, true),
+    initialEditValue: '',
+    minWidth: 100,
+    align: 'left',
     export: true,
   },
   {
@@ -970,6 +1347,73 @@ export const ColumnsSalaryItem = (data, t, locale, currency) => [
     export: true,
   },
 ]
+
+export const ColumnsPayrollTaxRange = (t, locale, currency) => [
+  {
+    field: 'id',
+    title: t('common.id'),
+    export: true,
+    width: '10%',
+  },
+  {
+    field: 'fromAmount',
+    title: t('payroll.tax.range.from'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    width: '20%',
+    export: true,
+  },
+  {
+    field: 'toAmount',
+    title: t('payroll.tax.range.to'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    width: '20%',
+    export: true,
+  },
+  {
+    field: 'tax',
+    title: t('payroll.tax.range.tax'),
+    type: 'currency',
+    initialEditValue: 0,
+    currencySetting: {
+      locale: locale,
+      currencyCode: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+    width: '20%',
+    align: 'right',
+    export: true,
+  },
+  {
+    field: 'taxClass',
+    title: t('payroll.tax.range.class'),
+    type: 'string',
+    export: true,
+    width: '10%',
+    align: 'center',
+  },
+  {
+    field: 'company',
+    title: t('common.company'),
+    type: 'string',
+    export: true,
+    width: '10%',
+  },
+]
 export const ColumnsArticle = (data, t, locale, currency) => [
   {
     field: 'id',
@@ -993,6 +1437,22 @@ export const ColumnsArticle = (data, t, locale, currency) => [
     title: t('article.parent'),
     editComponent: ({ value, onRowDataChange, rowData }) =>
       ACCOUNT(data, value, onRowDataChange, rowData, 'account'),
+    width: 20,
+    export: true,
+  },
+  {
+    field: 'stockAccount',
+    title: t('article.stock.account'),
+    editComponent: ({ value, onRowDataChange, rowData }) =>
+      ACCOUNT(data, value, onRowDataChange, rowData, 'stockAccount'),
+    width: 20,
+    export: true,
+  },
+  {
+    field: 'expenseAccount',
+    title: t('article.expense.account'),
+    editComponent: ({ value, onRowDataChange, rowData }) =>
+      ACCOUNT(data, value, onRowDataChange, rowData, 'expenseAccount'),
     width: 20,
     export: true,
   },
@@ -1031,6 +1491,12 @@ export const ColumnsArticle = (data, t, locale, currency) => [
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     },
+  },
+  {
+    field: 'vatCode',
+    title: t('common.vatCode'),
+    type: 'string',
+    export: true,
   },
   {
     field: 'enterdate',
@@ -2063,10 +2529,12 @@ export const ColumnsBalancesheet = (t, locale, currency) => [
 ]
 
 export const ColumnFactory = (formid, data, t, locale, currency) => {
-  console.log('formid', formid)
   switch (formid) {
     case formEnum.ACCOUNT:
+    case formEnum.CLOSE_ACCOUNT_PERIOD:
+    case formEnum.CREATE_PAYROLL_TRANSACTION:
       return ColumnsACC(data, t, locale, currency)
+    case formEnum.CREATE_DEPRECIATION_TRANSACTION:
     case formEnum.ASSET:
       return ColumnsAsset(data, t, locale, currency)
     case formEnum.BANKACCOUNT:
@@ -2079,8 +2547,14 @@ export const ColumnFactory = (formid, data, t, locale, currency) => {
       return ColumnsM2(t, locale)
     case formEnum.ARTICLE:
       return ColumnsArticle(data, t, locale, currency)
+    case formEnum.PAYROLL_TAX_RANGE:
+      return ColumnsPayrollTaxRange(t, locale, currency)
     case formEnum.COSTCENTER:
     case formEnum.BANK:
+    case formEnum.QUANTITYUNIT:
+    case formEnum.ACCOUNT_CLASS:
+    case formEnum.ACCOUNT_GROUP:
+    case formEnum.ARTICLE_GROUP:
     case formEnum.FMODULE:
     case formEnum.ROLE:
     case formEnum.PERMISSION:
@@ -2103,6 +2577,8 @@ export const ColumnFactory = (formid, data, t, locale, currency) => {
       return ColumnsVAT(data, t, locale, currency)
     case formEnum.SALARY_ITEM:
       return ColumnsSalaryItem(data, t, locale, currency)
+    case formEnum.STOCK:
+      return StockColumns(data, t, locale, currency)
     default:
       return <>NODATA</>
   }

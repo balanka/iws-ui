@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from '../tabs/Tabs'
-import { AddressForm, FormFactory, FormWrapper } from './FormsProps'
+import { AddressForm, FormFactory, FormInCollapsibleWrapper } from './FormsProps'
 import { ColumnFactory, Options } from '../tables/LineFinancialsProps'
 import EditableTable from '../tables/EditableTable'
 import { formEnum } from '../utils/FORMS'
@@ -8,52 +8,39 @@ import Grid from 'react-fast-grid'
 import { Add, Edit } from './CrudController'
 import { styles } from '../Tree/BasicTreeTableProps'
 import { blue } from '@material-ui/core/colors'
+import Example2 from './Example2'
 
 const CustomerTabs = (props) => {
   // eslint-disable-next-line react/prop-types
   const {
     // eslint-disable-next-line react/prop-types
-    formid,
-    // eslint-disable-next-line react/prop-types
-    current,
-    // eslint-disable-next-line react/prop-types
-    setCurrent,
-    // eslint-disable-next-line react/prop-types
-    accData,
-    // eslint-disable-next-line react/prop-types
-    vatData,
-    // eslint-disable-next-line react/prop-types
-    bankData,
-    // eslint-disable-next-line react/prop-types
-    modifyUrl,
-    // eslint-disable-next-line react/prop-types
-    data,
-    // eslint-disable-next-line react/prop-types
-    tableRef,
-    // eslint-disable-next-line react/prop-types
-    t,
-    // eslint-disable-next-line react/prop-types
-    locale,
-    // eslint-disable-next-line react/prop-types
-    currency,
-    // eslint-disable-next-line react/prop-types
-    token,
-    /* eslint-disable-next-line react/prop-types */
-    disable,
+    formid, // eslint-disable-next-line react/prop-types
+    current, // eslint-disable-next-line react/prop-types
+    setCurrent, // eslint-disable-next-line react/prop-types
+    accData, // eslint-disable-next-line react/prop-types
+    vatData, // eslint-disable-next-line react/prop-types
+    bankData, // eslint-disable-next-line react/prop-types
+    modifyUrl, // eslint-disable-next-line react/prop-types
+    data, // eslint-disable-next-line react/prop-types
+    tableRef, // eslint-disable-next-line react/prop-types
+    t, // eslint-disable-next-line react/prop-types
+    locale, // eslint-disable-next-line react/prop-types
+    currency, // eslint-disable-next-line react/prop-types
+    token, // eslint-disable-next-line react/prop-types
+    disable, // eslint-disable-next-line react/prop-types
+    height,
   } = props
   const columnsX = (formid) => ColumnFactory(formid, bankData, t, locale, currency)
   const addRow = (newData) => {
-    const dx = { ...current }
-    // eslint-disable-next-line react/prop-types
+    const dx = { ...current } // eslint-disable-next-line react/prop-types
     const company = formid === formEnum.COMPANY ? current.id : current.company
     dx.bankaccounts[dx.bankaccounts.length] = {
-      ...newData,
-      // eslint-disable-next-line react/prop-types
+      ...newData, // eslint-disable-next-line react/prop-types
       owner: current.id,
       company: company,
       modelid: -3,
     }
-    Add(modifyUrl, token, dx, data, setCurrent)
+    Edit(modifyUrl, token, dx, data, setCurrent)
     setCurrent({ ...dx })
   }
   const updateRow = (newData, oldData) => {
@@ -104,14 +91,14 @@ const CustomerTabs = (props) => {
     }
   }
 
-  const getAddressForm = () => <FormWrapper {...props} form={AddressForm} />
+  const getAddressForm = () => <FormInCollapsibleWrapper {...props} form={AddressForm} />
   const getGeneralForm = (mainFormId) => (
     <FormFactory
       formid={getSubFormId(mainFormId)}
       current={current}
       setCurrent={setCurrent}
       t={t}
-      height={35}
+      height={height}
       disable={disable}
     />
   )
@@ -124,17 +111,28 @@ const CustomerTabs = (props) => {
       t={t}
       accData={accData}
       vatData={vatData}
-      height={35}
+      height={height}
       disable={disable}
     />
   )
+
   const getTable = (formid) => (
-    <Grid container spacing={0.5} style={{ ...styles.innerX, backgroundColor: blue }}>
+    <Grid
+      container
+      spacing={0.5}
+      style={{ ...styles.inner, backgroundColor: blue }}
+      direction="column"
+    >
       <EditableTable
         id="bankaccouts"
-        Options={{ ...Options, tableLayout: 'auto', paging: false, tableWidth: 'full' }}
-        flag={false}
-        /* eslint-disable-next-line react/prop-types */
+        Options={{
+          ...Options,
+          tableLayout: 'auto', // eslint-disable-next-line react/prop-types
+          paging: current ? current.bankaccounts?.length > 8 : false,
+          search: true,
+          pageSizeOptions: [5, 10, 20],
+        }}
+        flag={false} // eslint-disable-next-line react/prop-types
         data={current ? current.bankaccounts : []}
         columns={columnsX(formid)}
         editable={editable()}
@@ -149,6 +147,7 @@ const CustomerTabs = (props) => {
       { title: t('common.address'), id: 2, form: getAddressForm() },
       { title: t('common.accounts'), id: 3, form: getAccountForm(mainFormId) },
       { title: t('common.bankaccounts'), id: 4, form: getTable(formEnum.BANKACCOUNT) },
+      //{ title: t('common.bankaccounts'), id: 4, form: Example2() },
     ]
   }
 
