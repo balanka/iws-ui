@@ -1,0 +1,71 @@
+const data = [
+    {
+        id: '1',
+        name: 'Bilan',
+        type: 'folder',
+        debit: 0,
+        credit:0,
+    },
+    {
+        id: '2',
+        account: '1',
+        name: 'Actif',
+        type: 'folder',
+        debit: 0,
+        credit:0,
+    },
+    {
+        id: '3',
+        account: '2',
+        name: 'Terrains, Immeubles',
+        size: 512000,
+        created: '2023-07-10',
+        modified: '2023-08-01',
+        debit: 200,
+        credit: 0,
+    },
+    {
+        id: '4',
+        account: '2',
+        name: 'Immobilisations incorporelles',
+        size: 1048576,
+        created: '2023-07-12',
+        modified: '2023-08-03',
+        debit: 200,
+        credit: 0,
+    },
+    {
+        id: '5',
+        account: '1',
+        name: 'Passif',
+        size: 51200,
+        created: '2023-08-05',
+        modified: '2023-08-10',
+        debit:0,
+        credit:0,
+    },
+    {
+        id: '6',
+        account: '5',
+        name: 'Capital social',
+        size: 460800,
+        created: '2023-08-15',
+        modified: '2023-08-15',
+        debit:0,
+        credit: 200,
+    },
+    {
+        id: '7',
+        account: '5',
+        name: 'Emprunts et dettes assimilées',
+        size: 460800,
+        created: '2023-08-15',
+        modified: '2023-08-15',
+        debit:0,
+        credit: 200,
+    },
+];
+
+export function getData() {
+    return data;
+}

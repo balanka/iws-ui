@@ -1,0 +1,69 @@
+select {
+    border: 2px solid #ddd;
+    background: #cec6f3;
+    padding: 5px;
+    transition: 0.4ms;
+}
+
+select:hover,
+select:focus {
+    background: #bab8bf;
+}
+/*select:open::picker-icon {*/
+/*    rotate: 180deg;*/
+/*}*/
+::picker(select) {
+    border: none;
+}
+
+option {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    border: 2px solid #ddd;
+    /*background: #bfbbcf;*/
+    padding: 10px;
+    transition: 0.4s;
+}
+
+option:first-of-type {
+    border-radius: 8px 8px 0 0;
+}
+
+option:last-of-type {
+    border-radius: 0 0 8px 8px;
+}
+
+option:not(option:last-of-type) {
+    border-bottom: none;
+}
+
+option .icon {
+    font-size: 1.6rem;
+    text-box: trim-both cap alphabetic;
+}
+
+option:nth-of-type(odd) {
+    background: #b3accd;
+}
+
+/*option:hover,*/
+option:focus {
+    background: plum;
+}
+
+option:checked {
+    font-weight: bold;
+}
+/*option::checkmark {*/
+/*    order: 1;*/
+/*    margin-left: auto;*/
+/*    content: "☑️";*/
+/*}*/
+::picker(select) {
+    opacity: 0;
+    transition: all 0.4s allow-discrete;
+}
+::picker(select):popover-open {
+    opacity: 1;
+}
