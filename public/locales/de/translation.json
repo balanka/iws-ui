@@ -32,6 +32,8 @@
   "searchPlaceholder": "Suche"
 },
   "common": {
+    "print": "Drucken",
+    "dashboard": "Dashboard",
     "id":"Nr.",
     "title": "Ansprache",
     "name": "Name",
@@ -48,14 +50,20 @@
     "to"        :  "Bis",
     "total"     : "Total",
     "company"   : "Mandant",
+    "parent": "Ueberg.",
     "modelid"     : "Model",
     "idebit": "AB Soll",
     "debit": "Soll",
     "icredit": "AB Haben",
     "credit": "Haben",
     "balance": "Saldo",
+    "report": "Salden N-1",
+    "transactions": "Bewegungen",
     "amount"      : "Betrag",
+    "quantity":  "Menge",
+    "charge": "Charge",
     "street"      : "Strasse",
+    "period"      : "Buchungsperiode",
     "zip"         : "PLZ",
     "city"       : "Stadt",
     "country"       : "Bundesland",
@@ -75,16 +83,24 @@
     "paymentClearingAcc":"ZE Clearing",
     "settlementClearingAcc": "ZA Clearing.",
     "taxCode":"Steuernummer",
-    "vatCode": "VAT-ID",
+    "vatCode": "Mwst.",
+    "vat": "Mwst.",
     "general": "Allg. Info",
     "address": "Addresse",
     "accounts": "Konten",
+    "edited":{
+      "bankaccount":"Bankverbingung bearbeiten"
+    },
     "bankaccounts":"Bankverbingungen",
     "iban":"IBAN",
+    "bic": "BIC",
     "bank":"Bank",
     "owner":"Inhaber",
     "exportCSV": "Exportieren CSV",
-    "exportPDF": "Exportieren PDF"
+    "exportPDF": "Exportieren PDF",
+    "run": "Ausführen",
+    "runAll": "Ausführen alle",
+    "permission": "Berechtigung"
   },
   "asset": {
     "title":  "Anlage",
@@ -95,10 +111,11 @@
     "changedate":  "Geändert am",
     "account":  "Konto",
     "oaccount": "G. Konto",
+    "amount": "Anschaffungskosten",
     "rate":     "Satz",
     "scrapValue": "Restwert",
     "lifeSpan":   "Laufzeit",
-    "frequency":   "Frequency",
+    "frequency":   "Frequenz",
     "depreciation":   "Methode"
   },
   "account": {
@@ -171,16 +188,6 @@
     "account":  "Kreditor",
     "oaccount": "Aufwand"
   },
-  "costcenter": {
-    "title":"Kostenstelle",
-    "name":"Name",
-    "description":"Beschreibung",
-    "enterdate":"Enterdate",
-    "postingdate":"Gebucht am",
-    "changedate":"Geaendert am",
-    "account"    : "Konto",
-    "company"    : "Mandant"
-  },
   "module": {
     "title":"Module",
     "name":"Name",
@@ -191,19 +198,46 @@
     "parent":"Gruppe",
     "path": "Path"
   },
+  "payroll": {
+    "tax" : {
+      "range": {
+        "title": "Lohnsteuertabelle",
+        "from": "Von",
+        "to": "Bis",
+        "tax": "Betrag",
+        "class": "Steuerklasse"
+      }
+    }
+  },
   "salary": {
     "item": {
-      "title": "Komponenten des Gehalts"
+      "title": "Komponenten des Gehalts",
+        "amount" : "Betrag",
+       "percentage": "Prozentsatz"
     }
   },
   "article": {
-    "title":      "Artikel",
+    "title": "Artikel",
     "sprice": "Verkaufspreis",
     "pprice": "Einkaufspreis",
-    "avgPrice": "G.D.P"
+    "avgPrice": "G.D.P",
+    "quantityUnit": "M.E.",
+    "packUnit": "V.E.",
+    "stocked": "Bestand ?",
+    "vat": "Mwst.",
+    "group": "W.gruppe",
+    "stock": {
+      "account": "Best.Konto"
+    },
+    "expense": {
+      "account": "WE.Konto"
+    }
   },
   "store": {
     "title":      "Lager"
+  },
+  "stock": {
+    "title":  "Bestand"
   },
   "vat": {
     "title":      "MwSt.",
@@ -212,8 +246,12 @@
     "enterdate"  : "Eingabedatum",
     "postingdate": "Gebucht am",
     "changedate":  "Geaendert am",
-    "input_account": "Vorsteuerkonto",
-    "output_account": "Umsatsteuerkonto",
+    "input":{
+      "account" : "Vorsteuerkonto"
+    },
+    "output":{
+      "account" : "Umsatsteuerkonto"
+    },
     "percent":     "Prozent"
   },
   "pac": {
@@ -255,6 +293,31 @@
       "amount": "Betrag",
       "side": "S/H?",
       "duedate": "Faellig am",
+      "text": "Text"
+    }
+  },
+  "transaction": {
+    "title":      "Beleg",
+    "id":        "Nr.",
+    "oid":        "O.BelegNr",
+    "period":       "Periode",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Buchungsdatum",
+    "transdate":   "Belegdatum",
+    "account":      "Deb./Kred.",
+    "store":   "Lager",
+    "text" :       "Text",
+    "type":         "B.Art",
+    "posted":     "Gebucht",
+    "line": {
+      "title": "Positione(n)",
+      "id": "LineNr.",
+      "article": "Artikel",
+      "articleName": "Name",
+      "quantity": "Menge",
+      "unit": "M.E.",
+      "price": "Preis",
+      "duedate": "Fällig am",
       "text": "Text"
     }
   },
@@ -320,19 +383,33 @@
     "menu": "Menü",
     "email": "Email"
   },
+  "toolBar":{
+    "reload":"Neuladen aller Belege ",
+    "duplicate":"Beleg kopieren",
+    "add":"Anlegen",
+    "addLine":"Neue Zeile anlegen",
+    "cancel":"Anlegen bzw. Aenderung abbrechen",
+    "void":"Beleg stornieren",
+    "save":"Beleg speichern",
+    "post":"Beleg buchen "
+  },
   "menu": {
     "salary":{
       "item": "Komponenten des Gehalts"
     },
     "admin": "Verwaltung",
     "article": "Artikel",
+    "articleGroup": "Artikelgruppe",
     "asset": "Anlage",
     "dashboard": "Dashboard",
     "accounting": "Buchhaltung",
     "journal": "Journal",
     "pacb": "Salden",
     "account": "Konten",
+    "accountGroup": "Kontengruppen ",
+    "accountClass": "Kontenklassen",
     "bank": "Bank",
+    "quantityUnit": "Mengeneinheit",
     "module": "Module",
     "costcenter": "Kostenstelle",
     "customer": "Kunden",
@@ -345,11 +422,43 @@
     "user": "Benutzer",
     "permission": "Berechtigung",
     "fmodule": "Belegart",
+    "currency": "Währung",
     "role": "Role",
     "bankstatement": "Bankauszug",
     "masterfiles": "Stammdaten",
     "balancesheet": "Jahresabschluss",
     "financials": "Belege",
-    "financials_stmt": "Jahresabschluss/GuV"
+    "transaction": "Logistik",
+    "financials_stmt": "Jahresabschluss/GuV",
+    "payroll.tax.range": "Lohnsteuertabelle",
+    "closeAccountingPeriod": "Buchungsperiode abschliessen",
+    "createPayrollTransaction": "Gehaltsliste generieren",
+    "createDepreciationTransaction": "Abschreibungsbelege generieren"
+  },
+  "accountClass": {
+    "title":      "Kontenklassen"
+  },
+  "accountGroup": {
+    "title":      "Kontengruppen"
+  },
+  "quantityUnit": {
+    "title": "Mengeneinheit"
+  },
+  "closeAccountingPeriod": {
+    "title": "Buchungsperiode abschliessen",
+    "account": "Konto",
+    "close": "Close"
+  },
+  "createPayrollTransaction": {
+    "title": "Gehaltsliste generieren",
+    "generate": "Generieren"
+  },
+  "createDepreciationTransaction": {
+    "title": "Abschreibungsbelege generieren",
+    "generate": "Generieren"
+  },
+  "ccy": {
+    "title": "Währung"
   }
+
 }

@@ -7,14 +7,14 @@
     "deleteText": "Voulez vous supprimer cet enregistrement ?",
     "cancelTooltip": "Annuler",
     "saveTooltip": "Sauvegarder",
-    "placeholder": "Spalten ziehen ...",
+    "placeholder": "Tirer ube colone ici ...",
     "groupedBy": "Grouper par:",
     "actions": "Actions",
     "labelDisplayedRows": "{from}-{to} de {count}",
     "labelRowsSelect": "Lignes",
     "labelRowsPerPage": "Enreg. par  page:",
     "firstAriaLabel": "1iere page",
-    "firstTooltip": "1iere page",
+    "firstTooltip": "1.iere page",
     "previousAriaLabel": "Page précédante",
     "previousTooltip": "Page suivante",
     "nextAriaLabel": "Page suivante",
@@ -31,7 +31,9 @@
     "searchTooltip": "Recherche",
     "searchPlaceholder": "Recherche"
   },
-  "common": {
+  "common":{
+    "print": "Imprimer",
+    "dashboard": "Tableau de board",
     "id":  "Nº",
     "title": "Titre",
     "name": "Nom",
@@ -48,14 +50,20 @@
     "to"        :  "A",
     "total"     : "Total",
     "company": "Société",
+    "parent": "Parent",
     "modelid"     : "Model",
     "idebit": "R. débit",
-    "debit": "Debit",
+    "debit": "Débit",
     "icredit": "R. crédit",
     "credit": "Crédit",
-    "balance": "Balance",
+    "report": "Solde N-1",
+    "transactions": "Mouvements",
+    "balance": "Solde",
+    "quantity":  "Qté",
+    "charge": "Charge",
     "amount"      : "Montant",
     "street"      : "Rue",
+    "period"      : "Periode",
     "zip"        : "Code P.",
     "city"       : "Ville",
     "country"    : "Région",
@@ -67,6 +75,7 @@
     "postingdate": "Date validation",
     "changedate":  "Date mod.",
     "bankAcc": "Cpte banque",
+    "bic": "BIC",
     "cashAcc": "Cpte caisse",
     "balanceSheetAcc":"Cpte Bilan",
     "incomeStmtAcc": "Cpte résultat",
@@ -75,16 +84,23 @@
     "paymentClearingAcc":"Cpte reg. paiement",
     "settlementClearingAcc": "Cpte reg. reglement",
     "taxCode":"NºImpots",
-    "vatCode": "Réf TVA",
+    "vatCode": "Code TVA",
+    "vat": "TVA",
     "general": "Inf. générale",
     "address": "Adresse",
     "accounts": "Comptes",
+    "edited":{
+       "bankaccount":"Edit réf. bancaire"
+     },
     "bankaccounts":"Références bancaires",
     "iban":"IBAN",
     "bank":"Banque",
     "owner":"Titulaire",
     "exportCSV": "Exporter CSV",
-    "exportPDF": "Exporter PDF"
+    "exportPDF": "Exporter PDF",
+    "run": "Exécuter",
+    "runAll": "Exécuter tous",
+     "permission": "Permission"
 
   },
   "asset": {
@@ -96,6 +112,7 @@
     "changedate":  "Modif.",
     "account": "compte.",
     "oaccount": "Compte charge",
+    "amount": "V. Base",
     "rate":     "Taux",
     "scrapValue": "Risidu",
     "lifeSpan":   "Durée",
@@ -104,7 +121,7 @@
   },
   "account": {
     "title":      "Comptes",
-    "name":       "Nom",
+    "name":       "Libélé",
     "description": "Description",
     "account"    : "Compte",
     "enterdate"  : "Saisie",
@@ -147,9 +164,17 @@
   "company": {
     "title":      "Société",
     "locale":      "Locale",
-    "companyIban" : "IBAN"
+    "companyIban" : "IBAN",
+    "description": "Description",
+    "bankAccount": "Bank Acc.",
+    "cashAccount": "Cash Acc.",
+    "balanceSheetAcc":"Balance sheet Acc",
+    "incomeStmtAcc": "IncomeStmtAcc",
+    "purchasingClearingAcc": "PurchasingClearingAcc",
+    "salesClearingAcc":"SalesClearingAcc.",
+    "paymentClearingAcc":"PaymentClearingAcc",
+    "settlementClearingAcc": "SetlmtClearingAcc."
   },
-
   "customer": {
     "title":      "Client",
     "account":  "Compte Client",
@@ -185,20 +210,43 @@
     "parent":"Groupe",
     "path": "Path"
   },
+  "payroll": {
+    "tax": {
+      "range": {
+        "title": "Table impôt sur salaire",
+        "from": "Début ",
+        "to": "Fin",
+        "tax": "Tax",
+        "class": "Classe impôt"
+      }
+    }
+  },
   "salary": {
     "item": {
-      "title": "Composantes du salaire"
+      "title": "Composantes du salaire",
+      "amount" : "Montant",
+      "percentage": "Pourcentage"
     }
   },
   "article": {
     "title": "Article",
     "sprice": "Prix de vente",
     "pprice": "Prix d'achat",
-    "avgPrice": "P.M.P"
+    "avgPrice": "P.M.P",
+    "quantityUnit": "Unité",
+    "packUnit": "Emballage",
+    "stocked": "Stocké",
+    "group": "Groupe",
+    "vat": "Code TVA",
+    "stock": {
+      "account": "Cpte. Stock"
+    },
+    "expense": {
+      "account": "Cpte. Charge"
+    }
   },
-  "store": {
-    "title": "Store"
-  },
+  "store": {"title": "Magasin"},
+  "stock": {"title": "Stock"},
   "vat": {
     "title":      "TVA",
     "name":       "Nom",
@@ -206,8 +254,12 @@
     "enterdate"  : "Saisie",
     "postingdate": "Validation",
     "changedate":  "Modif.",
-    "input_account": "TVA perc.",
-    "output_account": "TVA rec.",
+    "input":{
+      "account" : "TVA perc."
+    },
+    "output":{
+      "account" : "TVA rec."
+    },
     "percent":     "Pourcent"
      },
   "pac": {
@@ -222,7 +274,7 @@
     "title":      "Permission"
   },
   "fmodule":{
-    "title": "Journaux"
+    "title": "Journal"
   },
   "financials": {
     "title":      "Pièce comptable",
@@ -240,7 +292,7 @@
     "file_content":  "Contenu",
     "posted":     "Validée",
     "line": {
-      "title": "Lignes",
+      "title": "Lignes/Details",
       "id": "Nº",
       "account": "C.débité",
       "accountName": "Nom",
@@ -252,11 +304,36 @@
       "text": "Texte"
     }
   },
+  "transaction": {
+    "title":      "Pièce comptable",
+    "id":        "Nº",
+    "oid":        "Réf.",
+    "period":       "Période",
+    "enterdate"  : "Saisie",
+    "postingdate": "Validée",
+    "transdate":   "Date pièce",
+    "store": "Magasin",
+    "account":   "Client/Fourn.",
+    "text" :       "Texte",
+    "file_content":  "Contenu",
+    "posted":     "Validée",
+    "line": {
+      "title": "Lignes/Details",
+      "id": "Nº",
+      "article": "Article",
+      "articleName": "Nom",
+      "quantity": "Quantité",
+      "unit": "Unité",
+      "price": "Prix",
+      "duedate": "Date valeur",
+      "text": "Texte"
+    }
+  },
   "journal": {
     "title":      "Journal",
     "id":         "Nº",
     "transid":    "Nºpièce",
-    "oid":         "Nº",
+    "oid":         "Réf.",
     "account":      "C.débité",
     "oaccount":      "C.crédité",
     "enterdate"  : "Saisie",
@@ -294,7 +371,6 @@
   "firstname_constraint": "Le prénom doit compté au moins  2 characteres",
   "lastname": "Nom",
   "lastname_constraint": "Le nom doit compté au moins  2 characteres",
-
   "title": "Bienvenue a react avec l'utilisation de  react-i18next",
   "description": {
     "name":"Nom",
@@ -315,12 +391,23 @@
     "menu": "Menu",
     "email": "Ad. mail"
   },
+  "toolBar":{
+    "reload":"Lire tous les journaux",
+    "duplicate":"Dupliquer le journal",
+    "add":"Créer un journal",
+    "addLine":"Créer une nouvelle ligne",
+    "cancel":"Annuler la création ou l'édition",
+    "void":"void a transaction",
+    "save":"Save transaction",
+    "post":"validate or post a transaction"
+  },
   "menu": {
     "salary":{
       "item": "Composantes du salaire"
       },
     "admin": "Administration",
     "article": "Article",
+    "articleGroup": " Groupe",
     "asset": "Immobilisation",
     "dashboard": "Tableau de board",
     "masterfiles": "Références",
@@ -328,7 +415,10 @@
     "journal": "Grand livre",
     "pacb": "Balance",
     "account": "Comptes",
+    "accountGroup": "Groupe",
+    "accountClass": "Classe",
     "bank": "Banque",
+    "quantityUnit": "Unité de mesure",
     "module": "Module",
     "costcenter": "Centre de coûts",
     "customer": "Clients",
@@ -342,9 +432,39 @@
     "role": "Role",
     "permission": "Permission",
     "fmodule": "Journaux",
-    "bankstatement": "Rélévé bancaire",
-    "balancesheet": "Bilan/Résultat",
+    "currency": "Monaie",
     "financials": "Journaux",
-    "financials_stmt": "Clôture/Etat financiers"
+    "transaction": "Logistique",
+    "bankstatement": "Rélévé bancaire",
+    "financials_stmt": "Bilan",
+    "payroll.tax.range": "Lohnsteuertabelle",
+    "createPayrollTransaction": "Générer les journaux de paie",
+    "createDepreciationTransaction": "Générer les journaux  amort."
+
+  },
+  "accountClass": {
+    "title":"Classe"
+  },
+  "accountGroup": {
+    "title": "Groupe"
+  },
+  "quantityUnit": {
+    "title": "Unité de mesure"
+  },
+  "closeAccountingPeriod": {
+    "title": "Clôturer periode comptable",
+    "account": "Compte",
+    "close": "Clôturer"
+  },
+  "createPayrollTransaction": {
+    "title": "Générer les journaux de paie",
+    "generate": "Générer"
+  },
+  "createDepreciationTransaction": {
+    "title": "Générer les journaux  amort.",
+    "generate": "Générer"
+  },
+  "ccy": {
+    "title": "Monaie"
   }
 }

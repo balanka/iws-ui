@@ -1,14 +1,7 @@
-
-FROM node:alpine3.18 as build
-
+FROM node:20-alpine
 WORKDIR /app
-COPY package.json ./
-RUN yarn install --production
-COPY . /app
-RUN yarn run build
-
-FROM nginx:stable-alpine
-WORKDIR /usr/share/nginx/html
-RUN rm -rf ./*
-COPY --from=build /app/build .
-CMD ["nginx", "-g", "daemon off;"]
+COPY ./package*.json .
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "run","dev"]
