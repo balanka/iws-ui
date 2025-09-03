@@ -1,6 +1,5 @@
 import { MASTERFILE } from './form/Menu'
 import './i18n'
-import MasterDetailsTreeExample from "./form/MasterDetailsTreeExample.tsx";
 
 const Dashboard = () =>import('./components/dashboard/Dashboard.tsx')
 const AccountForm = ()  =>   import('./form/AccountForm.tsx')
@@ -18,11 +17,8 @@ const StoreForm = () =>   import('./form/StoreForm')
 const UserForm = () =>   import('./form/UserForm')
 const VatForm = () => import('./form/VatForm')
 //const BasicTreeTable = () => import('./form/BasicTreeTable')
-//const BasicTreeTable = () => import('./form/MasterDetailsTreeExample')
 const BasicTreeTable = () => import('./form/Main')
-//const BasicTreeTable = () => import('./form/TreeDataExample')
 
-//const BALANCESHEET = (path) => React.lazy(() => import('./forms/base/Components/BasicTreeTable'))
 const Login = ()   => import('./form/Login')
 
 
