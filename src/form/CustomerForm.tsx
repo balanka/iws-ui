@@ -25,7 +25,7 @@ import {
 } from '../Models.ts'
 import { CustomerGrid} from '../IWSGrid.tsx'
 import Login from './Login.tsx'
-import {logout} from "./TransactionLib.ts";
+import {logout} from './TransactionLib.ts'
 import { useTranslation } from 'react-i18next'
 import {useDispatch} from "react-redux"
 import {useNavigate} from "react-router-dom"
@@ -156,11 +156,11 @@ const CustomerForm = () => {
   }
   const addLine =
       ( line:IBankAccount)  => {
-        const dx: ICustomer|ISupplier|IEmployee = {...current}
         const newLine:IBankAccount = {...line, modelid:-1, owner: `${current.id}`}
-        dx.bankaccounts.push(newLine)
-        console.log('newLine', newLine)
-        console.log('dx', dx)
+        const dx: ICustomer|ISupplier|IEmployee = {...current}
+         if(dx.hasOwnProperty('bankaccounts')){
+           dx.bankaccounts.push(newLine)
+         } else dx['bankaccounts'] = [ {...newLine}]
         return dx
       }
 
@@ -168,18 +168,15 @@ const CustomerForm = () => {
       ( event:any, current:ICustomer|ISupplier|IEmployee, setCurrent:(arg:IBusinespartner) =>void) => {
         event.preventDefault()
         const dx: ICustomer|ISupplier|IEmployee = {...current}
-        const idx = dx.bankaccounts.findIndex((obj: IBankAccount) => obj.id === currentBankAccount.id)
+        const idx = dx?.bankaccounts.findIndex((obj: IBankAccount) => obj.id === currentBankAccount.id)
         if (idx >= 0) dx.bankaccounts[idx] = {...currentBankAccount, modelid: -2}
-        // const res = gridRef.current!.api.applyTransaction({
-        //   remove: [currentBankAccount],
-        // })!;
         setCurrent(dx)
       }, [currentBankAccount]);
 
   const onNewBankAccount = () => {
     setEdited(true)
     setDisable(false)
-    const record = addLine (initBankAccount)
+    const record = addLine ( {...initBankAccount, owner: `${current.id}` })
     setCurrent(record)
   }
   const onDeleteBankAccount = (event:any) => {

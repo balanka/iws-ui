@@ -5,29 +5,28 @@
 //     useState,
 //     StrictMode,
 // } from 'react'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {
     ClientSideRowModelModule,
-//    GridOptions,
     ModuleRegistry,
      themeQuartz,
 } from "ag-grid-community";
-import { TreeDataModule } from "ag-grid-enterprise";
-import { getData } from "./data";
-import {MASTERFILE, PACB_QUERY_PARM, useStore} from "./Menu.tsx";
-import {formEnum} from "../utils/FormEnum.tsx";
-import Login from "./Login.tsx";
-import {logout} from "./TransactionLib.ts";
-import {useDispatch} from "react-redux";
+import { TreeDataModule } from "ag-grid-enterprise"
+import {MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu.tsx'
+import {formEnum} from '../utils/FormEnum.tsx'
+import Login from './Login'
+import {logout} from './TransactionLib'
+
 import {useTranslation} from "react-i18next";
-import {JournalFormHead, JournalMainForm} from "./FormsProps.tsx";
+import {BalanceSheetHead, JournalMainForm} from "./FormsProps.tsx";
 import {styles as stylesx} from "./BasicTreeTableProps.tsx";
 import Grid from "react-fast-grid";
 import {AgGridReact} from "ag-grid-react";
-import {Get} from "./CrudController.ts";
+import {IAccount, IPACBQueryParam} from '../Models'
+import { useDispatch } from "react-redux";
 import iwsStore from "../utils/Store.tsx";
-import {IAccount, IPACBQueryParam, IPeriodicAccountBalance} from "../Models.ts";
-import { BalanceSheetColDef } from "../ColumnsDefs.ts";
+import { Get } from "./CrudController.ts";
+
 
 ModuleRegistry.registerModules([
     ClientSideRowModelModule,
@@ -79,6 +78,7 @@ const Main  = () => {
     const {profile, menu, selected} = useStore()
     const {t,} = useTranslation()
     const {token, company} = profile
+    const init = useRef(false)
     let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
     module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
     if (module_ === '11111' || module_ === 11111) return <Login / >
@@ -88,13 +88,14 @@ const Main  = () => {
         const [current, setCurrent] = useState<IPACBQueryParam>(current_)
         const [, setIwsState] = useState(iwsStore.initialState)
         const [accData, setAccData] = useState<IAccount[]>([])
-        const [rowData, setRowData] = useState<IPeriodicAccountBalance[]>([])
+        const [rowData, setRowData] = useState<IAccount[]>([])
         const dispatch = useDispatch()
         const acc_modelid = formEnum.ACCOUNT
         const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
         const title = company?.concat(' / ').concat(t(module_.title))
         //const title = "Balancesheet"
-        const gridOptions = {
+        const gridOptions = ()=>  {
+        return {
             rowStyle: {background: 'lightBlue'},
             getRowStyle: (params:any)=> (params.node.rowIndex % 2 === 0)? {
             //color:'black',
@@ -111,92 +112,149 @@ const Main  = () => {
             fontsize: 10,
             //backgroundColor:'#fff9e6'
         },
-         columnDefs:BalanceSheetColDef(t),
-        //     columnDefs: [
-        //       {
-        //         field: 'init Balance',
-        //         headerName: t('common.report'),
-        //         cellStyle: {textAlign: 'center'},
-        //         children: [
-        //             {
-        //                 headerName: t('common.idebit'),
-        //                 aggFunc: "sum",
-        //                 field: "idebit",
-        //                 flex: 1,
-        //                 cellStyle: {textAlign: 'right'},
-        //             },
-        //             {
-        //                 headerName: t('common.icredit'),
-        //                 aggFunc: "sum",
-        //                 field: "icredit",
-        //                 flex: 1,
-        //                 cellStyle: {textAlign: 'right'},
-        //             },
-        //         ],
-        //      },
-        //    {
-        //      field: 'Transaction',
-        //      headerName: t('common.transactions'),
-        //      cellStyle: {textAlign: 'center'},
-        //       children: [
-        //         {
-        //         headerName: t('common.debit'),
-        //         aggFunc: "sum",
-        //         field: "debit",
-        //         flex: 1,
-        //         cellStyle: {textAlign: 'right'},
-        //      },
-        //      {
-        //         headerName: t('common.credit'),
-        //         aggFunc: "sum",
-        //         field: "credit",
-        //         flex: 1,
-        //         cellStyle: {textAlign: 'right'},
-        //     },
-        //     ]
-        //   },
-        // ],
-            defaultColDef: {
-              flex: 1,
-            },
-            autoGroupColumnDef: {
-               headerName: "Name",
-               field: "name",
-               flex: 2,
-               cellRendererParams: {
-                 suppressCount: true,
-               },
-            },
-            rowData: getData(),
-            getRowId: (params:any) => {console.log('dataZZZ', accData)
-             return params.data.id
-            }, // This is required
-            treeData: true, // enable Tree Data mode
-            treeDataParentIdField: "account",
-            groupDefaultExpanded: -1, // expand all groups by default
+         //columnDefs: BalanceSheetColDef(t),
+
+        columnDefs: [
+      {
+        field: 'init Balance',
+        headerName: t('common.report'),
+        cellStyle: {textAlign: 'center'},
+        children: [
+      {
+        headerName: t('common.idebit'),
+        aggFunc: "sum",
+        field: "idebit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) => Number(params.data.idebit.toFixed(2))
+      },
+      {
+        headerName: t('common.icredit'),
+        aggFunc: "sum",
+        field: "icredit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) => Number(params.data.icredit.toFixed(2))
+      },
+        ],
+      },
+      {
+        field: 'Transaction',
+        headerName: t('common.transactions'),
+        cellStyle: {textAlign: 'center'},
+        children: [
+      {
+        headerName: t('common.debit'),
+        aggFunc: "sum",
+        field: "debit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) =>Number(params.data.debit.toFixed(2))
+      },
+      {
+        headerName: t('common.credit'),
+        aggFunc: "sum",
+        field: "credit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) => Number(params.data.credit.toFixed(2))
+      },
+        ],
+      },
+      {
+        field: 'balance',
+        headerName: t('common.balance'),
+        cellStyle: {textAlign: 'center'},
+        children: [
+      {
+        headerName: t('common.debit'),
+        aggFunc: "sum",
+        field: "bdebit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) => Number(params.data.bdebit.toFixed(2))
+      },
+      {
+        headerName: t('common.credit'),
+        aggFunc: "sum",
+        field: "bcredit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) => Number(params.data.bcredit.toFixed(2))
+      },
+        ],
+      },
+        ],
+        defaultColDef: {
+          flex: 1,
+        },
+        autoGroupColumnDef: {
+          headerName: "Name",
+          field: "name",
+          flex: 2,
+          cellRendererParams: {
+          suppressCount: true,
+       },
+      },
+        //rowData: accData,
+        getRowId: (params:any) => params.data.id, // This is required
+        treeData: true, // enable Tree Data mode
+        treeDataParentIdField: "account",
+        groupDefaultExpanded: -1, // expand all groups by default
+      }
+      }
+      const buildUrl0 = () => `${module_.ctx}/${company}/${current.account}/${current.toPeriod}`
+      //const buildUrl = () => `${module_.ctx}/${company}/${current.account}/${current.fromPeriod}/${current.toPeriod}`
+      const load = (event:any) => {
+        event.preventDefault()
+       // accData?.length < 2
+       // ? Get(acc_ctx, token, acc_modelid, setAccData)
+       // current.account && current.fromPeriod && current.toPeriod
+        //? Get(buildUrl(), token, modelid, setRowData)
+         Get(buildUrl0(), token, modelid, setRowData)
+       // : void 0
+      }
+
+       {/* const submitQuery_ = (event:any) => {*/}
+       {/*     event.preventDefault()*/}
+       {/*     accData?.length < 2?*/}
+       {/*         Get(acc_ctx, token,  acc_modelid, setAccData)*/}
+       {/*     :   Get(buildUrl(), token,  modelid, setRowData)*/}
+       {/*}*/}
+
+      useEffect(() => {
+        if (!init.current) {
+          iwsStore.subscribe(setIwsState)
+          init.current = true
         }
-        const buildUrl = () => `${module_.ctx}/${company}/${current.account}/${current.fromPeriod}/${current.toPeriod}`
-        const submitQuery_ = (event:any) => {
-            //event.preventDefault()
-            accData?.length < 2?
-                Get(acc_ctx, token,  acc_modelid, setAccData)
-            :   Get(buildUrl(), token,  modelid, setRowData)
-       }
-        useEffect(() => {
-            iwsStore.subscribe(setIwsState)
-            Get(acc_ctx, token, acc_modelid, setAccData)
-            setCurrent(current_)
-        }, [selected])
-        console.log('data', accData)
+        // load account data as they are needed
+        acc_ctx && Get(acc_ctx, token, acc_modelid, setAccData)
+        setCurrent(current_)
+      }, [selected])
+      const formatIt= (d:IAccount) =>{
+        return {...d,  idebit:Number(d.idebit.toFixed(2))
+                   , icredit:Number(d.icredit.toFixed(2))
+                   , debit:Number(d.debit.toFixed(2))
+                   , credit:Number(d.credit.toFixed(2))
+               }
+      }
+
+      const v = rowData.map((d:IAccount)=> formatIt(d))
+      console.log('rowData>>>', v)
     return (
         <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
-            <JournalFormHead style={{...STYLES.inner2}} title={title} submitQuery={submitQuery_} dispatch={dispatch}
-                logout={logout}  balancesheet={true} t={t}
-                    templateFileName={""} current={accData}/>
+            <BalanceSheetHead style={{...STYLES.inner2}} title={title} submitQuery={load} dispatch={dispatch}
+                logout={logout}  t={t}
+                    templateFileName={""}/>
             <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
-                             stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
-            <Grid container style={{...stylesx.outer, height:600, width:"100%", paddingTop: 10}} maximize direction="column">
-               <AgGridReact gridOptions = {gridOptions} rowData ={accData}/>
+                   //@ts-ignore
+                      stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
+            <Grid container
+                  //@ts-ignore
+                  style={{...stylesx.outer, height:600, width:"100%", paddingTop: 10}} maximize direction="column">
+               <AgGridReact theme = {myTheme}
+                           //@ts-ignore
+                            gridOptions = {gridOptions()} rowData ={v}/>
             </Grid>
        </Grid>
    )

@@ -25,8 +25,8 @@ interface ShowProps<T> {
 export const transactionToOption = (m: ITransaction|IFinancials) => {
     return {value: m.id, label:`${m.id} ${m.modelid}`}
 }
-
-export const toOption = (m: {id:string|bigint, name:string}):{ value:string|bigint, label:string } => {
+//export const toOption = (m: {id:string|bigint, name:string}):{ value:string|bigint, label:string } => {
+export const toOption = (m: {id:string|bigint, name:string}) => {
     return {value:m.id, label:`${m.id} ${m.name}`}
 }
 

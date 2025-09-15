@@ -184,7 +184,7 @@ const ComboBox = <TValue extends Base>({
                  value ={value}
                  //onChange={handleOption}
                  onChange={onSelectChange}
-                 options={values.map((m, index: number) => {
+                 options={values?.map((m, index: number) => {
                      return {...m, color: (index % 2 === 0) ? '#87CEFA' : '#E0FFFF'}
                  })}
                  isDisabled={disable}

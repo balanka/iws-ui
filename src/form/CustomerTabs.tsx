@@ -63,7 +63,7 @@ const CustomerTabs  = ({ formid, current, setCurrent
                 theme="legacy" columnDefs ={bankAccountColumnDefs(t)}  defaultColDef={defaultColDef}
                 rowData ={current.bankaccounts??[initBankAccount]} onRowSelected ={onRowSelected}/>
      </Grid>
-
+console.log('bankAccountProps', bankAccountProps)
   const tabContent = [
       { title: t('common.general'), id: 1, form: CustomerGeneralForm (props)},
       { title: t('common.address'), id: 2, form: AddressForm(addressProps) },

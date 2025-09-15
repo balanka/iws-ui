@@ -11,7 +11,7 @@ import Grid from 'react-fast-grid'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { BSFormHead} from './FormsProps'
-import { Get, Get1, Get2} from './CrudController'
+import { Get, Get2} from './CrudController'
 import {initBS, MASTERFILE, useStore} from './Menu'
 import iwsStore from '../utils/Store'
 import { useTranslation } from 'react-i18next'
@@ -21,35 +21,48 @@ import {IBankStatement} from '../Models.ts'
 import {BankStatementGrid} from '../IWSGrid.tsx'
 import BankStatementTabs from "./BankStatementTabs.tsx";
 import Login from './Login'
+import {logout} from "./TransactionLib.ts";
+import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
-const STYLES = {
-  inner: {
+const styles = {
+  outer: {
     borderRadius: 5,
-    boxShadow: '0 20px 50px #BBF',
-    padding: 10,
-    paddingLeft: 25,
-    paddingRight: 20,
-    //height: 350,
-    paddingTop: 30,
-  }
+    boxShadow: "0 30px 40px #BBB",
+    padding: 4,
+  },
 }
+// const STYLES = {
+//   inner: {
+//     borderRadius: 5,
+//     boxShadow: '0 20px 50px #BBF',
+//     padding: 10,
+//     paddingLeft: 25,
+//     paddingRight: 20,
+//     //height: 350,
+//     paddingTop: 30,
+//   }
+// }
 const BankStatementForm = () => {
   // @ts-ignore
   const { profile, menu, selected } = useStore()
-  const { t, } = useTranslation()
+  const { t, i18n} = useTranslation()
   const { token, company, locale, currency } = profile
   const localex = locale ??'fr-FR'
   const currencyx = currency ??'EUR'
+  const dispatch = useDispatch()
+  let navigate = useNavigate()
+  const [language, setLanguage] = useState('en-US')
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   //module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   module_ =  module_ ?? formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const title = t(module_.title)
   const [state, setState] = useState({ collapse: true, fadeIn: true, timeout: 300 })
-  const [toolbar, setToolbar] = useState(true)
+  //const [toolbar, setToolbar] = useState(true)
   const height = 33
   const modelid :number = module_? module_.modelid:1111
   const ctx = `${module_.ctx}/${modelid}/${company}`
@@ -58,17 +71,20 @@ const BankStatementForm = () => {
   const [rows, setRows] = useState<string[]|bigint[]>([])
   const [, setIwsState] = useState(iwsStore.initialState)
 
-  const toggleToolbar = () => setToolbar(!toolbar)
+  //const toggleToolbar = () => setToolbar(!toolbar)
   const toggle = () => setState({ ...state, collapse: !state.collapse })
 
   const [rowData, setRowData] = useState<IBankStatement[]>([])
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
-     Get(ctx, token, modelid, setRowData)
+     //Get(ctx, token, modelid, setRowData)
      setCurrent(current_)
   }, [selected])
 
+  const cancelEdit = () => {
+    setCurrent(current_)
+  }
   const submitEdit = () => {}
   //const cancelEdit = () => initAdd()
   // const initAdd = () => {
@@ -79,14 +95,15 @@ const BankStatementForm = () => {
   const reload = () => {
     iwsStore.deleteKey(current.modelid)
     //const url_ = modifyUrl?.concat('/').concat(current.modelid)
-    Get1(ctx, token, current.modelid)
+    Get(ctx, token, modelid, setRowData)
+    //Get1(ctx, token, current.modelid)
     setCurrent(current_)
 }
 
-  const submitQuery = (event:any) => {
-    event.preventDefault()
-    Get(ctx, token, modelid, setRowData)
-  }
+  // const submitQuery = (event:any) => {
+  //   event.preventDefault()
+  //   Get(ctx, token, modelid, setRowData)
+  // }
   const onRowSelected = (event: RowSelectedEvent) => {
     const _data:IBankStatement[] = (event.data instanceof Array)?event.data:[event.data]
     let rowsx = _data.map((item:IBankStatement) => item.id)
@@ -106,60 +123,43 @@ const BankStatementForm = () => {
     url_ && Get(url_, token, current.modelid, setRowData)
   }
 
-  // const gridOptions: GridOptions<IBankStatement> = {
-  //   rowStyle: {background: 'lightBlue'},
-  //   // @ts-ignore
-  //   getRowStyle: (params: { node: { rowIndex: number } }) => {
-  //     if (params.node.rowIndex % 2 === 0) {
-  //       return {background: '#fff9e6'}
-  //     } else return {background: 'lightBlue'}
-  //   },
-  //   defaultColDef: {
-  //     resizable: true,
-  //     editable: false,
-  //     flex: 1,
-  //     filter: true,
-  //   },
-  //   rowHeight: 20,
-  //   rowSelection: {
-  //     mode: "multiRow",
-  //   },
-  //   onRowSelected: onRowSelected,
-  //   paginationPageSizeSelector: [5, 10, 20, 50],
-  //   pagination: true,
-  //   paginationPageSize: 10,
-  //   autoSizeStrategy: {
-  //     type: "fitGridWidth",
-  //   },
-  //   // @ts-ignore
-  //   columnDefs: bankStatementColumnDefs(t),
-  //
-  // }
+  const handleLanguageChange = (event:any) => {
+    event.preventDefault()
+    const value = event.target.value
+    setLanguage(value)
+    i18n.changeLanguage(value)
+  }
+  const minHeight = 400
+  const maxHeight = 700
   return (
-        <Grid container spacing={10} style={{...STYLES.inner}} direction="column">
+        <>
+        {/*<Grid container spacing={10} style={{...STYLES.inner}} direction="column">*/}
           <BSFormHead
               title={title}
               collapse={state.collapse}
-              //setData={setRowData}
+              cancelEdit={cancelEdit}
               submitEdit={submitEdit}
-              reload={reload}
               importData={importData}
-              submitQuery={submitQuery}
               submitPost={submitPost}
+              reload={reload}
               toggle={toggle}
-              toggleToolbar={toggleToolbar}
+              logout={logout}
+              navigate={navigate}
+              language={language}
+              handleLanguageChange={handleLanguageChange}
+              dispatch={dispatch}
               current={current}
           />
-          <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
+          <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>
             <BankStatementTabs current={current} setCurrent={setCurrent}  t={t}  height={height}
               currency={currencyx}  locale={localex}/>
-            <Grid item style={{paddingTop: 5, height:300, width:1500 }}>
+            <Grid item style={{paddingTop: 5, height:300, width:'99%' }}>
               <BankStatementGrid
                   // @ts-ignore
                    columnDefs ={bankStatementColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
             </Grid>
           </Grid>
-        </Grid>
+    </>
   )
 }
 export default BankStatementForm

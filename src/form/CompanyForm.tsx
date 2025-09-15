@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback, useRef} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import { AllCommunityModule, ClientSideRowModelModule, ModuleRegistry } from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -21,7 +21,6 @@ import {
 } from '../Models.ts'
 import { CustomerGrid} from '../IWSGrid.tsx'
 import Login from './Login.tsx'
-import {AgGridReact} from "ag-grid-react";
 import {CompanyTabs} from "./CompanyTabs.tsx";
 import {logout} from "./TransactionLib.ts";
 import {useDispatch} from "react-redux";
@@ -62,7 +61,7 @@ const CompanyForm = () => {
   let title =  company?.concat(' / ').concat(t(module_.title))
   const [state, setState] = useState({ collapse: true, fadeIn: true, timeout: 300 })
   const [disable, setDisable] = useState(true)
-  const gridRef: React.RefObject<AgGridReact|null> = useRef<AgGridReact>(null)
+ // const gridRef: React.RefObject<AgGridReact|null> = useRef<AgGridReact>(null)
   const height = 20
   const modelid = module_? module_.modelid:1111
   const acc_modelid = formEnum.ACCOUNT
@@ -108,8 +107,6 @@ const CompanyForm = () => {
     setLanguage(value)
     i18n.changeLanguage(value)
   }
-
-
   const edit = () => {
     console.log('edit called!!!')
     if(edited) {
@@ -173,21 +170,15 @@ const CompanyForm = () => {
       ( event:any, current:ICompany, setCurrent:(arg:any) =>void) => {
         event.preventDefault()
         const dx:ICompany = {...current}
-        console.log('gridRef', gridRef)
-       // const selectedData: IBankAccount[] = gridRef.current!.api.getSelectedRows()
-       // console.log('selectedData', selectedData)
         console.log('currentBankAccount', currentBankAccount)
-        const idx = dx.bankaccounts.findIndex((obj: IBankAccount) => obj.id === currentBankAccount.id)
+        const idx = dx?.bankaccounts.findIndex((obj: IBankAccount) => obj.id === currentBankAccount.id)
         if (idx >= 0) dx.bankaccounts[idx] = {...currentBankAccount, modelid: -2}
-        // const res = gridRef.current!.api.applyTransaction({
-        //   remove: [currentBankAccount],
-        // })!;
         setCurrent(dx)
       }, [currentBankAccount]);
   const onNewBankAccount = () => {
     setEdited(true)
     setDisable(false)
-    const record = addLine (initBankAccount)
+    const record = addLine ({...initBankAccount, owner: `${current.id}` })
     setCurrent(record)
   }
   const onDeleteBankAccount = (event:any) => {
@@ -205,7 +196,6 @@ const CompanyForm = () => {
   }
 
   return (
-     // <Grid container spacing={10} style={{...STYLES.inner,  paddingTop: 25}} direction="row">
         <Grid container spacing={10} style={{...STYLES.inner}} direction="column">
           <CommonFormHead
               title={title}
@@ -245,7 +235,6 @@ const CompanyForm = () => {
                   // @ts-ignore
                   theme="legacy" columnDefs ={customerColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
             </Grid>
-
         </Grid>
   )
 }

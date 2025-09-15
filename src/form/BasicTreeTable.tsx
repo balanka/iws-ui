@@ -20,7 +20,7 @@ const BasicTreeTable = () => {
   if (typeof module_ === 'undefined' || !module_ || module_.id === '11111')
     return navigate('/login')
   if (module_.id === '0') navigate('/login')
-  const url = module_.ctx.concat('/').concat(company)
+  const url = module_.ctx.concat('/').concat(company) 
   const accUrl = `${MASTERFILE.acc}/${formEnum.ACCOUNT}/${company}`
   const initAcc = module_.state1
   const initialState = module_.state
@@ -63,7 +63,7 @@ const BasicTreeTable = () => {
       //.concat(current.fromPeriod)
       .concat('/')
       .concat(current.toPeriod)
-
+    
   return Internal(
     data,
     setData,

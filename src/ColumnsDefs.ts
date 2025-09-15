@@ -3,6 +3,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import {
   IAccount,
   IArticle,
+  IAsset,
   IBankStatement,
   IFinancials, ILineFinancials,
   ILineTransaction,
@@ -455,7 +456,7 @@ export const articleColumnDefs = (t: (arg0: string) => any):ColDef<IArticle>[] =
       return  pprice.toFixed(2)
     },
     minWidth: 40,
-    filter: "agNumericColumnFilter",
+    filter: "agNumberColumnFilter",
   },
   {
     field: 'avgPrice',
@@ -465,7 +466,7 @@ export const articleColumnDefs = (t: (arg0: string) => any):ColDef<IArticle>[] =
       return  avgPrice.toFixed(2)
     },
     minWidth: 40,
-    filter: "agNumericColumnFilter",
+    filter: "agNumberColumnFilter",
   },
   {
     field: 'sprice',
@@ -475,7 +476,7 @@ export const articleColumnDefs = (t: (arg0: string) => any):ColDef<IArticle>[] =
     return  sprice.toFixed(2)
     },
     minWidth: 40,
-    filter: "agNumericColumnFilter",
+    filter: "agNumberColumnFilter",
   },
   {
     field: "enterdate",
@@ -496,8 +497,8 @@ export const articleColumnDefs = (t: (arg0: string) => any):ColDef<IArticle>[] =
     cellRenderer: dateRenderer
   },
 ]
-export const assetColumnDefs = (t: (arg0: string) => any) => //:ColDef<IAsset>[] => [
-  [{
+export const assetColumnDefs = (t: (arg0: string) => any) :ColDef<IAsset>[] => [
+  {
     field: 'id',
     headerName: t('common.id'),
     minWidth: 40,
@@ -525,45 +526,49 @@ export const assetColumnDefs = (t: (arg0: string) => any) => //:ColDef<IAsset>[]
   {
     field: 'amount',
     headerName: t('asset.amount'),
-    valueFormatter: (params: { data: { amount: number } }) => params.data?.amount?.toFixed(2),
+    valueFormatter: (params: ValueFormatterParams<IAsset, number>) => (params.data?.amount??0.0).toFixed(2),
     minWidth: 40,
-    filter: "agNumericColumnFilter",
+    filter: "agNumberColumnFilter",
   },
   {
     field: 'scrapValue',
     headerName: t('asset.scrapValue'),
-    valueFormatter: (params: { data: { scrapValue: number } }) => params.data?.scrapValue?.toFixed(2),
+    valueFormatter: (params: ValueFormatterParams<IAsset, number>) => (params.data?.scrapValue??0.0).toFixed(2),
     minWidth: 40,
-    filter: "agNumericColumnFilter",
+    filter: "agNumberColumnFilter",
   },
+  //    valueFormatter: (params:ValueFormatterParams<IArticle, number>)  => {
+  //       const sprice = params.data?.sprice??0.0
+  //     return  sprice.toFixed(2)
   {
     field: 'lifeSpan',
     headerName: t('asset.lifeSpan'),
-    valueFormatter: (params: { data: { lifeSpan: number } }) => params.data?.lifeSpan?.toFixed(2),
+    valueFormatter: (params: ValueFormatterParams<IAsset, number>) => (params.data?.lifeSpan??0.0).toFixed(2),
+
     minWidth: 40,
-    filter: "agNumericColumnFilter",
+    filter: "agNumberColumnFilter",
 
   },
   {
     field: 'frequency',
     headerName: t('asset.frequency'),
-    valueFormatter: (params: { data: { frequency: number } }) => params.data?.frequency?.toFixed(2),
+    valueFormatter: (params: ValueFormatterParams<IAsset, number>) => (params.data?.frequency??0.0).toFixed(2),
     minWidth: 30,
-    filter: "agNumericColumnFilter",
+    filter: "agNumberColumnFilter",
   },
   {
     field: 'rate',
     headerName: t('asset.rate'),
-    valueFormatter: (params: { data: { rate: number } }) => params.data?.rate?.toFixed(2),
+    valueFormatter: (params: ValueFormatterParams<IAsset, number>) => (params.data?.rate??0.0).toFixed(2),
     minWidth: 40,
-    filter: "agNumericColumnFilter",
+    filter: "agNumberColumnFilter",
   },
   {
     field: 'depMethod',
     headerName: t('asset.depreciation'),
-    valueFormatter: (params: { data: { depMethod: number } }) => params.data?.depMethod?.toFixed(2),
+    valueFormatter: (params: ValueFormatterParams<IAsset, number>) => (params.data?.depMethod??0.0).toFixed(2),
     minWidth: 40,
-    filter: "agNumericColumnFilter",
+    filter: "agNumberColumnFilter",
   },
   {
     field: 'description',
@@ -639,7 +644,7 @@ export const LinesFinancialsColumns = ( t: (arg0: string) => any) => {
       valueFormatter: (params: { data: { amount: number } }) => params.data?.amount?.toFixed(2),
       minWidth: 30,
       cellStyle: {textAlign: 'right'},
-      filter: "agNumericColumnFilter",
+      filter: "agNumberColumnFilter",
     },
     {
       field: 'currency',
@@ -661,7 +666,7 @@ export const bankStatementColumnDefs = (t: (arg0: string) => any):ColDef<IBankSt
       field: 'id',
       headerName: t('common.id'),
       minWidth: 10,
-      filter: "agNumericColumnFilter",
+      filter: "agNumberColumnFilter",
     },
     {
       field: 'depositor',
@@ -687,11 +692,11 @@ export const bankStatementColumnDefs = (t: (arg0: string) => any):ColDef<IBankSt
       minWidth: 20,
       filter: "agTextColumnFilter",
     },
-    {
-      field: 'postingdate',
-      headerName: t('bankstatement.postingdate'),
-      minWidth: 10,
-    },
+    // {
+    //   field: 'postingdate',
+    //   headerName: t('bankstatement.postingdate'),
+    //   minWidth: 10,
+    // },
     {
       field: 'valuedate',
       headerName: t('bankstatement.valuedate'),
@@ -713,7 +718,8 @@ export const bankStatementColumnDefs = (t: (arg0: string) => any):ColDef<IBankSt
       field: 'amount',
       headerName: t('common.amount'),
       minWidth: 20,
-      filter: "agNumericColumnFilter",
+      cellStyle: {textAlign: 'right'},
+      filter: "agNumberColumnFilter",
     },
     {
       field: 'currency',
@@ -737,7 +743,8 @@ export const bankStatementColumnDefs = (t: (arg0: string) => any):ColDef<IBankSt
       field: 'period',
       headerName: t('bankstatement.period'),
       minWidth: 10,
-      filter: "agNumericColumnFilter",
+      cellStyle: {textAlign: 'right'},
+      filter: "agNumberColumnFilter",
     },
     {
       field: 'posted',
@@ -748,11 +755,13 @@ export const bankStatementColumnDefs = (t: (arg0: string) => any):ColDef<IBankSt
     {
       field: 'modelid',
       headerName: t('common.modelid'),
+      cellStyle: {textAlign: 'right'},
       minWidth: 5,
     },
     {
       field: 'company',
       headerName: t('common.company'),
+      cellStyle: {textAlign: 'right'},
       minWidth: 5,
     },
   ]

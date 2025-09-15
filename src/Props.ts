@@ -237,14 +237,6 @@ export interface TransactionDetailsFormProps {
     height?: number
 }
 
-// export interface FormWrapperProps<F, T> {
-//     collapse: boolean,
-//     buildForm: (formProps: F) => ReactElement,
-//     formProps: F,
-//     buildTable: (tableFormProps: T) => ReactElement,
-//     tableFormProps: TableFormProps<T>,
-//     formWrapperProps?: jsx.JSX.IntrinsicAttributes & FormWrapperProps<any, any>
-// }
 
 export interface Masterfile2FormProps<A> {
     collapse:boolean,
@@ -255,14 +247,14 @@ export interface Masterfile2FormProps<A> {
     height: number,
     t: TFunction<'translation', undefined>
 }
+export interface FinancialsCBoxProps<A, B> {
+  current: A,
+  setCurrent: (arg: A) => void,
+  data: B[],
+  zIndex: number,
+  styles: any
+}
 
-// export interface TableFormProps<T> {
-//     style: CSSProperties,
-//     t: TFunction<'transalation', undefined>,
-//     colDef: (t: TFunction<'transalation', undefined>) => ColDef[],
-//     data: T[],
-//     onRowSelected: (event: RowSelectedEvent) => void
-// }
 export interface UserFormProps { collapse: boolean, current:IUser, setCurrent:(arg:IUser)=>void
     , t:TFunction<'translation', undefined>, disable:boolean, height:number
 }

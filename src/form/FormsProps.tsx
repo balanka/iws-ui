@@ -1,7 +1,7 @@
-import React, { CSSProperties, Dispatch, MouseEventHandler} from 'react'
+import React, {CSSProperties, Dispatch, FC, MouseEventHandler} from 'react'
 import {toOption, transactionToOption} from '../utils/FormUtils.tsx'
 import Grid from 'react-fast-grid'
-import { IoMdMenu } from 'react-icons/io'
+import {IoMdMenu} from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import HourglassTopTwoToneIcon from '@mui/icons-material/HourglassTopTwoTone'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
@@ -10,50 +10,68 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import SaveIcon from '@mui/icons-material/Save'
 import LogoutIcon from '@mui/icons-material/Logout'
 import {
-    CBadge,
-    CInputGroup,
-    CFormInput,
-    CFormLabel,
-    CFormSelect,
-    CFormTextarea,
-    CButton,
-    CCol, CTooltip, CLink, CHeaderToggler,
+  CBadge,
+  CButton,
+  CCol,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CFormTextarea,
+  CHeaderToggler,
+  CInputGroup,
 } from '@coreui/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { formEnum } from '../utils/FormEnum'
-import { sortById } from '../utils/Utils'
-import { saveXlsx} from './../utils/XlsUtils.ts'
-import {SaveProps, StoreGeneralFormProps} from '../Props.ts'
+import {formEnum} from '../utils/FormEnum'
+import {sortById} from '../utils/Utils'
+import {saveXlsx} from './../utils/XlsUtils.ts'
 import {
-    faAngleDoubleDown,
-    faAngleDoubleUp,
-    faSave,
-    faSpinner,
-} from '@fortawesome/free-solid-svg-icons'
+  AccountMainProps,
+  ArticleProps,
+  AssetProps,
+  BankAccountFormProps,
+  BankStatementParamProps,
+  BankStatementProps,
+  CustomerGeneralFormProps, FinancialsCBoxProps,
+  FinancialsDetailsFormProps,
+  MasterfileProps,
+  MasterfileProps2,
+  SaveProps,
+  StoreGeneralFormProps,
+  TransactionDetailsFormProps,
+  UserFormProps
+} from '../Props.ts'
 import DatePicker from 'react-datepicker'
 import '../../public/css/custom-datepicker.css'
-import { green} from '@mui/material/colors'
+import {green} from '@mui/material/colors'
 import SvgIcon from '@mui/material/SvgIcon'
-import { styles } from './BasicTreeTableProps'
-import {initAcc, initCc, initCust, initStore} from './Menu'
+//import {styles} from './BasicTreeTableProps'
+import {initAcc, initCc, initCust, initfModule, initStore} from './Menu'
 import {
-    IAccount, IAddress,
-    IArticle, IBankAccount, IBankStatement, IBusinespartner,
-    ICompany, ICustomer, IEmployee,
-    IFinancials, IFmodule, ILineFinancials, ILineTransaction,
-    IMasterfile, IPermission,
-    IPACBQueryParam, IPayrollTaxRange,
-    IStore, ISupplier, ITransaction, IVat, IPeriodicAccountBalance2, IJournal, IRole
+  IAccount,
+  IAddress,
+  IArticle,
+  IBankAccount,
+  IBankStatement,
+  IBusinespartner,
+  ICompany,
+  ICustomer,
+  IEmployee,
+  IFinancials,
+  IFmodule,
+  IJournal,
+  ILineFinancials,
+  ILineTransaction,
+  IMasterfile,
+  IPACBQueryParam,
+  IPayrollTaxRange,
+  IPeriodicAccountBalance2,
+  IPermission,
+  IRole,
+  IStore,
+  ISupplier,
+  ITransaction,
+  IVat
 } from '../Models.ts'
 import {TFunction} from 'i18next'
-import {
-    AccountMainProps,
-    ArticleProps,
-    AssetProps, BankAccountFormProps, BankStatementParamProps,
-    BankStatementProps, CustomerGeneralFormProps, FinancialsDetailsFormProps,
-    MasterfileProps,
-    MasterfileProps2, TransactionDetailsFormProps, UserFormProps,
-} from '../Props.ts'
 import {IconProp} from '@fortawesome/fontawesome-svg-core'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import AddBoxIcon from '@mui/icons-material/AddBox'
@@ -64,10 +82,11 @@ import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
 import {Checkbox, FormControlLabel} from "@mui/material";
 import {NavigateFunction, useNavigate} from 'react-router-dom'
-import {languages} from "./Login.tsx";
-import {useSelector} from "react-redux";
-import ComboBox from "./ComboBox.tsx";
-import {showFile} from "../utils/XlsUtils.ts";
+import {languages} from './Login.tsx'
+import {useSelector} from 'react-redux'
+import ComboBox from './ComboBox.tsx'
+import {showFile} from '../utils/XlsUtils.ts'
+
 
 export const svgIcons = {
     cubeLoader:
@@ -126,6 +145,35 @@ export const svgIcons = {
     logo: 'M666.3 296.5c0-32.5-40.7-63.3-103.1-82.4 14.4-63.6 8-114.2-20.2-130.4-6.5-3.8-14.1-5.6-22.4-5.6v22.3c4.6 0 8.3.9 11.4 2.6 13.6 7.8 19.5 37.5 14.9 75.7-1.1 9.4-2.9 19.3-5.1 29.4-19.6-4.8-41-8.5-63.5-10.9-13.5-18.5-27.5-35.3-41.6-50 32.6-30.3 63.2-46.9 84-46.9V78c-27.5 0-63.5 19.6-99.9 53.6-36.4-33.8-72.4-53.2-99.9-53.2v22.3c20.7 0 51.4 16.5 84 46.6-14 14.7-28 31.4-41.3 49.9-22.6 2.4-44 6.1-63.6 11-2.3-10-4-19.7-5.2-29-4.7-38.2 1.1-67.9 14.6-75.8 3-1.8 6.9-2.6 11.5-2.6V78.5c-8.4 0-16 1.8-22.6 5.6-28.1 16.2-34.4 66.7-19.9 130.1-62.2 19.2-102.7 49.9-102.7 82.3 0 32.5 40.7 63.3 103.1 82.4-14.4 63.6-8 114.2 20.2 130.4 6.5 3.8 14.1 5.6 22.5 5.6 27.5 0 63.5-19.6 99.9-53.6 36.4 33.8 72.4 53.2 99.9 53.2 8.4 0 16-1.8 22.6-5.6 28.1-16.2 34.4-66.7 19.9-130.1 62-19.1 102.5-49.9 102.5-82.3zm-130.2-66.7c-3.7 12.9-8.3 26.2-13.5 39.5-4.1-8-8.4-16-13.1-24-4.6-8-9.5-15.8-14.4-23.4 14.2 2.1 27.9 4.7 41 7.9zm-45.8 106.5c-7.8 13.5-15.8 26.3-24.1 38.2-14.9 1.3-30 2-45.2 2-15.1 0-30.2-.7-45-1.9-8.3-11.9-16.4-24.6-24.2-38-7.6-13.1-14.5-26.4-20.8-39.8 6.2-13.4 13.2-26.8 20.7-39.9 7.8-13.5 15.8-26.3 24.1-38.2 14.9-1.3 30-2 45.2-2 15.1 0 30.2.7 45 1.9 8.3 11.9 16.4 24.6 24.2 38 7.6 13.1 14.5 26.4 20.8 39.8-6.3 13.4-13.2 26.8-20.7 39.9zm32.3-13c5.4 13.4 10 26.8 13.8 39.8-13.1 3.2-26.9 5.9-41.2 8 4.9-7.7 9.8-15.6 14.4-23.7 4.6-8 8.9-16.1 13-24.1zM421.2 430c-9.3-9.6-18.6-20.3-27.8-32 9 .4 18.2.7 27.5.7 9.4 0 18.7-.2 27.8-.7-9 11.7-18.3 22.4-27.5 32zm-74.4-58.9c-14.2-2.1-27.9-4.7-41-7.9 3.7-12.9 8.3-26.2 13.5-39.5 4.1 8 8.4 16 13.1 24 4.7 8 9.5 15.8 14.4 23.4zM420.7 163c9.3 9.6 18.6 20.3 27.8 32-9-.4-18.2-.7-27.5-.7-9.4 0-18.7.2-27.8.7 9-11.7 18.3-22.4 27.5-32zm-74 58.9c-4.9 7.7-9.8 15.6-14.4 23.7-4.6 8-8.9 16-13 24-5.4-13.4-10-26.8-13.8-39.8 13.1-3.1 26.9-5.8 41.2-7.9zm-90.5 125.2c-35.4-15.1-58.3-34.9-58.3-50.6 0-15.7 22.9-35.6 58.3-50.6 8.6-3.7 18-7 27.7-10.1 5.7 19.6 13.2 40 22.5 60.9-9.2 20.8-16.6 41.1-22.2 60.6-9.9-3.1-19.3-6.5-28-10.2zM310 490c-13.6-7.8-19.5-37.5-14.9-75.7 1.1-9.4 2.9-19.3 5.1-29.4 19.6 4.8 41 8.5 63.5 10.9 13.5 18.5 27.5 35.3 41.6 50-32.6 30.3-63.2 46.9-84 46.9-4.5-.1-8.3-1-11.3-2.7zm237.2-76.2c4.7 38.2-1.1 67.9-14.6 75.8-3 1.8-6.9 2.6-11.5 2.6-20.7 0-51.4-16.5-84-46.6 14-14.7 28-31.4 41.3-49.9 22.6-2.4 44-6.1 63.6-11 2.3 10.1 4.1 19.8 5.2 29.1zm38.5-66.7c-8.6 3.7-18 7-27.7 10.1-5.7-19.6-13.2-40-22.5-60.9 9.2-20.8 16.6-41.1 22.2-60.6 9.9 3.1 19.3 6.5 28.1 10.2 35.4 15.1 58.3 34.9 58.3 50.6-.1 15.7-23 35.6-58.4 50.6zM320.8 78.4z',
 }
 
+const styles = {
+  outer: {
+    borderRadius: 5,
+    boxShadow: "0 30px 40px #BBB",
+    //padding: 20,
+    padding: 50,
+  },
+  fuller: {
+    borderRadius: 5,
+    boxShadow: "0 1px 50px #BBE",
+    padding: 5,
+    height:30
+  },
+  fuller40H: {
+    borderRadius: 5,
+    boxShadow: "0 1px 50px #BBE",
+    padding: 5,
+    height:40
+  },
+  paddingLeft10: {
+    paddingLeft: 10,
+  },
+  paddingLeft20: {
+    paddingLeft: 20,
+  },
+  height40: {
+    height: 40,
+  },
+}
 const STYLES = {
     outer: {
         borderRadius: 5,
@@ -208,21 +256,6 @@ export function IwsIcon({ style, d }:{ style:CSSProperties|undefined, d:IconProp
         </SvgIcon>
     )
 }
-
-const wrapIcon = ( title:string, icon:IconProp|string,  action: MouseEventHandler<any> | undefined, isDisabled:boolean) => (
-    <CTooltip content={title}>
-        <CLink>
-            <ToolBarButton
-                title={title}
-                color="link"
-                icon={icon}
-                disable={isDisabled}
-                onClick={action}
-                //className="card-header-action btn-minimize"
-            />
-        </CLink>
-    </CTooltip>
-)
 const headStyle = {
     header: {
         borderRadius: 5,
@@ -233,6 +266,11 @@ const headStyle = {
         paddingBottom: 15,
     },
 }
+const mapping = (item:{id:string, name:string}) => (
+  <option key={item.id} value={item.id}>
+    {item.name}
+  </option>
+)
 export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable, added, cancelEdit, submitEdit //, submitQuery
                                    , reload, toggle,  onNewBankAccount, onDeleteBankAccount //, onNewSalaryItem, disable
                                    , handleLanguageChange, navigate, language, dispatch, logout}:
@@ -248,15 +286,6 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
     const keyboardDoubleArrowDwnIcon = <KeyboardDoubleArrowDownIcon/>
     const UpDownIcon =  collapse ? keyboardDoubleArrowUpIcon:keyboardDoubleArrowDwnIcon
     const sidebarShow = useSelector((state:any) => state.sidebarShow)
-    console.log('disable ', disable )
-    console.log('edited', edited)
-    console.log('added', added)
-
-    const mapping = (item:{id:string, name:string}) => (
-        <option key={item.id} value={item.id}>
-            {item.name}
-        </option>
-    )
     return (
         <Grid container xs style={{ ...headStyle.header }} justify="flex-start" alignItems="center">
             <Grid item justify="center" alignItems="center">
@@ -273,7 +302,7 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
             </Grid>
             <Grid container xs spacing={0} justify="flex-end"  alignItems="center">
                 <CHeaderToggler className="ps-1" onClick={(event) => handleLanguageChange(event)}>
-                    <CFormSelect  style={{ height: 30, paddingLeft:10}}
+                    <CFormSelect  style={{ height: 24, paddingLeft:10, fontSize:10}}
                         className="flex-row"
                         type="select"
                         name="language"
@@ -284,15 +313,16 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
                         {languages.data.map((item) => mapping(item))}
                     </CFormSelect>
                 </CHeaderToggler>
-                <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                <IconButton size="small" edge="start" color="inherit" aria-label="open drawer"
+                            style={{ height: 20, padding:1, display:onDeleteBankAccount? 'block':'none'}}
                             onClick={(event)=>
                                 onDeleteBankAccount?onDeleteBankAccount(event):void(0)} disabled={!edited} >
                     <RemoveCircleOutlineIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer"
-                            style={{ height: 20, padding:1}} onClick={()=>
-                    onNewBankAccount?onNewBankAccount():void(0)} disabled={!edited} >
-                    <AddCircleOutlineIcon />
+                            style={{ height: 20, padding:1, display:onNewBankAccount?'block':'none'}} onClick={()=>
+                    onNewBankAccount?onNewBankAccount():void(0)} disabled={!edited}>
+                    <AddCircleOutlineIcon/>
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             disabled={!added && added !==undefined}      onClick={()=>initAdd()}>
@@ -333,70 +363,77 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
         </Grid>
     )
 }
-export const BSFormHead = ({title, collapse, importData, submitEdit, reload
-                               , submitQuery, submitPost, toggle, toggleToolbar, current}:
-                           {title:string, collapse:boolean, importData:()=>void, submitEdit: (e:any)=>void, reload: ()=>void
-                               , submitQuery:(e:any)=>void, submitPost:(e:any)=>void, toggle:()=>void, toggleToolbar:()=>void
-                               , current:IBankStatement}) => {
 
-    const posted = current ? current.posted : false
+export const BSFormHead = ({title, collapse, cancelEdit, submitEdit, importData, submitPost, reload, toggle, logout, navigate
+                           , language, handleLanguageChange, dispatch, current}:{title:string, collapse:boolean
+                            ,  cancelEdit:(e:any)=>void, submitEdit: (e:any)=>void, importData:()=>void
+                            , submitPost:(e:any)=>void, reload: ()=>void, toggle:()=>void
+                            , logout:(navigate:NavigateFunction) =>void, navigate:NavigateFunction, language:string
+                            ,  handleLanguageChange: (arg:any)=>void,  dispatch:Dispatch<any>, current:IBankStatement }) => {
+    const keyboardDoubleArrowUpIcon = <KeyboardDoubleArrowUpIcon/>
+    const keyboardDoubleArrowDwnIcon = <KeyboardDoubleArrowDownIcon/>
+    const UpDownIcon =  collapse ? keyboardDoubleArrowUpIcon:keyboardDoubleArrowDwnIcon
+    const sidebarShow = useSelector((state:any) => state.sidebarShow)
+    //const posted = current ? current.posted : false
+  console.log('current', current)
     return (
         // eslint-disable-next-line react/prop-types
         <Grid container xs style={{ ...STYLES.header }} justify="flex-start">
-            <Grid item justify="center" alignItems="center">
-                <IoMdMenu />
-            </Grid>
-            <Grid item>
-                <CBadge color="primary">{title}</CBadge>
-            </Grid>
-            <Grid
-                container
-                xs
-                spacing={0}
-                justify="flex-end" // eslint-disable-next-line react/prop-types
-                style={{ ...styles.header }}
-                alignItems="flex-end"
-            >
-                {wrapIcon('', //'Reload',
-                    svgIcons.refresh, reload, false)}
-                {wrapIcon('', //'Post',
-                    svgIcons.done, (e) => submitPost(e), false)}
-                {wrapIcon('', //'Add new entry',
-                    svgIcons.addCircleOutline, importData, posted)}
-                <div className="card-header-actions">
-                    <CButton
-                        color="link"
-                        className="card-header-action btn-minimize"
-                        title="Save entry"
-                        onClick={(e) => submitEdit(e)}
-                    >
-                        <FontAwesomeIcon icon={faSave} />
-                    </CButton>
-                </div>
-                <div>
-                    <CButton
-                        color="link"
-                        type="submit"
-                        className="card-header-action btn-minimize"
-                        onClick={(event:any) => {
-                            event.preventDefault()
-                            submitQuery(event)
-                        }}>
-                        <FontAwesomeIcon icon={faSpinner} rotation={90} />
-                    </CButton>
-                </div>
-                <div className="card-header-actions">
-                    <CButton
-                        color="link"
-                        className="card-header-action btn-minimize"
-                        title='' //"Hide/Display transaction"
-                        onClick={() => toggle()}>
-                        <FontAwesomeIcon icon={collapse ? faAngleDoubleUp : faAngleDoubleDown} />
-                    </CButton>
-                </div>
-                {wrapIcon('',//'Toggle tool bar',
-                    svgIcons.swapVertCircle, toggleToolbar, false)}
-            </Grid>
+          <Grid item justify="center" alignItems="center">
+            <CHeaderToggler
+              className="ps-1"
+              onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}>
+              <IoMdMenu/>
+            </CHeaderToggler>
+          </Grid>
+          <Grid xs item>
+            <h5>
+              <CBadge color="primary">{title}</CBadge>
+            </h5>
+          </Grid>
+          <Grid container xs spacing={0} justify="flex-end"  alignItems="center">
+            <CHeaderToggler className="ps-1" onClick={(event) => handleLanguageChange(event)}>
+              <CFormSelect  style={{ height: 30, paddingLeft:10}}
+                            className="flex-row"
+                            type="select"
+                            name="language"
+                            id="language-id"
+                            value={language}
+                            onChange={(event) => handleLanguageChange(event)}
+              >
+                {languages.data.map((item) => mapping(item))}
+              </CFormSelect>
+            </CHeaderToggler>
+
+            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                        disabled={current.posted} onClick={(e)=>submitEdit(e)}>
+              <SaveIcon/>
+            </IconButton>
+            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                        disabled={current.posted} onClick={(e)=>cancelEdit(e)}>
+              <CancelIcon />
+            </IconButton>
+            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                        disabled={current.posted} onClick={(event)=>submitPost(event)}>
+              <CheckIcon />
+            </IconButton>
+            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                onClick={importData}>
+              <DriveFolderUploadIcon />
+            </IconButton>
+            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                        onClick={reload}>
+              <HourglassTopTwoToneIcon/>
+            </IconButton>
+            <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
+                        onClick={toggle}>
+              {UpDownIcon}
+            </IconButton>
+            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                        onClick={()=>logout(navigate)}>
+              <LogoutIcon/>
+            </IconButton>
+          </Grid>
         </Grid>
     )
 }
@@ -461,11 +498,11 @@ export const FinancialsFormHead = ({ title, saveProps,  collapse, initAdd
                     <RemoveCircleOutlineIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer"
-                            style={{ height: 20, padding:1}} onClick={()=>onNewLine()} disabled={current.posted}>
+                            style={{ height: 20, padding:1}} onClick={onNewLine} disabled={current.posted}>
                     <AddCircleOutlineIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={()=>initAdd()} >
+                            onClick={initAdd} >
                     <AddBoxIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
@@ -473,7 +510,7 @@ export const FinancialsFormHead = ({ title, saveProps,  collapse, initAdd
                     <SaveIcon/>
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={()=>cancelEdit()} disabled={current.posted}>
+                            onClick={cancelEdit} disabled={current.posted}>
                     <CancelIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
@@ -485,11 +522,11 @@ export const FinancialsFormHead = ({ title, saveProps,  collapse, initAdd
                     <ArrowCircleDownIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={()=>reload()}>
+                            onClick={reload}>
                     <HourglassTopTwoToneIcon/>
                 </IconButton>
                 <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={() => toggle()}>
+                            onClick={toggle}>
                     {UpDownIcon}
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
@@ -500,7 +537,92 @@ export const FinancialsFormHead = ({ title, saveProps,  collapse, initAdd
         </Grid>
     )
 }
+export const BalanceSheetHead = ({ style, title, submitQuery
+                                  ,  t, dispatch, logout, templateFileName}:
+                                { style: CSSProperties, title:string, submitQuery:(event:any)=>void
+                                  , t:TFunction<'translation', undefined>
+                                  , dispatch:Dispatch<any>
+                                  , logout:(navigate:NavigateFunction) =>void, templateFileName:string }) => {
+  const headStyle = {
+    header: {
+      borderRadius: 5,
+      //boxShadow: '0 10px 30px #BBB',
+      padding: 1,
+      height: 40,
+      paddingTop: 1,
+      paddingBottom: 10,
+    },
+  }
+  console.log('wordFileName>>>', templateFileName)
+  // @ts-ignore
+  const sidebarShow = useSelector((state) => state.sidebarShow)
+  let navigate = useNavigate()
+  return (
+    <Grid
+      container
+      spacing={2}
+      justify="space-between"
+      style={{ ...style }}
+      direction="column"
+    >
+      <Grid container justify="space-between">
+        <Grid container xs spacing={1} justify="flex-start">
+          <Grid item justify="center" alignItems="center">
+            <CHeaderToggler
+              className="ps-1"
+              onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
+            >
+              <IoMdMenu/>
+            </CHeaderToggler>
+          </Grid>
+          <Grid item>
+            <h5>
+              <CBadge color="primary">{title}</CBadge>
+            </h5>
+          </Grid>
+          <Grid container xs spacing={0} justify="flex-end" style={{...headStyle.header}}
+                alignItems="flex-end">
 
+            {/*<IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}>*/}
+            {/*  <input type="file" onInput={(event:any) =>  showFile({e: event, templateFileName: templateFileName, data: current})}/>*/}
+            {/*  /!*<DriveFolderUploadIcon/>*!/*/}
+            {/*</IconButton>*/}
+
+            <Grid item justify="center" alignItems="center">
+              <CHeaderToggler className="ps-1">
+                <FormButton title={t('common.run')}
+                            onClick={(e) => submitQuery(e)}
+                            style={{textAlign: 'left', height: 25, padding: 1 }}
+                            className="ps-1"/>
+              </CHeaderToggler>
+            </Grid>
+
+            {/*<Grid item justify="center" alignItems="center">*/}
+            {/*  <CHeaderToggler className="ps-1">*/}
+            {/*    <FormButton*/}
+            {/*      title={t('common.runAll')}*/}
+            {/*      onClick={(e)=>submitQuery2(e)}*/}
+            {/*      style={{ textAlign: 'right', height: 25, padding: 1 }}*/}
+            {/*      className="ps-1"*/}
+            {/*      disable={!submitQuery2===undefined && balancesheet}/>*/}
+            {/*  </CHeaderToggler>*/}
+            {/*</Grid>*/}
+
+            <Grid item justify="center" alignItems="center">
+              <CHeaderToggler className="ps-1">
+                <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                            onClick={()=>logout(navigate)}>
+                  <LogoutIcon/>
+                </IconButton>
+              </CHeaderToggler>
+            </Grid>
+
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  )
+}
 export const JournalFormHead = ({ style, title, submitQuery, submitQuery2
                                     , balancesheet, t, dispatch, logout, templateFileName, current}:
                        { style: CSSProperties, title:string, submitQuery:(event:any)=>void
@@ -678,22 +800,6 @@ const FormButton = ({ title, type, color, style, size, height, onClick, classNam
         </CButton>
     )
 }
-
-const ToolBarButton = ({ title, color, size, onClick, icon, disable }:
-                       { title:string, color:string, size?:'sm'|'lg', onClick: MouseEventHandler<any> | undefined, icon:IconProp|string, disable:boolean }) => {
-    return (
-        <CButton
-            title={title}
-            style={{ padding: 5, height: 30 }}
-            size={size ? size : 'sm'}
-            color={color}
-            disabled={disable ? disable : false}
-            onClick={onClick}>
-            <IwsIcon style={{ ...styles.imageIcon, textAlign: 'end' }} d={icon} />
-        </CButton>
-    )
-}
-
 const DatePickerField = ({ fieldName,  current, setCurrent, selected, label, disabled, onChange }:
                          {fieldName:string,  current:any, setCurrent:(arg:any)=>void, selected:Date
                              , label:string, disabled:boolean, onChange?:(event:any)=>void} ) => {
@@ -1986,34 +2092,6 @@ export const PayrollTaxForm = ({ current, setCurrent, disable, t, locale, curren
     )
 }
 export const    MasterfilesMainBaseForm = ({ current, setCurrent, disable, t,  height }: MasterfileProps<IMasterfile>)=> {
-    const styles = {
-        outer: {
-            borderRadius: 5,
-            boxShadow: "0 30px 40px #BBB",
-            padding: 20,
-        },
-        fuller: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:30
-        },
-        fuller40H: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:40
-        },
-        paddingLeft10: {
-            paddingLeft: 10,
-        },
-        paddingLeft20: {
-            paddingLeft: 20,
-        },
-        height40: {
-            height: 40,
-        },
-    }
     return (
         <>
             <Grid container spacing={1}>
@@ -2151,34 +2229,6 @@ export const    MasterfilesMainBaseForm = ({ current, setCurrent, disable, t,  h
     )
 }
 export const PermissionMainBaseForm = ({ current, setCurrent, disable, t,  height }: MasterfileProps<IPermission>)=> {
-    const styles = {
-        outer: {
-            borderRadius: 5,
-            boxShadow: "0 30px 40px #BBB",
-            padding: 20,
-        },
-        fuller: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:30
-        },
-        fuller40H: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:40
-        },
-        paddingLeft10: {
-            paddingLeft: 10,
-        },
-        paddingLeft20: {
-            paddingLeft: 20,
-        },
-        height40: {
-            height: 40,
-        },
-    }
     return (
         <>
             <Grid container spacing={1}>
@@ -2315,35 +2365,8 @@ export const PermissionMainBaseForm = ({ current, setCurrent, disable, t,  heigh
         </>
     )
 }
-export const RoleMainBaseForm = ({ current, setCurrent, disable, t,  height }: MasterfileProps<IRole>)=> {
-    const styles = {
-        outer: {
-            borderRadius: 5,
-            boxShadow: "0 30px 40px #BBB",
-            padding: 20,
-        },
-        fuller: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:30
-        },
-        fuller40H: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:40
-        },
-        paddingLeft10: {
-            paddingLeft: 10,
-        },
-        paddingLeft20: {
-            paddingLeft: 20,
-        },
-        height40: {
-            height: 40,
-        },
-    }
+export const RoleMainBaseForm:FC<MasterfileProps<IRole>> = ({ current, setCurrent, disable, t,  height })=> {
+
     return (
         <>
         <Grid container spacing={1}>
@@ -2481,7 +2504,7 @@ export const RoleMainBaseForm = ({ current, setCurrent, disable, t,  height }: M
         )
 }
 
-export const MasterfilesMainForm = ({collapse, current, setCurrent, disable, t,  height }: MasterfileProps<IMasterfile>) => {
+export const MasterfileMainForm:FC<MasterfileProps<IMasterfile>> = ({collapse, current, setCurrent, disable, t,  height }) => {
     const styles = {
         outer: {
             borderRadius: 5,
@@ -4041,22 +4064,31 @@ export const FinancialsDetailsForm = (
         </Grid>
     )
 }
-
+//    const idx = businessPartner.bankaccounts.findIndex((obj) =>
+//         (obj.id === selectedBankAccount.id) || ( obj.modelid ===-1) || ( obj.id === oldBankAccount.id))
+//     console.log('selectedBankAccount>>', selectedBankAccount)
+//     console.log('businessPartner>>', businessPartner)
+//     const bankAccount: IBankAccount = {...selectedBankAccount, owner: `${businessPartner.id}`};
+//     (idx === -1) ? void(0) : (businessPartner.bankaccounts[idx] = bankAccount)
+//     setBusinessPartner(businessPartner)
+//     console.log('idx>>', idx)
+//     console.log('bankAccount>>', bankAccount)
+//     setCurrent(bankAccount)
 const setBusinessPartnerR = ( businessPartner:IBusinespartner
     , setBusinessPartner:(arg:IBusinespartner)=>void
     , selectedBankAccount:IBankAccount
     , oldBankAccount:IBankAccount
     , setCurrent:(arg:IBankAccount)=>void) => {
-    const idx = businessPartner.bankaccounts.findIndex((obj) =>
-        (obj.id === selectedBankAccount.id) || ( obj.modelid ===-1) || ( obj.id === oldBankAccount.id))
-    console.log('selectedBankAccount>>', selectedBankAccount)
-    console.log('businessPartner>>', businessPartner)
-    const bankAccount: IBankAccount = {...selectedBankAccount, owner: `${businessPartner.id}`};
-    (idx === -1) ? void(0) : (businessPartner.bankaccounts[idx] = bankAccount)
-    setBusinessPartner(businessPartner)
-    console.log('idx>>', idx)
-    console.log('bankAccount>>', bankAccount)
-    setCurrent(bankAccount)
+     const idx = businessPartner?.bankaccounts?.findIndex((obj) =>
+    (obj.id === selectedBankAccount.id) || (obj.modelid === -1) || (obj.id === oldBankAccount.id))
+      console.log('selectedBankAccount>>', selectedBankAccount)
+      console.log('businessPartner>>', businessPartner)
+       const bankAccount: IBankAccount = {...selectedBankAccount, owner: `${businessPartner.id}`, company:`-${businessPartner.company}`};
+      (idx === -1) ? void (0) : (businessPartner.bankaccounts[idx] = bankAccount)
+      setBusinessPartner(businessPartner)
+      console.log('idx>>', idx)
+      console.log('bankAccount>>', bankAccount)
+      setCurrent(bankAccount)
 }
 
 
@@ -4064,38 +4096,35 @@ export const BankAccountForm = (
     { currentBankAccount, setCurrentBankAccount, businessPartner, setBusinessPartner, bankData, t,  disable, height , zIndex}:BankAccountFormProps) => {
     const current = currentBankAccount
     const setCurrent = setCurrentBankAccount
-    const styles = {
-        outer: {
-            borderRadius: 5,
-            boxShadow: "0 30px 40px #BBB",
-            padding: 20,
-        },
-        fuller: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:30
-        },
-        fuller40H: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:60
-        },
-        paddingLeft10: {
-            paddingLeft: 10,
-        },
-        paddingLeft20: {
-            paddingLeft: 20,
-        },
-        height40: {
-            height: 40,
-        },
-    }
     const currentBank = bankData?.find((acc: { id: any }) => acc.id === current.bic)
 console.log('currentBank', currentBank)
     return (
         <Grid container spacing={0} style={{...styles.outer}}>
+          {/* Iban  */}
+          <Grid container spacing={1}>
+            <Grid item sm={8} xs={2}>
+              <Grid container maximize style={{...styles.fuller40H, paddingTop: 10}} justify="flex-start" alignItems="flex-start">
+                <Grid item sm={2} xs={2} alignItems="flex-start" justify="flex-start">
+                  <div>{t('common.iban')}</div>
+                </Grid>
+                <Grid item sm={8} xs={2} justify="flex-start" alignItems="stretch" >
+                  <InputField
+                    fieldName ='id'
+                    current={current}
+                    setCurrent={setCurrent}
+                    value={current.id}
+                    onChange={(_event:any) => {
+                      const currentx = { ...current, id: _event.target.value, company:`-${current.company}` }
+                      setCurrent(currentx)
+                      setBusinessPartnerR( businessPartner, setBusinessPartner, currentx, current, setCurrent)
+                    }}
+                    disabled={disable}
+                    style={ { height: height,  textAlign: 'left'}}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
             {/**Account,  accountName*/}
             <Grid container spacing={1}>
                 <Grid item sm={8} xs={2}>
@@ -4110,8 +4139,6 @@ console.log('currentBank', currentBank)
                                 value={ {value:currentBank?currentBank.id:''
                                     , label: currentBank?`${currentBank.id} ${currentBank.name}` :''}}
                                 onChange={(_event:any) => {
-                                    console.log('_event', _event)
-                                   // const currentBank1 = bankData?.find((acc: { id: any }) => acc.id === _event)
                                     const currentx:IBankAccount = {...current,
                                         bic: _event, owner:`${businessPartner.id}`, company:`-${current.company}`}
                                     setCurrent(currentx)
@@ -4124,32 +4151,6 @@ console.log('currentBank', currentBank)
                     </Grid>
                 </Grid>
             </Grid>
-            {/* Iban  */}
-            <Grid container spacing={1}>
-                <Grid item sm={8} xs={2}>
-                    <Grid container maximize style={{...styles.fuller, paddingTop: 15}} justify="flex-start" alignItems="stretch">
-                        <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                            <div>{t('common.iban')}</div>
-                        </Grid>
-                        <Grid item sm={6} xs={2} justify="flex-start" alignItems="stretch" >
-                            <InputField
-                                fieldName ='id'
-                                current={current}
-                                setCurrent={setCurrent}
-                                value={current.id}
-                                onChange={(_event:any) => {
-                                    const currentx = { ...current, id: _event.target.value, company:`-${current.company}` }
-                                    setCurrent(currentx)
-                                    setBusinessPartnerR( businessPartner, setBusinessPartner, currentx, current, setCurrent)
-                                }}
-                                disabled={disable}
-                                style={ { height: height,  textAlign: 'left', minWidth:200 }}
-                            />
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-
         </Grid>
     )
 }
@@ -4157,37 +4158,6 @@ export const CustomerAccountForm = (
     { current, setCurrent, accData, vatData, t,  disable }:
     {current: IArticle|ICustomer|ISupplier|IEmployee|ICompany, setCurrent: (art:any)=>void, accData: IAccount[]
         , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, height?: number, zIndex:number}) => {
-
-    const styles = {
-        outer: {
-            borderRadius: 5,
-            boxShadow: "0 30px 40px #BBB",
-            padding: 10,
-        },
-        fuller: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:30
-        },
-        fuller40H: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:60
-        },
-        paddingLeft10: {
-            paddingLeft: 10,
-        },
-        paddingLeft20: {
-            paddingLeft: 20,
-        },
-        height40: {
-            height: 40,
-        },
-    }
-
-
     const currentAccount = accData?.find((acc: { id: any }) => acc.id === current.account)
     const currentOAccount = accData?.find((acc: { id: any }) => acc.id === current.oaccount)
     const currentVat = vatData?.find((vat: { id: any }) => vat.id === current.vatCode)
@@ -4270,34 +4240,6 @@ export const CompanyAccountForm = (
     {current: ICompany, setCurrent: (art:any)=>void, accData: IAccount[]
         , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean; height?: number}) => {
 
-    const styles = {
-        outer: {
-            borderRadius: 5,
-            boxShadow: "0 30px 40px #BBB",
-            padding: 40,
-        },
-        fuller: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:30
-        },
-        fuller40H: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:60
-        },
-        paddingLeft10: {
-            paddingLeft: 10,
-        },
-        paddingLeft20: {
-            paddingLeft: 20,
-        },
-        height40: {
-            height: 40,
-        },
-    }
     const stockAccount = accData?.find((acc: { id: any }) => acc.id === current.account)
     const bankAccount = accData?.find((acc: { id: any }) => acc.id === current.bankAcc)
     const balanceSheetAcc = accData?.find((acc: { id: any }) => acc.id === current.balanceSheetAcc)
@@ -4496,359 +4438,95 @@ export const CompanyAccountForm = (
         </Grid>
     )
 }
-//
-// export const CompanyAccountForm2 = ({ current, setCurrent, disable, t, accData, vatData, height }:
-//                                     { current:ICompany, setCurrent:(arg:ICompany)=>void, t:TFunction<'translation', undefined>
-//                                         , disable:boolean, accData:IAccount[], vatData:IVat[], height:number }) => {
-//
-//     return (
-//         <>
-//             <CInputGroup  style={{ height: height }}>
-//                 <CCol sm="2">
-//                     <FieldLabel title={t('common.bankAcc')} />
-//                 </CCol>
-//                 <CCol sm="4">
-//                     <CFormSelect
-//                         className="flex-row"
-//                         type="select"
-//                         name="bankAcc"
-//                         id="bankAcc-id"
-//                         size="sm"
-//                         disabled={disable}
-//                         style={{ height: 30 }} //eslint-disable-next-line react/prop-types
-//                         value={current.bankAcc}
-//                         onChange={(event:any) => setCurrent({ ...current, bankAcc: event.target.value })}
-//                     >
-//                         {/* eslint-disable-next-line react/prop-types */}
-//                         {accData.map((item: any) => mappingSelect(item))}
-//                     </CFormSelect>
-//                 </CCol>
-//                 <CCol sm="2" style={{ paddingLeft: 10 }}>
-//                     <FieldLabel title={t('common.vatCode')} />
-//                 </CCol>
-//                 <CCol sm="4">
-//                     <CFormSelect
-//                         className="flex-row"
-//                         type="select"
-//                         name="vatcode"
-//                         id="vatcode-id"
-//                         size="sm"
-//                         disabled={disable}
-//                         style={{ height: 30 }} //eslint-disable-next-line react/prop-types
-//                         value={current.vatCode}
-//                         onChange={(event:any) => setCurrent({ ...current, vatCode: event.target.value })}
-//                     >
-//                         {/* eslint-disable-next-line react/prop-types */}
-//                         {vatData.map((item: any) => mappingSelect(item))}
-//                     </CFormSelect>
-//                 </CCol>
-//             </CInputGroup>
-//             <CInputGroup  style={{ height: height }}>
-//                 <CCol sm="2">
-//                     <FieldLabel title={t('common.paymentClearingAcc')} />
-//                 </CCol>
-//                 <CCol sm="4">
-//                     <CFormSelect
-//                         className="flex-row"
-//                         type="select"
-//                         name="paymentClearingAcc"
-//                         id="paymentClearingAcc-id"
-//                         disabled={disable}
-//                         style={{ height: 30 }} //eslint-disable-next-line react/prop-types
-//                         value={current.paymentClearingAcc}
-//                         onChange={(event:any) => setCurrent({ ...current, paymentClearingAcc: event.target.value })}
-//                     >
-//                         {/* eslint-disable-next-line react/prop-types */}
-//                         {accData.map((item: any) => mappingSelect(item))}
-//                     </CFormSelect>
-//                 </CCol>
-//                 <CCol sm="2" style={{ paddingLeft: 10 }}>
-//                     <FieldLabel title={t('common.settlementClearingAcc')} />
-//                 </CCol>
-//                 <CCol sm="4">
-//                     <CFormSelect
-//                         className="flex-row"
-//                         type="select"
-//                         name="settlementClearingAcc"
-//                         id="settlementClearingAcc-id"
-//                         size="sm"
-//                         style={{ height: 30 }}
-//                         disabled={disable} //eslint-disable-next-line react/prop-types
-//                         value={current.settlementClearingAcc}
-//                         onChange={(event:any) =>
-//                             setCurrent({ ...current, settlementClearingAcc: event.target.value })
-//                         }
-//                     >
-//                         {/* eslint-disable-next-line react/prop-types */}
-//                         {accData.map((item: any) => mappingSelect(item))}
-//                     </CFormSelect>
-//                 </CCol>
-//             </CInputGroup>
-//             <CInputGroup  style={{ height: height }}>
-//                 <CCol sm="2">
-//                     <FieldLabel title={t('common.cashAcc')} />
-//                 </CCol>
-//                 <CCol sm="4">
-//                     <CFormSelect
-//                         className="flex-row"
-//                         type="select"
-//                         name="cashAcc"
-//                         id="cashAcc-id"
-//                         size="sm"
-//                         disabled={disable}
-//                         style={{ height: 30 }} //eslint-disable-next-line react/prop-types
-//                         value={current.cashAcc}
-//                         onChange={(event:any) => setCurrent({ ...current, cashAcc: event.target.value })}
-//                     >
-//                         {/* eslint-disable-next-line react/prop-types */}
-//                         {accData.map((item: any) => mappingSelect(item))}
-//                     </CFormSelect>
-//                 </CCol>
-//                 <CCol sm="2" style={{ paddingLeft: 10 }}>
-//                     <FieldLabel title={t('common.purchasingClearingAcc')} />
-//                 </CCol>
-//                 <CCol sm="4">
-//                     <CFormSelect
-//                         className="flex-row"
-//                         type="select"
-//                         name="purchasingClearingAcc"
-//                         id="purchasingClearingAcc-id"
-//                         size="sm"
-//                         disabled={disable}
-//                         style={{ height: 30 }} //eslint-disable-next-line react/prop-types
-//                         value={current.purchasingClearingAcc}
-//                         onChange={(event:any) =>
-//                             setCurrent({ ...current, purchasingClearingAcc: event.target.value })
-//                         }
-//                     >
-//                         {/* eslint-disable-next-line react/prop-types */}
-//                         {accData.map((item: any) => mappingSelect(item))}
-//                     </CFormSelect>
-//                 </CCol>
-//             </CInputGroup>
-//             <CInputGroup  style={{ height: height }}>
-//                 <CCol sm="2">
-//                     <FieldLabel title={t('common.balanceSheetAcc')} />
-//                 </CCol>
-//                 <CCol sm="4">
-//                     <CFormSelect
-//                         className="flex-row"
-//                         type="select"
-//                         name="balanceSheetAcc"
-//                         id="balanceSheetAcc-id"
-//                         size="sm"
-//                         disabled={disable}
-//                         style={{ height: 30 }} //eslint-disable-next-line react/prop-types
-//                         value={current.balanceSheetAcc}
-//                         onChange={(event:any) => setCurrent({ ...current, balanceSheetAcc: event.target.value })}
-//                     >
-//                         {/* eslint-disable-next-line react/prop-types */}
-//                         {accData.map((item: any) => mappingSelect(item))}
-//                     </CFormSelect>
-//                 </CCol>
-//                 <CCol sm="2" style={{ paddingLeft: 10 }}>
-//                     <FieldLabel title={t('common.incomeStmtAcc')} />
-//                 </CCol>
-//                 <CCol sm="4">
-//                     <CFormSelect
-//                         className="flex-row"
-//                         type="select"
-//                         name="incomeStmtAcc"
-//                         id="incomeStmtAcc-id"
-//                         size="sm"
-//                         disabled={disable}
-//                         style={{ height: 30 }} //eslint-disable-next-line react/prop-types
-//                         value={current.incomeStmtAcc}
-//                         onChange={(event:any) => setCurrent({ ...current, incomeStmtAcc: event.target.value })}
-//                     >
-//                         {/* eslint-disable-next-line react/prop-types */}
-//                         {accData.map((item: any) => mappingSelect(item))}
-//                     </CFormSelect>
-//                 </CCol>
-//             </CInputGroup>
-//         </>
-//     )
-// }
 
-// export const CompanyGeneralForm1 = ({ current, setCurrent, t, disable, height }:
-//                                     { current:ICompany, setCurrent:(arg:ICompany)=>void, t:TFunction<'translation',undefined>
-//                                         , disable:boolean,  height:number }) => {
-//     return (
-//         <div style={{ height: 110 }}>
-//             <CInputGroup  style={{ height: height }}>
-//                 <CCol sm="2">
-//                     <FieldLabel title={t('common.id')} />
-//                 </CCol>
-//                 <CCol sm="4">
-//                     <InputField
-//                         fieldName="id"
-//                         current={current}
-//                         setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-//                         value={current.id}
-//                         disabled={disable}
-//                     />
-//                 </CCol>
-//                 <CCol sm="2" style={{ paddingLeft: 8 }}>
-//                     <FieldLabel title={t('common.enterdate')} />
-//                 </CCol>
-//                 <CCol sm="2">
-//                     <DatePickerField
-//                         fieldName="enterdate"
-//                         label={t('common.enterdate')} //eslint-disable-next-line react/prop-types
-//                         selected={current.enterdate}
-//                         current={current}
-//                         setCurrent={setCurrent}
-//                         disabled={true}
-//                     />
-//                 </CCol>
-//             </CInputGroup>
-//             <CInputGroup  style={{ height: height, paddingTop: 5 }}>
-//                 <CCol sm="2">
-//                     <FieldLabel title={t('company.name')} />
-//                 </CCol>
-//                 <CCol sm="4">
-//                     <InputField
-//                         fieldName="name"
-//                         current={current}
-//                         setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-//                         value={current.name}
-//                         disabled={disable}
-//                         style={{ height: height }}
-//                     />
-//                 </CCol>
-//                 <CCol sm="2" style={{ paddingLeft: 10 }}>
-//                     <FieldLabel title={t('common.changedate')} />
-//                 </CCol>
-//                 <CCol sm="2">
-//                     <DatePickerField
-//                         fieldName="changedate"
-//                         label={t('common.changedate')} //eslint-disable-next-line react/prop-types
-//                         selected={current.changedate}
-//                         current={current}
-//                         setCurrent={setCurrent}
-//                         disabled={true}
-//                     />
-//                 </CCol>
-//             </CInputGroup>
-//             <CInputGroup  style={{ height: height, paddingTop: 10 }}>
-//                 <CCol md="2">
-//                     <FieldLabel title={t('company.description')} />
-//                 </CCol>
-//                 <CCol xs="12" md="9">
-//                     <TextareaField
-//                         fieldName="description"
-//                         placeholder={t('common.description')} // eslint-disable-next-line react/prop-types
-//                         disabled={disable} // eslint-disable-next-line react/prop-types
-//                         value={current.description}
-//                         current={current}
-//                         setCurrent={setCurrent}
-//                     />
-//                 </CCol>
-//             </CInputGroup>
-//         </div>
-//     )
-// }
-
-
-
-const getAccount =(current:IFinancials
-                   ,  setCurrent:(arg:IFinancials) =>void, accData:IAccount[]
-    , t:TFunction<'transalation', undefined>,  zIndex:number, styles:any)=>{
-    const currentAcc:IAccount = (accData ??  [initAcc]).find((acc) => acc.id === current.account)??initAcc[0]
+const AccountComboBox:FC<FinancialsCBoxProps<IFinancials, IAccount>> =({current, setCurrent, data, zIndex, styles})=>{
+    const currentAcc:IAccount = (data ??  [initAcc]).find((acc) => acc.id === current.account)??initAcc[0]
   return (
-    <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-        <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-            <div>{t('transaction.account')}</div>
-        </Grid>
-        <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start" style={{paddingLeft:5}}>
-            <ComboBox<{value:string|bigint,  label:string}>
-                style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
-                disable={current.posted}
-                value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
-                onChange={(_event:any) => {
-                    setCurrent({...current, account: _event /*, accountName: _event?.name*/})}}
-                values={accData.slice().sort(sortById).map(toOption)}
-                zIndex={zIndex}
-            />
-        </Grid>
-    </Grid>
+      <ComboBox<{value:string|bigint,  label:string}>
+          style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+          disable={current.posted}
+          value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
+          onChange={(_event:any) => {
+                    setCurrent({...current, account: _event })}}
+          values={data.slice().sort(sortById).map(toOption)}
+          zIndex={zIndex}
+      />
+  )
+}
+const PartnerComboBox:FC<FinancialsCBoxProps<ITransaction, ICustomer|ISupplier>> =({current,  setCurrent, data,  zIndex, styles}) =>{
+  const currentAcc:ICustomer|ISupplier = (data ??  [initCust]).find((acc) =>
+    acc.id === current.account)??initCust[0]
+   return ( <>
+        <ComboBox<{value:string|bigint,  label:string}>
+          style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+          disable={current.posted}
+          value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
+          onChange={(_event:any) => {
+            setCurrent({...current, account: _event })}}
+          //@ts-ignore
+          values={data??[].sort(sortById).map(toOption)}
+          zIndex={zIndex}
+        />
+    </>
   )
 }
 
-const getPartener =(current:ITransaction
-    ,  setCurrent:(arg:ITransaction) =>void, accData:ICustomer[]|ISupplier[]
-    , t:TFunction<'transalation', undefined>,  zIndex:number, styles:any)=>{
-    const currentAcc:ICustomer|ISupplier = (accData ??  [initCust]).find((acc) =>
-        acc.id === current.account)??initCust[0]
+const CostCenterComboBox:FC<FinancialsCBoxProps<IFinancials, IMasterfile>> = ({current, setCurrent, data, zIndex, styles}) => {
+    const currentCC = (data ?? []).find((store: { id: any }) => store.id ===  current.costcenter )??initCc[0]
     return (
-        <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                <div>{t('transaction.account')}</div>
-            </Grid>
-            <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start"style={{paddingLeft:5}}>
-                <ComboBox<{value:string|bigint,  label:string}>
-                    style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
-                    disable={current.posted}
-                    value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
-                    onChange={(_event:any) => {
-                        setCurrent({...current, account: _event /*, accountName: _event?.name*/})}}
-                    values={accData.slice().sort(sortById).map(toOption)}
-                    zIndex={zIndex}
-                />
-            </Grid>
-        </Grid>
+            <ComboBox<{value:string|bigint,  label:string}>
+              style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+              disable={current.posted}
+              value={ {value:currentCC?currentCC.id:'', label: currentCC?`${currentCC.id} ${currentCC.name}` :''}}
+              onChange={(_event:any) => {setCurrent({...current, costcenter: _event})}}
+              //@ts-ignore
+              values={data??[].sort(sortById).map(toOption)}
+              zIndex={zIndex}
+            />
     )
 }
-const getCostCenter = (current:IFinancials
-    ,  setCurrent:(arg:IFinancials) =>void
-    , storeData:IMasterfile[]
-    , t:TFunction<'transalation', undefined>
-    , zIndex:number, styles:any) => {
-    const currentCC = (storeData ?? []).find((store: { id: any }) => store.id ===  current.costcenter )??initCc[0]
-    return (
-        <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                <div>{t('financials.costcenter')}</div>
-            </Grid>
-            <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start" style={{paddingLeft:5}}>
-                <ComboBox<{value:string|bigint,  label:string}>
-                    style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
-                    disable={current.posted}
-                    value={ {value:currentCC?currentCC.id:'', label: currentCC?`${currentCC.id} ${currentCC.name}` :''}}
-                    onChange={(_event:any) => {
-                        setCurrent({...current, costcenter: _event /*, accountName: _event?.name*/})}}
-                    values={storeData.slice().sort(sortById).map(toOption)}
-                    zIndex={zIndex}
-                />
-            </Grid>
-        </Grid>
-    )
-}
-const getStore = (current:ITransaction
-                                     ,  setCurrent:(arg:ITransaction) =>void
-                                     , storeData:IStore[]
-                                     , t:TFunction<'transalation', undefined>
-                                     , zIndex:number, styles:any) => {
+export const  StoreComboBox:FC<FinancialsCBoxProps<ITransaction, IStore>> = ({current,  setCurrent, data, zIndex, styles}) => {
 
-    const currentStore = (storeData ?? []).find((store: { id: any }) => store.id ===  current.store )??initStore[0]
+    const currentStore = (data ?? []).find((store: { id: any }) => store.id ===  current.store )??initStore[0]
     return (
-        <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                <div>{t('transaction.store')}</div>
-            </Grid>
-            <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start" style={{paddingLeft:5}}>
                 <ComboBox<{value:string|bigint,  label:string}>
                     style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
                     disable={current.posted}
                     value={ {value:currentStore?currentStore.id:'', label: currentStore?`${currentStore.id} ${currentStore.name}` :''}}
                     onChange={(_event:any) => {
                         setCurrent({...current, store: _event /*, accountName: _event?.name*/})}}
-                    values={storeData.slice().sort(sortById).map(toOption)}
+                    values={data.slice().sort(sortById).map(toOption)}
                     zIndex={zIndex}
                 />
-            </Grid>
-        </Grid>
     )
+}
+
+
+export const FromTransactionComboBox  = ({current, transactions, currentModule, onChange}:
+                                {current:IFinancials, transactions:IFinancials[], currentModule:IFmodule, onChange:(value:BigInt)=>void})=> {
+  return (
+    <ComboBox<{value:bigint|string,  label:string}>
+      style={{...styles, minHeight:25, height:25, minWidth:50, width:'100%', color: '#6b7280', fontSize:8}}
+      disable={current.posted}
+      value={{value:BigInt(currentModule?currentModule?.id:0), label:currentModule?currentModule?.name:'' }}
+      onChange={onChange}
+      values={transactions.slice().sort(sortById).map(transactionToOption)}
+      zIndex={99999}
+    />
+  )
+}
+export const ModuleComboBox  = ({currentModule, modules, handleModuleChange}:
+                    {currentModule:IFmodule, modules:IFmodule[], handleModuleChange:(value:any)=>void})=> {
+  return (
+    <ComboBox<{ value: bigint | string, label: string }>
+      style={{...styles, minHeight: 25, height: 25, minWidth: 50, width: '100%', color: '#6b7280', fontSize: 8}}
+      disable={false}
+      value={{value: BigInt(currentModule ? currentModule?.id : 0), label: currentModule ? currentModule?.name : ''}}
+      onChange={handleModuleChange}
+      values={modules.slice().sort(sortById).map(toOption)}
+      zIndex={99999}
+    />
+  )
 }
 export const FinancialsMainForm =
                      ({ collapse, current,  setCurrent, t, handleModuleChange, storeData, accData, modules
@@ -4862,9 +4540,7 @@ export const FinancialsMainForm =
                        , height:number, zIndex:number}) => {
 
     const styles = STYLES
-    const currentModule= modules.find((m:IFmodule) =>m.id == BigInt(current.modelid))
-
-
+    const currentModule= modules.find((m:IFmodule) =>m.id == BigInt(current.modelid))??initfModule[0]
     return (
         <Grid container spacing={0} style={{...STYLES.inner, display: !collapse?'none':''}}>
             {/**id, postingdate*/}
@@ -4893,18 +4569,10 @@ export const FinancialsMainForm =
                             <div>{t('fmodule.title')}</div>
                         </Grid>
                         <Grid item sm={8} xs={4} alignItems="stretch" justify="flex-start">
-                            <ComboBox<{value:bigint|string,  label:string}>
-                                style={{...styles, minHeight:25, height:25, minWidth:50, width:'100%', color: '#6b7280', fontSize:8}}
-                                disable={false}
-                                value={{value:BigInt(currentModule?currentModule?.id:0), label:currentModule?currentModule?.name:'' }}
-                                onChange={handleModuleChange}
-                                values={modules.slice().sort(sortById).map(toOption)}
-                                zIndex={99999}
-                            />
+                          <ModuleComboBox currentModule = {currentModule} modules ={modules} handleModuleChange ={handleModuleChange}/>
                         </Grid>
                     </Grid>
                 </Grid>
-                {/*</Grid>*/}
             </Grid>
             {/**oid, transdate*/}
             <Grid container spacing={1}>
@@ -4917,21 +4585,15 @@ export const FinancialsMainForm =
                             <InputField
                                 fieldName="oid"
                                 current={current}
-                                setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-                                value={current.oid} //eslint-disable-next-line react/prop-types
+                                setCurrent={setCurrent}
+                                value={current.oid}
                                 disabled={current.posted}
                                 style={{ height: 20 , textAlign:'right'}}
                             />
                         </Grid>
                         <Grid item sm={8} xs={4} alignItems="stretch" justify="flex-start">
-                            <ComboBox<{value:bigint|string,  label:string}>
-                                style={{...styles, minHeight:25, height:25, minWidth:50, width:'100%', color: '#6b7280', fontSize:8}}
-                                disable={current.posted}
-                                value={{value:BigInt(currentModule?currentModule?.id:0), label:currentModule?currentModule?.name:'' }}
-                                onChange={submitCopy}
-                                values={copyFromTransaction.slice().sort(sortById).map(transactionToOption)}
-                                zIndex={99999}
-                            />
+                          <FromTransactionComboBox current={current} transactions={copyFromTransaction}
+                                                   currentModule={currentModule} onChange = {submitCopy}/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -4956,7 +4618,15 @@ export const FinancialsMainForm =
             {/**Store,  period*/}
             <Grid container spacing={1}>
                 <Grid item sm={8} xs={2}>
-                    { getCostCenter(current, setCurrent, storeData, t, zIndex, styles)}
+                  <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+                    <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+                      <div>{t('financials.costcenter')}</div>
+                    </Grid>
+                     <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start" style={{paddingLeft:5}}>
+                       <CostCenterComboBox current ={current} setCurrent ={setCurrent} data={storeData??[]} zIndex={zIndex}
+                                          styles={styles}/>
+                      </Grid>
+                  </Grid>
                 </Grid>
                 <Grid item sm={4} xs={6}>
                     <Grid container maximize style={styles.fuller} alignItems="stretch">
@@ -4977,7 +4647,14 @@ export const FinancialsMainForm =
             {/**OutputVat */}
             <Grid container spacing={1}>
                 <Grid item sm={8} xs={2}>
-                    { getAccount(current, setCurrent, accData, t, zIndex, styles)}
+                  <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+                    <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+                      <div>{t('transaction.account')}</div>
+                    </Grid>
+                    <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start" style={{paddingLeft:5}}>
+                      <AccountComboBox  current={current} setCurrent={setCurrent} data={accData} zIndex={zIndex} styles={styles}/>
+                    </Grid>
+                  </Grid>
                 </Grid>
             </Grid>
             <Grid container spacing={1}>
@@ -5020,6 +4697,178 @@ export const FinancialsMainForm =
     )
 }
 
+export const FinancialsMainFormX =
+  ({ collapse, current,  setCurrent, t, handleModuleChange, storeData, accData, modules
+     , copyFromTransaction, submitCopy, height, zIndex}:
+   { collapse:boolean, current:IFinancials, setCurrent:(arg:IFinancials) =>void
+     , t:TFunction<'translation', undefined>, storeData:IMasterfile[]
+     , accData:IAccount[], modules:IFmodule[]
+     , copyFromTransaction:IFinancials[]
+     , handleModuleChange:(value:any)=>void
+     , submitCopy:(id:BigInt) =>void
+     , height:number, zIndex:number}) => {
+
+    const styles = STYLES
+    const currentModule= modules.find((m:IFmodule) =>m.id == BigInt(current.modelid))??initfModule[0]
+
+
+    return (
+      <Grid container spacing={0} style={{...STYLES.inner, display: !collapse?'none':''}}>
+        {/**id, postingdate*/}
+        <Grid container spacing={1} >
+          {/*<Grid container maximize  justify="flex-start" alignItems="stretch">*/}
+          <Grid item sm={8} xs={2}>
+            <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller}>
+              <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
+                <div>{t('common.id')}</div>
+              </Grid>
+              <Grid item sm ={2} xs={2} justify="flex-start" >
+                <InputField
+                  fieldName="id"
+                  current={current}
+                  setCurrent={setCurrent}
+                  value={current.id}
+                  disabled={current.posted}
+                  style={{ height: height, textAlign:'right' }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item sm={4} xs={6}>
+            <Grid container maximize style={styles.fuller} alignItems="stretch">
+              <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+                <div>{t('fmodule.title')}</div>
+              </Grid>
+              <Grid item sm={8} xs={4} alignItems="stretch" justify="flex-start">
+                <ModuleComboBox currentModule = {currentModule} modules ={modules} handleModuleChange ={handleModuleChange}/>
+              </Grid>
+            </Grid>
+          </Grid>
+          {/*</Grid>*/}
+        </Grid>
+        {/**oid, transdate*/}
+        <Grid container spacing={1}>
+          <Grid item sm={8} xs={2}>
+            <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
+              <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
+                <div >{t('transaction.oid')}</div>
+              </Grid>
+              <Grid item sm ={2} xs={2} justify="flex-start">
+                <InputField
+                  fieldName="oid"
+                  current={current}
+                  setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+                  value={current.oid} //eslint-disable-next-line react/prop-types
+                  disabled={current.posted}
+                  style={{ height: 20 , textAlign:'right'}}
+                />
+              </Grid>
+              <Grid item sm={8} xs={4} alignItems="stretch" justify="flex-start">
+                <FromTransactionComboBox current={current} transactions={copyFromTransaction}
+                                         currentModule={currentModule} onChange = {submitCopy}/>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item sm={4} xs={6}>
+            <Grid container maximize style={styles.fuller} alignItems="stretch">
+              <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+                <div>{t('transaction.transdate')}</div>
+              </Grid>
+              <Grid item sm={4} xs={2} alignItems="flex-end" justify="flex-start">
+                <DatePickerField
+                  fieldName="transdate"
+                  label={t('transaction.transdate')}
+                  selected={current.enterdate}
+                  current={current}
+                  setCurrent={setCurrent}
+                  disabled={current.posted}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        {/**Store,  period*/}
+        <Grid container spacing={1}>
+          <Grid item sm={8} xs={2}>
+            <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+              <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+                <div>{t('financials.costcenter')}</div>
+              </Grid>
+              <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start" style={{paddingLeft:5}}>
+                 <CostCenterComboBox current={current} setCurrent={setCurrent} data={storeData} zIndex={zIndex}
+                                     styles ={styles}/>
+               </Grid>
+            </Grid>
+          </Grid>
+          <Grid item sm={4} xs={6}>
+            <Grid container maximize style={styles.fuller} alignItems="stretch">
+              <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+                <div>{t('transaction.period')}</div>
+              </Grid>
+              <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+                <InputField fieldName="period" current={current}
+                            setCurrent={setCurrent}
+                            value={current.period}
+                            disabled={true}
+                            style={{ height: 20, width: 100, textAlign: 'right' }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        {/**OutputVat */}
+        <Grid container spacing={1}>
+          <Grid item sm={8} xs={2}>
+            <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+              <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+                <div>{t('transaction.account')}</div>
+              </Grid>
+              <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start" style={{paddingLeft:5}}>
+                 <AccountComboBox current={current} setCurrent={setCurrent} data={accData} zIndex={zIndex} styles={styles} />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid container spacing={1}>
+          <Grid item sm={8} xs={2}>
+            <Grid container maximize style={styles.fuller40H} justify="flex-start" alignItems="stretch">
+              <Grid item sm={2} xs={12}
+                    justify="flex-start" alignItems="flex-start">
+                <div>{t('transaction.text')}</div>
+              </Grid>
+              <Grid item sm={10} xs={10} justify="flex-start" alignItems="stretch">
+                <TextareaField
+                  fieldName="text"
+                  placeholder={t('transaction.text')}
+                  disabled={current.posted}
+                  value={current.text}
+                  current={current}
+                  setCurrent={setCurrent}
+                  style={{ width: 1000 }}/>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item sm={4} xs={6}>
+            <Grid container maximize style={styles.fuller} alignItems="stretch">
+              <Grid item sm={2} xs={12}
+                    justify="flex-start" alignItems="flex-start">
+                <BooleanField
+                  fieldName="posted" current={current}
+                  setCurrent={setCurrent}
+                  label={t('transaction.posted')}
+                  disabled={current.posted}
+                  checked={current.posted}
+                  style={{ height: 20, paddingLeft: 20, textAlign:'right' }}
+                  styleC={{ height: 20, paddingLeft: 50, textAlign:'right' }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    )
+  }
+
 export const TransactionMainForm =
     ({ collapse, current,  setCurrent, t, handleModuleChange, storeData, accData, modules, copyFromTransaction, submitCopy, height, zIndex}:
      { collapse:boolean, current:ITransaction, setCurrent:(arg:ITransaction) =>void
@@ -5028,6 +4877,7 @@ export const TransactionMainForm =
          , handleModuleChange:(value:any)=>void
          , submitCopy:(id:BigInt)=>void
          , height:number, zIndex:number}) => {
+           console.log('accData>>>>', accData)
 
         const styles = STYLES
         const currentModule= modules.find((m:IFmodule) =>m.id == BigInt(current?.modelid??0))
@@ -5125,7 +4975,14 @@ export const TransactionMainForm =
                 {/**Store,  period*/}
                 <Grid container spacing={1}>
                     <Grid item sm={8} xs={2}>
-                        { getStore(current, setCurrent, storeData, t, zIndex, styles)}
+                      <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+                        <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+                          <div>{t('transaction.store')}</div>
+                        </Grid>
+                        <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start" style={{paddingLeft:5}}>
+                         <StoreComboBox current ={current} setCurrent={setCurrent} data={storeData} zIndex={zIndex} styles={styles}/>
+                        </Grid>
+                      </Grid>
                     </Grid>
                     <Grid item sm={4} xs={6}>
                         <Grid container maximize style={styles.fuller} alignItems="stretch">
@@ -5146,7 +5003,14 @@ export const TransactionMainForm =
                 {/**OutputVat */}
                 <Grid container spacing={1}>
                     <Grid item sm={8} xs={2}>
-                        { getPartener(current, setCurrent, accData, t, zIndex, styles)}
+                      <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+                        <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+                          <div>{t('transaction.account')}</div>
+                        </Grid>
+                        <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start"style={{paddingLeft:5}}>
+                          <PartnerComboBox current ={current} setCurrent={setCurrent} data={accData} zIndex={zIndex}  styles={styles}/>
+                        </Grid>
+                      </Grid>
                     </Grid>
                 </Grid>
                 <Grid container spacing={1}>
@@ -5282,93 +5146,6 @@ export const JournalMainForm = ({ current, setCurrent,  t, accData,  height, ids
         </>
     )
 }
-// export const StockMainForm = (props) => {
-//   // eslint-disable-next-line react/prop-types
-//   const { current, setCurrent, t, storeData, articleData, submitQuery, height } = props
-//   // eslint-disable-next-line react/prop-types
-//   const currentStore = storeData.find((store: { id: any }) => store.id === current.store)
-//   // eslint-disable-next-line react/prop-types
-//   const currentArticle = articleData.find((article: { id: any }) => article.id === current.article)
-//   return (
-//       <>
-//         <CInputGroup  style={{ height: height }}>
-//           <Col sm="1">
-//             <FieldLabel title={t('common.store')} />
-//           </Col>
-//           <Col sm="2">
-//             <ComboBox
-//                 id="store-id"
-//                 idCol={true}
-//                 sm="4"
-//                 height={height} //eslint-disable-next-line react/prop-types
-//                 data={storeData} //eslint-disable-next-line react/prop-types
-//                 value={current.store}
-//                 placeholder={'store number'}
-//                 onChange={(_event:any, newValue:any) => {
-//                   setCurrent({ ...current, store: newValue?.id, store2: newValue?.name })
-//                 }}
-//             />
-//           </Col>
-//           <Col sm="4" style={{ paddingLeft: 10 }}>
-//             <ComboBox
-//                 id="account2-id"
-//                 idCol={false}
-//                 sm="4"
-//                 height={height}
-//                 data={accData.slice().sort(sortByName)}
-//                 value={currentStore ? currentStore.name : ''}
-//                 placeholder={'store name'}
-//                 onChange={(_event:any, newValue:any) => {
-//                   setCurrent({ ...current, store: newValue?.id, store2: newValue?.name })
-//                 }}
-//             />
-//           </Col>
-//           <Col sm="1">
-//             <FieldLabel title={t('common.article')} />
-//           </Col>
-//           <Col sm="2">
-//             <ComboBox
-//                 id="article-id"
-//                 idCol={true}
-//                 sm="4"
-//                 height={height} //eslint-disable-next-line react/prop-types
-//                 data={storeData?.(sortById)} //eslint-disable-next-line react/prop-types
-//                 value={current.article}
-//                 placeholder={'article number'}
-//                 onChange={(_event:any, newValue:any) => {
-//                   setCurrent({ ...current, article: newValue?.id, article2: newValue?.name })
-//                 }}
-//             />
-//           </Col>
-//           <Col sm="4" style={{ paddingLeft: 10 }}>
-//             <ComboBox
-//                 id="article2-id"
-//                 idCol={false}
-//                 sm="4"
-//                 height={height}
-//                 data={storeData.slice().sort(sortByName)}
-//                 value={currentArticle ? currentArticle.name : ''}
-//                 placeholder={'article name'}
-//                 onChange={(_event:any, newValue:any) => {
-//                   setCurrent({ ...current, article: newValue?.id, article2: newValue?.name })
-//                 }}
-//             />
-//           </Col>
-//           {submitQuery ? (
-//               <Col sm="2" style={{ paddingLeft: 10, align: 'right' }}>
-//                 <FormButton
-//                     title={t('common.run')}
-//                     onClick={submitQuery}
-//                     style={{ align: 'right' }}
-//                     titleClass="fa fa-dot-circle-o"
-//                 />
-//               </Col>
-//           ) : null}
-//         </CInputGroup>
-//       </>
-//   )
-// }
-
 
 export const VatMainForm =
     ({current, setCurrent, accData, t, disable, height, zIndex}:
@@ -5381,7 +5158,7 @@ export const VatMainForm =
             outer: {
                 borderRadius: 5,
                 boxShadow: "0 30px 40px #BBB",
-                padding: 45,
+                padding: 50,
             },
             fuller: {
                 borderRadius: 5,

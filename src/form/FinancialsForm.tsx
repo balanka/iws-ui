@@ -350,7 +350,7 @@ const FinancialsForm = () => {
         //onFirstDataRendered: onFirstDataRendered,
     }
     const minHeight=300
-    const maxHeight =500
+    const maxHeight =650
     const minPadding=0
     const maxPadding=40
     const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)

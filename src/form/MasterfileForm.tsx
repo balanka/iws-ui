@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, FC} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -6,7 +6,7 @@ import Grid from 'react-fast-grid'
 
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {CommonFormHead, MasterfilesMainForm, MasterfilesMainForm2, PermissionMainForm} from './FormsProps'
+import {CommonFormHead, MasterfileMainForm, MasterfilesMainForm2, PermissionMainForm} from './FormsProps'
 import {Add, Edit, Get} from './CrudController'
 import {MASTERFILE, useStore} from './Menu'
 import iwsStore from '../utils/Store'
@@ -182,7 +182,7 @@ const getCtx = (modelid:number, company:string ) => {
          setCurrent4((event.data instanceof Array) ? event.data[0] : event.data)
      }
 
-     const getForms = (props:Masterfile2FormProps<IMasterfile2>) => {
+     const MasterfileForm:FC<Masterfile2FormProps<IMasterfile2>> = (props:Masterfile2FormProps<IMasterfile2>) => {
          switch (props.current.modelid) {
              case formEnum.BANK:
              case formEnum.QUANTITYUNIT:
@@ -190,7 +190,7 @@ const getCtx = (modelid:number, company:string ) => {
                  const current = current2
                  const setCurrent = setCurrent2
                  const props1:Masterfile2FormProps<IMasterfile> = {...props, current, setCurrent}
-                 return  MasterfilesMainForm(props1)
+                 return  MasterfileMainForm(props1)
              }
              case formEnum.PERMISSION:
              {
@@ -219,7 +219,7 @@ const getCtx = (modelid:number, company:string ) => {
          },
      }
      const collapse=  state.collapse
-     const props:Masterfile2FormProps<IMasterfile2> = { collapse, current, setCurrent, disable, height, accData, t}
+     const props:Masterfile2FormProps<IMasterfile2> = { }
      console.log('current', current)
      console.log('rowData', rowData)
      //console.log('current', iwsStore.get(400))
@@ -244,7 +244,8 @@ const getCtx = (modelid:number, company:string ) => {
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
              />
-             {getForms(props)}
+             <MasterfileForm collapse={collapse} current={current} setCurrent={setCurrent} disable={disable}
+                              height={height} accData={accData} t={t}/>
              <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>
                  <MasterfileGrid
                          // @ts-ignore
