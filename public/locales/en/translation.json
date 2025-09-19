@@ -89,7 +89,7 @@
     "address": "Address",
     "accounts": "Accounts",
     "edited":{
-      "bankaccount":"Edite bank account"
+      "bankaccount":"Edit bank account"
     },
     "bankaccounts":"Bank accounts",
     "iban":"IBAN",
