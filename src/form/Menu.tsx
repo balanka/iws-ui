@@ -16,9 +16,7 @@ export const getCurrentMonth = (date:Date) => {
 }
 
 export const date = new Date().toISOString()
-export const getPeriod = (date:Date) => {
-  return parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))
-}
+export const getPeriod = (date:Date) => parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))
 
 export const loginInit = [
   {

@@ -3,7 +3,6 @@ import { AllCommunityModule
     , ClientSideRowModelModule
     ,  GridApi
     , GridReadyEvent
-    , IDetailCellRendererParams
     , ModuleRegistry
     , SelectEditorModule
     , GridOptions,
@@ -34,12 +33,11 @@ import {
     IFinancials,
     IFmodule,
     ILineFinancials,
-    ILineTransaction,
     IMasterfile,
     IModule,
 } from '../Models.ts'
 import {TransactionGrid} from '../IWSGrid.tsx'
-import { financialsColumnDefs, LinesFinancialsColumns} from '../ColumnsDefs.ts'
+import { financialsColumnDefs} from '../ColumnsDefs.ts'
 import {callSubmitEdit, toggleEdit, logout} from './TransactionLib.ts'
 import Login from './Login'
 import {CSpinner} from '@coreui/react'
@@ -156,7 +154,7 @@ const FinancialsForm = () => {
         const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]
         title_ = mx?.name ? mx.name : title_
         const copyFromIds = mx? mx.copyFrom:''
-        setTitle(company?.concat(' / ').concat(title_))
+        setTitle(company??''.concat(' / ').concat(title_))
         setCopyFRom([copyFromIds])
         setCurrent(current_)
         console.log('mx', mx)

@@ -4577,7 +4577,7 @@ export const FinancialsMainForm =
                                   const month_ = date.getMonth()+1
                                   const month = month_ <10?`0${month_}`:`${month_}`
                                   const period = Number(`${date.getFullYear()}${month}`)
-                                  const currentx = { ...current, transdate: date.toISOString(), period:period}
+                                  const currentx:IFinancials = { ...current, transdate: date, period:period}
                                   setCurrent(currentx)
                                 }}
                                 setCurrent={setCurrent}
