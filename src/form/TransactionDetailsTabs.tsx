@@ -53,7 +53,9 @@ const TransactionDetailsTabs = ({
         console.log('event.dataLLLL>>>', event.data)
         setCurrentLineTransaction(event.data)
     }
-
+  // const defaultColDef = {
+  //     editable: true
+  //   }
     const table = () => {
         return (
             <Grid container
@@ -61,6 +63,7 @@ const TransactionDetailsTabs = ({
                   style={{...styles.outer, width: '100%', height: 130, paddingTop: 5, zIndex:zIndex-2}} maximize
                   direction="column" zeroMinWidth>
                 <LineTransactionGrid columnDefs={lineTransactionColumnDefs(t)} onRowSelected={onRowSelected}
+                                     //defaultColDef = {defaultColDef}
                    rowData={!transaction?.lines?.length?[ {...currentLineTransaction
                    , transid:transaction.id1}]:transaction.lines}
                    onGridReady={onGridReady}  pagination={false}/>

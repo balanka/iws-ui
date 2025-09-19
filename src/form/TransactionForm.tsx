@@ -86,7 +86,7 @@ const STYLES = {
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
      console.log('module_>>>>', module_)
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  let title_ = company?.concat(' / ').concat(t(module_.title))
+  let title_ = company??''.concat(' / ').concat(t(module_.title))
   const initialState:ITransaction = initLtr [0]//module_.state
   const initialLine:ILineTransaction = initLtr [0].lines[0]
   const current_:ITransaction = initialState
@@ -184,7 +184,7 @@ console.log('rowData', rowData)
     const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]
     title_ = mx?.name ? mx.name : title_
       const copyFromIds = mx? mx.copyFrom:''
-    setTitle(company?.concat(' / ').concat(title_))
+    setTitle(company??''.concat(' / ').concat(title_))
     setCopyFRom([copyFromIds])
     setPartnerId(parseInt(mx.account))
     setCurrent(current_)
@@ -216,7 +216,6 @@ console.log('rowData', rowData)
          Get2(url_, token, setCurrent)
      }
 
-//ltr/post/transids/modelid/company
   const callSubmitPost = (event:any, modifyUrl:string, token:string, current:ITransaction
       , setCurrent:(arg:ITransaction )=>void,  rows:BigInt[]):void => {
     event.preventDefault()
@@ -251,39 +250,23 @@ console.log('rowData', rowData)
          ( event:any, current:ITransaction, setCurrent:(arg:ITransaction) =>void) => {
              event.preventDefault()
              const dx: ITransaction = {...current}
-             console.log('gridApi?', gridApi)
-             const selectedData: ILineTransaction[] = gridApi!.getSelectedRows()
-             console.log('selectedData', selectedData)
-             console.log('currentLineTransaction', currentLineTransaction)
+            if(!dx.hasOwnProperty('lines')) dx['lines']=[]
              const idx = dx.lines.findIndex((obj: ILineTransaction) => obj.id === currentLineTransaction.id)
              if (idx >= 0) dx.lines[idx] = {...currentLineTransaction, transid: BigInt(-2)}
-             const res = gridApi!.applyTransaction({
-                 remove: [currentLineTransaction],
-             })
-             console.log('res', res)
-             //const res = gridApi?.applyTransaction({remove: currentLineTransaction,})
-             //const selectedDatax = selectedData
-             // selectedData.forEach((line) => {
-             //     const idx = dx.lines.findIndex((obj: ILineTransaction) => obj.id === line.id)
-             //     if (idx >= 0) dx.lines[idx] = {...line, id: BigInt(-2)}
-             // })
-
+             gridApi!.applyTransaction({remove: [currentLineTransaction]})
              setCurrent(dx)
-
      }, [currentLineTransaction]);
 
   const callSubmitEdit = (event:any, modifyUrl:string, token:string, current:ITransaction
       , setCurrent:(arg:ITransaction)=>void, data:ITransaction[], submitAdd: (arg:any)=>void) => {
       console.log('event...', event);
       event.preventDefault();
-      //toggleEdit(current)
       (BigInt(current.id) > 0) ? Edit(modifyUrl, token, current, data, setCurrent) : submitAdd(event)
   }
   const submitCancel = (event:any) =>  callSubmitCancel(event, ctx, token, current, setCurrent, rowData )
   const callSubmitCancel = (event:any, _ctx:string, token:string, current:ITransaction
       , setCurrent:(arg:ITransaction)=>void, data:ITransaction[],) => {
     event.preventDefault()
-    //toggleEdit(current)
     const url_ = _ctx.replace('ltr', 'cancelnLtr')
     BigInt(current.id )> 0 ? Edit(url_, token, current, data, setCurrent) : current
   }

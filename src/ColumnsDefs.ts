@@ -636,7 +636,21 @@ export const LinesFinancialsColumns = ( t: (arg0: string) => any) => {
       minWidth: 20,
       cellStyle: {textAlign: 'right'},
       filter: 'agDateColumnFilter',
-      cellRenderer: dateRenderer
+     //  valueFormatter: (params: ValueFormatterParams<any, Date>) => {
+     //    if (!params.value) {
+     //      return ""
+     //    }
+     //    console.log('params', params)
+     //    const date = new Date(params.value)
+     //    const month = date.getMonth() + 1
+     //    const day = date.getDate()
+     //    return `${date.getFullYear()}.${month < 10 ? "0" + month : month}.${day < 10 ? "0" + day : day}`;
+     //  },
+     //  //cellEditor: "agDateStringCellEditor",
+     //  cellEditor: "agDateCellEditor",
+     // // cellEditor: IWSDatepicker,
+     //  editable: true,
+     cellRenderer: dateRenderer
     },
     {
       field: 'amount',
@@ -727,18 +741,18 @@ export const bankStatementColumnDefs = (t: (arg0: string) => any):ColDef<IBankSt
       minWidth: 5,
       filter: "agTextColumnFilter",
     },
-    {
-      field: 'info',
-      headerName: t('bankstatement.info'),
-      minWidth: 100,
-      filter: "agTextColumnFilter",
-    },
-    {
-      field: 'companyIban',
-      headerName: t('bankstatement.companyIban'),
-      minWidth: 50,
-      filter: "agTextColumnFilter",
-    },
+    // {
+    //   field: 'info',
+    //   headerName: t('bankstatement.info'),
+    //   minWidth: 100,
+    //   filter: "agTextColumnFilter",
+    // },
+    // {
+    //   field: 'companyIban',
+    //   headerName: t('bankstatement.companyIban'),
+    //   minWidth: 50,
+    //   filter: "agTextColumnFilter",
+    // },
     {
       field: 'period',
       headerName: t('bankstatement.period'),
@@ -788,7 +802,7 @@ export const financialsColumnDefs = (t: (arg0: string) => any) => {
       field: 'id1',
       headerName: t('financials.id'),
       cellStyle: {textAlign: 'right'},
-      // filter: "agTextColumnFilter",
+      //filter: "agTextColumnFilter",
       minWidth: 6,
 
     },
@@ -810,14 +824,12 @@ export const financialsColumnDefs = (t: (arg0: string) => any) => {
     {
       field: 'total',
       headerName: t('common.total'),
-      // valueFormatter: (params: { data: { vat: number} }) => Number(params.data?.vat).toFixed(2),
       valueFormatter: (params:{data:IFinancials}) => {
-        // console.log('params', params)
         return Number(params.data?.lines?.reduce((acc:number, line:ILineFinancials) =>
-            acc + line.amount, 0.0)).toFixed(2)},
+          acc + line.amount, 0.0)??0.0).toFixed(2)},
       //type: 'currency',
       minWidth: 25,
-      //filter: "agNumberColumnFilter",
+      filter: "agNumberColumnFilter",
       cellStyle: {textAlign: 'right'},
     },
     // {
@@ -860,26 +872,6 @@ export const financialsColumnDefs = (t: (arg0: string) => any) => {
       minWidth: 10,
       DataType: 'Boolean',
     },
-    // {
-    //   field: 'total',
-    //   headerName: t('common.total'),
-    //   cellStyle: {textAlign: 'right'},
-    //   //valueFormatter: (params: { data: { total: number}}) => { console.log('params.dataparams.data', params.data ); params.data?.total?.toFixed(2)},
-    //   // Query: {
-    //   //   AggregatedScalarExpression: 'Sum(lines.map(line=>line.amount))',
-    //   // },
-    //   // CalculatedColumnSettings: {
-    //   //   DataType: 'Number',
-    //   // },
-    //   // type: 'currency',
-    //   // currencySetting: {
-    //   //   locale: locale,
-    //   //   currencyCode: currency,
-    //   //   minimumFractionDigits: 2,
-    //   //   maximumFractionDigits: 2,
-    //   // },
-    //   minWidth: 80,
-    // },
     {
       field: 'text',
       headerName: t('financials.text'),
@@ -937,12 +929,12 @@ export const transactionColumnDefs = ( t: TFunction<"translation", undefined>) =
       filter: 'agDateColumnFilter',
       minWidth: 20,
     },
-    {
-      field: 'postingdate',
-      headerName: t('transaction.postingdate'),
-      filter: 'agDateColumnFilter',
-      minWidth: 20,
-    },
+    // {
+    //   field: 'postingdate',
+    //   headerName: t('transaction.postingdate'),
+    //   filter: 'agDateColumnFilter',
+    //   minWidth: 20,
+    // },
     {
       field: 'transdate',
       headerName: t('transaction.transdate'),
@@ -966,11 +958,9 @@ export const transactionColumnDefs = ( t: TFunction<"translation", undefined>) =
     {
       field: 'total',
       headerName: t('common.total'),
-      // valueFormatter: (params: { data: { vat: number} }) => Number(params.data?.vat).toFixed(2),
       valueFormatter: (params:{data:ITransaction}) => {
-       // console.log('params', params)
         return Number(params.data?.lines?.reduce((acc:number, line:ILineTransaction) =>
-          acc + line.quantity * line.price +line.vat, 0.0)).toFixed(2)},
+          acc + line.quantity * line.price +line.vat, 0.0)??0.0).toFixed(2)},
       //type: 'currency',
       minWidth: 25,
       //filter: "agNumberColumnFilter",
@@ -1226,59 +1216,6 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
     minWidth: 1,
   },
 ]
-// export const pacColumnsDefs = (t: (arg0: string) => any) => [
-//   //{ field: 'id', title: t('common.id'), minWidth: 10, export: true },
-//   {
-//     field: 'account',
-//     headerName: t('account.account'),
-//     align: 'left',
-//    width: 15,
-//   },
-//   { field: 'name', headerName: t('common.name'), width: 20, align: 'left' },
-//   {
-//     field: 'period',
-//     headerName: t('pac.period'),
-//     //width: 15,
-//     align: 'left',
-//   },
-//   {
-//     field: 'idebit',
-//     headerName: t('common.idebit'),
-//     cellStyle: {textAlign: 'right'},
-//     //width: 15,
-//     valueFormatter: (params: { data: { idebit: number}}) => params.data?.idebit?.toFixed(2),
-//   },
-//   {
-//     field: 'debit',
-//     headerName: t('common.debit'),
-//     cellStyle: {textAlign: 'right'},
-//     //width: 15,
-//     valueFormatter: (params: { data: { debit: number} }) => params.data?.debit?.toFixed(2),
-//   },
-//   {
-//     field: 'icredit',
-//     headerName: t('common.icredit'),
-//     //width: 15,
-//     cellStyle: {textAlign: 'right'},
-//     valueFormatter: (params: { data: { icredit: number }}) => params.data?.icredit.toFixed(2),
-//   },
-//   {
-//     field: 'credit',
-//     headerName: t('common.credit'),
-//     //width: 15,
-//     cellStyle: {textAlign: 'right'},
-//     valueFormatter: (params: { data: { credit: number} }) => params.data?.credit?.toFixed(2),
-//   },
-//   {
-//     field: 'balance',
-//     //width: 15,
-//     headerName: t('common.balance'),
-//     cellStyle: {textAlign: 'right'},
-//     valueFormatter: (params: { data: { balance: number}}) => params.data?.balance?.toFixed(2),
-//   },
-//   { field: 'currency', headerName: t('common.currency'), width: 5},
-//   { field: 'company', headerName: t('common.company'), width: 5 },
-// ]
 export const storeColumnDefs =  (t: (arg0: string) => any):ColDef<IStore>[] =>  [
   {
     field: 'id',

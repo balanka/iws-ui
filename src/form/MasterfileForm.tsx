@@ -61,16 +61,16 @@ const getCtx = (modelid:number, company:string ) => {
      const {profile, menu, selected} = useStore()
      const {t, i18n} = useTranslation()
      const {token, company} = profile
-     console.log('selected>>>', selected)
+    // console.log('selected>>>', selected)
      const dispatch = useDispatch()
      let navigate = useNavigate()
      const [language, setLanguage] = useState('en-US')
-     console.log('menu', menu)
+     // console.log('menu', menu)
      let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-     console.log('module_X', module_)
-     console.log('module_.state3', module_?.state3)
+     // console.log('module_X', module_)
+     // console.log('module_.state3', module_?.state3)
      const parent_ctx = `${module_?.state3}/${company}`
-     console.log('parent_ctx', parent_ctx)
+     //console.log('parent_ctx', parent_ctx)
      module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
      console.log('module_', module_)
      if (module_ === '11111' || module_ === 11111) return <Login/>
@@ -80,15 +80,12 @@ const getCtx = (modelid:number, company:string ) => {
      const height = 20
 
      const modelid: number = module_ ? module_.modelid : 1111
-     console.log('modelid', modelid)
-     const acc_modelid  = formEnum.ACCOUNT
-     const acc_ctx = `${modelid === formEnum.COSTCENTER ?  MASTERFILE.acc:-1}/${acc_modelid}/${company}`
-
-     console.log('acc_ctx', acc_ctx)
      const ctx = getCtx(modelid, company)
      const modifyUrl = MASTERFILE.masterfile
-     console.log('module_', module_)
-     console.log('initialState', module_.state[0])
+     //console.log('modelid', modelid)
+      // console.log('acc_ctx', acc_ctx)
+     // console.log('module_', module_)
+     // console.log('initialState', module_.state[0])
      const current_: IMasterfile2 =  module_.state[0]
      const current_2: IMasterfile =  module_.state[0]
      const current_3: IPermission =  module_.state[0]
@@ -186,26 +183,14 @@ const getCtx = (modelid:number, company:string ) => {
          switch (props.current.modelid) {
              case formEnum.BANK:
              case formEnum.QUANTITYUNIT:
-             {
-                 const current = current2
-                 const setCurrent = setCurrent2
-                 const props1:Masterfile2FormProps<IMasterfile> = {...props, current, setCurrent}
-                 return  MasterfileMainForm(props1)
-             }
+                 return  <MasterfileMainForm collapse={collapse} current={current2} setCurrent={setCurrent2}
+                                             disable={disable} t={t}  height={height} />
              case formEnum.PERMISSION:
-             {
-                 const current = current3
-                 const setCurrent = setCurrent3
-                 const props1:Masterfile2FormProps<IPermission> = {...props, current, setCurrent}
-                 return  PermissionMainForm(props1)
-             }
+                 return  <PermissionMainForm collapse={collapse} current={current3} setCurrent={setCurrent3}
+               disable={disable} t={t}  height={height} />
              case formEnum.ROLE:
-             {
-                 const current = current4
-                 const setCurrent = setCurrent4
-                 const props1:Masterfile2FormProps<IRole> = {...props, current, setCurrent}
-                 return  RoleTabs(props1)
-             }
+                 return  <RoleTabs  collapse={collapse} current={current4} setCurrent={setCurrent4}
+               disable={disable} t={t}  height={height} />
              default:
                  return MasterfilesMainForm2(props)
          }
@@ -219,10 +204,6 @@ const getCtx = (modelid:number, company:string ) => {
          },
      }
      const collapse=  state.collapse
-     const props:Masterfile2FormProps<IMasterfile2> = { }
-     console.log('current', current)
-     console.log('rowData', rowData)
-     //console.log('current', iwsStore.get(400))
      return (
          <>
              <CommonFormHead

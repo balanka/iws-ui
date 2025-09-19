@@ -7,7 +7,7 @@ import { styles as stylesx } from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { CommonFormHead } from './FormsProps.tsx'
-import {Add, Edit, Get} from './CrudController.ts'
+import {Add, Edit, Get, Get2} from './CrudController.ts'
 import {initBankAccount, initComp, MASTERFILE, useStore} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import { useTranslation } from 'react-i18next'
@@ -97,8 +97,9 @@ const CompanyForm = () => {
     Get(bank_ctx, token, bank_modelid, setBankData)
     Get(ccy_ctx, token, ccy_modelid, setCcyData)
     Get(vat_ctx, token, vat_modelid, setVatData)
-    setCurrent(current_)
-    setRowData([])
+    Get2(`${selected}/${company}/${modelid}`, token, setCurrent)
+    //setCurrent(current_)
+   // setRowData([])
   }, [selected])
 
   const handleLanguageChange = (event:any) => {
@@ -121,6 +122,7 @@ const CompanyForm = () => {
   }
   const submitEdit = (event:any) => {
     event.preventDefault()
+    console.log('current>>>X', current)
     if(edited) {
       Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
     } else if (!edited && !disable) {

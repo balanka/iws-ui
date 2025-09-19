@@ -1,29 +1,10 @@
 import { formEnum } from '../utils/FormEnum'
-// import {
-//   ColumnsACC,
-//   columnsPACB,
-//   ColumnJournal,
-//   ColumnsBalancesheet,
-//   ColumnsVAT,
-//   ColumnsBS,
-//   ColumnsM,
-//   ColumnsComp,
-//   ColumnsCUST,
-//   ColumnsUSER,
-//   ColumnsLOGIN,
-//   ColumnsModule,
-//   ColumnsAsset,
-//   ColumnsSalaryItem,
-//   ColumnsM2,
-//   ColumnsPayrollTaxRange,
-// } from './LineFinancialsProps'
-
 import { create } from 'zustand'
 import {
   IAccount, IArticle, IAsset, IBankAccount, IBankStatement,
   ICustomer,
   IEmployee, IFinancials,
-  IFmodule, ILineFinancials, ILineTransaction,
+  IFmodule, ILineFinancials, ILineTransaction, IMasterfile2,
   IProfile, IStore,
   ISTORE_Return,
   ISupplier, ITransaction
@@ -137,14 +118,14 @@ export const initBank = [
     company: '',
   },
 ]
-export const initCurrency = [
+export const initCurrency:IMasterfile2[] = [
   {
     id: '',
     name: '',
     description: '',
-    enterdate: date,
-    postingdate: date,
-    changedate: date,
+    enterdate: new Date(),
+    postingdate: new Date(),
+    changedate: new Date(),
     modelid: 99,
     parent: '-1',
     company: '',

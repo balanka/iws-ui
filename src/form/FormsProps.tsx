@@ -24,12 +24,11 @@ import {formEnum} from '../utils/FormEnum'
 import {sortById} from '../utils/Utils'
 import {saveXlsx} from './../utils/XlsUtils.ts'
 import {
-  AccountMainProps,
-  ArticleProps,
+  AccountMainProps, ArticleGeneralFormProps,
   AssetProps,
   BankAccountFormProps,
   BankStatementParamProps,
-  BankStatementProps,
+  BankStatementProps, CompanyCBoxProps,
   CustomerGeneralFormProps, FinancialsCBoxProps,
   FinancialsDetailsFormProps,
   MasterfileProps,
@@ -42,9 +41,8 @@ import {
 import DatePicker from 'react-datepicker'
 import '../../public/css/custom-datepicker.css'
 import {green} from '@mui/material/colors'
-import SvgIcon from '@mui/material/SvgIcon'
 //import {styles} from './BasicTreeTableProps'
-import {initAcc, initCc, initCust, initfModule, initStore} from './Menu'
+import {initAcc, initCc, initCurrency, initCust, initfModule, initStore, initVat} from './Menu'
 import {
   IAccount,
   IAddress,
@@ -72,7 +70,6 @@ import {
   IVat
 } from '../Models.ts'
 import {TFunction} from 'i18next'
-import {IconProp} from '@fortawesome/fontawesome-svg-core'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import EditSquareIcon from '@mui/icons-material/EditSquare'
@@ -87,70 +84,12 @@ import {useSelector} from 'react-redux'
 import ComboBox from './ComboBox.tsx'
 import {showFile} from '../utils/XlsUtils.ts'
 
-
-export const svgIcons = {
-    cubeLoader:
-        'M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z',
-    loader2:
-        'M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z',
-    plusCircle:
-        'M10 3a7 7 0 100 14 7 7 0 000-14zm-9 7a9 9 0 1118 0 9 9 0 01-18 0zm14 .069a1 1 0 01-1 1h-2.931V14a1 1 0 11-2 0v-2.931H6a1 1 0 110-2h3.069V6a1 1 0 112 0v3.069H14a1 1 0 011 1z',
-    plus: 'M38 6H10c-2.21 0-4 1.79-4 4v28c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4zm-4 20h-8v8h-4v-8h-8v-4h8v-8h4v8h8v4z',
-    delete: 'M12 38c0 2.21 1.79 4 4 4h16c2.21 0 4-1.79 4-4V14H12v24zM38 8h-7l-2-2H19l-2 2h-7v4h28V8z',
-    delete4ever:
-        'M12 38c0 2.2 1.8 4 4 4h16c2.2 0 4-1.8 4-4V14H12v24zm4.93-14.24l2.83-2.83L24 25.17l4.24-4.24 2.83 2.83L26.83 28l4.24 4.24-2.83 2.83L24 30.83l-4.24 4.24-2.83-2.83L21.17 28l-4.24-4.24zM31 8l-2-2H19l-2 2h-7v4h28V8z',
-    copyRight:
-        'M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 36c-8.82 0-16-7.18-16-16S15.18 8 24 8s16 7.18 16 16-7.18 16-16 16zm-3.84-18.27c.11-.65.31-1.23.6-1.74s.69-.92 1.18-1.23c.47-.29 1.06-.45 1.79-.46.48.01.92.09 1.3.26.41.18.75.42 1.04.72s.51.66.67 1.06.25.83.27 1.28h3.58c-.03-.94-.22-1.8-.55-2.58s-.81-1.45-1.41-2.02-1.32-1-2.16-1.31-1.77-.47-2.79-.47c-1.3 0-2.43.22-3.39.67s-1.76 1.06-2.4 1.84-1.12 1.68-1.43 2.71-.46 2.12-.46 3.27v.55c0 1.16.16 2.25.47 3.28s.79 1.93 1.43 2.7 1.44 1.38 2.41 1.83 2.1.67 3.4.67c.94 0 1.82-.15 2.64-.46s1.54-.73 2.16-1.27 1.12-1.16 1.48-1.88.57-1.48.6-2.3h-3.58c-.02.42-.12.8-.3 1.16s-.42.66-.72.91-.65.45-1.05.59c-.38.13-.78.2-1.21.2-.72-.02-1.31-.17-1.79-.47-.5-.32-.9-.73-1.19-1.24s-.49-1.09-.6-1.75-.15-1.3-.15-1.97v-.55c0-.68.05-1.35.16-2z',
-    copyContent:
-        'M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z',
-    clearAll: 'M10 26h28v-4H10v4zm-4 8h28v-4H6v4zm8-20v4h28v-4H14z',
-    libraryAdd:
-        'M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z',
-    checkCircle:
-        'M24 4C12.95 4 4 12.95 4 24c0 11.04 8.95 20 20 20 11.04 0 20-8.96 20-20 0-11.05-8.96-20-20-20zm-4 30L10 24l2.83-2.83L20 28.34l15.17-15.17L38 16 20 34z',
-    highlightRemove:
-        'M29.17 16L24 21.17 18.83 16 16 18.83 21.17 24 16 29.17 18.83 32 24 26.83 29.17 32 32 29.17 26.83 24 32 18.83 29.17 16zM24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 36c-8.82 0-16-7.18-16-16S15.18 8 24 8s16 7.18 16 16-7.18 16-16 16z',
-    highlightOff:
-        'M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z',
-    doneAll:
-        'M36 14l-2.83-2.83-12.68 12.69 2.83 2.83L36 14zm8.49-2.83L23.31 32.34 14.97 24l-2.83 2.83L23.31 38l24-24-2.82-2.83zM.83 26.83L12 38l2.83-2.83L3.66 24 .83 26.83z',
-    done: 'M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z',
-    close:
-        'M697.4 759.2l61.8-61.8L573.8 512l185.4-185.4-61.8-61.8L512 450.2 326.6 264.8l-61.8 61.8L450.2 512 264.8 697.4l61.8 61.8L512 573.8z',
-    spinner: 'M17 26H9c-.6 0-1-.4-1-1s.4-1 1-1h8c.6 0 1 .4 1 1s-.4 1-1 1z',
-    swapVertCircle: 'M16 17.01V10h-2v7.01h-3L15 21l4-3.99h-3zM9 3L5 6.99h3V14h2V6.99h3L9 3z',
-    addCircleOutline:
-        'M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z',
-    addBox:
-        'M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z',
-    save1:
-        'M7.6557,6.6063l4.1865-.0606a1.8,1.8,0,0,1,1.5406.8267,1.7242,1.7242,0,0,0,1.1358.2111h3.5622a2.9963,2.9963,0,0,0,1.6765-.451L32.6628,6.993a1.3244,1.3244,0,0,1,1.3006.7408,1.4817,1.4817,0,0,1,1.7249-1.19q.051.0094.1011.0223a2.1725,2.1725,0,0,1,1.5928.6661l3.2346,3.1824a2.4138,2.4138,0,0,1,.7207,1.7013l.21,26.4876a2.3209,2.3209,0,0,1-.7134,1.6925l-.4364.4189a2.4944,2.4944,0,0,1-1.7214.6949l-29.5692.07a2.3325,2.3325,0,0,1-1.6912-.72l-.2712-.2835a2.4922,2.4922,0,0,1-.6912-1.7226V9.0345a3.0417,3.0417,0,0,1,.5261-1.7517Z',
-    save: 'M8 20H6C4.89543 20 4 19.1046 4 18V6C4 4.89543 4.89543 4 6 4H9M8 20V14C8 13.4477 8.44772 13 9 13H15C15.5523 13 16 13.4477 16 14V20M8 20H16M16 20H18C19.1046 20 20 19.1046 20 18V8.82843C20 8.29799 19.7893 7.78929 19.4142 7.41421L16.5858 4.58579C16.2107 4.21071 15.702 4 15.1716 4H15M15 4V7C15 7.55228 14.5523 8 14 8H10C9.44772 8 9 7.55228 9 7V4M15 4H9',
-    doubleAngleUp:
-        'M177 255.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 351.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 425.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1zm-34-192L7 199.7c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l96.4-96.4 96.4 96.4c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9l-136-136c-9.2-9.4-24.4-9.4-33.8 0z',
-    doubleAngleUp1:
-        'M177 255.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 351.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 425.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1zm-34-192L7 199.7c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l96.4-96.4 96.4 96.4c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9l-136-136c-9.2-9.4-24.4-9.4-33.8 0z',
-    doubleAngleDown:
-        'M143 256.3L7 120.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0L313 86.3c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.4 9.5-24.6 9.5-34 .1zm34 192l136-136c9.4-9.4 9.4-24.6 0-33.9l-22.6-22.6c-9.4-9.4-24.6-9.4-33.9 0L160 352.1l-96.4-96.4c-9.4-9.4-24.6-9.4-33.9 0L7 278.3c-9.4 9.4-9.4 24.6 0 33.9l136 136c9.4 9.5 24.6 9.5 34 .1z',
-    doubleAngleDown1:
-        'M143 256.3L7 120.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0L313 86.3c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.4 9.5-24.6 9.5-34 .1zm34 192l136-136c9.4-9.4 9.4-24.6 0-33.9l-22.6-22.6c-9.4-9.4-24.6-9.4-33.9 0L160 352.1l-96.4-96.4c-9.4-9.4-24.6-9.4-33.9 0L7 278.3c-9.4 9.4-9.4 24.6 0 33.9l136 136c9.4 9.5 24.6 9.5 34 .1z',
-    arrowUpSolid:
-        'M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z',
-    arrowDownSolid:
-        'M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z',
-    checkBox:
-        'M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z',
-    refresh:
-        'm19 8-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z',
-    logo: 'M666.3 296.5c0-32.5-40.7-63.3-103.1-82.4 14.4-63.6 8-114.2-20.2-130.4-6.5-3.8-14.1-5.6-22.4-5.6v22.3c4.6 0 8.3.9 11.4 2.6 13.6 7.8 19.5 37.5 14.9 75.7-1.1 9.4-2.9 19.3-5.1 29.4-19.6-4.8-41-8.5-63.5-10.9-13.5-18.5-27.5-35.3-41.6-50 32.6-30.3 63.2-46.9 84-46.9V78c-27.5 0-63.5 19.6-99.9 53.6-36.4-33.8-72.4-53.2-99.9-53.2v22.3c20.7 0 51.4 16.5 84 46.6-14 14.7-28 31.4-41.3 49.9-22.6 2.4-44 6.1-63.6 11-2.3-10-4-19.7-5.2-29-4.7-38.2 1.1-67.9 14.6-75.8 3-1.8 6.9-2.6 11.5-2.6V78.5c-8.4 0-16 1.8-22.6 5.6-28.1 16.2-34.4 66.7-19.9 130.1-62.2 19.2-102.7 49.9-102.7 82.3 0 32.5 40.7 63.3 103.1 82.4-14.4 63.6-8 114.2 20.2 130.4 6.5 3.8 14.1 5.6 22.5 5.6 27.5 0 63.5-19.6 99.9-53.6 36.4 33.8 72.4 53.2 99.9 53.2 8.4 0 16-1.8 22.6-5.6 28.1-16.2 34.4-66.7 19.9-130.1 62-19.1 102.5-49.9 102.5-82.3zm-130.2-66.7c-3.7 12.9-8.3 26.2-13.5 39.5-4.1-8-8.4-16-13.1-24-4.6-8-9.5-15.8-14.4-23.4 14.2 2.1 27.9 4.7 41 7.9zm-45.8 106.5c-7.8 13.5-15.8 26.3-24.1 38.2-14.9 1.3-30 2-45.2 2-15.1 0-30.2-.7-45-1.9-8.3-11.9-16.4-24.6-24.2-38-7.6-13.1-14.5-26.4-20.8-39.8 6.2-13.4 13.2-26.8 20.7-39.9 7.8-13.5 15.8-26.3 24.1-38.2 14.9-1.3 30-2 45.2-2 15.1 0 30.2.7 45 1.9 8.3 11.9 16.4 24.6 24.2 38 7.6 13.1 14.5 26.4 20.8 39.8-6.3 13.4-13.2 26.8-20.7 39.9zm32.3-13c5.4 13.4 10 26.8 13.8 39.8-13.1 3.2-26.9 5.9-41.2 8 4.9-7.7 9.8-15.6 14.4-23.7 4.6-8 8.9-16.1 13-24.1zM421.2 430c-9.3-9.6-18.6-20.3-27.8-32 9 .4 18.2.7 27.5.7 9.4 0 18.7-.2 27.8-.7-9 11.7-18.3 22.4-27.5 32zm-74.4-58.9c-14.2-2.1-27.9-4.7-41-7.9 3.7-12.9 8.3-26.2 13.5-39.5 4.1 8 8.4 16 13.1 24 4.7 8 9.5 15.8 14.4 23.4zM420.7 163c9.3 9.6 18.6 20.3 27.8 32-9-.4-18.2-.7-27.5-.7-9.4 0-18.7.2-27.8.7 9-11.7 18.3-22.4 27.5-32zm-74 58.9c-4.9 7.7-9.8 15.6-14.4 23.7-4.6 8-8.9 16-13 24-5.4-13.4-10-26.8-13.8-39.8 13.1-3.1 26.9-5.8 41.2-7.9zm-90.5 125.2c-35.4-15.1-58.3-34.9-58.3-50.6 0-15.7 22.9-35.6 58.3-50.6 8.6-3.7 18-7 27.7-10.1 5.7 19.6 13.2 40 22.5 60.9-9.2 20.8-16.6 41.1-22.2 60.6-9.9-3.1-19.3-6.5-28-10.2zM310 490c-13.6-7.8-19.5-37.5-14.9-75.7 1.1-9.4 2.9-19.3 5.1-29.4 19.6 4.8 41 8.5 63.5 10.9 13.5 18.5 27.5 35.3 41.6 50-32.6 30.3-63.2 46.9-84 46.9-4.5-.1-8.3-1-11.3-2.7zm237.2-76.2c4.7 38.2-1.1 67.9-14.6 75.8-3 1.8-6.9 2.6-11.5 2.6-20.7 0-51.4-16.5-84-46.6 14-14.7 28-31.4 41.3-49.9 22.6-2.4 44-6.1 63.6-11 2.3 10.1 4.1 19.8 5.2 29.1zm38.5-66.7c-8.6 3.7-18 7-27.7 10.1-5.7-19.6-13.2-40-22.5-60.9 9.2-20.8 16.6-41.1 22.2-60.6 9.9 3.1 19.3 6.5 28.1 10.2 35.4 15.1 58.3 34.9 58.3 50.6-.1 15.7-23 35.6-58.4 50.6zM320.8 78.4z',
-}
-
 const styles = {
   outer: {
     borderRadius: 5,
     boxShadow: "0 30px 40px #BBB",
-    //padding: 20,
-    padding: 50,
+    padding: 20,
+    //padding: 50,
   },
   fuller: {
     borderRadius: 5,
@@ -247,15 +186,7 @@ const STYLES = {
     }
 };
 
-export function IwsIcon({ style, d }:{ style:CSSProperties|undefined, d:IconProp|string }) {
-    return (
-        <SvgIcon style={{ ...style }}>
-            <path
-                // @ts-ignore
-                d ={d} />
-        </SvgIcon>
-    )
-}
+
 const headStyle = {
     header: {
         borderRadius: 5,
@@ -801,8 +732,8 @@ const FormButton = ({ title, type, color, style, size, height, onClick, classNam
     )
 }
 const DatePickerField = ({ fieldName,  current, setCurrent, selected, label, disabled, onChange }:
-                         {fieldName:string,  current:any, setCurrent:(arg:any)=>void, selected:Date
-                             , label:string, disabled:boolean, onChange?:(event:any)=>void} ) => {
+                         { fieldName:string,  current:any, setCurrent?:(arg:any)=>void, selected:Date
+                          , label:string, disabled:boolean, onChange?:(event:any)=>void} ) => {
 
     return (
         <DatePicker
@@ -813,43 +744,45 @@ const DatePickerField = ({ fieldName,  current, setCurrent, selected, label, dis
             calendarClassName="custom-calendar"
             z-Index ={9999}
             className="text-center date-picker-reports"
-            dateFormat="dd.MM.yyyy"
+            dateFormat="dd.MM.YYYY"
             id={fieldName?.concat('id')}
-            onChange={ onChange ? onChange :(newValue) => setCurrent({...current, [fieldName]: newValue})}
+            onChange={ onChange ? onChange :(newValue) => {
+              setCurrent?({...current, [fieldName]: newValue}):void(0)
+            }}
         />
     )
 }
 
 export const AccountMainForm = ({ current, setCurrent, accData, t, disable}:AccountMainProps) => {
     //const styles = STYLES
-    const styles = {
-        outer: {
-            borderRadius: 5,
-            boxShadow: "0 30px 40px #BBB",
-            padding: 20,
-        },
-        fuller: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:30
-        },
-        fuller40H: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:60
-        },
-        paddingLeft10: {
-            paddingLeft: 10,
-        },
-        paddingLeft20: {
-            paddingLeft: 20,
-        },
-        height40: {
-            height: 40,
-        },
-    };
+    // const styles = {
+    //     outer: {
+    //         borderRadius: 5,
+    //         boxShadow: "0 30px 40px #BBB",
+    //         padding: 20,
+    //     },
+    //     fuller: {
+    //         borderRadius: 5,
+    //         boxShadow: "0 1px 50px #BBE",
+    //         padding: 5,
+    //         height:30
+    //     },
+    //     fuller40H: {
+    //         borderRadius: 5,
+    //         boxShadow: "0 1px 50px #BBE",
+    //         padding: 5,
+    //         height:60
+    //     },
+    //     paddingLeft10: {
+    //         paddingLeft: 10,
+    //     },
+    //     paddingLeft20: {
+    //         paddingLeft: 20,
+    //     },
+    //     height40: {
+    //         height: 40,
+    //     },
+    // };
     const currentAccount = accData?.find((acc: { id: any }) => acc.id === current?.account)??initAcc[0]
 
     return (
@@ -2091,7 +2024,7 @@ export const PayrollTaxForm = ({ current, setCurrent, disable, t, locale, curren
         </>
     )
 }
-export const    MasterfilesMainBaseForm = ({ current, setCurrent, disable, t,  height }: MasterfileProps<IMasterfile>)=> {
+export const    MasterfileMainBaseForm:FC<MasterfileProps<IMasterfile>> = ({ current, setCurrent, disable, t,  height })=> {
     return (
         <>
             <Grid container spacing={1}>
@@ -2514,8 +2447,8 @@ export const MasterfileMainForm:FC<MasterfileProps<IMasterfile>> = ({collapse, c
     }
     return (
         <Grid container spacing={0}  style={{...styles.outer, display: !collapse?'none':''}} >
-            <MasterfilesMainBaseForm collapse ={collapse} current={current} setCurrent ={setCurrent}
-                                     disable ={disable} t ={t}  height ={height}/>
+            <MasterfileMainBaseForm collapse ={collapse} current={current} setCurrent ={setCurrent}
+                                    disable ={disable} t ={t} height ={height}/>
         </Grid>
     )
 }
@@ -2573,41 +2506,42 @@ export const PermissionMainForm = ({collapse, current, setCurrent, disable, t,  
     </Grid>
    )
    }
-export const ArticleGeneralForm =
-    ({ current, setCurrent,  t, quantityUnitData, groupData, disable }:ArticleProps) => {
+   //current={current} setCurrent={setCurrent}  t={t} quantityUnitData={quantityUnitData} groupData={groupData} disable={disable
+export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
+    ({ current, setCurrent,  t, quantityUnitData, groupData, disable }) => {
         const currentQuantityUnit = quantityUnitData?.find((m: { id: any }) => m.id === current?.quantityUnit)
         const currentPackUnit = quantityUnitData?.find((m: { id: any }) => m.id === current?.packUnit)
         const currentGroup = groupData?.find((m: { id: any }) => m.id === current?.parent)
 
 
-        const styles = {
-            outer: {
-                borderRadius: 5,
-                boxShadow: "0 30px 40px #BBB",
-                //padding: 2,
-            },
-            fuller: {
-                borderRadius: 5,
-                boxShadow: "0 1px 50px #BBE",
-                padding: 5,
-                height:30
-            },
-            fuller40H: {
-                borderRadius: 5,
-                boxShadow: "0 1px 50px #BBE",
-                padding: 5,
-                height:60
-            },
-            paddingLeft10: {
-                paddingLeft: 10,
-            },
-            paddingLeft20: {
-                paddingLeft: 20,
-            },
-            height40: {
-                height: 40,
-            },
-        }
+        // const styles = {
+        //     outer: {
+        //         borderRadius: 5,
+        //         boxShadow: "0 30px 40px #BBB",
+        //         //padding: 2,
+        //     },
+        //     fuller: {
+        //         borderRadius: 5,
+        //         boxShadow: "0 1px 50px #BBE",
+        //         padding: 5,
+        //         height:30
+        //     },
+        //     fuller40H: {
+        //         borderRadius: 5,
+        //         boxShadow: "0 1px 50px #BBE",
+        //         padding: 5,
+        //         height:60
+        //     },
+        //     paddingLeft10: {
+        //         paddingLeft: 10,
+        //     },
+        //     paddingLeft20: {
+        //         paddingLeft: 20,
+        //     },
+        //     height40: {
+        //         height: 40,
+        //     },
+        // }
         return (
             <Grid container spacing={0} style={styles.outer}>
                 {/**Id, enterdate*/}
@@ -3225,10 +3159,7 @@ export const CustomerGeneralForm = ({current, setCurrent, ccyData, disable, t }:
             height: 40,
         },
     }
-    const currentCurrency= ccyData.find((ccy)=>ccy.id === current?.currency)
-    console.log('ccyData', ccyData)
-    console.log('current', current)
-    console.log('currentCurrency', currentCurrency)
+    const currentCurrency:IMasterfile= ccyData.find((ccy)=>ccy.id === current?.currency)??initCurrency[0]
     return (
         <Grid container spacing={0} style={{...styles.outer}}>
             <Grid container spacing={1}>
@@ -3376,22 +3307,151 @@ export const CustomerGeneralForm = ({current, setCurrent, ccyData, disable, t }:
                             <div>{t('common.currency')}</div>
                         </Grid>
                         <Grid item sm={10} xs={10} alignItems="stretch" justify="flex-start">
-                            <ComboBox<{value:string|bigint,  label:string}>
-                                style={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280', fontSize:12}}
-                                disable ={disable}
-                                value={{ value:currentCurrency?currentCurrency.id:''
-                                    , label: currentCurrency?`${currentCurrency.id} ${currentCurrency.name}` :''}}
-                                onChange={(_event:any) => {
-                                    setCurrent({...current, currency: _event /*, accountName: _event?.name*/})
-                                }}
-                                values={ccyData.slice().sort(sortById).map(toOption)}
-                            />
+                          <PartnerAccountComboBox fieldName={'currency'} current={current} setCurrent={setCurrent}
+                                                  data={ccyData} currentAcc={currentCurrency} zIndex={11} disable={disable}
+                                                  styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
+                            {/*<ComboBox<{value:string|bigint,  label:string}>*/}
+                            {/*    style={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280', fontSize:12}}*/}
+                            {/*    disable ={disable}*/}
+                            {/*    value={{ value:currentCurrency?currentCurrency.id:''*/}
+                            {/*        , label: currentCurrency?`${currentCurrency.id} ${currentCurrency.name}` :''}}*/}
+                            {/*    onChange={(_event:any) => {*/}
+                            {/*        setCurrent({...current, currency: _event /*, accountName: _event?.name*!/)*/}
+                            {/*    }}*/}
+                            {/*    values={ccyData.slice().sort(sortById).map(toOption)}*/}
+                            {/*/>*/}
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
         </Grid>
     )
+}
+export const CompanyGeneralForm = ({current, setCurrent, ccyData, disable, t }: CustomerGeneralFormProps) => {
+  const currentCurrency = ccyData.find((ccy)=>ccy.id === current?.currency)??initCurrency[0]
+  return (
+    <Grid container spacing={0} style={{...styles.outer}}>
+      <Grid container spacing={1}>
+        <Grid item sm={8} xs={2}>
+          <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller}>
+            <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
+              <div>{t('common.id')}</div>
+            </Grid>
+            <Grid item sm ={2} xs={2} justify="flex-end">
+              <InputField
+                fieldName="id"
+                current={current}
+                setCurrent={setCurrent}
+                value={current.id}
+                disabled={disable}
+                style={{ height: 20}}/>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item sm={4} xs={6}>
+          <Grid container maximize style={styles.fuller} alignItems="stretch">
+            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+              <div>{t('common.enterdate')}</div>
+            </Grid>
+            <Grid item sm={4} xs={1} alignItems="stretch" justify="flex-start">
+              <DatePickerField
+                fieldName="enterdate"
+                label={t('common.enterdate')}
+                selected={current.enterdate}
+                current={current}
+                setCurrent={setCurrent}
+                disabled={true}/>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      {/**Name */}
+      <Grid container spacing={1}>
+        <Grid item sm={8} xs={2}>
+          <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
+            <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
+              <div >{t('common.name')}</div>
+            </Grid>
+            <Grid item sm ={10} xs={10} justify="flex-end">
+              <InputField
+                fieldName="name"
+                current={current}
+                setCurrent={setCurrent}
+                value={current.name}
+                disabled={disable}
+                style={{ height: 20 }}/>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item sm={4} xs={6}>
+          <Grid container maximize style={styles.fuller} alignItems="stretch">
+            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+              <div>{t('common.changedate')}</div>
+            </Grid>
+            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+              <DatePickerField
+                fieldName="changedate"
+                label={t('common.changedate')}
+                selected={current.changedate}
+                current={current}
+                setCurrent={setCurrent}
+                disabled={true}/>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      {/**taxCode postingdate */}
+      <Grid container spacing={1}>
+        <Grid item sm={8} xs={2}>
+          <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
+            <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
+              <div >{t('common.taxCode')}</div>
+            </Grid>
+            <Grid item sm ={10} xs={10} justify="flex-end">
+              <InputField
+                fieldName="taxCode"
+                current={current}
+                setCurrent={setCurrent}
+                value={current.taxCode}
+                disabled={disable}
+                style={{ height: 20 }}/>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item sm={4} xs={6}>
+          <Grid container maximize style={styles.fuller} alignItems="stretch">
+            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+              <div>{t('common.postingdate')}</div>
+            </Grid>
+            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+              <DatePickerField
+                fieldName="postingdate"
+                label={t('common.postingdate')}
+                selected={current.postingdate}
+                current={current}
+                setCurrent={setCurrent}
+                disabled={true}/>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      {/**currency*/}
+      <Grid container spacing={1}>
+        <Grid item sm={8} xs={6}>
+          <Grid container maximize style={styles.fuller} alignItems="stretch">
+            <Grid item  sm={2}  xs={2} alignItems="stretch" justify="flex-start">
+              <div>{t('common.currency')}</div>
+            </Grid>
+            <Grid item sm={10} xs={10} alignItems="stretch" justify="flex-start">
+              <PartnerAccountComboBox fieldName={'currency'} current={current} setCurrent={setCurrent}
+                                      data={ccyData} currentAcc={currentCurrency} zIndex={11} disable={disable}
+                                      styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  )
 }
 
 export const StoreGeneralForm = ({current, setCurrent, disable, t }: StoreGeneralFormProps) => {
@@ -3649,43 +3709,6 @@ export const TransactionDetailsForm = (
         , articleData, vatData, t,  disable, height }: TransactionDetailsFormProps ) => {
     const current = currentLineTransaction
     const setCurrent = setCurrentLineTransaction
-
-    const styles = {
-        outer: {
-            borderRadius: 5,
-            boxShadow: "0 30px 40px #BBB",
-            padding: 20,
-            //height: 20,
-        },
-        fuller: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            //padding: 1,
-            height:30
-        },
-        fuller1: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:40
-        },
-        fuller40H: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:60
-        },
-        paddingLeft10: {
-            paddingLeft: 10,
-        },
-        paddingLeft20: {
-            paddingLeft: 20,
-        },
-        height40: {
-            height: 40,
-        },
-    }
-
     const currentArticle = articleData?.find((acc: { id: any }) => acc.id === current.article)
     const currentVat = vatData?.find((vat: { id: any }) => vat.id === current.vatCode)
     console.log('currentVatX', currentVat)
@@ -3859,7 +3882,8 @@ export const TransactionDetailsForm = (
                                 current={current}
                                 setCurrent={setCurrent}
                                 onChange={(_event:any) => {
-                                    const currentx = { ...current, duedate: _event.id, company:`-${transaction.company}` }
+                                  console.log('_event', _event)
+                                    const currentx = { ...current, duedate: _event, company:`-${transaction.company}` }
                                     setCurrent(currentx)
                                     setTransactionR(transaction, setTransaction, currentx, setCurrent)
                                 }}
@@ -3888,42 +3912,20 @@ export const FinancialsDetailsForm = (
     const current = currentLineFinancials
     const setCurrent = setCurrentLineFinancials
 
-    /* eslint-disable-next-line react/prop-types */
-    const styles = {
-        outer: {
-            borderRadius: 5,
-            boxShadow: "0 30px 40px #BBB",
-            padding: 20,
-            //height: 20,
-        },
-        fuller: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            //padding: 5,
-            height:27
-        },
-        fuller1: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:40
-        },
-        fuller40H: {
-            borderRadius: 5,
-            boxShadow: "0 1px 50px #BBE",
-            padding: 5,
-            height:60
-        },
-        paddingLeft10: {
-            paddingLeft: 10,
-        },
-        paddingLeft20: {
-            paddingLeft: 20,
-        },
-        height40: {
-            height: 40,
-        },
-    }
+    // const styles = {
+    //     outer: {
+    //         borderRadius: 5,
+    //         boxShadow: "0 30px 40px #BBB",
+    //         padding: 20,
+    //         //height: 20,
+    //     },
+    //     fuller: {
+    //         borderRadius: 5,
+    //         boxShadow: "0 1px 50px #BBE",
+    //         //padding: 5,
+    //         height:27
+    //     },
+    // }
     const currentAccount = accData?.find((acc: { id: any }) => acc.id === current.account)
     const currentOAccount = accData?.find((acc: { id: any }) => acc.id === current.oaccount)
 
@@ -4019,19 +4021,20 @@ export const FinancialsDetailsForm = (
                             <div>{t('financials.line.duedate')}</div>
                         </Grid>
                         <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                            <DatePickerField
-                                fieldName="duedate"
-                                label={t('transaction.line.duedate')}
-                                selected={current.duedate}
-                                current={current}
-                                setCurrent={setCurrent}
-                                onChange={(_event:any) => {
-                                    const currentx = { ...current, duedate: _event.id, company:`-${transaction.company}` }
-                                    setCurrent(currentx)
-                                    setTransactionF(transaction, setTransaction, currentx, setCurrent)
-                                }}
-                                disabled={disable}
-                            />
+                          <DatePickerField
+                            fieldName="duedate"
+                            label={t('financials.line.duedate')}
+                            selected={current.duedate}
+                            current={current}
+                            disabled={disable}
+                            onChange={(_event:any) => {
+
+                              const currentx = { ...current, duedate: _event, company:`-${transaction.company}`}
+                              console.log('currentx', currentx)
+                              setCurrent(currentx)
+                              setTransactionF(transaction, setTransaction, currentx, setCurrent)
+                            }}
+                          />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -4064,16 +4067,7 @@ export const FinancialsDetailsForm = (
         </Grid>
     )
 }
-//    const idx = businessPartner.bankaccounts.findIndex((obj) =>
-//         (obj.id === selectedBankAccount.id) || ( obj.modelid ===-1) || ( obj.id === oldBankAccount.id))
-//     console.log('selectedBankAccount>>', selectedBankAccount)
-//     console.log('businessPartner>>', businessPartner)
-//     const bankAccount: IBankAccount = {...selectedBankAccount, owner: `${businessPartner.id}`};
-//     (idx === -1) ? void(0) : (businessPartner.bankaccounts[idx] = bankAccount)
-//     setBusinessPartner(businessPartner)
-//     console.log('idx>>', idx)
-//     console.log('bankAccount>>', bankAccount)
-//     setCurrent(bankAccount)
+
 const setBusinessPartnerR = ( businessPartner:IBusinespartner
     , setBusinessPartner:(arg:IBusinespartner)=>void
     , selectedBankAccount:IBankAccount
@@ -4081,13 +4075,9 @@ const setBusinessPartnerR = ( businessPartner:IBusinespartner
     , setCurrent:(arg:IBankAccount)=>void) => {
      const idx = businessPartner?.bankaccounts?.findIndex((obj) =>
     (obj.id === selectedBankAccount.id) || (obj.modelid === -1) || (obj.id === oldBankAccount.id))
-      console.log('selectedBankAccount>>', selectedBankAccount)
-      console.log('businessPartner>>', businessPartner)
        const bankAccount: IBankAccount = {...selectedBankAccount, owner: `${businessPartner.id}`, company:`-${businessPartner.company}`};
       (idx === -1) ? void (0) : (businessPartner.bankaccounts[idx] = bankAccount)
       setBusinessPartner(businessPartner)
-      console.log('idx>>', idx)
-      console.log('bankAccount>>', bankAccount)
       setCurrent(bankAccount)
 }
 
@@ -4097,7 +4087,7 @@ export const BankAccountForm = (
     const current = currentBankAccount
     const setCurrent = setCurrentBankAccount
     const currentBank = bankData?.find((acc: { id: any }) => acc.id === current.bic)
-console.log('currentBank', currentBank)
+    console.log('currentBank', currentBank)
     return (
         <Grid container spacing={0} style={{...styles.outer}}>
           {/* Iban  */}
@@ -4163,10 +4153,6 @@ export const CustomerAccountForm = (
     const currentVat = vatData?.find((vat: { id: any }) => vat.id === current.vatCode)
     const accountLabel = getAccountLabel(current, t)
     const oaccountLabel = getOAccountLabel(current, t)
-    console.log('current', current)
-     console.log('currentAccount', currentAccount)
-    console.log('currentOAccount', currentOAccount)
-    console.log('currentVat', currentVat)
     return (
         <Grid container spacing={0} style={{...styles.outer}}>
             {/**Account,  accountName*/}
@@ -4231,7 +4217,6 @@ export const CustomerAccountForm = (
                     </Grid>
                 }
             </Grid>
-
         </Grid>
     )
 }
@@ -4240,108 +4225,78 @@ export const CompanyAccountForm = (
     {current: ICompany, setCurrent: (art:any)=>void, accData: IAccount[]
         , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean; height?: number}) => {
 
-    const stockAccount = accData?.find((acc: { id: any }) => acc.id === current.account)
-    const bankAccount = accData?.find((acc: { id: any }) => acc.id === current.bankAcc)
-    const balanceSheetAcc = accData?.find((acc: { id: any }) => acc.id === current.balanceSheetAcc)
-    const incomeStmtAcc= accData?.find((acc: { id: any }) => acc.id === current.incomeStmtAcc)
-    const purchasingClearingAcc= accData?.find((acc: { id: any }) => acc.id === current.purchasingClearingAcc)
-    const salesClearingAcc= accData?.find((acc: { id: any }) => acc.id === current.salesClearingAcc)
-    const cashAcc= accData?.find((acc: { id: any }) => acc.id === current.cashAcc)
-    const currentVat = vatData?.find((vat: { id: any }) => vat.id === current.vatCode)
+    const stockAccount = accData?.find((acc: { id: any }) => acc.id === current.account)??initAcc[0]
+    const bankAccount = accData?.find((acc: { id: any }) => acc.id === current.bankAcc)??initAcc[0]
+    const balanceSheetAcc = accData?.find((acc: { id: any }) => acc.id === current.balanceSheetAcc)??initAcc[0]
+    const incomeStmtAcc= accData?.find((acc: { id: any }) => acc.id === current.incomeStmtAcc)??initAcc[0]
+    const purchasingClearingAcc= accData?.find((acc: { id: any }) => acc.id === current.purchasingClearingAcc)??initAcc[0]
+    const salesClearingAcc= accData?.find((acc: { id: any }) => acc.id === current.salesClearingAcc)??initAcc[0]
+    const cashAcc= accData?.find((acc: { id: any }) => acc.id === current.cashAcc)??initAcc[0]
+    const currentVat = vatData?.find((vat: { id: any }) => vat.id === current.vatCode)??initVat[0]
 
     return (
         <Grid container spacing={0} style={{...styles.outer}}>
-            {/**stockAccount ,  accountName*/}
-            <Grid container spacing={1}>
-                <Grid item sm={8} xs={2}>
-                    <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-                        <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                            <div>{t('article.stock.account')}</div>
-                        </Grid>
-                        <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-                            <ComboBox<{value:string|bigint,  label:string}>
-                                style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}
-                                disable={disable}
-                                value={ {value:stockAccount?stockAccount.id:''
-                                    , label: stockAccount?`${stockAccount.id} ${stockAccount.name}` :''}}
-                                onChange={(_event:any) => {setCurrent({...current,
-                                        account: _event /*, accountName: _event?.name*/})
-                                }}
-                                values={accData.slice().sort(sortById).map(toOption)}
-                                zIndex={13}
-                            />
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
             {/**bankAcc, balanceSheetAcc */}
-            <Grid container spacing={1}>
-                <Grid item sm={8} xs={2}>
-                    <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-                        <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                            <div>{t('common.bankAcc')}</div>
-                        </Grid>
-                        <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start">
-                            <ComboBox<{value:string|bigint,  label:string}>
-                                style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}
-                                disable={disable}
-                                value={ {value:bankAccount?bankAccount.id:''
-                                    , label: bankAccount?`${bankAccount.id} ${bankAccount.name}` :''}}
-                                onChange={(_event:any) => {setCurrent({...current, bankAcc: _event /*, accountName: _event?.name*/})}}
-                                values={accData.slice().sort(sortById).map(toOption)}
-                                zIndex={12}
-                            />
-                        </Grid>
-                    </Grid>
-                </Grid>
+            {/*<Grid container spacing={1}>*/}
+              {/**bankAcc, balanceSheetAcc */}
                 <Grid item sm={8} xs={2}>
                     <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
                         <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
                             <div>{t('common.balanceSheetAcc')}</div>
                         </Grid>
                         <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start">
-                            <ComboBox<{value:string|bigint,  label:string}>
-                                style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}
-                                disable={disable}
-                                value={ {value:balanceSheetAcc?balanceSheetAcc.id:''
-                                    , label: balanceSheetAcc?`${balanceSheetAcc.id} ${balanceSheetAcc.name}` :''}}
-                                onChange={(_event:any) => {setCurrent({...current, balanceSheetAcc: _event /*, accountName: _event?.name*/})
-                                }}
-                                values={accData.slice().sort(sortById).map(toOption)}
-                                zIndex={11}
-                            />
+                          <CompanyAccountComboBox fieldName={'balanceSheetAcc'} current={current} setCurrent={setCurrent}
+                                                  data={accData} currentAcc={balanceSheetAcc} zIndex={11} disable={disable}
+                              styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
                         </Grid>
 
                     </Grid>
                 </Grid>
-                {/**Vat */}
-
-
-            </Grid>
-            {/**incomeStmtAcc */}
-            <Grid container spacing={1}>
+              {/**incomeStmtAcc */}
+              <Grid container spacing={1}>
                 <Grid item sm={8} xs={2}>
-                    <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-                        <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                            <div>{t('common.incomeStmtAcc')}</div>
-                        </Grid>
-                        <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-                            <ComboBox<{value:string|bigint,  label:string}>
-                                style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}
-                                disable={disable}
-                                value={ {value:incomeStmtAcc?incomeStmtAcc.id:''
-                                    , label: incomeStmtAcc?`${incomeStmtAcc.id} ${incomeStmtAcc.name}` :''}}
-                                onChange={(_event:any) => {setCurrent({...current,
-                                    incomeStmtAcc: _event /*, accountName: _event?.name*/})
-                                }}
-                                values={accData.slice().sort(sortById).map(toOption)}
-                                zIndex={10}
-                            />
-                        </Grid>
+                  <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+                    <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+                      <div>{t('common.incomeStmtAcc')}</div>
                     </Grid>
+                    <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
+                      <CompanyAccountComboBox fieldName={'incomeStmtAcc'} current={current} setCurrent={setCurrent}
+                                              data={accData} currentAcc={incomeStmtAcc} zIndex={10} disable={disable}
+                                              styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+                    </Grid>
+                  </Grid>
                 </Grid>
+              </Grid>
+          {/*bankAcc */}
+          <Grid item sm={8} xs={2}>
+            <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+              <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+                <div>{t('common.bankAcc')}</div>
+              </Grid>
+              <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start">
+                <CompanyAccountComboBox fieldName={'bankAcc'} current={current} setCurrent={setCurrent}
+                                        data={accData} currentAcc={bankAccount} zIndex={12} disable={disable}
+                                        styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+              </Grid>
             </Grid>
+          </Grid>
+            {/*</Grid>*/}
+          {/**stockAccount ,  accountName*/}
+          <Grid container spacing={1}>
+            <Grid item sm={8} xs={2}>
+              <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+                <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+                  <div>{t('article.stock.account')}</div>
+                </Grid>
+                <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
+                  <CompanyAccountComboBox fieldName={'account'} current={current} setCurrent={setCurrent}
+                                          data={accData} currentAcc={stockAccount} zIndex={13} disable={disable}
+                                          styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
 
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
             {/**purchasingClearingAcc */}
             <Grid container spacing={1}>
                 <Grid item sm={8} xs={2}>
@@ -4350,17 +4305,9 @@ export const CompanyAccountForm = (
                             <div>{t('common.purchasingClearingAcc')}</div>
                         </Grid>
                         <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-                            <ComboBox<{value:string|bigint,  label:string}>
-                                style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}
-                                disable={disable}
-                                value={ {value:purchasingClearingAcc?purchasingClearingAcc.id:''
-                                    , label: purchasingClearingAcc?`${purchasingClearingAcc.id} ${purchasingClearingAcc.name}` :''}}
-                                onChange={(_event:any) => {setCurrent({...current,
-                                    purchasingClearingAcc: _event /*, accountName: _event?.name*/})
-                                }}
-                                values={accData.slice().sort(sortById).map(toOption)}
-                                zIndex={9}
-                            />
+                          <CompanyAccountComboBox fieldName={'purchasingClearingAcc'} current={current} setCurrent={setCurrent}
+                                                  data={accData} currentAcc={purchasingClearingAcc}  zIndex={9} disable={disable}
+                              styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -4373,17 +4320,9 @@ export const CompanyAccountForm = (
                             <div>{t('common.salesClearingAcc')}</div>
                         </Grid>
                         <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-                            <ComboBox<{value:string|bigint,  label:string}>
-                                style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}
-                                disable={disable}
-                                value={ {value:salesClearingAcc?salesClearingAcc.id:''
-                                    , label: salesClearingAcc?`${salesClearingAcc.id} ${salesClearingAcc.name}` :''}}
-                                onChange={(_event:any) => {setCurrent({...current,
-                                    salesClearingAcc: _event /*, accountName: _event?.name*/})
-                                }}
-                                values={accData.slice().sort(sortById).map(toOption)}
-                                zIndex={8}
-                            />
+                          <CompanyAccountComboBox fieldName={'salesClearingAcc'} current={current} setCurrent={setCurrent}
+                                                  data={accData} currentAcc={salesClearingAcc}  zIndex={8} disable={disable}
+                              styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -4396,17 +4335,9 @@ export const CompanyAccountForm = (
                             <div>{t('common.cashAcc')}</div>
                         </Grid>
                         <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-                            <ComboBox<{value:string|bigint,  label:string}>
-                                style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}
-                                disable={disable}
-                                value={ {value:cashAcc?cashAcc.id:''
-                                    , label: cashAcc?`${cashAcc.id} ${cashAcc.name}` :''}}
-                                onChange={(_event:any) => {setCurrent({...current,
-                                    cashAcc: _event /*, accountName: _event?.name*/})
-                                }}
-                                values={accData.slice().sort(sortById).map(toOption)}
-                                zIndex={7}
-                            />
+                          <CompanyAccountComboBox fieldName={'cashAcc'} current={current} setCurrent={setCurrent}
+                                                  data={accData} currentAcc={cashAcc}  zIndex={7} disable={disable}
+                             styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -4419,25 +4350,57 @@ export const CompanyAccountForm = (
                             <div>{t('common.vatCode')}</div>
                         </Grid>
                         <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-                            <ComboBox<{value:string|bigint,  label:string}>
-                                style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}
-                                disable={disable}
-                                value={ {value:currentVat?currentVat.id:''
-                                    , label: currentVat?`${currentVat.id} ${currentVat.name}` :''}}
-                                onChange={(_event:any) => {setCurrent({...current,
-                                    vatCode: _event /*, accountName: _event?.name*/})
-                                }}
-                                values={vatData.slice().sort(sortById).map(toOption)}
-                                zIndex={7}
-                            />
+                          <CompanyAccountComboBox fieldName={'vatCode'} current={current} setCurrent={setCurrent}
+                                                  data={vatData} currentAcc={currentVat} zIndex={13} disable={disable}
+                              styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
-
         </Grid>
     )
 }
+export const PartnerAccountComboBox:FC<CompanyCBoxProps<IBusinespartner, IMasterfile>> =({ fieldName, current, setCurrent, data
+                                         , currentAcc, zIndex, styles, disable})=> {
+
+  return (
+    <ComboBox<{ value: string | bigint, label: string }>
+      style={{...styles}}
+      disable={disable}
+      value={{value: currentAcc ? currentAcc.id : '', label: currentAcc ? `${currentAcc.id} ${currentAcc.name}` : ''}}
+      onChange={(_event: any) => {
+        console.log('_event>>>', _event)
+        // setCurrent({...current, account: _event})
+        setCurrent({...current, [fieldName]: _event})
+        console.log('current>>>', current)
+      }}
+      values={data.slice().sort(sortById).map(toOption)}
+      zIndex={zIndex}
+    />
+  )
+}
+export const CompanyAccountComboBox:FC<CompanyCBoxProps<ICompany, IMasterfile>> =({ fieldName, current, setCurrent, data
+                                                                                 , currentAcc, zIndex, styles, disable})=> {
+  //const currentAcc:IAccount = (data ??  [initAcc]).find((acc) => acc.id === current.account)??initAcc[0]
+  // console.log('fieldName>>>', fieldName)
+  // console.log('currentAcc>>>', currentAcc)
+  return (
+    <ComboBox<{ value: string | bigint, label: string }>
+      style={{...styles}}
+      disable={disable}
+      value={{value: currentAcc ? currentAcc.id : '', label: currentAcc ? `${currentAcc.id} ${currentAcc.name}` : ''}}
+      onChange={(_event: any) => {
+        console.log('_event>>>', _event)
+       // setCurrent({...current, account: _event})
+        setCurrent({...current, [fieldName]: _event})
+        console.log('current>>>', current)
+      }}
+      values={data.slice().sort(sortById).map(toOption)}
+      zIndex={zIndex}
+    />
+  )
+}
+
 
 const AccountComboBox:FC<FinancialsCBoxProps<IFinancials, IAccount>> =({current, setCurrent, data, zIndex, styles})=>{
     const currentAcc:IAccount = (data ??  [initAcc]).find((acc) => acc.id === current.account)??initAcc[0]
@@ -4540,7 +4503,8 @@ export const FinancialsMainForm =
                        , height:number, zIndex:number}) => {
 
     const styles = STYLES
-    const currentModule= modules.find((m:IFmodule) =>m.id == BigInt(current.modelid))??initfModule[0]
+    const currentx:IFinancials = Array.isArray(current)?current[0]:current
+    const currentModule= modules.find((m:IFmodule) =>m.id == BigInt(currentx?.modelid))??initfModule[0]
     return (
         <Grid container spacing={0} style={{...STYLES.inner, display: !collapse?'none':''}}>
             {/**id, postingdate*/}
@@ -4606,8 +4570,16 @@ export const FinancialsMainForm =
                             <DatePickerField
                                 fieldName="transdate"
                                 label={t('transaction.transdate')}
-                                selected={current.enterdate}
+                                selected={current.transdate}
                                 current={current}
+                                onChange={(_event:any) => {
+                                  const date = new Date(_event)
+                                  const month_ = date.getMonth()+1
+                                  const month = month_ <10?`0${month_}`:`${month_}`
+                                  const period = Number(`${date.getFullYear()}${month}`)
+                                  const currentx = { ...current, transdate: date.toISOString(), period:period}
+                                  setCurrent(currentx)
+                                }}
                                 setCurrent={setCurrent}
                                 disabled={current.posted}
                             />
@@ -4716,7 +4688,6 @@ export const FinancialsMainFormX =
       <Grid container spacing={0} style={{...STYLES.inner, display: !collapse?'none':''}}>
         {/**id, postingdate*/}
         <Grid container spacing={1} >
-          {/*<Grid container maximize  justify="flex-start" alignItems="stretch">*/}
           <Grid item sm={8} xs={2}>
             <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller}>
               <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
@@ -4757,8 +4728,8 @@ export const FinancialsMainFormX =
                 <InputField
                   fieldName="oid"
                   current={current}
-                  setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-                  value={current.oid} //eslint-disable-next-line react/prop-types
+                  setCurrent={setCurrent}
+                  value={current.oid}
                   disabled={current.posted}
                   style={{ height: 20 , textAlign:'right'}}
                 />
@@ -4778,8 +4749,15 @@ export const FinancialsMainFormX =
                 <DatePickerField
                   fieldName="transdate"
                   label={t('transaction.transdate')}
-                  selected={current.enterdate}
+                  selected={current.transdate}
                   current={current}
+                  onChange={(_event:any) => {
+                    console.log('_event', _event)
+                    const date = new Date(_event)
+                    console.log('period', Number(`${date.getFullYear()}${date.getMonth()}`))
+                    const currentx = { ...current, duedate: _event, period:Number(`${date.getFullYear()}${date.getMonth()}`)}
+                    setCurrent(currentx)
+                  }}
                   setCurrent={setCurrent}
                   disabled={current.posted}
                 />
@@ -4963,7 +4941,7 @@ export const TransactionMainForm =
                                 <DatePickerField
                                     fieldName="transdate"
                                     label={t('transaction.transdate')}
-                                    selected={current.enterdate}
+                                    selected={current.transdate}
                                     current={current}
                                     setCurrent={setCurrent}
                                     disabled={current.posted}

@@ -1,5 +1,5 @@
 
-import {Edit, Get1, Get2, Post} from './CrudController.ts'
+import {Edit, Get1} from './CrudController.ts'
 import iwsStore from '../utils/Store.jsx'
 import {IWSModel} from '../Models.ts'
 import {NavigateFunction} from "react-router-dom";
@@ -33,11 +33,7 @@ const formatCurrency = (number:number, currency:string, locale:string) =>
 //   Post(url_, token, rows)
 // }
 
-const callSubmitCopy = <A>(event:any, modifyUrl:string, token:string, rows:A[]) => {
-  event.preventDefault()
-  const url_ = modifyUrl.concat('/copy')
-  Post(url_, token, rows)
-}
+
 const callSubmitEdit = (event:any, modifyUrl:string, token:string, current:IWSModel
                            , setCurrent:(arg:IWSModel)=>void, data:IWSModel[], submitAdd: (arg:any)=>void) => {
   event.preventDefault()
@@ -57,21 +53,13 @@ const callReload = (ctx:string, token:string, modelid:number) => {
   Get1(ctx, token, modelid)
 }
 
-const callSubmitPost = (event:any, modifyUrl:string, token:string, current:IWSModel
-                           , setCurrent:(arg:IWSModel)=>void,  rows:IWSModel[]):void => {
-  event.preventDefault()
-  const ids = rows.length > 0 ? rows.map((c:IWSModel) => c.id) : [current.id]
-  const url_ = `${modifyUrl}/post/${ids}/${current.company}`
-  Get2(url_, token, setCurrent)
-}
+
 
 export {
   getPeriod,
   formatCurrency,
   callSubmitEdit,
   callReload,
-  callSubmitCopy,
-  callSubmitPost,
   logout,
   toggleEdit,
 }

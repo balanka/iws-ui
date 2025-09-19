@@ -27,7 +27,8 @@ export  const ArticleTabs = (
     </Grid>
 
   const tabContent:TabItem[] = [
-      { title: t('common.general'), id: 1, form:ArticleGeneralForm(props)},
+      { title: t('common.general'), id: 1, form: <ArticleGeneralForm  current={current} setCurrent={setCurrent}
+               t={t} quantityUnitData={quantityUnitData} groupData={groupData} disable={disable} />},
       { title: t('common.accounts'), id: 2, form: CustomerAccountForm(props)},
       { title: t('stock.title'), id: 4, form: getTable() },
     ]

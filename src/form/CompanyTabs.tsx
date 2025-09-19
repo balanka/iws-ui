@@ -1,5 +1,5 @@
 import React from 'react'
-import {AddressForm, BankAccountForm, CompanyAccountForm, CustomerGeneralForm} from './FormsProps'
+import {AddressForm, BankAccountForm, CompanyAccountForm, CompanyGeneralForm} from './FormsProps'
 import { BankAccountGrid } from "../IWSGrid"
 import Grid from "react-fast-grid";
 import {bankAccountColumnDefs} from "../ColumnsDefs"
@@ -7,7 +7,6 @@ import IWSTabs from './IWSTabs.tsx'
 import {AddressProps, BankAccountFormProps, CompanyTabProps} from '../Props'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {ICompany} from "../Models.ts";
 import {initBankAccount} from "./Menu.tsx";
 
 
@@ -24,24 +23,15 @@ const CompanyTabs  = ({ formid, current, setCurrent
                   , locale, data, accData, bankData, vatData, ccyData, height, disable, zIndex }:CompanyTabProps) => {
   const  props:CompanyTabProps = { formid, current, setCurrent, currentBankAccount, setCurrentBankAccount
       , token, modifyUrl, t, locale, data, accData, bankData, vatData, ccyData, height, disable, zIndex }
-    const currentC:ICompany = current
-    // const  compProps:CompanyTabProps = { formid, currentC, setCurrent, currentBankAccount, setCurrentBankAccount
-    //     , token, modifyUrl, t, locale, data, accData, vatData, height, disable }
+
   const  addressProps:AddressProps = { current, setCurrent,  t, disable, height:20 }
-   // const nusinessPartner:ICustomer|ISupplier|IEmployee = current
-    console.log('current>>>>', current)
-    console.log('currentC>>>>', currentC);
-    console.log('currentBankAccount', currentBankAccount)
-    console.log('current.bankaccounts', current.bankaccounts)
-    //console.log('bankData', bankData)
     const businessPartner = current
     const setBusinessPartner = setCurrent
- const  bankAccountProps:BankAccountFormProps = {currentBankAccount, setCurrentBankAccount, businessPartner, setBusinessPartner,  bankData, t,  disable, height, zIndex }
+ const  bankAccountProps:BankAccountFormProps =
+   {currentBankAccount, setCurrentBankAccount, businessPartner, setBusinessPartner,  bankData, t,  disable, height, zIndex }
 
-    const onRowSelected = (event: RowSelectedEvent) => {
-        console.log('selected currentBankAccount>>>>', event.data)
-        setCurrentBankAccount(event.data)
-    }
+    const onRowSelected = (event: RowSelectedEvent) => setCurrentBankAccount(event.data)
+
   const defaultColDef= {
     resizable: true,
       editable: true,
@@ -49,7 +39,8 @@ const CompanyTabs  = ({ formid, current, setCurrent
   }
 
   const table =
-      <Grid container spacing={1} style={{...STYLES.outer, width:1000, height:200, padding:5,  paddingTop: 20}} maximize direction="row" justify="flex-start" alignItems="stretch" >
+      <Grid container spacing={1} style={{...STYLES.outer, width:1000, height:200, padding:5,  paddingTop: 20}}
+            maximize direction="row" justify="flex-start" alignItems="stretch" >
             <BankAccountGrid
                 // @ts-ignore
                 theme="legacy" columnDefs ={bankAccountColumnDefs(t)}  defaultColDef={defaultColDef}
@@ -57,7 +48,7 @@ const CompanyTabs  = ({ formid, current, setCurrent
      </Grid>
 
   const tabContent = [
-      { title: t('common.general'), id: 1, form: CustomerGeneralForm (props)},
+      { title: t('common.general'), id: 1, form: CompanyGeneralForm (props)},
       { title: t('common.address'), id: 2, form: AddressForm(addressProps) },
       { title: t('common.accounts'), id: 3, form: CompanyAccountForm(props)},
       { title: t('common.bankaccounts'), id: 4, form: table },

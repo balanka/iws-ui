@@ -79,19 +79,28 @@ export interface CompanyTabProps {
 }
 
 export interface ArticleProps {
+  current: IArticle
+  , setCurrent: (art: IArticle) => void
+  ,  accData: IAccount[]
+  , vatData: IVat[]
+  , data:IArticle[]
+  , quantityUnitData:IMasterfile[]
+  , groupData:IMasterfile[]
+  , locale: string
+  , currency: string
+  , t: TFunction<'transalation', undefined>
+  , disable: boolean
+  , height?: number
+  , zIndex:number
+}
+
+export interface ArticleGeneralFormProps {
     current: IArticle
     , setCurrent: (art: IArticle) => void
-    ,  accData: IAccount[]
-    , vatData: IVat[]
-    , data:IArticle[]
     , quantityUnitData:IMasterfile[]
     , groupData:IMasterfile[]
-    , locale: string
-    , currency: string
     , t: TFunction<'transalation', undefined>
     , disable: boolean
-    , height?: number
-    , zIndex:number
 }
 
 export interface AccountMainProps {
@@ -253,6 +262,16 @@ export interface FinancialsCBoxProps<A, B> {
   data: B[],
   zIndex: number,
   styles: any
+}
+export interface CompanyCBoxProps<A, B> {
+  fieldName:string
+  current: A,
+  setCurrent: (arg: A) => void,
+  data: B[],
+  currentAcc:B,
+  zIndex: number,
+  styles: any,
+  disable:boolean
 }
 
 export interface UserFormProps { collapse: boolean, current:IUser, setCurrent:(arg:IUser)=>void

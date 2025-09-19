@@ -81,7 +81,7 @@ const FinancialsForm = () => {
     //module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
     module_ =  module_ ?? formEnum.LOGIN
     if (module_ === '11111' || module_ === 11111) return <Login/>
-    let title_ = company?.concat(' / ').concat(t(module_.title))
+    let title_ = company??''.concat(' / ').concat(t(module_.title))
     const modifyUrl = selected
     console.log('current_?>>>>>', initFtr)
     const current_: IFinancials = initFtr [0]
@@ -159,7 +159,9 @@ const FinancialsForm = () => {
         setTitle(company?.concat(' / ').concat(title_))
         setCopyFRom([copyFromIds])
         setCurrent(current_)
+        console.log('mx', mx)
         ctx = `${module_.ctx}/${mx.id}/${company}`
+        console.log('ctx', ctx)
         const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
         Get(ctx_copyFrom, token, parseInt(copyFromIds), setCopyFromTransaction)
         submitQuery(ctx)
@@ -207,13 +209,10 @@ const FinancialsForm = () => {
         ( event:any, current:IFinancials, setCurrent:(arg:IFinancials) =>void) => {
             event.preventDefault()
             const dx: IFinancials = {...current}
-            const selectedData: ILineTransaction[] = gridApi!.getSelectedRows()
-            console.log('selectedData', selectedData)
-            console.log('currentLineFinancials', currentLineFinancials)
-            const idx = dx.lines.findIndex((obj: ILineFinancials) => obj.id === currentLineFinancials.id)
+            if(!dx.hasOwnProperty('lines')) dx['lines']=[]
+            const idx = dx?.lines.findIndex((obj: ILineFinancials) => obj.id === currentLineFinancials.id)
             if (idx >= 0) dx.lines[idx] = {...currentLineFinancials, transid: BigInt(-2)}
             gridApi!.applyTransaction({remove: [currentLineFinancials]})!;
-            //console.log('res>>>>', res);
             setCurrent(dx)
         }, [currentLineFinancials]);
     const onNewLine = () => addLine (initialLine,  setCurrent)
@@ -285,7 +284,6 @@ const FinancialsForm = () => {
     }
     const submitQuery = (ctx:string, event?:any) => {
         event?.preventDefault()
-        console.log('submitQuery', ctx)
         setIsFetching(true)
         !iwsState.get(fmodule_modelid)&&Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
         !iwsState.get(acc_modelid)&&Get(acc_ctx,  token, acc_modelid, setAccData)
@@ -329,24 +327,24 @@ const FinancialsForm = () => {
             type: "fitGridWidth",
         },
         // @ts-ignore
-        columnDefs: financialsColumnDefs(t),
+        //columnDefs: financialsColumnDefs(t),
         // @ts-ignore
-        detailCellRendererParams: {
-            detailGridOptions: {
-                getRowStyle: (params: { node: { rowIndex: number} }) => {
-                    if (params.node.rowIndex % 2 === 0) {
-                        return { background: '#fff9e6' }
-                    }
-                },
-                columnDefs:LinesFinancialsColumns(t),
-                defaultColDef: {
-                    flex: 1,
-                },
-            },
-            getDetailRowData: (params:any) => {
-                params.successCallback(params.data.lines);
-            },
-        } as IDetailCellRendererParams<IFinancials, ILineFinancials>,
+        // detailCellRendererParams: {
+        //     detailGridOptions: {
+        //         getRowStyle: (params: { node: { rowIndex: number} }) => {
+        //             if (params.node.rowIndex % 2 === 0) {
+        //                 return { background: '#fff9e6' }
+        //             }
+        //         },
+        //         columnDefs:LinesFinancialsColumns(t),
+        //         defaultColDef: {
+        //             flex: 1,
+        //         },
+        //     },
+        //     getDetailRowData: (params:any) => {
+        //         params.successCallback(params.data.lines);
+        //     },
+        // } as IDetailCellRendererParams<IFinancials, ILineFinancials>,
         //onFirstDataRendered: onFirstDataRendered,
     }
     const minHeight=300

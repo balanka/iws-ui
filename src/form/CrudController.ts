@@ -294,9 +294,9 @@ const Get2 = <A>(ctx:string, token:string, setCurrent:(arg0: A) => void ) => {
     getFn(url, token)
         .then((response) => {
             const resp = response.data
-            //console.log('responseRRRRRR2', resp)
+            console.log('responseRRRRRR2', resp)
             iwsStore.update(resp.modelid, resp.id, {...resp})
-            Array.isArray(resp) && resp.length > 0 ? setCurrent(resp[0]) : setCurrent(resp)
+            Array.isArray(resp) && resp.length > 0 ? setCurrent(resp[0]) : void (0)
             setCurrent(resp)
         })
         .catch(function (error) {

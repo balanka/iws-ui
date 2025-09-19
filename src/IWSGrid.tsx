@@ -111,10 +111,10 @@ const getGridOptionsL= ( columnDefs:ColDef[], defaultColDef:DefaultColDefType, o
         autoSizeStrategy: {
             type: "fitGridWidth",
         },
-        detailCellRendererParams: {
-            //refreshStrategy: "everything",
-            refreshStrategy:'rows'
-        }
+        // detailCellRendererParams: {
+        //     //refreshStrategy: "everything",
+        //     refreshStrategy:'rows'
+        // }
     })
 export const getGridOptionsBalance= ( columnDefs:ColDef[]
                                       , onRowSelected:(event:RowSelectedEvent) =>void
@@ -371,6 +371,7 @@ export const TransactionGrid: FC<Props<ITransaction|IFinancials>> = ({ columnDef
         // @ts-ignore
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
+        columnDefs={columnDefs}
         resetRowDataOnUpdate ={true}
     />
 export const LineTFinancialsGrid: FC<Props<ILineFinancials>> = ({ columnDefs, defaultColDef, onRowSelected, onCellValueChanged, gridOptions
