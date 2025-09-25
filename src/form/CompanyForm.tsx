@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import { AllCommunityModule, ClientSideRowModelModule, ModuleRegistry } from 'ag-grid-community'
+import {AllCommunityModule, ClientSideRowModelModule, GridApi, GridReadyEvent, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import Grid from 'react-fast-grid'
@@ -89,6 +89,7 @@ const CompanyForm = () => {
   const [bankData, setBankData] = useState<IMasterfile[]>([])
   const [ccyData, setCcyData] = useState<IMasterfile[]>([])
   const [currentBankAccount, setCurrentBankAccount] = useState<IBankAccount>(initBankAccount)
+  const [gridApi,  setGridApi] = useState<GridApi>()
   const minHeight = 350
   const maxHeight = 700
   useEffect(() => {
@@ -162,9 +163,10 @@ const CompanyForm = () => {
   const addLine =(line:IBankAccount)  => {
         const dx: ICompany = {...current}
         const newLine:IBankAccount = {...line, modelid:-1, owner: `${current.id}`}
-        dx.bankaccounts.push(newLine)
-        console.log('newLine', newLine)
-        console.log('dx', dx)
+       if(dx.hasOwnProperty('bankaccounts')){
+          dx.bankaccounts.push(newLine)
+        } else dx['bankaccounts'] = [{...newLine}]
+        gridApi!.applyTransaction({add: [newLine]})
         return dx
       }
 
@@ -196,7 +198,7 @@ const CompanyForm = () => {
     setCurrent(event.data)
     setCurrentBankAccount(selectedBankAccount)
   }
-
+  const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   return (
         <Grid container spacing={10} style={{...STYLES.inner}} direction="column">
           <CommonFormHead
@@ -227,6 +229,7 @@ const CompanyForm = () => {
                              disable={disable} t={t} locale={localex}
                              data ={rowData} accData ={accData} bankData={bankData} ccyData={ccyData}
                              vatData ={vatData} height={height}
+                            onGridReady={onGridReady}
                              // @ts-ignore
                              stylesx={{...stylesx, height:state.collapse?minHeight:maxHeight, padding: 5, paddingLeft: 10, paddingBottom: 5}}/>
           </Grid>
@@ -235,7 +238,7 @@ const CompanyForm = () => {
                   style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 10}} maximize direction="column">
               <CustomerGrid
                   // @ts-ignore
-                  theme="legacy" columnDefs ={customerColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
+                  theme="legacy" columnDefs ={customerColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData} />
             </Grid>
         </Grid>
   )

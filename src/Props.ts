@@ -40,8 +40,7 @@ export interface BankAccountFormProps {
     , height?: number}
 
 export interface CustomerTabProps {
-    formid: number
-    , current: ICustomer | ISupplier | IEmployee
+     current: ICustomer | ISupplier | IEmployee
     , setCurrent: (set: any ) => void
     , currentBankAccount:IBankAccount
     , setCurrentBankAccount:(arg:IBankAccount) =>void
@@ -57,10 +56,10 @@ export interface CustomerTabProps {
     , height: number
     , disable: boolean
     , zIndex:number
+    , onGridReady:(params: GridReadyEvent)=>void
 }
 export interface CompanyTabProps {
-    formid: number
-    , current: ICompany
+      current: ICompany
     , setCurrent: (set: any ) => void
     , currentBankAccount:IBankAccount
     , setCurrentBankAccount:(arg:IBankAccount) =>void
@@ -76,6 +75,7 @@ export interface CompanyTabProps {
     , height: number
     , disable: boolean
     , zIndex:number
+    , onGridReady:(params: GridReadyEvent)=>void
 }
 
 export interface ArticleProps {

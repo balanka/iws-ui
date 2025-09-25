@@ -247,16 +247,16 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer"
                             style={{ height: 20, padding:1, display:onDeleteBankAccount? 'block':'none'}}
                             onClick={(event)=>
-                                onDeleteBankAccount?onDeleteBankAccount(event):void(0)} disabled={!edited} >
+                                onDeleteBankAccount?onDeleteBankAccount(event):void(0)} disabled={!onDeleteBankAccount} >
                     <RemoveCircleOutlineIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer"
                             style={{ height: 20, padding:1, display:onNewBankAccount?'block':'none'}} onClick={()=>
-                    onNewBankAccount?onNewBankAccount():void(0)} disabled={!edited}>
+                    onNewBankAccount?onNewBankAccount():void(0)} disabled={!onNewBankAccount}>
                     <AddCircleOutlineIcon/>
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            disabled={!added && added !==undefined}      onClick={()=>initAdd()}>
+                            disabled={!added}      onClick={()=>initAdd()}>
                     <AddBoxIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
@@ -601,7 +601,6 @@ export const JournalFormHead = ({ style, title, submitQuery, submitQuery2
                     </Grid>
                     <Grid container xs spacing={0} justify="flex-end" style={{...headStyle.header}}
                           alignItems="flex-end">
-
                         <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}>
                              {/*onClick={(event:any) => showFile({e: event, templateFileName: templateFileName, data: current})}>*/}
                             <input type="file" onInput={(event:any) =>  showFile({e: event, templateFileName: templateFileName, data: current})}/>
@@ -4416,24 +4415,23 @@ const AccountComboBox:FC<FinancialsCBoxProps<IFinancials, IAccount>> =({current,
       />
   )
 }
-const PartnerComboBox:FC<FinancialsCBoxProps<ITransaction, ICustomer|ISupplier>> =({current,  setCurrent, data,  zIndex, styles}) =>{
-  const currentAcc:ICustomer|ISupplier = (data ??  [initCust]).find((acc) =>
+
+const getPartnerComboBox =(current:ITransaction
+  ,  setCurrent:(arg:ITransaction) =>void, accData:ICustomer[]|ISupplier[],  zIndex:number, styles:any)=>{
+  const currentAcc:ICustomer|ISupplier = (accData ??  [initCust]).find((acc) =>
     acc.id === current.account)??initCust[0]
-   return ( <>
+  return (
         <ComboBox<{value:string|bigint,  label:string}>
           style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
           disable={current.posted}
           value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
           onChange={(_event:any) => {
-            setCurrent({...current, account: _event })}}
-          //@ts-ignore
-          values={data??[].sort(sortById).map(toOption)}
+            setCurrent({...current, account: _event /*, accountName: _event?.name*/})}}
+          values={accData.slice().sort(sortById).map(toOption)}
           zIndex={zIndex}
         />
-    </>
   )
 }
-
 const CostCenterComboBox:FC<FinancialsCBoxProps<IFinancials, IMasterfile>> = ({current, setCurrent, data, zIndex, styles}) => {
     const currentCC = (data ?? []).find((store: { id: any }) => store.id ===  current.costcenter )??initCc[0]
     return (
@@ -4443,7 +4441,7 @@ const CostCenterComboBox:FC<FinancialsCBoxProps<IFinancials, IMasterfile>> = ({c
               value={ {value:currentCC?currentCC.id:'', label: currentCC?`${currentCC.id} ${currentCC.name}` :''}}
               onChange={(_event:any) => {setCurrent({...current, costcenter: _event})}}
               //@ts-ignore
-              values={data??[].sort(sortById).map(toOption)}
+              values={data??[].slice().sort(sortById).map(toOption)}
               zIndex={zIndex}
             />
     )
@@ -4495,12 +4493,13 @@ export const FinancialsMainForm =
                      ({ collapse, current,  setCurrent, t, handleModuleChange, storeData, accData, modules
                         , copyFromTransaction, submitCopy, height, zIndex}:
                       { collapse:boolean, current:IFinancials, setCurrent:(arg:IFinancials) =>void
-                       , t:TFunction<'translation', undefined>, storeData:IMasterfile[]
-                       , accData:IAccount[], modules:IFmodule[]
+                       , t:TFunction<'translation', undefined> //, getTransdate?:() =>string
+                       , storeData:IMasterfile[], accData:IAccount[], modules:IFmodule[]
                        , copyFromTransaction:IFinancials[]
                        , handleModuleChange:(value:any)=>void
                        , submitCopy:(id:BigInt) =>void
                        , height:number, zIndex:number}) => {
+
 
     const styles = STYLES
     const currentx:IFinancials = Array.isArray(current)?current[0]:current
@@ -4573,7 +4572,10 @@ export const FinancialsMainForm =
                                 selected={current.transdate}
                                 current={current}
                                 onChange={(_event:any) => {
+                                 // const datex = new Date(getTransdate? getTransdate(): _event)
                                   const date = new Date(_event)
+                                    //console.log ('datex ', datex)
+                                  console.log ('date ', date)
                                   const month_ = date.getMonth()+1
                                   const month = month_ <10?`0${month_}`:`${month_}`
                                   const period = Number(`${date.getFullYear()}${month}`)
@@ -4986,7 +4988,8 @@ export const TransactionMainForm =
                           <div>{t('transaction.account')}</div>
                         </Grid>
                         <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start"style={{paddingLeft:5}}>
-                          <PartnerComboBox current ={current} setCurrent={setCurrent} data={accData} zIndex={zIndex}  styles={styles}/>
+                          { getPartnerComboBox(current, setCurrent, accData, zIndex, styles)}
+                          {/*<PartnerComboBox current ={current} setCurrent={setCurrent} data={accData} zIndex={zIndex}  styles={styles}/>*/}
                         </Grid>
                       </Grid>
                     </Grid>

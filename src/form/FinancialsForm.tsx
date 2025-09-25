@@ -119,6 +119,47 @@ const FinancialsForm = () => {
     const [isFetching, setIsFetching] = useState(false)
     const [gridApi, setGridApi] = useState<GridApi>()
 
+  //const  getTransdate = ()  => {
+    //console.log('getTransdate called')
+    const input = document.getElementById("transdateid");
+    console.log('input', input)
+    input?.addEventListener("keyup", logKey)
+    var x: string[] = []
+    let transdate = new Date()
+    function logKey(e: any) {
+      console.log('e.key', e.key)
+      if (e.key === 'Enter') {
+        const v= x.join("")
+         x=[]
+        console.log('valueX', v)
+        transdate = new Date(v)
+        console.log('transdate', transdate)
+      } else {
+        x.push(e.key)
+      }
+    }
+  //  return transdate
+  //}
+
+  // const  getTransdate = ()  => {
+  //   console.log('getTransdate called')
+  //   const input = document.getElementById("transdateid");
+  //   console.log('input', input)
+  //   input?.addEventListener("keyup", logKey)
+  //   var x: string[] = []
+  //   let transdate:string = new Date().toISOString()
+  //   function logKey(e: any) {
+  //     if (e.key === 'Enter') {
+  //       const v= x.join("")
+  //       console.log('valueX', v)
+  //       transdate = v
+  //     } else {
+  //       x.push(e.key)
+  //     }
+  //   }
+  //   return transdate
+  // }
+
     const handleKeyPress = useCallback((event: any) => {
         if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
             submitEdit(event)
@@ -377,7 +418,7 @@ const FinancialsForm = () => {
         <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
             <FinancialsMainForm collapse ={state.collapse}
                                  current={current}
-                                 //current_={current_}
+                                 //getTransdate ={getTransdate}
                                  setCurrent={setCurrent}
                                  accData={accData}
                                  storeData={ccData}

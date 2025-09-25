@@ -18,11 +18,12 @@ const STYLES ={
         padding: 5,
     },
 }
-const CompanyTabs  = ({ formid, current, setCurrent
+const CompanyTabs  = ({ current, setCurrent
                            , currentBankAccount, setCurrentBankAccount, token, modifyUrl, t
-                  , locale, data, accData, bankData, vatData, ccyData, height, disable, zIndex }:CompanyTabProps) => {
-  const  props:CompanyTabProps = { formid, current, setCurrent, currentBankAccount, setCurrentBankAccount
-      , token, modifyUrl, t, locale, data, accData, bankData, vatData, ccyData, height, disable, zIndex }
+                  , locale, data, accData, bankData, vatData, ccyData, height, disable
+                  , zIndex, onGridReady }:CompanyTabProps) => {
+  const  props:CompanyTabProps = {current, setCurrent, currentBankAccount, setCurrentBankAccount
+      , token, modifyUrl, t, locale, data, accData, bankData, vatData, ccyData, height, disable, zIndex, onGridReady }
 
   const  addressProps:AddressProps = { current, setCurrent,  t, disable, height:20 }
     const businessPartner = current
@@ -43,7 +44,7 @@ const CompanyTabs  = ({ formid, current, setCurrent
             maximize direction="row" justify="flex-start" alignItems="stretch" >
             <BankAccountGrid
                 // @ts-ignore
-                theme="legacy" columnDefs ={bankAccountColumnDefs(t)}  defaultColDef={defaultColDef}
+                theme="legacy" columnDefs ={bankAccountColumnDefs(t)}  defaultColDef={defaultColDef} onGridReady={onGridReady}
                 rowData ={current.bankaccounts??[initBankAccount]} onRowSelected ={onRowSelected}/>
      </Grid>
 

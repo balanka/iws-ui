@@ -45,7 +45,7 @@ ModuleRegistry.registerModules([
 //   oddRowBackgroundColor: "rgb(0, 0, 0, 0.03)",
 //   headerColumnResizeHandleColor: "rgb(126, 46, 132)",
 // });
-const pacTheme = themeQuartz.withParams({
+export const pacTheme = themeQuartz.withParams({
     /* Low spacing = very compact */
     spacing: 2,
     /* Changes the color of the grid text */
@@ -118,6 +118,7 @@ const getGridOptionsL= ( columnDefs:ColDef[], defaultColDef:DefaultColDefType, o
     })
 export const getGridOptionsBalance= ( columnDefs:ColDef[]
                                       , onRowSelected:(event:RowSelectedEvent) =>void
+                                      , rowData:any
                                       //, summaryRow:IPeriodicAccountBalance2[]
                                       ) => {
  //console.log('summaryRow', summaryRow)
@@ -133,7 +134,7 @@ export const getGridOptionsBalance= ( columnDefs:ColDef[]
         //theme: "legacy",
         theme: myTheme,
         columnDefs,
-        //rowData,
+        rowData:rowData,
       defaultColDef: {
           resizable: true,
           editable: false, //!current.posted,
@@ -170,6 +171,14 @@ const getGridOptions= ( columnDefs:ColDef[], defaultColDef:DefaultColDefType, on
             if (params.node.rowIndex % 2 === 0) {
                 return { background: '#fff9e6' };
             }//else if(params.data.toPeriod===-1) {}
+          // @ts-ignore
+          if (params?.data?.period  === 0) {
+            return {
+              //background: 'black',
+              fontSize:12,
+              fontWeight:'bold'
+            };
+          }
         },
         //theme: "legacy",
         theme : myTheme,
@@ -236,7 +245,8 @@ export const AccountGrid: FC<Props<IAccount>> = ({ columnDefs, defaultColDef, on
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
     />
-export const BankAccountGrid: FC<Props<IBankAccount>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData, gridRef}:Props<IBankAccount>)=>{
+export const BankAccountGrid: FC<Props<IBankAccount>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData
+                                                         , gridRef, onGridReady}:Props<IBankAccount>)=>{
     console.log('rowData', rowData)
    return  <AgGridReact
         ref={gridRef}
@@ -245,6 +255,7 @@ export const BankAccountGrid: FC<Props<IBankAccount>> = ({ columnDefs, defaultCo
         // @ts-ignore
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected)}
         rowData ={rowData}
+        onGridReady={onGridReady}
         resetRowDataOnUpdate ={true}
     />
 }
@@ -266,13 +277,14 @@ export const ArticleGrid: FC<Props<IArticle>> = ({ columnDefs, defaultColDef, on
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
     />
-export const CustomerGrid: FC<Props<ICustomer|ISupplier|IEmployee>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<ICustomer|ISupplier|IEmployee>)=>
+export const CustomerGrid: FC<Props<ICustomer|ISupplier|IEmployee>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData, onGridReady }:Props<ICustomer|ISupplier|IEmployee>)=>
     <AgGridReact
         theme = {pacTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
         // @ts-ignore
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
+        onGridReady={onGridReady}
         resetRowDataOnUpdate ={true}
     />
 export const AssetGrid: FC<Props<IAsset>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<IAsset>)=>
@@ -315,26 +327,32 @@ export const RightGrid: FC<Props<IUserRight>> = ({ columnDefs, defaultColDef, on
         animateRows={false}
     />
  export const PeriodicAccountBalanceGrid: FC<Props<IPeriodicAccountBalance>> = ({ columnDefs, defaultColDef
-                         , onRowSelected, gridOptions, rowData, onGridReady }:Props<IPeriodicAccountBalance >)=>
-    <AgGridReact
-        theme = {pacTheme}
-        onRowSelected = {onRowSelected}
-        // @ts-ignore
-        gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
-        rowData ={rowData}
-        resetRowDataOnUpdate ={true}
-        onGridReady ={onGridReady}
-    />
-export const JournalGrid: FC<Props<IJournal>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData , onGridReady}:Props<IJournal>)=>
-    <AgGridReact
-        theme = {pacTheme} //{theme ?? "legacy"}
-        onRowSelected = {onRowSelected}
-        // @ts-ignore
-        gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
-        rowData ={rowData}
-        onGridReady={onGridReady}
-        resetRowDataOnUpdate ={true}
-    />
+                         , onRowSelected, gridOptions, rowData }:Props<IPeriodicAccountBalance>) => {
+   console.log('rowData', rowData)
+   return (< AgGridReact
+   theme = {pacTheme}
+   onRowSelected = {onRowSelected}
+   // @ts-ignore
+   gridOptions = {{...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
+     , paginationPageSize: 20, paginationPageSizeSelector: [20, 40, 60]}}
+   rowData = {rowData}
+   resetRowDataOnUpdate = {true}
+   //onGridReady = {onGridReady}
+   />)
+ }
+export const JournalGrid: FC<Props<IJournal>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<IJournal>)=> {
+  console.log('rowDataX', rowData)
+  return (<AgGridReact
+    theme={pacTheme} //{theme ?? "legacy"}
+    onRowSelected={onRowSelected}
+    // @ts-ignore
+    gridOptions={{...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
+      , paginationPageSize: 20, paginationPageSizeSelector: [30, 50, 80]}}
+    rowData={rowData}
+    //onGridReady={onGridReady}
+    resetRowDataOnUpdate={true}
+  />)
+}
 export const StoreGrid: FC<Props<IStore>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<IStore>)=>
     <AgGridReact
         theme = {myTheme} //{theme ?? "legacy"}

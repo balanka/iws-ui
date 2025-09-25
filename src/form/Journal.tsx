@@ -22,7 +22,7 @@ import {journalColumnsDefs} from '../ColumnsDefs.ts'
 import {IAccount, IJournal, IPACBQueryParam, IPeriodicAccountBalance2} from '../Models.ts'
 import {JournalGrid} from '../IWSGrid.tsx'
 import Login from './Login.tsx'
-import  {getGridOptionsBalance, defaultColDefX} from '../IWSGrid.tsx'
+import  {defaultColDefX} from '../IWSGrid.tsx'
 import {formatumber2Digits} from '../utils/Utils.ts'
 import {useDispatch} from 'react-redux'
 import {logout} from './TransactionLib.ts'
@@ -93,7 +93,7 @@ const Journal = () => {
   // const buildUrl = () => `${module_.ctx}/${company}/${current.account}/${current.fromPeriod}/${current.toPeriod}`
   const buildJournalUrl = () => `${module_.ctx}/${company}/${current.account}/${current.fromPeriod ===-1 ?
                                                    current.toPeriod:current.fromPeriod}/${current.toPeriod}`
-  const buildJournalUrlAll = () => `${module_.ctx}/${company}/${current.fromPeriod ===-1 ? 
+  const buildJournalUrlAll = () => `${module_.ctx}/${company}/${current.fromPeriod ===-1 ?
                                                       current.toPeriod:current.fromPeriod}/${current.toPeriod}`
 
   // const getUrlAll = () =>  modelid === formEnum.PACB ? `${module_.ctx}/${company}/${current.fromPeriod}/${current.toPeriod}`: buildJournalUrlAll()
@@ -173,11 +173,12 @@ const Journal = () => {
         <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
             // @ts-ignore
                          stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
-        <Grid item style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: 1500}}>
+        <Grid item style={{paddingLeft: 1, paddingRight: 1, paddingTop: 5, height: 560, width: 1500}}>
               <JournalGrid
-                  // @ts-ignore
-                  gridOptions={getGridOptionsBalance(journalColumnsDefs(t), defaultColDefX, onRowSelected)}
-                  rowData={rowData}/>
+                columnDefs ={journalColumnsDefs(t)}
+                defaultColDef ={defaultColDefX}
+                onRowSelected={onRowSelected}
+                rowData={rowData}/>
         </Grid>
       </Grid>
   )

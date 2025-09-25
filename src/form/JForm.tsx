@@ -24,12 +24,10 @@ import {pacColumnsDefs} from '../ColumnsDefs.ts'
 import {IAccount, IPACBQueryParam, IPeriodicAccountBalance, IPeriodicAccountBalance2} from '../Models.ts'
 import {PeriodicAccountBalanceGrid} from '../IWSGrid.tsx'
 import Login from './Login.tsx'
-import  {getGridOptionsBalance, defaultColDefX} from '../IWSGrid.tsx'
-import {formatumber2Digits, sortById} from '../utils/Utils.ts'
+import  {defaultColDefX} from '../IWSGrid.tsx'
+import {formatumber2Digits} from '../utils/Utils.ts'
 import {useDispatch} from 'react-redux'
 import {logout} from './TransactionLib.ts'
-
-
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -114,8 +112,8 @@ const JForm = () => {
             , icredit: Number(d.icredit.toFixed(2))
             , debit: Number(d.debit.toFixed(2))
             , credit: Number(d.credit.toFixed(2))
-            , bdebit: Number(d.bdebit.toFixed(2))
-            , bcredit: Number(d.bcredit.toFixed(2))
+            , bdebit: Number((d.idebit+d.debit).toFixed(2))
+            , bcredit: Number((d.icredit+d.credit).toFixed(2))
         }
     }
   const sumData = (data:IPeriodicAccountBalance[]) => {
@@ -149,10 +147,6 @@ const JForm = () => {
         , credit: Number(credit.toFixed(2))
         , bdebit:Number(bdebit.toFixed(2))
         , bcredit:Number(bcredit.toFixed(2)), account: '', modelid:modelidx, period:0, currency:currency, company: companyx}
-    console.log('accData>>>', accData.sort(sortById))
-    //console.log('totalsRowData>>>', totalsRowData)
-    //console.log('totalPac>>>', totalsRowData)
-    console.log('current>>>', current)
     const templateFileName = 'Balancesx.docx'
    // let currency = profile?.currency ?? 'XOF'
     const toBalance2 = (m: IPeriodicAccountBalance) => {
@@ -223,10 +217,10 @@ const JForm = () => {
                              stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
             <Grid item style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: 1500}}>
                 <PeriodicAccountBalanceGrid
-                    // @ts-ignore
-                    gridOptions={getGridOptionsBalance(pacColumnsDefs(t), defaultColDefX, onRowSelected)}
+                  columnDefs ={pacColumnsDefs(t)}
+                  defaultColDef ={defaultColDefX}
+                  onRowSelected={onRowSelected}
                     rowData={rowData.map(format)}/>
-
             </Grid>
         </Grid>
     )

@@ -20,13 +20,14 @@ const STYLES ={
         padding: 5,
     },
 }
-const CustomerTabs  = ({ formid, current, setCurrent
+const CustomerTabs  = ({ current, setCurrent
                            , currentBankAccount, setCurrentBankAccount, token, modifyUrl, t
-                           , locale, data, accData, bankData, vatData, ccyData, height, disable, zIndex,
+                           , locale, data, accData, bankData, vatData, ccyData, height, disable, zIndex
+                           , onGridReady
                        }: CustomerTabProps) => {
     const props: CustomerTabProps = {
-        formid, current, setCurrent, currentBankAccount, setCurrentBankAccount
-        , token, modifyUrl, t, locale, data, bankData, accData, vatData, ccyData, height, disable, zIndex
+        current, setCurrent, currentBankAccount, setCurrentBankAccount
+        , token, modifyUrl, t, locale, data, bankData, accData, vatData, ccyData, height, disable, zIndex, onGridReady
     }
 
     const addressProps: AddressProps = {current, setCurrent, t, disable, height: 20}
@@ -60,7 +61,7 @@ const CustomerTabs  = ({ formid, current, setCurrent
             maximize direction="row" justify="flex-start" alignItems="stretch" >
             <BankAccountGrid
                 // @ts-ignore
-                theme="legacy" columnDefs ={bankAccountColumnDefs(t)}  defaultColDef={defaultColDef}
+                theme="legacy" columnDefs ={bankAccountColumnDefs(t)}  defaultColDef={defaultColDef} onGridReady={onGridReady}
                 rowData ={current.bankaccounts??[initBankAccount]} onRowSelected ={onRowSelected}/>
      </Grid>
 console.log('bankAccountProps', bankAccountProps)

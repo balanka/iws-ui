@@ -17,7 +17,7 @@ import {styles as stylesx} from './BasicTreeTableProps.tsx'
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {FinancialsFormHead, TransactionMainForm} from './FormsProps.tsx'
 import {Add, Edit, EditRow, Get, Get2} from './CrudController.ts'
-import {initfModule, initLtr, MASTERFILE, TRANSACTION, useStore} from './Menu.tsx'
+import {initCust, initfModule, initLtr, MASTERFILE, TRANSACTION, useStore} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {useTranslation} from 'react-i18next'
 import {formEnum} from '../utils/FormEnum.tsx'
@@ -132,7 +132,7 @@ const STYLES = {
   const [vatData, setVatData] = useState<IVat[]>([])
   const [, setCustData] = useState<ICustomer[]>([])
   const [, setSupData] = useState<ISupplier[]>([])
-  const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>([])
+  const [partnerData, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
   const [, setModule] = useState<IModule[]>([])
   const [copyFrom, setCopyFRom] = useState<String[]>([])
   const [copyFromTransaction, setCopyFromTransaction] = useState<ITransaction[]>([])
@@ -312,6 +312,8 @@ console.log('rowData', rowData)
   const submitQuery = (ctx:string, partnerCtx:string, partnerModelid:number) => {
     //event?.preventDefault()
       console.log('submitQuery', ctx)
+    console.log('partnerCtx', partnerCtx)
+    console.log('partnerModelid', partnerModelid)
     setIsFetching(true)
     !iwsState.get(fmodule_modelid)&&Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
     !iwsState.get(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData)
@@ -321,6 +323,8 @@ console.log('rowData', rowData)
     !iwsState.get(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
     Get(ctx, token, modelid, setRowData)
     setIsFetching(false)
+    console.log('PartnerData', partnerData)
+    console.log('PartnerData', iwsState.get(partnerModelid))
   }
 
      const onRowSelected = (event: RowSelectedEvent) => {
@@ -401,8 +405,9 @@ console.log('rowData', rowData)
   const maxPadding =35
   const saveProps:SaveProps = { 'fileName':"~/Download/MYSavedData.xlsx", 'sheetName':"Sheet1", 'data':current.lines }
   const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
-  const getPartnerData =(partnerModelid:number) => iwsState.get(partnerModelid)??[]
-
+  //const getPartnerData =(partnerModelid:number) => iwsState.get(partnerModelid)
+   console.log('PartnerData', partnerData)
+   console.log('PartnerData', iwsState.get(partnerId))
     return isFetching?<CSpinner color="primary" />:(<>
             <FinancialsFormHead
                 title={title}
@@ -427,7 +432,7 @@ console.log('rowData', rowData)
         />
         <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
           <TransactionMainForm collapse={state.collapse} current={current??current_} setCurrent={setCurrent}
-                               t={t} accData={getPartnerData(partnerId)}
+                               t={t} accData={iwsState.get(partnerId)??[initCust]}
                                storeData={storeData} modules={fmoduleData}
                                copyFromTransaction={copyFromTransaction}
                                handleModuleChange={handleModuleChange}

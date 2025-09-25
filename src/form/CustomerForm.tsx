@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import { AllCommunityModule, ClientSideRowModelModule, ModuleRegistry } from 'ag-grid-community'
+import {AllCommunityModule, ClientSideRowModelModule, GridApi, GridReadyEvent, ModuleRegistry} from 'ag-grid-community'
 //import { ExcelExportModule, MasterDetailModule, MultiFilterModule, SetFilterModule } from 'ag-grid-enterprise'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -53,8 +53,8 @@ const CustomerForm = () => {
   let title =  company?.concat(' / ').concat(t(module_.title))
   const [state, setState] = useState({ collapse: true, fadeIn: true, timeout: 300 })
   const [disable, setDisable] = useState(true)
+  const [gridApi,  setGridApi] = useState<GridApi>()
 
-  //const gridRef: React.RefObject<AgGridReact|null> = useRef<AgGridReact>(null)
   const height = 20
   const modelid = module_? module_.modelid:1111
   const acc_modelid = formEnum.ACCOUNT
@@ -86,6 +86,7 @@ const CustomerForm = () => {
   const minHeight = 350
   const maxHeight = 700
   const zIndex = 9999
+  const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
     Get(acc_ctx, token, acc_modelid, setAccData)
@@ -160,7 +161,8 @@ const CustomerForm = () => {
         const dx: ICustomer|ISupplier|IEmployee = {...current}
          if(dx.hasOwnProperty('bankaccounts')){
            dx.bankaccounts.push(newLine)
-         } else dx['bankaccounts'] = [ {...newLine}]
+         } else dx['bankaccounts'] = [{...newLine}]
+        gridApi!.applyTransaction({add: [newLine]})
         return dx
       }
 
@@ -173,15 +175,18 @@ const CustomerForm = () => {
         setCurrent(dx)
       }, [currentBankAccount]);
 
-  const onNewBankAccount = () => {
+  const onNewBankAccount = //useCallback(
+    () => {
     setEdited(true)
     setDisable(false)
+    console.log('current>>>>', current)
     const record = addLine ( {...initBankAccount, owner: `${current.id}` })
     setCurrent(record)
-  }
+  }//,
+  //   [current],
+  // )
   const onDeleteBankAccount = (event:any) => {
     onRemoveSelectedLine (event, current,  setCurrent);
-    console.log('current>>>>', current);
      Edit(modifyUrl, token, current, rowData, setCurrent)
   }
   const onRowSelected = (event: RowSelectedEvent) => {
@@ -224,6 +229,7 @@ const CustomerForm = () => {
                              data ={rowData} accData ={accData} bankData={bankData}
                              vatData ={vatData} height={height} ccyData={ccyData}
                              zIndex={zIndex-1}
+                             onGridReady={onGridReady}
                              // @ts-ignore
                              stylesx={{...stylesx, height:state.collapse?minHeight:maxHeight, padding: 5, paddingLeft: 10, paddingBottom: 5}}/>
           </Grid>
