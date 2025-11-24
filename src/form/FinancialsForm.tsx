@@ -22,19 +22,19 @@ import {styles as stylesx} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {FinancialsFormHead, FinancialsMainForm} from './FormsProps.tsx'
-import {Add, Edit, EditRow, Get, Get2} from './CrudController.ts'
+import {Add, Edit, EditRow, Get, Get2, Get3} from './CrudController.ts'
 import {FINANCIALS, initAcc, initfModule, initFtr, initLineFinancials,  MASTERFILE, useStore} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import { useTranslation } from 'react-i18next'
 import { formEnum } from '../utils/FormEnum.tsx'
 import {
-    IAccount,
-    IEditing,
-    IFinancials,
-    IFmodule,
-    ILineFinancials,
-    IMasterfile,
-    IModule,
+  IAccount,
+  IEditing,
+  IFinancials,
+  IFmodule,
+  ILineFinancials,
+  IMasterfile,
+  IModule, ITransaction,
 } from '../Models.ts'
 import {TransactionGrid} from '../IWSGrid.tsx'
 import { financialsColumnDefs} from '../ColumnsDefs.ts'
@@ -45,6 +45,10 @@ import {FinancialsDetailsTabs} from './FinancialsDetailsTabs.tsx'
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {SaveProps} from "../Props.ts";
+// import PizZip from "pizzip";
+// import Docxtemplater from "docxtemplater";
+// import {saveAs} from "file-saver";
+import {generateDocx} from "../utils/XlsUtils.ts";
 ModuleRegistry.registerModules([
     AllCommunityModule,
     ClientSideRowModelModule,
@@ -89,6 +93,7 @@ const FinancialsForm = () => {
     const [currentLineFinancials, setCurrentLineFinancials] = useState<ILineFinancials>(initialLine)
     const [iwsState, setIwsState] = useState(iwsStore.initialState)
     const [title, setTitle] = useState(title_)
+    //const [selectedIds, setSelectedIds] = useState<Number[]>([])
     const toggle = () => setState({...state, collapse: !state.collapse})
     const handleLanguageChange = (event:any) => {
         event.preventDefault()
@@ -102,6 +107,7 @@ const FinancialsForm = () => {
     const module_modelid = formEnum.MODULE
     const fmodule_modelid = formEnum.FMODULE
     const zIndex:number = 99999
+    let templateFileName =''
     let ctx = `${module_.ctx}/${modelid}/${company}`
     const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
     const cc_ctx = `${MASTERFILE.masterfile}/${cc_modelid}/${company}`
@@ -114,8 +120,8 @@ const FinancialsForm = () => {
     const [, setModule] = useState<IModule[]>([])
     const [fmodule, setFmodule] = useState<IFmodule[]>([])
     const [model, setModel] = useState<number>(-1)
-    const [copyFrom, setCopyFRom] = useState<String[]>([])
-    const [copyFromTransaction, setCopyFromTransaction] = useState<IFinancials[]>([])
+    const [copyFrom, ] = useState<String[]>([])
+    const [copyFromTransaction, ] = useState<IFinancials[]>([])
     const [isFetching, setIsFetching] = useState(false)
     const [gridApi, setGridApi] = useState<GridApi>()
 
@@ -178,7 +184,7 @@ const FinancialsForm = () => {
             Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
             Get(acc_ctx, token, acc_modelid, setAccData)
             Get(cc_ctx, token, cc_modelid, setCcData)
-            Get(module_ctx, token, fmodule_modelid, setModule)
+            Get(module_ctx, token, module_modelid, setModule)
             setIsFetching(false)
             document.addEventListener('keydown', handleKeyPress)
         }
@@ -189,20 +195,21 @@ const FinancialsForm = () => {
     }, [isFetching, copyFrom, setIsFetching])
 
     const handleModuleChange = (value:any) => {
-        //event?.preventDefault()
-        console.log('handleModuleChange', value)
         setModel(value)
         const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]
+        templateFileName = mx.description
         title_ = mx?.name ? mx.name : title_
-        const copyFromIds = mx? mx.copyFrom:''
+        //const copyFromIds = mx? mx.copyFrom:''
+        //console.log('copyFromIds', copyFromIds)
         setTitle(company??''.concat(' / ').concat(title_))
-        setCopyFRom([copyFromIds])
+        //setCopyFRom([copyFromIds])
         setCurrent(current_)
         console.log('mx', mx)
         ctx = `${module_.ctx}/${mx.id}/${company}`
         console.log('ctx', ctx)
-        const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
-        Get(ctx_copyFrom, token, parseInt(copyFromIds), setCopyFromTransaction)
+       // const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
+      //console.log('ctx_copyFrom', ctx_copyFrom)
+       // Get(ctx_copyFrom, token, parseInt(copyFromIds), setCopyFromTransaction)
         submitQuery(ctx)
     }
 
@@ -277,6 +284,7 @@ const FinancialsForm = () => {
 
     const submitPost = (event:any) => {
         //const ids = rows.length > 0 ? rows.map((c) => c.id) : [current.id]
+        //const selectedData = gridApi!.getSelectedRows();
         const ids = [current.id]
         const url = `${module_.ctx}/post/${ids}/${current.modelid}/${current.company}`
         callSubmitPost(event, url, token, setCurrent)
@@ -309,7 +317,7 @@ const FinancialsForm = () => {
     const submitCancel = (event:any) =>
         callSubmitCancel(event, ctx, token, current, setCurrent, rowData)
 
-    const cancelEdit = () => initAdd()
+    //const cancelEdit = () => initAdd()
     const initAdd = () => {
         setDisable(false)
         const newRow:IFinancials&IEditing = { ...initFtr[0], company: company, editing: false }
@@ -327,11 +335,17 @@ const FinancialsForm = () => {
         !iwsState.get(fmodule_modelid)&&Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
         !iwsState.get(acc_modelid)&&Get(acc_ctx,  token, acc_modelid, setAccData)
         !iwsState.get(cc_modelid)&&Get(cc_ctx, token, cc_modelid, setCcData)
-        Get(ctx, token, modelid, setRowData)
+        Get3(ctx, token, modelid, setRowData, setCurrent)
         setIsFetching(false)
     }
 
-    const onRowSelected = (event: RowSelectedEvent) => setCurrent(event.data)
+    const onRowSelected = (event: RowSelectedEvent) => {
+      // selectedIds.push(...selectedIds.concat(event.data.id))
+      // console.log('event.data>>>', event.data)
+      // console.log('gridApi>>>', gridApi)
+      // console.log('selectedIds>>>', selectedIds)
+      setCurrent(event.data)
+    }
 
     const fmoduleData = (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id)
     const gridOptions: GridOptions<IFinancials> = {
@@ -356,6 +370,7 @@ const FinancialsForm = () => {
         rowSelection: {
             mode: "multiRow",
         },
+        enableClickSelection: true,
         onRowSelected:onRowSelected,
         paginationPageSizeSelector: [5, 10, 20, 50],
         pagination: true,
@@ -391,7 +406,21 @@ const FinancialsForm = () => {
     const minPadding=0
     const maxPadding=40
     const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
+    const calcTotal =(current:ITransaction|IFinancials) => {
+      //@ts-ignore
+      const trans:IFinancials  = current
+       return trans?.lines?.reduce((acc: number, line: ILineFinancials) => acc + line.amount, 0.0)
+     }
+    const formatLines = (line:ILineFinancials):ILineFinancials =>  {
+        return  { ...line
+          // @ts-ignore
+        , amount:Number(line.amount).toFixed(2)}
+        }
+    const templateName = () =>
+      templateFileName ? templateFileName: (fmodule.find((m:IFmodule) => Number(m.id) === current.modelid) ?? initfModule[0]).description
 
+    //const templateFileName='/template/GoodreceivingTemplate1.docx'
+     console.log('templateName', templateName())
     const saveProps:SaveProps= { 'fileName':"~/Download/FinancialsData.xlsx", 'sheetName':"Sheet1", 'data':current.lines }
     return isFetching?<CSpinner color="primary" />:(<>
         <FinancialsFormHead
@@ -399,8 +428,13 @@ const FinancialsForm = () => {
             saveProps={saveProps}
             collapse={state.collapse}
             initAdd={initAdd}
-            cancelEdit={cancelEdit}
+            //cancelEdit={cancelEdit}
             submitEdit={submitEdit}
+            templateName={templateName}
+            //@ts-ignore
+            formatLines ={formatLines}
+            buildTotal ={calcTotal}
+            submitPrintPreview={generateDocx}
             submitCancel={submitCancel}
             onNewLine={onNewLine}
             onDeleteLine={onDeleteLine}
@@ -418,12 +452,11 @@ const FinancialsForm = () => {
         <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
             <FinancialsMainForm collapse ={state.collapse}
                                  current={current}
-                                 //getTransdate ={getTransdate}
                                  setCurrent={setCurrent}
                                  accData={accData}
                                  storeData={ccData}
                                  modules={fmoduleData}
-                                copyFromTransaction={copyFromTransaction}
+                                 copyFromTransaction={copyFromTransaction}
                                  handleModuleChange={handleModuleChange}
                                  submitCopy={copyCall}
                                  t={t} height ={20}

@@ -6,14 +6,19 @@ import Grid from 'react-fast-grid'
 
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {CommonFormHead, MasterfileMainForm, MasterfilesMainForm2, PermissionMainForm} from './FormsProps'
+import {
+  CommonFormHead, FModuleMainForm,
+  MasterfileMainForm,
+  MasterfilesMainForm2,
+  PermissionMainForm
+} from './FormsProps'
 import {Add, Edit, Get} from './CrudController'
 import {MASTERFILE, useStore} from './Menu'
 import iwsStore from '../utils/Store'
 import { useTranslation } from 'react-i18next'
 import { formEnum } from '../utils/FormEnum'
-import {masterfileColumnDefs, permissionColumnDefs, userColumnDefs} from '../ColumnsDefs.ts'
-import {IMasterfile, IMasterfile2, IPermission, IRole} from '../Models.ts'
+import {fmoduleColumnDefs, masterfileColumnDefs, permissionColumnDefs, userColumnDefs} from '../ColumnsDefs.ts'
+import {IFmodule, IMasterfile, IMasterfile2, IPermission, IRole} from '../Models.ts'
 import {MasterfileGrid} from '../IWSGrid'
 import Login from './Login'
 import {TFunction} from "i18next";
@@ -41,7 +46,11 @@ const getCtx = (modelid:number, company:string ) => {
         case formEnum.PERMISSION:
             return `${MASTERFILE.perm}/${modelid}/${company}`
         case formEnum.ROLE:
-            return `${MASTERFILE.role}/${modelid}/${company}`
+          return `${MASTERFILE.role}/${modelid}/${company}`
+        case formEnum.ACCOUNT_CLASS:
+           return `${MASTERFILE.masterfile}/${modelid}/${company}`
+        case formEnum.FMODULE:
+            return `${MASTERFILE.fmodule}/${modelid}/${company}`
         default:
             return `${MASTERFILE.masterfile}/${modelid}/${company}`
     }
@@ -51,7 +60,9 @@ const getCtx = (modelid:number, company:string ) => {
          case formEnum.PERMISSION:
              return permissionColumnDefs(t)
          case formEnum.USER:
-             return userColumnDefs(t)
+           return userColumnDefs(t)
+       case formEnum.FMODULE:
+           return fmoduleColumnDefs(t)
          default:
              return masterfileColumnDefs(t)
      }
@@ -69,8 +80,10 @@ const getCtx = (modelid:number, company:string ) => {
      let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
      // console.log('module_X', module_)
      // console.log('module_.state3', module_?.state3)
+     //const parent_ctx = `${module_?.state3}/${module_?.modelid}/${company}`
      const parent_ctx = `${module_?.state3}/${company}`
-     //console.log('parent_ctx', parent_ctx)
+     const acc_ctx = `${module_?.state2}/${company}`
+     console.log('parent_ctx', parent_ctx)
      module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
      console.log('module_', module_)
      if (module_ === '11111' || module_ === 11111) return <Login/>
@@ -81,8 +94,8 @@ const getCtx = (modelid:number, company:string ) => {
 
      const modelid: number = module_ ? module_.modelid : 1111
      const ctx = getCtx(modelid, company)
-     const modifyUrl = MASTERFILE.masterfile
-     //console.log('modelid', modelid)
+     const modifyUrl = module_.ctx
+     console.log('modelid', modelid)
       // console.log('acc_ctx', acc_ctx)
      // console.log('module_', module_)
      // console.log('initialState', module_.state[0])
@@ -90,23 +103,37 @@ const getCtx = (modelid:number, company:string ) => {
      const current_2: IMasterfile =  module_.state[0]
      const current_3: IPermission =  module_.state[0]
      const current_4: IRole =  module_.state[0]
+     const current_5: IFmodule =  module_.state[0]
      const [current, setCurrent] = useState<IMasterfile2>(current_)
      const [current2, setCurrent2] = useState<IMasterfile>(current_2)
      const [current3, setCurrent3] = useState<IPermission>(current_3)
      const [current4, setCurrent4] = useState<IRole>(current_4)
+     const [current5, setCurrent5] = useState<IFmodule>(current_5)
      const [edited, setEdited] = useState<boolean|undefined>(false)
      const [added, setAdded] = useState<boolean|undefined>(undefined)
      const [, setIwsState] = useState(iwsStore.initialState)
      const toggle = () => setState({...state, collapse: !state.collapse})
      const [rowData, setRowData] = useState<IMasterfile2[]>([])
+     const [rowData2, ] = useState<IMasterfile[]>([])
+     const [rowData3, ] = useState<IPermission[]>([])
+     const [rowData4, ] = useState<IRole[]>([])
+     const [rowData5, ] = useState<IFmodule[]>([])
      const [accData, setAccData] = useState<IMasterfile2[]>([])
+     const [accountData, setAccountData] = useState<IMasterfile2[]>([])
+
+
 
      const minHeight = 400
      const maxHeight = 700
 
+   // console.log('accData', accData)
+   console.log('current_', current_)
+
      useEffect(() => {
+       //const set =module_.modelid===formEnum.FMODULE?setCurrent5:setAccData
          iwsStore.subscribe(setIwsState)
          Get(parent_ctx, token, module_.modelid, setAccData)
+         Get(acc_ctx, token, formEnum.ACCOUNT, setAccountData)
          setCurrent(current_)
      }, [current_])
 
@@ -119,7 +146,7 @@ const getCtx = (modelid:number, company:string ) => {
 
 
      const edit = () => {
-         console.log('edit called!!!')
+         console.log('edit called!!!', current)
          if(edited) {
              setEdited(false )
              setDisable(true)
@@ -133,9 +160,9 @@ const getCtx = (modelid:number, company:string ) => {
      const submitEdit = (event:any) => {
          event.preventDefault()
          if(edited) {
-             Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
+             Edit(modifyUrl, token, { ...getCurrent() }, getRowData(), setCurrent)
          } else if (!edited && !disable) {
-             Add(modifyUrl, token, { ...current }, rowData, setCurrent)
+             Add(modifyUrl, token, {...getCurrent()}, getRowData(), currentSetter)
          }
          setDisable(true)
          setEdited(false)
@@ -151,7 +178,9 @@ const getCtx = (modelid:number, company:string ) => {
 
      const initAdd = () => {
          const newRow = { ...current_, company: company}
-         setCurrent(newRow)
+         const setter: (arg:any)=>void = currentSetter() //.bind(newRow).
+         setter(newRow)
+         //setCurrent(newRow)
          setAdded(true)
          setDisable(false)
          setEdited(false)
@@ -162,8 +191,10 @@ const getCtx = (modelid:number, company:string ) => {
              setRowData(iwsStore.get(400))
              return
          }
-         iwsStore.deleteKey(current.modelid)
-         Get(ctx, token, current.modelid, setRowData)
+       console.log('modelid5!!!', modelid)
+       console.log('modelid5ctx!!!', ctx)
+         iwsStore.deleteKey(modelid)
+         Get(ctx, token, modelid, setRowData)
          setCurrent(current_)
      }
 
@@ -177,11 +208,80 @@ const getCtx = (modelid:number, company:string ) => {
          setCurrent2((event.data instanceof Array) ? event.data[0] : event.data)
          setCurrent3((event.data instanceof Array) ? event.data[0] : event.data)
          setCurrent4((event.data instanceof Array) ? event.data[0] : event.data)
+         setCurrent5((event.data instanceof Array) ? event.data[0] : event.data)
      }
-
+     const getRowData  = () => {
+       switch (modelid) {
+         case formEnum.BANK:
+         case formEnum.CURRENCY:
+         case formEnum.QUANTITYUNIT:
+           return  rowData2
+         case formEnum.PERMISSION:
+           return  rowData4
+         case formEnum.ROLE:
+           return  rowData3
+         case formEnum.FMODULE:
+           return  rowData5
+         default:
+           return rowData
+      }
+    }
+   console.log('rowData', rowData)
+   console.log('rowData5', getRowData())
+    // const rowDataSetter  = () => {
+    //   switch (modelid) {
+    //     case formEnum.BANK:
+    //     case formEnum.CURRENCY:
+    //     case formEnum.QUANTITYUNIT:
+    //       return  setRowData2
+    //     case formEnum.PERMISSION:
+    //       return  setRowData4
+    //     case formEnum.ROLE:
+    //       return  setRowData3
+    //     case formEnum.FMODULE:
+    //       return  setRowData5
+    //     default:
+    //       return setRowData
+    //   }
+    // }
+   const getCurrent  = () => {
+     switch (modelid) {
+       case formEnum.BANK:
+       case formEnum.CURRENCY:
+       case formEnum.QUANTITYUNIT:
+         return  current2
+       case formEnum.PERMISSION:
+         return  current4
+       case formEnum.ROLE:
+         return  current3
+       case formEnum.FMODULE:
+         return  current5
+       default:
+         return current
+     }
+   }
+   const currentSetter: ()=>( arg:any)=>void  = () => {
+     switch (modelid) {
+       case formEnum.BANK:
+       case formEnum.CURRENCY:
+       case formEnum.QUANTITYUNIT:
+         return  setCurrent2
+       case formEnum.PERMISSION:
+         return  setCurrent4
+       case formEnum.ROLE:
+         return  setCurrent3
+       case formEnum.FMODULE:
+         return  setCurrent5
+       default:
+         return setCurrent
+     }
+   }
      const MasterfileForm:FC<Masterfile2FormProps<IMasterfile2>> = (props:Masterfile2FormProps<IMasterfile2>) => {
+       console.log('rowData', rowData)
+       console.log('rowData5', rowData5)
          switch (props.current.modelid) {
              case formEnum.BANK:
+           case formEnum.CURRENCY:
              case formEnum.QUANTITYUNIT:
                  return  <MasterfileMainForm collapse={collapse} current={current2} setCurrent={setCurrent2}
                                              disable={disable} t={t}  height={height} />
@@ -191,6 +291,10 @@ const getCtx = (modelid:number, company:string ) => {
              case formEnum.ROLE:
                  return  <RoleTabs  collapse={collapse} current={current4} setCurrent={setCurrent4}
                disable={disable} t={t}  height={height} />
+             case formEnum.FMODULE:
+                return  <FModuleMainForm collapse={collapse} current={current5} setCurrent={setCurrent5}
+                                      disable={disable} t={t} accData={accData} accountData={accountData}
+                                         rowData={rowData} height={height} />
              default:
                  return MasterfilesMainForm2(props)
          }

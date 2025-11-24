@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react'
 import {
-    AllCommunityModule,
-    ClientSideRowModelModule,
-    GridApi,
-    GridOptions,
-    GridReadyEvent,
-    IDetailCellRendererParams,
-    ModuleRegistry,
+  AllCommunityModule,
+  ClientSideRowModelModule,
+  GridApi,
+  GridOptions,
+  GridReadyEvent,
+  IDetailCellRendererParams,
+  ModuleRegistry,
 } from 'ag-grid-community'
 
 import 'ag-grid-community/styles/ag-grid.css'
@@ -16,23 +16,23 @@ import {styles as stylesx} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {FinancialsFormHead, TransactionMainForm} from './FormsProps.tsx'
-import {Add, Edit, EditRow, Get, Get2} from './CrudController.ts'
+import {Add, Edit, EditRow, Get, Get2, Get3} from './CrudController.ts'
 import {initCust, initfModule, initLtr, MASTERFILE, TRANSACTION, useStore} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {useTranslation} from 'react-i18next'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {
-    IAccount,
-    IArticle,
-    ICustomer,
-    IFinancials,
-    IFmodule,
-    ILineTransaction,
-    IModule,
-    IStore,
-    ISupplier,
-    ITransaction,
-    IVat,
+  IAccount,
+  IArticle,
+  ICustomer,
+  IFinancials,
+  IFmodule, ILineFinancials,
+  ILineTransaction,
+  IModule,
+  IStore,
+  ISupplier,
+  ITransaction,
+  IVat,
 } from '../Models.ts'
 import {TransactionGrid} from '../IWSGrid.tsx'
 import {lineTransactionColumnDefs, transactionColumnDefs} from '../ColumnsDefs.ts'
@@ -43,7 +43,7 @@ import {TransactionDetailsTabs} from "./TransactionDetailsTabs.tsx";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {SaveProps} from '../Props.ts'
-
+import {generateDocx} from './../utils/XlsUtils.ts'
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -72,10 +72,8 @@ const STYLES = {
   const {t, i18n} = useTranslation()
      const dispatch = useDispatch()
   const {token, company, currency} = profile
-  console.log('menu', menu)
-  console.log('profile', profile)
-  console.log('selected', selected)
-  console.log('i18n', i18n)
+   let templateFileName =''
+
   //i18n.changeLanguage('de-DE');
   //let navigate = useNavigate()
   let navigate = useNavigate()
@@ -90,7 +88,6 @@ const STYLES = {
   const initialState:ITransaction = initLtr [0]//module_.state
   const initialLine:ILineTransaction = initLtr [0].lines[0]
   const current_:ITransaction = initialState
-     console.log('current_>>>>', current_)
   const [current, setCurrent] = useState<ITransaction>(current_)
   const [currentLineTransaction, setCurrentLineTransaction] = useState<ILineTransaction>(initialLine)
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
@@ -134,7 +131,7 @@ const STYLES = {
   const [, setSupData] = useState<ISupplier[]>([])
   const [partnerData, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
   const [, setModule] = useState<IModule[]>([])
-  const [copyFrom, setCopyFRom] = useState<String[]>([])
+  const [copyFrom, setCopyFRom] = useState<number[]>([])
   const [copyFromTransaction, setCopyFromTransaction] = useState<ITransaction[]>([])
   const [fmodule, setFmodule] = useState<IFmodule[]>([])
   const [model, setModel] = useState<number>(-1)
@@ -143,8 +140,9 @@ const STYLES = {
   const [gridApi,   setGridApi] = useState<GridApi>()
   //const gridRef: React.RefObject<AgGridReact|null> = useRef<AgGridReact>(null)
   const zIndex:number = 99999
+  const EXPORT_FILE_EXTENSION= "xlsx"
   //const [partnerCtx, setPartnerCtx] = useState<string>('')
-console.log('rowData', rowData)
+  console.log('rowData', rowData)
   const handleKeyPress = useCallback((event:any) => {
     if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
       submitEdit(event, )
@@ -179,24 +177,26 @@ console.log('rowData', rowData)
 
   const handleModuleChange = (value:any) => {
     //event?.preventDefault()
-      console.log('handleModuleChange', value)
     setModel(value)
     const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]
+     templateFileName = mx.description
+    console.log('mx>>>>', mx)
+    console.log('templateFileName >>>>', templateFileName)
     title_ = mx?.name ? mx.name : title_
-      const copyFromIds = mx? mx.copyFrom:''
+      const copyFromIds = mx? mx.copyFrom:-1
     setTitle(company??''.concat(' / ').concat(title_))
     setCopyFRom([copyFromIds])
     setPartnerId(parseInt(mx.account))
     setCurrent(current_)
     ctx = `${module_.ctx}/${mx.id}/${company}`
     const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
-      console.log('ctx_copyFrom', ctx_copyFrom)
     const _partnerCtx:string = parseInt(mx.account)===formEnum.CUSTOMER?MASTERFILE.cust:
                               (parseInt(mx.account)==formEnum.SUPPLIER)?MASTERFILE.sup:''
     const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
-    Get(ctx_copyFrom, token, parseInt(copyFromIds), setCopyFromTransaction)
+    Get(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
     submitQuery( ctx, partnerCtx, parseInt(mx.account))
-    //setCurrent(current_)
+    const currentx = rowData.length>0?rowData[0]:current_
+    setCurrent(currentx)
   }
 
   // const callEdit = (editedRow: ITransaction, setCurrent:(arg:ITransaction)=>void) => {
@@ -211,8 +211,6 @@ console.log('rowData', rowData)
      function buildPostCall(rows: BigInt[], current: ITransaction, modifyUrl: string, token: string, setCurrent: (arg: ITransaction) => void) {
          const ids = rows.length > 0 ? rows : [current.id]
          const url_ = `${modifyUrl}/post/${ids.join(',')}/${current.modelid}/${current.company}`
-         console.log('current', current)
-         console.log('Posting to the URL', url_)
          Get2(url_, token, setCurrent)
      }
 
@@ -221,18 +219,11 @@ console.log('rowData', rowData)
     event.preventDefault()
       buildPostCall(rows, current, modifyUrl, token, setCurrent)
   }
-  //const edit = (editedRow: ITransaction) => callEdit(editedRow, setCurrent)
+
   const submitPost = (event:any) => callSubmitPost(event, module_.ctx, token, current, setCurrent, rows)
-  //const submitCopy = (event:any) => callSubmitCopy(event, ctx, token, rows)
- //const submitPostAll = (event:any) => callSubmitCopy(event, ctx, token, rows)
- //  const submitPostAll = ( event:any, ids:BigInt[]) => {
- //      event.preventDefault()
- //      buildPostCall(ids, current, modifyUrl, token, setCurrent)
- //  }
   const submitAdd = (event:any) => {
     event.preventDefault()
     const row: ITransaction = { ...current, modelid: model, company: company}
-      console.log('row', row)
     Add(modifyUrl, token, row, rowData, setCurrent)
   }
      const addLine = useCallback(
@@ -256,6 +247,8 @@ console.log('rowData', rowData)
              gridApi!.applyTransaction({remove: [currentLineTransaction]})
              setCurrent(dx)
      }, [currentLineTransaction]);
+   const templateName = () =>
+     templateFileName ? templateFileName: (fmodule.find((m:IFmodule) => Number(m.id) === current.modelid) ?? initfModule[0]).description
 
   const callSubmitEdit = (event:any, modifyUrl:string, token:string, current:ITransaction
       , setCurrent:(arg:ITransaction)=>void, data:ITransaction[], submitAdd: (arg:any)=>void) => {
@@ -281,7 +274,7 @@ console.log('rowData', rowData)
   //const submitCancel = (event) => {}
       //callSubmitCancel(event, ctx, token, current, setCurrent, data)
 
-  const cancelEdit = () => initAdd()
+  //const cancelEdit = () => initAdd()
   const initAdd = () => {
     setDisable(false)
     const newRow = {...initialState, company: company, currency: currency, editing: false}
@@ -311,9 +304,9 @@ console.log('rowData', rowData)
 
   const submitQuery = (ctx:string, partnerCtx:string, partnerModelid:number) => {
     //event?.preventDefault()
-      console.log('submitQuery', ctx)
-    console.log('partnerCtx', partnerCtx)
-    console.log('partnerModelid', partnerModelid)
+    //   console.log('submitQuery', ctx)
+    // console.log('partnerCtx', partnerCtx)
+    // console.log('partnerModelid', partnerModelid)
     setIsFetching(true)
     !iwsState.get(fmodule_modelid)&&Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
     !iwsState.get(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData)
@@ -321,10 +314,10 @@ console.log('rowData', rowData)
     !iwsState.get(store_modelid)&&Get(store_ctx, token, store_modelid, setStoreData)
     !iwsState.get(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData)
     !iwsState.get(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
-    Get(ctx, token, modelid, setRowData)
+    Get3(ctx, token, modelid, setRowData, setCurrent)
     setIsFetching(false)
-    console.log('PartnerData', partnerData)
-    console.log('PartnerData', iwsState.get(partnerModelid))
+    // console.log('PartnerData', partnerData)
+    // console.log('PartnerData', iwsState.get(partnerModelid))
   }
 
      const onRowSelected = (event: RowSelectedEvent) => {
@@ -349,6 +342,7 @@ console.log('rowData', rowData)
                  //filter: "agTextColumnFilter",
              },
          rowHeight: 20,
+         copySelectedRows:true,
          rowSelection: {
              mode: "multiRow",
              checkboxes: true,
@@ -403,24 +397,57 @@ console.log('rowData', rowData)
   const maxHeight =700
   const minPadding=20
   const maxPadding =35
-  const saveProps:SaveProps = { 'fileName':"~/Download/MYSavedData.xlsx", 'sheetName':"Sheet1", 'data':current.lines }
+   const sheetName ="Sheet1"
+  const exportFileName =()=> {
+     const filename = templateName().split('.')[0]
+    return `${filename}.${EXPORT_FILE_EXTENSION}`
+  }
+  const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current.lines }
   const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
   //const getPartnerData =(partnerModelid:number) => iwsState.get(partnerModelid)
    console.log('PartnerData', partnerData)
-   console.log('PartnerData', iwsState.get(partnerId))
+   console.log('templateFileName', templateName() )
+   const formatLines = (line:ILineTransaction|ILineFinancials):ILineTransaction|ILineFinancials =>  {
+     // @ts-ignore
+     const v:ILineTransaction= {
+       ...line
+       // @ts-ignore
+       , quantity: Number(line.quantity).toFixed(2)
+       // @ts-ignore
+       , price: Number(line.price).toFixed(2)
+       // @ts-ignore
+       , vat: Number(line.vat).toFixed(2)
+       // @ts-ignore
+       , net: Number((line.quantity * line.price) + line.vat).toFixed(2)
+     }
+     // @ts-ignore
+     return v
+   }
+   const calcTotal = (current: ITransaction|IFinancials) =>{
+     //@ts-ignore
+     const trans:ITransaction  = current
+     return  trans?.lines?.reduce((acc: number, line: ILineTransaction) => acc + line.quantity * line.price + line.vat, 0.0)
+   }
+   //const generateDocx1: (current:ITransaction, templateName:() =>String
+   //  , buildTotal:(arg:ITransaction)=>Number, formatLines: (arg:ILineTransaction)=>ILineTransaction) =>Promise<void>  = generateDocx
+   //const generateDocx1 = generateDocx( current, templateName, calcTotal, getNet) => {
     return isFetching?<CSpinner color="primary" />:(<>
             <FinancialsFormHead
                 title={title}
                 saveProps={saveProps}
                 collapse={state.collapse}
                 initAdd={initAdd}
-                cancelEdit={cancelEdit}
-                submitEdit={submitEdit}
+                //cancelEdit={cancelEdit}
                 submitCancel={submitCancel}
+                submitEdit={submitEdit}
                 onNewLine={onNewLine}
                 onDeleteLine={onDeleteLine}
                 submitPost={submitPost}
-                //submitPostAll={submitPostAll}
+                templateName={templateName}
+                formatLines ={formatLines}
+                buildTotal = {calcTotal}
+                //@ts-ignore
+                submitPrintPreview={generateDocx}
                 reload={reload}
                 logout={logout}
                 navigate={navigate}

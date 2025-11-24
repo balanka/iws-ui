@@ -25,3 +25,5 @@ export const IWSTabs= ({ tabList, zIndex}:Props):React.JSX.Element => {
 }
 
 export default IWSTabs
+
+

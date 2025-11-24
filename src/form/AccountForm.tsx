@@ -141,7 +141,7 @@ ModuleRegistry.registerModules([
                  dispatch={dispatch}
              />
              {/*<Grid container style={{...stylesx.inner, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>*/}
-                 <AccountMainForm current={current}
+                 <AccountMainForm  collapse={state.collapse} current={current}
                                   setCurrent={setCurrent}
                                   disable={disable}
                                   t={t}

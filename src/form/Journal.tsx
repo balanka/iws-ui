@@ -14,7 +14,7 @@ import Grid from 'react-fast-grid'
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { JournalFormHead, JournalMainForm } from './FormsProps'
 import { Get} from './CrudController'
-import { MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu'
+import {initAcc, MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu'
 import iwsStore from '../utils/Store'
 import { useTranslation } from 'react-i18next'
 import { formEnum } from '../utils/FormEnum'
@@ -114,24 +114,14 @@ const Journal = () => {
   const onRowSelected = (event: RowSelectedEvent) =>
           setCurrent((event.data instanceof Array)?event.data[0]:event.data)
 
-
-  // const sumData = (data:IJournal[]) => {
-  //     const idebit = data.reduce((accumulator, currentData: IJournal) => accumulator + currentData.idebit, 0.0)
-  //     const icredit = data.reduce((accumulator, currentData: IJournal) => accumulator + currentData.icredit, 0.0)
-  //     const debit = data.reduce((accumulator, currentData: IJournal) => accumulator + currentData.debit, 0.0)
-  //     const credit = data.reduce((accumulator, currentData: IJournal) => accumulator + currentData.credit, 0.0)
-  //     const bdebit = data.reduce((accumulator, currentData: IJournal) => accumulator + currentData?.bdebit, 0.0)
-  //     const bcredit = data.reduce((accumulator, currentData: IJournal) => accumulator + currentData?.bcredit, 0.0)
-  //     return {idebit, icredit, debit, credit, bdebit, bcredit }
-  // }
-
-  //const { idebit, icredit, debit, credit, bdebit, bcredit  } = sumData(rowData)
-
-  //const totalsRowData:IBalance[] = [{id: 'Total', idebit: idebit, icredit: icredit, debit: debit, credit: credit,, bdebit, bcredit,}]
-
   const templateFileName ='Balancesx.docx'
   let currency= profile?.currency??'XOF'
    const toBalance2 = (m:IJournal) => {
+     const currentAcc= accData.find(acc=>acc.id === m.account)??initAcc[0]
+     const x= m?.bdebit??0.0
+     const y= m?.bcredit??0.0
+     const balance = currentAcc.isDebit ? x-y :y-x
+
         return { id:m.id, modelid:m.modelid, currency:m.currency, account:m.account
            , idebit: m.idebit==0.0?'':formatumber2Digits (m.idebit,'de-DE', 2)
            , icredit:m.icredit==0.0?'':formatumber2Digits (m.icredit,'de-DE', 2)
@@ -139,6 +129,7 @@ const Journal = () => {
            , credit:m.credit==0.0?'':formatumber2Digits (m.credit,'de-DE', 2)
            , bdebit:m.bdebit==0.0?'':formatumber2Digits (m.idebit+m.debit,'de-DE', 2)
            , bcredit:m.bcredit==0.0?'':formatumber2Digits (m.icredit+m.credit,'de-DE', 2)
+           , balance: formatumber2Digits(balance, 'de-DE', 2)
            , period:m.period, name:'', company:m.company
        }
       }
@@ -176,7 +167,7 @@ const Journal = () => {
         <Grid item style={{paddingLeft: 1, paddingRight: 1, paddingTop: 5, height: 560, width: 1500}}>
               <JournalGrid
                 columnDefs ={journalColumnsDefs(t)}
-                defaultColDef ={defaultColDefX}
+                defaultColDef ={{...defaultColDefX, filter:true}}
                 onRowSelected={onRowSelected}
                 rowData={rowData}/>
         </Grid>

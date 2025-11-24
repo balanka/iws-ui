@@ -1,12 +1,12 @@
-import { ReactElement, ReactNode } from 'react'
+//import { ReactElement, ReactNode } from 'react'
 
-export interface TabItemProps {
-  label: string;
-  children: ReactNode;
-}
-
-export interface TabListProps {
-  activeTabIndex: number;
-  children:  ReactElement<TabItemProps>[];
-  //children: ReactElement<TabItemProps> | ReactElement<TabItemProps>[];
-}
+// export interface TabItemProps {
+//   label: string;
+//   children: ReactNode;
+// }
+//
+// export interface TabListProps {
+//   activeTabIndex: number;
+//   children:  ReactElement<TabItemProps>[];
+//   //children: ReactElement<TabItemProps> | ReactElement<TabItemProps>[];
+// }

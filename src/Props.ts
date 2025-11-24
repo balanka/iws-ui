@@ -1,22 +1,23 @@
 import {
-    IAccount,
-    IAddress,
-    IArticle, IAsset, IBankAccount, IBankStatement, IBankStatementParam, IBusinespartner, ICompany,
-    ICustomer,
-    IEmployee, IFinancials, ILineFinancials, ILineTransaction,
-    IMasterfile,
-    IMasterfile2, IRole,
-    IStore,
-    ISupplier, ITransaction, IUser,
-    IVat
+  IAccount,
+  IAddress,
+  IArticle, IAsset, IBankAccount, IBankStatement, IBankStatementParam, IBusinespartner, ICompany,
+  ICustomer,
+  IEmployee, IFinancials, ILineFinancials, ILineTransaction,
+  IMasterfile,
+  IMasterfile2, IRole,
+  IStore,
+  ISupplier, ITransaction, IUser,
+  IVat, IWSLine, IWSTransaction
 } from "./Models.ts";
 import {TFunction} from "i18next";
-import React from "react";
+import React, {CSSProperties, Dispatch} from "react";
 import {GridReadyEvent} from "ag-grid-community";
 // @ts-ignore
 import type {RowSelectedEvent} from "ag-grid-community/dist/types/src/events";
 
 import {AgGridReact} from "ag-grid-react";
+import {NavigateFunction} from "react-router-dom";
 
 
 export interface AddressProps {
@@ -103,16 +104,6 @@ export interface ArticleGeneralFormProps {
     , disable: boolean
 }
 
-export interface AccountMainProps {
-    current: IAccount,
-    setCurrent: (arg: IAccount) => void,
-    accData: IAccount[],
-    t: TFunction<'transalation', undefined>,
-    locale: string,
-    disable: boolean,
-    height: number
-}
-
 export interface AssetProps {
     current: IAsset
     , setCurrent: (arg: IAsset) => void
@@ -140,23 +131,54 @@ export interface BankStatementParamProps {
     t: TFunction<'transalation', undefined>,
     height: number
 }
-
-export interface MasterfileProps2 {
+export interface AccountMainProps {
+  collapse:boolean,
+  current: IAccount,
+  setCurrent: (arg: IAccount) => void,
+  accData: IAccount[],
+  t: TFunction<'transalation', undefined>,
+  locale: string,
+  disable: boolean,
+  height: number
+}
+export interface MasterfileProps2<A extends IMasterfile2>{
     collapse:boolean
-    current: IMasterfile2,
-    setCurrent: (arg: IMasterfile2) => void,
+    current: A,
+    setCurrent: (arg: any) => void,
     accData: IMasterfile[],
     t: TFunction<'translation', undefined>,
     disable: boolean,
     height: number
 }
-export interface MasterfileProps<A> {
-    collapse: boolean,
+export interface FModuleProps2<A extends IMasterfile2>{
+  collapse:boolean
+  current: A,
+  setCurrent: (arg: any) => void,
+  accData: IMasterfile[],
+  accountData: IMasterfile[],
+  rowData: IMasterfile2[],
+  t: TFunction<'translation', undefined>,
+  disable: boolean,
+  height: number
+}
+export interface MasterfileProps<A extends IMasterfile> {
+  collapse: boolean,
+  current: A,
+  setCurrent: (arg: any) => void,
+  t: TFunction<'translation', undefined>,
+  disable: boolean,
+  height: number
+}
+export interface MasterfileComboboxProps<A extends IMasterfile, B extends IMasterfile> {
     current: A,
-    setCurrent: (arg: A) => void,
-    t: TFunction<'translation', undefined>,
+    data: B[]
+    setCurrent: (arg: any) => void,
+    fieldName:string,
+    defaultValue:B,
     disable: boolean,
-    height: number
+    zIndex:number,
+    styles:CSSProperties,
+    height?: number
 }
 
 export interface RoleProps {
@@ -169,23 +191,25 @@ export interface RoleProps {
 }
 
 export interface StoreGeneralFormProps {
-      current: IStore
+     collapse: boolean
+    , current: IStore
     , setCurrent: (art: any | IStore) => void
     , accData: IAccount[]
     , locale: string
     , t: TFunction<'transalation', undefined>
     , disable: boolean
-    , height?: number
+    , height: number
 }
 export interface StoreProps {
-    current: IStore
+      collapse: boolean
+    , current: IStore
     , setCurrent: (art: any | IStore) => void
     , accData: IAccount[]
     , locale: string
     , t: TFunction<'transalation', undefined>
     , zIndex:number
     , disable: boolean
-    , height?: number
+    , height: number
 }
 
 export interface CustomerGeneralFormProps {
@@ -255,6 +279,15 @@ export interface Masterfile2FormProps<A> {
     disable: boolean,
     height: number,
     t: TFunction<'translation', undefined>
+} //,
+export interface FinancialsCBoxProps2<A, B> {
+  current: A,
+  setCurrent: (arg: any) => void,
+  data: B[],
+  fieldName:string,
+  defaultValue:B
+  zIndex: number,
+  styles: any
 }
 export interface FinancialsCBoxProps<A, B> {
   current: A,
@@ -276,6 +309,19 @@ export interface CompanyCBoxProps<A, B> {
 
 export interface UserFormProps { collapse: boolean, current:IUser, setCurrent:(arg:IUser)=>void
     , t:TFunction<'translation', undefined>, disable:boolean, height:number
+}
+export  interface TransactionToolBarProps<A extends IWSTransaction<L>, L extends  IWSLine>{
+  title:string, templateName: ()=> string
+  , saveProps:SaveProps, collapse:boolean
+  ,  initAdd:()=>void, onNewLine:()=>void, onDeleteLine:(arg:any)=>void
+  , submitCancel:(e:any)=>void, submitEdit: (arg:any)=>void
+  , buildTotal:(arg:A)=>Number, formatLines: (arg:L) => L
+  , submitPrintPreview:(arg:A, templateName: () =>string, buildTotal:(arg:A)=>Number, formatLines: (arg:L) => L ) =>Promise<void>
+  , toggle:()=>void, submitPost:(arg:any)=>void,  reload:()=>void
+  , handleLanguageChange: (arg:any)=>void
+  , navigate:NavigateFunction, language:string, dispatch:Dispatch<any>
+  , logout:(navigate:NavigateFunction) =>void
+  , current:IFinancials|ITransaction
 }
 
 

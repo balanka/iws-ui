@@ -100,7 +100,8 @@
     "exportPDF": "Exportieren PDF",
     "run": "Ausführen",
     "runAll": "Ausführen alle",
-    "permission": "Berechtigung"
+    "permission": "Berechtigung",
+    "copyFrom": "Kopieren von"
   },
   "asset": {
     "title":  "Anlage",

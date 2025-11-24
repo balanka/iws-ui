@@ -203,8 +203,7 @@ const Edit = <A>(ctx:string, token:string, record:IWSModel, data:IWSModel[], set
 }
 
 const Add = <A>(ctx:string, token:string, record:A, data:A[], setCurrent:(arg0:A)=>void) => {
-    console.log('Adding', record)
-    console.log('Adding', ctx)
+    console.log('Adding ctx/record', `${ctx}/${record}`)
     const url = `${SERVER_URL}${ctx}`
     console.log('Adding url', url)
     axios.post(url, record, {headers: {Authorization: `Bearer ${token}`}})
@@ -242,6 +241,34 @@ const Login = (
 
 }
 
+const  Get3 = <A>(ctx:string, token:string, key: string|number
+                  , setRowData: (arg0:A[]) => void, setCurrent:(arg:A)=>void): void => {
+  const url = `${SERVER_URL}${ctx}`
+  fetch(url, {
+    headers: {
+      method: 'GET',
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+  })
+    .then((response) => response.json())
+    .then((data: A[]) => {
+      if (Array.isArray(data)) {
+        iwsStore.put(key, data)
+        setRowData(data as A[])
+        data.length>0? setCurrent(data[0]):void(0)
+      } else {
+        console.log('key>>>>', key)
+        console.log('data>>>>', data)
+      }
+    }).catch(function (error) {
+    console.log('Error', error)
+    if (JSON.stringify(error).includes('401')) {
+      console.log('error', 'Session expired!!!!! Login again!!!!')
+      // history('/login')
+    }
+  })
+}
 const  Get = <A>(ctx:string, token:string, key: string|number, setRowData: (arg0:A[]) => void): void => {
     console.log('Error ctx', ctx)
     const url = `${SERVER_URL}${ctx}`
@@ -307,4 +334,4 @@ const Get2 = <A>(ctx:string, token:string, setCurrent:(arg0: A) => void ) => {
 const EditRow = <A>(edited:A, isNew:boolean, setCurrent :(arg0: A) => void) =>
     setCurrent({ ...edited, editing: !isNew })
 
-export { Get, Get1, Get2, Post, Login, Add, Edit, EditRow }
+export { Get, Get1, Get2, Get3, Post, Login, Add, Edit, EditRow }

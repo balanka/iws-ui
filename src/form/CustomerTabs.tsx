@@ -57,7 +57,7 @@ const CustomerTabs  = ({ current, setCurrent
     }
 
   const table =
-      <Grid container spacing={1} style={{...STYLES.outer,  height:200, padding:5,  paddingTop: 20}}
+      <Grid container spacing={1} style={{...STYLES.outer,  height:200,  padding:5,  paddingTop: 20}}
             maximize direction="row" justify="flex-start" alignItems="stretch" >
             <BankAccountGrid
                 // @ts-ignore

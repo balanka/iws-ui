@@ -8,28 +8,11 @@ import {BankStatementProps} from "../Props.ts";
 const BankStatementTabs = ({ current, setCurrent,  locale,  t,  currency, height }:BankStatementProps) => {
 
   const getGeneralForm = () =>
-      <BankStatementMainForm
-        current={current}
-        setCurrent={setCurrent}
-        t={t}
-        locale={locale}
-        currency={currency}
-        height={height}
-      />
+      <BankStatementMainForm current={current} setCurrent={setCurrent} t={t} locale={locale} currency={currency} height={height}/>
 
   const getParameterForm = () => (
-    <Grid
-      container
-      spacing={1}
-      style={{ ...styles.inner, backgroundColor: "#bbdefb" }}
-      direction="column"
-    >
-      <BankStatementParameterForm
-        current={current}
-        setCurrent={setCurrent}
-        t={t}
-        height={35}
-      />
+    <Grid container spacing={1} style={{ ...styles.inner, backgroundColor: "#bbdefb" }} direction="column">
+      <BankStatementParameterForm current={current} setCurrent={setCurrent} t={t} height={35}/>
     </Grid>
   )
 

@@ -4,7 +4,7 @@ import {
   IAccount, IArticle, IAsset, IBankAccount, IBankStatement,
   ICustomer,
   IEmployee, IFinancials,
-  IFmodule, ILineFinancials, ILineTransaction, IMasterfile2,
+  IFmodule, ILineFinancials, ILineTransaction, IMasterfile, IMasterfile2,
   IProfile, IStore,
   ISTORE_Return,
   ISupplier, ITransaction
@@ -129,14 +129,14 @@ export const initCurrency:IMasterfile2[] = [
     company: '',
   },
 ]
-export const initQuantity = [
+export const initQuantity:IMasterfile[] = [
   {
     id: '',
     name: '',
     description: '',
-    enterdate: date,
-    postingdate: date,
-    changedate: date,
+    enterdate: new Date(),
+    postingdate: new Date(),
+    changedate: new Date(),
     modelid: 15,
     company: '',
   },
@@ -228,27 +228,27 @@ export const initAccountGroup = [
     modelid: 37,
   },
 ]
-export const initArticleGroup = [
+export const initArticleGroup:IMasterfile2 []  = [
   {
     id: '',
     name: '',
     description: '',
     parent: '-1',
-    enterdate: date,
-    postingdate: date,
-    changedate: date,
+    enterdate: new Date(),
+    postingdate: new Date(),
+    changedate: new Date(),
     company: '',
     modelid: 13,
   },
 ]
-export const initCc = [
+export const initCc:IMasterfile2 [] = [
   {
     id: '6',
     name: '',
     description: '',
-    enterdate: date,
-    postingdate: date,
-    changedate: date,
+    enterdate: new Date(),
+    postingdate: new Date(),
+    changedate: new Date(),
     modelid: 6,
     parent: '-1',
     company: '',
@@ -534,7 +534,7 @@ export const PACB_QUERY_PARM ={
   toPeriod: -1,
   modelid:-1.
 }
-export const initPac = [
+export const initPac  = [
   {
     id: '',
     name: '',
@@ -543,15 +543,18 @@ export const initPac = [
     icredit: 0.0,
     debit: 0.0,
     credit: 0.0,
+    bdebit: 0.0,
+    bcredit: 0.0,
+    balance: 0.0,
     currency: '',
     company: '',
     modelid: 106,
-    query: {
-      account: '',
-      account2: '',
-      fromPeriod: '',
-      toPeriod: '',
-    },
+    // query: {
+    //   account: '',
+    //   account2: '',
+    //   fromPeriod: '',
+    //   toPeriod: '',
+    // },
   },
 ]
 
@@ -611,7 +614,7 @@ export const initfModule:IFmodule[] = [
     name: '',
     description: '',
     parent:'',
-    copyFrom:'',
+    copyFrom:-1,
     enterdate: new Date(),
     postingdate: new Date(),
     changedate: new Date(),
@@ -727,7 +730,7 @@ export const COSTCENTER ={
   ctx: MASTERFILE.masterfile,
   state: initCc,
   state2: '',
-  state3: `/acc/${ACCOUNT.modelid}`,
+  state3: `${MASTERFILE.masterfile}/${formEnum.COSTCENTER}`,
   modelid: formEnum.COSTCENTER,
 }
 
@@ -798,7 +801,7 @@ export const ACCOUNT_CLASS = {
   title: 'accountClass.title',
   ctx: MASTERFILE.masterfile,
   state: initAccountClass,
-  state3: '/class',
+  state3: `${MASTERFILE.masterfile}/${formEnum.ACCOUNT_CLASS}`,
   modelid: formEnum.ACCOUNT_CLASS,
 }
 export const ACCOUNT_GROUP = {
@@ -808,7 +811,7 @@ export const ACCOUNT_GROUP = {
   ctx: MASTERFILE.masterfile,
   state: initAccountGroup,
   state2: '',
-  state3: '/group',
+  state3:  `${MASTERFILE.masterfile}/${formEnum.ACCOUNT_GROUP}`,
   modelid: formEnum.ACCOUNT_GROUP
 }
 export const ARTICLE_GROUP = {
@@ -818,7 +821,7 @@ export const ARTICLE_GROUP = {
   ctx: MASTERFILE.masterfile,
   state: initArticleGroup,
   state2: '',
-  state3: '/articleGroup',
+  state3: MASTERFILE.masterfile,
   modelid: formEnum.ARTICLE_GROUP,
 }
 export const CLOSE_ACCOUNT_PERIOD = {
@@ -924,6 +927,7 @@ const BALANCESHEET = {
     fromPeriod: '',
     toPeriod: '',
   },
+  state1:initAcc,
   modelid: formEnum.BALANCESHEET,
 }
 
@@ -955,8 +959,8 @@ export const FMODULE = {
   title: 'fmodule.title',
   ctx: MASTERFILE.fmodule,
   state: initfModule,
-  state2: '',
-  state3: '/fmodule',
+  state2: `${MASTERFILE.acc}/${formEnum.ACCOUNT}`,
+  state3: `${MASTERFILE.module}/${formEnum.MODULE}`,
   modelid: formEnum.FMODULE,
 }
 export const LOGIN_MENU = (t: (arg0: string) => any) => [LOGIN(t)]

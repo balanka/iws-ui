@@ -137,12 +137,12 @@ export const masterfileColumnDefs=  (t: (arg0: string) => any) =>[
     minWidth: 3,
     filter: "agNumberColumnFilter"
   },
-  {
-    field: "company",
-    headerName: t('common.company'),
-    cellStyle: {textAlign: 'right'},
-    minWidth: 5,
-  }
+  // {
+  //   field: "company",
+  //   headerName: t('common.company'),
+  //   cellStyle: {textAlign: 'right'},
+  //   minWidth: 5,
+  // }
 ]
 export const permissionColumnDefs=  (t: (arg0: string) => any) => {
   return  [
@@ -150,6 +150,29 @@ export const permissionColumnDefs=  (t: (arg0: string) => any) => {
     {
       field: "short",
       headerName: t('common.permission'),
+      minWidth: 5,
+      cellStyle: {textAlign: 'left'},
+    },
+  ]
+}
+export const fmoduleColumnDefs=  (t: (arg0: string) => any) => {
+  return  [
+    ...masterfileColumnDefs(t),
+    {
+      field: "account",
+      headerName: t('common.account'),
+      minWidth: 5,
+      cellStyle: {textAlign: 'left'},
+    },
+    {
+      field: "isDebit",
+      headerName: t('account.debit_credit'),
+      minWidth: 5,
+      cellStyle: {textAlign: 'left'},
+    },
+    {
+      field: "copyFrom",
+      headerName: t('account.copy_from'),
       minWidth: 5,
       cellStyle: {textAlign: 'left'},
     },
@@ -182,18 +205,18 @@ export const pacColumnsDefs = (t: (arg0: string) => any) =>  [
     align: 'center',
     children: [
       {
-        field: 'idebit', aggFunc: "sum",
+        field: 'idebit', //aggFunc: "sum",
         headerName: t('common.debit'),
         cellStyle: {textAlign: 'right'},
         minWidth: 10,
-        valueFormatter: (params: { data: { idebit: number } }) => Number(params.data?.idebit.toFixed(2)),
+        valueFormatter: (params: { data: { idebit: number } }) => Number(params.data?.idebit).toFixed(2),
       },
       {
-        field: 'icredit', aggFunc: "sum",
+        field: 'icredit', //aggFunc: "sum",
         headerName: t('common.credit'),
         minWidth: 10,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params: { data: { icredit: number }}) => Number(params.data?.icredit.toFixed(2)),
+        valueFormatter: (params: { data: { icredit: number }}) => Number(params.data?.icredit).toFixed(2),
       },
     ]
   },
@@ -204,40 +227,47 @@ export const pacColumnsDefs = (t: (arg0: string) => any) =>  [
     //cellStyle: {textAlign: 'center'},
     children: [
       {
-        field: 'debit', aggFunc: "sum",
+        field: 'debit', //aggFunc: "sum",
         headerName: t('common.debit'),
         cellStyle: {textAlign: 'right'},
         minWidth: 10,
-        valueFormatter: (params: { data: { debit: number } }) => Number(params.data?.debit.toFixed(2)),
+        valueFormatter: (params: { data: { debit: number } }) => Number(params.data?.debit).toFixed(2),
       },
       {
-        field: 'credit', aggFunc: "sum",
+        field: 'credit', //aggFunc: "sum",
         headerName: t('common.credit'),
         minWidth: 10,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params: { data: { credit: number } }) => Number(params.data?.credit.toFixed(2)),
+        valueFormatter: (params: { data: { credit: number } }) => Number(params.data?.credit).toFixed(2),
       },
     ],
   },
   {
-    field: 'balance',
+    field: 'balancex',
     headerName: t('common.balance'),
     align: 'center',
     //cellStyle: {textAlign: 'center'},
     children: [
       {
-        field: 'bdebit', aggFunc: "sum",
+        field: 'bdebit', //aggFunc: "sum",
         headerName: t('common.debit'),
         cellStyle: {textAlign: 'right'},
         minWidth: 10,
-        valueFormatter: (params: { data: { bdebit: number } }) => Number(params.data?.bdebit.toFixed(2)),
+        valueFormatter: (params: { data: { bdebit: number } }) =>Number(params.data?.bdebit).toFixed(2),
       },
       {
-        field: 'bcredit', aggFunc: "sum",
+        field: 'bcredit', //aggFunc: "sum",
         headerName: t('common.credit'),
         minWidth: 10,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params: { data: { bcredit: number } }) => Number(params.data?.bcredit.toFixed(2)),
+        valueFormatter: (params: { data: { bcredit: number } }) =>Number(params.data?.bcredit).toFixed(2),
+      },
+      {
+        field: 'balance', //aggFunc: "sum",
+        headerName: t('common.balance'),
+        minWidth: 10,
+        cellStyle: {textAlign: 'right'},
+        valueFormatter: (params: { data: { balance: number } }) =>Number(params.data?.balance).toFixed(2),
       },
     ],
   },
@@ -1078,7 +1108,6 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
   {
     field: 'id',
     headerName: t('common.id'),
-    //width: 30,
     minWidth: 6,
   },
   {
@@ -1086,7 +1115,6 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
     headerName: t('journal.transid'),
     //width: 30,
     minWidth: 5,
-    //maxWidth: 40,
     type: 'numeric',
   },
   {
@@ -1100,14 +1128,12 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
     field: 'account',
     headerName: t('journal.account'),
     minWidth: 8,
-    //maxWidth: 50,
     cellStyle: {textAlign: 'right'},
   },
   {
     field: 'oaccount',
     headerName: t('journal.oaccount'),
     minWidth: 8,
-    // maxWidth: 50,
     cellStyle: {textAlign: 'right'},
   },
   {
@@ -1132,7 +1158,6 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
     field: 'period',
     headerName: t('journal.period'),
     minWidth: 5,
-    //maxWidth: 30,
   },
   {
     field: 'amount',

@@ -100,7 +100,8 @@
     "exportPDF": "Export PDF",
     "run": "run",
     "runAll": "run 4 all",
-    "permission": "Permission"
+    "permission": "Permission",
+    "copyFrom": "Copy from"
   },
   "asset": {
     "title":      "Asset",

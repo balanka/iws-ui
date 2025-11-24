@@ -16,15 +16,15 @@ import {RowSelectedEvent, GridOptions} from "ag-grid-community";
 import { AgGridReact } from 'ag-grid-react'
 import React, { FC } from 'react'
 import {
-    IAccount, IArticle, IAsset,
-    IBankAccount, IBankStatement,
-    ICustomer, IEmployee,
-    IFinancials, IJournal,
-    ILineFinancials, ILineTransaction,
-    IMasterfile, IPeriodicAccountBalance, IRole,
-    IStock, IStore, ISupplier,
-    ITransaction, IUser, IUserRight,
-    IVat
+  IAccount, IArticle, IAsset,
+  IBankAccount, IBankStatement,
+  ICustomer, IEmployee,
+  IFinancials, IJournal,
+  ILineFinancials, ILineTransaction,
+  IMasterfile, IPeriodicAccountBalance2, IRole,
+  IStock, IStore, ISupplier,
+  ITransaction, IUser, IUserRight,
+  IVat
 } from './Models.ts'
 
 ModuleRegistry.registerModules([
@@ -167,7 +167,7 @@ const getGridOptions= ( columnDefs:ColDef[], defaultColDef:DefaultColDefType, on
     ({
         rowStyle: { background: 'lightBlue' },
         getRowStyle: (params: { node: { rowIndex: number; }; }) => {
-            console.log('params', params)
+            //console.log('params', params)
             if (params.node.rowIndex % 2 === 0) {
                 return { background: '#fff9e6' };
             }//else if(params.data.toPeriod===-1) {}
@@ -326,28 +326,29 @@ export const RightGrid: FC<Props<IUserRight>> = ({ columnDefs, defaultColDef, on
         resetRowDataOnUpdate ={true}
         animateRows={false}
     />
- export const PeriodicAccountBalanceGrid: FC<Props<IPeriodicAccountBalance>> = ({ columnDefs, defaultColDef
-                         , onRowSelected, gridOptions, rowData }:Props<IPeriodicAccountBalance>) => {
-   console.log('rowData', rowData)
+ export const PeriodicAccountBalanceGrid: FC<Props<IPeriodicAccountBalance2>> = ({ columnDefs, defaultColDef
+                         , onRowSelected, gridOptions, rowData }:Props<IPeriodicAccountBalance2>) => {
+   // @ts-ignore
+   const gridOptions_ = {...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
+     , paginationPageSize: 20, paginationPageSizeSelector: [20, 50, 80]}
    return (< AgGridReact
    theme = {pacTheme}
    onRowSelected = {onRowSelected}
    // @ts-ignore
-   gridOptions = {{...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
-     , paginationPageSize: 20, paginationPageSizeSelector: [20, 40, 60]}}
+   gridOptions = {gridOptions_}
    rowData = {rowData}
    resetRowDataOnUpdate = {true}
-   //onGridReady = {onGridReady}
    />)
  }
 export const JournalGrid: FC<Props<IJournal>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<IJournal>)=> {
-  console.log('rowDataX', rowData)
+  // @ts-ignore
+  const gridOptions_ = {...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
+    , paginationPageSize: 20, paginationPageSizeSelector: [30, 50, 80]}
   return (<AgGridReact
-    theme={pacTheme} //{theme ?? "legacy"}
+    theme={pacTheme}
     onRowSelected={onRowSelected}
     // @ts-ignore
-    gridOptions={{...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
-      , paginationPageSize: 20, paginationPageSizeSelector: [30, 50, 80]}}
+    gridOptions={gridOptions_}
     rowData={rowData}
     //onGridReady={onGridReady}
     resetRowDataOnUpdate={true}
@@ -391,6 +392,7 @@ export const TransactionGrid: FC<Props<ITransaction|IFinancials>> = ({ columnDef
         rowData ={rowData}
         columnDefs={columnDefs}
         resetRowDataOnUpdate ={true}
+        //rowSelection="multiple"
     />
 export const LineTFinancialsGrid: FC<Props<ILineFinancials>> = ({ columnDefs, defaultColDef, onRowSelected, onCellValueChanged, gridOptions
                                                              , rowData, onGridReady, pagination}:Props<ILineFinancials>)=>{

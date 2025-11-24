@@ -12,7 +12,7 @@ type GenericSelectProps<TValue> = {
     disable?: boolean,
     zIndex?: number,
     values: TValue[],
-    onChange: (value: any) => void,
+    onChange: (value: any, event:any) => void,
     fontSize?: number,
 };
 
@@ -170,7 +170,7 @@ const ComboBox = <TValue extends Base>({
         console.log('valX', val)
         if (val) {
             console.log('val', val)
-            onChange(val.value)
+            onChange(val.value, e)
         }
     }
 

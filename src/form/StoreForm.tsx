@@ -50,6 +50,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const modifyUrl = selected
      const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
      const zIndex = 9999
+     const height= 20
      useEffect(() => {
          iwsStore.subscribe(setIwsState)
          Get(ctx, token, modelid, setRowData)
@@ -138,9 +139,9 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
              <Grid container
                  // @ts-ignore
-                   style={{...stylesx.outer, padding: 10, display: !state.collapse?'none':''}} maximize direction="column">
-                 <StoreTabs current={current} setCurrent={setCurrent} disable={disable} t={t} zIndex={zIndex-1}
-                            accData={accData} locale={localex} />
+                   style={{...stylesx.outer, padding: 5, display: !state.collapse?'none':''}} maximize direction="column">
+                 <StoreTabs collapse = {state.collapse} current={current} setCurrent={setCurrent} disable={disable} t={t} zIndex={zIndex-1}
+                            accData={accData} locale={localex}  height={height} />
              </Grid>
              <Grid container
                  // @ts-ignore
