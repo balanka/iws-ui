@@ -26,7 +26,8 @@ import {
   IArticle,
   ICustomer,
   IFinancials,
-  IFmodule, ILineFinancials,
+  IFmodule,
+  ILineFinancials,
   ILineTransaction,
   IModule,
   IStore,
@@ -129,7 +130,7 @@ const STYLES = {
   const [vatData, setVatData] = useState<IVat[]>([])
   const [, setCustData] = useState<ICustomer[]>([])
   const [, setSupData] = useState<ISupplier[]>([])
-  const [partnerData, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
+  const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
   const [, setModule] = useState<IModule[]>([])
   const [copyFrom, setCopyFRom] = useState<number[]>([])
   const [copyFromTransaction, setCopyFromTransaction] = useState<ITransaction[]>([])
@@ -397,19 +398,17 @@ const STYLES = {
   const maxHeight =700
   const minPadding=20
   const maxPadding =35
-   const sheetName ="Sheet1"
+  const sheetName ="Sheet1"
   const exportFileName =()=> {
      const filename = templateName().split('.')[0]
     return `${filename}.${EXPORT_FILE_EXTENSION}`
   }
   const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current.lines }
   const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
-  //const getPartnerData =(partnerModelid:number) => iwsState.get(partnerModelid)
-   console.log('PartnerData', partnerData)
-   console.log('templateFileName', templateName() )
+
    const formatLines = (line:ILineTransaction|ILineFinancials):ILineTransaction|ILineFinancials =>  {
      // @ts-ignore
-     const v:ILineTransaction= {
+     return {
        ...line
        // @ts-ignore
        , quantity: Number(line.quantity).toFixed(2)
@@ -420,17 +419,19 @@ const STYLES = {
        // @ts-ignore
        , net: Number((line.quantity * line.price) + line.vat).toFixed(2)
      }
-     // @ts-ignore
-     return v
    }
-   const calcTotal = (current: ITransaction|IFinancials) =>{
+   const buildTotal = (current: ITransaction|IFinancials) =>{
      //@ts-ignore
      const trans:ITransaction  = current
      return  trans?.lines?.reduce((acc: number, line: ILineTransaction) => acc + line.quantity * line.price + line.vat, 0.0)
    }
-   //const generateDocx1: (current:ITransaction, templateName:() =>String
-   //  , buildTotal:(arg:ITransaction)=>Number, formatLines: (arg:ILineTransaction)=>ILineTransaction) =>Promise<void>  = generateDocx
-   //const generateDocx1 = generateDocx( current, templateName, calcTotal, getNet) => {
+   const getData: ()=>any = ()=>  {
+     return {
+       transdate: current.transdate
+       , total: Number(buildTotal(current)).toFixed(2)
+       , lines: current.lines.map(formatLines)
+     }
+   }
     return isFetching?<CSpinner color="primary" />:(<>
             <FinancialsFormHead
                 title={title}
@@ -444,9 +445,7 @@ const STYLES = {
                 onDeleteLine={onDeleteLine}
                 submitPost={submitPost}
                 templateName={templateName}
-                formatLines ={formatLines}
-                buildTotal = {calcTotal}
-                //@ts-ignore
+                getData={getData}
                 submitPrintPreview={generateDocx}
                 reload={reload}
                 logout={logout}
@@ -487,7 +486,6 @@ const STYLES = {
                 gridOptions ={gridOptions}  columnDefs={transactionColumnDefs(t)} onRowSelected={onRowSelected} rowData={rowData}/>
           </Grid>
         </Grid>
-     {/*</Grid>*/}
     </>)
 }
 export default TransactionForm

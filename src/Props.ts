@@ -8,7 +8,7 @@ import {
   IMasterfile2, IRole,
   IStore,
   ISupplier, ITransaction, IUser,
-  IVat, IWSLine, IWSTransaction
+  IVat, IWSLine, IWSModel, IWSTransaction
 } from "./Models.ts";
 import {TFunction} from "i18next";
 import React, {CSSProperties, Dispatch} from "react";
@@ -315,14 +315,29 @@ export  interface TransactionToolBarProps<A extends IWSTransaction<L>, L extends
   , saveProps:SaveProps, collapse:boolean
   ,  initAdd:()=>void, onNewLine:()=>void, onDeleteLine:(arg:any)=>void
   , submitCancel:(e:any)=>void, submitEdit: (arg:any)=>void
-  , buildTotal:(arg:A)=>Number, formatLines: (arg:L) => L
-  , submitPrintPreview:(arg:A, templateName: () =>string, buildTotal:(arg:A)=>Number, formatLines: (arg:L) => L ) =>Promise<void>
+  , getData:()=>any
+  , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
   , toggle:()=>void, submitPost:(arg:any)=>void,  reload:()=>void
   , handleLanguageChange: (arg:any)=>void
   , navigate:NavigateFunction, language:string, dispatch:Dispatch<any>
   , logout:(navigate:NavigateFunction) =>void
   , current:IFinancials|ITransaction
 }
-
-
-
+export interface IJournalIF<A>  extends IWSModel  {
+    fromPeriod:number
+  , toPeriod:number
+  , currency:string
+  , lines:A[]
+}
+export  interface JournalToolBarProps<A> {
+   style: CSSProperties
+  , title:string, submitQuery:(event:any)=>void
+  , submitQuery2:(event:any)=>void
+  , balancesheet:boolean, t:TFunction<'translation', undefined>
+  , dispatch:Dispatch<any>
+  , logout:(navigate:NavigateFunction) =>void
+  , current: IJournalIF<A>|A
+  , templateName: ()=>string
+  , getData: ()=>any
+  , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
+   }

@@ -124,9 +124,9 @@ const FinancialsForm = () => {
     const [copyFromTransaction, ] = useState<IFinancials[]>([])
     const [isFetching, setIsFetching] = useState(false)
     const [gridApi, setGridApi] = useState<GridApi>()
+    const EXPORT_FILE_EXTENSION= "xlsx"
+    const sheetName ="Sheet1"
 
-  //const  getTransdate = ()  => {
-    //console.log('getTransdate called')
     const input = document.getElementById("transdateid");
     console.log('input', input)
     input?.addEventListener("keyup", logKey)
@@ -144,27 +144,6 @@ const FinancialsForm = () => {
         x.push(e.key)
       }
     }
-  //  return transdate
-  //}
-
-  // const  getTransdate = ()  => {
-  //   console.log('getTransdate called')
-  //   const input = document.getElementById("transdateid");
-  //   console.log('input', input)
-  //   input?.addEventListener("keyup", logKey)
-  //   var x: string[] = []
-  //   let transdate:string = new Date().toISOString()
-  //   function logKey(e: any) {
-  //     if (e.key === 'Enter') {
-  //       const v= x.join("")
-  //       console.log('valueX', v)
-  //       transdate = v
-  //     } else {
-  //       x.push(e.key)
-  //     }
-  //   }
-  //   return transdate
-  // }
 
     const handleKeyPress = useCallback((event: any) => {
         if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
@@ -406,7 +385,7 @@ const FinancialsForm = () => {
     const minPadding=0
     const maxPadding=40
     const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
-    const calcTotal =(current:ITransaction|IFinancials) => {
+    const buildTotal =(current:ITransaction|IFinancials) => {
       //@ts-ignore
       const trans:IFinancials  = current
        return trans?.lines?.reduce((acc: number, line: ILineFinancials) => acc + line.amount, 0.0)
@@ -421,7 +400,19 @@ const FinancialsForm = () => {
 
     //const templateFileName='/template/GoodreceivingTemplate1.docx'
      console.log('templateName', templateName())
-    const saveProps:SaveProps= { 'fileName':"~/Download/FinancialsData.xlsx", 'sheetName':"Sheet1", 'data':current.lines }
+    const exportFileName =()=> {
+       const filename = templateName().split('.')[0]
+      return `${filename}.${EXPORT_FILE_EXTENSION}`
+    }
+    const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current.lines }
+    const getData:()=>any = ()=>  {
+       return {
+           ...current
+          , transdate: current.transdate
+          , total: Number(buildTotal(current)).toFixed(2)
+          , lines: current.lines.map(formatLines)
+       }
+     }
     return isFetching?<CSpinner color="primary" />:(<>
         <FinancialsFormHead
             title={title}
@@ -431,9 +422,7 @@ const FinancialsForm = () => {
             //cancelEdit={cancelEdit}
             submitEdit={submitEdit}
             templateName={templateName}
-            //@ts-ignore
-            formatLines ={formatLines}
-            buildTotal ={calcTotal}
+            getData={getData}
             submitPrintPreview={generateDocx}
             submitCancel={submitCancel}
             onNewLine={onNewLine}

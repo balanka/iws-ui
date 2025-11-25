@@ -3,7 +3,7 @@ export const formEnum =  {
     CUSTOMER: 3,
     COSTCENTER: 6,
     FINANCIALS: 7,
-    JOURNAL: 8,
+    JOURNAL:10002 ,
     ACCOUNT: 9,
     COMPANY: 10,
     BANK: 11,

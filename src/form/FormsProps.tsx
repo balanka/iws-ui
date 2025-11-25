@@ -31,7 +31,7 @@ import {
   BankStatementParamProps,
   BankStatementProps,
   CustomerGeneralFormProps, FinancialsCBoxProps2,
-  FinancialsDetailsFormProps, FModuleProps2, MasterfileComboboxProps,
+  FinancialsDetailsFormProps, FModuleProps2, JournalToolBarProps, MasterfileComboboxProps,
   MasterfileProps,
   MasterfileProps2,
   StoreGeneralFormProps,
@@ -64,13 +64,11 @@ import {
   IEmployee,
   IFinancials,
   IFmodule,
-  IJournal,
   ILineFinancials,
   ILineTransaction,
   IMasterfile, IMasterfile2,
   IPACBQueryParam,
   IPayrollTaxRange,
-  IPeriodicAccountBalance2,
   IPermission,
   IRole,
   IStore,
@@ -91,7 +89,6 @@ import {NavigateFunction, useNavigate} from 'react-router-dom'
 import {languages} from './Login.tsx'
 import {useSelector} from 'react-redux'
 import ComboBox from './ComboBox.tsx'
-import {showFile} from '../utils/XlsUtils.ts'
 
 const styles = {
   outer: {
@@ -390,8 +387,8 @@ export const BSFormHead = ({title, collapse, cancelEdit, submitEdit, importData,
     )
 }
 export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, initAdd
-                                       , onNewLine, onDeleteLine,  submitCancel, submitEdit, buildTotal, formatLines
-                                       ,  submitPrintPreview, toggle, submitPost,  reload, handleLanguageChange
+                                       , onNewLine, onDeleteLine,  submitCancel, submitEdit, getData, submitPrintPreview
+                                      , toggle, submitPost,  reload, handleLanguageChange
                                        , navigate, language, dispatch, logout, current
                                     }:TransactionToolBarProps<ITransaction|IFinancials, ILineTransaction|ILineFinancials>)=> {
 
@@ -462,7 +459,7 @@ export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, i
                     <CheckIcon />
                 </IconButton>
               <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                          onClick={()=>submitPrintPreview(current, templateName, buildTotal, formatLines)}>
+                          onClick={()=>submitPrintPreview(current, templateName, getData)}>
                 <PrintOutlined/>
               </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
@@ -572,13 +569,8 @@ export const BalanceSheetHead = ({ style, title, submitQuery
   )
 }
 export const JournalFormHead = ({ style, title, submitQuery, submitQuery2
-                                    , balancesheet, t, dispatch, logout, templateFileName, current}:
-                       { style: CSSProperties, title:string, submitQuery:(event:any)=>void
-                        , submitQuery2:(event:any)=>void, balancesheet:boolean, t:TFunction<'translation', undefined>
-                        , dispatch:Dispatch<any>
-                        , logout:(navigate:NavigateFunction) =>void, templateFileName:string
-                        , current:{ fromPeriod:number, toPeriod:number, currency:string
-                        , lines:IPeriodicAccountBalance2[]|IJournal[]}}) => {
+                                    , balancesheet, t, dispatch, logout, templateName, current, getData
+                                    , submitPrintPreview}:JournalToolBarProps<any>)=> {
     const headStyle = {
         header: {
             borderRadius: 5,
@@ -589,7 +581,7 @@ export const JournalFormHead = ({ style, title, submitQuery, submitQuery2
             paddingBottom: 10,
         },
     }
-    console.log('wordFileName>>>', templateFileName)
+    console.log('wordFileName>>>', templateName())
     // @ts-ignore
     const sidebarShow = useSelector((state) => state.sidebarShow)
     let navigate = useNavigate()
@@ -618,12 +610,10 @@ export const JournalFormHead = ({ style, title, submitQuery, submitQuery2
                     </Grid>
                     <Grid container xs spacing={0} justify="flex-end" style={{...headStyle.header}}
                           alignItems="flex-end">
-                        <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}>
-                             {/*onClick={(event:any) => showFile({e: event, templateFileName: templateFileName, data: current})}>*/}
-                            <input type="file" onInput={(event:any) =>  showFile({e: event, templateFileName: templateFileName, data: current})}/>
-                            {/*<DriveFolderUploadIcon/>*/}
-                        </IconButton>
-
+                      <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                                  onClick={()=>submitPrintPreview(current, templateName, getData)}>
+                        <PrintOutlined/>
+                      </IconButton>
                         <Grid item justify="center" alignItems="center">
                             <CHeaderToggler className="ps-1">
                                 <FormButton title={t('common.run')}

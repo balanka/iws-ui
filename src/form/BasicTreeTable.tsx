@@ -5,7 +5,6 @@ import {BalanceSheetHead, JournalMainForm} from './FormsProps'
 import {Get, Get2} from './CrudController'
 import {LOGIN, MASTERFILE, useStore} from './Menu'
 import {useNavigate} from 'react-router-dom'
-//import {buildExportOption, ColumnsBalancesheet as columns} from './LineBalancesheetProps.tsx'
 import {useTranslation} from 'react-i18next'
 import iwsStore from '../utils/Store.jsx'
 import {TFunction} from "i18next";

@@ -14,18 +14,19 @@ import Grid from 'react-fast-grid'
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { JournalFormHead, JournalMainForm } from './FormsProps'
 import { Get} from './CrudController'
-import {initAcc, MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu'
+import {initAcc, initModule, MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu'
 import iwsStore from '../utils/Store'
 import { useTranslation } from 'react-i18next'
 import { formEnum } from '../utils/FormEnum'
 import {journalColumnsDefs} from '../ColumnsDefs.ts'
-import {IAccount, IJournal, IPACBQueryParam, IPeriodicAccountBalance2} from '../Models.ts'
+import {IAccount, IJournal, IModule, IPACBQueryParam, IPeriodicAccountBalance2} from '../Models.ts'
 import {JournalGrid} from '../IWSGrid.tsx'
 import Login from './Login.tsx'
 import  {defaultColDefX} from '../IWSGrid.tsx'
 import {formatumber2Digits} from '../utils/Utils.ts'
 import {useDispatch} from 'react-redux'
 import {logout} from './TransactionLib.ts'
+import {generateDocx} from "../utils/XlsUtils.ts";
 
 
 ModuleRegistry.registerModules([
@@ -66,6 +67,8 @@ const Journal = () => {
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const title =  company?.concat(' / ').concat(t(module_.title))
+  const module_modelid = formEnum.MODULE
+  const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
   //const initialState:IPACBQueryParam = module_.state
   //const ALL = { ...initialState, id: '*', name: '**ALL**' }
   const dispatch = useDispatch()
@@ -74,6 +77,7 @@ const Journal = () => {
   const height = 20
 
   const modelid :number = module_? module_.modelid:1111
+  console.log('module_', module_)
   const acc_modelid = formEnum.ACCOUNT
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const current_ = {...PACB_QUERY_PARM, modelid:modelid}
@@ -83,10 +87,12 @@ const Journal = () => {
   //const toggle = () => setState({ ...state, collapse: !state.collapse })
   const [accData, setAccData] = useState<IAccount[]>([])
   const [rowData, setRowData] = useState<IJournal[]>([])
+  const [module, setModule] = useState<IModule[]>([])
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
      Get(acc_ctx, token, acc_modelid, setAccData)
+     Get(module_ctx, token, module_modelid, setModule)
      setCurrent(current_)
   }, [selected, modelid])
 
@@ -114,7 +120,6 @@ const Journal = () => {
   const onRowSelected = (event: RowSelectedEvent) =>
           setCurrent((event.data instanceof Array)?event.data[0]:event.data)
 
-  const templateFileName ='Balancesx.docx'
   let currency= profile?.currency??'XOF'
    const toBalance2 = (m:IJournal) => {
      const currentAcc= accData.find(acc=>acc.id === m.account)??initAcc[0]
@@ -143,10 +148,14 @@ const Journal = () => {
   const total_bcredit:number = rowData.reduce((accumulator:number, currentData:IJournal):number => accumulator + currentData.icredit +currentData.credit, 0.0)
 
 
-  const data: {fromPeriod:number, toPeriod:number, currency:string, total_idebit:string, total_icredit:string, total_debit:string, total_credit:string
+  const data: {id: string, modelid:number, company:string
+    , fromPeriod:number, toPeriod:number
+    , currency:string, total_idebit:string
+    , total_icredit:string, total_debit:string
+    , total_credit:string
     , total_bdebit:string, total_bcredit:string, lines:IPeriodicAccountBalance2 []} =
-      {
-          fromPeriod:current.fromPeriod, toPeriod:current.toPeriod, currency:currency
+      { id: `${current.fromPeriod}${current.toPeriod}`, modelid:current.modelid, company:company
+        , fromPeriod:current.fromPeriod, toPeriod:current.toPeriod, currency:currency
         , total_idebit:total_idebit==0.0?'':formatumber2Digits (total_idebit,'de-DE', 2)
         , total_icredit:total_icredit==0.0?'':formatumber2Digits (total_icredit,'de-DE', 2)
         , total_debit:total_debit==0.0?'':formatumber2Digits (total_debit,'de-DE', 2)
@@ -156,11 +165,18 @@ const Journal = () => {
         , lines:daten()
       }
 
+  const getData =() =>data
+  const templateName = () =>  (module.find((m:IModule) => Number(m.id) === modelid) ?? initModule[0]).description
+  console.log('templateName', templateName())
   return (
       <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
         <JournalFormHead style={{...STYLES.inner2}} title={title} submitQuery={submitQuery_} dispatch={dispatch}
                logout ={logout} submitQuery2={submitQuery2} balancesheet={false} t={t}
-                         templateFileName={templateFileName} current={data}/>
+                         templateName={templateName}
+                         current={data}
+                         getData={getData}
+                         submitPrintPreview = {generateDocx}
+        />
         <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
             // @ts-ignore
                          stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>

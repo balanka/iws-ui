@@ -13,7 +13,7 @@ import Grid from 'react-fast-grid'
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { JournalFormHead, JournalMainForm } from './FormsProps'
 import { Get} from './CrudController'
-import {initAcc, MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu'
+import {initAcc, initModule, MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu'
 import iwsStore from '../utils/Store'
 import { useTranslation } from 'react-i18next'
 import { formEnum } from '../utils/FormEnum'
@@ -31,6 +31,7 @@ import  {defaultColDefX} from '../IWSGrid.tsx'
 import {formatumber2Digits} from '../utils/Utils.ts'
 import {useDispatch} from 'react-redux'
 import {logout} from './TransactionLib.ts'
+import {generateDocx} from "../utils/XlsUtils.ts";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -85,7 +86,7 @@ const JForm = () => {
   const [, setIwsState] = useState(iwsStore.initialState)
   const [accData, setAccData] = useState<IAccount[]>([])
   const [rowData, setRowData] = useState<IPeriodicAccountBalance[]>([])
-  const [, setModule] = useState<IModule[]>([])
+  const [module, setModule] = useState<IModule[]>([])
   //const [_,   setGridApi] = useState<GridApi>()
 
   useEffect(() => {
@@ -178,8 +179,7 @@ const JForm = () => {
     console.log('total>>>', total)
     return total
   }
-    const templateFileName = 'Balancesx.docx'
-   // let currency = profile?.currency ?? 'XOF'
+
     const toBalance2 = (m: IPeriodicAccountBalance) => {
       const currentAcc= accData.find(acc=>acc.id === m.account)??initAcc[0]
         return {
@@ -218,6 +218,7 @@ const JForm = () => {
         , company:total_company
     }
     const data: {
+        id:string, modelid:number, company:string,
         fromPeriod: number,
         toPeriod: number,
         currency: string,
@@ -228,15 +229,14 @@ const JForm = () => {
         total_bdebit: string,
         total_bcredit: string,
         lines: IPeriodicAccountBalance2 []
-    } = {...totalBalance, fromPeriod: current.fromPeriod, toPeriod: current.toPeriod, currency: currency, lines: daten()}
-
-  // const formatLines = (line:ILineFinancials):ILineFinancials =>  {
-  //   return  { ...line
-  //     // @ts-ignore
-  //     , amount:Number(line.amount).toFixed(2)}
-  // }
-  // const templateName = () =>
-  //   templateFileName ? templateFileName: (module.find((m:IMasterfile) => Number(m.id) === current.modelid) ?? initModule[0]).description
+    } = {
+        id: `${current.fromPeriod}${current.toPeriod}`
+      , ...totalBalance
+      , fromPeriod: current.fromPeriod
+      , toPeriod: current.toPeriod
+      , currency: currency
+      , lines: daten()
+  }
 
   const buildTotal = (data:IPeriodicAccountBalance[]):void =>{
     let d= [...data]
@@ -255,12 +255,14 @@ const JForm = () => {
   }
 
   buildTotal(rowData)
-
+  const getData =() =>data
+  const templateName = () =>  (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule[0]).description
   return (
         <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
             <JournalFormHead style={{...STYLES.inner2}} title={title} submitQuery={submitQuery_} dispatch={dispatch}
                              logout={logout} submitQuery2={submitQuery2} balancesheet={true} t={t}
-                             templateFileName={templateFileName} current={data}/>
+                             templateName ={templateName} current={data} getData={getData}
+                             submitPrintPreview = {generateDocx}/>
             <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
                 // @ts-ignore
                              stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
