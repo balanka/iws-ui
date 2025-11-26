@@ -71,7 +71,6 @@ const Main  = () => {
     const {profile, menu, selected} = useStore()
     const {t,} = useTranslation()
     const {token, company} = profile
-    //let gridApi: GridApi<IAccount>;
   const init = useRef(false)
     let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
       module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
@@ -81,8 +80,8 @@ const Main  = () => {
         const current_ = {...PACB_QUERY_PARM, modelid:modelid}
         const [current, setCurrent] = useState<IPACBQueryParam>(current_)
         const [, setIwsState] = useState(iwsStore.initialState)
-        const [accData, setAccData] = useState <IAccount [] >([])
-        const [rowData, setRowData] = useState <IAccount []>([])
+        const [accData, setAccData] = useState <IAccount[] >([])
+        const [rowData, setRowData] = useState <IAccount[]>([])
         const dispatch = useDispatch()
         const acc_modelid = formEnum.ACCOUNT
         const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
@@ -248,7 +247,6 @@ const Main  = () => {
       }
       const v:IAccount2[] = rowData.map((d:IAccount)=> {
          const { subAccounts: _, ...newObj } = d
-        // console.log('newObj', newObj)
          return  formatIt( {...newObj})
       })
 

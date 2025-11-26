@@ -52,7 +52,6 @@
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
     "pizzip": "^3.2.0",
-    "preact": "^10.26.9",
     "prop-types": "^15.8.1",
     "react": "^19.2.0",
     "react-datepicker": "^8.4.0",

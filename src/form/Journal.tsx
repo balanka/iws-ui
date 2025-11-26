@@ -6,7 +6,6 @@ import {
     ModuleRegistry,
     PinnedRowModule
 } from 'ag-grid-community'
-//import { RowGroupingModule } from 'ag-grid-enterprise'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import Grid from 'react-fast-grid'
@@ -69,11 +68,8 @@ const Journal = () => {
   const title =  company?.concat(' / ').concat(t(module_.title))
   const module_modelid = formEnum.MODULE
   const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
-  //const initialState:IPACBQueryParam = module_.state
-  //const ALL = { ...initialState, id: '*', name: '**ALL**' }
   const dispatch = useDispatch()
-  //const [state, setState] = useState({ collapse: true, fadeIn: true, timeout: 300 })
-  //const [toolbar, setToolbar] = useState(true)
+
   const height = 20
 
   const modelid :number = module_? module_.modelid:1111
@@ -83,8 +79,6 @@ const Journal = () => {
   const current_ = {...PACB_QUERY_PARM, modelid:modelid}
   const [current, setCurrent] = useState<IPACBQueryParam>(current_)
   const [, setIwsState] = useState(iwsStore.initialState)
-  //const toggleToolbar = () => setToolbar(!toolbar)
-  //const toggle = () => setState({ ...state, collapse: !state.collapse })
   const [accData, setAccData] = useState<IAccount[]>([])
   const [rowData, setRowData] = useState<IJournal[]>([])
   const [module, setModule] = useState<IModule[]>([])
@@ -96,14 +90,11 @@ const Journal = () => {
      setCurrent(current_)
   }, [selected, modelid])
 
-  // const buildUrl = () => `${module_.ctx}/${company}/${current.account}/${current.fromPeriod}/${current.toPeriod}`
   const buildJournalUrl = () => `${module_.ctx}/${company}/${current.account}/${current.fromPeriod ===-1 ?
                                                    current.toPeriod:current.fromPeriod}/${current.toPeriod}`
   const buildJournalUrlAll = () => `${module_.ctx}/${company}/${current.fromPeriod ===-1 ?
                                                       current.toPeriod:current.fromPeriod}/${current.toPeriod}`
 
-  // const getUrlAll = () =>  modelid === formEnum.PACB ? `${module_.ctx}/${company}/${current.fromPeriod}/${current.toPeriod}`: buildJournalUrlAll()
-  // const getUrl = modelid === formEnum.PACB ? buildUrl : buildJournalUrl
   const submitQuery_ = (event:any) => {
     event.preventDefault()
     accData?.length < 2
@@ -138,8 +129,7 @@ const Journal = () => {
            , period:m.period, name:'', company:m.company
        }
       }
-       const daten = () => rowData.map(toBalance2)
-
+  const daten = () => rowData.map(toBalance2)
   const total_debit = rowData.reduce((accumulator:number, currentData:IJournal):number => accumulator + currentData.debit, 0.0)
   const total_credit = rowData.reduce((accumulator:number, currentData:IJournal):number => accumulator + currentData.credit, 0.0)
   const total_idebit = rowData.reduce((accumulator:number, currentData:IJournal):number => accumulator + currentData.idebit, 0.0)

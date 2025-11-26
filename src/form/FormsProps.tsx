@@ -1183,7 +1183,7 @@ export const BankStatementParameterForm = ({ current, setCurrent, t, height }:Ba
         </>
     )
 }
-export const BankStatementMainForm = ({ current, setCurrent, t, locale, currency /*, height*/}:BankStatementProps) => {
+export const BankStatementMainForm = ({ collapse, current, setCurrent, t, locale, currency /*, height*/}:BankStatementProps) => {
 
     const styles = {
         outer: {
@@ -1214,7 +1214,7 @@ export const BankStatementMainForm = ({ current, setCurrent, t, locale, currency
         },
     }
     return (
-        <Grid container spacing={0} style={styles.outer}>
+        <Grid container spacing={0} style={{...styles.outer, display: !collapse?'none':''}}>
             {/**Id, enterdate*/}
             <Grid container spacing={1}>
                 <Grid item sm={8} xs={2}>

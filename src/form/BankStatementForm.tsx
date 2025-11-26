@@ -11,7 +11,7 @@ import Grid from 'react-fast-grid'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { BSFormHead} from './FormsProps'
-import { Get, Get2} from './CrudController'
+import {Edit, Get, Get2} from './CrudController'
 import {initBS, MASTERFILE, useStore} from './Menu'
 import iwsStore from '../utils/Store'
 import { useTranslation } from 'react-i18next'
@@ -35,17 +35,7 @@ const styles = {
     padding: 4,
   },
 }
-// const STYLES = {
-//   inner: {
-//     borderRadius: 5,
-//     boxShadow: '0 20px 50px #BBF',
-//     padding: 10,
-//     paddingLeft: 25,
-//     paddingRight: 20,
-//     //height: 350,
-//     paddingTop: 30,
-//   }
-// }
+
 const BankStatementForm = () => {
   // @ts-ignore
   const { profile, menu, selected } = useStore()
@@ -58,6 +48,7 @@ const BankStatementForm = () => {
   const [language, setLanguage] = useState('en-US')
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   //module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
+  const modifyUrl = module_.ctx
   module_ =  module_ ?? formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const title = t(module_.title)
@@ -85,7 +76,9 @@ const BankStatementForm = () => {
   const cancelEdit = () => {
     setCurrent(current_)
   }
-  const submitEdit = () => {}
+  const submitEdit = () => Edit(modifyUrl, token, current, rowData, setCurrent)
+
+
   //const cancelEdit = () => initAdd()
   // const initAdd = () => {
   //   const newRow = { ...initialState, company: company, currency: currency, editing: false }
@@ -151,9 +144,9 @@ const BankStatementForm = () => {
               current={current}
           />
           <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>
-            <BankStatementTabs current={current} setCurrent={setCurrent}  t={t}  height={height}
+            <BankStatementTabs collapse ={state.collapse} current={current} setCurrent={setCurrent}  t={t}  height={height}
               currency={currencyx}  locale={localex}/>
-            <Grid item style={{paddingTop: 5, height:300, width:'99%' }}>
+            <Grid item style={{paddingTop: 5, height:'75%', width:'100%' }}>
               <BankStatementGrid
                   // @ts-ignore
                    columnDefs ={bankStatementColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>

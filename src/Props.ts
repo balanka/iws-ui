@@ -117,6 +117,7 @@ export interface AssetProps {
 }
 
 export interface BankStatementProps {
+    collapse:boolean,
     current: IBankStatement,
     setCurrent: (arg: any | IBankStatement) => void,
     t: TFunction<'transalation', undefined>,

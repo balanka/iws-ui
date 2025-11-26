@@ -5,13 +5,13 @@ import { styles } from './BasicTreeTableProps'
 import {BankStatementMainForm, BankStatementParameterForm} from './FormsProps'
 import {BankStatementProps} from "../Props.ts";
 
-const BankStatementTabs = ({ current, setCurrent,  locale,  t,  currency, height }:BankStatementProps) => {
+const BankStatementTabs = ({ collapse, current, setCurrent,  locale,  t,  currency, height }:BankStatementProps) => {
 
   const getGeneralForm = () =>
-      <BankStatementMainForm current={current} setCurrent={setCurrent} t={t} locale={locale} currency={currency} height={height}/>
-
+      <BankStatementMainForm collapse={collapse} current={current} setCurrent={setCurrent} t={t}
+                             locale={locale} currency={currency} height={height}/>
   const getParameterForm = () => (
-    <Grid container spacing={1} style={{ ...styles.inner, backgroundColor: "#bbdefb" }} direction="column">
+    <Grid container spacing={1} style={{ ...styles.inner, backgroundColor: "#bbdefb", display: !collapse?'none':'' }} direction="column">
       <BankStatementParameterForm current={current} setCurrent={setCurrent} t={t} height={35}/>
     </Grid>
   )

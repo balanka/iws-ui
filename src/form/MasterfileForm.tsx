@@ -78,9 +78,6 @@ const getCtx = (modelid:number, company:string ) => {
      const [language, setLanguage] = useState('en-US')
      // console.log('menu', menu)
      let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-     // console.log('module_X', module_)
-     // console.log('module_.state3', module_?.state3)
-     //const parent_ctx = `${module_?.state3}/${module_?.modelid}/${company}`
      const parent_ctx = `${module_?.state3}/${company}`
      const acc_ctx = `${module_?.state2}/${company}`
      console.log('parent_ctx', parent_ctx)

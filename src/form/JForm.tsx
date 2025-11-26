@@ -1,37 +1,25 @@
-import React, {useState, useEffect} from 'react'
-import {
-    AllCommunityModule,
-    ClientSideRowModelModule,
-    ModuleRegistry,
-    PinnedRowModule
-} from 'ag-grid-community'
+import React, {useEffect, useState} from 'react'
+import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule} from 'ag-grid-community'
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import Grid from 'react-fast-grid'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import { JournalFormHead, JournalMainForm } from './FormsProps'
-import { Get} from './CrudController'
+import {JournalFormHead, JournalMainForm} from './FormsProps'
+import {Get} from './CrudController'
 import {initAcc, initModule, MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu'
 import iwsStore from '../utils/Store'
-import { useTranslation } from 'react-i18next'
-import { formEnum } from '../utils/FormEnum'
+import {useTranslation} from 'react-i18next'
+import {formEnum} from '../utils/FormEnum'
 import {pacColumnsDefs} from '../ColumnsDefs.ts'
-import {
-  IAccount,
-  IModule,
-  IPACBQueryParam,
-  IPeriodicAccountBalance,
-  IPeriodicAccountBalance2
-} from '../Models.ts'
-import {PeriodicAccountBalanceGrid} from '../IWSGrid.tsx'
+import {IAccount, IModule, IPACBQueryParam, IPeriodicAccountBalance, IPeriodicAccountBalance2} from '../Models.ts'
+import {defaultColDefX, PeriodicAccountBalanceGrid} from '../IWSGrid.tsx'
 import Login from './Login.tsx'
-import  {defaultColDefX} from '../IWSGrid.tsx'
 import {formatumber2Digits} from '../utils/Utils.ts'
 import {useDispatch} from 'react-redux'
 import {logout} from './TransactionLib.ts'
-import {generateDocx} from "../utils/XlsUtils.ts";
+import {generateDocx} from '../utils/XlsUtils.ts'
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -71,8 +59,6 @@ const JForm = () => {
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const title = company?.concat(' / ').concat(t(module_.title))
-  //const initialState:IPACBQueryParam = module_.state
-  //const ALL = { ...initialState, id: '*', name: '**ALL**' }
   const dispatch = useDispatch()
   const height = 20
 
@@ -87,7 +73,6 @@ const JForm = () => {
   const [accData, setAccData] = useState<IAccount[]>([])
   const [rowData, setRowData] = useState<IPeriodicAccountBalance[]>([])
   const [module, setModule] = useState<IModule[]>([])
-  //const [_,   setGridApi] = useState<GridApi>()
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
@@ -153,31 +138,22 @@ const JForm = () => {
   }
 
   const totalPac = (rowData: IPeriodicAccountBalance[]):IPeriodicAccountBalance => {
-    //const {idebit, icredit, debit, credit, bdebit, bcredit, accountx, currency, modelidx, companyx} = sumData(datax)
     const idebit = rowData.reduce((acc, currentData: IPeriodicAccountBalance) => acc + currentData.idebit, 0.0)
     const icredit = rowData.reduce((acc, currentData: IPeriodicAccountBalance) => acc + currentData.icredit, 0.0)
     const debit = rowData.reduce((acc, currentData: IPeriodicAccountBalance) => acc + currentData.debit, 0.0)
     const credit = rowData.reduce((acc, currentData: IPeriodicAccountBalance) => acc + currentData.credit, 0.0)
     const currentAcc = accData.find(acc => acc.id === current.account) ?? initAcc[0]
-    //const bdebitv = rowData.reduce((accumulator, currentData: IPeriodicAccountBalance) => accumulator+ currentData?.idebit+currentData?.debit, 0.0)
-    //const bcreditv = rowData.reduce((accumulator, currentData: IPeriodicAccountBalance) => accumulator + currentData?.icredit+ currentData?.credit, 0.0)
     const balance = currentAcc.isDebit ? (idebit+debit - credit-credit) : (icredit+credit - idebit+debit)
-    console.log('currentAcc>>>', currentAcc)
-    console.log('debit>>>', debit)
-    console.log('credit>>>', credit)
-    console.log('balance>>>', balance)
-    const total = {
+    return {
       id: '-1', name: 'Total', account: ''
       , idebit: Number(idebit.toFixed(2))
       , icredit: Number(icredit.toFixed(2))
       , debit: Number(debit.toFixed(2))
       , credit: Number(credit.toFixed(2))
-      , bdebit: Number((idebit+debit).toFixed(2))
-      , bcredit: Number((icredit+credit).toFixed(2))
+      , bdebit: Number((idebit + debit).toFixed(2))
+      , bcredit: Number((icredit + credit).toFixed(2))
       , balance: Number(balance.toFixed(2)), modelid: modelidx, period: 0, currency: currency, company: companyx
     }
-    console.log('total>>>', total)
-    return total
   }
 
     const toBalance2 = (m: IPeriodicAccountBalance) => {
@@ -246,7 +222,6 @@ const JForm = () => {
     } else {
       const index = d.findIndex(d => d.period === 0)
       const total = totalPac(data)
-      console.log('total', total)
       if (index === -1) {
        d.push(total)
         setRowData(d)
