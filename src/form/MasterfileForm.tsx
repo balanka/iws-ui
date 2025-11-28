@@ -117,17 +117,9 @@ const getCtx = (modelid:number, company:string ) => {
      const [rowData5, ] = useState<IFmodule[]>([])
      const [accData, setAccData] = useState<IMasterfile2[]>([])
      const [accountData, setAccountData] = useState<IMasterfile2[]>([])
-
-
-
      const minHeight = 400
      const maxHeight = 700
-
-   // console.log('accData', accData)
-   console.log('current_', current_)
-
      useEffect(() => {
-       //const set =module_.modelid===formEnum.FMODULE?setCurrent5:setAccData
          iwsStore.subscribe(setIwsState)
          Get(parent_ctx, token, module_.modelid, setAccData)
          Get(acc_ctx, token, formEnum.ACCOUNT, setAccountData)
@@ -175,9 +167,8 @@ const getCtx = (modelid:number, company:string ) => {
 
      const initAdd = () => {
          const newRow = { ...current_, company: company}
-         const setter: (arg:any)=>void = currentSetter() //.bind(newRow).
+         const setter: (arg:any)=>void = currentSetter()
          setter(newRow)
-         //setCurrent(newRow)
          setAdded(true)
          setDisable(false)
          setEdited(false)
@@ -185,11 +176,9 @@ const getCtx = (modelid:number, company:string ) => {
 
      const reload = () => {
          if (current.modelid===formEnum.MODULE ) {
-             setRowData(iwsStore.get(400))
+             setRowData(iwsStore.get(formEnum.MODULE))
              return
          }
-       console.log('modelid5!!!', modelid)
-       console.log('modelid5ctx!!!', ctx)
          iwsStore.deleteKey(modelid)
          Get(ctx, token, modelid, setRowData)
          setCurrent(current_)
@@ -274,8 +263,6 @@ const getCtx = (modelid:number, company:string ) => {
      }
    }
      const MasterfileForm:FC<Masterfile2FormProps<IMasterfile2>> = (props:Masterfile2FormProps<IMasterfile2>) => {
-       console.log('rowData', rowData)
-       console.log('rowData5', rowData5)
          switch (props.current.modelid) {
              case formEnum.BANK:
            case formEnum.CURRENCY:
