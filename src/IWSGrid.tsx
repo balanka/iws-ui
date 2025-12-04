@@ -267,6 +267,7 @@ export const StockGrid: FC<Props<IStock>> = ({ columnDefs, defaultColDef, onRowS
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
+        style={{'width': '100%'}}
     />
 export const ArticleGrid: FC<Props<IArticle>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<IArticle>)=>
     <AgGridReact

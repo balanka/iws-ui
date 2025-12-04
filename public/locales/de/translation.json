@@ -101,7 +101,8 @@
     "run": "Ausführen",
     "runAll": "Ausführen alle",
     "permission": "Berechtigung",
-    "copyFrom": "Kopieren von"
+    "copyFrom": "Kopieren von",
+    "image_QR_code": "Image/QR Code"
   },
   "asset": {
     "title":  "Anlage",

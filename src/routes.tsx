@@ -19,6 +19,7 @@ const VatForm = () => import('./form/VatForm')
 //const BasicTreeTable = () => import('./form/BasicTreeTable')
 const BasicTreeTable = () => import('./form/Main')
 //const BasicTreeTable = () => import('./form/BasicTreeData')
+//const ImageEditorExample = () => import('./form/ImageEditorExample')
 
 const Login = ()   => import('./form/Login')
 

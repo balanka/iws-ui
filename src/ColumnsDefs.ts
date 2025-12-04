@@ -243,7 +243,7 @@ export const pacColumnsDefs = (t: (arg0: string) => any) =>  [
     ],
   },
   {
-    field: 'balancex',
+    field: 'balance',
     headerName: t('common.balance'),
     align: 'center',
     //cellStyle: {textAlign: 'center'},
@@ -256,18 +256,11 @@ export const pacColumnsDefs = (t: (arg0: string) => any) =>  [
         valueFormatter: (params: { data: { bdebit: number } }) =>Number(params.data?.bdebit).toFixed(2),
       },
       {
-        field: 'bcredit', //aggFunc: "sum",
+        field: 'bcredit',
         headerName: t('common.credit'),
         minWidth: 10,
         cellStyle: {textAlign: 'right'},
         valueFormatter: (params: { data: { bcredit: number } }) =>Number(params.data?.bcredit).toFixed(2),
-      },
-      {
-        field: 'balance', //aggFunc: "sum",
-        headerName: t('common.balance'),
-        minWidth: 10,
-        cellStyle: {textAlign: 'right'},
-        valueFormatter: (params: { data: { balance: number } }) =>Number(params.data?.balance).toFixed(2),
       },
     ],
   },
@@ -1148,12 +1141,6 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
   //   minWidth: 10,
   //   //maxWidth: 60,
   // },
-  // {
-  //   field: 'enterdate',
-  //   headerName: t('common.enterdate'),
-  //   minWidth: 10,
-  //   //maxWidth: 60,
-  // },
   {
     field: 'period',
     headerName: t('journal.period'),
@@ -1197,7 +1184,7 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
     field: 'side',
     headerName: t('journal.side'),
     cellRenderer: AgGridCheckbox,
-    minWidth:5,
+    minWidth:2,
   },
   {
     field: 'text',
@@ -1218,11 +1205,11 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
     width: 15,
     cellStyle: {textAlign: 'right'},
   },
-  {
-    field: 'company',
-    headerName: t('common.company'),
-    minWidth: 4,
-  },
+  // {
+  //   field: 'company',
+  //   headerName: t('common.company'),
+  //   minWidth: 4,
+  // },
   {
     field: 'modelid',
     headerName: t('common.modelid'),

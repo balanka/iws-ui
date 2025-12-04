@@ -5,7 +5,7 @@ import {
   ICustomer,
   IEmployee, IFinancials, ILineFinancials, ILineTransaction,
   IMasterfile,
-  IMasterfile2, IRole,
+  IMasterfile2, IPACBQueryParam, IRole,
   IStore,
   ISupplier, ITransaction, IUser,
   IVat, IWSLine, IWSModel, IWSTransaction
@@ -95,6 +95,10 @@ export interface ArticleProps {
   , zIndex:number
 }
 
+export interface ArticleQRFormProps {
+  current: IArticle
+  , t: TFunction<'transalation', undefined>
+}
 export interface ArticleGeneralFormProps {
     current: IArticle
     , setCurrent: (art: IArticle) => void
@@ -332,8 +336,9 @@ export interface IJournalIF<A>  extends IWSModel  {
 }
 export  interface JournalToolBarProps<A> {
    style: CSSProperties
-  , title:string, submitQuery:(event:any)=>void
-  , submitQuery2:(event:any)=>void
+  , title:string
+  , submitQuery:(event:any, current:IPACBQueryParam)=>void
+  , submitQuery2:(event:any , current:IPACBQueryParam)=>void
   , balancesheet:boolean, t:TFunction<'translation', undefined>
   , dispatch:Dispatch<any>
   , logout:(navigate:NavigateFunction) =>void

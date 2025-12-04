@@ -1,38 +1,4 @@
-import { createTheme } from  '@mui/material/styles'
 import { blue, green } from  '@mui/material/colors'
-
-export const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#4caf50',
-    },
-    secondary: {
-      main: '#ff9100',
-    },
-  },
-  typography: {
-    fontSize: 10,
-  },
-})
-
-export function rowStyle(rowData:any) {
-  return rowData.tableData.index % 2 === 0
-    ? {
-        //color:'black',
-        padding: 0.5,
-        height: 3,
-        fontsize: 10,
-        backgroundColor: '#fff9e6', //'#EEEE'
-      }
-    : {
-        color: 'black',
-        //color:'#eee',
-        padding: 0.5,
-        height: 3,
-        fontsize: 10,
-        //backgroundColor:'#fff9e6'
-      }
-}
 export const styles = {
   outer: {
     backgroundColor: blue,
@@ -63,6 +29,8 @@ export const styles = {
     //paddingRight: 20,
     //height: 350,
     paddingTop: 10,
+
+
   },
   innerX: {
     borderRadius: 5,
@@ -72,7 +40,7 @@ export const styles = {
     //boxShadow: '0 20px 50px #BBF',
     padding: 10,
     //height: 350,
-    width: 900,
+    //width: 900,
     display: 'flex',
     paddingTop: 20,
   },
@@ -110,63 +78,4 @@ export const styles = {
     fontsize: 8,
   },
 }
-export const formStyles = {
-  form: {
-    display: 'flex',
-    'flex-direction': 'column',
-    gap: '10px',
-    background: 'linear-gradient(to right ,grey,silver)',
-    padding: '40px',
-    'border-radius': '10px',
-  },
-  login: {
-    'font-size': '25px',
-    'font-weight': 'bold',
-    'text-align': 'center',
-    'margin-bottom': '20px',
-  },
-  flex: {
-    display: 'flex',
-    'flex-direction': 'column',
-  },
 
-  'form button': {
-    'margin-top': '25px',
-    'margin-bottom': '6px',
-    'border-radius': '10px',
-    border: 'none',
-    'padding-top': '4px',
-    'padding-bottom': '4px',
-    'font-size': '19px',
-    'font-weight': 'bold',
-    color: 'grey',
-  },
-
-  'form label': {
-    'margin-top': '20px',
-    'margin-bottom': '5px',
-  },
-
-  'form button:hover': {
-    'box-shadow': '2px 2px 12px white',
-  },
-  input: {
-    height: '30px',
-    outline: 'none',
-    padding: '15px',
-    'border-radius': '10px',
-    border: 'none',
-    'font-weight': 'bold',
-    'font-size': '15px',
-    'box-shadow': '2px 2px 12px inset black',
-  },
-  'span:hover': {
-    'font-weight': 'bold',
-  },
-  color: {
-    color: 'white',
-  },
-  align: {
-    'text-align': 'center',
-  },
-}

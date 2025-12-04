@@ -32,27 +32,7 @@ const STYLES = {
   },
 }
 
-// const  myTheme = themeQuartz.withParams({
-//   /* Low spacing = very compact */
-//   spacing: 2,
-//   /* Changes the color of the grid text */
-//   foregroundColor:'rgb(126, 46, 132)',// '#8CBACC80', // 'rgb(14, 68, 145)',
-//   /* Changes the color of the grid background */
-//   backgroundColor: 'rgb(249, 245, 227)', //'rgb(241, 247, 255)',
-//
-//   oddRowBackgroundColor: 'rgba(120, 255, 0, 0.5)',
-//   //oddRowBackgroundColor: '#fff9e6', //'rgb(0, 0, 0, 0.03)',
-//
-//   selectedRowBackgroundColor: 'rgba(0, 255, 0, 0.1)',
-//   /* Changes the header color of the top row */
-//   headerBackgroundColor: 'rgb(228, 237, 250)',
-//
-//
-//   /* Changes the hover color of the row*/
-//   rowHoverColor: 'rgb(216, 226, 255)',
-//   dataFontSize:12,
-//   //fontSize: 10,
-// });
+
 const BasicTreeTable = () => {
   const {t} = useTranslation()
   const {profile} = useStore()

@@ -20,6 +20,7 @@ export  interface  IPACBQueryParam {
   modelid:number,
   isMulti?:boolean,
   isDebit?:boolean,
+  currency:string
 }
 export interface IEditing {
   editing:boolean
@@ -102,7 +103,7 @@ export interface IJournal {
     bcredit?: number,
     currency: string,
     side: boolean,
-    text: number,
+    text: string,
     month: number,
     year: number,
     company: string,

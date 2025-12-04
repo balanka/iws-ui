@@ -3,7 +3,7 @@ import {
   ClientSideRowModelModule,
   ModuleRegistry,
   themeQuartz,
-  CsvExportModule,
+  //CsvExportModule,
 } from 'ag-grid-community'
 import { TreeDataModule } from "ag-grid-enterprise"
 import {MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu.tsx'
@@ -24,7 +24,7 @@ import { Get } from "./CrudController.ts";
 ModuleRegistry.registerModules([
     ClientSideRowModelModule,
     TreeDataModule,
-    CsvExportModule,
+    //CsvExportModule,
 ]);
 
 const  myTheme = themeQuartz.withParams({
@@ -70,14 +70,14 @@ const STYLES = {
 const Main  = () => {
     const {profile, menu, selected} = useStore()
     const {t,} = useTranslation()
-    const {token, company} = profile
+    const {token, currency, company} = profile
   const init = useRef(false)
     let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
       module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
     if (module_ === '11111' || module_ === 11111) return <Login / >
         const height = 20
         const modelid :number = module_? module_.modelid:1111
-        const current_ = {...PACB_QUERY_PARM, modelid:modelid}
+        const current_ = {...PACB_QUERY_PARM, modelid:modelid, currency:currency??''}
         const [current, setCurrent] = useState<IPACBQueryParam>(current_)
         const [, setIwsState] = useState(iwsStore.initialState)
         const [accData, setAccData] = useState <IAccount[] >([])

@@ -4,7 +4,7 @@ import { StockGrid } from "../IWSGrid.tsx"
 import Grid from 'react-fast-grid'
 import { styles } from './BasicTreeTableProps'
 import {stockColumnDefs} from '../ColumnsDefs.ts'
-import {ArticleGeneralForm, CustomerAccountForm} from './FormsProps'
+import {ArticleGeneralForm, ArticleQRForm, CustomerAccountForm} from './FormsProps'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {IStock} from "../Models.ts";
@@ -19,7 +19,7 @@ export  const ArticleTabs = (
   const getTable = () =>
     <Grid container
         // @ts-ignore
-          style={{...styles.outer, height:150,  paddingTop: 10}} maximize direction="row">
+          style={{...styles.outer, /*width:'100%',*/ height:180,  paddingTop: 10,}} maximize direction="row">
       <StockGrid
           // @ts-ignore
           theme="legacy" columnDefs ={stockColumnDefs(t)}
@@ -28,9 +28,10 @@ export  const ArticleTabs = (
 
   const tabContent:TabItem[] = [
       { title: t('common.general'), id: 1, form: <ArticleGeneralForm  current={current} setCurrent={setCurrent}
-               t={t} quantityUnitData={quantityUnitData} groupData={groupData} disable={disable} />},
+               t={t} quantityUnitData={quantityUnitData} groupData={groupData} disable={disable}/>},
       { title: t('common.accounts'), id: 2, form: CustomerAccountForm(props)},
       { title: t('stock.title'), id: 4, form: getTable() },
+      { title: t('common.image_QR_code'), id: 5, form: <ArticleQRForm  current={current} t={t}/> },
     ]
 
   return <IWSTabs tabList={tabContent} />

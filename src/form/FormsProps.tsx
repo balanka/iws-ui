@@ -25,7 +25,7 @@ import {formEnum} from '../utils/FormEnum'
 import {sortById} from '../utils/Utils'
 import {saveXlsx} from './../utils/XlsUtils.ts'
 import {
-  AccountMainProps, ArticleGeneralFormProps,
+  AccountMainProps, ArticleGeneralFormProps, ArticleQRFormProps,
   AssetProps,
   BankAccountFormProps,
   BankStatementParamProps,
@@ -89,12 +89,15 @@ import {NavigateFunction, useNavigate} from 'react-router-dom'
 import {languages} from './Login.tsx'
 import {useSelector} from 'react-redux'
 import ComboBox from './ComboBox.tsx'
+import QRCode from 'react-qr-code'
+//import QRReader from 'react-qr-reader'
 
 const styles = {
   outer: {
     borderRadius: 5,
     boxShadow: "0 30px 40px #BBB",
     padding: 10,
+    //width: '100%',
     //height: 200,
     //padding: 50,
   },
@@ -617,7 +620,7 @@ export const JournalFormHead = ({ style, title, submitQuery, submitQuery2
                         <Grid item justify="center" alignItems="center">
                             <CHeaderToggler className="ps-1">
                                 <FormButton title={t('common.run')}
-                                    onClick={(e) => submitQuery(e)}
+                                    onClick={(e) => submitQuery(e, current)}
                                     style={{textAlign: 'left', height: 25, padding: 1 }}
                                     className="ps-1"/>
                             </CHeaderToggler>
@@ -627,7 +630,7 @@ export const JournalFormHead = ({ style, title, submitQuery, submitQuery2
                             <CHeaderToggler className="ps-1">
                             <FormButton
                                 title={t('common.runAll')}
-                                onClick={(e)=>submitQuery2(e)}
+                                onClick={(e)=>submitQuery2(e, current)}
                                 style={{ textAlign: 'right', height: 25, padding: 1 }}
                                 className="ps-1"
                                 disable={!submitQuery2===undefined && balancesheet}/>
@@ -2166,6 +2169,7 @@ export const PermissionMainForm = ({collapse, current, setCurrent, disable, t,  
 
 export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
     ({ current, setCurrent,  t, quantityUnitData, groupData, disable }) => {
+
         return (
             <Grid container spacing={0} style={styles.outer}>
                 {/**Id, enterdate*/}
@@ -2373,6 +2377,66 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
             </Grid>
         )
     }
+
+export const ArticleQRForm:FC<ArticleQRFormProps> =
+  ({ current }) => {
+
+    // const handleScan = data => {
+    //   if (data) {
+    //     console.log('Result: ', data);
+    //   }
+    // }
+    //
+    // const handleError = err => {
+    //   console.error(err);
+    // }
+
+    // return (
+    //   <div>
+    //     <QRReader
+    //       delay={300}
+    //       onError={handleError}
+    //       onScan={handleScan}
+    //       style={{ width: '100%' }}
+    //     />
+    //   </div>
+    // )
+
+
+    return (
+      // <Grid container spacing={0} style={{...styles.outer, minWidth:300, height: 260, width: 700, display: 'flex'}}>
+      <Grid container spacing={0} style={{...styles.outer, minWidth:'100%', height: 260, maxWidth: 1000, display: 'flex'}}>
+        {/**QR Code */}
+        {/*<Grid container spacing={1} style={{ width:100}}>*/}
+          <Grid item sm={12} xs={2}>
+            <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller}>
+              {/*<Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">*/}
+              {/*  <div>{t('common.id')}</div>*/}
+              {/*</Grid>*/}
+              <Grid item sm ={8} xs={2} justify="flex-start" alignItems="stretch">
+                {/*<div style={{ background: 'white', padding: '1px'}}>*/}
+                  <QRCode fgColor ={'#000000'} bgColor ={'#FFFFFF'}
+                    size={256}
+                    //style={{ height: "auto", maxWidth: "100%", width: "100%", }}
+                    style={{ height: "auto", background: 'white', padding: '15px',  paddingRight:'15px'}}
+                    title={current.name}
+                    value={`${current.id}${current.name}`}
+                    viewBox={`0 0 256 256`}
+                  />
+                {/*</div>*/}
+               </Grid>
+              <Grid item sm ={4} xs={4} justify="flex-end" alignItems="stretch">
+                {/*<div style={{ background: 'white', padding: '3px', width:'100%'}}>*/}
+                {/*<img src="/apple-icon-180x180.png" alt="product.name" style={{ height: "auto", maxWidth: "100%", width: "100%" }} />*/}
+                  <img src="/apple-icon-180x180.png" alt="product.name"   style={{ padding: '20px',   paddingLeft:'50px'}}/>
+                {/*</div>*/}
+              </Grid>
+            </Grid>
+          {/*</Grid>*/}
+        </Grid>
+      </Grid>
+    )
+  }
 // export const SalaryItemForm = ({ current, setCurrent, t, disable, locale, currency, height }:
 //                                { current:ISalaryItem, setCurrent:(arg:any|ISalaryItem)=>void, t:TFunction<'translation', undefined>
 //                                    , disable:boolean, locale:string, currency:string, height:number })=> {
@@ -3014,6 +3078,8 @@ export const StoreGeneralForm = ({collapse, current, setCurrent, disable, t, hei
 const FromPeriod = ({ name, label, value, current, setCurrent, t, labelStyle, style }:
                     { name:string, label:string, value:any, current:any, setCurrent:(arg:any)=>void, t:TFunction<'translation', undefined>
                         , labelStyle:any, style:any }) => {
+  console.log('name', name)
+  console.log('value', value )
     return (
         <>
             <CCol sm="0.5" style={labelStyle}>

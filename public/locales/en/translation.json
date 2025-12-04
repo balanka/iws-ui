@@ -101,7 +101,8 @@
     "run": "run",
     "runAll": "run 4 all",
     "permission": "Permission",
-    "copyFrom": "Copy from"
+    "copyFrom": "Copy from",
+    "image_QR_code": "Image/QR Code"
   },
   "asset": {
     "title":      "Asset",

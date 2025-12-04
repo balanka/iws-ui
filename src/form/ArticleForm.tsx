@@ -161,7 +161,7 @@ ModuleRegistry.registerModules([
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
              />
-             <Grid container style={{...stylesx.inner, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
+             <Grid container style={{...stylesx.innerX, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
                  <ArticleTabs current={current} setCurrent={setCurrent} disable={disable} t={t} data ={rowData}
                               accData={accData} quantityUnitData ={quantityUnitData} locale={`${locale}`} currency={`${currency}`}
                               vatData={vatData} groupData={groupData} height={height} zIndex={zIndex-1}/>

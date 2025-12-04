@@ -1,10 +1,10 @@
 import * as XLSX from 'xlsx'
 import {printDocProps, SaveProps} from '../Props.ts'
 import {TemplateHandler} from 'easy-template-x'
-import {IWSModel} from "../Models.ts";
+import {IWSModel} from '../Models.ts'
 import PizZip from "pizzip";
-import Docxtemplater from "docxtemplater";
-import {saveAs} from "file-saver";
+import Docxtemplater from 'docxtemplater'
+import {saveAs} from 'file-saver'
 
 
 export const  saveXlsx =  ({fileName, sheetName, data }:SaveProps):void => {
@@ -15,10 +15,6 @@ export const  saveXlsx =  ({fileName, sheetName, data }:SaveProps):void => {
 }
 
 export const saveFile =({templateFileName, blob}:{templateFileName: string, blob: Blob}):void => {
-
-    // get downloadable url from the blob
-    // console.log('filename', templateFileName);
-    // console.log('blob',  blob);
     const blobUrl = URL.createObjectURL(blob);
     // create temp link element
     let link:any= document.createElement("a");
@@ -36,18 +32,14 @@ export const saveFile =({templateFileName, blob}:{templateFileName: string, blob
 }
 export const showFile = async ({e, templateFileName, data}:printDocProps) => {
     e.preventDefault()
-    const handler = new TemplateHandler();
-    console.log('e.target.files[0]', e.target.files[0])
-    console.log('data', data)
-    handler.process(e.target.files[0], data).then ((doc:Blob) => saveFile({templateFileName:templateFileName, blob:doc}))
+  new TemplateHandler().process(e.target.files[0], data)
+    .then ((doc:Blob) => saveFile({templateFileName:templateFileName, blob:doc}))
 }
-//export const generateDocx = async <A extends IWSTransaction<L>, L extends IWSLine>( current:A, templateName:() =>String
-//  , getData:()=>any) : Promise<void> => {
+
 export const generateDocx = async <A extends  IWSModel>( current:A, templateName:() =>String
                                        , getData:()=>any) : Promise<void> => {
   const templateFileName = templateName()
   console.log('templateName', templateFileName)
-
   try {
     //@ts-ignore
     const response = await fetch(templateFileName)
@@ -55,27 +47,16 @@ export const generateDocx = async <A extends  IWSModel>( current:A, templateName
     const arrayBuffer = await blob.arrayBuffer()
     const zip = new PizZip(arrayBuffer)
     const doc = new Docxtemplater(zip, {paragraphLoop: true, linebreaks: true,})
-
-    // const data = {transdate: current.transdate, total: Number(buildTotal(current)).toFixed(2),
-    //   lines: current.lines.map((line:L) =>  formatLines(line)),
-    // }
-    //doc.setData(getData()??data);
-    doc.setData(getData());
-
     try {
-      doc.render()
+      doc.render(getData())
     } catch (error) {
       console.error('Error rendering document:', error);
       return;
     }
 
     const out = doc.getZip().generate({
-      type: 'blob',
-      mimeType:
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    });
+      type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',})
 
-    //saveAs(out, 'Goodreceiving.docx');
     const fileNamesAndExtenstion= templateFileName.split('.')
     const outFileName_= fileNamesAndExtenstion[0]??'NoFileName'
     const outFileExtension= fileNamesAndExtenstion[1]??'docx'
@@ -84,6 +65,19 @@ export const generateDocx = async <A extends  IWSModel>( current:A, templateName
     saveAs(out, outFileName)
   } catch (err) {
     console.error('Error generating document:', err);
+  }
+}
+export const getAsArrayBuffer = async (templateFileName:String) : Promise<ArrayBuffer|undefined> => {
+  try {
+    //@ts-ignore
+    const response = await fetch(templateFileName)
+    const blob = await response.blob()
+    const arrayBuffer = await blob.arrayBuffer()
+    console.log('arrayBuffer==>', arrayBuffer)
+    return arrayBuffer
+
+  } catch (err) {
+    console.error(`Error reading the file  ${templateFileName}:`, err);
   }
 }
 
