@@ -6,29 +6,26 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {Add, Edit, Get} from './CrudController.ts'
-import {initBankAccount, MASTERFILE, useStore} from './Menu.tsx'
+import {initBankAccount, MASTERFILE} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {IAccount, IBankAccount, IBusinespartner, IMasterfile, IVat} from '../Models.ts'
-import {useTranslation} from 'react-i18next'
 import {UseCustomerFormResult} from "../Props.ts";
+import useForm from "./UseForm.ts";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFormResult<T>]  => {
-  const { profile, menu, selected } = useStore()
-  const { t, i18n} = useTranslation()
+  const [{ profile, menu, selected, t, i18n, title, modelid}] = useForm()
   const { token, company, currency } = profile
   const [language, setLanguage] = useState('en-US')
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-
-  let title =  `${company}/${t(module_.title)}`
   const [disable, setDisable] = useState(true)
   const [gridApi,  setGridApi] = useState<GridApi>()
 
   //const height = 20
-  const modelid = module_? module_.modelid:1111
+  //const modelid = module_? module_.modelid:1111
   const acc_modelid = formEnum.ACCOUNT
   const bank_modelid = formEnum.BANK
   const ccy_modelid = formEnum.CURRENCY

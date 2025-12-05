@@ -10,7 +10,7 @@ import {
   ISupplier, ITransaction, IUser,
   IVat, IWSLine, IWSModel, IWSTransaction
 } from "./Models.ts";
-import {TFunction} from "i18next";
+import {type i18n, TFunction} from "i18next";
 import React, {CSSProperties, Dispatch, SetStateAction} from "react";
 import {GridApi, GridReadyEvent} from "ag-grid-community";
 // @ts-ignore
@@ -353,7 +353,9 @@ export interface UseFormResult {
   , menu: Map<any, any>
   , selected: string
   , t:TFunction<'translation', undefined>
+  , i18n: i18n
   , title:string
+  , modelid : number
 }
 
 export interface UseCustomerFormResult<T extends IBusinespartner> {

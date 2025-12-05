@@ -8,7 +8,7 @@ import { styles as stylesx } from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { CommonFormHead } from './FormsProps.tsx'
-import { initCust, initEmp, initSup, useStore} from './Menu.tsx'
+import { initCust, initEmp, initSup} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import  { CustomerTabs }  from './CustomerTabs.tsx'
 import { formEnum } from '../utils/FormEnum.tsx'
@@ -20,22 +20,23 @@ import {logout} from './TransactionLib.ts'
 import {useDispatch} from "react-redux"
 import {useNavigate} from "react-router-dom"
 import useCustomerForm from "./UseCustomerForm.ts";
+import useForm from "./UseForm.ts";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const CustomerForm = () => {
-  const { profile, menu, selected } = useStore()
+  const [{ profile, menu, selected, t, modelid }] = useForm()
+  const { locale } = profile
   const [, setIwsState] = useState(iwsStore.initialState)
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  const modelid = module_? module_.modelid:1111
+  //const modelid = module_? module_.modelid:1111
   const current_ : IBusinespartner= modelid ===formEnum.CUSTOMER?initCust[0]:(modelid ===formEnum.SUPPLIER)?initSup[0]:initEmp[0]
-  const  [{ t, edited, added, disable, language, accData, bankData, ccyData
+  const  [{ edited, added, disable, language, accData, bankData, ccyData
     , rowData, setRowData, vatData, current, setCurrent, currentBankAccount, setCurrentBankAccount
     , edit, initAdd, reload, cancelEdit, submitEdit, handleLanguageChange, onNewBankAccount
     , onDeleteBankAccount, onNewSalaryItem, submitQuery, onRowSelected, title:title, setGridApi}] = useCustomerForm<ICustomer>(current_)
-  const { locale } = profile
   const localex= locale?? 'fr-FR'
   const dispatch = useDispatch()
   let navigate = useNavigate()
@@ -54,7 +55,6 @@ const CustomerForm = () => {
     setRowData([])
   }, [selected])
 
-  console.log('ccyData>>>>', ccyData);
   return ( <>
           <CommonFormHead
               title={title}

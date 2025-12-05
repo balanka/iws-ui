@@ -11,11 +11,12 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, Pi
 const UseForm = (): [UseFormResult] => {
   const {profile, menu, selected} = useStore()
   const { company} = profile
-  const {t,} = useTranslation()
+  const {t, i18n} = useTranslation()
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
+  const modelid: number = module_ ? module_.modelid : 1111
   const title =  `${company}/${t(module_.title)}`
-  return [{ profile, menu, selected, t, title:title}]
+  return [{ profile, menu, selected, t, i18n, title:title, modelid}]
 
 }
 export default UseForm

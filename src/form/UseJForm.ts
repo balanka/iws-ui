@@ -37,11 +37,11 @@ const STYLES = {
 }
 
 const UseJForm = <T>(): [UseJFormResult<T>] => {
-  const [{ profile, menu, selected, t, title:title}] = useForm()
+  const [{ profile, menu, selected, t, title, modelid}] = useForm()
   const {token, currency, company} = profile
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-  const modelid: number = module_ ? module_.modelid : 1111
+  //const modelid: number = module_ ? module_.modelid : 1111
   const acc_modelid = formEnum.ACCOUNT
   const module_modelid = formEnum.MODULE
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
