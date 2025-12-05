@@ -5,13 +5,13 @@ import {
   ICustomer,
   IEmployee, IFinancials, ILineFinancials, ILineTransaction,
   IMasterfile,
-  IMasterfile2, IPACBQueryParam, IRole,
+  IMasterfile2, IPACBQueryParam, IProfile, IRole,
   IStore,
   ISupplier, ITransaction, IUser,
   IVat, IWSLine, IWSModel, IWSTransaction
 } from "./Models.ts";
 import {TFunction} from "i18next";
-import React, {CSSProperties, Dispatch} from "react";
+import React, {CSSProperties, Dispatch, SetStateAction} from "react";
 import {GridReadyEvent} from "ag-grid-community";
 // @ts-ignore
 import type {RowSelectedEvent} from "ag-grid-community/dist/types/src/events";
@@ -347,3 +347,27 @@ export  interface JournalToolBarProps<A> {
   , getData: ()=>any
   , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
    }
+
+export interface UseJFormProps<T> {
+  setRowData: Dispatch<SetStateAction<T[]>>
+}
+
+export interface UseJFormResult<T> {
+  profile: IProfile
+  , menu: Map<any, any>
+  , selected: string
+  , t:TFunction<'translation', undefined>
+  , module_ctx:string
+  , accData:IAccount[]
+  , rowData:T[]
+  , setRowData:Dispatch<SetStateAction<T[]>>
+  , current_:IPACBQueryParam
+  , current:IPACBQueryParam
+  , setCurrent:Dispatch<SetStateAction<IPACBQueryParam>>
+  , submitQuery: (event: any, current: IPACBQueryParam) => void
+  , submitQuery2: (event: any, current: IPACBQueryParam) => void
+  , onRowSelected: (event: RowSelectedEvent) => void
+  , templateName: ()=>string
+  , title:string
+  , styles:any
+}

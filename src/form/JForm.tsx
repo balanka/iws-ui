@@ -7,95 +7,45 @@ import Grid from 'react-fast-grid'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {JournalFormHead, JournalMainForm} from './FormsProps'
-import {Get} from './CrudController'
-import {initAcc, initModule} from './Menu'
+import {initAcc} from './Menu'
 import iwsStore from '../utils/Store'
 import {formEnum} from '../utils/FormEnum'
 import {pacColumnsDefs} from '../ColumnsDefs.ts'
-import {
-  IAccount,
-  IModule,
-  IPeriodicAccountBalance,
-} from '../Models.ts'
+import {IPeriodicAccountBalance} from '../Models.ts'
 import {defaultColDefX, PeriodicAccountBalanceGrid} from '../IWSGrid.tsx'
 import Login from './Login.tsx'
 import {formatumber2Digits} from '../utils/Utils.ts'
 import {useDispatch} from 'react-redux'
 import {logout} from './TransactionLib.ts'
 import {generateDocx} from '../utils/XlsUtils.ts'
-import useJForm from "./UseJForm.ts";
-
-
+import useJForm from './UseJForm.ts'
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
   ClientSideRowModelModule,
-  //RowGroupingModule,
   PinnedRowModule,
-  // ExcelExportModule,
-  // SetFilterModule,
-  // MultiFilterModule,
-  // MasterDetailModule,
 ])
 
-const STYLES = {
-  inner: {
-    borderRadius: 5,
-    boxShadow: '0 20px 50px #BBF',
-    padding: 10,
-    paddingTop: 30,
-   // paddingLeft: 5,
-    paddingRight: 5,
-    paddingBottom: 3,
-  },
-  inner2: {
-    borderRadius: 5,
-    boxShadow: '0 20px 50px #BBF',
-    paddingTop:5,
-    paddingLeft: 1,
-    paddingRight: 2,
-  },
-}
+
 const JForm = () => {
   // @ts-ignore
   const [, setIwsState] = useState(iwsStore.initialState)
-  const [accData, setAccData] = useState<IAccount[]>([])
-  const [rowData, setRowData] = useState<IPeriodicAccountBalance[]>([])
-  const [module, setModule] = useState<IModule[]>([])
-  const  [props] = useJForm<IPeriodicAccountBalance>({accData, setAccData, setRowData})
-  const {profile, menu, selected, t, module_ctx, acc_ctx, current_, current
-    , setCurrent, submitQuery, submitQuery2, onRowSelected} = props
-  //const {profile, menu, selected} = useStore()
-  const {token, currency, company} = profile
+  const  [{profile, menu, selected, t, accData, rowData, setRowData, current_, current, setCurrent, submitQuery, submitQuery2
+    , onRowSelected, templateName, title, styles}] = useJForm<IPeriodicAccountBalance>()
 
-  //const {t,} = useTranslation()
-  //const {token, currency, company} = profile
+  const {currency, company} = profile
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  const title =  `${company}/${t(module_.title)}`
+  //const title =  `${company}/${t(module_.title)}`
   const dispatch = useDispatch()
-
   const height = 20
-  //const modelid: number = module_ ? module_.modelid : 1111
-  const acc_modelid = formEnum.ACCOUNT
-  const module_modelid = formEnum.MODULE
-  //const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
-  //const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
-  //const current_ = {...PACB_QUERY_PARM, modelid: modelid, currency:currency??''}
-  console.log('rowData', rowData)
-
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
-    Get(acc_ctx, token, acc_modelid, setAccData)
-    Get(module_ctx, token, module_modelid, setModule)
     setCurrent(current_)
   }, [selected])
 
-
-  //const onRowSelected = (event: RowSelectedEvent) => setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
-  const templateName = () =>  (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule[0]).description
   const format = (d: IPeriodicAccountBalance) => {
     const  totalx_debit= d.idebit + d.debit
     const  totalx_credit= d.icredit + d.credit
@@ -200,13 +150,12 @@ const JForm = () => {
     }
 
   buildTotal(rowData)
-  //const templateName = () =>  (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule[0]).description
+
   return (
-        <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
-            <JournalFormHead style={{...STYLES.inner2}} title={title} submitQuery={submitQuery} dispatch={dispatch}
+        <Grid container style={{...styles.inner}} maximize direction="row" zeroMinWidth>
+            <JournalFormHead style={{...styles.inner2}} title={title} submitQuery={submitQuery} dispatch={dispatch}
                              logout={logout} submitQuery2={submitQuery2} balancesheet={true} t={t}
                              templateName ={templateName} getData={getData} current ={{...current, currency:currency, company:company}}
-                            // current={ { id: `${current.fromPeriod}${current.toPeriod}`, modelid:current.modelid, company:company}}
                              submitPrintPreview = {generateDocx}/>
             <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
                 // @ts-ignore

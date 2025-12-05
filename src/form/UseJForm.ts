@@ -1,70 +1,50 @@
-import {Dispatch, SetStateAction, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {Get} from './CrudController'
-import { MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu'
-
-
+import {initModule, MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu'
 import {formEnum} from '../utils/FormEnum'
-
-import {
-  IAccount,
-  IPACBQueryParam,
-  IProfile,
-} from '../Models.ts'
+import {IAccount, IModule, IPACBQueryParam} from '../Models.ts'
 import {useTranslation} from "react-i18next";
-import {TFunction} from "i18next";
+import iwsStore from "../utils/Store.tsx";
+import {UseJFormResult} from "../Props.ts";
 
 
 ModuleRegistry.registerModules([
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  //RowGroupingModule,
-  PinnedRowModule,
-  // ExcelExportModule,
-  // SetFilterModule,
-  // MultiFilterModule,
-  // MasterDetailModule,
+  AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,
 ])
 
-interface UseJFormProps<T> {
-  accData: IAccount[],
-  setAccData: Dispatch<SetStateAction<IAccount[]>>,
-  setRowData: Dispatch<SetStateAction<T[]>>
+const STYLES = {
+  inner: {
+    borderRadius: 5,
+    boxShadow: '0 20px 50px #BBF',
+    padding: 10,
+    paddingTop: 30,
+    // paddingLeft: 5,
+    paddingRight: 5,
+    paddingBottom: 3,
+  },
+  inner2: {
+    borderRadius: 5,
+    boxShadow: '0 20px 50px #BBF',
+    paddingTop:5,
+    paddingLeft: 1,
+    paddingRight: 2,
+  },
 }
 
-interface UseJFormResult {
-  profile: IProfile,
-  menu: Map<any, any>,
-  selected: string
-  t:TFunction<'translation', undefined>,
-  module_ctx:string,
-  acc_ctx:string,
-  current_:IPACBQueryParam,
-  current:IPACBQueryParam,
-  setCurrent:Dispatch<SetStateAction<IPACBQueryParam>>
-  submitQuery: (event: any, current: IPACBQueryParam) => void,
-  submitQuery2: (event: any, current: IPACBQueryParam) => void,
-  onRowSelected: (event: RowSelectedEvent) => void
-  //, format:(arg:T)=>any
-  // , templateName: ()=>string
-  // , rowData:T[]
-  // , setRowData:Dispatch<SetStateAction<T[]>>
-  // , accData:IAccount[]
-}
-
-const UseJForm = <T>(useJFormProps: UseJFormProps<T>): [UseJFormResult] => {
+const UseJForm = <T>(): [UseJFormResult<T>] => {
   // @ts-ignore
-  const {accData, setAccData, setRowData} = useJFormProps
+  //const {setRowData} = useJFormProps
   const {profile, menu, selected} = useStore()
   const {token, currency, company} = profile
   const {t,} = useTranslation()
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-  //if (module_ === '11111' || module_ === 11111) return <Login/>
+  const title =  `${company}/${t(module_.title)}`
 
   const modelid: number = module_ ? module_.modelid : 1111
   const acc_modelid = formEnum.ACCOUNT
@@ -73,24 +53,18 @@ const UseJForm = <T>(useJFormProps: UseJFormProps<T>): [UseJFormResult] => {
   const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
   const current_ = {...PACB_QUERY_PARM, modelid: modelid, currency:currency??''}
   const [current, setCurrent] = useState<IPACBQueryParam>(current_)
-  //const [, setIwsState] = useState(iwsStore.initialState)
-  // const [accData, setAccData] = useState<IAccount[]>([])
-  // const [rowData, setRowData] = useState<T[]>([])
-  //const [module, setModule] = useState<IModule[]>([])
-  console.log('module_', module_)
-  console.log('selected', selected)
-  console.log('current_', current_)
-  console.log('current', current)
+  const [, setIwsState] = useState(iwsStore.initialState)
+   const [accData, setAccData] = useState<IAccount[]>([])
+   const [rowData, setRowData] = useState<T[]>([])
+  const [module, setModule] = useState<IModule[]>([])
 
   //useCallback(() => {
-  // useEffect(() => {
-  //   iwsStore.subscribe(setIwsState)
-  //   console.log('acc_ctx', acc_ctx)
-  //   console.log('module_ctx', module_ctx)
-  //   Get(acc_ctx, token, acc_modelid, setAccData)
-  //   Get(module_ctx, token, module_modelid, setModule)
-  //   setCurrent(current_)
-  // }, [selected])
+  useEffect(() => {
+    iwsStore.subscribe(setIwsState)
+    Get(acc_ctx, token, acc_modelid, setAccData)
+    Get(module_ctx, token, module_modelid, setModule)
+    setCurrent(current_)
+  }, [selected])
 
   const buildUrl = (current:IPACBQueryParam) => `${module_.ctx}/${company}/${current.account}/${current.fromPeriod ===-1 ?
                                                 current.toPeriod:current.fromPeriod}/${current.toPeriod}`
@@ -111,8 +85,9 @@ const UseJForm = <T>(useJFormProps: UseJFormProps<T>): [UseJFormResult] => {
   }
 
    const onRowSelected = (event: RowSelectedEvent) => setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
-   //const templateName = () =>  (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule[0]).description
+   const templateName = () =>  (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule[0]).description
 
-  return [{ profile, menu, selected, t, module_ctx, acc_ctx, current_, current, setCurrent, submitQuery, submitQuery2, onRowSelected}]
+  return [{ profile, menu, selected, t, module_ctx, accData, rowData, setRowData, current_, current, setCurrent
+    , submitQuery, submitQuery2, onRowSelected, templateName, title:title, styles:STYLES}]
 }
 export default UseJForm
