@@ -348,9 +348,13 @@ export  interface JournalToolBarProps<A> {
   , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
    }
 
-// export interface UseJFormProps<T> {
-//   setRowData: Dispatch<SetStateAction<T[]>>
-//}
+export interface UseFormResult {
+  profile: IProfile
+  , menu: Map<any, any>
+  , selected: string
+  , t:TFunction<'translation', undefined>
+  , title:string
+}
 
 export interface UseCustomerFormResult<T extends IBusinespartner> {
   profile: IProfile

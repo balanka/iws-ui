@@ -22,14 +22,7 @@ import {logout} from "./TransactionLib.ts";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
-ModuleRegistry.registerModules([
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  // ExcelExportModule,
-  // SetFilterModule,
-  // MultiFilterModule,
-  // MasterDetailModule,
-])
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const ArticleForm = () => {
      const {profile, menu, selected} = useStore()

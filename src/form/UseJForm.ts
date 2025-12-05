@@ -5,12 +5,12 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {Get} from './CrudController'
-import {initModule, MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu'
+import {initModule, MASTERFILE, PACB_QUERY_PARM} from './Menu'
 import {formEnum} from '../utils/FormEnum'
 import {IAccount, IModule, IPACBQueryParam} from '../Models.ts'
-import {useTranslation} from "react-i18next";
 import iwsStore from "../utils/Store.tsx";
 import {UseJFormResult} from "../Props.ts";
+import useForm from "./UseForm.ts";
 
 
 ModuleRegistry.registerModules([
@@ -37,14 +37,10 @@ const STYLES = {
 }
 
 const UseJForm = <T>(): [UseJFormResult<T>] => {
-
-  const {profile, menu, selected} = useStore()
+  const [{ profile, menu, selected, t, title:title}] = useForm()
   const {token, currency, company} = profile
-  const {t,} = useTranslation()
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-  const title =  `${company}/${t(module_.title)}`
-
   const modelid: number = module_ ? module_.modelid : 1111
   const acc_modelid = formEnum.ACCOUNT
   const module_modelid = formEnum.MODULE
