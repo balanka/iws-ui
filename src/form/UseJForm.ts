@@ -37,8 +37,7 @@ const STYLES = {
 }
 
 const UseJForm = <T>(): [UseJFormResult<T>] => {
-  // @ts-ignore
-  //const {setRowData} = useJFormProps
+
   const {profile, menu, selected} = useStore()
   const {token, currency, company} = profile
   const {t,} = useTranslation()
@@ -58,7 +57,6 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
    const [rowData, setRowData] = useState<T[]>([])
   const [module, setModule] = useState<IModule[]>([])
 
-  //useCallback(() => {
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
     Get(acc_ctx, token, acc_modelid, setAccData)
@@ -73,13 +71,11 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
 
   const submitQuery = (event: any, current:IPACBQueryParam ) => {
     event.preventDefault()
-    console.log('buildUrl()', buildUrl(current))
     accData?.length < 2 && Get(acc_ctx, token, acc_modelid, setAccData)
     Get(buildUrl(current), token, modelid, setRowData)
   }
   const submitQuery2 = (event: any, current:IPACBQueryParam) => {
     event.preventDefault()
-    console.log('getUrlAll()', getUrlAll(current))
     accData?.length < 2 && Get(acc_ctx, token, acc_modelid, setAccData)
     Get(getUrlAll(current), token, modelid, setRowData)
   }
@@ -87,7 +83,7 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
    const onRowSelected = (event: RowSelectedEvent) => setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
    const templateName = () =>  (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule[0]).description
 
-  return [{ profile, menu, selected, t, module_ctx, accData, rowData, setRowData, current_, current, setCurrent
+  return [{ profile, menu, selected, t, accData, rowData, setRowData, current_, current, setCurrent
     , submitQuery, submitQuery2, onRowSelected, templateName, title:title, styles:STYLES}]
 }
 export default UseJForm

@@ -17,6 +17,7 @@ const SERVER_URL = 'http://127.0.0.1:8091'// `http://${SERVER_IP}:${SERVER_PORT}
 
 //const SERVER_URL = 'http://0.0.0.0:8091'// `http://${SERVER_IP}:${SERVER_PORT}` //'http://0.0.0.0:8091'
 console.log(' SERVER_URL', SERVER_URL)
+/* Helper function for fetching  and setting  user menu, profile, etc... */
 const getFn1 = (url: string
     , token: string
     , profile: IProfile
@@ -32,8 +33,10 @@ const getFn1 = (url: string
             setProfile({...profile, error: error})
         })
 
+/* Helper function for fetching data from api using tge url and the token */
 const getFn = (url:string, token:string) =>
                     axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
+
 /* After successfully login get user's menu and set user's profile, etc... */
 const getOtherUserData = (companyURL: string, token: string, moduleURL: string
     , result: Map<number, any>, company: string, userRights: { key: number, value: any }[]
@@ -44,7 +47,6 @@ const getOtherUserData = (companyURL: string, token: string, moduleURL: string
     , setModule: (argo: any) => void
     , setRoutes: (argo: any) => void
     , navigate:NavigateFunction): void => {
-    console.log(' tokentoken', token)
     getFn(companyURL, token)
         .then((response) => {
             const locale: string = response.data.locale
@@ -53,15 +55,11 @@ const getOtherUserData = (companyURL: string, token: string, moduleURL: string
             getFn(moduleURL, token)
                 .then((response) => {
                     const module_ = response.data
-                    console.log('module_', module_)
                     iwsStore.put(formEnum.MODULE, module_)
                     const moduleIds = module_.filter((e: any) => result.has(parseInt(e.id)))
-                    console.log('moduleIds', moduleIds)
                     const userMenu = moduleIds.map((m: any) => parseInt(m.id))
                     const menu = moduleIds.map((m: any) => m.path).filter((p: string) => p !== '/')
-                    console.log('menu', menu)
                     const menu_t = MENU(t)
-                    console.log('menu_t', menu_t)
                     const routes_t = module_.map((e: any) => {
                         return {
                             ...e,
@@ -72,7 +70,6 @@ const getOtherUserData = (companyURL: string, token: string, moduleURL: string
 
                     const newMenu = new Map([...menu_t].filter(([k, _]) => menu.includes(k)))
                     const newRoutes = routes_t.filter((r: any) => menu.includes(r.path))
-                    console.log('newRoutes', newRoutes)
                     profile.token = token
                     const profilex: IProfile = {
                         ...profile,
@@ -84,7 +81,7 @@ const getOtherUserData = (companyURL: string, token: string, moduleURL: string
                         currency: currency,
                         incomeStmtAcc: incomeStmtAcc,
                     }
-                    const profile_ = JSON.parse(JSON.stringify(profilex))
+                    const profile_ :IProfile = JSON.parse(JSON.stringify(profilex))
                     setProfile(profile_)
                     setModule(module_)
                     setMenu(newMenu)
@@ -107,6 +104,7 @@ const getOtherUserData = (companyURL: string, token: string, moduleURL: string
         })
 }
 
+/* Helper function for login */
 const loginFunction = (companyURL: string, token:string, moduleURL: string
     , result: Map<number, any>, company:string, profile:IProfile, setProfile:(p: IProfile) =>void
                         , userRights: { key: number; value: any}[]
@@ -146,7 +144,6 @@ const post1Fn = <A>(ctx: string, record: A,
         const rights = profile.rights??[]
         const allRights =  [...rights]
         const result:Map<number, any> = groupBy(allRights, ({ moduleid }) => moduleid)
-        console.log(' result', result)
         const userRights = Array.from(result, (entry) => ({
             // @ts-ignore
             key: entry[0],

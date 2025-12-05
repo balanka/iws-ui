@@ -28,7 +28,6 @@ ModuleRegistry.registerModules([
 
 
 const JForm = () => {
-  // @ts-ignore
   const [, setIwsState] = useState(iwsStore.initialState)
   const  [{profile, menu, selected, t, accData, rowData, setRowData, current_, current, setCurrent, submitQuery, submitQuery2
     , onRowSelected, templateName, title, styles}] = useJForm<IPeriodicAccountBalance>()
@@ -37,7 +36,6 @@ const JForm = () => {
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  //const title =  `${company}/${t(module_.title)}`
   const dispatch = useDispatch()
   const height = 20
 

@@ -12,7 +12,7 @@ import {
 } from "./Models.ts";
 import {TFunction} from "i18next";
 import React, {CSSProperties, Dispatch, SetStateAction} from "react";
-import {GridReadyEvent} from "ag-grid-community";
+import {GridApi, GridReadyEvent} from "ag-grid-community";
 // @ts-ignore
 import type {RowSelectedEvent} from "ag-grid-community/dist/types/src/events";
 
@@ -348,16 +348,52 @@ export  interface JournalToolBarProps<A> {
   , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
    }
 
-export interface UseJFormProps<T> {
-  setRowData: Dispatch<SetStateAction<T[]>>
-}
+// export interface UseJFormProps<T> {
+//   setRowData: Dispatch<SetStateAction<T[]>>
+//}
 
+export interface UseCustomerFormResult<T extends IBusinespartner> {
+  profile: IProfile
+  , menu: Map<any, any>
+  , selected: string
+  , t:TFunction<'translation', undefined>
+  , edited:boolean|undefined, added:boolean|undefined
+  , disable:boolean
+  , language:string
+  , accData:IAccount[]
+  //, setAccData:Dispatch<SetStateAction<IAccount[]>>
+  , bankData:IMasterfile[]
+  //, setBankData:Dispatch<SetStateAction<IMasterfile[]>>
+  , ccyData:IMasterfile[]
+  //, setCcyData:Dispatch<SetStateAction<IMasterfile[]>>
+  , vatData:IVat[]
+  //, setVatData:Dispatch<SetStateAction<IVat[]>>
+  , rowData:T[]
+  , setRowData:Dispatch<SetStateAction<T[]>>
+  , current_ :T
+  , current:T
+  , setCurrent:Dispatch<SetStateAction<T>>
+  , currentBankAccount:IBankAccount
+  , setCurrentBankAccount:Dispatch<SetStateAction<IBankAccount>>
+  , edit:()=>void
+  , initAdd:()=>void
+  , reload:()=>void
+  , submitEdit: (event: any) => void
+  , cancelEdit:()=>void
+  , handleLanguageChange:(event:any) =>void
+  , onNewBankAccount: ()=>void
+  , onDeleteBankAccount:(event:any) =>void
+  , onNewSalaryItem:()=>void
+  , submitQuery: (event: any) => void
+  , onRowSelected: (event: RowSelectedEvent) => void
+  , title:string
+  , setGridApi:Dispatch<SetStateAction<GridApi<any>|undefined>>
+}
 export interface UseJFormResult<T> {
   profile: IProfile
   , menu: Map<any, any>
   , selected: string
   , t:TFunction<'translation', undefined>
-  , module_ctx:string
   , accData:IAccount[]
   , rowData:T[]
   , setRowData:Dispatch<SetStateAction<T[]>>

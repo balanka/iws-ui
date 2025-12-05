@@ -27,7 +27,6 @@ ModuleRegistry.registerModules([
 ])
 
 const Journal = () => {
-  // @ts-ignore
   const [, setIwsState] = useState(iwsStore.initialState)
   const  [{profile, menu, selected, t, accData, rowData, current_, current, setCurrent, submitQuery, submitQuery2
     , onRowSelected, templateName, title, styles}] = useJForm<IJournal>()
@@ -37,9 +36,7 @@ const Journal = () => {
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const dispatch = useDispatch()
-
   const height = 20
-  //const modelid :number = module_? module_.modelid:1111
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)

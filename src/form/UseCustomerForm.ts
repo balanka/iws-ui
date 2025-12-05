@@ -1,0 +1,169 @@
+import {useCallback, useEffect, useState} from 'react'
+import {AllCommunityModule, ClientSideRowModelModule, GridApi, ModuleRegistry} from 'ag-grid-community'
+import 'ag-grid-community/styles/ag-grid.css'
+import 'ag-grid-community/styles/ag-theme-quartz.css'
+
+// @ts-ignore
+import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
+import {Add, Edit, Get} from './CrudController.ts'
+import {initBankAccount, MASTERFILE, useStore} from './Menu.tsx'
+import iwsStore from '../utils/Store.tsx'
+import {formEnum} from '../utils/FormEnum.tsx'
+import {IAccount, IBankAccount, IBusinespartner, IMasterfile, IVat} from '../Models.ts'
+import {useTranslation} from 'react-i18next'
+import {UseCustomerFormResult} from "../Props.ts";
+
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
+
+const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFormResult<T>]  => {
+  const { profile, menu, selected } = useStore()
+  const { t, i18n} = useTranslation()
+  const { token, company, currency } = profile
+  const [language, setLanguage] = useState('en-US')
+  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
+  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
+
+  let title =  `${company}/${t(module_.title)}`
+  const [disable, setDisable] = useState(true)
+  const [gridApi,  setGridApi] = useState<GridApi>()
+
+  //const height = 20
+  const modelid = module_? module_.modelid:1111
+  const acc_modelid = formEnum.ACCOUNT
+  const bank_modelid = formEnum.BANK
+  const ccy_modelid = formEnum.CURRENCY
+  const vat_modelid = formEnum.VAT
+  const ctx = `${selected}/${modelid}/${company}`
+
+  const modifyUrl = selected
+  console.log('ctx', ctx)
+  const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
+  const bank_ctx = `${MASTERFILE.masterfile}/${bank_modelid}/${company}`
+  const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
+  const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
+  const [current, setCurrent] = useState<T>(current_)
+  const [edited, setEdited] = useState<boolean|undefined>(false)
+  const [added, setAdded] = useState<boolean|undefined>(undefined)
+  const [, setIwsState] = useState(iwsStore.initialState)
+  const [accData, setAccData] = useState<IAccount[]>([])
+  const [rowData, setRowData] = useState<T[]>([])
+  const [vatData, setVatData] = useState<IVat[]>([])
+  const [bankData, setBankData] = useState<IMasterfile[]>([])
+  const [ccyData, setCcyData] = useState<IMasterfile[]>([])
+  const [currentBankAccount, setCurrentBankAccount] = useState<IBankAccount>(initBankAccount)
+  useEffect(() => {
+    iwsStore.subscribe(setIwsState)
+    Get(acc_ctx, token, acc_modelid, setAccData)
+    Get(bank_ctx, token, bank_modelid, setBankData)
+    Get(ccy_ctx, token, ccy_modelid, setCcyData)
+    Get(vat_ctx, token, vat_modelid, setVatData)
+    setCurrent(current_)
+    setRowData([])
+  }, [selected])
+
+  const handleLanguageChange = (event:any) => {
+    event.preventDefault()
+    const value = event.target.value
+    setLanguage(value)
+    i18n.changeLanguage(value)
+  }
+  const onNewSalaryItem = () => {}
+  const edit = () => {
+    console.log('edit called!!!')
+    if(edited) {
+      setEdited(false )
+      setDisable(true)
+      setAdded(false)
+    } else {
+      setEdited(true)
+      setDisable(false)
+      setAdded(true)
+    }
+  }
+  const submitEdit = (event:any) => {
+    event.preventDefault()
+    if(edited) {
+      Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
+    } else if (!edited && !disable) {
+      Add(modifyUrl, token, { ...current }, rowData, setCurrent)
+    }
+    setDisable(true)
+    setEdited(false)
+    setAdded(true)
+  }
+  const cancelEdit = () => {
+    if(edited) {
+      setEdited(false)
+      setDisable(true)
+      setAdded(true)
+    }
+  }
+
+  const initAdd = () => {
+    const newRow = { ...current_, company: company, currency: currency}
+    setCurrent(newRow)
+    setAdded(true)
+    setEdited(false)
+    setDisable(false)
+  }
+
+  const reload = () => {
+    iwsStore.deleteKey(current.modelid)
+    Get(ctx, token, current.modelid, setRowData)
+    setCurrent(current_)
+  }
+  const submitQuery = (event:any) => {
+    event.preventDefault()
+    Get(ctx, token, modelid, setRowData)
+    Get(acc_ctx, token, acc_modelid, setAccData)
+    Get(vat_ctx, token, vat_modelid, setVatData)
+  }
+  const addLine =
+      ( line:IBankAccount)  => {
+        const newLine:IBankAccount = {...line, modelid:-1, owner: `${current.id}`}
+        const dx: T = {...current}
+         if(dx.hasOwnProperty('bankaccounts')){
+           dx.bankaccounts.push(newLine)
+         } else dx['bankaccounts'] = [{...newLine}]
+        gridApi!.applyTransaction({add: [newLine]})
+        return dx
+      }
+
+  const onRemoveSelectedLine = useCallback(
+      ( event:any, current:T, setCurrent:(arg:T) =>void) => {
+        event.preventDefault()
+        const dx: T = {...current}
+        const idx = dx?.bankaccounts.findIndex((obj: IBankAccount) => obj.id === currentBankAccount.id)
+        if (idx >= 0) dx.bankaccounts[idx] = {...currentBankAccount, modelid: -2}
+        setCurrent(dx)
+      }, [currentBankAccount]);
+
+  const onNewBankAccount = //useCallback(
+    () => {
+    setEdited(true)
+    setDisable(false)
+    console.log('current>>>>', current)
+    const record = addLine ( {...initBankAccount, owner: `${current.id}` })
+    setCurrent(record)
+  }//,
+  //   [current],
+  // )
+  const onDeleteBankAccount = (event:any) => {
+    onRemoveSelectedLine (event, current,  setCurrent);
+     Edit(modifyUrl, token, current, rowData, setCurrent)
+  }
+  const onRowSelected = (event: RowSelectedEvent) => {
+    const selected:T = event.data
+    const bankAccounts:IBankAccount[] = selected?.bankaccounts
+    const selectedBankAccount:IBankAccount = bankAccounts?bankAccounts[0]:initBankAccount
+    setCurrent(selected)
+    setCurrentBankAccount(selectedBankAccount)
+  }
+
+  return [{ profile, menu, selected, t,  edited, disable, language, added, accData, bankData, ccyData, rowData
+    , setRowData, vatData, current_, current, setCurrent, currentBankAccount, setCurrentBankAccount, edit, initAdd
+    , reload, cancelEdit, submitEdit, handleLanguageChange, onNewBankAccount, onDeleteBankAccount,  onNewSalaryItem
+    , submitQuery, onRowSelected, title:title, setGridApi}]
+
+}
+export default  UseCustomerForm
