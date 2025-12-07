@@ -1,9 +1,9 @@
-import axios from 'axios'
+//import axios from 'axios'
 import {MASTERFILE, MENU} from './Menu'
 import iwsStore from '../utils/Store.jsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {groupBy} from '../utils/Utils'
-import {ILoggingContext, IProfile, IWSModel} from "../Models.ts";
+import {HttpMethod, ILoggingContext, IProfile, IWSModel} from "../Models.ts";
 import {NavigateFunction} from "react-router-dom";
 import {TFunction} from "i18next";
 // @ts-ignore
@@ -17,14 +17,46 @@ const SERVER_URL = 'http://127.0.0.1:8091'// `http://${SERVER_IP}:${SERVER_PORT}
 
 //const SERVER_URL = 'http://0.0.0.0:8091'// `http://${SERVER_IP}:${SERVER_PORT}` //'http://0.0.0.0:8091'
 console.log(' SERVER_URL', SERVER_URL)
+const fetchFn00 = (url: string,  record:any) =>
+  fetch(url,  {
+    body: JSON.stringify(record),
+    method: 'POST'}).then((response: any) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
+
+const fetchFnPost0 = (url: string,  record:any) =>
+      fetch (url, {
+           body: JSON.stringify(record),
+           method:'POST',
+      }).then((response: any) => {
+           if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+         return response.json();
+      })
+
+const fetchFn2 = (url: string, method:HttpMethod, token:string, record:any) =>
+  fetch(url,  {
+    body: JSON.stringify(record),
+    method:method ,
+    headers: {Authorization: `Bearer ${token}`}
+  }).then((response: any) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
 /* Helper function for fetching  and setting  user menu, profile, etc... */
 const getFn1 = (url: string
     , token: string
     , profile: IProfile
     , setProfile: (argo: IProfile) => void) =>
-    axios.get(url, {headers: {Authorization: `Bearer ${token}`}})
-        .then((response) => {
-            const resp = JSON.parse(JSON.stringify(response.data))
+          fetchFn00(url, token).then((data:any) => {
+            console.log(' data ', data)
+            const resp:any = JSON.parse(JSON.stringify(data))
             const profilex = {...profile, locale: resp.locale, currency: resp.currency
                 , incomeStmtAcc: resp.incomeStmtAcc}
             setProfile(profilex)
@@ -33,9 +65,8 @@ const getFn1 = (url: string
             setProfile({...profile, error: error})
         })
 
-/* Helper function for fetching data from api using tge url and the token */
-const getFn = (url:string, token:string) =>
-                    axios.get(url, { headers: { Authorization: `Bearer ${token}` } })
+/* Helper function for fetching data from api using the url and the token */
+const getFn = (url:string, token:string) => fetchFn2(url, 'GET', token, undefined )
 
 /* After successfully login get user's menu and set user's profile, etc... */
 const getOtherUserData = (companyURL: string, token: string, moduleURL: string
@@ -49,12 +80,12 @@ const getOtherUserData = (companyURL: string, token: string, moduleURL: string
     , navigate:NavigateFunction): void => {
     getFn(companyURL, token)
         .then((response) => {
-            const locale: string = response.data.locale
-            const currency: string = response.data.currency
-            const incomeStmtAcc: string = response.data.incomeStmtAcc
+            const locale: string = response.locale
+            const currency: string = response.currency
+            const incomeStmtAcc: string = response.incomeStmtAcc
             getFn(moduleURL, token)
                 .then((response) => {
-                    const module_ = response.data
+                    const module_ = response
                     iwsStore.put(formEnum.MODULE, module_)
                     const moduleIds = module_.filter((e: any) => result.has(parseInt(e.id)))
                     const userMenu = moduleIds.map((m: any) => parseInt(m.id))
@@ -131,15 +162,14 @@ const post1Fn = <A>(ctx: string, record: A,
     , navigate: NavigateFunction
 ):IProfile => {
    /* Login using the user provided credentials and get the user data and set the profile */
-    axios.post(ctx, record).then((response: any) => {
-       // RESPONSE = response
-        console.log(' response.data', response?.data)
-        profile.token=response.data.hash
-        profile.company=response.data.company
-        profile.rights=response.data.rights
-        profile.roles=response.data.roles
-        setProfile({...profile, token:response.data.hash, company:response.data.company
-            , roles:response.data.roles, rights:response.data.rights})
+  fetchFnPost0(ctx, record).then((data:any) =>  {
+       console.log(' response', data)
+        profile.token=data.hash
+        profile.company=data.company
+        profile.rights=data.rights
+        profile.roles=data.roles
+        setProfile({...profile, token:data.hash, company:data.company
+            , roles:data.roles, rights:data.rights})
         const token = profile.token
         const rights = profile.rights??[]
         const allRights =  [...rights]
@@ -165,29 +195,22 @@ const post1Fn = <A>(ctx: string, record: A,
     console.log('profile', profile)
     return profile
 }
+
 const Post = <A>(ctx:string, profile:any, record:A) => patchFn(ctx, profile.token, record)
 
 const patchFn = <A>(ctx:string, token:string, record:A) =>
-    axios
-        .patch(`${SERVER_URL}${ctx}`, record, {headers: {Authorization: `Bearer ${token}`}})
-        .then((response: { data: any }) => {
-            console.log('responsex', response.data)
-        })
-        .catch(function (error: any) {
-            console.log('error', error)
-    })
+  fetchFn2(`${SERVER_URL}${ctx}`, 'PATCH', token, record )
+    //axios.patch(`${SERVER_URL}${ctx}`, record, {headers: {Authorization: `Bearer ${token}`}})
 const Edit = <A>(ctx:string, token:string, record:IWSModel, data:IWSModel[], setCurrent:(arg0:A) =>void)=> {
     console.log('record>>>', record)
     var result
     const url = `${SERVER_URL}${ctx}`
-    axios
-        .put(url, record, {headers: {Authorization: `Bearer ${token}`}})
-        .then((response: { data: any }) => {
-            const resp = response.data
+    //axios.put(url, record, {headers: {Authorization: `Bearer ${token}`}})
+    fetchFn2(url, 'PUT', token, record )
+     .then((response) => {
+            const resp = response
             console.log('response', response)
-            const index = data.findIndex((obj) => {
-                return obj ? obj.id === record.id : false
-            })
+            const index = data.findIndex((obj) => obj && obj.id === record.id)
             data[index] = resp
             result = resp
             setCurrent(resp)
@@ -203,9 +226,9 @@ const Add = <A>(ctx:string, token:string, record:A, data:A[], setCurrent:(arg0:A
     console.log('Adding ctx/record', `${ctx}/${record}`)
     const url = `${SERVER_URL}${ctx}`
     console.log('Adding url', url)
-    axios.post(url, record, {headers: {Authorization: `Bearer ${token}`}})
-        .then((response: { data: any }) => {
-            const resp = response.data
+     fetchFn2(url, 'POST', token, record )
+      .then((response) => {
+            const resp = response
             const index = data.length + 1
             data[index] = resp
             console.log('response', resp)
@@ -216,7 +239,6 @@ const Add = <A>(ctx:string, token:string, record:A, data:A[], setCurrent:(arg0:A
         })
 }
 
-//const importFn = (str:string) => React.lazy(() => import(`./${str}.jsx`))
 const Login = (
   navigate:NavigateFunction,
   ctx:string,
@@ -235,7 +257,6 @@ const Login = (
     /* Login using the user provided credentials */
     post1Fn(url, loggingContext, profile, setProfile, companyURL, moduleURL, company
         , t, setMenu, setModule, setRoutes, navigate)
-
 }
 
 const  Get3 = <A>(ctx:string, token:string, key: string|number
@@ -310,7 +331,6 @@ const Get1 = (ctx:string, token:string, key_ : string|number) => {
             console.log('error', error)
         })
 }
-
 
 const Get2 = <A>(ctx:string, token:string, setCurrent:(arg0: A) => void ) => {
     const url = `${SERVER_URL}${ctx}`

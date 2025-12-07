@@ -41,7 +41,6 @@
     "ag-grid-community": "^34.3.1",
     "ag-grid-enterprise": "34.3.1",
     "ag-grid-react": "^34.3.1",
-    "axios": "^1.12.2",
     "classnames": "^2.5.1",
     "core-js": "^3.44.0",
     "date-fns": "^4.1.0",

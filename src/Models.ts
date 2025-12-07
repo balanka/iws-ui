@@ -84,6 +84,7 @@ export interface IArticle  extends IMasterfile, IStockAccount {
   , quantityUnit: string, packUnit: string, vatCode: string, stocks:IStock[]
 }
 
+export type HttpMethod = "PATCH" | "POST" | "PUT" | "GET"
 export interface IJournal {
     id:bigint,
     transid:bigint,
