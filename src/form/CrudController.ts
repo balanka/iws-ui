@@ -1,9 +1,8 @@
-//import axios from 'axios'
 import {MASTERFILE, MENU} from './Menu'
 import iwsStore from '../utils/Store.jsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {groupBy} from '../utils/Utils'
-import {HttpMethod, ILoggingContext, IProfile, IWSModel} from "../Models.ts";
+import {HttpMethod, ILoggingContext, IProfile, IWSModel} from '../Models.ts'
 import {NavigateFunction} from "react-router-dom";
 import {TFunction} from "i18next";
 // @ts-ignore
@@ -18,9 +17,7 @@ const SERVER_URL = 'http://127.0.0.1:8091'// `http://${SERVER_IP}:${SERVER_PORT}
 //const SERVER_URL = 'http://0.0.0.0:8091'// `http://${SERVER_IP}:${SERVER_PORT}` //'http://0.0.0.0:8091'
 console.log(' SERVER_URL', SERVER_URL)
 const fetchFn00 = (url: string,  record:any) =>
-  fetch(url,  {
-    body: JSON.stringify(record),
-    method: 'POST'}).then((response: any) => {
+  fetch(url,  {body: JSON.stringify(record), method: 'POST'}).then((response: any) => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -28,45 +25,41 @@ const fetchFn00 = (url: string,  record:any) =>
   })
 
 const fetchFnPost0 = (url: string,  record:any) =>
-      fetch (url, {
-           body: JSON.stringify(record),
-           method:'POST',
-      }).then((response: any) => {
+      fetch (url, {body: JSON.stringify(record), method:'POST',}).then((response: any) => {
            if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);
               }
          return response.json();
       })
 
-const fetchFn2 = (url: string, method:HttpMethod, token:string, record:any) =>
-  fetch(url,  {
+const fetchFn = (url: string, method_:HttpMethod, token:string, record:any) => {
+  console.log('record', record)
+  return fetch(url, {
     body: JSON.stringify(record),
-    method:method ,
-    headers: {Authorization: `Bearer ${token}`}
+    method: method_,
+    headers: {Authorization: `Bearer ${token}`, Accept: "application/json", "Content-Type": "application/json",}
   }).then((response: any) => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-  })
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+ }
+
+
+/* Helper function for fetching data from api using the url and the token */
+const getFn = (url:string, token:string) => fetchFn(url, 'GET', token, undefined )
+
 /* Helper function for fetching  and setting  user menu, profile, etc... */
-const getFn1 = (url: string
-    , token: string
-    , profile: IProfile
-    , setProfile: (argo: IProfile) => void) =>
+const getFn1 = (url: string, token: string, profile: IProfile, setProfile: (argo: IProfile) => void) =>
           fetchFn00(url, token).then((data:any) => {
             console.log(' data ', data)
             const resp:any = JSON.parse(JSON.stringify(data))
-            const profilex = {...profile, locale: resp.locale, currency: resp.currency
-                , incomeStmtAcc: resp.incomeStmtAcc}
-            setProfile(profilex)
-        })
-        .catch(function (error: any) {
+            const profile_ = {...profile, locale: resp.locale, currency: resp.currency, incomeStmtAcc: resp.incomeStmtAcc}
+            setProfile(profile_)
+        }).catch(function (error: any) {
             setProfile({...profile, error: error})
         })
-
-/* Helper function for fetching data from api using the url and the token */
-const getFn = (url:string, token:string) => fetchFn2(url, 'GET', token, undefined )
 
 /* After successfully login get user's menu and set user's profile, etc... */
 const getOtherUserData = (companyURL: string, token: string, moduleURL: string
@@ -78,11 +71,13 @@ const getOtherUserData = (companyURL: string, token: string, moduleURL: string
     , setModule: (argo: any) => void
     , setRoutes: (argo: any) => void
     , navigate:NavigateFunction): void => {
+   /* 1- Fetch company data from  api */
     getFn(companyURL, token)
         .then((response) => {
             const locale: string = response.locale
             const currency: string = response.currency
             const incomeStmtAcc: string = response.incomeStmtAcc
+          /* Fetch Module data from  api and use to build user menu on UI */
             getFn(moduleURL, token)
                 .then((response) => {
                     const module_ = response
@@ -92,10 +87,8 @@ const getOtherUserData = (companyURL: string, token: string, moduleURL: string
                     const menu = moduleIds.map((m: any) => m.path).filter((p: string) => p !== '/')
                     const menu_t = MENU(t)
                     const routes_t = module_.map((e: any) => {
-                        return {
-                            ...e,
-                            component: e.description,
-                            element: e.description, //? importFn(e.description) : undefined,
+                        return {...e,
+                            component: e.description, element: e.description, //? importFn(e.description) : undefined,
                         }
                     })
 
@@ -196,25 +189,18 @@ const post1Fn = <A>(ctx: string, record: A,
     return profile
 }
 
-const Post = <A>(ctx:string, profile:any, record:A) => patchFn(ctx, profile.token, record)
-
-const patchFn = <A>(ctx:string, token:string, record:A) =>
-  fetchFn2(`${SERVER_URL}${ctx}`, 'PATCH', token, record )
-    //axios.patch(`${SERVER_URL}${ctx}`, record, {headers: {Authorization: `Bearer ${token}`}})
 const Edit = <A>(ctx:string, token:string, record:IWSModel, data:IWSModel[], setCurrent:(arg0:A) =>void)=> {
     console.log('record>>>', record)
     var result
     const url = `${SERVER_URL}${ctx}`
-    //axios.put(url, record, {headers: {Authorization: `Bearer ${token}`}})
-    fetchFn2(url, 'PUT', token, record )
-     .then((response) => {
+    fetchFn(url, 'PUT', token, record )
+        .then((response: any ) => {
             const resp = response
             console.log('response', response)
-            const index = data.findIndex((obj) => obj && obj.id === record.id)
+            const index = data.findIndex((obj) => obj && (obj.id === record.id))
             data[index] = resp
             result = resp
             setCurrent(resp)
-            console.log('resultX', result)
         })
         .catch(function (error: any) {
             console.log('error', error)
@@ -226,7 +212,7 @@ const Add = <A>(ctx:string, token:string, record:A, data:A[], setCurrent:(arg0:A
     console.log('Adding ctx/record', `${ctx}/${record}`)
     const url = `${SERVER_URL}${ctx}`
     console.log('Adding url', url)
-     fetchFn2(url, 'POST', token, record )
+     fetchFn(url, 'POST', token, record )
       .then((response) => {
             const resp = response
             const index = data.length + 1
@@ -262,15 +248,7 @@ const Login = (
 const  Get3 = <A>(ctx:string, token:string, key: string|number
                   , setRowData: (arg0:A[]) => void, setCurrent:(arg:A)=>void): void => {
   const url = `${SERVER_URL}${ctx}`
-  fetch(url, {
-    headers: {
-      method: 'GET',
-      Accept: 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-  })
-    .then((response) => response.json())
-    .then((data: A[]) => {
+    getFn(url, token ).then((data: A[]) => {
       if (Array.isArray(data)) {
         iwsStore.put(key, data)
         setRowData(data as A[])
@@ -288,18 +266,9 @@ const  Get3 = <A>(ctx:string, token:string, key: string|number
   })
 }
 const  Get = <A>(ctx:string, token:string, key: string|number, setRowData: (arg0:A[]) => void): void => {
-    console.log('Error ctx', ctx)
     const url = `${SERVER_URL}${ctx}`
-    console.log('Error url', url)
-    fetch(url, {
-        headers: {
-            method: 'GET',
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-    })
-        .then((response) => response.json())
-        .then((data: A[]) => {
+    console.log('url', url)
+     getFn(url,  token ).then((data: A[]) => {
             console.log('data>>>>', data)
             if (Array.isArray(data)) {
                 console.log('dataXXX>>>>', data)
@@ -313,20 +282,14 @@ const  Get = <A>(ctx:string, token:string, key: string|number, setRowData: (arg0
         console.log('Error', error)
         if (JSON.stringify(error).includes('401')) {
             console.log('error', 'Session expired!!!!! Login again!!!!')
-            // history('/login')
         }
     })
 }
 
 const Get1 = (ctx:string, token:string, key_ : string|number) => {
     const url = `${SERVER_URL}${ctx}`
-    console.log('urlurlurlurl Get1', url)
-    console.log('urlurlurlurl Get1 ctx', ctx)
-    getFn(url, token)
-        .then((response) => {
-            const resp = response.data
-            iwsStore.put(key_, resp)
-        })
+    console.log('url', url)
+    getFn(url, token).then((response) => iwsStore.put(key_, response))
         .catch(function (error) {
             console.log('error', error)
         })
@@ -334,10 +297,9 @@ const Get1 = (ctx:string, token:string, key_ : string|number) => {
 
 const Get2 = <A>(ctx:string, token:string, setCurrent:(arg0: A) => void ) => {
     const url = `${SERVER_URL}${ctx}`
-    console.log('urlurlurlurl', url)
-    getFn(url, token)
-        .then((response) => {
-            const resp = response.data
+    console.log('url', url)
+    getFn(url, token).then((response) => {
+            const resp = response
             console.log('responseRRRRRR2', resp)
             iwsStore.update(resp.modelid, resp.id, {...resp})
             Array.isArray(resp) && resp.length > 0 ? setCurrent(resp[0]) : void (0)
@@ -351,4 +313,4 @@ const Get2 = <A>(ctx:string, token:string, setCurrent:(arg0: A) => void ) => {
 const EditRow = <A>(edited:A, isNew:boolean, setCurrent :(arg0: A) => void) =>
     setCurrent({ ...edited, editing: !isNew })
 
-export { Get, Get1, Get2, Get3, Post, Login, Add, Edit, EditRow }
+export { Get, Get1, Get2, Get3,  Login, Add, Edit, EditRow }
