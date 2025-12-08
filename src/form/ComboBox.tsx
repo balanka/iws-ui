@@ -25,7 +25,6 @@ const ComboBox = <TValue extends Base>({
                                             onChange,
                                             fontSize
                                         }: GenericSelectProps<TValue>) => {
-     console.log('value', value);
     //console.log('fontSize', fontSize);
      const zindex = zIndex ?? 99999
     //const [items, setItems] = useState<ValueType<typeof value[0], true>>()
