@@ -1,22 +1,18 @@
 import React from 'react'
 import Select from 'react-select'
 
-type Base = {
-    value: string|bigint,
-    label: string,
-}
-
-type GenericSelectProps<TValue> = {
+type Base = { value: string|bigint, label: string, }
+type GenericSelectProps<T> = {
     style?: React.CSSProperties,
-    value: TValue,
+    value: T,
     disable?: boolean,
     zIndex?: number,
-    values: TValue[],
+    values: T[],
     onChange: (value: any, event:any) => void,
     fontSize?: number,
 };
 
-const ComboBox = <TValue extends Base>({
+const ComboBox = <T extends Base>({
                                             style,
                                             value,
                                             disable,
@@ -24,7 +20,7 @@ const ComboBox = <TValue extends Base>({
                                             values,
                                             onChange,
                                             fontSize
-                                        }: GenericSelectProps<TValue>) => {
+                                        }: GenericSelectProps<T>) => {
     //console.log('fontSize', fontSize);
      const zindex = zIndex ?? 99999
     //const [items, setItems] = useState<ValueType<typeof value[0], true>>()
@@ -44,17 +40,6 @@ const ComboBox = <TValue extends Base>({
              ...base, ...style,
              padding: '0 0 0px',
          }),
-
-         // singleValue: (base) => ({
-         //     ...base,
-         //     padding: 0,
-         //     borderRadius: 2,
-         //     opacity: .9,
-         //     background: '#CAFFCA',
-         //     //color: 'white',
-         //     display: 'flex',
-         // }),
-         //singleValue: (base) => ({ ...base, color: "lightgray" }),
 
          control: (base:any, state:any):any => {
              return {
@@ -85,26 +70,7 @@ const ComboBox = <TValue extends Base>({
                  //boxShadow: state.isFocused ? null : null,
              }
          },
-         // control: (base, state) => {
-             // return {
-             //     ...base, ...style,
-             //     background: '#fff',
-             //     borderColor: '#9e9e9e',
-             //     '&:hover': {
-             //         outline: 'none',
-             //     },
-             //     boxShadow: 'none',
-             //     paddingBottom: '10px',
-             //     //borderColor: "#6b7280",
-             //     borderRadius: "px",
-             //     paddingTop: '0px',
-             //     border: '1px solid gray',
-             //     //backgroundColor: 'lightgray',
-             //     outline: state.isFocused ? "none" : undefined,
-             //     // backgroundColor: state.isDisabled ? 'blue' : 'lightGreen',
-             //     //boxShadow: state.isFocused ? null : null,
-             // }
-         //},
+
          input: (base:any, state:any):any => ({
              ...base, ...style,
              margin: '0px',
@@ -151,17 +117,7 @@ const ComboBox = <TValue extends Base>({
              right: -1,
          }),
      }
-    // const handleOption = (selections: ValueType<typeof values[0], true>) => {
-    //     console.log('selections', selections)
-    //     const val = values.find((m) => m.value === selections?.value )//isId?(value.id === e?.id):(value.name === e?.target?.value))
-    //     console.log('valX', val)
-    //     if (val) {
-    //         console.log('val', val)
-    //         onChange(val.value)
-    //         setItems(selections);
-    //     }
-    //
-    // };
+
     const onSelectChange = (e:any) => {
          console.log('onSelectChange', e)
         console.log('onSelectChange V', value)
