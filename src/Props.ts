@@ -347,7 +347,6 @@ export  interface JournalToolBarProps<A> {
   , getData: ()=>any
   , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
    }
-
 export interface UseFormResult {
   profile: IProfile
   , menu: Map<any, any>
@@ -356,6 +355,28 @@ export interface UseFormResult {
   , i18n: i18n
   , title:string
   , modelid : number
+}
+export interface UseMasterfileFormResult<T extends  IMasterfile> {
+  profile: IProfile
+  , menu: Map<any, any>
+  , selected: string
+  , t:TFunction<'translation', undefined>
+  , i18n: i18n
+  , language:string
+  , modelid : number
+  , initAdd:()=>void
+  , added:boolean
+  , disable:boolean
+  , edit:()=>void
+  , edited:boolean
+  , submitEdit:(event:any) =>void
+  , cancelEdit:()=>void
+  , reload: ()=>void
+  , handleLanguageChange:(event:any) =>void
+  , toggle:() =>void
+  , title:string
+  , zIndex:number
+  , rowData:T[]
 }
 export interface UseCustomerFormResult<T extends IBusinespartner> {
   profile: IProfile
