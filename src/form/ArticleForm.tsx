@@ -33,7 +33,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      module_ =  module_ ?? formEnum.LOGIN
      if (module_ === '11111' || module_ === 11111) return <Login/>
      const [state, ] = useState({collapse: true, fadeIn: true, timeout: 300})
-     //const [disable, ] = useState(true)
      const height = 20
      const initialState = initArticle[0]
      const acc_modelid = formEnum.ACCOUNT
@@ -46,8 +45,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const group_ctx = `${MASTERFILE.masterfile}/${group_modelid}/${company}`
      const current_: IArticle = initialState
      const [current, setCurrent] = useState<IArticle>(current_)
-     //const [edited, ] = useState<boolean|undefined>(false)
-     //const [added, ] = useState<boolean|undefined>(undefined)
      const [, setIwsState] = useState(iwsStore.initialState)
      const [accData, setAccData] = useState<IAccount[]>([])
      const [groupData, setGroupData] = useState<IMasterfile[]>([])
@@ -67,11 +64,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
       const load = (event: any) => {
          event.preventDefault()
         reload()
-         // Get(acc_ctx, token??'noToken', acc_modelid, setAccData)
-         // Get(qttyUnit_ctx, token??'noToken', qttyUnit_modelid, setQuantityUnitData)
-         // Get(vat_ctx, token??'noToken', vat_modelid, setVatData)
-         // //ctx && Get(ctx, token??'noToken', modelid, setRowData)
-         // setCurrent(current_)
      }
      const onRowSelected = (event: RowSelectedEvent) =>
               setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
