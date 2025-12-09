@@ -8,7 +8,7 @@ import {useNavigate} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
 import iwsStore from '../utils/Store.jsx'
 import {TFunction} from "i18next";
-import {logout} from "./TransactionLib.ts";
+import {logout} from '../utils/FormUtils.tsx'
 import {styles as stylesx} from "./BasicTreeTableProps.tsx";
 import {useDispatch} from "react-redux";
 import {IAccount} from "../Models.ts";

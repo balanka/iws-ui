@@ -16,7 +16,7 @@ import {defaultColDefX, PeriodicAccountBalanceGrid} from '../IWSGrid.tsx'
 import Login from './Login.tsx'
 import {formatumber2Digits} from '../utils/Utils.ts'
 import {useDispatch} from 'react-redux'
-import {logout} from './TransactionLib.ts'
+import {logout} from '../utils/FormUtils.tsx'
 import {generateDocx} from '../utils/XlsUtils.ts'
 import useJForm from './UseJForm.ts'
 

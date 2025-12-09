@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import {IFinancials, ITransaction} from "../Models.ts";
+import {NavigateFunction} from "react-router-dom";
+import iwsStore from "./Store.tsx";
 
 export const AgGridCheckbox =
     (props: { value: { toString: () => string };
@@ -32,6 +34,11 @@ export const toOption = (m: {id:string|bigint, name:string}) => {
 
 export function Show <T>({ when, fallback = null, children }:ShowProps<T>) {
     return when ? children : fallback;
+}
+export const logout = (navigate:NavigateFunction) => {
+  iwsStore.clear()
+  navigate('/dashboard')
+  window.location.reload()
 }
 // export const  print = <A extends object>(templateFileName:string, data:A[]):Element => {
 //     return (

@@ -24,7 +24,7 @@ import Login from './Login'
 import {TFunction} from "i18next";
 import {Masterfile2FormProps} from "../Props.ts";
 import RoleTabs from "./RoleTabs.tsx";
-import {logout} from "./TransactionLib.ts";
+import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 

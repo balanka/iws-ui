@@ -9,7 +9,7 @@ import { TreeDataModule } from "ag-grid-enterprise"
 import {MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import Login from './Login'
-import {logout} from './TransactionLib'
+import {logout} from '../utils/FormUtils.tsx'
 
 import {useTranslation} from 'react-i18next'
 import {BalanceSheetHead, JournalMainForm} from './FormsProps.tsx'

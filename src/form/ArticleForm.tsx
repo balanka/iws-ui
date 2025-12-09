@@ -18,7 +18,7 @@ import {articleColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IArticle, IMasterfile, IVat} from '../Models.ts'
 import {ArticleGrid} from '../IWSGrid.tsx'
 import Login from './Login'
-import {logout} from "./TransactionLib.ts";
+import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 

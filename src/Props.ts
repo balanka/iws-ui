@@ -3,7 +3,7 @@ import {
   IAddress,
   IArticle, IAsset, IBankAccount, IBankStatement, IBankStatementParam, IBusinespartner, ICompany,
   ICustomer,
-  IEmployee, IFinancials, ILineFinancials, ILineTransaction,
+  IEmployee, IFinancials, IFmodule, ILineFinancials, ILineTransaction,
   IMasterfile,
   IMasterfile2, IPACBQueryParam, IProfile, IRole,
   IStore,
@@ -224,12 +224,12 @@ export interface CustomerGeneralFormProps {
     disable: boolean,
     t: TFunction<'transalation', undefined>
 }
-
-export interface FinancialsDetailsTabProps {
-    transaction: IFinancials,
-    setTransaction:(arg:IFinancials)=>void
-    currentLineFinancials:ILineFinancials,
-    setCurrentLineFinancials:(arg:ILineFinancials) =>void,
+export type ILine = ILineTransaction|ILineFinancials
+export interface FinancialsDetailsTabProps<T extends IFinancials, L extends  ILine> {
+    transaction: T,
+    setTransaction:(arg:T)=>void
+    currentLineFinancials:L,
+    setCurrentLineFinancials:Dispatch<SetStateAction<L>>,
     accData: IAccount[],
     t: TFunction<'transalation', undefined>,
     zIndex:number,
@@ -237,11 +237,11 @@ export interface FinancialsDetailsTabProps {
     gridRef?:React.RefObject<AgGridReact>
 }
 
-export interface FinancialsDetailsFormProps {
-    transaction: IFinancials,
-    setTransaction:(arg:IFinancials)=>void
-    currentLineFinancials:ILineFinancials,
-    setCurrentLineFinancials:(arg:ILineFinancials) =>void,
+export interface FinancialsDetailsFormProps<T extends IWSTransaction<L>, L extends  ILineFinancials> {
+    transaction: T,
+    setTransaction:(arg:T)=>void
+    currentLineFinancials:L,
+    setCurrentLineFinancials:Dispatch<SetStateAction<L>>,
     accData: IAccount[],
     t: TFunction<'transalation', undefined>,
     disable: boolean,
@@ -249,11 +249,11 @@ export interface FinancialsDetailsFormProps {
     zIndex:number,
 }
 
-export interface TransactionDetailsTabProps {
-    transaction: ITransaction,
-    setTransaction:(arg:ITransaction)=>void,
-    currentLineTransaction:ILineTransaction,
-    setCurrentLineTransaction:(arg:ILineTransaction) =>void,
+export interface TransactionDetailsTabProps <T extends ITransaction, L extends ILineTransaction> {
+    transaction: T,
+    setTransaction:Dispatch<SetStateAction<T>>,
+    currentLineTransaction:L,
+    setCurrentLineTransaction:Dispatch<SetStateAction<L>>,
     articleData: IArticle[],
     vatData: IVat[],
     t: TFunction<'transalation', undefined>,
@@ -263,11 +263,11 @@ export interface TransactionDetailsTabProps {
     zIndex:number,
 }
 
-export interface TransactionDetailsFormProps {
-    transaction: ITransaction,
-    setTransaction:(arg:ITransaction)=>void
-    currentLineTransaction: ILineTransaction,
-    setCurrentLineTransaction: (line: ILineTransaction) => void,
+export interface TransactionDetailsFormProps<T extends IWSTransaction<L>, L extends  ILine> {
+    transaction: T,
+    setTransaction:Dispatch<SetStateAction<T>>
+    currentLineTransaction: L,
+    setCurrentLineTransaction: Dispatch<SetStateAction<L>>,
     articleData: IArticle[],
     vatData: IVat[],
     t: TFunction<'transalation', undefined>,
@@ -357,7 +357,6 @@ export interface UseFormResult {
   , title:string
   , modelid : number
 }
-
 export interface UseCustomerFormResult<T extends IBusinespartner> {
   profile: IProfile
   , menu: Map<any, any>
@@ -367,13 +366,9 @@ export interface UseCustomerFormResult<T extends IBusinespartner> {
   , disable:boolean
   , language:string
   , accData:IAccount[]
-  //, setAccData:Dispatch<SetStateAction<IAccount[]>>
   , bankData:IMasterfile[]
-  //, setBankData:Dispatch<SetStateAction<IMasterfile[]>>
   , ccyData:IMasterfile[]
-  //, setCcyData:Dispatch<SetStateAction<IMasterfile[]>>
   , vatData:IVat[]
-  //, setVatData:Dispatch<SetStateAction<IVat[]>>
   , rowData:T[]
   , setRowData:Dispatch<SetStateAction<T[]>>
   , current_ :T
@@ -395,6 +390,46 @@ export interface UseCustomerFormResult<T extends IBusinespartner> {
   , title:string
   , setGridApi:Dispatch<SetStateAction<GridApi<any>|undefined>>
 }
+
+export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends  IWSLine> {
+  profile: IProfile
+  , menu: Map<any, any>
+  , selected: string
+  , t:TFunction<'translation', undefined>
+  , language:string
+  , isFetching:boolean
+  , accData?:IAccount[]
+  , storeData:IStore[]
+  , fmodule:IFmodule[]
+  , articleData?:IArticle[]
+  , vatData?:IVat[]
+  , rowData:T[]
+  , setRowData:Dispatch<SetStateAction<T[]>>
+  , current_ :T
+  , current:T
+  , setCurrent:Dispatch<SetStateAction<T>>
+  , initAdd:()=>void
+  , reload:()=>void
+  , submitEdit: (event: any) => void
+  , copyFromTransaction:T[]
+  , handleLanguageChange:(event:any) =>void
+  , handleModuleChange:(event:any) =>void
+  , handleKeyPress:(event:any)=>void
+  , onNewLine:()=>void
+  , onRowSelected: (event: RowSelectedEvent) => void
+  , onDeleteLine:(arg:any) =>void
+  , submitCancel:(event:any) =>void
+  , submitPost:(event:any)=>void
+  , copyCall:(arg:BigInt)=>void
+  , setGridApi:Dispatch<SetStateAction<GridApi<any>|undefined>>
+  , templateName:()=>string
+  , zIndex:number
+  , saveProps:SaveProps
+  , modelid:number
+  , partnerId:number
+  , title:string
+}
+
 export interface UseJFormResult<T> {
   profile: IProfile
   , menu: Map<any, any>

@@ -22,7 +22,7 @@ import {
 import { CustomerGrid} from '../IWSGrid.tsx'
 import Login from './Login.tsx'
 import {CompanyTabs} from "./CompanyTabs.tsx";
-import {logout} from "./TransactionLib.ts";
+import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 

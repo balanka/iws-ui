@@ -21,7 +21,7 @@ import {IBankStatement} from '../Models.ts'
 import {BankStatementGrid} from '../IWSGrid.tsx'
 import BankStatementTabs from "./BankStatementTabs.tsx";
 import Login from './Login'
-import {logout} from "./TransactionLib.ts";
+import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 

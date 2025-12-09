@@ -31,6 +31,7 @@ export interface  IWSModel {
   company:string
 }
 export interface  IWSTransaction <L extends IWSLine>extends IWSModel {
+  id1:string|bigint,
   transdate: Date,
   postingdate:Date,
   enterdate:Date,
@@ -181,7 +182,7 @@ export interface IPeriodicAccountBalance2 extends IWSModel {
 }
 export interface  IWSLine  {
   id: bigint,
-  transid: bigint,
+  transid: string|bigint,
   //buldTotal:  ,
   currency: string,
   duedate: Date,

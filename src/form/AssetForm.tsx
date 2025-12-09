@@ -17,7 +17,7 @@ import {assetColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IAsset} from '../Models.ts'
 import {AssetGrid} from '../IWSGrid.tsx'
 import Login from './Login'
-import {logout} from "./TransactionLib.ts";
+import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 

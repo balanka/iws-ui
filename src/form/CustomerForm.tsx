@@ -16,7 +16,7 @@ import {customerColumnDefs} from '../ColumnsDefs.ts'
 import {IBusinespartner, ICustomer} from '../Models.ts'
 import { CustomerGrid} from '../IWSGrid.tsx'
 import Login from './Login.tsx'
-import {logout} from './TransactionLib.ts'
+import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux"
 import {useNavigate} from "react-router-dom"
 import useCustomerForm from "./UseCustomerForm.ts";

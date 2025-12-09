@@ -5,6 +5,7 @@ import {groupBy} from '../utils/Utils'
 import {HttpMethod, ILoggingContext, IProfile, IWSModel} from '../Models.ts'
 import {NavigateFunction} from "react-router-dom";
 import {TFunction} from "i18next";
+import {Dispatch, SetStateAction} from "react";
 // @ts-ignore
 const SERVER_IP:string = 'REACT_APP_HOST_IP_ADDRESS'
 // @ts-ignore
@@ -189,7 +190,7 @@ const post1Fn = <A>(ctx: string, record: A,
     return profile
 }
 
-const Edit = <A>(ctx:string, token:string, record:IWSModel, data:IWSModel[], setCurrent:(arg0:A) =>void)=> {
+const Edit = <A>(ctx:string, token:string, record:IWSModel, data:IWSModel[], setCurrent:Dispatch<SetStateAction<A>>)=> {
     console.log('record>>>', record)
     var result
     const url = `${SERVER_URL}${ctx}`
@@ -208,7 +209,7 @@ const Edit = <A>(ctx:string, token:string, record:IWSModel, data:IWSModel[], set
     return result
 }
 
-const Add = <A>(ctx:string, token:string, record:A, data:A[], setCurrent:(arg0:A)=>void) => {
+const Add = <A>(ctx:string, token:string, record:A, data:A[], setCurrent:Dispatch<SetStateAction<A>>) => {
     console.log('Adding ctx/record', `${ctx}/${record}`)
     const url = `${SERVER_URL}${ctx}`
     console.log('Adding url', url)
@@ -246,7 +247,7 @@ const Login = (
 }
 
 const  Get3 = <A>(ctx:string, token:string, key: string|number
-                  , setRowData: (arg0:A[]) => void, setCurrent:(arg:A)=>void): void => {
+                  , setRowData: (arg0:A[]) => void, setCurrent:Dispatch<SetStateAction<A>>): void => {
   const url = `${SERVER_URL}${ctx}`
     getFn(url, token ).then((data: A[]) => {
       if (Array.isArray(data)) {
@@ -265,7 +266,7 @@ const  Get3 = <A>(ctx:string, token:string, key: string|number
     }
   })
 }
-const  Get = <A>(ctx:string, token:string, key: string|number, setRowData: (arg0:A[]) => void): void => {
+const  Get = <A>(ctx:string, token:string, key: string|number, setRowData: Dispatch<SetStateAction<A[]>>): void => {
     const url = `${SERVER_URL}${ctx}`
     console.log('url', url)
      getFn(url,  token ).then((data: A[]) => {
@@ -295,7 +296,7 @@ const Get1 = (ctx:string, token:string, key_ : string|number) => {
         })
 }
 
-const Get2 = <A>(ctx:string, token:string, setCurrent:(arg0: A) => void ) => {
+const Get2 = <A>(ctx:string, token:string, setCurrent:Dispatch<SetStateAction<A>> ) => {
     const url = `${SERVER_URL}${ctx}`
     console.log('url', url)
     getFn(url, token).then((response) => {
@@ -310,7 +311,7 @@ const Get2 = <A>(ctx:string, token:string, setCurrent:(arg0: A) => void ) => {
         })
 }
 
-const EditRow = <A>(edited:A, isNew:boolean, setCurrent :(arg0: A) => void) =>
+const EditRow = <A>(edited:A, isNew:boolean, setCurrent :Dispatch<SetStateAction<A>>) =>
     setCurrent({ ...edited, editing: !isNew })
 
 export { Get, Get1, Get2, Get3,  Login, Add, Edit, EditRow }

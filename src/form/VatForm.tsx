@@ -20,7 +20,7 @@ import {vatColumnDefs} from '../ColumnsDefs'
 import Login from './Login'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {logout} from "./TransactionLib.ts";
+import {logout} from '../utils/FormUtils.tsx'
 
 
 ModuleRegistry.registerModules([

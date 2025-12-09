@@ -17,7 +17,7 @@ import {storeColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IStore} from '../Models.ts'
 import { StoreGrid} from '../IWSGrid.tsx'
 import Login from "./Login.tsx";
-import {logout} from "./TransactionLib.ts";
+import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
