@@ -9,6 +9,7 @@ import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { TransactionDetailsForm} from './FormsProps.tsx'
 import {blue} from '@mui/material/colors'
 import FileOutput from './FileOutput.tsx'
+import {ILineTransaction, ITransaction} from '../Models.ts'
 
 const styles = {
     outer: {
@@ -22,12 +23,12 @@ const TransactionDetailsTabs = ({
                                       transaction, setTransaction
                                     , currentLineTransaction, setCurrentLineTransaction
                                     , articleData, vatData, t, onGridReady,  zIndex
-                                }: TransactionDetailsTabProps) => {
+                                }: TransactionDetailsTabProps<ITransaction, ILineTransaction>) => {
 
     const height = 20
     const disable = transaction.posted
     transaction.lines = !transaction?.lines?.length?  [ {...currentLineTransaction, transid:transaction.id1}]:transaction?.lines
-    const props: TransactionDetailsFormProps = { transaction, setTransaction, currentLineTransaction
+    const props: TransactionDetailsFormProps<ITransaction, ILineTransaction> = { transaction, setTransaction, currentLineTransaction
         , setCurrentLineTransaction, articleData, vatData, t, disable, height
     }
     const onRowSelected = (event: RowSelectedEvent) => setCurrentLineTransaction(event.data)

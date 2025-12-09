@@ -3164,7 +3164,7 @@ const setTransactionR = ( transaction:ITransaction
 
 export const TransactionDetailsForm = (
     { transaction, setTransaction, currentLineTransaction, setCurrentLineTransaction
-        , articleData, vatData, t,  disable, height }: TransactionDetailsFormProps ) => {
+        , articleData, vatData, t,  disable, height }: TransactionDetailsFormProps<ITransaction, ILineTransaction> ) => {
     const current = currentLineTransaction
     const setCurrent = setCurrentLineTransaction
     const currentArticle = articleData?.find((acc: { id: any }) => acc.id === current.article)
@@ -3365,7 +3365,7 @@ const setTransactionF = ( transaction:IFinancials
 }
 export const FinancialsDetailsForm = (
     { transaction, setTransaction, currentLineFinancials, setCurrentLineFinancials
-        , accData,  t, zIndex, disable, height }: FinancialsDetailsFormProps) => {
+        , accData,  t, zIndex, disable, height }: FinancialsDetailsFormProps<IFinancials, ILineFinancials>) => {
     const current = currentLineFinancials
     const setCurrent = setCurrentLineFinancials
     const currentAccount = accData?.find((acc: { id: any }) => acc.id === current.account)

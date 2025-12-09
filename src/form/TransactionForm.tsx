@@ -1,8 +1,7 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
-  GridApi,
   GridOptions,
   GridReadyEvent,
   IDetailCellRendererParams,
@@ -16,46 +15,29 @@ import {styles as stylesx} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {FinancialsFormHead, TransactionMainForm} from './FormsProps.tsx'
-import {Add, Edit, EditRow, Get, Get2, Get3} from './CrudController.ts'
-import {initCust, initfModule, initLtr, MASTERFILE, TRANSACTION, useStore} from './Menu.tsx'
+import {initCust, initLtr, TRANSACTION} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
-import {useTranslation} from 'react-i18next'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {
-  IAccount,
-  IArticle,
-  ICustomer,
-  IFinancials,
-  IFmodule,
+  IFinancials, IFmodule,
   ILineFinancials,
   ILineTransaction,
-  IModule,
-  IStore,
-  ISupplier,
   ITransaction,
-  IVat,
 } from '../Models.ts'
 import {TransactionGrid} from '../IWSGrid.tsx'
 import {lineTransactionColumnDefs, transactionColumnDefs} from '../ColumnsDefs.ts'
-import {logout} from './TransactionLib.ts'
-import Login from "./Login.tsx";
+import {logout} from '../utils/FormUtils.tsx'
+import Login from './Login.tsx'
 import {CSpinner} from "@coreui/react";
-import {TransactionDetailsTabs} from "./TransactionDetailsTabs.tsx";
-import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {SaveProps} from '../Props.ts'
+import {TransactionDetailsTabs} from './TransactionDetailsTabs.tsx'
+import {useNavigate} from 'react-router-dom'
+import {useDispatch} from 'react-redux'
 import {generateDocx} from './../utils/XlsUtils.ts'
+import useTransactionForm from './UseTransactionForm.ts'
+import useForm from './UseForm.ts'
 
-ModuleRegistry.registerModules([
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  //MasterDetailModule,
-  //RichSelectModule,
-  // ExcelExportModule,
-  // SetFilterModule,
-  // MultiFilterModule,
-  // MasterDetailModule,
-])
+
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const STYLES = {
   inner: {
@@ -69,262 +51,37 @@ const STYLES = {
   }
 }
  const TransactionForm = () => {
-  const {profile, menu, selected} = useStore()
-  const {t, i18n} = useTranslation()
-     const dispatch = useDispatch()
-  const {token, company, currency} = profile
-   let templateFileName =''
+   const [{  menu, selected, t }] = useForm()
+   const dispatch = useDispatch()
 
-  //i18n.changeLanguage('de-DE');
-  //let navigate = useNavigate()
   let navigate = useNavigate()
-  const [language, setLanguage] = useState('en-US')
+  //const [language, setLanguage] = useState('en-US')
   const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
-  const [, setDisable] = useState(true)
+  //const [, setDisable] = useState(true)
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
      console.log('module_>>>>', module_)
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  let title_ = company??''.concat(' / ').concat(t(module_.title))
-  const initialState:ITransaction = initLtr [0]//module_.state
+  const initialState:ITransaction = initLtr [0]
   const initialLine:ILineTransaction = initLtr [0].lines[0]
   const current_:ITransaction = initialState
-  const [current, setCurrent] = useState<ITransaction>(current_)
-  const [currentLineTransaction, setCurrentLineTransaction] = useState<ILineTransaction>(initialLine)
+   const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
+   const  [{  language, isFetching, storeData, articleData, fmodule, rowData
+    , setRowData, vatData,  current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
+    , handleLanguageChange, handleModuleChange, onRowSelected, onNewLine
+     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, partnerId, title}] =
+     useTransactionForm(current_, initialLine, currentLine)
+
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
-  const [title, setTitle] = useState(title_)
+   const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
   const toggle = () => setState({...state, collapse: !state.collapse})
-     const handleLanguageChange = (event:any) => {
-         event.preventDefault()
-         const value = event.target.value
-         setLanguage(value)
-         i18n.changeLanguage(value)
-     }
-
-     console.log('current>>>>', current)
-  const modelid = module_ ? module_.modelid : 1111
-  const acc_modelid = formEnum.ACCOUNT
-  const art_modelid = formEnum.ARTICLE
-  const vat_modelid = formEnum.VAT
-  const store_modelid = formEnum.STORE
-  const sup_modelid = formEnum.SUPPLIER
-  const cust_modelid = formEnum.CUSTOMER
-  const module_modelid = formEnum.MODULE
-  const fmodule_modelid = formEnum.FMODULE
-  const modifyUrl = selected
-  let ctx = `${module_.ctx}/${modelid}/${company}`
-  console.log('ctxctxctx>>>>', ctx)
-  const art_ctx = `${MASTERFILE.article}/${art_modelid}/${company}`
-  const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
-  const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
-  const store_ctx = `${MASTERFILE.store}/${store_modelid}/${company}`
-  const sup_ctx = `${MASTERFILE.sup}/${sup_modelid}/${company}`
-  const cust_ctx = `${MASTERFILE.cust}/${cust_modelid}/${company}`
-  const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
-  const fmodule_ctx = `${MASTERFILE.fmodule}/${fmodule_modelid}/${company}`
-  const [rows, ] = useState<bigint[]>([])
-  const [rowData, setRowData] = useState<ITransaction[]>([])
-  const [storeData, setStoreData] = useState<IStore[]>([])
-   const [, setAccData] = useState<IAccount[]>([])
-  const [articleData, setArticleData] = useState<IArticle[]>([])
-  const [vatData, setVatData] = useState<IVat[]>([])
-  const [, setCustData] = useState<ICustomer[]>([])
-  const [, setSupData] = useState<ISupplier[]>([])
-  const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
-  const [, setModule] = useState<IModule[]>([])
-  const [copyFrom, setCopyFRom] = useState<number[]>([])
-  const [copyFromTransaction, setCopyFromTransaction] = useState<ITransaction[]>([])
-  const [fmodule, setFmodule] = useState<IFmodule[]>([])
-  const [model, setModel] = useState<number>(-1)
-  const [partnerId, setPartnerId] = useState<number>(-1)
-  const [isFetching, setIsFetching] = useState(false)
-  const [gridApi,   setGridApi] = useState<GridApi>()
-  //const gridRef: React.RefObject<AgGridReact|null> = useRef<AgGridReact>(null)
-  const zIndex:number = 99999
-  const EXPORT_FILE_EXTENSION= "xlsx"
-  //const [partnerCtx, setPartnerCtx] = useState<string>('')
-  console.log('rowData', rowData)
-  const handleKeyPress = useCallback((event:any) => {
-    if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
-      submitEdit(event, )
-    } else if (event.ctrlKey && (event.key === 'l' || event.key === 'L')) {
-      onNewLine()
-    }
-  }, [])
-
-  let init = useRef(false)
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    if (!init.current) {
-        iwsStore.subscribe(setIwsState)
-        init.current = true
-        Get(art_ctx, token, art_modelid, setArticleData)
-        Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
-        Get(acc_ctx, token, acc_modelid, setAccData)
-        Get(store_ctx, token, store_modelid, setStoreData)
-        Get(vat_ctx, token, vat_modelid, setVatData)
-        Get(cust_ctx, token, cust_modelid, setCustData)
-        Get(sup_ctx, token, sup_modelid, setSupData)
-        Get(module_ctx, token, fmodule_modelid, setModule)
-        // attach the event listener
-        document.addEventListener('keydown', handleKeyPress)
-    }
-    // remove the event listener
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress)
-    }
-  }, [partnerId, copyFrom, current])
 
 
-  const handleModuleChange = (value:any) => {
-    //event?.preventDefault()
-    setModel(value)
-    const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]
-     templateFileName = mx.description
-    console.log('mx>>>>', mx)
-    console.log('templateFileName >>>>', templateFileName)
-    title_ = mx?.name ? mx.name : title_
-      const copyFromIds = mx? mx.copyFrom:-1
-    setTitle(company??''.concat(' / ').concat(title_))
-    setCopyFRom([copyFromIds])
-    setPartnerId(parseInt(mx.account))
-    setCurrent(current_)
-    ctx = `${module_.ctx}/${mx.id}/${company}`
-    const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
-    const _partnerCtx:string = parseInt(mx.account)===formEnum.CUSTOMER?MASTERFILE.cust:
-                              (parseInt(mx.account)==formEnum.SUPPLIER)?MASTERFILE.sup:''
-    const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
-    Get(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
-    submitQuery( ctx, partnerCtx, parseInt(mx.account))
-    const currentx = rowData.length>0?rowData[0]:current_
-    setCurrent(currentx)
-  }
-
-  // const callEdit = (editedRow: ITransaction, setCurrent:(arg:ITransaction)=>void) => {
-  //   const isArray = Array.isArray(editedRow) && editedRow.length > 0
-  //   const row = isArray ? editedRow[0] : editedRow
-  //   if (row) {
-  //     const data = iwsState.get(row.modelid)
-  //     const record = data.find((obj:ITransaction) => obj.id === row.id)
-  //     setCurrent({...record, editing: true})
-  //   }
-  // }
-     function buildPostCall(rows: BigInt[], current: ITransaction, modifyUrl: string, token: string, setCurrent: (arg: ITransaction) => void) {
-         const ids = rows.length > 0 ? rows : [current.id]
-         const url_ = `${modifyUrl}/post/${ids.join(',')}/${current.modelid}/${current.company}`
-         Get2(url_, token, setCurrent)
-     }
-
-  const callSubmitPost = (event:any, modifyUrl:string, token:string, current:ITransaction
-      , setCurrent:(arg:ITransaction )=>void,  rows:BigInt[]):void => {
-    event.preventDefault()
-      buildPostCall(rows, current, modifyUrl, token, setCurrent)
-  }
-
-  const submitPost = (event:any) => callSubmitPost(event, module_.ctx, token, current, setCurrent, rows)
-  const submitAdd = (event:any) => {
-    event.preventDefault()
-    const row: ITransaction = { ...current, modelid: model, company: company}
-    Add(modifyUrl, token, row, rowData, setCurrent)
-  }
-     const addLine = useCallback(
-         ( line:ILineTransaction, setCurrent:(arg:ITransaction) =>void) => {
-             const dx: ITransaction = {...current}
-             const newLine = {...line, id: BigInt(-1), transid: current.id1}
-             dx.lines.push(newLine)
-             gridApi!.applyTransaction({add: [newLine]})
-             setCurrent(dx)
-         },
-         [current],
-     )
-
-     const onRemoveSelectedLine = useCallback(
-         ( event:any, current:ITransaction, setCurrent:(arg:ITransaction) =>void) => {
-             event.preventDefault()
-             const dx: ITransaction = {...current}
-            if(!dx.hasOwnProperty('lines')) dx['lines']=[]
-             const idx = dx.lines.findIndex((obj: ILineTransaction) => obj.id === currentLineTransaction.id)
-             if (idx >= 0) dx.lines[idx] = {...currentLineTransaction, transid: BigInt(-2)}
-             gridApi!.applyTransaction({remove: [currentLineTransaction]})
-             setCurrent(dx)
-     }, [currentLineTransaction]);
-   const templateName = () =>
-     templateFileName ? templateFileName: (fmodule.find((m:IFmodule) => Number(m.id) === current.modelid) ?? initfModule[0]).description
-
-  const callSubmitEdit = (event:any, modifyUrl:string, token:string, current:ITransaction
-      , setCurrent:(arg:ITransaction)=>void, data:ITransaction[], submitAdd: (arg:any)=>void) => {
-      console.log('event...', event);
-      event.preventDefault();
-      (BigInt(current.id) > 0) ? Edit(modifyUrl, token, current, data, setCurrent) : submitAdd(event)
-  }
-  const submitCancel = (event:any) =>  callSubmitCancel(event, ctx, token, current, setCurrent, rowData )
-  const callSubmitCancel = (event:any, _ctx:string, token:string, current:ITransaction
-      , setCurrent:(arg:ITransaction)=>void, data:ITransaction[],) => {
-    event.preventDefault()
-    const url_ = _ctx.replace('ltr', 'cancelnLtr')
-    BigInt(current.id )> 0 ? Edit(url_, token, current, data, setCurrent) : current
-  }
-  const onNewLine = () => addLine (initialState.lines[0],  setCurrent)
-  const onDeleteLine = (event:any) => {
-      onRemoveSelectedLine (event, current,  setCurrent);
-      console.log('current>>>>', current);
-      (BigInt(current.id) > 0) ? Edit(modifyUrl, token, current, rowData, setCurrent) : void(0) //submitAdd(current)
-  }
-  const submitEdit = (event:any) =>
-      callSubmitEdit(event, modifyUrl, token, current, setCurrent, rowData, submitAdd)
-  //const submitCancel = (event) => {}
-      //callSubmitCancel(event, ctx, token, current, setCurrent, data)
-
-  //const cancelEdit = () => initAdd()
-  const initAdd = () => {
-    setDisable(false)
-    const newRow = {...initialState, company: company, currency: currency, editing: false}
-    EditRow(newRow, true, setCurrent)
-  }
-     const copyCall = (id:BigInt) => {
-         setDisable(false)
-         const idx = copyFromTransaction.findIndex((obj: ITransaction) => obj.id === id)
-         console.log('idx', idx)
-         if (idx >= 0) {
-             const tr = copyFromTransaction.find((obj: ITransaction) => obj.id === id) ?? current_
-             const linesx = tr.lines.map((line) => {
-                 return {...line, id: BigInt(-1), transid: current_.id1}
-             })
-             const newRow = {
-                 ...tr, id: current_.id, id1: current_.id1, modelid: model, company: company
-                 , currency: currency, posted: false, editing: false, lines: linesx
-             }
-             Add(modifyUrl, token, newRow, rowData, setCurrent)
-         }
-     }
-  const reload = () => {
-    iwsStore.deleteKey(current.modelid)
-    Get(ctx, token, current.modelid, setRowData)
-    setCurrent(current_)
-  }
-
-  const submitQuery = (ctx:string, partnerCtx:string, partnerModelid:number) => {
-    //event?.preventDefault()
-    //   console.log('submitQuery', ctx)
-    // console.log('partnerCtx', partnerCtx)
-    // console.log('partnerModelid', partnerModelid)
-    setIsFetching(true)
-    !iwsState.get(fmodule_modelid)&&Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
-    !iwsState.get(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData)
-    !iwsState.get(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData)
-    !iwsState.get(store_modelid)&&Get(store_ctx, token, store_modelid, setStoreData)
-    !iwsState.get(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData)
-    !iwsState.get(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
-    Get3(ctx, token, modelid, setRowData, setCurrent)
-    setIsFetching(false)
-    // console.log('PartnerData', partnerData)
-    // console.log('PartnerData', iwsState.get(partnerModelid))
-  }
-
-     const onRowSelected = (event: RowSelectedEvent) => {
-      console.log('onRowSelected', event.data)
-         setCurrent(event.data)
-     }
+   useEffect(() => {
+     iwsStore.subscribe(setIwsState)
+     setCurrent(current_)
+     setRowData([])
+   }, [selected])
 
      const gridOptions: GridOptions<ITransaction|IFinancials> = {
          rowStyle: { background: 'lightBlue' },
@@ -398,13 +155,7 @@ const STYLES = {
   const maxHeight =700
   const minPadding=20
   const maxPadding =35
-  const sheetName ="Sheet1"
-  const exportFileName =()=> {
-     const filename = templateName().split('.')[0]
-    return `${filename}.${EXPORT_FILE_EXTENSION}`
-  }
-  const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current.lines }
-  const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
+
 
    const formatLines = (line:ILineTransaction|ILineFinancials):ILineTransaction|ILineFinancials =>  {
      // @ts-ignore
@@ -438,7 +189,6 @@ const STYLES = {
                 saveProps={saveProps}
                 collapse={state.collapse}
                 initAdd={initAdd}
-                //cancelEdit={cancelEdit}
                 submitCancel={submitCancel}
                 submitEdit={submitEdit}
                 onNewLine={onNewLine}
@@ -470,9 +220,9 @@ const STYLES = {
                     , paddingTop: 5, zIndex: 4}} maximize
                 direction="column" zeroMinWidth>
               <TransactionDetailsTabs   transaction={current}  setTransaction={setCurrent}
-                                        currentLineTransaction ={currentLineTransaction}
-                                        setCurrentLineTransaction={setCurrentLineTransaction}
-                                        articleData={articleData} vatData={vatData}  t={t}
+                                        currentLineTransaction ={currentLine}
+                                        setCurrentLineTransaction={setCurrentLine}
+                                        articleData={articleData??[]} vatData={vatData??[]}  t={t}
                                         onGridReady={onGridReady}  zIndex={2}/>
           </Grid>
           <Grid container

@@ -3,22 +3,23 @@ import {LineTFinancialsGrid} from '../IWSGrid'
 import Grid from 'react-fast-grid'
 import {LinesFinancialsColumns} from '../ColumnsDefs'
 import IWSTabs from './IWSTabs.tsx'
-import { FinancialsDetailsFormProps, FinancialsDetailsTabProps } from '../Props'
+import {FinancialsDetailsFormProps, FinancialsDetailsTabProps} from '../Props'
 import {styles as stylesx} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { FinancialsDetailsForm} from './FormsProps.tsx'
+import {IFinancials, ILineFinancials} from "../Models.ts";
 
 const FinancialsDetailsTabs  = ({ transaction
                                     , setTransaction
                                     , currentLineFinancials
                                     , setCurrentLineFinancials
-                                    , accData, t,  zIndex, onGridReady}: FinancialsDetailsTabProps) => {
+                                    , accData, t,  zIndex, onGridReady}: FinancialsDetailsTabProps<IFinancials, ILineFinancials>) => {
 
     const height = 20
     const disable = transaction.posted
     console.log('Financials current_', currentLineFinancials)
-    let  props:FinancialsDetailsFormProps = {transaction, setTransaction
+    let  props:FinancialsDetailsFormProps<IFinancials, ILineFinancials> = {transaction, setTransaction
                                                , currentLineFinancials
                                                , setCurrentLineFinancials, accData, t, zIndex, disable,  height}
 
