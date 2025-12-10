@@ -31,7 +31,6 @@ const CustomerForm = () => {
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  //const modelid = module_? module_.modelid:1111
   const current_ : IBusinespartner= modelid ===formEnum.CUSTOMER?initCust[0]:(modelid ===formEnum.SUPPLIER)?initSup[0]:initEmp[0]
   const  [{ edited, added, disable, language, accData, bankData, ccyData
     , rowData, setRowData, vatData, current, setCurrent, currentBankAccount, setCurrentBankAccount

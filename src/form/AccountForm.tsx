@@ -7,10 +7,8 @@ import { styles as stylesx } from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { CommonFormHead } from './FormsProps.tsx'
-import {Add, Edit, Get} from './CrudController.ts'
-import {initAcc, MASTERFILE, useStore} from './Menu.tsx'
+import {initAcc} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
-import { useTranslation } from 'react-i18next'
 import { AccountMainForm } from './FormsProps.tsx'
 import { formEnum } from '../utils/FormEnum.tsx'
 import {accountColumnDefs} from '../ColumnsDefs.ts'
@@ -20,104 +18,32 @@ import Login from './Login'
 import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import UseMasterfileForm from './UseMasterfileForm.ts'
+import useForm from './UseForm.ts'
 
-ModuleRegistry.registerModules([
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  // ExcelExportModule,
-  // SetFilterModule,
-  // MultiFilterModule,
-  // MasterDetailModule,
-])
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const AccountForm = () => {
-     const {profile, menu, selected} = useStore()
-     const {t, i18n} = useTranslation()
-     const {token, company, currency, locale} = profile
-     const dispatch = useDispatch()
-     let navigate = useNavigate()
-     const [language, setLanguage] = useState('en-US')
-     let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-     //module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-     module_ =  module_ ?? formEnum.LOGIN
-     if (module_ === '11111' || module_ === 11111) return <Login/>
-     const title = company?.concat(' / ').concat(t(module_.title))
-     const modelid: number = module_ ? module_.modelid : 1111
-     const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
-     const [disable, setDisable] = useState(true)
-     const height = 33
-     const current_: IAccount = initAcc[0]
-     const [current, setCurrent] = useState<IAccount>(current_)
-     const [edited, setEdited] = useState<boolean|undefined>(false)
-     const [added, setAdded] = useState<boolean|undefined>(undefined)
-     const [setIwsState] = useState(iwsStore.initialState)
-     const toggle = () => setState({...state, collapse: !state.collapse})
-     const ctx = `${MASTERFILE.acc}/${modelid}/${company}`
-     const modifyUrl = MASTERFILE.acc
-     const [rowData, setRowData] = useState<IAccount[]>([])
+   const [{profile, menu, selected, t}] = useForm()
+   const {locale} = profile
+   const dispatch = useDispatch()
+   let navigate = useNavigate()
+   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
+   module_ = module_ ?? formEnum.LOGIN
+   if (module_ === '11111' || module_ === 11111) return <Login/>
+   const [state] = useState({collapse: true, fadeIn: true, timeout: 300})
+   const height = 33
+   const current_: IAccount = initAcc[0]
+   const [setIwsState] = useState(iwsStore.initialState)
+   const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
+     , handleLanguageChange, toggle, title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
-     useEffect(() => {
-         iwsStore.subscribe(setIwsState)
-         Get(ctx, token??'noToken', modelid, setRowData)
-     }, [])
+   useEffect(() => {
+     iwsStore.subscribe(setIwsState)
+     setCurrent(current_)
+   }, [selected])
 
-     const handleLanguageChange = (event:any) => {
-         event.preventDefault()
-         const value = event.target.value
-         setLanguage(value)
-         i18n.changeLanguage(value)
-     }
-
-     const edit = () => {
-         console.log('edit called!!!')
-         if(edited) {
-             setEdited(false )
-             setDisable(true)
-             setAdded(false)
-         } else {
-             setEdited(true)
-             setDisable(false)
-             setAdded(true)
-         }
-     }
-     const submitEdit = (event:any) => {
-         event.preventDefault()
-         if(edited) {
-             Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
-         } else if (!edited && !disable) {
-             Add(modifyUrl, token, { ...current }, rowData, setCurrent)
-         }
-         setDisable(true)
-         setEdited(false)
-         setAdded(true)
-     }
-     const cancelEdit = () => {
-         if(edited) {
-             setEdited(false)
-             setDisable(true)
-             setAdded(true)
-         }
-     }
-
-     const initAdd = () => {
-         const newRow = { ...current_, company: `${company}`, currency: `${currency}`}
-         setCurrent(newRow)
-         setAdded(true)
-         setEdited(false)
-         setDisable(false)
-     }
-
-     const reload = () => {
-         iwsStore.deleteKey(current.modelid)
-         Get(ctx, token??'noToken', current.modelid, setRowData)
-         setCurrent(current_)
-     }
-
-     const submitQuery = (event: any) => {
-         event.preventDefault()
-         Get(ctx, token??'noToken', modelid, setRowData)
-     }
-     const onRowSelected = (event: RowSelectedEvent<IAccount[], any>) =>
-         setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
+   const onRowSelected = (event: RowSelectedEvent<IAccount[], any>) =>
+     setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
 
      return (<>
              <CommonFormHead
@@ -131,7 +57,7 @@ ModuleRegistry.registerModules([
                  disable={disable??true}
                  cancelEdit={cancelEdit}
                  submitEdit={submitEdit}
-                 submitQuery={submitQuery}
+                 submitQuery={reload}
                  reload={reload}
                  toggle={toggle}
                  logout={logout}

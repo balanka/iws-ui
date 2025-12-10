@@ -356,7 +356,7 @@ export interface UseFormResult {
   , title:string
   , modelid : number
 }
-export interface UseMasterfileFormResult<T extends  IMasterfile> {
+export interface UseMasterfileFormResult<T> {
   profile: IProfile
   , menu: Map<any, any>
   , selected: string
@@ -377,6 +377,9 @@ export interface UseMasterfileFormResult<T extends  IMasterfile> {
   , title:string
   , zIndex:number
   , rowData:T[]
+  , setRowData:Dispatch<SetStateAction<T[]>>
+  , current:T
+  , setCurrent:Dispatch<SetStateAction<T>>
 }
 export interface UseCustomerFormResult<T extends IBusinespartner> {
   profile: IProfile

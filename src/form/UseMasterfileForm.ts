@@ -5,15 +5,15 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {useStore} from './Menu'
 import {formEnum} from '../utils/FormEnum'
-import {useTranslation} from "react-i18next";
-import { UseMasterfileFormResult} from "../Props.ts";
-import {Add, Edit, Get} from "./CrudController.ts";
-import iwsStore from "../utils/Store.tsx";
-import {useState} from "react";
-import {IMasterfile} from "../Models.ts";
+import {useTranslation} from 'react-i18next'
+import { UseMasterfileFormResult} from '../Props.ts'
+import {Add, Edit, Get} from './CrudController.ts'
+import iwsStore from '../utils/Store.tsx'
+import {useState} from 'react'
+import {IWSModel} from '../Models.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,])
 
-const UseMasterfileForm = <T extends IMasterfile>(current_ :T): [UseMasterfileFormResult<T>] => {
+const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormResult<T>] => {
   const {profile, menu, selected} = useStore()
   const { token, company} = profile
   const {t, i18n} = useTranslation()
@@ -30,7 +30,6 @@ const UseMasterfileForm = <T extends IMasterfile>(current_ :T): [UseMasterfileFo
   const [disable, setDisable] = useState(true)
   const modifyUrl = selected
   const ctx = `${selected}/${modelid}/${company}`
-
   const zIndex = 9999
 
   const toggle = () => setState({...state, collapse: !state.collapse})
@@ -41,7 +40,6 @@ const UseMasterfileForm = <T extends IMasterfile>(current_ :T): [UseMasterfileFo
     i18n.changeLanguage(value)
   }
   const edit = () => {
-    console.log('edit called!!!')
     if(edited) {
       setEdited(false )
       setDisable(true)
@@ -51,11 +49,11 @@ const UseMasterfileForm = <T extends IMasterfile>(current_ :T): [UseMasterfileFo
       setDisable(false)
       setAdded(true)
     }
-    console.log('edited', edited)
-    console.log('disable', disable)
+    console.log('current', current)
   }
   const submitEdit = (event:any) => {
     event.preventDefault()
+    console.log('current', current)
     if(edited) {
       Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
     } else if (!edited && !disable) {
@@ -85,14 +83,11 @@ const UseMasterfileForm = <T extends IMasterfile>(current_ :T): [UseMasterfileFo
     iwsStore.deleteKey(current.modelid)
     Get(ctx, token??'noToken', current.modelid, setRowData)
     const size= rowData.length
-    console.log('size ', size)
     setCurrent(size>1?rowData[0]:current_)
   }
-  // const onRowSelected = (event: RowSelectedEvent) =>
-  //   setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
 
-  return [{ profile, menu, selected, t, i18n, language, modelid, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
-    , handleLanguageChange, toggle, title:title, zIndex, rowData }]
+  return [{ profile, menu, selected, t, i18n, language, modelid, initAdd, added, disable, edit, edited, submitEdit
+    , cancelEdit, reload, handleLanguageChange, toggle, title:title, zIndex, rowData, setRowData, current, setCurrent }]
 
 }
 export default UseMasterfileForm

@@ -22,14 +22,7 @@ import {useNavigate} from "react-router-dom";
 import {logout} from '../utils/FormUtils.tsx'
 
 
-ModuleRegistry.registerModules([
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  // ExcelExportModule,
-  // SetFilterModule,
-  // MultiFilterModule,
-  // MasterDetailModule,
-])
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const STYLES = {
   inner: {

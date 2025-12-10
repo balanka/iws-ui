@@ -34,7 +34,9 @@ const fetchFnPost0 = (url: string,  record:any) =>
       })
 
 const fetchFn = (url: string, method_:HttpMethod, token:string, record:any) => {
-  console.log('record', record)
+  console.log( 'method',method_ )
+  console.log( 'record', record)
+  console.log( 'url', url)
   return fetch(url, {
     body: JSON.stringify(record),
     method: method_,

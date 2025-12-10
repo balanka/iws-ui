@@ -44,14 +44,13 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const qttyUnit_ctx = `${MASTERFILE.masterfile}/${qttyUnit_modelid}/${company}`
      const group_ctx = `${MASTERFILE.masterfile}/${group_modelid}/${company}`
      const current_: IArticle = initialState
-     const [current, setCurrent] = useState<IArticle>(current_)
      const [, setIwsState] = useState(iwsStore.initialState)
      const [accData, setAccData] = useState<IAccount[]>([])
      const [groupData, setGroupData] = useState<IMasterfile[]>([])
      const [quantityUnitData, setQuantityUnitData] = useState<IMasterfile[]>([])
      const [vatData, setVatData] = useState<IVat[]>([])
    const   [{  language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
-       , handleLanguageChange, toggle, title, zIndex, rowData }] = UseMasterfileForm(current_)
+       , handleLanguageChange, toggle, title, zIndex, rowData, current, setCurrent }] = UseMasterfileForm(current_)
 
      useEffect(() => {
          iwsStore.subscribe(setIwsState)

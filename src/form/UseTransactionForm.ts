@@ -25,7 +25,7 @@ import {
   IVat, IWSTransaction,
 } from '../Models.ts'
 import {ILine, SaveProps, UseTransactionFormResult} from '../Props.ts'
-import useForm from "./UseForm.ts";
+import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -44,14 +44,6 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
   const initialState:T = current_
   const [current, setCurrent] = useState<T>(current_)
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
-  const [title, setTitle] = useState(title_)
-     const handleLanguageChange = (event:any) => {
-         event.preventDefault()
-         const value = event.target.value
-         setLanguage(value)
-         i18n.changeLanguage(value)
-     }
-
   console.log('current>>>>', current)
   const acc_modelid = formEnum.ACCOUNT
   const art_modelid = formEnum.ARTICLE
@@ -88,10 +80,12 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
   const [model, setModel] = useState<number>(-1)
   const [partnerId, setPartnerId] = useState<number>(-1)
   const [isFetching, setIsFetching] = useState(false)
+  const [title, setTitle] = useState(title_)
   const [gridApi,   setGridApi] = useState<GridApi>()
   const zIndex:number = 99999
   const EXPORT_FILE_EXTENSION= "xlsx"
   console.log('rowData', rowData)
+
   const handleKeyPress = useCallback((event:any) => {
     if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
       submitEdit(event, )
@@ -122,9 +116,13 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
     }
   }, [partnerId, copyFrom, current])
 
-
+  const handleLanguageChange = (event:any) => {
+    event.preventDefault()
+    const value = event.target.value
+    setLanguage(value)
+    i18n.changeLanguage(value)
+  }
   const handleModuleChange = (value:any) => {
-    //event?.preventDefault()
     setModel(value)
     const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]
      templateFileName = mx.description
@@ -191,7 +189,6 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
 
   const callSubmitEdit = (event:any, modifyUrl:string, token:string, current:T
       , setCurrent:Dispatch<SetStateAction<T>>, data:T[], submitAdd: (arg:any)=>void) => {
-      console.log('event...', event);
       event.preventDefault();
       BigInt(current.id) > 0 ? Edit(modifyUrl, token, current, data, setCurrent) : submitAdd(event)
   }
@@ -205,14 +202,11 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
   const onNewLine = () => addLine (currentLine_,  setCurrent)
   const onDeleteLine = (event:any) => {
       onRemoveSelectedLine (event, current,  setCurrent);
-      console.log('current>>>>', current);
       (BigInt(current.id) > 0) && Edit(modifyUrl, token, current, rowData, setCurrent)//submitAdd(current)
   }
   const submitEdit = (event:any) =>
       callSubmitEdit(event, modifyUrl, token, current, setCurrent, rowData, submitAdd)
 
-
-  //const cancelEdit = () => initAdd()
   const initAdd = () => {
     setDisable(false)
     const newRow:T = {...initialState, company: company, currency: currency, editing: false}
@@ -251,10 +245,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
     setIsFetching(false)
   }
 
-     const onRowSelected = (event: RowSelectedEvent) => {
-      console.log('onRowSelected', event.data)
-         setCurrent(event.data)
-     }
+  const onRowSelected = (event: RowSelectedEvent) => setCurrent(event.data)
 
   const sheetName ="Sheet1"
   const exportFileName =()=> {

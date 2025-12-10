@@ -29,14 +29,7 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
 
-ModuleRegistry.registerModules([
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  // ExcelExportModule,
-  // SetFilterModule,
-  // MultiFilterModule,
-  // MasterDetailModule,
-])
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 
 const getCtx = (modelid:number, company:string ) => {
@@ -92,10 +85,6 @@ const getCtx = (modelid:number, company:string ) => {
      const modelid: number = module_ ? module_.modelid : 1111
      const ctx = getCtx(modelid, company)
      const modifyUrl = module_.ctx
-     console.log('modelid', modelid)
-      // console.log('acc_ctx', acc_ctx)
-     // console.log('module_', module_)
-     // console.log('initialState', module_.state[0])
      const current_: IMasterfile2 =  module_.state[0]
      const current_2: IMasterfile =  module_.state[0]
      const current_3: IPermission =  module_.state[0]

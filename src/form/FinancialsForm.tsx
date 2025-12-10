@@ -25,22 +25,13 @@ import {CSpinner} from '@coreui/react'
 import {FinancialsDetailsTabs} from './FinancialsDetailsTabs.tsx'
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-// import PizZip from "pizzip";
-// import Docxtemplater from "docxtemplater";
-// import {saveAs} from "file-saver";
 import {generateDocx} from "../utils/XlsUtils.ts";
 import useTransactionForm from "./UseTransactionForm.ts";
   import useForm from "./UseForm.ts";
 import iwsStore from "../utils/Store.tsx";
 import {Get, Get3} from "./CrudController.ts";
 
-ModuleRegistry.registerModules([
-    AllCommunityModule,
-    ClientSideRowModelModule,
-    SelectEditorModule,
-    //RichSelectModule,
-    //MasterDetailModule,
-])
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, SelectEditorModule,])
 
 const STYLES = {
     inner: {
@@ -56,21 +47,14 @@ const STYLES = {
 
 const FinancialsForm = () => {
   const [{ profile, menu, selected, t }] = useForm()
-    //const {profile, menu, selected} = useStore()
-    //const {t, i18n} = useTranslation()
     const { token, company} = profile
     let navigate = useNavigate()
-    //i18n.changeLanguage('de-DE');
     const dispatch = useDispatch()
-    //const [language, setLanguage] = useState('en-US')
     const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
-    //const [, setDisable] = useState(true)
     let module_:any = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-    //module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
     module_ =  module_ ?? formEnum.LOGIN
     if (module_ === '11111' || module_ === 11111) return <Login/>
     let title_ = `${company} /${t(module_.title)}`
-    //const modifyUrl = selected
     console.log('current_?>>>>>', initFtr)
     const current_: IFinancials = initFtr [0]
   const initialLine:ILineFinancials = initFtr [0].lines[0]
