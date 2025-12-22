@@ -8,10 +8,9 @@ import {Get} from './CrudController'
 import {initModule, MASTERFILE, PACB_QUERY_PARM} from './Menu'
 import {formEnum} from '../utils/FormEnum'
 import {IAccount, IModule, IPACBQueryParam} from '../Models.ts'
-import iwsStore from "../utils/Store.tsx";
-import {UseJFormResult} from "../Props.ts";
-import useForm from "./UseForm.ts";
-
+import iwsStore from '../utils/Store.tsx'
+import {UseJFormResult} from '../Props.ts'
+import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([
   AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,
@@ -41,7 +40,6 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
   const {token, currency, company} = profile
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-  //const modelid: number = module_ ? module_.modelid : 1111
   const acc_modelid = formEnum.ACCOUNT
   const module_modelid = formEnum.MODULE
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`

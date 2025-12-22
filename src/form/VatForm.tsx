@@ -21,8 +21,6 @@ import {useNavigate} from "react-router-dom";
 import {logout} from '../utils/FormUtils.tsx'
 import UseMasterfileForm from "./UseMasterfileForm.ts";
 import useForm from "./UseForm.ts";
-
-
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const STYLES = {
@@ -45,8 +43,7 @@ const VatForm = () => {
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const [state] = useState({ collapse: true, fadeIn: true, timeout: 300 })
   const height = 20
-  const initialState:IVat  = initVat[0]
-  const current_ :IVat = initialState
+  const current_ :IVat = initVat[0]
   const [, setIwsState] = useState(iwsStore.initialState)
   const acc_modelid = formEnum.ACCOUNT
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`

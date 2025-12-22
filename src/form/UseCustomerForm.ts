@@ -10,8 +10,8 @@ import {initBankAccount, MASTERFILE} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {IAccount, IBankAccount, IBusinespartner, IMasterfile, IVat} from '../Models.ts'
-import {UseCustomerFormResult} from "../Props.ts";
-import useForm from "./UseForm.ts";
+import {UseCustomerFormResult} from '../Props.ts'
+import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -23,9 +23,6 @@ const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFo
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   const [disable, setDisable] = useState(true)
   const [gridApi,  setGridApi] = useState<GridApi>()
-
-  //const height = 20
-  //const modelid = module_? module_.modelid:1111
   const acc_modelid = formEnum.ACCOUNT
   const bank_modelid = formEnum.BANK
   const ccy_modelid = formEnum.CURRENCY
@@ -33,7 +30,6 @@ const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFo
   const ctx = `${selected}/${modelid}/${company}`
 
   const modifyUrl = selected
-  console.log('ctx', ctx)
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const bank_ctx = `${MASTERFILE.masterfile}/${bank_modelid}/${company}`
   const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
@@ -135,16 +131,15 @@ const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFo
         setCurrent(dx)
       }, [currentBankAccount]);
 
-  const onNewBankAccount = //useCallback(
+  const onNewBankAccount =
     () => {
     setEdited(true)
     setDisable(false)
     console.log('current>>>>', current)
     const record = addLine ( {...initBankAccount, owner: `${current.id}` })
     setCurrent(record)
-  }//,
-  //   [current],
-  // )
+  }
+
   const onDeleteBankAccount = (event:any) => {
     onRemoveSelectedLine (event, current,  setCurrent);
      Edit(modifyUrl, token, current, rowData, setCurrent)

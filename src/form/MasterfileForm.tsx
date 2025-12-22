@@ -201,24 +201,7 @@ const getCtx = (modelid:number, company:string ) => {
            return rowData
       }
     }
-   console.log('rowData', rowData)
-   console.log('rowData5', getRowData())
-    // const rowDataSetter  = () => {
-    //   switch (modelid) {
-    //     case formEnum.BANK:
-    //     case formEnum.CURRENCY:
-    //     case formEnum.QUANTITYUNIT:
-    //       return  setRowData2
-    //     case formEnum.PERMISSION:
-    //       return  setRowData4
-    //     case formEnum.ROLE:
-    //       return  setRowData3
-    //     case formEnum.FMODULE:
-    //       return  setRowData5
-    //     default:
-    //       return setRowData
-    //   }
-    // }
+
    const getCurrent  = () => {
      switch (modelid) {
        case formEnum.BANK:
@@ -305,10 +288,7 @@ const getCtx = (modelid:number, company:string ) => {
              <MasterfileForm collapse={collapse} current={current} setCurrent={setCurrent} disable={disable}
                               height={height} accData={accData} t={t}/>
              <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>
-                 <MasterfileGrid
-                         // @ts-ignore
-                         theme="legacy" columnDefs={getColumns(modelid, t)} onRowSelected={onRowSelected}
-                         rowData={rowData}/>
+                 <MasterfileGrid columnDefs={getColumns(modelid, t)} onRowSelected={onRowSelected} rowData={rowData}/>
              </Grid>
          </>
      )

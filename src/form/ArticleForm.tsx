@@ -25,8 +25,8 @@ import useForm from "./UseForm.ts";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const ArticleForm = () => {
-   const [{ profile, menu, selected, t }] = useForm()
-     const { token, company, locale, currency} = profile
+   const [{ menu, selected, t }] = useForm()
+
      const dispatch = useDispatch()
      let navigate = useNavigate()
      let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
@@ -39,18 +39,19 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const vat_modelid = formEnum.VAT
      const qttyUnit_modelid = formEnum.QUANTITYUNIT
      const group_modelid = formEnum.ARTICLE_GROUP
-     const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
-     const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
-     const qttyUnit_ctx = `${MASTERFILE.masterfile}/${qttyUnit_modelid}/${company}`
-     const group_ctx = `${MASTERFILE.masterfile}/${group_modelid}/${company}`
      const current_: IArticle = initialState
      const [, setIwsState] = useState(iwsStore.initialState)
      const [accData, setAccData] = useState<IAccount[]>([])
      const [groupData, setGroupData] = useState<IMasterfile[]>([])
      const [quantityUnitData, setQuantityUnitData] = useState<IMasterfile[]>([])
      const [vatData, setVatData] = useState<IVat[]>([])
-   const   [{  language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
+     const [{profile, language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
        , handleLanguageChange, toggle, title, zIndex, rowData, current, setCurrent }] = UseMasterfileForm(current_)
+     const { token, company, locale, currency} = profile
+     const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
+     const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
+     const qttyUnit_ctx = `${MASTERFILE.masterfile}/${qttyUnit_modelid}/${company}`
+     const group_ctx = `${MASTERFILE.masterfile}/${group_modelid}/${company}`
 
      useEffect(() => {
          iwsStore.subscribe(setIwsState)
@@ -60,6 +61,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          Get(vat_ctx, token??'noToken', vat_modelid, setVatData)
          setCurrent(current_)
      }, [selected])
+
       const load = (event: any) => {
          event.preventDefault()
         reload()

@@ -43,15 +43,27 @@ const fetchFn = (url: string, method_:HttpMethod, token:string, record:any) => {
     headers: {Authorization: `Bearer ${token}`, Accept: "application/json", "Content-Type": "application/json",}
   }).then((response: any) => {
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        throw new Error(`HTTP error! Status: ${response.statusText}`);
       }
       return response.json();
     })
  }
 
+//type ApiRoute = `/api/${string}`;
+// type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
+//
+// async function api<T>(method: Method, route: ApiRoute): Promise<T> {
+//   const res = await fetch(route, { method });
+//   return res.json();
+// }
+// api('GET', '/api/users');     // ✓ works
+// api('GET', '/users');         // ✗ error: must start with /api/
+// api('PATCH', '/api/users');   // ✗ error: PATCH not allowed
+
+
 
 /* Helper function for fetching data from api using the url and the token */
-const getFn = (url:string, token:string) => fetchFn(url, 'GET', token, undefined )
+const getFn = (url:string, token:string) =>fetchFn(url, 'GET', token, undefined )
 
 /* Helper function for fetching  and setting  user menu, profile, etc... */
 const getFn1 = (url: string, token: string, profile: IProfile, setProfile: (argo: IProfile) => void) =>

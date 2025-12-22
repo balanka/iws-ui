@@ -190,7 +190,7 @@ const getGridOptions= ( columnDefs:ColDef[], defaultColDef:DefaultColDefType, on
             mode: "multiRow",
         },
         onRowSelected:onRowSelected,
-        paginationPageSizeSelector: [5, 10, 20, 40],
+        paginationPageSizeSelector: [15, 20, 40, 80],
         pagination: true,
         paginationPageSize: 10,
         //masterDetail: true,

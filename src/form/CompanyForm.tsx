@@ -21,19 +21,12 @@ import {
 } from '../Models.ts'
 import { CustomerGrid} from '../IWSGrid.tsx'
 import Login from './Login.tsx'
-import {CompanyTabs} from "./CompanyTabs.tsx";
+import {CompanyTabs} from './CompanyTabs.tsx'
 import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
-ModuleRegistry.registerModules([
-  AllCommunityModule,
-  ClientSideRowModelModule,
-  // ExcelExportModule,
-  // SetFilterModule,
-  // MultiFilterModule,
-  // MasterDetailModule,
-])
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const STYLES = {
   inner: {
@@ -236,9 +229,7 @@ const CompanyForm = () => {
             <Grid container
                 // @ts-ignore
                   style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 10}} maximize direction="column">
-              <CustomerGrid
-                  // @ts-ignore
-                  theme="legacy" columnDefs ={customerColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData} />
+              <CustomerGrid columnDefs ={customerColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData} />
             </Grid>
         </Grid>
   )

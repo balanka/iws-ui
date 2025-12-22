@@ -231,9 +231,8 @@ const STYLES = {
                     , paddingLeft: 10, paddingRight:5, paddingTop:state.collapse?minPadding:maxPadding, width: '100%'
                     , zIndex:1}} maximize
                 direction="column">
-            <TransactionGrid
-                // @ts-ignore
-                gridOptions ={gridOptions}  columnDefs={transactionColumnDefs(t)} onRowSelected={onRowSelected} rowData={rowData}/>
+            <TransactionGrid gridOptions ={gridOptions}  columnDefs={transactionColumnDefs(t)}
+                             onRowSelected={onRowSelected} rowData={rowData}/>
           </Grid>
         </Grid>
     </>)

@@ -159,11 +159,8 @@ const JForm = () => {
                 // @ts-ignore
                              stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
             <Grid item style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: 1500}}>
-                <PeriodicAccountBalanceGrid
-                  columnDefs ={pacColumnsDefs(t)}
-                  defaultColDef ={defaultColDefX}
-                  onRowSelected={onRowSelected}
-                    rowData={ rowData.map(format)}/>
+                <PeriodicAccountBalanceGrid columnDefs ={pacColumnsDefs(t)} defaultColDef ={defaultColDefX}
+                      onRowSelected={onRowSelected} rowData={ rowData.map(format)}/>
             </Grid>
         </Grid>
     )

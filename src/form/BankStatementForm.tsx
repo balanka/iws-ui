@@ -148,7 +148,6 @@ const BankStatementForm = () => {
               currency={currencyx}  locale={localex}/>
             <Grid item style={{paddingTop: 5, height:'75%', width:'100%' }}>
               <BankStatementGrid
-                  // @ts-ignore
                    columnDefs ={bankStatementColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
             </Grid>
           </Grid>

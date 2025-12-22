@@ -11,14 +11,7 @@ import {
 } from '../ColumnsDefs.ts'
 import Grid from 'react-fast-grid'
 import {IRole, IUserRight} from '../Models.ts'
-import {
-  // IMasterDetailService
-  // AllCommunityModule,
-  // ClientSideRowModelModule,
-  // ModuleRegistry,
-  IDetailCellRendererParams
-  , GridOptions
-} from 'ag-grid-community'
+import {IDetailCellRendererParams, GridOptions} from 'ag-grid-community'
 
 
 const UserTabs = ({ collapse, current, setCurrent, disable, t, height }:UserFormProps) => {

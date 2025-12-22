@@ -105,9 +105,7 @@ const AssetForm = () => {
         <Grid container
             // @ts-ignore
               style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 30}} maximize direction="column" >
-          <AssetGrid
-              // @ts-ignore
-              theme="legacy" columnDefs ={assetColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
+          <AssetGrid columnDefs ={assetColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
         </Grid>
       </Grid>
 

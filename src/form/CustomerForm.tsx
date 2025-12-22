@@ -40,10 +40,8 @@ const CustomerForm = () => {
   const dispatch = useDispatch()
   let navigate = useNavigate()
   const [state, setState] = useState({ collapse: true, fadeIn: true, timeout: 300 })
-  const height = 20
-
   const toggle = () => setState({ ...state, collapse: !state.collapse })
-
+  const height = 20
   const minHeight = 350
   const maxHeight = 700
   const zIndex = 9999
@@ -92,9 +90,7 @@ const CustomerForm = () => {
             <Grid container
                 // @ts-ignore
                   style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 10}} maximize direction="column">
-              <CustomerGrid
-                  // @ts-ignore
-                  theme="legacy" columnDefs ={customerColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
+              <CustomerGrid columnDefs ={customerColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
             </Grid>
       </>
   )

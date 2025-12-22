@@ -19,8 +19,8 @@ import UserTabs from "./UserTabs.tsx";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {logout} from '../utils/FormUtils.tsx'
-import useForm from "./UseForm.ts";
-import UseMasterfileForm from "./UseMasterfileForm.ts";
+import useForm from './UseForm.ts'
+import UseMasterfileForm from './UseMasterfileForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const STYLES = {

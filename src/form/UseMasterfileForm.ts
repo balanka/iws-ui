@@ -3,24 +3,17 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {useStore} from './Menu'
-import {formEnum} from '../utils/FormEnum'
-import {useTranslation} from 'react-i18next'
 import { UseMasterfileFormResult} from '../Props.ts'
 import {Add, Edit, Get} from './CrudController.ts'
 import iwsStore from '../utils/Store.tsx'
 import {useState} from 'react'
 import {IWSModel} from '../Models.ts'
+import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,])
 
 const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormResult<T>] => {
-  const {profile, menu, selected} = useStore()
+  const [{ profile, menu, selected, t, i18n, title:title, modelid}]  = useForm()
   const { token, company} = profile
-  const {t, i18n} = useTranslation()
-  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-  const modelid: number = module_ ? module_.modelid : 1111
-  const title =  `${company}/${t(module_.title)}`
   const [language, setLanguage] = useState('en-US')
   const [edited, setEdited] = useState<boolean>(false)
   const [added, setAdded] = useState<boolean>(false)
@@ -49,11 +42,9 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormR
       setDisable(false)
       setAdded(true)
     }
-    console.log('current', current)
   }
   const submitEdit = (event:any) => {
     event.preventDefault()
-    console.log('current', current)
     if(edited) {
       Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
     } else if (!edited && !disable) {

@@ -173,10 +173,7 @@ const STYLES = {
              <MasterfilesMainForm2 collapse ={state.collapse} current={current} setCurrent={setCurrent} disable={disable} t={t} height={0}
                                        accData={ iwsState.get(formEnum.ACCOUNT) ?? accData}/>
                  <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>
-                     <MasterfileGrid
-                         // @ts-ignore
-                         theme="legacy" columnDefs={masterfileColumnDefs(t)} onRowSelected={onRowSelected}
-                         rowData={rowData}/>
+                     <MasterfileGrid columnDefs={masterfileColumnDefs(t)} onRowSelected={onRowSelected} rowData={rowData}/>
                  </Grid>
          </Grid>
      )

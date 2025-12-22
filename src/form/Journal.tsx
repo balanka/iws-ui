@@ -89,11 +89,8 @@ const Journal = () => {
         // @ts-ignore
                        stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
       <Grid item style={{paddingLeft: 1, paddingRight: 1, paddingTop: 5, height: 560, width: 1500}}>
-        <JournalGrid
-          columnDefs ={journalColumnsDefs(t)}
-          defaultColDef ={{...defaultColDefX, filter:true}}
-          onRowSelected={onRowSelected}
-          rowData={rowData}/>
+        <JournalGrid columnDefs ={journalColumnsDefs(t)} defaultColDef ={{...defaultColDefX, filter:true}}
+                     onRowSelected={onRowSelected} rowData={rowData}/>
       </Grid>
     </Grid>
   )

@@ -19,8 +19,8 @@ import Login from "./Login.tsx";
 import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import UseMasterfileForm from "./UseMasterfileForm.ts";
-import useForm from "./UseForm.ts";
+import UseMasterfileForm from './UseMasterfileForm.ts'
+import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const StoreForm= () => {
@@ -29,25 +29,14 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const localex= locale??'fr-FR'
      const dispatch = useDispatch()
      let navigate = useNavigate()
-     //const [language, setLanguage] = useState('en-US')
      let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
      module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-     //const modelid = module_ ? module_.modelid : 1111
      if (module_ === '11111' || module_ === 11111) return <Login/>
-     //let title = company?.concat(' / ').concat(t(module_.title))
      const [state] = useState({collapse: true, fadeIn: true, timeout: 300})
-     // const [disable, setDisable] = useState(true)
      const current_: IStore = initStore[0]
-     // const [current, setCurrent] = useState(current_)
      const [, setIwsState] = useState(iwsStore.initialState)
-     // const [edited, setEdited] = useState<boolean|undefined>(false)
-     // const [added, setAdded] = useState<boolean|undefined>(undefined)
-     //const toggle = () => setState({...state, collapse: !state.collapse})
      const [accData, setAccData] = useState<IAccount[]>([])
-    // const [rowData, setRowData] = useState<IStore[]>([])
      const acc_modelid = formEnum.ACCOUNT
-     //const ctx = `${selected}/${modelid}/${company}`
-       //const modifyUrl = selected
      const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
      const zIndex = 9999
      const height= 20
@@ -56,69 +45,10 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
      useEffect(() => {
          iwsStore.subscribe(setIwsState)
-         //Get(ctx, token, modelid, setRowData)
          Get(acc_ctx, token, acc_modelid, setAccData)
      }, [])
 
-     // const handleLanguageChange = (event:any) => {
-     //     event.preventDefault()
-     //     const value = event.target.value
-     //     setLanguage(value)
-     //     i18n.changeLanguage(value)
-     // }
-     // const edit = () => {
-     //     console.log('edit called!!!')
-     //     if(edited) {
-     //         setEdited(false )
-     //         setDisable(true)
-     //         setAdded(false)
-     //     } else {
-     //         setEdited(true)
-     //         setDisable(false)
-     //         setAdded(true)
-     //     }
-     // }
-     // const submitEdit = (event:any) => {
-     //     event.preventDefault()
-     //     if(edited) {
-     //         Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
-     //     } else if (!edited && !disable) {
-     //         Add(modifyUrl, token, { ...current }, rowData, setCurrent)
-     //     }
-     //     setDisable(true)
-     //     setEdited(false)
-     //     setAdded(true)
-     // }
-     // const cancelEdit = () => {
-     //     if(edited) {
-     //         setEdited(false)
-     //         setDisable(true)
-     //         setAdded(true)
-     //     }
-     // }
-     //
-     // const initAdd = () => {
-     //     const newRow = {...current_, company: company, stocks:[]}
-     //     setCurrent(newRow)
-     //     setAdded(true)
-     //     setEdited(false)
-     //     setDisable(false)
-     // }
-     //
-     // const reload = () => {
-     //     iwsStore.deleteKey(current.modelid)
-     //     Get1(ctx, token, current.modelid)
-     //     setCurrent(current_)
-     // }
-     //
-     // const submitQuery = (event: any) => {
-     //     event.preventDefault()
-     //     Get(ctx, token, modelid, setRowData)
-     //     Get(acc_ctx, token, acc_modelid, setAccData)
-     // }
      const onRowSelected = (event: RowSelectedEvent) => setCurrent(event.data)
-
-
      return (<>
              <CommonFormHead
                  title={title}
