@@ -88,10 +88,7 @@ const VatForm = () => {
           <Grid container
               // @ts-ignore
                 style={{...stylesx.outer, height:250, paddingTop: 10}} maximize direction="column">
-            <VatGrid
-                // @ts-ignore
-                theme="legacy" columnDefs ={vatColumnDefs(t)}  onRowSelected={onRowSelected}
-                     rowData ={rowData} />
+            <VatGrid columnDefs ={vatColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData} />
           </Grid>
     </>
   )

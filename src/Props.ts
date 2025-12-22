@@ -355,6 +355,7 @@ export interface UseFormResult {
   , i18n: i18n
   , title:string
   , modelid : number
+  , company:string
 }
 export interface UseMasterfileFormResult<T> {
   profile: IProfile

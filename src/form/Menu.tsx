@@ -1,7 +1,7 @@
 import { formEnum } from '../utils/FormEnum'
 import { create } from 'zustand'
 import {
-  IAccount, IArticle, IAsset, IBankAccount, IBankStatement,
+  IAccount, IArticle, IAsset, IBankAccount, IBankStatement, ICompany,
   ICustomer,
   IEmployee, IFinancials,
   IFmodule, ILineFinancials, ILineTransaction, IMasterfile, IMasterfile2,
@@ -255,7 +255,7 @@ export const initCc:IMasterfile2 [] = [
   },
 ]
 export const initBankAccount:IBankAccount = { id: '', bic: '', owner: '', modelid: -1, company: ''}
-export const initComp = [
+export const initComp:ICompany[] = [
   {
     id: '',
     name: '',

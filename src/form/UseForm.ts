@@ -18,6 +18,6 @@ const UseForm = (): [UseFormResult] => {
   const modelid: number = module_ ? module_.modelid : 1111
   const title =  `${company}/${t(module_.title)}`
 
-  return [{ profile, menu, selected, t, i18n, title:title, modelid}]
+  return [{ profile, menu, selected, t, i18n, title:title, modelid, company}]
 }
 export default UseForm
