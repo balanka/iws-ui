@@ -57,11 +57,11 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
     Get(module_ctx, token, module_modelid, setModule)
     setCurrent(current_)
   }, [selected])
-
+ const fromPeriod = `${current.toPeriod.toString().substring(0,4)}00`
   const buildUrl = (current:IPACBQueryParam) => `${module_.ctx}/${company}/${current.account}/${current.fromPeriod ===-1 ?
-                                                current.toPeriod:current.fromPeriod}/${current.toPeriod}`
+                                                    fromPeriod:current.fromPeriod}/${current.toPeriod}`
   const getUrlAll = (current:IPACBQueryParam) => `${module_.ctx}/${company}/${current.fromPeriod ===-1 ?
-                                               current.toPeriod:current.fromPeriod}/${current.toPeriod}`
+                                                    fromPeriod:current.fromPeriod}/${current.toPeriod}`
 
   const submitQuery = (event: any, current:IPACBQueryParam ) => {
     event.preventDefault()
