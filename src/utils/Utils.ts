@@ -70,22 +70,36 @@ const sortByName = (a:& {name:string}, b:& {name:string}) => strcmp (a.name, b.n
 
 //const sortById = (a:{id:string|bigint, name:string}, b:{id:string|bigint, name:string}) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
 //const sortByName = (a:{id:string|bigint, name:string}, b:{id:string|bigint, name:string}) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
+// Executes functions from right-to-left
+//type A = <T> (arg:T)=>T
 
+const composeT = <T>(fn1: (a: T) => T, ...fns: Array<(a: T) => T>) =>
+  fns.reduce((prevFn:(a:T)=>T, nextFn:(a:T)=>T) => value => prevFn(nextFn(value)), fn1);
 
+const compose = <T>(...fns:((arg:T)=>T)[]) => (initialValue:T) =>
+   fns.reduceRight((acc:T, fn:(arg:T)=>T) => fn(acc), initialValue);
 
+const double =  (x:number) => x * 2;
+const increment = (x:number) => x + 1;
+const stringify = (x:number) => x//`Result: ${x}`;
+
+const processTNumber = composeT(stringify, increment, double);
+const processNumber = compose(stringify, increment, double);
+console.log(processTNumber(10)) // "Result: 21"
+console.log(processNumber(10)) // "Result: 21"
+
+//type Identity<T> = T extends object ? { [K in keyof T]: T[K] } : T
 /**
  * @description
  * Takes an Array<V>, and a grouping function,
  * and returns a Map of the array grouped by the grouping function.
  *
  * @param list An array of type V.
- * @param keyGetter A Function that takes the the Array type V as an input, and returns a value of type K.
+ * @param keyGetter A Function that takes the Array type V as an input, and returns a value of type K.
  *                  K is generally intended to be a property key of V.
  *
  * @returns Map of the array grouped by the grouping function.
  */
-//export function groupBy<K, V>(list: Array<V>, keyGetter: (input: V) => K): Map<K, Array<V>> {
-//    const map = new Map<K, Array<V>>();
 const  groupBy = <A, K>(list:A[], keyGetter:(arg: A) =>K):Map<K, A[]> => {
     const map = new Map<K, A[]>();
     list.forEach((item) => {
