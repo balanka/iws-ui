@@ -38,13 +38,10 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
   const [, setDisable] = useState(true)
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-     console.log('module_>>>>', module_)
-
-  let title_ = company??''.concat(' / ').concat(t(module_.title))
-  const initialState:T = current_
+  let title_ = `${company}/${t(module_.title)}`
   const [current, setCurrent] = useState<T>(current_)
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
-  console.log('current>>>>', current)
+  //console.log('current>>>>', current)
   const acc_modelid = formEnum.ACCOUNT
   const art_modelid = formEnum.ARTICLE
   const vat_modelid = formEnum.VAT
@@ -55,7 +52,6 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
   const fmodule_modelid = formEnum.FMODULE
   const modifyUrl = selected
   let ctx = `${module_.ctx}/${modelid}/${company}`
-  console.log('ctxctxctx>>>>', ctx)
   const art_ctx = `${MASTERFILE.article}/${art_modelid}/${company}`
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
@@ -70,8 +66,8 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
    const [accData, setAccData] = useState<IAccount[]>([])
   const [articleData, setArticleData] = useState<IArticle[]>([])
   const [vatData, setVatData] = useState<IVat[]>([])
-  const [, setCustData] = useState<ICustomer[]>([])
-  const [, setSupData] = useState<ISupplier[]>([])
+  const [, setCustomerData] = useState<ICustomer[]>([])
+  const [, setSupplier] = useState<ISupplier[]>([])
   const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
   const [, setModule] = useState<IModule[]>([])
   const [copyFrom, setCopyFRom] = useState<number[]>([])
@@ -104,8 +100,8 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
         Get(acc_ctx, token, acc_modelid, setAccData)
         Get(store_ctx, token, store_modelid, setStoreData)
         Get(vat_ctx, token, vat_modelid, setVatData)
-        Get(cust_ctx, token, cust_modelid, setCustData)
-        Get(sup_ctx, token, sup_modelid, setSupData)
+        Get(cust_ctx, token, cust_modelid, setCustomerData)
+        Get(sup_ctx, token, sup_modelid, setSupplier)
         Get(module_ctx, token, fmodule_modelid, setModule)
         // attach the event listener
         document.addEventListener('keydown', handleKeyPress)
@@ -129,8 +125,10 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
     console.log('mx>>>>', mx)
     console.log('templateFileName >>>>', templateFileName)
     title_ = mx?.name ? mx.name : title_
-      const copyFromIds = mx? mx.copyFrom:-1
-    setTitle(company??''.concat(' / ').concat(title_))
+    const copyFromIds = mx? mx.copyFrom:-1
+    const titlex = `${company}/${title_}`
+    //console.log('titlex>>>>', titlex)
+    setTitle(titlex)
     setCopyFRom([copyFromIds])
     setPartnerId(parseInt(mx.account))
     setCurrent(current_)
@@ -209,7 +207,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
 
   const initAdd = () => {
     setDisable(false)
-    const newRow:T = {...initialState, company: company, currency: currency, editing: false}
+    const newRow:T = {...current_, company: company, currency: currency, editing: false}
     EditRow(newRow, true, setCurrent)
   }
   const reload = () => {
