@@ -111,6 +111,7 @@ const BankStatementForm = () => {
     Get2(url_, token, setCurrent)
   }
   const importData = () => {
+    console.log('current', current)
     const url_ = `${module_.ctx}/${current.path}/${current.header}/${current.char}/${current.extension}/${company}`
     console.log('url_', url_)
     url_ && Get(url_, token, current.modelid, setRowData)

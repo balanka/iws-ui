@@ -16,9 +16,8 @@ import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFormResult<T>]  => {
-  const [{ profile, menu, selected, t, i18n, title, modelid}] = useForm()
-  const { token, company, currency } = profile
-  const [language, setLanguage] = useState('en-US')
+  const [{ profile, menu, selected, t, title, language, handleLanguageChange, modelid, company}] = useForm()
+  const { token, currency } = profile
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   const [disable, setDisable] = useState(true)
@@ -54,12 +53,6 @@ const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFo
     setRowData([])
   }, [selected])
 
-  const handleLanguageChange = (event:any) => {
-    event.preventDefault()
-    const value = event.target.value
-    setLanguage(value)
-    i18n.changeLanguage(value)
-  }
   const onNewSalaryItem = () => {}
   const edit = () => {
     console.log('edit called!!!')

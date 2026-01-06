@@ -13,9 +13,8 @@ import {
   PermissionMainForm
 } from './FormsProps'
 import {Add, Edit, Get} from './CrudController'
-import {MASTERFILE, useStore} from './Menu'
+import {MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
-import { useTranslation } from 'react-i18next'
 import { formEnum } from '../utils/FormEnum'
 import {fmoduleColumnDefs, masterfileColumnDefs, permissionColumnDefs, userColumnDefs} from '../ColumnsDefs.ts'
 import {IFmodule, IMasterfile, IMasterfile2, IPermission, IRole} from '../Models.ts'
@@ -27,6 +26,7 @@ import RoleTabs from "./RoleTabs.tsx";
 import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import useForm from "./UseForm.ts";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
@@ -55,6 +55,7 @@ const getCtx = (modelid:number, company:string ) => {
          case formEnum.USER:
            return userColumnDefs(t)
        case formEnum.FMODULE:
+         console.log('modelid', modelid)
            return fmoduleColumnDefs(t)
          default:
              return masterfileColumnDefs(t)
@@ -62,13 +63,11 @@ const getCtx = (modelid:number, company:string ) => {
  }
 
  const MasterfileForm = () => {
-     const {profile, menu, selected} = useStore()
-     const {t, i18n} = useTranslation()
-     const {token, company} = profile
-    // console.log('selected>>>', selected)
+     const [{ profile, menu, selected, t, title:title, language, handleLanguageChange, modelid, company}]  = useForm()
+     const {token} = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
-     const [language, setLanguage] = useState('en-US')
+
      // console.log('menu', menu)
      let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
      const parent_ctx = `${module_?.state3}/${company}`
@@ -77,12 +76,9 @@ const getCtx = (modelid:number, company:string ) => {
      module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
      console.log('module_', module_)
      if (module_ === '11111' || module_ === 11111) return <Login/>
-     const title = company?.concat(' / ').concat(t(module_.title))
      const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
      const [disable, setDisable] = useState(true)
      const height = 20
-
-     const modelid: number = module_ ? module_.modelid : 1111
      const ctx = getCtx(modelid, company)
      const modifyUrl = module_.ctx
      const current_: IMasterfile2 =  module_.state[0]
@@ -114,14 +110,6 @@ const getCtx = (modelid:number, company:string ) => {
          Get(acc_ctx, token, formEnum.ACCOUNT, setAccountData)
          setCurrent(current_)
      }, [current_])
-
-     const handleLanguageChange = (event:any) => {
-         event.preventDefault()
-         const value = event.target.value
-         setLanguage(value)
-         i18n.changeLanguage(value)
-     }
-
 
      const edit = () => {
          console.log('edit called!!!', current)

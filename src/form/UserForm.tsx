@@ -8,7 +8,6 @@ import Grid from 'react-fast-grid'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {CommonFormHead} from './FormsProps'
-import { MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import { userColumnDefs} from '../ColumnsDefs.ts'
@@ -36,29 +35,19 @@ const STYLES = {
 }
 
  const UserForm = () => {
-   const [{profile, menu, selected, t}] = useForm()
-   const { company } = profile
+   const [{ menu, selected, t}] = useForm()
      const dispatch = useDispatch()
      let navigate = useNavigate()
-     console.log('selected>>>', selected)
      let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
      module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
      if (module_ === '11111' || module_ === 11111) return <Login/>
      const [state] = useState({collapse: true, fadeIn: true, timeout: 300})
-     const modelid: number = module_ ? module_.modelid : 1111
-     console.log('modelid', modelid)
-     const acc_modelid  = formEnum.ACCOUNT
-     const acc_ctx = `${modelid === formEnum.COSTCENTER ?  MASTERFILE.acc:-1}/${acc_modelid}/${company}`
-     console.log('acc_ctx', acc_ctx)
-     console.log('module_', module_)
-     console.log('initialState', module_.state[0])
      const current_: IUser =  module_.state[0]
      const [setIwsState] = useState(iwsStore.initialState)
-
      const minHeight = 400
      const maxHeight = 700
-   const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
-     , handleLanguageChange, toggle, title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
+     const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
+           , handleLanguageChange, toggle, title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
      useEffect(() => {
          iwsStore.subscribe(setIwsState)

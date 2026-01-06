@@ -31,10 +31,10 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const UseTransactionForm = <T extends IWSTransaction<ILine>,
               L extends ILine>(current_ :T, currentLine_ :L, currentLine:L): [UseTransactionFormResult<T, ILine>]  => {
-   const [{ profile, menu, selected, t, i18n, modelid}] = useForm()
+   const [{ profile, menu, selected, t, language, handleLanguageChange,modelid}] = useForm()
    const { token, company, currency } = profile
    let templateFileName =''
-  const [language, setLanguage] = useState('en-US')
+
   const [, setDisable] = useState(true)
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
@@ -112,12 +112,6 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
     }
   }, [partnerId, copyFrom, current])
 
-  const handleLanguageChange = (event:any) => {
-    event.preventDefault()
-    const value = event.target.value
-    setLanguage(value)
-    i18n.changeLanguage(value)
-  }
   const handleModuleChange = (value:any) => {
     setModel(value)
     const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]

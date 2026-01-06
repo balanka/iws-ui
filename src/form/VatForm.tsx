@@ -19,8 +19,8 @@ import Login from './Login'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {logout} from '../utils/FormUtils.tsx'
-import UseMasterfileForm from "./UseMasterfileForm.ts";
-import useForm from "./UseForm.ts";
+import UseMasterfileForm from './UseMasterfileForm.ts'
+import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const STYLES = {
@@ -34,8 +34,8 @@ const STYLES = {
   }
 }
 const VatForm = () => {
-  const [{ profile, menu, selected, t }] = useForm()
-  const { token, company} = profile
+  const [{ profile, menu, selected, t, company }] = useForm()
+  const { token} = profile
   const dispatch = useDispatch()
   let navigate = useNavigate()
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)

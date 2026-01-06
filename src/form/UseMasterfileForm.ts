@@ -12,9 +12,8 @@ import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,])
 
 const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormResult<T>] => {
-  const [{ profile, menu, selected, t, i18n, title:title, modelid}]  = useForm()
+  const [{ profile, menu, selected, t, i18n, title:title, language, handleLanguageChange, modelid}]  = useForm()
   const { token, company} = profile
-  const [language, setLanguage] = useState('en-US')
   const [edited, setEdited] = useState<boolean>(false)
   const [added, setAdded] = useState<boolean>(false)
   const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
@@ -24,14 +23,8 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormR
   const modifyUrl = selected
   const ctx = `${selected}/${modelid}/${company}`
   const zIndex = 9999
-
   const toggle = () => setState({...state, collapse: !state.collapse})
-  const handleLanguageChange = (event:any) => {
-    event.preventDefault()
-    const value = event.target.value
-    setLanguage(value)
-    i18n.changeLanguage(value)
-  }
+
   const edit = () => {
     if(edited) {
       setEdited(false )

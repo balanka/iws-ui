@@ -354,6 +354,9 @@ export interface UseFormResult {
   , t:TFunction<'translation', undefined>
   , i18n: i18n
   , title:string
+  , language:string
+  , setLanguage:Dispatch<SetStateAction<string>>
+  , handleLanguageChange:(language:any)=>void
   , modelid : number
   , company:string
 }

@@ -24,9 +24,8 @@ import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const StoreForm= () => {
-     const [{profile, menu, selected, t}] = useForm()
-     const { token, company, locale } = profile
-     const localex= locale??'fr-FR'
+     const [{profile, menu, selected, t, company}] = useForm()
+     const { token, locale } = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
      let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
@@ -74,7 +73,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  // @ts-ignore
                    style={{...stylesx.outer, padding: 5, display: !state.collapse?'none':''}} maximize direction="column">
                  <StoreTabs collapse = {state.collapse} current={current} setCurrent={setCurrent} disable={disable} t={t} zIndex={zIndex-1}
-                            accData={accData} locale={localex}  height={height} />
+                            accData={accData} locale={locale??'fr-FR'}  height={height} />
              </Grid>
              <Grid container
                  // @ts-ignore

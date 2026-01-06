@@ -53,11 +53,8 @@ const STYLES = {
  const TransactionForm = () => {
    const [{  menu, selected, t }] = useForm()
    const dispatch = useDispatch()
-
   let navigate = useNavigate()
-  //const [language, setLanguage] = useState('en-US')
   const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
-  //const [, setDisable] = useState(true)
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
      console.log('module_>>>>', module_)

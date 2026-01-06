@@ -47,8 +47,8 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
   const current_ = {...PACB_QUERY_PARM, modelid: modelid, currency:currency??''}
   const [current, setCurrent] = useState<IPACBQueryParam>(current_)
   const [, setIwsState] = useState(iwsStore.initialState)
-   const [accData, setAccData] = useState<IAccount[]>([])
-   const [rowData, setRowData] = useState<T[]>([])
+  const [accData, setAccData] = useState<IAccount[]>([])
+  const [rowData, setRowData] = useState<T[]>([])
   const [module, setModule] = useState<IModule[]>([])
 
   useEffect(() => {
@@ -57,7 +57,9 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
     Get(module_ctx, token, module_modelid, setModule)
     setCurrent(current_)
   }, [selected])
- const fromPeriod = current.fromPeriod ===-1 ? `${current.toPeriod.toString().substring(0,4)}00`:current.fromPeriod
+
+ const fromPeriod = current.fromPeriod ===-1 ? `${current.toPeriod.toString().substring(0,4)}00`
+                                                            :current.fromPeriod
   const buildUrl = (current:IPACBQueryParam) =>
          `${module_.ctx}/${company}/${current.account}/${fromPeriod}/${current.toPeriod}`
   const getUrlAll = (current:IPACBQueryParam) =>
