@@ -440,6 +440,7 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , reload:()=>void
   , submitEdit: (event: any) => void
   , copyFromTransaction:T[]
+  , setCopyFromTransaction:Dispatch<SetStateAction<T[]>>
   , handleLanguageChange:(event:any) =>void
   , handleModuleChange:(event:any) =>void
   , handleKeyPress:(event:any)=>void

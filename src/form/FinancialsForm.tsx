@@ -59,9 +59,11 @@ const FinancialsForm = () => {
     const current_: IFinancials = initFtr [0]
   const initialLine:ILineFinancials = initFtr [0].lines[0]
   const [currentLine, setCurrentLine] = useState<ILineFinancials>(initialLine)
-  const  [{ modelid,  language, rowData, fmodule, setRowData,  current, setCurrent, initAdd, reload, submitEdit
-         , copyFromTransaction, handleLanguageChange, onRowSelected, onNewLine, onDeleteLine, submitCancel, submitPost
-         , copyCall, setGridApi, templateName, zIndex, saveProps}] = useTransactionForm(current_, initialLine, currentLine)
+  const  [{  language, isFetching, fmodule, rowData
+    , setRowData,  current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction, setCopyFromTransaction
+    , handleLanguageChange, onRowSelected, onNewLine
+    , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, modelid}] =
+    useTransactionForm(current_, initialLine, currentLine)
     console.log('current_?>>>>>', current_)
     const [_, setIwsState] = useState(iwsStore.initialState)
     const [title, setTitle] = useState(title_)
@@ -74,18 +76,24 @@ const FinancialsForm = () => {
     const cc_ctx = `${MASTERFILE.masterfile}/${cc_modelid}/${company}`
     const [accData, setAccData] = useState<IAccount[]>(initAcc)
     const [ccData, setCcData] = useState<IMasterfile[]>([])
-    const [isFetching, setIsFetching] = useState(false)
+    //const [copyFrom, setCopyFrom] = useState<number[]>([])
+    //const [isFetching, setIsFetching] = useState(false)
 
     const handleModuleChange = (value:any) => {
         //setModel(value)
         const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]
         title_ = mx?.name ? mx.name : title_
-        setTitle(company??''.concat(' / ').concat(title_))
-        //setCopyFRom([copyFromIds])
+        console.log('title_', title_)
+        title_ = `${company}/${title_}`
+        const copyFromIds = mx? mx.copyFrom:-1
+        setTitle(title_)
+        //setCopyFrom([copyFromIds])
         setCurrent(current_)
         console.log('mx', mx)
         ctx = `${module_.ctx}/${mx.id}/${company}`
         console.log('ctx', ctx)
+        const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
+        Get(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
         submitQuery(ctx)
     }
 
@@ -99,11 +107,11 @@ const FinancialsForm = () => {
 
     const submitQuery = (ctx:string, event?:any) => {
         event?.preventDefault()
-        setIsFetching(true)
+        //setIsFetching(true)
         !accData&&Get(acc_ctx,  token, acc_modelid, setAccData)
         !ccData&&Get(cc_ctx, token, cc_modelid, setCcData)
         Get3(ctx, token, modelid, setRowData, setCurrent)
-        setIsFetching(false)
+        //setIsFetching(false)
     }
 
     const fmoduleData = (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id)

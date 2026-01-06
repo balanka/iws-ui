@@ -247,7 +247,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
    const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current.lines }
 
    return [{ profile, menu, selected, t, language, isFetching, storeData, accData, articleData, fmodule, rowData
-     , setRowData, vatData, current_, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
+     , setRowData, vatData, current_, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction,  setCopyFromTransaction
      , handleLanguageChange, handleModuleChange, handleKeyPress, onNewLine, onRowSelected, onDeleteLine, submitCancel, submitPost
      , copyCall, setGridApi, templateName, zIndex, saveProps, partnerId, modelid, title}]
 }
