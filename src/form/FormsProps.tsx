@@ -93,6 +93,11 @@ import QRCode from 'react-qr-code'
 //import QRReader from 'react-qr-reader'
 
 const styles = {
+  outer0: {
+    borderRadius: 5,
+    boxShadow: "0 30px 40px #BBB",
+    padding: 4,
+  },
   outer: {
     borderRadius: 5,
     boxShadow: "0 30px 40px #BBB",
@@ -813,8 +818,8 @@ export const AccountMainForm = ({current, setCurrent, accData, t, disable}:Accou
                             <InputField
                                 fieldName="name"
                                 current={current}
-                                setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-                                value={current.name} //eslint-disable-next-line react/prop-types
+                                setCurrent={setCurrent}
+                                value={current.name}
                                 disabled={disable}
                                 style={{ height: 20, width: 1000 }}/>
                         </Grid>
@@ -981,7 +986,7 @@ export const AccountMainForm = ({current, setCurrent, accData, t, disable}:Accou
 //             <InputField
 //                 fieldName="account"
 //                 current={current}
-//                 setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+//                 setCurrent={setCurrent}
 //                 value={incomeStmtAcc}
 //                 disabled={false}
 //                 style={{ paddingLeft: 0 }}
@@ -994,7 +999,7 @@ export const AccountMainForm = ({current, setCurrent, accData, t, disable}:Accou
 //             <InputField
 //                 fieldName="period"
 //                 current={current}
-//                 setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+//                 setCurrent={setCurrent}
 //                 value={current.period}
 //                 disabled={false}
 //                 style={{ height: height, textAlign: 'right' }}
@@ -1007,7 +1012,7 @@ export const AccountMainForm = ({current, setCurrent, accData, t, disable}:Accou
 //             <InputField
 //                 fieldName="company"
 //                 current={current}
-//                 setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+//                 setCurrent={setCurrent}
 //                 value={current.company}
 //                 disabled={false}
 //                 style={{ height: height, textAlign: 'right' }}
@@ -1027,7 +1032,7 @@ export const AccountMainForm = ({current, setCurrent, accData, t, disable}:Accou
 //   const submitQuery = (event:any) => {
 //     event.preventDefault()
 //     const url = MASTERFILE.createDepreciationTransaction
-//         .concat('/') // eslint-disable-next-line react/prop-types
+//         .concat('/')
 //         .concat(current.period)
 //         .concat('/')
 //         .concat(company)
@@ -1043,7 +1048,7 @@ export const AccountMainForm = ({current, setCurrent, accData, t, disable}:Accou
 //             <InputField
 //                 fieldName="period"
 //                 current={current}
-//                 setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+//                 setCurrent={setCurrent}
 //                 value={current.period}
 //                 disabled={false}
 //                 style={{ height: height, textAlign: 'right' }}
@@ -1056,7 +1061,7 @@ export const AccountMainForm = ({current, setCurrent, accData, t, disable}:Accou
 //             <InputField
 //                 fieldName="company"
 //                 current={current}
-//                 setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+//                 setCurrent={setCurrent}
 //                 value={current.company}
 //                 disabled={false}
 //                 style={{ height: height, textAlign: 'right' }}
@@ -1092,7 +1097,7 @@ export const AccountMainForm = ({current, setCurrent, accData, t, disable}:Accou
 //             <InputField
 //                 fieldName="id"
 //                 current={current}
-//                 setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+//                 setCurrent={setCurrent} /
 //                 value={current.id}
 //                 disabled={false}
 //                 style={{ paddingLeft: 0 }}
@@ -1105,7 +1110,8 @@ export const AccountMainForm = ({current, setCurrent, accData, t, disable}:Accou
 //             <InputField
 //                 fieldName="company"
 //                 current={current}
-//                 setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+//                 setCurrent={setCurrent}
+
 //                 value={current.company}
 //                 disabled={false}
 //                 style={{ height: height, textAlign: 'right' }}
@@ -1134,7 +1140,7 @@ export const BankStatementParameterForm = ({ current, setCurrent, t, height }:Ba
                     <InputField
                         fieldName="header"
                         current={current}
-                        setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+                        setCurrent={setCurrent}
                         value={current.header}
                         disabled={false}
                         style={{ paddingLeft: 0 }}
@@ -1147,7 +1153,7 @@ export const BankStatementParameterForm = ({ current, setCurrent, t, height }:Ba
                     <InputField
                         fieldName="char"
                         current={current}
-                        setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+                        setCurrent={setCurrent}
                         value={current.char}
                         disabled={false}
                         style={{ paddingLeft: 0 }}
@@ -1160,7 +1166,7 @@ export const BankStatementParameterForm = ({ current, setCurrent, t, height }:Ba
                     <InputField
                         fieldName="extension"
                         current={current}
-                        setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+                        setCurrent={setCurrent}
                         value={current.extension}
                         //placeholder=".CSV"
                         disabled={false}
@@ -1176,7 +1182,7 @@ export const BankStatementParameterForm = ({ current, setCurrent, t, height }:Ba
                     <InputField
                         fieldName="path"
                         current={current}
-                        setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+                        setCurrent={setCurrent}
                         value={current.path}
                         disabled={false}
                         style={{ paddingLeft: 0 }}
@@ -1264,8 +1270,8 @@ export const BankStatementMainForm = ({ collapse, current, setCurrent, t, locale
                             <InputField
                                 fieldName="depositor"
                                 current={current}
-                                setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-                                value={current.depositor} //eslint-disable-next-line react/prop-types
+                                setCurrent={setCurrent}
+                                value={current.depositor}
                                 disabled={current.posted}
                                 style={{ height: 20 }}/>
                         </Grid>
@@ -1279,7 +1285,7 @@ export const BankStatementMainForm = ({ collapse, current, setCurrent, t, locale
                         <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
                             <DatePickerField
                                 fieldName="valuedate"
-                                label={t('bankstatement.valuedate')} //eslint-disable-next-line react/prop-types
+                                label={t('bankstatement.valuedate')}
                                 selected={current.valuedate}
                                 current={current}
                                 setCurrent={setCurrent}
@@ -1334,8 +1340,8 @@ export const BankStatementMainForm = ({ collapse, current, setCurrent, t, locale
                             <InputField
                                 fieldName="info"
                                 current={current}
-                                setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-                                value={current.info} //eslint-disable-next-line react/prop-types
+                                setCurrent={setCurrent}
+                                value={current.info}
                                 disabled={current.posted}
                                 style={{ height: 20 }}/>
                         </Grid>
@@ -1375,8 +1381,8 @@ export const BankStatementMainForm = ({ collapse, current, setCurrent, t, locale
                             <InputField
                                 fieldName="companyIban"
                                 current={current}
-                                setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-                                value={current.companyIban} //eslint-disable-next-line react/prop-types
+                                setCurrent={setCurrent}
+                                value={current.companyIban}
                                 disabled={current.posted}
                                 style={{ height: 20 }}/>
                         </Grid>
@@ -1391,8 +1397,8 @@ export const BankStatementMainForm = ({ collapse, current, setCurrent, t, locale
                             <InputField
                                 fieldName="company"
                                 current={current}
-                                setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-                                value={current.company} //eslint-disable-next-line react/prop-types
+                                setCurrent={setCurrent}
+                                value={current.company}
                                 disabled={true}
                                 style={{ textAlign: 'right', padding: 2, width: 120 }}/>
                         </Grid>
@@ -1410,8 +1416,8 @@ export const BankStatementMainForm = ({ collapse, current, setCurrent, t, locale
                             <InputField
                                 fieldName="accountno"
                                 current={current}
-                                setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-                                value={current.accountno} //eslint-disable-next-line react/prop-types
+                                setCurrent={setCurrent}
+                                value={current.accountno}
                                 disabled={current.posted}
                                 style={{ height: 20 }}/>
                         </Grid>
@@ -1426,8 +1432,8 @@ export const BankStatementMainForm = ({ collapse, current, setCurrent, t, locale
                             <InputField
                                 fieldName="bankCode"
                                 current={current}
-                                setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-                                value={current.bankCode} //eslint-disable-next-line react/prop-types
+                                setCurrent={setCurrent}
+                                value={current.bankCode}
                                 disabled={true}
                                 style={{ textAlign: 'left', padding: 2, width: 120 }}/>
                         </Grid>
@@ -1444,8 +1450,8 @@ export const BankStatementMainForm = ({ collapse, current, setCurrent, t, locale
                         <Grid item sm={11} xs={12} justify="flex-start" alignItems="stretch">
                             <TextareaField
                                 fieldName="purpose"
-                                placeholder={t('common.purpose')} // eslint-disable-next-line react/prop-types
-                                disabled={current.posted} // eslint-disable-next-line react/prop-types
+                                placeholder={t('common.purpose')}
+                                disabled={current.posted}
                                 value={current.purpose}
                                 current={current}
                                 setCurrent={setCurrent}
@@ -1578,10 +1584,7 @@ export const AssetMainForm =
                         current={current}
                         setCurrent={setCurrent}
                         value={ Number(current.amount).toFixed(2)}
-                        onChange={(event:any) => {
-                            const currentx = { ...current, amount: Number(event.target.value) }
-                            setCurrent(currentx)
-                        }}
+                        onChange={(event:any) => setCurrent({ ...current, amount: Number(event.target.value) })}
                         disabled={disable}
                         style={{ height: 30, textAlign: 'right', padding: 2 }}
                     />
@@ -1592,10 +1595,7 @@ export const AssetMainForm =
                         current={current}
                         setCurrent={setCurrent}
                         value={Number(current.scrapValue)}
-                        onChange={(event:any) => {
-                            const currentx = { ...current, scrapValue: Number(event.target.value) }
-                            setCurrent(currentx)
-                        }}
+                        onChange={(event:any) => setCurrent({ ...current, scrapValue: Number(event.target.value) })}
                         disabled={disable}
                         style={{ height: 30, textAlign: 'right', padding: 2 }}
                     />
@@ -1609,10 +1609,7 @@ export const AssetMainForm =
                         current={current}
                         setCurrent={setCurrent}
                         value={current.lifeSpan}
-                        onChange={(event:any) => {
-                            const currentx = { ...current, lifeSpan: Number(event.target.value) }
-                            setCurrent(currentx)
-                        }}
+                        onChange={(event:any) => setCurrent({ ...current, lifeSpan: Number(event.target.value) })}
                         disabled={disable}
                         style={{ height: 30, textAlign: 'right', padding: 2 }}
                     />
@@ -1628,10 +1625,7 @@ export const AssetMainForm =
                         current={current}
                         setCurrent={setCurrent}
                         value={current.depMethod}
-                        onChange={(event:any) => {
-                            const currentx = { ...current, depMethod: Number(event.target.value) }
-                            setCurrent(currentx)
-                        }}
+                        onChange={(event:any) => setCurrent({ ...current, depMethod: Number(event.target.value) })}
                         disabled={disable}
                         style={{ height: 30, textAlign: 'right', padding: 2 }}
                     />
@@ -1645,12 +1639,8 @@ export const AssetMainForm =
                         current={current}
                         setCurrent={setCurrent}
                         value={current.frequency}
-                        onChange={(event:any) => {
-                            const currentx = { ...current, frequency:Number(event.target.value)}
-                            setCurrent(currentx)
-                        }}
+                        onChange={(event:any) => setCurrent({ ...current, frequency:Number(event.target.value)})}
                         disabled={disable}
-                        //placeholder="depreciation frequency"
                         style={{ height: 30, textAlign: 'right', padding: 2 }}
                     />
                 </CCol>
@@ -1660,12 +1650,8 @@ export const AssetMainForm =
                         current={current}
                         setCurrent={setCurrent}
                         value={current.rate}
-                        onChange={(event:any) => {
-                            const currentx = { ...current, rate:Number(event.target.value) }
-                            setCurrent(currentx)
-                        }}
+                        onChange={(event:any) => setCurrent({ ...current, rate:Number(event.target.value) })}
                         disabled={disable}
-                        //placeholder="depreciation rate"
                         style={{ height: 30, textAlign: 'right', padding: 2 }}
                     />
                 </CCol>
@@ -1878,7 +1864,6 @@ export const PayrollTaxForm = ({ current, setCurrent, disable, t, locale, curren
                             style: 'currency',
                             currency: currency,
                         })}
-                        //placeholder="From amount"
                         style={{ height: 30, textAlign: 'right' }}
                     />
                 </CCol>
@@ -1897,7 +1882,6 @@ export const PayrollTaxForm = ({ current, setCurrent, disable, t, locale, curren
                             style: 'currency',
                             currency: currency,
                         })}
-                        //placeholder="From amount"
                         style={{ height: 30, textAlign: 'right' }}
                     />
                 </CCol>
@@ -1918,7 +1902,6 @@ export const PayrollTaxForm = ({ current, setCurrent, disable, t, locale, curren
                             style: 'currency',
                             currency: currency,
                         })}
-                        //placeholder="From amount"
                         style={{ height: 30, textAlign: 'right' }}
                     />
                 </CCol>
@@ -2381,121 +2364,29 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
 export const ArticleQRForm:FC<ArticleQRFormProps> =
   ({ current }) => {
 
-    // const handleScan = data => {
-    //   if (data) {
-    //     console.log('Result: ', data);
-    //   }
-    // }
-    //
-    // const handleError = err => {
-    //   console.error(err);
-    // }
-
-    // return (
-    //   <div>
-    //     <QRReader
-    //       delay={300}
-    //       onError={handleError}
-    //       onScan={handleScan}
-    //       style={{ width: '100%' }}
-    //     />
-    //   </div>
-    // )
-
-
     return (
-      // <Grid container spacing={0} style={{...styles.outer, minWidth:300, height: 260, width: 700, display: 'flex'}}>
       <Grid container spacing={0} style={{...styles.outer, minWidth:'100%', height: 260, maxWidth: 1000, display: 'flex'}}>
         {/**QR Code */}
-        {/*<Grid container spacing={1} style={{ width:100}}>*/}
           <Grid item sm={12} xs={2}>
             <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller}>
-              {/*<Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">*/}
-              {/*  <div>{t('common.id')}</div>*/}
-              {/*</Grid>*/}
+
               <Grid item sm ={8} xs={2} justify="flex-start" alignItems="stretch">
-                {/*<div style={{ background: 'white', padding: '1px'}}>*/}
                   <QRCode fgColor ={'#000000'} bgColor ={'#FFFFFF'}
                     size={256}
-                    //style={{ height: "auto", maxWidth: "100%", width: "100%", }}
                     style={{ height: "auto", background: 'white', padding: '15px',  paddingRight:'15px'}}
                     title={current.name}
                     value={`${current.id}${current.name}`}
                     viewBox={`0 0 256 256`}
                   />
-                {/*</div>*/}
                </Grid>
               <Grid item sm ={4} xs={4} justify="flex-end" alignItems="stretch">
-                {/*<div style={{ background: 'white', padding: '3px', width:'100%'}}>*/}
-                {/*<img src="/apple-icon-180x180.png" alt="product.name" style={{ height: "auto", maxWidth: "100%", width: "100%" }} />*/}
                   <img src="/apple-icon-180x180.png" alt="product.name"   style={{ padding: '20px',   paddingLeft:'50px'}}/>
-                {/*</div>*/}
               </Grid>
             </Grid>
-          {/*</Grid>*/}
         </Grid>
       </Grid>
     )
   }
-// export const SalaryItemForm = ({ current, setCurrent, t, disable, locale, currency, height }:
-//                                { current:ISalaryItem, setCurrent:(arg:any|ISalaryItem)=>void, t:TFunction<'translation', undefined>
-//                                    , disable:boolean, locale:string, currency:string, height:number })=> {
-//     const props = { current, setCurrent, locale, currency, disable, t, height }
-//     return (
-//         <div style={{ height: 210 }}>
-//             {MasterfilesMainForm(props)}
-//             <CInputGroup  style={{ height: height, paddingTop: 12 }}>
-//                 <CCol sm="2">
-//                     <FieldLabel title={t('salary.item.amount')} />
-//                 </CCol>
-//                 <CCol sm="2">
-//                     <InputField
-//                         fieldName="amount"
-//                         current={current}
-//                         setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
-//                         value={Number(current.amount).toLocaleString(locale, {
-//                             maximumFractionDigits: 2,
-//                             minimumFractionDigits: 2,
-//                             style: 'currency',
-//                             currency: currency,
-//                         })}
-//                         //placeholder="Amount"
-//                         disabled={disable}
-//                         style={{ height: height, textAlign: 'right' }}
-//                     />
-//                 </CCol>
-//                 <CCol sm="1" style={{ height: height, paddingLeft: 5 }}>
-//                     <InputField
-//                         fieldName="currency"
-//                         current={current}
-//                         setCurrent={setCurrent}
-//                         value={current.currency}
-//                         //placeholder="Currency"
-//                         disabled={true}
-//                         style={{ height: height, padding: 2 }}
-//                     />
-//                 </CCol>
-//                 <CCol sm="2" style={{ height: height, paddingLeft: 10 }}>
-//                     <FieldLabel title={t('salary.item.percentage')} />
-//                 </CCol>
-//                 <CCol sm="1">
-//                     <InputField
-//                         fieldName="percentage"
-//                         current={current}
-//                         setCurrent={setCurrent}
-//                         value={Number(current.percentage).toLocaleString(locale, {
-//                             maximumFractionDigits: 2,
-//                             minimumFractionDigits: 2,
-//                         })}
-//                         //placeholder="Percentage"
-//                         disabled={disable}
-//                         style={{ height: height, textAlign: 'right', padding: 2 }}
-//                     />
-//                 </CCol>
-//             </CInputGroup>
-//         </div>
-//     )
-// }
 
 export const UserMainForm = ({ collapse, current, setCurrent, disable, t }:UserFormProps) => {
 
@@ -3112,7 +3003,7 @@ const FromPeriod = ({ name, label, value, current, setCurrent, t, labelStyle, st
 //                   fieldName="salary"
 //                   //type="currency"
 //                   current={current}
-//                   setCurrent={setCurrent} //eslint-disable-next-line react/prop-types
+//                   setCurrent={setCurrent}
 //                   value={Number(current?.salary ?? 0.0).toLocaleString(locale, {
 //                     maximumFractionDigits: 2,
 //                     minimumFractionDigits: 2,
@@ -3590,9 +3481,6 @@ export const CustomerAccountForm = (
     { current, setCurrent, accData, vatData, t,  disable }:
     {current: IArticle|ICustomer|ISupplier|IEmployee|ICompany, setCurrent: (art:any)=>void, accData: IAccount[]
         , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, height?: number, zIndex:number}) => {
-    // const currentAccount = accData?.find((acc: { id: any }) => acc.id === current.account)
-    // const currentOAccount = accData?.find((acc: { id: any }) => acc.id === current.oaccount)
-    // const currentVat = vatData?.find((vat: { id: any }) => vat.id === current.vatCode)
     const accountLabel = getAccountLabel(current, t)
     const oaccountLabel = getOAccountLabel(current, t)
     return (
@@ -3608,16 +3496,6 @@ export const CustomerAccountForm = (
                           <MasterfileXComboBox fieldName={'account'} current={current} setCurrent={setCurrent}
                                data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
                             styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-
-                            {/*<ComboBox<{value:string|bigint,  label:string}>*/}
-                            {/*    style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}*/}
-                            {/*    disable={disable}*/}
-                            {/*    value={ {value:currentAccount?currentAccount.id:'', label: currentAccount?`${currentAccount.id} ${currentAccount.name}` :''}}*/}
-                            {/*    onChange={(value:any, _event:any) => {*/}
-                            {/*        setCurrent({...current, account: value /*, accountName: _event?.name*!/)*/}
-                            {/*    }}*/}
-                            {/*    values={accData.slice().sort(sortById).map(toOption)}*/}
-                            {/*/>*/}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -3633,16 +3511,6 @@ export const CustomerAccountForm = (
                           <MasterfileXComboBox fieldName={'oaccount'} current={current} setCurrent={setCurrent}
                               data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
                             styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-                            {/*<ComboBox<{value:string|bigint,  label:string}>*/}
-                            {/*    style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%'}}*/}
-                            {/*    disable={disable}*/}
-                            {/*    value={ {value:currentOAccount?currentOAccount.id:''*/}
-                            {/*        , label: currentOAccount?`${currentOAccount.id} ${currentOAccount.name}` :''}}*/}
-                            {/*    onChange={(value:any, _event:any) => {*/}
-                            {/*        setCurrent({...current, oaccount: value /*, accountName: _event?.name*!/)*/}
-                            {/*    }}*/}
-                            {/*    values={accData.slice().sort(sortById).map(toOption)}*/}
-                            {/*/>*/}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -3657,13 +3525,6 @@ export const CustomerAccountForm = (
                               <MasterfileXComboBox fieldName={'vatCode'} current={current} setCurrent={setCurrent}
                                  data={vatData} defaultValue={initVat[0]} zIndex={11} disable={disable}
                                  styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-                                {/*<ComboBox<{value:string|bigint,  label:string}>*/}
-                                {/*    style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%'}}*/}
-                                {/*    disable={disable}*/}
-                                {/*    value={ {value:currentVat?currentVat.id:'', label: currentVat?`${currentVat.id} ${currentVat.name}` :''}}*/}
-                                {/*    onChange={(value:any, _event:any) => {setCurrent({...current, vatCode: value })}}*/}
-                                {/*    values={vatData.slice().sort(sortById).map(toOption)}*/}
-                                {/*/>*/}
                             </Grid>
                         </Grid>
                     </Grid>
@@ -4291,37 +4152,6 @@ export const VatMainForm =
     ({current, setCurrent, accData, t, disable, height, zIndex}:
      {current:IVat, setCurrent:(arg:IVat)=>void, accData:IAccount[]
          , t:TFunction<'transalation', undefined>, disable:boolean, height:number, zIndex:number}) => {
-
-        //const currentInputAccount = accData?.find((acc: { id: any }) => acc.id === current.inputVatAccount)
-       // const currentOutputAccount = accData?.find((acc: { id: any }) => acc.id === current.outputVatAccount)
-       //  const styles = {
-       //      outer: {
-       //          borderRadius: 5,
-       //          boxShadow: "0 30px 40px #BBB",
-       //          padding: 50,
-       //      },
-       //      fuller: {
-       //          borderRadius: 5,
-       //          boxShadow: "0 1px 50px #BBE",
-       //          padding: 5,
-       //          height:30
-       //      },
-       //      fuller40H: {
-       //          borderRadius: 5,
-       //          boxShadow: "0 1px 50px #BBE",
-       //          padding: 5,
-       //          height:60
-       //      },
-       //      paddingLeft10: {
-       //          paddingLeft: 10,
-       //      },
-       //      paddingLeft20: {
-       //          paddingLeft: 20,
-       //      },
-       //      height40: {
-       //          height: 40,
-       //      },
-       //  };
         return (
             <Grid container spacing={0} style={STYLES.outer50}>
                 <Grid container spacing={1}>
@@ -4404,14 +4234,6 @@ export const VatMainForm =
                               <MasterfileXComboBox fieldName={'inputVatAccount'} current={current} setCurrent={setCurrent}
                                   data={accData} defaultValue={initAcc[0]} zIndex={zIndex} disable={disable}
                                   styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-                                {/*<ComboBox<{value:string|bigint,  label:string}>*/}
-                                {/*    style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}*/}
-                                {/*    disable={disable}*/}
-                                {/*    value={ {value:currentInputAccount?currentInputAccount.id:''*/}
-                                {/*        , label: currentInputAccount?`${currentInputAccount.id} ${currentInputAccount.name}` :''}}*/}
-                                {/*    onChange={(value:any, _event:any) => setCurrent({...current, inputVatAccount: value /*, accountName: _event?.name*!/)}*/}
-                                {/*    values={accData.slice().sort(sortById).map(toOption)}*/}
-                                {/*    zIndex={zIndex}/>*/}
                             </Grid>
 
                         </Grid>
@@ -4444,14 +4266,6 @@ export const VatMainForm =
                               <MasterfileXComboBox fieldName={'outputVatAccount'} current={current} setCurrent={setCurrent}
                                 data={accData} defaultValue={initAcc[0]} zIndex={zIndex} disable={disable}
                                 styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-                                {/*<ComboBox<{value:string|bigint,  label:string}>*/}
-                                {/*    style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}*/}
-                                {/*    disable ={disable}*/}
-                                {/*    value={ {value:currentOutputAccount?currentOutputAccount.id:''*/}
-                                {/*        , label: currentOutputAccount?`${currentOutputAccount.id} ${currentOutputAccount.name}` :''}}*/}
-                                {/*    onChange={(value:any, _event:any) => setCurrent({...current, outputVatAccount: value /*, accountName: _event?.name*!/)}*/}
-                                {/*    values={accData.slice().sort(sortById).map(toOption)}*/}
-                                {/*/>*/}
                             </Grid>
                         </Grid>
                     </Grid>

@@ -16,14 +16,14 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormR
   const { token, company} = profile
   const [edited, setEdited] = useState<boolean>(false)
   const [added, setAdded] = useState<boolean>(false)
-  const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
+
   const [current, setCurrent] = useState<T>(current_)
   const [rowData, setRowData] = useState<T[]>([])
   const [disable, setDisable] = useState(true)
   const modifyUrl = selected
   const ctx = `${selected}/${modelid}/${company}`
   const zIndex = 9999
-  const toggle = () => setState({...state, collapse: !state.collapse})
+
 
   const edit = () => {
     if(edited) {
@@ -71,7 +71,7 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormR
   }
 
   return [{ profile, menu, selected, t, i18n, language, modelid, initAdd, added, disable, edit, edited, submitEdit
-    , cancelEdit, reload, handleLanguageChange, toggle, title:title, zIndex, rowData, setRowData, current, setCurrent }]
+    , cancelEdit, reload, handleLanguageChange, title:title, zIndex, rowData, setRowData, current, setCurrent }]
 
 }
 export default UseMasterfileForm

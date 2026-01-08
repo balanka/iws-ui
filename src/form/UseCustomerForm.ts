@@ -18,8 +18,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFormResult<T>]  => {
   const [{ profile, menu, selected, t, title, language, handleLanguageChange, modelid, company}] = useForm()
   const { token, currency } = profile
-  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   const [disable, setDisable] = useState(true)
   const [gridApi,  setGridApi] = useState<GridApi>()
   const acc_modelid = formEnum.ACCOUNT

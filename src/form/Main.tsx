@@ -6,20 +6,19 @@ import {
   //CsvExportModule,
 } from 'ag-grid-community'
 import { TreeDataModule } from "ag-grid-enterprise"
-import {MASTERFILE, PACB_QUERY_PARM, useStore} from './Menu.tsx'
-import {formEnum} from '../utils/FormEnum.tsx'
+import {MASTERFILE, PACB_QUERY_PARM } from './Menu.tsx'
 import Login from './Login'
 import {logout} from '../utils/FormUtils.tsx'
-
-import {useTranslation} from 'react-i18next'
 import {BalanceSheetHead, JournalMainForm} from './FormsProps.tsx'
 import {styles as stylesx} from './BasicTreeTableProps.tsx'
 import Grid from 'react-fast-grid'
 import {AgGridReact} from 'ag-grid-react'
 import {IAccount, IAccount2, IPACBQueryParam} from '../Models'
 import { useDispatch } from "react-redux";
-import iwsStore from "../utils/Store.tsx";
-import { Get } from "./CrudController.ts";
+import iwsStore from '../utils/Store.tsx'
+import { Get } from './CrudController.ts'
+import useForm from './UseForm.ts'
+import { formEnum } from "../utils/FormEnum.tsx"
 
 ModuleRegistry.registerModules([
     ClientSideRowModelModule,
@@ -68,12 +67,10 @@ const STYLES = {
     },
 }
 const Main  = () => {
-    const {profile, menu, selected} = useStore()
-    const {t,} = useTranslation()
-    const {token, currency, company} = profile
+  const [{profile, selected, t,  module_ }] = useForm()
+  const {token, currency, company} = profile
   const init = useRef(false)
-    let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-      module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
+
     if (module_ === '11111' || module_ === 11111) return <Login / >
         const height = 20
         const modelid :number = module_? module_.modelid:1111

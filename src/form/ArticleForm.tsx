@@ -19,20 +19,16 @@ import Login from './Login'
 import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import UseMasterfileForm from "./UseMasterfileForm.ts";
-import useForm from "./UseForm.ts";
+import UseMasterfileForm from './UseMasterfileForm.ts'
+import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const ArticleForm = () => {
-   const [{ menu, selected, t }] = useForm()
-
+   const [{  selected, t, toggle, state, handleLanguageChange,  module_ }] = useForm()
      const dispatch = useDispatch()
      let navigate = useNavigate()
-     let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-     module_ =  module_ ?? formEnum.LOGIN
      if (module_ === '11111' || module_ === 11111) return <Login/>
-     const [state, ] = useState({collapse: true, fadeIn: true, timeout: 300})
      const height = 20
      const initialState = initArticle[0]
      const acc_modelid = formEnum.ACCOUNT
@@ -46,7 +42,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const [quantityUnitData, setQuantityUnitData] = useState<IMasterfile[]>([])
      const [vatData, setVatData] = useState<IVat[]>([])
      const [{profile, language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
-       , handleLanguageChange, toggle, title, zIndex, rowData, current, setCurrent }] = UseMasterfileForm(current_)
+       , title, zIndex, rowData, current, setCurrent }] = UseMasterfileForm(current_)
      const { token, company, locale, currency} = profile
      const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
      const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`

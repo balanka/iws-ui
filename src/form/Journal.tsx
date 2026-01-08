@@ -9,7 +9,6 @@ import {JournalFormHead, JournalMainForm} from './FormsProps'
 
 import {initAcc} from './Menu'
 import iwsStore from '../utils/Store'
-import {formEnum} from '../utils/FormEnum'
 import {journalColumnsDefs} from '../ColumnsDefs.ts'
 import {IJournal} from '../Models.ts'
 import {defaultColDefX, JournalGrid} from '../IWSGrid.tsx'
@@ -18,7 +17,8 @@ import {formatumber2Digits} from '../utils/Utils.ts'
 import {useDispatch} from 'react-redux'
 import {logout} from '../utils/FormUtils.tsx'
 import {generateDocx} from '../utils/XlsUtils.ts'
-import useJForm from "./UseJForm.ts";
+import useJForm from './UseJForm.ts'
+import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -27,15 +27,12 @@ ModuleRegistry.registerModules([
 ])
 
 const Journal = () => {
-  const [, setIwsState] = useState(iwsStore.initialState)
-  const  [{profile, menu, selected, t, accData, rowData, current_, current, setCurrent, submitQuery, submitQuery2
-    , onRowSelected, templateName, title, styles}] = useJForm<IJournal>()
-
-  const { company } = profile
-  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
+  const [{ selected, t, title, company, module_}] = useForm()
+  const  [{ accData, rowData, current_, current, setCurrent, submitQuery, submitQuery2, onRowSelected
+    , templateName, styles}] = useJForm<IJournal>()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const dispatch = useDispatch()
+  const [, setIwsState] = useState(iwsStore.initialState)
   const height = 20
 
   useEffect(() => {

@@ -3,13 +3,11 @@ import {AllCommunityModule, ClientSideRowModelModule, GridReadyEvent, ModuleRegi
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import Grid from 'react-fast-grid'
-import {styles as stylesx} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {CommonFormHead} from './FormsProps.tsx'
 import {initComp} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
-import {formEnum} from '../utils/FormEnum.tsx'
 import {customerColumnDefs} from '../ColumnsDefs.ts'
 import {ICompany} from '../Models.ts'
 import {CustomerGrid} from '../IWSGrid.tsx'
@@ -21,38 +19,22 @@ import {useNavigate} from "react-router-dom";
 import useForm from './UseForm.ts'
 import useCustomerForm from './UseCustomerForm.ts'
 import {Get2} from "./CrudController.ts";
-
+import { styles as stylesx} from './BasicTreeTableProps.tsx'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
-
-const STYLES = {
-  inner: {
-    borderRadius: 5,
-    boxShadow: '0 20px 50px #BBF',
-    padding: 10,
-    paddingLeft: 25,
-    paddingRight: 20,
-    //height: 350,
-    paddingTop: 30,
-  }
-}
 const CompanyForm = () => {
-  const [{ profile, menu, selected, t, modelid, company }] = useForm()
+  const [{ profile, selected, t,  toggle, state, handleLanguageChange, modelid, company, module_ }] = useForm()
   const { token, locale } = profile
   const [, setIwsState] = useState(iwsStore.initialState)
-  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
+
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const current_ : ICompany= initComp[0]
   const  [{ edited, added, disable, language, accData, bankData, ccyData
     , rowData, setRowData, vatData, current, setCurrent, currentBankAccount, setCurrentBankAccount
-    , edit, initAdd, reload, cancelEdit, submitEdit, handleLanguageChange, onNewBankAccount
+    , edit, initAdd, reload, cancelEdit, submitEdit, onNewBankAccount
     , onDeleteBankAccount, submitQuery, onRowSelected, title:title, setGridApi}] = useCustomerForm<ICompany>(current_)
-  const localex= locale?? 'fr-FR'
   const dispatch = useDispatch()
   let navigate = useNavigate()
-  const [state, setState] = useState({ collapse: true, fadeIn: true, timeout: 300 })
   const height = 20
-  const toggle = () => setState({ ...state, collapse: !state.collapse })
   const minHeight = 350
   const maxHeight = 700
   useEffect(() => {
@@ -64,7 +46,7 @@ const CompanyForm = () => {
 
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   return (
-        <Grid container spacing={10} style={{...STYLES.inner}} direction="column">
+        <Grid container spacing={10} style={{...stylesx.inner0}} direction="column">
           <CommonFormHead
               title={title}
               collapse={state.collapse}
@@ -90,7 +72,7 @@ const CompanyForm = () => {
               <CompanyTabs  current={current} setCurrent={setCurrent}
                              currentBankAccount ={currentBankAccount}
                              setCurrentBankAccount={setCurrentBankAccount}
-                             disable={disable} t={t} locale={localex}
+                             disable={disable} t={t} locale={locale?? 'fr-FR'}
                              data ={rowData} accData ={accData} bankData={bankData} ccyData={ccyData}
                              vatData ={vatData} height={height}
                             onGridReady={onGridReady}

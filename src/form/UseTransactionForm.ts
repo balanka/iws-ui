@@ -31,17 +31,14 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const UseTransactionForm = <T extends IWSTransaction<ILine>,
               L extends ILine>(current_ :T, currentLine_ :L, currentLine:L): [UseTransactionFormResult<T, ILine>]  => {
-   const [{ profile, menu, selected, t, language, handleLanguageChange,modelid}] = useForm()
+   const [{ profile, menu, selected, t, language, handleLanguageChange, modelid, module_}] = useForm()
    const { token, company, currency } = profile
    let templateFileName =''
 
   const [, setDisable] = useState(true)
-  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   let title_ = `${company}/${t(module_.title)}`
   const [current, setCurrent] = useState<T>(current_)
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
-  //console.log('current>>>>', current)
   const acc_modelid = formEnum.ACCOUNT
   const art_modelid = formEnum.ARTICLE
   const vat_modelid = formEnum.VAT

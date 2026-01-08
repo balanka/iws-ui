@@ -1443,6 +1443,7 @@ export const vatColumnDefs = ( t: (arg0: string) => any) => [
     field: 'percent',
     headerName: t('vat.percent'),
     minWidth: 20,
+    cellStyle: {textAlign: 'right'},
     filter: "agNumerictColumnFilter",
   },
   {
@@ -1457,25 +1458,25 @@ export const vatColumnDefs = ( t: (arg0: string) => any) => [
     minWidth: 20,
     filter: "agTextColumnFilter",
   },
-  {
-    field: 'enterdate',
-    headerName: t('common.enterdate'),
-    align: 'right',
-    minWidth: 6,
-
-  },
-  {
-    field: 'changedate',
-    headerName: t('common.changedate'),
-    align: 'right',
-    minWidth: 6,
-  },
-  {
-    field: 'postingdate',
-    headerName: t('common.postingdate'),
-    align: 'right',
-    minWidth: 6,
-  },
+  // {
+  //   field: 'enterdate',
+  //   headerName: t('common.enterdate'),
+  //   align: 'right',
+  //   minWidth: 6,
+  //
+  // },
+  // {
+  //   field: 'changedate',
+  //   headerName: t('common.changedate'),
+  //   align: 'right',
+  //   minWidth: 6,
+  // },
+  // {
+  //   field: 'postingdate',
+  //   headerName: t('common.postingdate'),
+  //   align: 'right',
+  //   minWidth: 6,
+  // },
   {
     field: 'company',
     headerName: t('common.company'),

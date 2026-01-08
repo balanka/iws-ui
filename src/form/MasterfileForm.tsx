@@ -63,7 +63,7 @@ const getCtx = (modelid:number, company:string ) => {
  }
 
  const MasterfileForm = () => {
-     const [{ profile, menu, selected, t, title:title, language, handleLanguageChange, modelid, company}]  = useForm()
+     const [{ profile, menu, selected, t, title:title, language, handleLanguageChange, state, toggle, modelid, company}]  = useForm()
      const {token} = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
@@ -76,7 +76,7 @@ const getCtx = (modelid:number, company:string ) => {
      module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
      console.log('module_', module_)
      if (module_ === '11111' || module_ === 11111) return <Login/>
-     const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
+     //const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
      const [disable, setDisable] = useState(true)
      const height = 20
      const ctx = getCtx(modelid, company)
@@ -94,7 +94,6 @@ const getCtx = (modelid:number, company:string ) => {
      const [edited, setEdited] = useState<boolean|undefined>(false)
      const [added, setAdded] = useState<boolean|undefined>(undefined)
      const [, setIwsState] = useState(iwsStore.initialState)
-     const toggle = () => setState({...state, collapse: !state.collapse})
      const [rowData, setRowData] = useState<IMasterfile2[]>([])
      const [rowData2, ] = useState<IMasterfile[]>([])
      const [rowData3, ] = useState<IPermission[]>([])

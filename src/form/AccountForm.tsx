@@ -10,7 +10,6 @@ import { CommonFormHead } from './FormsProps.tsx'
 import {initAcc} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import { AccountMainForm } from './FormsProps.tsx'
-import { formEnum } from '../utils/FormEnum.tsx'
 import {accountColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount} from '../Models.ts'
 import {AccountGrid,  defaultColDefX} from '../IWSGrid.tsx'
@@ -23,19 +22,16 @@ import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const AccountForm = () => {
-   const [{profile, menu, selected, t}] = useForm()
+   const [{profile, selected, t, toggle, state, handleLanguageChange, module_}] = useForm()
    const {locale} = profile
    const dispatch = useDispatch()
    let navigate = useNavigate()
-   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-   module_ = module_ ?? formEnum.LOGIN
    if (module_ === '11111' || module_ === 11111) return <Login/>
-   const [state] = useState({collapse: true, fadeIn: true, timeout: 300})
    const height = 33
    const current_: IAccount = initAcc[0]
    const [setIwsState] = useState(iwsStore.initialState)
    const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
-     , handleLanguageChange, toggle, title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
+     , title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
    useEffect(() => {
      iwsStore.subscribe(setIwsState)
@@ -66,7 +62,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
              />
-             {/*<Grid container style={{...stylesx.inner, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>*/}
                  <AccountMainForm  collapse={state.collapse} current={current}
                                   setCurrent={setCurrent}
                                   disable={disable}
@@ -74,7 +69,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                                   locale={`${locale}`}
                                   accData={rowData}
                                   height={height}/>
-             {/*</Grid>*/}
              <Grid container
                  // @ts-ignore
                    style={{...stylesx.outer, height: 400, paddingTop: 10}} maximize direction="column">

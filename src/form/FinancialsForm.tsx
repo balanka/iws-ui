@@ -25,50 +25,31 @@ import {CSpinner} from '@coreui/react'
 import {FinancialsDetailsTabs} from './FinancialsDetailsTabs.tsx'
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {generateDocx} from "../utils/XlsUtils.ts";
-import useTransactionForm from "./UseTransactionForm.ts";
-  import useForm from "./UseForm.ts";
-import iwsStore from "../utils/Store.tsx";
-import {Get, Get3} from "./CrudController.ts";
+import {generateDocx} from '../utils/XlsUtils.ts'
+import useTransactionForm from './UseTransactionForm.ts'
+  import useForm from './UseForm.ts'
+import iwsStore from '../utils/Store.tsx'
+import {Get, Get3} from './CrudController.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, SelectEditorModule,])
 
-const STYLES = {
-    inner: {
-        borderRadius: 5,
-        boxShadow: '0 20px 50px #BBF',
-        padding: 1,
-        //paddingLeft: 5,
-        //paddingRight: 5,
-        //height: 350,
-        //paddingTop:10,
-    }
-}
-
 const FinancialsForm = () => {
-  const [{ profile, menu, selected, t }] = useForm()
+  const [{ profile, selected, t, toggle, state, handleLanguageChange, module_ }] = useForm()
     const { token, company} = profile
     let navigate = useNavigate()
     const dispatch = useDispatch()
-    const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
-    let module_:any = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-    module_ =  module_ ?? formEnum.LOGIN
     if (module_ === '11111' || module_ === 11111) return <Login/>
     let title_ = `${company} /${t(module_.title)}`
-    console.log('current_?>>>>>', initFtr)
     const current_: IFinancials = initFtr [0]
   const initialLine:ILineFinancials = initFtr [0].lines[0]
   const [currentLine, setCurrentLine] = useState<ILineFinancials>(initialLine)
   const  [{  language, isFetching, fmodule, rowData
     , setRowData,  current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction, setCopyFromTransaction
-    , handleLanguageChange, onRowSelected, onNewLine
-    , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, modelid}] =
-    useTransactionForm(current_, initialLine, currentLine)
-    console.log('current_?>>>>>', current_)
+    , onRowSelected, onNewLine, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex
+    , saveProps, modelid}] = useTransactionForm(current_, initialLine, currentLine)
+
     const [_, setIwsState] = useState(iwsStore.initialState)
     const [title, setTitle] = useState(title_)
-    //const [selectedIds, setSelectedIds] = useState<Number[]>([])
-    const toggle = () => setState({...state, collapse: !state.collapse})
     const acc_modelid = formEnum.ACCOUNT
     const cc_modelid = formEnum.COSTCENTER
     let ctx = `${module_.ctx}/${modelid}/${company}`
@@ -76,8 +57,6 @@ const FinancialsForm = () => {
     const cc_ctx = `${MASTERFILE.masterfile}/${cc_modelid}/${company}`
     const [accData, setAccData] = useState<IAccount[]>(initAcc)
     const [ccData, setCcData] = useState<IMasterfile[]>([])
-    //const [copyFrom, setCopyFrom] = useState<number[]>([])
-    //const [isFetching, setIsFetching] = useState(false)
 
     const handleModuleChange = (value:any) => {
         //setModel(value)
@@ -107,11 +86,9 @@ const FinancialsForm = () => {
 
     const submitQuery = (ctx:string, event?:any) => {
         event?.preventDefault()
-        //setIsFetching(true)
         !accData&&Get(acc_ctx,  token, acc_modelid, setAccData)
         !ccData&&Get(cc_ctx, token, cc_modelid, setCcData)
         Get3(ctx, token, modelid, setRowData, setCurrent)
-        //setIsFetching(false)
     }
 
     const fmoduleData = (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id)
@@ -216,7 +193,7 @@ const FinancialsForm = () => {
             current={current}
             //zIndex={zIndex-1}
         />
-        <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
+        <Grid container style={{borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 1}} maximize direction="row" zeroMinWidth>
             <FinancialsMainForm collapse ={state.collapse}
                                  current={current}
                                  setCurrent={setCurrent}

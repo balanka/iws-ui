@@ -6,7 +6,7 @@ import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { useStore} from './Menu'
 import {formEnum} from '../utils/FormEnum'
 import {useTranslation} from "react-i18next";
-import {UseFormResult} from '../Props.ts'
+import {State, UseFormResult} from '../Props.ts'
 import {useState} from "react";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,])
 
@@ -19,6 +19,8 @@ const UseForm = (): [UseFormResult] => {
   const modelid: number = module_ ? module_.modelid : 1111
   const title =  `${company}/${t(module_.title)}`
   const [language, setLanguage] = useState('en-US')
+  const [state, setState] = useState <State>({collapse: true, fadeIn: true, timeout: 300})
+  const toggle = () => setState({...state, collapse: !state.collapse})
 
   const handleLanguageChange = (event:any) => {
     event.preventDefault()
@@ -26,6 +28,6 @@ const UseForm = (): [UseFormResult] => {
     setLanguage(value)
     i18n.changeLanguage(value)
   }
-  return [{ profile, menu, selected, t, i18n, title:title, language, setLanguage, handleLanguageChange, modelid, company}]
+  return [{ profile, menu, selected, t, i18n, title:title, language, setLanguage, handleLanguageChange, toggle, state, modelid, company, module_}]
 }
 export default UseForm

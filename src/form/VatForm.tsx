@@ -3,7 +3,6 @@ import { AllCommunityModule, ClientSideRowModelModule, ModuleRegistry } from 'ag
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import Grid from 'react-fast-grid'
-import { styles as stylesx } from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { CommonFormHead } from './FormsProps.tsx'
@@ -21,28 +20,15 @@ import {useNavigate} from "react-router-dom";
 import {logout} from '../utils/FormUtils.tsx'
 import UseMasterfileForm from './UseMasterfileForm.ts'
 import useForm from './UseForm.ts'
+import { styles as stylesx} from './BasicTreeTableProps.tsx'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
-const STYLES = {
-  inner: {
-    borderRadius: 5,
-    boxShadow: '0 20px 50px #BBF',
-    padding: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 10,
-  }
-}
 const VatForm = () => {
-  const [{ profile, menu, selected, t, company }] = useForm()
+  const [{ profile, selected, t, toggle, state, handleLanguageChange, company, module_ }] = useForm()
   const { token} = profile
   const dispatch = useDispatch()
   let navigate = useNavigate()
-  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  const [state] = useState({ collapse: true, fadeIn: true, timeout: 300 })
-  const height = 20
   const current_ :IVat = initVat[0]
   const [, setIwsState] = useState(iwsStore.initialState)
   const acc_modelid = formEnum.ACCOUNT
@@ -50,8 +36,9 @@ const VatForm = () => {
   const [accData, setAccData] = useState([])
   const minHeight = 300
   const maxHeight = 600
+  const height = 20
   const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
-    , handleLanguageChange, toggle, title, zIndex, rowData, current, setCurrent}] = UseMasterfileForm(current_)
+    , title, zIndex, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
@@ -78,9 +65,9 @@ const VatForm = () => {
               navigate={navigate}
               language={language}
               handleLanguageChange={handleLanguageChange}
-              dispatch={dispatch}
-          />
-          <Grid container style={{...STYLES.inner, height:state.collapse?minHeight:maxHeight
+              dispatch={dispatch}/>
+          <Grid container style={{ borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 10
+                                    , height:state.collapse?minHeight:maxHeight
                                    , display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
               <VatMainForm current={current} setCurrent={setCurrent}
                            disable={disable} t={t} accData ={accData} height={height} zIndex={zIndex}/>

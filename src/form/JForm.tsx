@@ -9,7 +9,6 @@ import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {JournalFormHead, JournalMainForm} from './FormsProps'
 import {initAcc} from './Menu'
 import iwsStore from '../utils/Store'
-import {formEnum} from '../utils/FormEnum'
 import {pacColumnsDefs} from '../ColumnsDefs.ts'
 import {IPeriodicAccountBalance} from '../Models.ts'
 import {defaultColDefX, PeriodicAccountBalanceGrid} from '../IWSGrid.tsx'
@@ -19,6 +18,7 @@ import {useDispatch} from 'react-redux'
 import {logout} from '../utils/FormUtils.tsx'
 import {generateDocx} from '../utils/XlsUtils.ts'
 import useJForm from './UseJForm.ts'
+import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -28,13 +28,12 @@ ModuleRegistry.registerModules([
 
 
 const JForm = () => {
+  const [{ profile, selected, t, title, module_}] = useForm()
   const [, setIwsState] = useState(iwsStore.initialState)
-  const  [{profile, menu, selected, t, accData, rowData, setRowData, current_, current, setCurrent, submitQuery, submitQuery2
-    , onRowSelected, templateName, title, styles}] = useJForm<IPeriodicAccountBalance>()
+  const  [{ accData, rowData, setRowData, current_, current, setCurrent, submitQuery, submitQuery2
+    , onRowSelected, templateName, styles}] = useJForm<IPeriodicAccountBalance>()
 
   const {currency, company} = profile
-  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const dispatch = useDispatch()
   const height = 20

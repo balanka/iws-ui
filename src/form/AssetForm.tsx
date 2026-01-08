@@ -45,17 +45,12 @@ const STYLES = {
 }
 const AssetForm = () => {
   // @ts-ignore
-  const [{profile, menu, selected, t}] = useForm()
+  const [{profile, t, toggle, state, handleLanguageChange, module_}] = useForm()
   const { token, company, locale, currency } = profile
-  const localex = locale ??'fr-FR'
   const currencyx = currency ??'EUR'
   const dispatch = useDispatch()
   let navigate = useNavigate()
-  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ =  module_ ?? formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  const [state] = useState({collapse: true, fadeIn: true, timeout: 300})
-  const height = 33
   const acc_modelid = formEnum.ACCOUNT
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const current_: IAsset = initAsset[0]
@@ -63,8 +58,9 @@ const AssetForm = () => {
   const [accData, setAccData] = useState<IAccount[]>([])
   const minHeight = 350
   const maxHeight = 700
+  const height = 33
   const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
-    , handleLanguageChange, toggle, title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
+    , title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
@@ -100,7 +96,7 @@ const AssetForm = () => {
           />
           <Grid container style={{...STYLES.inner, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
             <AssetMainForm current={current} setCurrent={setCurrent} disable={disable} t={t}
-                                 accData ={accData} height={height} locale ={localex} currency ={currencyx} zIndex={9999}/>
+                                 accData ={accData} height={height} locale ={locale ??'fr-FR'} currency ={currencyx} zIndex={9999}/>
          </Grid>
         <Grid container
             // @ts-ignore

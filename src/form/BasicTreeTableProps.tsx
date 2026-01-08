@@ -1,5 +1,10 @@
 import { blue, green } from  '@mui/material/colors'
 export const styles = {
+  outer0: {
+    borderRadius: 5,
+    boxShadow: "0 30px 40px #BBB",
+    padding: 4,
+  },
   outer: {
     backgroundColor: blue,
     borderRadius: 5,
@@ -29,9 +34,25 @@ export const styles = {
     //paddingRight: 20,
     //height: 350,
     paddingTop: 10,
-
-
   },
+  inner0: {
+    borderRadius: 5,
+    boxShadow: '0 20px 50px #BBF',
+    padding: 10,
+    paddingLeft: 25,
+    paddingRight: 20,
+    //height: 350,
+    paddingTop: 30,
+  },
+  inner1x : {
+    borderRadius: 5,
+    boxShadow: '0 20px 50px #BBF',
+    padding: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 10,
+  },
+
   innerX: {
     borderRadius: 5,
     //boxShadow: '0 20px 30px #cce0e3', //#66a6ff, #97baeb #36a3ff

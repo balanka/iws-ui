@@ -357,9 +357,13 @@ export interface UseFormResult {
   , language:string
   , setLanguage:Dispatch<SetStateAction<string>>
   , handleLanguageChange:(language:any)=>void
+  , state:State
+  , toggle:() =>void
   , modelid : number
   , company:string
+  , module_:any
 }
+export interface State {collapse: boolean, fadeIn: boolean, timeout:  300}
 export interface UseMasterfileFormResult<T> {
   profile: IProfile
   , menu: Map<any, any>
@@ -377,7 +381,6 @@ export interface UseMasterfileFormResult<T> {
   , cancelEdit:()=>void
   , reload: ()=>void
   , handleLanguageChange:(event:any) =>void
-  , toggle:() =>void
   , title:string
   , zIndex:number
   , rowData:T[]

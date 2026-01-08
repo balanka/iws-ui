@@ -17,7 +17,7 @@ import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {FinancialsFormHead, TransactionMainForm} from './FormsProps.tsx'
 import {initCust, initLtr, TRANSACTION} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
-import {formEnum} from '../utils/FormEnum.tsx'
+
 import {
   IFinancials, IFmodule,
   ILineFinancials,
@@ -51,13 +51,9 @@ const STYLES = {
   }
 }
  const TransactionForm = () => {
-   const [{  menu, selected, t }] = useForm()
+   const [{selected, t, toggle, state, handleLanguageChange, module_ }] = useForm()
    const dispatch = useDispatch()
   let navigate = useNavigate()
-  const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
-  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-     console.log('module_>>>>', module_)
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const initialState:ITransaction = initLtr [0]
   const initialLine:ILineTransaction = initLtr [0].lines[0]
@@ -65,13 +61,12 @@ const STYLES = {
    const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
    const  [{  language, isFetching, storeData, articleData, fmodule, rowData
     , setRowData, vatData,  current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
-    , handleLanguageChange, handleModuleChange, onRowSelected, onNewLine
+    , handleModuleChange, onRowSelected, onNewLine
      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, partnerId, title}] =
      useTransactionForm(current_, initialLine, currentLine)
 
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
    const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
-  const toggle = () => setState({...state, collapse: !state.collapse})
 
 
    useEffect(() => {

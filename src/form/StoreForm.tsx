@@ -24,14 +24,11 @@ import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const StoreForm= () => {
-     const [{profile, menu, selected, t, company}] = useForm()
+     const [{profile, t, state, handleLanguageChange, toggle, company, module_}] = useForm()
      const { token, locale } = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
-     let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-     module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
      if (module_ === '11111' || module_ === 11111) return <Login/>
-     const [state] = useState({collapse: true, fadeIn: true, timeout: 300})
      const current_: IStore = initStore[0]
      const [, setIwsState] = useState(iwsStore.initialState)
      const [accData, setAccData] = useState<IAccount[]>([])
@@ -40,7 +37,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const zIndex = 9999
      const height= 20
    const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
-     , handleLanguageChange, toggle, title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
+     , title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
      useEffect(() => {
          iwsStore.subscribe(setIwsState)
@@ -69,11 +66,11 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  dispatch={dispatch}
              />
 
-             <Grid container
+             <Grid container maximize direction="column"
                  // @ts-ignore
-                   style={{...stylesx.outer, padding: 5, display: !state.collapse?'none':''}} maximize direction="column">
-                 <StoreTabs collapse = {state.collapse} current={current} setCurrent={setCurrent} disable={disable} t={t} zIndex={zIndex-1}
-                            accData={accData} locale={locale??'fr-FR'}  height={height} />
+                   style={{...stylesx.outer, padding: 5, display: !state.collapse?'none':''}} >
+                 <StoreTabs collapse = {state.collapse} current={current} setCurrent={setCurrent} disable={disable}
+                            t={t} zIndex={zIndex-1} accData={accData} locale={locale??'fr-FR'}  height={height} />
              </Grid>
              <Grid container
                  // @ts-ignore

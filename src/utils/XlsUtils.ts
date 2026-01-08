@@ -5,6 +5,7 @@ import {IWSModel} from '../Models.ts'
 import PizZip from "pizzip";
 import Docxtemplater from 'docxtemplater'
 import {saveAs} from 'file-saver'
+//import pdf2md from '@opendocsg/pdf2md'
 
 
 export const  saveXlsx =  ({fileName, sheetName, data }:SaveProps):void => {
@@ -80,5 +81,13 @@ export const getAsArrayBuffer = async (templateFileName:String) : Promise<ArrayB
     console.error(`Error reading the file  ${templateFileName}:`, err);
   }
 }
+
+// export const    convertPdf2Text = async (file:File) => {
+//   // Read the file locally (no upload!)
+//   //const arrayBuffer = await file.arrayBuffer()
+//
+//   // Convert to markdown in the browser
+//   return await pdf2md(file.arrayBuffer())
+// }
 
 

@@ -19,28 +19,24 @@ import Login from './Login.tsx'
 import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux"
 import {useNavigate} from "react-router-dom"
-import useCustomerForm from "./UseCustomerForm.ts";
-import useForm from "./UseForm.ts";
+import useCustomerForm from './UseCustomerForm.ts'
+import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const CustomerForm = () => {
-  const [{ profile, menu, selected, t, modelid }] = useForm()
+  const [{ profile, selected, t, toggle, state, modelid, module_ }] = useForm()
   const { locale } = profile
   const [, setIwsState] = useState(iwsStore.initialState)
-  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const current_ : IBusinespartner= modelid ===formEnum.CUSTOMER?initCust[0]:(modelid ===formEnum.SUPPLIER)?initSup[0]:initEmp[0]
   const  [{ edited, added, disable, language, accData, bankData, ccyData
     , rowData, setRowData, vatData, current, setCurrent, currentBankAccount, setCurrentBankAccount
     , edit, initAdd, reload, cancelEdit, submitEdit, handleLanguageChange, onNewBankAccount
     , onDeleteBankAccount, onNewSalaryItem, submitQuery, onRowSelected, title:title, setGridApi}] = useCustomerForm<ICustomer>(current_)
-  const localex= locale?? 'fr-FR'
   const dispatch = useDispatch()
   let navigate = useNavigate()
-  const [state, setState] = useState({ collapse: true, fadeIn: true, timeout: 300 })
-  const toggle = () => setState({ ...state, collapse: !state.collapse })
+
   const height = 20
   const minHeight = 350
   const maxHeight = 700
@@ -79,7 +75,7 @@ const CustomerForm = () => {
               <CustomerTabs  current={current} setCurrent={setCurrent}
                              currentBankAccount ={currentBankAccount}
                              setCurrentBankAccount={setCurrentBankAccount}
-                             disable={disable} t={t} locale={localex}
+                             disable={disable} t={t} locale={locale?? 'fr-FR'}
                              data ={rowData} accData ={accData} bankData={bankData}
                              vatData ={vatData} height={height} ccyData={ccyData}
                              zIndex={zIndex-1}
