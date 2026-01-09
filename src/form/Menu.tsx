@@ -4,11 +4,12 @@ import {
   IAccount, IArticle, IAsset, IBankAccount, IBankStatement, ICompany,
   ICustomer,
   IEmployee, IFinancials,
-  IFmodule, ILineFinancials, ILineTransaction, IMasterfile, IMasterfile2,
+  IFmodule, ILineFinancials, ILineTransaction, ILoggingContext, IMasterfile, IMasterfile2,
   IProfile, IStore,
   ISTORE_Return,
   ISupplier, ITransaction
 } from '../Models'
+
 
 export const getCurrentMonth = (date:Date) => {
   const p = date.getUTCMonth() + 1
@@ -18,9 +19,9 @@ export const getCurrentMonth = (date:Date) => {
 export const date = new Date().toISOString()
 export const getPeriod = (date:Date) => parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))
 
-export const loginInit = [
+export const loginInit:ILoggingContext[] = [
   {
-    username: '',
+    userName: '',
     password: '',
     company: '',
     language: '',

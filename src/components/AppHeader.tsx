@@ -26,11 +26,10 @@ import {
   cilMoon,
   cilSun,
 } from '@coreui/icons'
-import { languages } from '../form/Login'
+import { languages } from '../form/languages.ts'
 import { AppHeaderDropdown } from './header'
 import { useTranslation } from 'react-i18next'
 import IconButton from "@mui/material/IconButton";
-//import LogoutIcon from "@mui/icons-material/Logout";
 import iwsStore from "../utils/Store.tsx";
 import ExitToAppTwoToneIcon from "@mui/icons-material/ExitToAppTwoTone";
 
@@ -86,7 +85,7 @@ const AppHeader = () => {
             value={language}
             onChange={(event) => handleInputChange(event)}
           >
-            {languages.data.map((item) => mapping(item))}
+            {languages.map((item) => mapping(item))}
           </CFormSelect>
         </CHeaderToggler>
         <CHeaderNav className="d-none d-md-flex me-auto">

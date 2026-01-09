@@ -1,5 +1,5 @@
 import React, {CSSProperties, Dispatch, FC, MouseEventHandler} from 'react'
-import {toOption, transactionToOption} from '../utils/FormUtils.tsx'
+import {Show, toOption, transactionToOption} from '../utils/FormUtils.tsx'
 import Grid from 'react-fast-grid'
 import {IoMdMenu} from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
@@ -12,18 +12,19 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import PrintOutlined from '@mui/icons-material/PrintOutlined'
 import {
   CBadge,
-  CButton,
-  CCol,
+  CButton, CCard, CCardBody, CCardGroup,
+  CCol, CContainer, CForm,
   CFormInput,
   CFormLabel,
   CFormSelect,
   CFormTextarea,
   CHeaderToggler,
-  CInputGroup,
+  CInputGroup, CInputGroupText, CRow,
 } from '@coreui/react'
 import {formEnum} from '../utils/FormEnum'
 import {sortById} from '../utils/Utils'
 import {saveXlsx} from './../utils/XlsUtils.ts'
+import {languages} from './languages.ts'
 import {
   AccountMainProps, ArticleGeneralFormProps, ArticleQRFormProps,
   AssetProps,
@@ -31,14 +32,14 @@ import {
   BankStatementParamProps,
   BankStatementProps,
   CustomerGeneralFormProps, FinancialsCBoxProps2,
-  FinancialsDetailsFormProps, FModuleProps2, JournalToolBarProps, MasterfileComboboxProps,
+  FinancialsDetailsFormProps, FModuleProps2, JournalToolBarProps, LoginProps, MasterfileComboboxProps,
   MasterfileProps,
   MasterfileProps2,
   StoreGeneralFormProps,
   TransactionDetailsFormProps, TransactionToolBarProps,
-  UserFormProps
+  UserFormProps,
 } from '../Props.ts'
-import DatePicker from 'react-datepicker'
+import DatePicker, {setDefaultLocale} from 'react-datepicker'
 import '../../public/css/custom-datepicker.css'
 import {green} from '@mui/material/colors'
 import {
@@ -85,8 +86,7 @@ import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
 import {Checkbox, FormControlLabel} from "@mui/material";
-import {NavigateFunction, useNavigate} from 'react-router-dom'
-import {languages} from './Login.tsx'
+import {Link, NavigateFunction, useNavigate} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import ComboBox from './ComboBox.tsx'
 import QRCode from 'react-qr-code'
@@ -267,7 +267,7 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
                         value={language}
                         onChange={(event) => handleLanguageChange(event)}
                     >
-                        {languages.data.map((item) => mapping(item))}
+                        {languages.map((item) => mapping(item))}
                     </CFormSelect>
                 </CHeaderToggler>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer"
@@ -358,7 +358,7 @@ export const BSFormHead = ({title, collapse, cancelEdit, submitEdit, importData,
                             value={language}
                             onChange={(event) => handleLanguageChange(event)}
               >
-                {languages.data.map((item) => mapping(item))}
+                {languages.map((item) => mapping(item))}
               </CFormSelect>
             </CHeaderToggler>
 
@@ -439,7 +439,7 @@ export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, i
                         value={language}
                         onChange={(event) => handleLanguageChange(event)}
                     >
-                        {languages.data.map((item) => mapping(item))}
+                        {languages.map((item) => mapping(item))}
                     </CFormSelect>
                 </CHeaderToggler>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
@@ -4321,3 +4321,148 @@ export const VatMainForm =
             </Grid>
         )
     }
+const signUp = (t:TFunction<'translation', undefined>) =>(
+  <CCard className="text-white bg-primary py-5 d-md-down-none"
+         style={{width: '44%'}}>
+    <CCardBody className="text-center">
+      <div>
+        <h2>Sign up</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+        <Link to="/register">
+          <CButton color="primary" className="mt-3" active tabIndex={-1}>
+            {t('login.signUpNow')}
+          </CButton>
+        </Link>
+      </div>
+    </CCardBody>
+  </CCard>
+)
+const  errorFn = (error?: string) =>{
+  return (
+    <CCard className="text-white bg-primary py-5 d-md-down-none" style={{width: '44%'}}>
+      <CCardBody className="text-center">
+        <div><h2>Error!!!</h2><p>{error}</p></div>
+      </CCardBody>
+    </CCard>
+  )
+}
+export const LoginForm = ({languages, companies, current, t, i18n, profile, setProfile, submit
+                            , handleEvent}:LoginProps ) => {
+  return (
+  <>
+    <div className="c-app c-default-layout flex-row align-items-center">
+      <CContainer>
+        <CRow className="justify-content-center">
+          <CCol md="8">
+            <CCardGroup>
+              <CCard className="p-4">
+                <CCardBody>
+                  <CForm>
+                    <h1>Login</h1>
+                    <p className="text-muted">{t('login.signIn')}</p>
+                    <CInputGroup className="mb-3">
+                      <CInputGroup>
+                        <CInputGroupText/>
+                      </CInputGroup>
+                      <CFormInput
+                        type="text"
+                        placeholder="UserName"
+                        id="userName"
+                        autoComplete="username"
+                        onChange={(event: any) =>
+                          handleEvent(event, {...current, userName: event.target.value})
+                        }
+                      />
+                    </CInputGroup>
+                    <CInputGroup className="mb-4">
+                      <CInputGroup>
+                        <CInputGroupText/>
+                      </CInputGroup>
+                      <CFormInput
+                        type="password"
+                        id="pwd"
+                        placeholder="Password"
+                        autoComplete="current-password"
+                        onChange={(event: any) =>
+                          handleEvent(event, {...current, password: event.target.value})
+                        }
+                      />
+                    </CInputGroup>
+                    <CInputGroup className="mb-4">
+                      <CInputGroup>
+                        <CInputGroupText/>
+                      </CInputGroup>
+                      <CFormSelect
+                        className="flex-row"
+                        type="select"
+                        name="company"
+                        id="company-id"
+                        value={current.company}
+                        onFocus={(event) =>
+                          handleEvent(event, {...current, company: event.target.value})
+                        }
+                        onChange={(event) =>
+                          handleEvent(event, {...current, company: event.target.value})
+                        }
+                      >
+                        {companies.map((item) => (
+                          <option key={item.id} value={item.id}>{`${item.id} ${item.name}`}</option>
+                        ))}
+                      </CFormSelect>
+                      <CFormSelect
+                        className="flex-row"
+                        type="select"
+                        name="language"
+                        id="language-id"
+                        value={current.language}
+                        onFocus={(event) =>
+                          handleEvent(event, {...current, language: event.target.value})
+                        }
+                        onChange={(event) => {
+                          handleEvent(event, {...current, language: event.target.value})
+                          i18n.changeLanguage(event.target.value)
+                            .then(() => setProfile({...profile, language: event.target.value}))
+                          setDefaultLocale(event.target.value)
+                        }}
+                      >
+                        {languages.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.id.concat(' ').concat(item.name)}
+                          </option>
+                        ))}
+                      </CFormSelect>
+                    </CInputGroup>
+                    <CRow>
+                      <CCol xs="6">
+                        <CButton
+                          color="primary"
+                          className="px-4"
+                          onClick={(event: any) => submit(event)}
+                        >
+                          Login
+                        </CButton>
+                      </CCol>
+                      <CCol xs="6" className="text-right">
+                        <CButton color="link" className="px-0">
+                          {t('login.forgotpwd')}
+                        </CButton>
+                      </CCol>
+                    </CRow>
+                  </CForm>
+                </CCardBody>
+              </CCard>
+              {/*{Show(profile?.error??'', signUp(), child(profile.error))}*/}
+              <
+                // @ts-ignore
+                Show when={profile.error} fallback={signUp} children={errorFn(profile.error)}/>
+            </CCardGroup>
+          </CCol>
+        </CRow>
+      </CContainer>
+    </div>
+  </>
+)
+}

@@ -133,12 +133,6 @@ export const AppSidebarNav = ({ items}:{items:any[]}) => {
             items.map((item, index) => (item.items ? navGroup1(item, index) : navItem1(item, index)))}
       </CSidebarNav>
   )
-  // return (
-  //   <React.Fragment>
-  //     {items &&
-  //       items.map((item:any, index) => (item.items ? navGroup1(item, index) : navItem1(item, index)))}
-  //   </React.Fragment>
-  // )
 }
 
 AppSidebarNav.propTypes = {

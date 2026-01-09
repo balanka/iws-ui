@@ -3,7 +3,7 @@ import {
   IAddress,
   IArticle, IAsset, IBankAccount, IBankStatement, IBankStatementParam, IBusinespartner, ICompany,
   ICustomer,
-  IEmployee, IFinancials, IFmodule, ILineFinancials, ILineTransaction,
+  IEmployee, IFinancials, IFmodule, ILineFinancials, ILineTransaction, ILoggingContext,
   IMasterfile,
   IMasterfile2, IPACBQueryParam, IProfile, IRole,
   IStore,
@@ -18,6 +18,9 @@ import type {RowSelectedEvent} from "ag-grid-community/dist/types/src/events";
 
 import {AgGridReact} from "ag-grid-react";
 import {NavigateFunction} from "react-router-dom";
+import './i18n.tsx'
+import I18n from "./i18n.tsx";
+
 
 
 export interface AddressProps {
@@ -348,8 +351,12 @@ export  interface JournalToolBarProps<A> {
   , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
    }
 export interface UseFormResult {
-  profile: IProfile
+    profile: IProfile
+  , setProfile:(p:IProfile)=>void
   , menu: Map<any, any>
+  , setMenu:(m: Map<any, any>) =>void
+  , setModule:(m : any)=>void
+  , setRoutes:(r : any)=>void
   , selected: string
   , t:TFunction<'translation', undefined>
   , i18n: i18n
@@ -480,3 +487,24 @@ export interface UseJFormResult<T> {
   , title:string
   , styles:any
 }
+export interface IMenu <T> {
+  id: string,
+  name:string,
+  title: string,
+  ctx:  string,
+  modelid: number,
+  state: T [],
+}
+
+export interface LoginProps {
+   languages: {id:string, name:string}[]
+  , companies: {id:string, name:string}[]
+  , current:ILoggingContext
+  , t:TFunction<'translation', undefined>, profile:IProfile
+  , i18n:typeof I18n
+  , setProfile:(p:IProfile)=>void //Dispatch<SetStateAction<IProfile>>
+  , submit:(event: any) =>void
+  , handleEvent:(event:any, value: ILoggingContext) =>void
+}
+
+

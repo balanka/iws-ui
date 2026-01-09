@@ -11,7 +11,7 @@ import {useState} from "react";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,])
 
 const UseForm = (): [UseFormResult] => {
-  const {profile, menu, selected} = useStore()
+  const {profile, setProfile, menu, setMenu, setModule, setRoutes, selected} = useStore()
   const { company} = profile
   const {t, i18n} = useTranslation()
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
@@ -28,6 +28,7 @@ const UseForm = (): [UseFormResult] => {
     setLanguage(value)
     i18n.changeLanguage(value)
   }
-  return [{ profile, menu, selected, t, i18n, title:title, language, setLanguage, handleLanguageChange, toggle, state, modelid, company, module_}]
+  return [{ profile, setProfile, menu, setMenu, setModule, setRoutes, selected, t, i18n, title:title
+    , language, setLanguage, handleLanguageChange, toggle, state, modelid, company, module_}]
 }
 export default UseForm
