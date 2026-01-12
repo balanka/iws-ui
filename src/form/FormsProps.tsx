@@ -4454,10 +4454,9 @@ export const LoginForm = ({languages, companies, current, t, i18n, profile, setP
                   </CForm>
                 </CCardBody>
               </CCard>
-              {/*{Show(profile?.error??'', signUp(), child(profile.error))}*/}
               <
                 // @ts-ignore
-                Show when={profile.error} fallback={signUp} children={errorFn(profile.error)}/>
+                Show when={profile.error} fallback={signUp(t)} children={errorFn(profile.error)}/>
             </CCardGroup>
           </CCol>
         </CRow>

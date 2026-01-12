@@ -24,7 +24,7 @@ export const loginInit:ILoggingContext[] = [
     userName: '',
     password: '',
     company: '',
-    language: '',
+    language: 'en',
   },
 ]
 export const initAcc:IAccount[] = [
