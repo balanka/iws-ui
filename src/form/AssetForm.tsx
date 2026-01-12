@@ -73,8 +73,7 @@ const AssetForm = () => {
 
   // @ts-ignore
   return (
-    <div style={{paddingTop: 15}}>
-      <Grid container spacing={10} style={{...STYLES.inner}} direction="row">
+    <>
           <CommonFormHead
               title={title}
               collapse={state.collapse}
@@ -103,9 +102,7 @@ const AssetForm = () => {
               style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 30}} maximize direction="column" >
           <AssetGrid columnDefs ={assetColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
         </Grid>
-      </Grid>
-
-    </div>
+    </>
 
   )
 }

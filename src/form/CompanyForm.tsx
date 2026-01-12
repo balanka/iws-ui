@@ -45,8 +45,7 @@ const CompanyForm = () => {
 
 
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
-  return (
-        <Grid container spacing={10} style={{...stylesx.inner0}} direction="column">
+  return (<>
           <CommonFormHead
               title={title}
               collapse={state.collapse}
@@ -84,7 +83,7 @@ const CompanyForm = () => {
                   style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 10}} maximize direction="column">
               <CustomerGrid columnDefs ={customerColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData.filter(row =>row.id===company)} />
             </Grid>
-        </Grid>
+    </>
   )
 }
 export default  CompanyForm
