@@ -109,7 +109,7 @@ export const masterfileColumnDefs=  (t: (arg0: string) => any) =>[
     field: "id",
     headerName: t('common.id'),
     minWidth: 15,
-    //filter: "agTextColumnFilter",
+    filter: "agTextColumnFilter",
     cellStyle: {textAlign: 'right'},
   },
   {

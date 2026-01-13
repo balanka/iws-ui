@@ -10,11 +10,11 @@ const BankStatementTabs = ({ collapse, current, setCurrent,  locale,  t,  curren
   const getGeneralForm = () =>
       <BankStatementMainForm collapse={collapse} current={current} setCurrent={setCurrent} t={t}
                              locale={locale} currency={currency} height={height}/>
-  const getParameterForm = () => (
+  const getParameterForm = () =>
     <Grid container spacing={1} style={{ ...styles.inner, backgroundColor: "#bbdefb", display: !collapse?'none':'' }} direction="column">
       <BankStatementParameterForm current={current} setCurrent={setCurrent} t={t} height={35}/>
     </Grid>
-  )
+
 
   const GetTabContent = () => {
     return [

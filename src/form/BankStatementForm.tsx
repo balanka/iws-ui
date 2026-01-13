@@ -80,8 +80,8 @@ const BankStatementForm = () => {
     url_ && Get(url_, token, current.modelid, setRowData)
   }
 
-  const minHeight = 400
-  const maxHeight = 700
+  const minHeight = 330
+  const maxHeight = 500
   const height = 33
   return (
         <>
@@ -103,14 +103,16 @@ const BankStatementForm = () => {
           />
           <Grid item
                 //@ts-ignore
-                style={{...stylesx.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>
+                style={{...stylesx.outer0, paddingTop:2, paddingBottom:1, display: !state.collapse?'none':''}}>
             <BankStatementTabs collapse ={state.collapse} current={current} setCurrent={setCurrent}  t={t}  height={height}
               currency={currencyx}  locale={locale ??'fr-FR'}/>
-            <Grid item style={{paddingTop: 5, height:'75%', width:'100%' }}>
+          </Grid>
+            <Grid item
+                  //@ts-ignore
+                  style={{...stylesx.outer, paddingTop: 10, height: state.collapse?minHeight:maxHeight, width:'100%' }}>
               <BankStatementGrid
                    columnDefs ={bankStatementColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
             </Grid>
-          </Grid>
     </>
   )
 }
