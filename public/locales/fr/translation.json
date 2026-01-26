@@ -231,6 +231,7 @@
   },
   "article": {
     "title": "Article",
+    "price": "Prix",
     "sprice": "Prix de vente",
     "pprice": "Prix d'achat",
     "avgPrice": "P.M.P",
@@ -244,7 +245,8 @@
     },
     "expense": {
       "account": "Cpte. Charge"
-    }
+    },
+    "wholeStock": "Stock tot."
   },
   "store": {"title": "Magasin"},
   "stock": {"title": "Stock"},
@@ -414,6 +416,7 @@
     "masterfiles": "Références",
     "accounting": "Comptabilité",
     "journal": "Grand livre",
+    "ijournal": "Compte des articles",
     "pacb": "Balance",
     "account": "Comptes",
     "accountGroup": "Groupe",

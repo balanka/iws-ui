@@ -63,7 +63,7 @@
     "quantity":  "Menge",
     "charge": "Charge",
     "street"      : "Strasse",
-    "period"      : "Buchungsperiode",
+    "period"      : "B.periode",
     "zip"         : "PLZ",
     "city"       : "Stadt",
     "country"       : "Bundesland",
@@ -89,7 +89,7 @@
     "address": "Addresse",
     "accounts": "Konten",
     "edited":{
-      "bankaccount":"Bankverbingung bearbeiten"
+      "bankaccount":"Bankverb. bearbeiten"
     },
     "bankaccounts":"Bankverbingungen",
     "iban":"IBAN",
@@ -220,6 +220,7 @@
   },
   "article": {
     "title": "Artikel",
+    "price": "Preis",
     "sprice": "Verkaufspreis",
     "pprice": "Einkaufspreis",
     "avgPrice": "G.D.P",
@@ -228,6 +229,7 @@
     "stocked": "Bestand ?",
     "vat": "Mwst.",
     "group": "W.gruppe",
+    "wholeStock": "Gesamtbestand",
     "stock": {
       "account": "Best.Konto"
     },
@@ -406,6 +408,7 @@
     "dashboard": "Dashboard",
     "accounting": "Buchhaltung",
     "journal": "Journal",
+    "ijournal": "Artikelkonto",
     "pacb": "Salden",
     "account": "Konten",
     "accountGroup": "Kontengruppen ",

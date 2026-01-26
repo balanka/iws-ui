@@ -6,14 +6,15 @@ import {
   //CsvExportModule,
 } from 'ag-grid-community'
 import { TreeDataModule } from "ag-grid-enterprise"
-import {MASTERFILE, PACB_QUERY_PARM } from './Menu.tsx'
+import {MASTERFILE, PACB_JOURNAL_QUERY_PARM } from './Menu.tsx'
 import Login from './Login'
 import {logout} from '../utils/FormUtils.tsx'
 import {BalanceSheetHead, JournalMainForm} from './FormsProps.tsx'
 import {styles as stylesx} from './BasicTreeTableProps.tsx'
 import Grid from 'react-fast-grid'
 import {AgGridReact} from 'ag-grid-react'
-import {IAccount, IAccount2, IPACBQueryParam} from '../Models'
+import {JournalProps} from '../Props.ts'
+import {IAccount, IAccount2} from '../Models'
 import { useDispatch } from "react-redux";
 import iwsStore from '../utils/Store.tsx'
 import { Get } from './CrudController.ts'
@@ -74,8 +75,8 @@ const Main  = () => {
     if (module_ === '11111' || module_ === 11111) return <Login / >
         const height = 20
         const modelid :number = module_? module_.modelid:1111
-        const current_ = {...PACB_QUERY_PARM, modelid:modelid, currency:currency??''}
-        const [current, setCurrent] = useState<IPACBQueryParam>(current_)
+        const current_ = {...PACB_JOURNAL_QUERY_PARM, modelid:modelid, currency:currency??''}
+        const [current, setCurrent] = useState<JournalProps>(current_)
         const [, setIwsState] = useState(iwsStore.initialState)
         const [accData, setAccData] = useState <IAccount[] >([])
         const [rowData, setRowData] = useState <IAccount[]>([])

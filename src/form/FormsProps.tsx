@@ -27,6 +27,7 @@ import {saveXlsx} from './../utils/XlsUtils.ts'
 import {languages} from './languages.ts'
 import {
   AccountMainProps, ArticleGeneralFormProps, ArticleQRFormProps,
+  JournalProps,
   AssetProps,
   BankAccountFormProps,
   BankStatementParamProps,
@@ -37,13 +38,13 @@ import {
   MasterfileProps2,
   StoreGeneralFormProps,
   TransactionDetailsFormProps, TransactionToolBarProps,
-  UserFormProps,
+  UserFormProps, IJournalProps,
 } from '../Props.ts'
 import DatePicker, {setDefaultLocale} from 'react-datepicker'
 import '../../public/css/custom-datepicker.css'
 import {green} from '@mui/material/colors'
 import {
-  initAcc,
+  initAcc, initArticle,
   initArticleGroup,
   initCc,
   initCurrency,
@@ -68,7 +69,6 @@ import {
   ILineFinancials,
   ILineTransaction,
   IMasterfile, IMasterfile2,
-  IPACBQueryParam,
   IPayrollTaxRange,
   IPermission,
   IRole,
@@ -630,7 +630,7 @@ export const JournalFormHead = ({ style, title, submitQuery, submitQuery2
                                     className="ps-1"/>
                             </CHeaderToggler>
                         </Grid>
-
+                      {submitQuery2?
                         <Grid item justify="center" alignItems="center">
                             <CHeaderToggler className="ps-1">
                             <FormButton
@@ -641,6 +641,7 @@ export const JournalFormHead = ({ style, title, submitQuery, submitQuery2
                                 disable={!submitQuery2===undefined && balancesheet}/>
                             </CHeaderToggler>
                         </Grid>
+                        : null}
 
                         <Grid item justify="center" alignItems="center">
                             <CHeaderToggler className="ps-1">
@@ -4083,28 +4084,105 @@ export const TransactionMainForm =
             </Grid>
         )
     }
-
 export const JournalMainForm = ({ current, setCurrent,  t, accData,  height, ids }:
-                                { current:IPACBQueryParam, setCurrent:(arg:IPACBQueryParam)=>void
-                                    , t:TFunction<'transalation', undefined>, accData:IAccount[], height:number, ids:string[]}) => {
+                                { current:JournalProps, setCurrent:(arg:JournalProps)=>void
+                                  , t:TFunction<'transalation', undefined>, accData:IAccount[], height:number, ids:string[]}) => {
+  const styles = STYLES
+  const accounts = current?.isMulti?accData.filter((acc) =>ids.includes(acc.account)):accData
+  const currentAccount = accounts?.find((acc:IAccount) => acc.id === current.account)
+  return (
+    <>
+      <Grid container spacing={1}>
+        <Grid item sm={6} xs={2}>
+          <Grid container maximize style={{...styles.fuller, height:30}} justify="flex-start" alignItems="stretch">
+            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start" style={{...styles.fuller, height:40, paddingTop:10}}>
+              <div>{t('common.account')}</div>
+            </Grid>
+            <Grid item sm ={8} xs={5}  justify="flex-start"  alignItems="flex-start" style={{...styles.fuller, height:20, paddingTop:10}} >
+              <ComboBox<{value:string|bigint,  label:string}>
+                style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+                disable={false}
+                value={ {value:currentAccount?currentAccount.id:'', label: currentAccount?`${currentAccount.id} ${currentAccount.name}` :''}}
+                onChange={(value:any, _event:any) => setCurrent({...current, account: value /*, accountName: _event?.name*/})}
+                values={accounts?.slice().sort(sortById).map(toOption)}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item sm={2} xs={6}>
+          <Grid container maximize style={{...styles.fuller, height:40}} alignItems="stretch">
+            <Grid item sm={1} xs={2} alignItems="stretch" justify="flex-start" style={{...styles.fuller, height:40, paddingTop:10}}>
+              <FromPeriod
+                //id="fromPeriod-id"
+                name="fromPeriod"
+                label="common.from"
+                current={current}
+                value={current.fromPeriod}
+                setCurrent={setCurrent}
+                t={t}
+                labelStyle={{ padding: 2, paddingLeft: 10, textAlign: 'right' }}
+                style={{ height: height, padding: 1, textAlign: 'right', width: 80 }}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item sm={2} xs={6}>
+          <Grid container maximize style={{...styles.fuller, height:40}} alignItems="stretch">
+            <Grid item sm={1} xs={2} alignItems="stretch" justify="flex-start" style={{...styles.fuller, height:40, paddingTop:10}}>
+              <FromPeriod
+                //id="fromPeriod-id"
+                name="toPeriod"
+                label="common.to"
+                current={current}
+                value={current.toPeriod}
+                setCurrent={setCurrent}
+                t={t}
+                labelStyle={{ padding: 2, paddingLeft: 10, textAlign: 'right' }}
+                style={{ height: height, padding: 1, textAlign: 'right', width: 80 }}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </>
+  )
+}
+export const InventoryJournalMainForm = ({ current, setCurrent,  t, artData, storeData, height }:
+                                { current:IJournalProps, setCurrent:(arg:IJournalProps)=>void
+                                    , t:TFunction<'transalation', undefined>, artData:IArticle[], storeData:IStore[], height:number}) => {
     const styles = STYLES
-    const accounts = current?.isMulti?accData.filter((acc) =>ids.includes(acc.account)):accData
-    const currentAccount = accounts?.find((acc:IAccount) => acc.id === current.account)
+    //const articles = current?.isMulti?artData.filter((art) =>ids.includes(art.account)):artData
+    const currentArticle = artData?.find((acc:IArticle) => acc.id === current.article)
+  const currentStore = storeData?.find((store:IStore) => store.id === current.store)
     return (
         <>
             <Grid container spacing={1}>
                 <Grid item sm={6} xs={2}>
+                  <Grid container maximize style={{...styles.fuller, height:30}} justify="flex-start" alignItems="stretch">
+                    <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start" style={{...styles.fuller, height:40, paddingTop:10}}>
+                      <div>{t('article.title')}</div>
+                    </Grid>
+                    <Grid item sm ={8} xs={5}  justify="flex-start"  alignItems="flex-start" style={{...styles.fuller, height:20, paddingTop:10}} >
+                      <ComboBox<{value:string|bigint,  label:string}>
+                        style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+                        disable={false}
+                        value={ {value:currentArticle?currentArticle.id:'', label: currentArticle?`${currentArticle.id} ${currentArticle.name}` :''}}
+                        onChange={(value:any, _event:any) => setCurrent({...current, article: value /*, accountName: _event?.name*/})}
+                        values={artData.concat(initArticle)?.slice().sort(sortById).map(toOption)}
+                      />
+                    </Grid>
+                  </Grid>
                     <Grid container maximize style={{...styles.fuller, height:30}} justify="flex-start" alignItems="stretch">
                         <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start" style={{...styles.fuller, height:40, paddingTop:10}}>
-                            <div>{t('common.account')}</div>
+                            <div>{t('store.title')}</div>
                         </Grid>
                         <Grid item sm ={8} xs={5}  justify="flex-start"  alignItems="flex-start" style={{...styles.fuller, height:20, paddingTop:10}} >
                             <ComboBox<{value:string|bigint,  label:string}>
                                 style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
                                 disable={false}
-                                value={ {value:currentAccount?currentAccount.id:'', label: currentAccount?`${currentAccount.id} ${currentAccount.name}` :''}}
-                                onChange={(value:any, _event:any) => setCurrent({...current, account: value /*, accountName: _event?.name*/})}
-                                values={accounts?.slice().sort(sortById).map(toOption)}
+                                value={ {value:currentStore?currentStore.id:'', label: currentStore?`${currentStore.id} ${currentStore.name}` :''}}
+                                onChange={(value:any, _event:any) => setCurrent({...current, store: value /*, accountName: _event?.name*/})}
+                                values={storeData.concat(initStore)?.slice().sort(sortById).map(toOption)}
                             />
                         </Grid>
                     </Grid>

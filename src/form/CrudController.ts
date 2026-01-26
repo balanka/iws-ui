@@ -12,13 +12,13 @@ const SERVER_IP:string = 'REACT_APP_HOST_IP_ADDRESS'
 const SERVER_PORT:string  = 'REACT_APP_PORT'
 // @ts-ignore
 
-//const SERVER_URL = 'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT) //'http://0.0.0.0:8091'
+//const SERVER_URL = `http://${SERVER_IP}:${SERVER_PORT}`//'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT) //'http://0.0.0.0:8091'
 const SERVER_URL = 'http://127.0.0.1:8091'// `http://${SERVER_IP}:${SERVER_PORT}` //'http://0.0.0.0:8091'
 
 //const SERVER_URL = 'http://0.0.0.0:8091'// `http://${SERVER_IP}:${SERVER_PORT}` //'http://0.0.0.0:8091'
 console.log(' SERVER_URL', SERVER_URL)
 const fetchFn00 = (url: string,  record:any) =>
-  fetch(url,  {body: JSON.stringify(record), method: 'POST'}).then((response: any) => {
+   fetch(url,  {body: JSON.stringify(record), method: 'POST'}).then((response: any) => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

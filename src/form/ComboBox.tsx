@@ -119,12 +119,8 @@ const ComboBox = <T extends Base>({
      }
 
     const onSelectChange = (e:any) => {
-         console.log('onSelectChange', e)
-        console.log('onSelectChange V', value)
         const val = values.find((m) => m.value === e?.value )//isId?(value.id === e?.id):(value.name === e?.target?.value))
-        console.log('valX', val)
         if (val) {
-            console.log('val', val)
             onChange(val.value, e)
         }
     }
@@ -137,7 +133,6 @@ const ComboBox = <T extends Base>({
                  //defaultValue={current?.value ? current : value}
                  defaultValue={value }
                  value ={value}
-                 //onChange={handleOption}
                  onChange={onSelectChange}
                  options={values?.map((m, index: number) => {
                      return {...m, color: (index % 2 === 0) ? '#87CEFA' : '#E0FFFF'}

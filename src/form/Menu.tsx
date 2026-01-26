@@ -9,6 +9,7 @@ import {
   ISTORE_Return,
   ISupplier, ITransaction
 } from '../Models'
+import {IJournalProps} from "../Props.ts";
 
 
 export const getCurrentMonth = (date:Date) => {
@@ -50,8 +51,8 @@ export const initAcc:IAccount[] = [
 ]
 export const initArticle:IArticle[] = [
   {
-    id: '34',
-    name: '',
+    id: '*',
+    name: '*',
     description: '',
     parent: '',
     sprice: 0,
@@ -144,8 +145,8 @@ export const initQuantity:IMasterfile[] = [
 ]
 export const initStore:IStore[] = [
   {
-    id: '',
-    name: '',
+    id: '*',
+    name: '*',
     description: '',
     enterdate: new Date(),
     postingdate: new Date(),
@@ -528,12 +529,20 @@ export const initLtr:ITransaction[] = [
     total:0.0,
   },
 ]
-export const PACB_QUERY_PARM ={
+export const PACB_JOURNAL_QUERY_PARM ={
   account: '',
   account2: '',
   fromPeriod:-1,
   toPeriod: -1,
   modelid:-1.
+}
+export const ARTICLE_ACCOUNT_QUERY_PARM:IJournalProps = {
+  article: '',
+  store: '',
+  fromPeriod:-1,
+  toPeriod: -1,
+  modelid:-1,
+  currency:''
 }
 export const initPac  = [
   {
@@ -650,6 +659,7 @@ export const MASTERFILE = {
   pac: '/pac',
   currency: '/ccy',
   journal: '/journal',
+  ijournal: '/ijournal',
   balancesheet: '/balance',
   user: '/user',
   salaryItem: '/s_item',
@@ -694,7 +704,6 @@ export const EMPLOYEE = {
   state: initEmp,
   modelid: formEnum.EMPLOYEE,
 }
-
 export const ARTICLE ={
   id: '34',
   name: 'Article',
@@ -705,7 +714,6 @@ export const ARTICLE ={
   state3: '/art',
   modelid: formEnum.ARTICLE,
 }
-
 export const STORE = {
   id: '35',
   name: 'store',
@@ -715,7 +723,6 @@ export const STORE = {
   state3: '/store',
   modelid: formEnum.STORE
 }
-
 export const ACCOUNT = {
   id: '9',
   name: 'Account',
@@ -734,7 +741,6 @@ export const COSTCENTER ={
   state3: `${MASTERFILE.masterfile}/${formEnum.COSTCENTER}`,
   modelid: formEnum.COSTCENTER,
 }
-
 const COMPANY = {
   id: '10',
   name: 'Company',
@@ -777,7 +783,6 @@ export const QUANTITYUNIT = {
   state: initQuantity,
   modelid: formEnum.QUANTITYUNIT,
 }
-
 export const SALARY_ITEM = {
   id: '171',
   name: 'Salary Item',
@@ -900,6 +905,13 @@ const JOURNAL = {
   ctx: MASTERFILE.journal,
   modelid: formEnum.JOURNAL,
 }
+const IJOURNAL = {
+  id: '10010',
+  name: 'IJournal',
+  title: 'journal.title',
+  ctx: MASTERFILE.ijournal,
+  modelid: formEnum.IJOURNAL,
+}
 export const FINANCIALS = {
   id: '1300',
   name: 'Financials',
@@ -907,7 +919,6 @@ export const FINANCIALS = {
   ctx: MASTERFILE.ftr,
   modelid: formEnum.FINANCIALS
 }
-
 export const TRANSACTION = {
   id: '1301',
   name: 'Transaction',
@@ -916,7 +927,6 @@ export const TRANSACTION = {
   state3: '',
   modelid: formEnum.TRANSACTION,
 }
-
 const BALANCESHEET = {
   id: '10012',
   name: 'Balancesheet',
@@ -931,7 +941,6 @@ const BALANCESHEET = {
   state1:initAcc,
   modelid: formEnum.BALANCESHEET,
 }
-
 export const ROLE = {
   id: '121',
   name: 'UserRole',
@@ -942,7 +951,6 @@ export const ROLE = {
   state3: '/role',
   modelid: formEnum.ROLE,
 }
-
 export const PERMISSION ={
   id: '141',
   name: 'Permission',
@@ -972,6 +980,7 @@ export const MENU = (t: { (arg0: string): any; (arg0: string): any; }) =>
     [MASTERFILE.articleGroup, ARTICLE_GROUP],
     [MASTERFILE.asset, ASSET],
     [MASTERFILE.journal, JOURNAL],
+    [MASTERFILE.ijournal, IJOURNAL],
     [MASTERFILE.pac, PACB],
     [MASTERFILE.currency, CURRENCY],
     [MASTERFILE.bank, BANK],

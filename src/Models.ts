@@ -12,16 +12,6 @@ export interface IAccount  extends IMasterfile{
 
 export type IAccount2 = Omit<IAccount, "subAccounts">;
 
-export  interface  IPACBQueryParam {
-  account: string,
-  account2:string,
-  fromPeriod:number,
-  toPeriod: number,
-  modelid:number,
-  isMulti?:boolean,
-  isDebit?:boolean,
-  currency:string
-}
 export interface IEditing {
   editing:boolean
 }
@@ -87,30 +77,57 @@ export interface IArticle  extends IMasterfile, IStockAccount {
 
 export type HttpMethod = 'PATCH' | 'POST' | 'PUT' | 'GET'
 export interface IJournal {
+  id:bigint,
+  transid:bigint,
+  oid:string,
+  account: string,
+  oaccount: string,
+  transdate: Date,
+  postingdate:Date,
+  enterdate:Date,
+  period: number,
+  amount: number,
+  idebit: number,
+  debit: number,
+  icredit: number,
+  credit: number,
+  bdebit?: number,
+  bcredit?: number,
+  currency: string,
+  side: boolean,
+  text: string,
+  month: number,
+  year: number,
+  company: string,
+  typeJournal:number,
+  file_content: string,
+  modelid: number,
+}
+
+export interface InventoryJournal {
     id:bigint,
+    id1:bigint,
     transid:bigint,
     oid:string,
+    store: string,
     account: string,
-    oaccount: string,
+    article:String,
+    quantity:number,
+    unit:String,
+    stock:number,
+    wholeStock:number,
+    price:number,
+    avgPrice:number,
+    currency:String,
     transdate: Date,
     postingdate:Date,
     enterdate:Date,
     period: number,
-    amount: number,
-    idebit: number,
-    debit: number,
-    icredit: number,
-    credit: number,
-    bdebit?: number,
-    bcredit?: number,
-    currency: string,
     side: boolean,
     text: string,
     month: number,
     year: number,
     company: string,
-    typeJournal:number,
-    file_content: string,
     modelid: number,
   }
 export interface IAddress {

@@ -5,7 +5,7 @@ import {
   ICustomer,
   IEmployee, IFinancials, IFmodule, ILineFinancials, ILineTransaction, ILoggingContext,
   IMasterfile,
-  IMasterfile2, IPACBQueryParam, IProfile, IRole,
+  IMasterfile2, IProfile, IRole,
   IStore,
   ISupplier, ITransaction, IUser,
   IVat, IWSLine, IWSModel, IWSTransaction
@@ -340,8 +340,8 @@ export interface IJournalIF<A>  extends IWSModel  {
 export  interface JournalToolBarProps<A> {
    style: CSSProperties
   , title:string
-  , submitQuery:(event:any, current:IPACBQueryParam)=>void
-  , submitQuery2:(event:any , current:IPACBQueryParam)=>void
+  , submitQuery:(event:any, current:any)=>void
+  , submitQuery2?:(event:any , current:any)=>void
   , balancesheet:boolean, t:TFunction<'translation', undefined>
   , dispatch:Dispatch<any>
   , logout:(navigate:NavigateFunction) =>void
@@ -468,7 +468,6 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , partnerId:number
   , title:string
 }
-
 export interface UseJFormResult<T> {
   profile: IProfile
   , menu: Map<any, any>
@@ -477,11 +476,29 @@ export interface UseJFormResult<T> {
   , accData:IAccount[]
   , rowData:T[]
   , setRowData:Dispatch<SetStateAction<T[]>>
-  , current_:IPACBQueryParam
-  , current:IPACBQueryParam
-  , setCurrent:Dispatch<SetStateAction<IPACBQueryParam>>
-  , submitQuery: (event: any, current: IPACBQueryParam) => void
-  , submitQuery2: (event: any, current: IPACBQueryParam) => void
+  , current_:JournalProps
+  , current:JournalProps
+  , setCurrent:Dispatch<SetStateAction<JournalProps>>
+  , submitQuery: (event: any, current: JournalProps) => void
+  , submitQuery2: (event: any, current: JournalProps) => void
+  , onRowSelected: (event: RowSelectedEvent) => void
+  , templateName: ()=>string
+  , title:string
+  , styles:any
+}
+export interface UseArticleAccountResult<T> {
+  profile: IProfile
+  , menu: Map<any, any>
+  , selected: string
+  , t:TFunction<'translation', undefined>
+  , articleData:IArticle[]
+  , storeData:IStore[]
+  , rowData:T[]
+  , setRowData:Dispatch<SetStateAction<T[]>>
+  , current_:IJournalProps
+  , current:IJournalProps
+  , setCurrent:Dispatch<SetStateAction<IJournalProps>>
+  , submitQuery: (event: any, current: IJournalProps) => void
   , onRowSelected: (event: RowSelectedEvent) => void
   , templateName: ()=>string
   , title:string
@@ -495,7 +512,24 @@ export interface IMenu <T> {
   modelid: number,
   state: T [],
 }
-
+export  interface JournalProps {
+  account: string,
+  account2:string,
+  fromPeriod:number,
+  toPeriod: number,
+  modelid:number,
+  isMulti?:boolean,
+  isDebit?:boolean,
+  currency:string
+}
+export  interface IJournalProps {
+  article: string,
+  store:string,
+  fromPeriod:number,
+  toPeriod: number,
+  modelid:number,
+  currency:string
+}
 export interface LoginProps {
    languages: {id:string, name:string}[]
   , companies: {id:string, name:string}[]

@@ -12,6 +12,7 @@ const FinancialsForm = () =>   import('./form/FinancialsForm')
 const TransactionForm = () =>   import('./form/TransactionForm')
 const JForm = () =>  import('./form/JForm')
 const Journal = () =>  import('./form/Journal')
+const InventoryJournalForm = () =>  import('./form/InventoryJournalForm')
 const BankStatementForm = () =>   import('./form/BankStatementForm')
 const StoreForm = () =>   import('./form/StoreForm')
 const UserForm = () =>   import('./form/UserForm')
@@ -23,23 +24,16 @@ const BasicTreeTable = () => import('./form/Main')
 
 const Login = ()   => import('./form/Login')
 
-
-
 const routes = ():{path:string, name?:string, element?: ()=>Promise<any>}[] => [
   { path: '/accounting',  name: 'Accounting' },
   { path: '/ftr', name: 'financials', element: FinancialsForm },
   { path: '/ltr', name: 'transaction', element: TransactionForm },
   { path: MASTERFILE.journal, name: 'Journal', element: Journal },
+  { path: MASTERFILE.ijournal, name: 'inventory Journal', element: InventoryJournalForm },
   { path: '/Masterfiles',  name: 'Masterfiles' },
   { path: '/admin', name: 'Admin' },
   { path: MASTERFILE.acc, name: 'Account', element: AccountForm },
   { path: MASTERFILE.comp, name: 'Company', element: CompanyForm},
-  // { path: MASTERFILE.closeAccountPeriod, name: 'Close accounting period', element: Article() },
-  // {
-  //   path: MASTERFILE.createPayrollTransaction,
-  //   name: 'Generate payroll transaction',
-  //   element: Article(),
-  // },
   {
     path: MASTERFILE.createDepreciationTransaction,
     name: 'Generate depreciation transaction',

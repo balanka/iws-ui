@@ -144,7 +144,7 @@ const STYLES = {
      }
 
   const minHeight=300
-  const maxHeight =700
+  const maxHeight = 800
   const minPadding=20
   const maxPadding =35
 
@@ -170,7 +170,8 @@ const STYLES = {
    }
    const getData: ()=>any = ()=>  {
      return {
-       transdate: current.transdate
+       id:current.id
+       , transdate: current.transdate
        , total: Number(buildTotal(current)).toFixed(2)
        , lines: current.lines.map(formatLines)
      }

@@ -21,7 +21,7 @@ import {
   ICustomer, IEmployee,
   IFinancials, IJournal,
   ILineFinancials, ILineTransaction,
-  IMasterfile, IPeriodicAccountBalance2, IRole,
+  IMasterfile, InventoryJournal, IPeriodicAccountBalance2, IRole,
   IStock, IStore, ISupplier,
   ITransaction, IUser, IUserRight,
   IVat
@@ -342,6 +342,20 @@ export const RightGrid: FC<Props<IUserRight>> = ({ columnDefs, defaultColDef, on
    />)
  }
 export const JournalGrid: FC<Props<IJournal>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<IJournal>)=> {
+  // @ts-ignore
+  const gridOptions_ = {...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
+    , paginationPageSize: 20, paginationPageSizeSelector: [30, 50, 80]}
+  return (<AgGridReact
+    theme={pacTheme}
+    onRowSelected={onRowSelected}
+    // @ts-ignore
+    gridOptions={gridOptions_}
+    rowData={rowData}
+    //onGridReady={onGridReady}
+    resetRowDataOnUpdate={true}
+  />)
+}
+export const InventoryJournalGrid: FC<Props<InventoryJournal>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<InventoryJournal>)=> {
   // @ts-ignore
   const gridOptions_ = {...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
     , paginationPageSize: 20, paginationPageSizeSelector: [30, 50, 80]}

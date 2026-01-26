@@ -239,6 +239,7 @@
   },
   "article": {
     "title": "Article",
+    "price": "Price",
     "sprice": "Sales price",
     "pprice": "Purchase price",
     "avgPrice": "Average price",
@@ -252,7 +253,8 @@
     },
     "expense": {
       "account": "Exp. Acc."
-    }
+    },
+    "wholeStock": "Wh.stock"
   },
   "store": {
     "title": "Store"
@@ -426,6 +428,7 @@
     "dashboard": "Dashboard",
     "accounting": "Accounting",
     "journal": "Journal",
+    "ijournal": "Article journal",
     "pacb": "Account balance",
     "account": "Accounts",
     "accountGroup": "Account group",

@@ -6,7 +6,7 @@ import {
   IAsset,
   IBankStatement,
   IFinancials, IJournal, ILineFinancials,
-  ILineTransaction,
+  ILineTransaction, InventoryJournal,
   IStore,
   ITransaction,
   IUser
@@ -271,7 +271,7 @@ export const customerColumnDefs=(t: (arg0: string) => any)=> [
   {
     field: "id",
     headerName: t('common.id'),
-    minWidth: 25,
+    minWidth: 15,
     filter: "agTextColumnFilter",
   },
   {
@@ -283,7 +283,7 @@ export const customerColumnDefs=(t: (arg0: string) => any)=> [
   {
     field: "description",
     headerName: t('common.description'),
-    minWidth: 100,
+    minWidth: 80,
     filter: "agTextColumnFilter",
   },
   {
@@ -1133,14 +1133,7 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
     field: 'transdate',
     headerName: t('journal.transdate'),
     minWidth: 10,
-    // maxWidth: 60,
   },
-  // {
-  //   field: 'postingdate',
-  //   headerName: t('common.postingdate'),
-  //   minWidth: 10,
-  //   //maxWidth: 60,
-  // },
   {
     field: 'period',
     headerName: t('journal.period'),
@@ -1154,7 +1147,6 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
       return (params.data?.amount??0.0).toFixed(2)
     },
     minWidth: 10,
-    //maxWidth: 70,
   },
   {
     field: 'idebit',
@@ -1210,6 +1202,119 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
   //   headerName: t('common.company'),
   //   minWidth: 4,
   // },
+  {
+    field: 'modelid',
+    headerName: t('common.modelid'),
+    minWidth: 1,
+  },
+]
+export const inventoryJournalColumnsDefs = (t: (arg0: string) => any) => [
+  {
+    field: 'id',
+    headerName: t('common.id'),
+    minWidth: 6,
+  },
+  {
+    field: 'transid',
+    headerName: t('journal.transid'),
+    minWidth: 5,
+    type: 'numeric',
+  },
+  {
+    field: 'oid',
+    headerName: t('transaction.oid'),
+    minWidth: 5,
+  },
+  {
+    field: 'article',
+    headerName: t('transaction.line.article'),
+    minWidth: 8,
+    cellStyle: {textAlign: 'right'},
+  },
+  {
+    field: 'quantity',
+    headerName: t('transaction.line.quantity'),
+    cellStyle: { textAlign: 'right'},
+    valueFormatter: (params:{data:InventoryJournal}) => {
+      return (params.data?.quantity??0.0).toFixed(2)
+    },
+    minWidth: 8,
+  },
+  {
+    field: 'stock',
+    headerName: t('stock.title'),
+    cellStyle: {textAlign: 'right'},
+    minWidth: 8,
+  },
+  {
+    field: 'wholeStock',
+    headerName: t('article.wholeStock'),
+    cellStyle: {textAlign: 'right'},
+    minWidth: 8,
+  },
+  {
+    field: 'unit',
+    headerName: t('transaction.line.unit'),
+    minWidth: 5,
+  },
+  {
+    field: 'price',
+    headerName: t('article.price'),
+    cellStyle: {textAlign: 'right'},
+    minWidth: 8,
+  },
+  {
+    field: 'avgPrice',
+    headerName: t('article.avgPrice'),
+    cellStyle: {textAlign: 'right'},
+    minWidth: 8,
+  },
+  {
+    field: 'currency',
+    headerName: t('common.currency'),
+    minWidth: 5,
+  },
+  {
+    field: 'store',
+    headerName: t('transaction.store'),
+    minWidth: 8,
+  },
+  {
+    field: 'account',
+    headerName: t('transaction.account'),
+    minWidth: 5,
+  },
+  {
+    field: 'transdate',
+    headerName: t('transaction.transdate'),
+    minWidth: 10,
+  },
+
+  {
+    field: 'period',
+    headerName: t('common.period'),
+    minWidth: 5,
+  },
+
+  {
+    field: 'text',
+    headerName: t('transaction.text'),
+    minWidth: 100,
+  },
+  {
+    field: 'month',
+    headerName: t('common.month'),
+    minWidth: 10,
+    width: 15,
+    cellStyle: {textAlign: 'right'},
+  },
+  {
+    field: 'year',
+    headerName: t('common.year'),
+    minWidth: 10,
+    width: 15,
+    cellStyle: {textAlign: 'right'},
+  },
   {
     field: 'modelid',
     headerName: t('common.modelid'),
