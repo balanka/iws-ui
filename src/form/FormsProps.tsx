@@ -38,7 +38,7 @@ import {
   MasterfileProps2,
   StoreGeneralFormProps,
   TransactionDetailsFormProps, TransactionToolBarProps,
-  UserFormProps, IJournalProps,
+  UserFormProps, IJournalProps, IAddressProps, PartnerProps,
 } from '../Props.ts'
 import DatePicker, {setDefaultLocale} from 'react-datepicker'
 import '../../public/css/custom-datepicker.css'
@@ -56,7 +56,6 @@ import {
 } from './Menu'
 import {
   IAccount,
-  IAddress,
   IArticle,
   IBankAccount,
   IBankStatement,
@@ -68,7 +67,7 @@ import {
   IFmodule,
   ILineFinancials,
   ILineTransaction,
-  IMasterfile, IMasterfile2,
+  IMasterfile, IMasterfile2, IPartner,
   IPayrollTaxRange,
   IPermission,
   IRole,
@@ -109,7 +108,7 @@ const styles = {
   fuller: {
     borderRadius: 5,
     boxShadow: "0 1px 50px #BBE",
-    padding: 5,
+    padding: 1,
     height:30
   },
   fuller40H: {
@@ -1938,9 +1937,7 @@ export const PayrollTaxForm = ({ current, setCurrent, disable, t, locale, curren
         </>
     )
 }
-
-export const    MasterfileMainBaseForm:FC<MasterfileProps<IMasterfile>> = ({ current, setCurrent, disable, t,  height })=> {
-
+export const    MasterfileMainBase0Form:FC<MasterfileProps<IMasterfile>> = ({ current, setCurrent, disable, t,  height })=> {
   return (
     <>
       <Grid container spacing={1}>
@@ -1949,7 +1946,7 @@ export const    MasterfileMainBaseForm:FC<MasterfileProps<IMasterfile>> = ({ cur
             <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
               <div>{t('common.id')}</div>
             </Grid>
-            <Grid item sm ={2} xs={2} justify="flex-end">
+            <Grid item sm ={3} xs={2} justify="flex-end">
               <InputField
                 fieldName="id"
                 current={current}
@@ -2012,6 +2009,14 @@ export const    MasterfileMainBaseForm:FC<MasterfileProps<IMasterfile>> = ({ cur
           </Grid>
         </Grid>
       </Grid>
+    </>
+  )
+}
+
+export const    MasterfileMainBaseForm:FC<MasterfileProps<IMasterfile>> = ({ collapse,  current, setCurrent, disable, t,  height })=> {
+  return (
+    <>
+      <MasterfileMainBase0Form collapse ={collapse} current={current} setCurrent={setCurrent} disable={disable} t={t}  height={height}/>
       {/** Description */}
       <Grid container spacing={1}>
         <Grid item sm={8} xs={2}>
@@ -2048,37 +2053,84 @@ export const    MasterfileMainBaseForm:FC<MasterfileProps<IMasterfile>> = ({ cur
           </Grid>
         </Grid>
       </Grid>
-      {/**Description */}
+      {/**company */}
+      {/*<Grid container spacing={1}>*/}
+      {/*  <Grid item sm={8} xs={2}>*/}
+      {/*    <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">*/}
+      {/*      <Grid item sm ={12} xs={2} justify="flex-start" alignItems="flex-start">*/}
+      {/*        <div></div>*/}
+      {/*      </Grid>*/}
+      {/*    </Grid>*/}
+      {/*  </Grid>*/}
+      {/*  <Grid item sm={4} xs={6}>*/}
+      {/*    <Grid container maximize style={styles.fuller} alignItems="stretch">*/}
+      {/*      <Grid item  sm={4}  xs={2} alignItems="stretch" justify="flex-start">*/}
+      {/*        <div>{t('common.company')}</div>*/}
+      {/*      </Grid>*/}
+      {/*      <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">*/}
+      {/*        <InputField*/}
+      {/*          fieldName="company"*/}
+      {/*          current={current}*/}
+      {/*          setCurrent={setCurrent}*/}
+      {/*          value={current.company}*/}
+      {/*          disabled={true}*/}
+      {/*          style={{ height: height, width: 90, textAlign: 'right' }}/>*/}
+      {/*      </Grid>*/}
+      {/*    </Grid>*/}
+      {/*  </Grid>*/}
+      {/*</Grid>*/}
+    </>
+  )
+}
+export const    PartnerMainForm:FC<PartnerProps<IPartner>> = ({ collapse,  current, setCurrent, disable, t,  height })=> {
+  const addressProps:IAddressProps = {current, setCurrent, disable, t, height:20}
+  return (
+    <>
+    <Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >
+      <MasterfileMainBase0Form collapse={collapse} current={current} setCurrent={setCurrent} disable={disable} t={t}
+                               height={height}/>
+      {/** Description */}
       <Grid container spacing={1}>
         <Grid item sm={8} xs={2}>
-          <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-            <Grid item sm ={12} xs={2} justify="flex-start" alignItems="flex-start">
-              <div></div>
+          <Grid container maximize style={{...styles.fuller, padding:1}} justify="flex-start" alignItems="stretch">
+            <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
+              <div>{t('common.prenom')}</div>
+            </Grid>
+            <Grid item sm={10} xs={10} justify="flex-start" alignItems="stretch">
+              <InputField
+                fieldName="description"
+                current={current}
+                setCurrent={setCurrent}
+                value={current.description}
+                disabled={disable}
+                style={{height: height}}/>
             </Grid>
           </Grid>
         </Grid>
         <Grid item sm={4} xs={6}>
           <Grid container maximize style={styles.fuller} alignItems="stretch">
-            <Grid item  sm={4}  xs={2} alignItems="stretch" justify="flex-start">
-              <div>{t('common.company')}</div>
+            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+              <div>{t('common.postingdate')}</div>
             </Grid>
-            <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">
-              <InputField
-                fieldName="company"
+            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+              <DatePickerField
+                fieldName="postingdate"
+                label={t('common.postingdate')}
+                selected={current.postingdate}
                 current={current}
                 setCurrent={setCurrent}
-                value={current.company}
-                disabled={true}
-                style={{ height: height, width: 90, textAlign: 'right' }}/>
+                disabled={true}/>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
+      <AddressForm current={current} setCurrent={setCurrent} t={t} disable={disable} height={addressProps.height}/>
+    </Grid>
     </>
   )
 }
-export const    FModuleMainForm:FC<FModuleProps2<IFmodule>> = ({collapse, current, setCurrent, accData, accountData, rowData, disable, t,  height })=> {
 
+export const    FModuleMainForm:FC<FModuleProps2<IFmodule>> = ({collapse, current, setCurrent, accData, accountData, rowData, disable, t,  height })=> {
     return (
       <Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >
         <MasterfilesForm2 collapse ={collapse} current ={current} setCurrent={setCurrent} accData={accData} t={t} disable={disable} height={height}/>
@@ -2557,9 +2609,7 @@ export const UserMainForm = ({ collapse, current, setCurrent, disable, t }:UserF
         )
 
 }
-export const AddressForm = ({ current, setCurrent, disable, t, height }:
-                            { current:IAddress, setCurrent:(arg:IAddress)=>void, disable:boolean
-                                , t:TFunction<'transation', undefined>, height:number }) => {
+export const AddressForm = ({ current, setCurrent, disable, t, height }:IAddressProps) => {
     return (<>
             <Grid container spacing={0} style={{...styles.outer, height:120}}>
                 {/*street, zip */}
@@ -2603,12 +2653,21 @@ export const AddressForm = ({ current, setCurrent, disable, t, height }:
                             <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
                                 <div >{t('common.city')}</div>
                             </Grid>
-                            <Grid item sm ={10} xs={10} justify="flex-end">
+                          <Grid item sm ={5} xs={10} justify="flex-end">
+                            <InputField
+                              fieldName="city"
+                              current={current}
+                              setCurrent={setCurrent}
+                              value={current.city}
+                              disabled={disable}
+                              style={{ height: height}}/>
+                          </Grid>
+                            <Grid item sm ={5} xs={10} justify="flex-end">
                                 <InputField
-                                    fieldName="city"
+                                    fieldName="state"
                                     current={current}
                                     setCurrent={setCurrent}
-                                    value={current.city}
+                                    value={current.state}
                                     disabled={disable}
                                     style={{ height: height}}/>
                             </Grid>

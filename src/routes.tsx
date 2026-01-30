@@ -17,6 +17,7 @@ const BankStatementForm = () =>   import('./form/BankStatementForm')
 const StoreForm = () =>   import('./form/StoreForm')
 const UserForm = () =>   import('./form/UserForm')
 const VatForm = () => import('./form/VatForm')
+const PartnerForm = () => import('./form/PartnerForm')
 //const BasicTreeTable = () => import('./form/BasicTreeTable')
 const BasicTreeTable = () => import('./form/Main')
 //const BasicTreeTable = () => import('./form/BasicTreeData')
@@ -49,6 +50,7 @@ const routes = ():{path:string, name?:string, element?: ()=>Promise<any>}[] => [
   { path: MASTERFILE.user, name: 'Users', element: UserForm },
   { path: MASTERFILE.vat, name: 'VAT', element: VatForm },
   { path: MASTERFILE.bank, name: 'Bank', element: MasterfileForm },
+  { path: MASTERFILE.partner, name: 'Partner', element: PartnerForm },
   { path: MASTERFILE.currency, name: 'Currency', element: MasterfileForm },
   { path: MASTERFILE.qty, name: 'Quantity unit', element: MasterfileForm},
   { path: MASTERFILE.accountClass, name: 'Account class', element: MasterfileForm},

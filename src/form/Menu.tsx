@@ -4,7 +4,7 @@ import {
   IAccount, IArticle, IAsset, IBankAccount, IBankStatement, ICompany,
   ICustomer,
   IEmployee, IFinancials,
-  IFmodule, ILineFinancials, ILineTransaction, ILoggingContext, IMasterfile, IMasterfile2,
+  IFmodule, ILineFinancials, ILineTransaction, ILoggingContext, IMasterfile, IMasterfile2, IPartner,
   IProfile, IStore,
   ISTORE_Return,
   ISupplier, ITransaction
@@ -315,6 +315,25 @@ export const initVat = [
     modelid: 14,
   },
 ]
+export const initPartner:IPartner[] = [
+  {
+    id: '',
+    name: '',
+    description: '',
+    street: '',
+    zip: '',
+    city: '',
+    state: '',
+    country: '',
+    phone: '',
+    email: '',
+    modelid:formEnum.PARTNER,
+    enterdate: new Date(),
+    postingdate: new Date(),
+    changedate: new Date(),
+    company: '',
+  },
+]
 export const initCust:ICustomer[] = [
   {
     id: '',
@@ -484,6 +503,7 @@ export const initFtr:IFinancials[] = [
     modelid: 1300,
     company: '',
     text: '',
+    foot_text: '',
     typeJournal: 0,
     fileContent: 0,
     lines: [initLineFinancials]
@@ -523,6 +543,7 @@ export const initLtr:ITransaction[] = [
     modelid: 1600,
     company: '',
     text: '',
+    foot_text: '',
     lines: [initLineTransaction],
     vat:0.0,
     net:0.0,
@@ -652,6 +673,7 @@ export const MASTERFILE = {
   cust: '/cust',
   emp: '/emp',
   sup: '/sup',
+  partner: '/partner',
   comp: '/comp',
   ftr: '/ftr',
   ltr: '/ltr',
@@ -783,8 +805,16 @@ export const QUANTITYUNIT = {
   state: initQuantity,
   modelid: formEnum.QUANTITYUNIT,
 }
+export const PARTNER = {
+  id: formEnum.PARTNER.toString(),
+  name: 'Partner',
+  title: 'partner.title',
+  ctx: MASTERFILE.partner,
+  state: initPartner,
+  modelid: formEnum.PARTNER,
+}
 export const SALARY_ITEM = {
-  id: '171',
+  id:  formEnum.SALARY_ITEM.toString(),
   name: 'Salary Item',
   title: 'salary.item.title',
   ctx: MASTERFILE.salaryItem,
@@ -908,7 +938,7 @@ const JOURNAL = {
 const IJOURNAL = {
   id: '10010',
   name: 'IJournal',
-  title: 'journal.title',
+  title: 'ijournal.title',
   ctx: MASTERFILE.ijournal,
   modelid: formEnum.IJOURNAL,
 }
@@ -984,10 +1014,12 @@ export const MENU = (t: { (arg0: string): any; (arg0: string): any; }) =>
     [MASTERFILE.pac, PACB],
     [MASTERFILE.currency, CURRENCY],
     [MASTERFILE.bank, BANK],
+    [MASTERFILE.partner, PARTNER],
     [MASTERFILE.qty, QUANTITYUNIT],
     [MASTERFILE.acc, ACCOUNT],
     [MASTERFILE.cc, COSTCENTER],
     [MASTERFILE.cust, CUSTOMER],
+    [MASTERFILE.sup, SUPPLIER],
     [MASTERFILE.sup, SUPPLIER],
     [MASTERFILE.store, STORE],
     [MASTERFILE.accountClass, ACCOUNT_CLASS],

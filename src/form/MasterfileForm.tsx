@@ -21,7 +21,7 @@ import {IFmodule, IMasterfile, IMasterfile2, IPermission, IRole} from '../Models
 import {MasterfileGrid} from '../IWSGrid'
 import Login from './Login'
 import {TFunction} from "i18next";
-import {Masterfile2FormProps} from "../Props.ts";
+import {MasterfileFormProps} from "../Props.ts";
 import RoleTabs from "./RoleTabs.tsx";
 import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
@@ -221,7 +221,7 @@ const getCtx = (modelid:number, company:string ) => {
          return setCurrent
      }
    }
-     const MasterfileForm:FC<Masterfile2FormProps<IMasterfile2>> = (props:Masterfile2FormProps<IMasterfile2>) => {
+     const MasterfileForm:FC<MasterfileFormProps<IMasterfile2, IMasterfile2>> = (props:MasterfileFormProps<IMasterfile2, IMasterfile2>) => {
          switch (props.current.modelid) {
              case formEnum.BANK:
            case formEnum.CURRENCY:

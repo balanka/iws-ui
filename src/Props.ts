@@ -5,7 +5,7 @@ import {
   ICustomer,
   IEmployee, IFinancials, IFmodule, ILineFinancials, ILineTransaction, ILoggingContext,
   IMasterfile,
-  IMasterfile2, IProfile, IRole,
+  IMasterfile2, IPartner, IProfile, IRole,
   IStore,
   ISupplier, ITransaction, IUser,
   IVat, IWSLine, IWSModel, IWSTransaction
@@ -149,6 +149,8 @@ export interface AccountMainProps {
   disable: boolean,
   height: number
 }
+export interface IAddressProps {
+  current:IAddress, setCurrent:(arg:IAddress)=>void, disable:boolean, t:TFunction<'transation', undefined>, height:number }
 export interface MasterfileProps2<A extends IMasterfile2>{
     collapse:boolean
     current: A,
@@ -177,6 +179,16 @@ export interface MasterfileProps<A extends IMasterfile> {
   disable: boolean,
   height: number
 }
+export interface PartnerProps<A extends IPartner> extends MasterfileProps<A> {
+  collapse: boolean,
+  current: A,
+  setCurrent: (arg: any) => void,
+  //setAddress: (arg: IAddress) => void,
+  t: TFunction<'translation', undefined>,
+  disable: boolean,
+  height: number
+}
+
 export interface MasterfileComboboxProps<A extends IMasterfile, B extends IMasterfile> {
     current: A,
     data: B[]
@@ -278,6 +290,15 @@ export interface TransactionDetailsFormProps<T extends IWSTransaction<L>, L exte
     height?: number
 }
 
+export interface MasterfileFormProps<A, B> {
+  collapse:boolean,
+  current: A,
+  setCurrent: (c: A) => void,
+  accData: B[],
+  disable: boolean,
+  height: number,
+  t: TFunction<'translation', undefined>
+} //,
 
 export interface Masterfile2FormProps<A> {
     collapse:boolean,

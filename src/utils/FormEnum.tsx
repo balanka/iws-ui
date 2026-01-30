@@ -31,6 +31,7 @@ export const formEnum =  {
     FMODULE: 151,
     SALARY_ITEM: 171,
     PAYROLL_TAX_RANGE: 172,
+    PARTNER: 173,
     MODULE: 400,
     BALANCESHEET: 1000,
     LOGIN: 11111,

@@ -16,7 +16,6 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormR
   const { token, company} = profile
   const [edited, setEdited] = useState<boolean>(false)
   const [added, setAdded] = useState<boolean>(false)
-
   const [current, setCurrent] = useState<T>(current_)
   const [rowData, setRowData] = useState<T[]>([])
   const [disable, setDisable] = useState(true)

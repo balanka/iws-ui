@@ -136,12 +136,7 @@
     "balancesheet": "Bilanz?"
   },
   "bank": {
-    "title":      "Bank",
-    "name":       "Name",
-    "description": "Beschreibung",
-    "enterdate"  : "Eingabedatum",
-    "postingdate": "Gebucht am",
-    "changedate":  "Geaendert"
+    "title":      "Bank"
   },
   "bankstatement": {
     "title":      "Bankauszug",
@@ -237,6 +232,7 @@
       "account": "WE.Konto"
     }
   },
+  "partner": {"title": "Kontakt"},
   "store": {
     "title":      "Lager"
   },
@@ -344,6 +340,9 @@
     "file":         "Datei",
     "modelid"     : "Model"
   },
+  "ijournal": {
+    "title": "Artikelkonto"
+  },
   "balancesheet": {
     "title":      "Bilanz",
     "name":         "Bilanz",
@@ -410,6 +409,7 @@
     "journal": "Journal",
     "ijournal": "Artikelkonto",
     "pacb": "Salden",
+    "partner":  "Kontact",
     "account": "Konten",
     "accountGroup": "Kontengruppen ",
     "accountClass": "Kontenklassen",

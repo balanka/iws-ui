@@ -49,6 +49,7 @@
     "from"       :  "From",
     "to"        :  "To",
     "total"     : "Total",
+    "prenom": "First name",
     "company":      "Company",
     "parent": "Parent",
     "modelid"     : "ModelId",
@@ -256,12 +257,9 @@
     },
     "wholeStock": "Wh.stock"
   },
-  "store": {
-    "title": "Store"
-  },
-  "stock": {
-    "title":      "Stock"
-  },
+  "partner": {"title": "Contact"},
+  "store": {"title": "Store"},
+  "stock": {"title":      "Stock"},
   "vat": {
     "title":      "VAT",
     "name":       "Name",
@@ -363,6 +361,9 @@
     "file":         "File",
     "modelid"     : "Model"
   },
+  "ijournal": {
+    "title": "Article journal"
+  },
   "balancesheet": {
     "title":      "Balance sheet",
     "id":          "Nr.",
@@ -434,6 +435,7 @@
     "accountGroup": "Account group",
     "accountClass": "Account class",
     "bank": "Bank",
+    "partner": "Contact",
     "quantityUnit": "Quantity unit",
     "module": "Module",
     "costcenter": "Cost center",

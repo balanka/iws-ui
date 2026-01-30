@@ -19,9 +19,10 @@ import {initCust, initLtr, TRANSACTION} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 
 import {
+  ICustomer,
   IFinancials, IFmodule,
   ILineFinancials,
-  ILineTransaction,
+  ILineTransaction, ISupplier,
   ITransaction,
 } from '../Models.ts'
 import {TransactionGrid} from '../IWSGrid.tsx'
@@ -176,6 +177,10 @@ const STYLES = {
        , lines: current.lines.map(formatLines)
      }
    }
+  const ccData:ICustomer[]|ISupplier[] = iwsState.get(partnerId)??[initCust]
+   const accData:ICustomer[]|ISupplier[] = ccData//.filter(m=>!m.id.toString().includes('*'))
+   const stData = storeData.filter(m=>!m.id.toString().includes('*'))
+   console.log('stData>>>', stData)
     return isFetching?<CSpinner color="primary" />:(<>
             <FinancialsFormHead
                 title={title}
@@ -201,8 +206,8 @@ const STYLES = {
         />
         <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
           <TransactionMainForm collapse={state.collapse} current={current??current_} setCurrent={setCurrent}
-                               t={t} accData={iwsState.get(partnerId)??[initCust]}
-                               storeData={storeData} modules={fmoduleData}
+                               t={t} accData={accData}
+                               storeData={stData} modules={fmoduleData}
                                copyFromTransaction={copyFromTransaction}
                                handleModuleChange={handleModuleChange}
                                submitCopy={copyCall}

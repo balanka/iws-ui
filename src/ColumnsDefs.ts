@@ -137,12 +137,35 @@ export const masterfileColumnDefs=  (t: (arg0: string) => any) =>[
     minWidth: 3,
     filter: "agNumberColumnFilter"
   },
-  // {
-  //   field: "company",
-  //   headerName: t('common.company'),
-  //   cellStyle: {textAlign: 'right'},
-  //   minWidth: 5,
-  // }
+]
+
+export const PartnerColumnDefs=  (t: (arg0: string) => any) =>[
+  {
+    field: "id",
+    headerName: t('common.id'),
+    minWidth: 15,
+    filter: "agTextColumnFilter",
+    cellStyle: {textAlign: 'right'},
+  },
+  {
+    field: "name",
+    headerName: t('common.name'),
+    minWidth: 150,
+    filter: "agTextColumnFilter",
+  },
+  {
+    field: "description",
+    headerName: t('common.prenom'),
+    minWidth: 100,
+    filter: "agTextColumnFilter",
+  },
+  {
+    field: "modelid",
+    headerName: t('common.modelid'),
+    cellStyle: {textAlign: 'right'},
+    minWidth: 3,
+    filter: "agNumberColumnFilter"
+  },
 ]
 export const permissionColumnDefs=  (t: (arg0: string) => any) => {
   return  [

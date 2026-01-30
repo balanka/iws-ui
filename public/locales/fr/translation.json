@@ -49,6 +49,7 @@
     "from"       :  "De",
     "to"        :  "A",
     "total"     : "Total",
+    "prenom": "Prénom",
     "company": "Société",
     "parent": "Parent",
     "modelid"     : "Model",
@@ -248,6 +249,7 @@
     },
     "wholeStock": "Stock tot."
   },
+  "partner": {"title": "Contacte"},
   "store": {"title": "Magasin"},
   "stock": {"title": "Stock"},
   "vat": {
@@ -351,7 +353,9 @@
     "type":         "Type",
     "file":         "Fichier"
   },
-
+  "ijournal": {
+    "title": "Compte des articles"
+  },
   "balancesheet": {
     "title":      "Bilan/Résultat",
     "name":         "Bilan/Résultat",
@@ -422,6 +426,7 @@
     "accountGroup": "Groupe",
     "accountClass": "Classe",
     "bank": "Banque",
+    "partner": "Contacte",
     "quantityUnit": "Unité de mesure",
     "module": "Module",
     "costcenter": "Centre de coûts",

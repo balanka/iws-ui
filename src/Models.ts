@@ -11,10 +11,6 @@ export interface IAccount  extends IMasterfile{
 }
 
 export type IAccount2 = Omit<IAccount, "subAccounts">;
-
-export interface IEditing {
-  editing:boolean
-}
 export interface  IWSModel {
   id:string|bigint,
   modelid: number,
@@ -28,6 +24,7 @@ export interface  IWSTransaction <L extends IWSLine>extends IWSModel {
   period: number,
   posted: boolean,
   text: string,
+  foot_text: string,
   lines: L []
 }
 export interface IMasterfile  extends IWSModel {
@@ -48,7 +45,6 @@ export interface IMasterfile3  extends IMasterfile {
   account:string
 }
 export interface IFmodule  extends IMasterfile2  {
-  //parent: string,
   account:string,
   isDebit:boolean,
   copyFrom:number,
@@ -139,8 +135,9 @@ export interface IAddress {
   phone:string,
   email:string,
   }
-export interface IBusinespartner  extends IMasterfile, IAddress, IStockAccount {
-  //email?:string,
+export interface IPartner  extends IMasterfile, IAddress {}
+
+export interface IBusinespartner  extends IPartner, IStockAccount {
   taxCode: string,
   vatCode:string,
   currency?:string,
@@ -195,45 +192,32 @@ export interface IPeriodicAccountBalance extends IWSModel {
 }
 export interface IPeriodicAccountBalance2 extends IWSModel {
     account:string,  period:number, idebit:string, icredit:string, debit:string, credit:string
-    , bdebit:string, bcredit:string, balance:string,  currency:string,  name:string
+   , bdebit:string, bcredit:string, balance:string,  currency:string,  name:string
 }
 export interface  IWSLine  {
   id: bigint,
   transid: string|bigint,
-  //buldTotal:  ,
   currency: string,
   duedate: Date,
   text: string,
   company: string
 }
 export interface ILineTransaction extends IWSLine {
-  //id: bigint,
-  //transid: bigint,
   article: string,
   articleName: string,
   quantity: number,
   unit: string,
   price: number,
-  //currency: string,
   vatCode: string,
   vat: number,
   net:  number,
   total:  number,
-  //duedate: Date,
- // text: string,
-  //company: string
 }
 export interface ITransaction extends IWSTransaction<ILineTransaction> {
   oid: bigint,
   id1: bigint,
   store: string,
   account: string,
-  // transdate: Date,
-  // enterdate: Date,
-  // postingdate: Date,
-  // period: number,
-  // posted: boolean,
-  // text: string,
   lines: ILineTransaction[],
   vat:number,
   net:number,
@@ -259,15 +243,10 @@ export interface ILineFinancials extends IWSLine {
 }
 
 export interface IFinancials extends  IWSTransaction<ILineFinancials> {
-  //id:bigint,
   oid:bigint,
   id1:bigint,
   costcenter: string,
   account: string,
- // transdate: Date,
-  //enterdate: Date,
-  //postingdate: Date,
-
   typeJournal?: number,
   fileContent?: number,
   lines: ILineFinancials [],
