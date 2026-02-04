@@ -25,7 +25,7 @@ export const loginInit:ILoggingContext[] = [
     userName: '',
     password: '',
     company: '',
-    language: 'en',
+    language: 'fr',
   },
 ]
 export const initAcc:IAccount[] = [
@@ -49,6 +49,7 @@ export const initAcc:IAccount[] = [
     subAccounts:[]
   },
 ]
+
 export const initArticle:IArticle[] = [
   {
     id: '*',
@@ -58,18 +59,20 @@ export const initArticle:IArticle[] = [
     sprice: 0,
     pprice: 0,
     avgPrice: 0,
-    currency: '',
+    currency: 'EUR',
     stocked: true,
     quantityUnit: '',
     packUnit: '',
     account: '',
     oaccount: '',
+    revenueAccount:'4711',
     vatCode: '',
     company: '',
     modelid: 34,
     enterdate: new Date(),
     changedate: new Date(),
     postingdate: new Date(),
+    bom: [],
     stocks: [
       {
         article: '',
@@ -503,7 +506,7 @@ export const initFtr:IFinancials[] = [
     modelid: 1300,
     company: '',
     text: '',
-    foot_text: '',
+    footText: '',
     typeJournal: 0,
     fileContent: 0,
     lines: [initLineFinancials]
@@ -543,7 +546,7 @@ export const initLtr:ITransaction[] = [
     modelid: 1600,
     company: '',
     text: '',
-    foot_text: '',
+    footText: '',
     lines: [initLineTransaction],
     vat:0.0,
     net:0.0,

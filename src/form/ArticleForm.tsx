@@ -25,22 +25,24 @@ import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const ArticleForm = () => {
-   const [{  selected, t, toggle, state, handleLanguageChange,  module_ }] = useForm()
+   const [{  selected, t, i18n, toggle, state, setLanguage, module_ }] = useForm()
      const dispatch = useDispatch()
      let navigate = useNavigate()
      if (module_ === '11111' || module_ === 11111) return <Login/>
      const height = 20
-     const initialState = initArticle[0]
+     const initialState:IArticle = {...initArticle[0], stocks:[]}
      const acc_modelid = formEnum.ACCOUNT
      const vat_modelid = formEnum.VAT
      const qttyUnit_modelid = formEnum.QUANTITYUNIT
      const group_modelid = formEnum.ARTICLE_GROUP
+     const ccy_modelid = formEnum.CURRENCY
      const current_: IArticle = initialState
      const [, setIwsState] = useState(iwsStore.initialState)
      const [accData, setAccData] = useState<IAccount[]>([])
      const [groupData, setGroupData] = useState<IMasterfile[]>([])
      const [quantityUnitData, setQuantityUnitData] = useState<IMasterfile[]>([])
      const [vatData, setVatData] = useState<IVat[]>([])
+     const [ccyData, setCcyData] = useState<IMasterfile[]>([])
      const [{profile, language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
        , title, zIndex, rowData, current, setCurrent }] = UseMasterfileForm(current_)
      const { token, company, locale, currency} = profile
@@ -48,6 +50,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
      const qttyUnit_ctx = `${MASTERFILE.masterfile}/${qttyUnit_modelid}/${company}`
      const group_ctx = `${MASTERFILE.masterfile}/${group_modelid}/${company}`
+     const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
 
      useEffect(() => {
          iwsStore.subscribe(setIwsState)
@@ -55,13 +58,20 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          Get(group_ctx, token??'noToken', group_modelid, setGroupData)
          Get(qttyUnit_ctx, token??'noToken', qttyUnit_modelid, setQuantityUnitData)
          Get(vat_ctx, token??'noToken', vat_modelid, setVatData)
+         Get(ccy_ctx, token??'noToken', ccy_modelid, setCcyData)
          setCurrent(current_)
      }, [selected])
-
+  console.log('ccyData', ccyData)
       const load = (event: any) => {
          event.preventDefault()
         reload()
      }
+   const handleLanguageChange = (event:any) => {
+     event.preventDefault()
+     const value = event.target.value
+     setLanguage(value)
+     i18n.changeLanguage(value)
+   }
      const onRowSelected = (event: RowSelectedEvent) =>
               setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
      return (<>
@@ -87,7 +97,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
              <Grid container style={{...stylesx.innerX, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
                  <ArticleTabs current={current} setCurrent={setCurrent} disable={disable} t={t} data ={rowData}
                               accData={accData} quantityUnitData ={quantityUnitData} locale={`${locale}`} currency={`${currency}`}
-                              vatData={vatData} groupData={groupData} height={height} zIndex={zIndex-1}/>
+                              vatData={vatData} groupData={groupData} ccyData={ccyData} height={height} zIndex={zIndex-1}/>
              </Grid>
              <Grid container
                  // @ts-ignore

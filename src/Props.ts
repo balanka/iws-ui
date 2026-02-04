@@ -90,6 +90,7 @@ export interface ArticleProps {
   , data:IArticle[]
   , quantityUnitData:IMasterfile[]
   , groupData:IMasterfile[]
+  , ccyData:IMasterfile[]
   , locale: string
   , currency: string
   , t: TFunction<'transalation', undefined>
@@ -107,6 +108,7 @@ export interface ArticleGeneralFormProps {
     , setCurrent: (art: IArticle) => void
     , quantityUnitData:IMasterfile[]
     , groupData:IMasterfile[]
+    , ccyData:IMasterfile[]
     , t: TFunction<'transalation', undefined>
     , disable: boolean
 }

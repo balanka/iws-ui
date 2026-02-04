@@ -250,10 +250,13 @@
     "vat": "Vat code",
     "group": "Group",
     "stock": {
-      "account": "stock Acc."
+      "account": "stock acc."
     },
     "expense": {
-      "account": "Exp. Acc."
+      "account": "Exp. acc."
+    },
+    "revenue": {
+      "account": "Sales acc."
     },
     "wholeStock": "Wh.stock"
   },

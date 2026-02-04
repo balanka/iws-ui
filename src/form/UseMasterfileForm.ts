@@ -19,10 +19,11 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormR
   const [current, setCurrent] = useState<T>(current_)
   const [rowData, setRowData] = useState<T[]>([])
   const [disable, setDisable] = useState(true)
-  const modifyUrl = selected
+  const modifyUrl = selected //??MASTERFILE.article
   const ctx = `${selected}/${modelid}/${company}`
   const zIndex = 9999
 
+  console.log('modifyUrl',  modifyUrl)
 
   const edit = () => {
     if(edited) {
@@ -37,6 +38,7 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormR
   }
   const submitEdit = (event:any) => {
     event.preventDefault()
+    console.log('modifyUrl',  modifyUrl)
     if(edited) {
       Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
     } else if (!edited && !disable) {

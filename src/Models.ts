@@ -24,7 +24,7 @@ export interface  IWSTransaction <L extends IWSLine>extends IWSModel {
   period: number,
   posted: boolean,
   text: string,
-  foot_text: string,
+  footText: string,
   lines: L []
 }
 export interface IMasterfile  extends IWSModel {
@@ -68,7 +68,10 @@ export interface IStockAccount   { account: string, oaccount: string, accountNam
 
 export interface IArticle  extends IMasterfile, IStockAccount {
   parent: string, sprice:number, pprice:number, avgPrice:number, currency:string, stocked: boolean
-  , quantityUnit: string, packUnit: string, vatCode: string, stocks:IStock[]
+  , quantityUnit: string, packUnit: string, vatCode: string
+  ,  revenueAccount:string
+  , stocks:IStock[]
+  , bom:IBom[]
 }
 
 export type HttpMethod = 'PATCH' | 'POST' | 'PUT' | 'GET'
@@ -232,6 +235,7 @@ export interface IStock {
   unit:string,
   amount?:number,
 }
+export interface IBom {id:string, parent:string, quantity:number, description:string, company:string, modelid: number}
 
 export interface ILineFinancials extends IWSLine {
   account: string,

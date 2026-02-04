@@ -226,10 +226,13 @@
     "group": "W.gruppe",
     "wholeStock": "Gesamtbestand",
     "stock": {
-      "account": "Best.Konto"
+      "account": "Bestand"
     },
     "expense": {
-      "account": "WE.Konto"
+      "account": "Verbrauch"
+    },
+    "revenue": {
+      "account": "Verkauf"
     }
   },
   "partner": {"title": "Kontakt"},

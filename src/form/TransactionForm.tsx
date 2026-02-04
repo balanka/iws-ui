@@ -175,6 +175,8 @@ const STYLES = {
        , transdate: current.transdate
        , total: Number(buildTotal(current)).toFixed(2)
        , lines: current.lines.map(formatLines)
+       , text:current.text
+       , footText:current.footText
      }
    }
   const ccData:ICustomer[]|ISupplier[] = iwsState.get(partnerId)??[initCust]

@@ -1,4 +1,4 @@
-import React, {CSSProperties, Dispatch, FC, MouseEventHandler} from 'react'
+import React, {CSSProperties, Dispatch, FC, MouseEventHandler, ReactNode} from 'react'
 import {Show, toOption, transactionToOption} from '../utils/FormUtils.tsx'
 import Grid from 'react-fast-grid'
 import {IoMdMenu} from 'react-icons/io'
@@ -676,6 +676,24 @@ const TextareaField = ({ fieldName, value, current, setCurrent, rows, disabled, 
             }}
         />
     )
+}
+const InputNumberField = ({ fieldName, type, current, setCurrent, value, disabled, style, onChange }:
+                    { fieldName:string, type?:'text', current:any, setCurrent:(arg:any)=>void, value:any
+                      , disabled?:boolean, style?: CSSProperties | undefined, onChange?:(event:any)=>void}) => {
+  const style_ = style ? style : { height: 20 }
+  //onChange=(event:any) => setCurrent({ ...current, [fieldName]: event.target.value })
+  return (
+    <CFormInput
+      type={type ? type : 'text'}
+      id={fieldName?.concat('id')}
+      className="input-sm"
+      disabled={disabled}
+      style={style_}
+      value={value}
+      placeholder={fieldName}
+      onChange={onChange?onChange:(event:any) => setCurrent({ ...current, [fieldName]: Number(event.target.value) })}
+    />
+  )
 }
 const InputField = ({ fieldName, type, current, setCurrent, value, disabled, style, onChange }:
                     { fieldName:string, type?:'text', current:any, setCurrent:(arg:any)=>void, value:any
@@ -1753,10 +1771,10 @@ export const MasterfilesForm2 =
         <Grid item sm={8} xs={2}>
           <Grid container maximize style={STYLES.fuller} justify="flex-start" alignItems="stretch">
             <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-              <div>{current.hasOwnProperty('parent') && current.parent?t('common.parent'):null}</div>
+              <div>{current?.hasOwnProperty('parent') && current.parent?t('common.parent'):null}</div>
             </Grid>
             <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-              { current.hasOwnProperty('parent')?// && current.parent?
+              { current?.hasOwnProperty('parent')?// && current.parent?
                 <MasterfileXComboBox fieldName={'parent'} current={current} setCurrent={setCurrent}
                     data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
                   styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
@@ -2204,7 +2222,7 @@ export const PermissionMainForm = ({collapse, current, setCurrent, disable, t,  
 }
 
 export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
-    ({ current, setCurrent,  t, quantityUnitData, groupData, disable }) => {
+    ({ current, setCurrent,  t, quantityUnitData, groupData, ccyData, disable }) => {
 
         return (
             <Grid container spacing={0} style={styles.outer}>
@@ -2275,7 +2293,6 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                     </Grid>
                 </Grid>
                 {/**QuantityUnit, changedate */}
-                {/**PPrice, SPrice, AVGPrice, changedate*/}
                 <Grid container spacing={1}>
                     <Grid item sm={8} xs={2}>
                         <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
@@ -2285,7 +2302,7 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                             <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
                               <MasterfileXComboBox fieldName={'quantityUnit'} current={current} setCurrent={setCurrent}
                                    data={quantityUnitData} defaultValue={initQuantity[0]} zIndex={11} disable={disable}
-                                 styles={{...styles, minHeight:25, height:25, minWidth:430, width:'100%', color: '#6b7280'}}/>
+                                 styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -2316,7 +2333,7 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                             <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
                               <MasterfileXComboBox fieldName={'packUnit'} current={current} setCurrent={setCurrent}
                                   data={quantityUnitData} defaultValue={initQuantity[0]} zIndex={11} disable={disable}
-                                  styles={{...styles, minHeight:25, height:25, minWidth:350, width:'100%', color: '#6b7280'}}/>
+                                  styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -2326,11 +2343,12 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                                 <div>{t('article.pprice')}</div>
                             </Grid>
                             <Grid item sm ={2} xs={4} justify="flex-start" alignItems="stretch">
-                                <InputField
+                                <InputNumberField
                                     fieldName="pprice"
                                     current={current}
                                     setCurrent={setCurrent}
                                     value={Number(current?.pprice).toFixed(2)}
+                                    //value={current?.pprice}
                                     disabled={disable}
                                     style={{ height: 20, width:140, textAlign: 'right', padding: 2, fontSize:12}}
                                 />
@@ -2339,7 +2357,7 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                         </Grid>
                     </Grid>
                 </Grid>
-                 {/**Group, PPrice*/}
+                 {/**Group, SPrice*/}
                 <Grid container spacing={1}>
                   <Grid item sm={8} xs={2}>
                       <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
@@ -2349,7 +2367,7 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                           <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
                             <MasterfileXComboBox fieldName={'parent'} current={current} setCurrent={setCurrent}
                                   data={groupData} defaultValue={initArticleGroup[0]} zIndex={11} disable={disable}
-                                 styles={{...styles, minHeight:25, height:25, minWidth:430, width:'100%', color: '#6b7280'}}/>
+                                 styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
                           </Grid>
                       </Grid>
                   </Grid>
@@ -2359,10 +2377,11 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                                 <div>{t('article.sprice')}</div>
                             </Grid>
                             <Grid item sm ={2} xs={4} justify="flex-start" alignItems="stretch">
-                                <InputField
+                                <InputNumberField
                                     fieldName="sprice"
                                     current={current}
                                     setCurrent={setCurrent}
+                                    //onChange={(value: any, _event: any) => setCurrent({...current, [fieldName]: value})}
                                     value={Number(current?.sprice).toFixed(2)}
                                     disabled={disable}
                                     style={{ height: 20, width:140, textAlign: 'right', padding:5, fontSize:12}}
@@ -2409,6 +2428,18 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                             </Grid>
                         </Grid>
                     </Grid>
+                  <Grid item sm={8} xs={6}>
+                    <Grid container maximize style={styles.fuller} alignItems="stretch">
+                      <Grid item  sm={2}  xs={2} alignItems="stretch" justify="flex-start">
+                        <div>{t('common.currency')}</div>
+                      </Grid>
+                      <Grid item sm={10} xs={10} alignItems="stretch" justify="flex-start">
+                        <MasterfileXComboBox fieldName={'currency'} current={current} setCurrent={setCurrent}
+                                             data={ccyData} defaultValue={initCurrency[0]} zIndex={11} disable={disable}
+                                             styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </Grid>
             </Grid>
         )
@@ -3049,56 +3080,27 @@ const FromPeriod = ({ name, label, value, current, setCurrent, t, labelStyle, st
     )
 }
 
-// const salaryField = ({ current, setCurrent, t, disable, locale, currency}:
-//                      { current:IEmployee, setCurrent:(arg:IEmployee)=>void, t:TFunction<'translation', undefined>
-//                       , disable:boolean,  locale:string, currency:string }) => {
-//   return (
-//       current.modelid === formEnum.EMPLOYEE && (
-//           <>
-//             <Col sm="2" style={{ paddingLeft: 10 }}>
-//               <FieldLabel title={t('employee.salary')} />
-//             </Col>
-//             <Col sm="2">
-//               <InputField
-//                   fieldName="salary"
-//                   //type="currency"
-//                   current={current}
-//                   setCurrent={setCurrent}
-//                   value={Number(current?.salary ?? 0.0).toLocaleString(locale, {
-//                     maximumFractionDigits: 2,
-//                     minimumFractionDigits: 2,
-//                     style: 'currency',
-//                     currency: currency,
-//                   })}
-//                   disabled={disable}
-//                   style={{ textAlign: 'right', padding: 2 }}
-//               />
-//             </Col>
-//           </>
-//       )
-//   )
-// }
 
 const  getAccountLabel = (current:ICustomer|ISupplier|IEmployee|IArticle|IStore
     , t:TFunction<'transalation', undefined>) =>
-    current.modelid === formEnum.SUPPLIER
+    current?.modelid === formEnum.SUPPLIER
         ? t('supplier.account') :
-        current.modelid === formEnum.CUSTOMER
+        current?.modelid === formEnum.CUSTOMER
             ? t('customer.account')
             :
-            current.modelid === formEnum.EMPLOYEE
+            current?.modelid === formEnum.EMPLOYEE
                 ? t('employee.account')
                 : t('article.stock.account')
 
 
 const  getOAccountLabel = (current:ICustomer|ISupplier|IEmployee|IArticle|IStore
     , t:TFunction<'transalation', undefined>) =>
-    current.modelid === formEnum.SUPPLIER ? t('supplier.oaccount')
+    current?.modelid === formEnum.SUPPLIER ? t('supplier.oaccount')
         :
-        current.modelid === formEnum.CUSTOMER
+        current?.modelid === formEnum.CUSTOMER
             ? t('customer.oaccount')
             :
-            current.modelid === formEnum.EMPLOYEE
+            current?.modelid === formEnum.EMPLOYEE
                 ? t('employee.oaccount')
                 : t('article.expense.account')
 
@@ -3474,7 +3476,52 @@ const setBusinessPartnerR = ( businessPartner:IBusinespartner
       setCurrent(bankAccount)
 }
 
+const MasterfileXComboBox:FC<MasterfileComboboxProps<IMasterfile, IMasterfile>> = ({current, setCurrent, data
+                                                                                     , fieldName, defaultValue,  zIndex, styles, disable})=> {
+  // @ts-ignore
+  const currentAcc = (data ?? [defaultValue]).find((acc) => acc.id === current[fieldName]) ?? defaultValue
+  return (
+    <ComboBox<{ value: string | bigint, label: string }>
+      style={{...styles}}
+      //style={{...styles, minHeight: 25, height: 25, minWidth: 100, width: '100%', color: '#6b7280', fontSize: 12}}
+      disable={disable}
+      value={{value: currentAcc ? currentAcc.id : '', label: currentAcc ? `${currentAcc.id} ${currentAcc.name}` : ''}}
+      onChange={(value: any, _event: any) => setCurrent({...current, [fieldName]: value})}
+      values={data.slice().sort(sortById).map(toOption)}
+      zIndex={zIndex}
+    />
+  )
+}
+const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction, IMasterfile>> =({current, setCurrent, data
+                                                                                             , fieldName, defaultValue,  zIndex, styles})=>{
+  // @ts-ignore
+  const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === current[fieldName])??defaultValue
 
+  return (
+    <ComboBox<{value:string|bigint,  label:string}>
+      style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+      disable={current.posted}
+      value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
+      onChange={(value:any, _event:any) => setCurrent({...current, [fieldName]: value })}
+      values={data.slice().sort(sortById).map(toOption)}
+      zIndex={zIndex}
+    />
+  )
+}
+
+export const FromTransactionComboBox  = ({current, transactions, currentModule, onChange}:
+                                         {current:IFinancials, transactions:IFinancials[], currentModule:IFmodule, onChange:(value:BigInt, event:any)=>void})=> {
+  return (
+    <ComboBox<{value:bigint|string,  label:string}>
+      style={{...styles, minHeight:25, height:25, minWidth:50, width:'100%', color: '#6b7280', fontSize:8}}
+      disable={current.posted}
+      value={{value:BigInt(currentModule?currentModule?.id:0), label:currentModule?currentModule?.name:'' }}
+      onChange={onChange}
+      values={transactions.slice().sort(sortById).map(transactionToOption)}
+      zIndex={99999}
+    />
+  )
+}
 export const BankAccountForm = (
     { currentBankAccount, setCurrentBankAccount, businessPartner, setBusinessPartner, bankData, t,  disable, height , zIndex}:BankAccountFormProps) => {
     const current = currentBankAccount
@@ -3537,14 +3584,74 @@ export const BankAccountForm = (
         </Grid>
     )
 }
-export const CustomerAccountForm = (
-    { current, setCurrent, accData, vatData, t,  disable }:
+
+// export const MComboBox  = <A extends IMasterfile>( { current, setCurrent
+//                                                            , data, init, name, fieldName, zIndex, disable, styles1 }:
+//                                                          {current: A, setCurrent: (art:any)=>void, data: A[], init:A, name:string
+//                                                            , fieldName:string , zIndex:number, disable: boolean, styles1:CSSProperties }) => {
+//   return (<>
+//       <Grid item sm={12} xs={2}>
+//         <Grid container maximize style={styles1} justify="flex-start" alignItems="stretch">
+//           <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+//             {name}
+//           </Grid>
+//             <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
+//               <MasterfileXComboBox fieldName={fieldName} current={current} setCurrent={setCurrent}
+//                                  data={data} defaultValue={init} zIndex={zIndex} disable={disable}
+//                                  styles={{...styles1, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+//             </Grid>
+//           </Grid>
+//       </Grid>
+//     </>
+//   )
+export const ArticleAccountForm = (
+  { current, setCurrent, accData, vatData, t,  disable }:
+  {current: IArticle, setCurrent: (art:any)=>void, accData: IAccount[]
+    , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, height?: number, zIndex:number}) => {
+  return (
+    <Grid container spacing={0} style={{...styles.outer, height: 140, display: 'flex'}}>
+      <CustomerAccountBaseForm current ={current} setCurrent = {setCurrent} accData ={accData} vatData ={vatData} t={t}
+                               disable={disable}  children={()=>null}/>
+      {/**revenue account*/}
+      <Grid container spacing={1}>
+        <Grid item sm={12} xs={2}>
+          <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+              {t('article.revenue.account')}
+            </Grid>
+            <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
+              <MasterfileXComboBox fieldName={'revenueAccount'} current={current} setCurrent={setCurrent}
+                                   data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
+                                   styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+            </Grid>
+          </Grid>
+        </Grid>
+        {/**Vat */}
+        { !current?.hasOwnProperty('vatCode') && !current?.hasOwnProperty('vatcode') ? null:
+        <Grid item sm={12} xs={2}>
+          <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+              <div>{t('common.vatCode')}</div>
+            </Grid>
+            <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start">
+              <MasterfileXComboBox fieldName={'vatCode'} current={current} setCurrent={setCurrent}
+                                   data={vatData} defaultValue={initVat[0]} zIndex={11} disable={disable}
+                                   styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+            </Grid>
+          </Grid>
+        </Grid>
+        }
+      </Grid>
+    </Grid>
+  )
+}
+export const CustomerAccountBaseForm = (
+    { current, setCurrent, accData,  t,  disable, children }:
     {current: IArticle|ICustomer|ISupplier|IEmployee|ICompany, setCurrent: (art:any)=>void, accData: IAccount[]
-        , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, height?: number, zIndex:number}) => {
+        , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, children:() =>ReactNode}) => {
     const accountLabel = getAccountLabel(current, t)
     const oaccountLabel = getOAccountLabel(current, t)
-    return (
-        <Grid container spacing={0} style={{...styles.outer, height: 120}}>
+    return (<>
             {/**Account,  accountName*/}
             <Grid container spacing={1}>
                 <Grid item sm={12} xs={2}>
@@ -3555,7 +3662,7 @@ export const CustomerAccountForm = (
                         <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
                           <MasterfileXComboBox fieldName={'account'} current={current} setCurrent={setCurrent}
                                data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
-                            styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+                            styles={{...styles, minHeight:20, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -3570,29 +3677,44 @@ export const CustomerAccountForm = (
                         <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start">
                           <MasterfileXComboBox fieldName={'oaccount'} current={current} setCurrent={setCurrent}
                               data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
-                            styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+                            styles={{...styles, minHeight:20, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
                         </Grid>
                     </Grid>
                 </Grid>
-                {/**Vat */}
-                {!current.hasOwnProperty('vatCode') && !current.hasOwnProperty('vatcode') ? null:
-                    <Grid item sm={12} xs={2}>
-                        <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-                            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                                <div>{t('common.vatCode')}</div>
-                            </Grid>
-                            <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start">
-                              <MasterfileXComboBox fieldName={'vatCode'} current={current} setCurrent={setCurrent}
-                                 data={vatData} defaultValue={initVat[0]} zIndex={11} disable={disable}
-                                 styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                }
             </Grid>
-        </Grid>
+        {/**Vat */}
+        {children ()}
+        </>
     )
 }
+  export const CustomerAccountForm  = (
+    { current, setCurrent, accData, vatData, t,  disable }:
+    {current: IArticle|ICustomer|ISupplier|IEmployee|ICompany, setCurrent: (art:any)=>void, accData: IAccount[]
+      , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, height?: number, zIndex:number}) => {
+
+    const children = () =>(<>
+      {!current?.hasOwnProperty('vatCode') && !current?.hasOwnProperty('vatcode') ? null:
+        <Grid item sm={12} xs={2}>
+          <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+              <div>{t('common.vatCode')}</div>
+            </Grid>
+            <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start">
+              <MasterfileXComboBox fieldName={'vatCode'} current={current} setCurrent={setCurrent}
+                                   data={vatData} defaultValue={initVat[0]} zIndex={11} disable={disable}
+                                   styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+            </Grid>
+          </Grid>
+        </Grid>
+      }</>)
+    return (
+      <Grid container spacing={0} style={{...styles.outer, height: 120}}>
+        <CustomerAccountBaseForm current ={current} setCurrent = {setCurrent} accData ={accData} vatData ={vatData} t={t}
+                                 disable={disable}  children={children}/>
+
+      </Grid>
+    )
+  }
 export const CompanyAccountForm = (
     { current, setCurrent, accData, vatData, t,  disable }:
     {current: ICompany, setCurrent: (art:any)=>void, accData: IAccount[]
@@ -3721,53 +3843,6 @@ export const CompanyAccountForm = (
             </Grid>
         </Grid>
     )
-}
-
-const MasterfileXComboBox:FC<MasterfileComboboxProps<IMasterfile, IMasterfile>> = ({current, setCurrent, data
-                            , fieldName, defaultValue,  zIndex, styles, disable})=> {
-  // @ts-ignore
-  const currentAcc = (data ?? [defaultValue]).find((acc) => acc.id === current[fieldName]) ?? defaultValue
-  return (
-    <ComboBox<{ value: string | bigint, label: string }>
-      style={{...styles}}
-      //style={{...styles, minHeight: 25, height: 25, minWidth: 100, width: '100%', color: '#6b7280', fontSize: 12}}
-      disable={disable}
-      value={{value: currentAcc ? currentAcc.id : '', label: currentAcc ? `${currentAcc.id} ${currentAcc.name}` : ''}}
-      onChange={(value: any, _event: any) => setCurrent({...current, [fieldName]: value})}
-      values={data.slice().sort(sortById).map(toOption)}
-      zIndex={zIndex}
-    />
-  )
-}
-const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction, IMasterfile>> =({current, setCurrent, data
-                             , fieldName, defaultValue,  zIndex, styles})=>{
-  // @ts-ignore
-  const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === current[fieldName])??defaultValue
-
-  return (
-    <ComboBox<{value:string|bigint,  label:string}>
-      style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
-      disable={current.posted}
-      value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
-      onChange={(value:any, _event:any) => setCurrent({...current, [fieldName]: value })}
-      values={data.slice().sort(sortById).map(toOption)}
-      zIndex={zIndex}
-    />
-  )
-}
-
-export const FromTransactionComboBox  = ({current, transactions, currentModule, onChange}:
-                                {current:IFinancials, transactions:IFinancials[], currentModule:IFmodule, onChange:(value:BigInt, event:any)=>void})=> {
-  return (
-    <ComboBox<{value:bigint|string,  label:string}>
-      style={{...styles, minHeight:25, height:25, minWidth:50, width:'100%', color: '#6b7280', fontSize:8}}
-      disable={current.posted}
-      value={{value:BigInt(currentModule?currentModule?.id:0), label:currentModule?currentModule?.name:'' }}
-      onChange={onChange}
-      values={transactions.slice().sort(sortById).map(transactionToOption)}
-      zIndex={99999}
-    />
-  )
 }
 
 export const FinancialsMainForm =
@@ -4079,14 +4154,26 @@ export const TransactionMainForm =
                             <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
                                 <div>{t('transaction.period')}</div>
                             </Grid>
-                            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+                            <Grid item sm={2} xs={1} alignItems="stretch" justify="flex-start">
                                 <InputField fieldName="period" current={current}
                                             setCurrent={setCurrent}
                                             value={current.period}
                                             disabled={true}
-                                            style={{ height: 20, width: 100, textAlign: 'right' }}
+                                            style={{ height: 20, width: 90, textAlign: 'left' }}
                                 />
                             </Grid>
+                          <Grid item sm={2} xs={6}
+                                justify="flex-start" alignItems="flex-start">
+                            <BooleanField
+                              fieldName="posted" current={current}
+                              setCurrent={setCurrent}
+                              label='' //{t('transaction.posted')}
+                              disabled={current.posted}
+                              checked={current.posted}
+                              style={{ height: 20, paddingLeft:15, textAlign:'right' }}
+                              styleC={{ height: 20, paddingLeft:25, textAlign:'right' }}
+                            />
+                          </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -4123,20 +4210,18 @@ export const TransactionMainForm =
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item sm={4} xs={6}>
+                    <Grid item sm={4} xs={10}>
                         <Grid container maximize style={styles.fuller} alignItems="stretch">
-                            <Grid item sm={2} xs={12}
-                                  justify="flex-start" alignItems="flex-start">
-                                <BooleanField
-                                    fieldName="posted" current={current}
-                                    setCurrent={setCurrent}
-                                    label={t('transaction.posted')}
-                                    disabled={current.posted}
-                                    checked={current.posted}
-                                    style={{ height: 20, paddingLeft: 20, textAlign:'right' }}
-                                    styleC={{ height: 20, paddingLeft: 50, textAlign:'right' }}
-                                />
-                            </Grid>
+                          <Grid item sm={10} xs={10} justify="flex-start" alignItems="stretch">
+                            <TextareaField
+                              fieldName="footText"
+                              placeholder={t('transaction.footText')}
+                              disabled={current.posted}
+                              value={current.footText }
+                              current={current}
+                              setCurrent={setCurrent}
+                              style={{ width: 1000 }}/>
+                          </Grid>
                         </Grid>
                     </Grid>
                 </Grid>

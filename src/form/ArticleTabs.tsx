@@ -4,15 +4,15 @@ import { StockGrid } from "../IWSGrid.tsx"
 import Grid from 'react-fast-grid'
 import { styles } from './BasicTreeTableProps'
 import {stockColumnDefs} from '../ColumnsDefs.ts'
-import {ArticleGeneralForm, ArticleQRForm, CustomerAccountForm} from './FormsProps'
+import {ArticleAccountForm, ArticleGeneralForm, ArticleQRForm} from './FormsProps'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {IStock} from "../Models.ts";
 import {ArticleProps} from "../Props.ts";
 
 export  const ArticleTabs = (
-    { current, setCurrent, data, accData, vatData, quantityUnitData, groupData,  locale,  currency, t,  disable, height, zIndex}:ArticleProps) => {
-  const  props:ArticleProps = { current, setCurrent, data, accData, vatData, quantityUnitData, groupData, locale, currency, t,  disable, height, zIndex }
+    { current, setCurrent, data, accData, vatData, quantityUnitData, groupData, ccyData, locale,  currency, t,  disable, height, zIndex}:ArticleProps) => {
+  const  props:ArticleProps = { current, setCurrent, data, accData, vatData, quantityUnitData, groupData, ccyData, locale, currency, t,  disable, height, zIndex }
 
   const onRowSelected = (event: RowSelectedEvent<IStock[],any>) =>
                                               setCurrent((event.data instanceof Array)?event.data[0]:event.data)
@@ -28,8 +28,8 @@ export  const ArticleTabs = (
 
   const tabContent:TabItem[] = [
       { title: t('common.general'), id: 1, form: <ArticleGeneralForm  current={current} setCurrent={setCurrent}
-               t={t} quantityUnitData={quantityUnitData} groupData={groupData} disable={disable}/>},
-      { title: t('common.accounts'), id: 2, form: CustomerAccountForm(props)},
+               t={t} quantityUnitData={quantityUnitData} groupData={groupData} ccyData={ccyData} disable={disable}/>},
+      { title: t('common.accounts'), id: 2, form: ArticleAccountForm(props)},
       { title: t('stock.title'), id: 4, form: getTable() },
       { title: t('common.image_QR_code'), id: 5, form: <ArticleQRForm  current={current} t={t}/> },
     ]

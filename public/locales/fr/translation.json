@@ -242,10 +242,13 @@
     "group": "Groupe",
     "vat": "Code TVA",
     "stock": {
-      "account": "Cpte. Stock"
+      "account": "Stock"
     },
     "expense": {
-      "account": "Cpte. Charge"
+      "account": "Charge"
+    },
+    "revenue": {
+      "account": "Ventes"
     },
     "wholeStock": "Stock tot."
   },
