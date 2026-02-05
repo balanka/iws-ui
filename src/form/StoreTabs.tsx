@@ -8,10 +8,11 @@ import {CustomerAccountForm, StoreGeneralForm} from './FormsProps'
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import IWSTabs from "./IWSTabs.tsx";
 import {StoreGeneralFormProps, StoreProps} from '../Props'
+import {initStore} from "./Menu.tsx";
 
 export  const StoreTabs =(
-    { collapse, current, setCurrent, accData, locale,  t,  disable, height, zIndex }:StoreProps) => {
-    const  props:StoreProps = {collapse, current, setCurrent, accData, locale,  t,  disable, height, zIndex }
+    { collapse, current, setCurrent, ccData, accData, locale,  t,  disable, height, zIndex }:StoreProps) => {
+    const  props:StoreProps = {collapse, current, setCurrent, ccData, accData, locale,  t,  disable, height, zIndex }
     const  props2:StoreGeneralFormProps = {collapse, current, setCurrent, accData, locale,  t,  disable, height }
   //const onRowSelected = (event: RowSelectedEvent) => console.log(' RowSelectedEvent', event )
 
@@ -22,7 +23,7 @@ export  const StoreTabs =(
       <StockGrid
           // @ts-ignore
           theme="legacy" columnDefs ={stockColumnDefs(t)}
-                       onRowSelected={()=>{}} rowData ={current.stocks} />
+                       onRowSelected={()=>{}} rowData ={current?.stocks??initStore[0].stocks} />
     </Grid>
 
     const tabContent =

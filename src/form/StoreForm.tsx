@@ -13,7 +13,7 @@ import iwsStore from '../utils/Store'
 import  { StoreTabs }  from './StoreTabs.tsx'
 import { formEnum } from '../utils/FormEnum'
 import {storeColumnDefs} from '../ColumnsDefs.ts'
-import {IAccount, IStore} from '../Models.ts'
+import {IAccount, IMasterfile, IStore} from '../Models.ts'
 import { StoreGrid} from '../IWSGrid.tsx'
 import Login from "./Login.tsx";
 import {logout} from '../utils/FormUtils.tsx'
@@ -29,10 +29,13 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const dispatch = useDispatch()
      let navigate = useNavigate()
      if (module_ === '11111' || module_ === 11111) return <Login/>
-     const current_: IStore = initStore[0]
+     const current_: IStore = {...initStore[0], stocks:[], company:company}
      const [, setIwsState] = useState(iwsStore.initialState)
+     const [ccData, setCcData] = useState<IMasterfile[]>([])
      const [accData, setAccData] = useState<IAccount[]>([])
      const acc_modelid = formEnum.ACCOUNT
+     const cc_modelid = formEnum.COSTCENTER
+     const cc_ctx = `${MASTERFILE.masterfile}/${cc_modelid}/${company}`
      const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
      const zIndex = 9999
      const height= 20
@@ -41,6 +44,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
      useEffect(() => {
          iwsStore.subscribe(setIwsState)
+         Get(cc_ctx, token, cc_modelid, setCcData)
          Get(acc_ctx, token, acc_modelid, setAccData)
      }, [])
 
@@ -70,7 +74,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  // @ts-ignore
                    style={{...stylesx.outer, padding: 5, display: !state.collapse?'none':''}} >
                  <StoreTabs collapse = {state.collapse} current={current} setCurrent={setCurrent} disable={disable}
-                            t={t} zIndex={zIndex-1} accData={accData} locale={locale??'fr-FR'}  height={height} />
+                            t={t} zIndex={zIndex-1} ccData ={ccData} accData={accData} locale={locale??'fr-FR'}  height={height} />
              </Grid>
              <Grid container
                  // @ts-ignore

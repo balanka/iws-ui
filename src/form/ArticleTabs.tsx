@@ -9,6 +9,7 @@ import {ArticleAccountForm, ArticleGeneralForm, ArticleQRForm} from './FormsProp
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {IStock} from "../Models.ts";
 import {ArticleProps} from "../Props.ts";
+import {initArticle} from "./Menu.tsx";
 
 export  const ArticleTabs = (
     { current, setCurrent, data, accData, vatData, quantityUnitData, groupData, ccyData, locale,  currency, t,  disable, height, zIndex}:ArticleProps) => {
@@ -23,11 +24,11 @@ export  const ArticleTabs = (
       <StockGrid
           // @ts-ignore
           theme="legacy" columnDefs ={stockColumnDefs(t)}
-                       onRowSelected={onRowSelected} rowData ={current?.stocks?current?.stocks:[]}/>
+                       onRowSelected={onRowSelected} rowData ={current?.stocks?current?.stocks:initArticle[0].stocks}/>
     </Grid>
 
   const tabContent:TabItem[] = [
-      { title: t('common.general'), id: 1, form: <ArticleGeneralForm  current={current} setCurrent={setCurrent}
+      { title: t('common.general'), id: 1, form: <ArticleGeneralForm  current={current??initArticle[0]} setCurrent={setCurrent}
                t={t} quantityUnitData={quantityUnitData} groupData={groupData} ccyData={ccyData} disable={disable}/>},
       { title: t('common.accounts'), id: 2, form: ArticleAccountForm(props)},
       { title: t('stock.title'), id: 4, form: getTable() },

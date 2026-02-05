@@ -111,32 +111,32 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
 
   const handleModuleChange = (value:any) => {
     setModel(value)
-    const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]
+    const mx:IFmodule = fmodule.find((m:IFmodule) => m?.id === value) ?? initfModule[0]
      templateFileName = mx.description
     console.log('mx>>>>', mx)
     console.log('templateFileName >>>>', templateFileName)
-    title_ = mx?.name ? mx.name : title_
+    title_ = mx?.name ? mx?.name : title_
     const copyFromIds = mx? mx.copyFrom:-1
     const titlex = `${company}/${title_}`
     //console.log('titlex>>>>', titlex)
     setTitle(titlex)
     setCopyFRom([copyFromIds])
-    setPartnerId(parseInt(mx.account))
+    setPartnerId(parseInt(mx?.account))
     setCurrent(current_)
     ctx = `${module_.ctx}/${mx.id}/${company}`
     const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
-    const _partnerCtx:string = parseInt(mx.account)===formEnum.CUSTOMER?MASTERFILE.cust:
-                              (parseInt(mx.account)==formEnum.SUPPLIER)?MASTERFILE.sup:''
+    const _partnerCtx:string = parseInt(mx?.account)===formEnum.CUSTOMER?MASTERFILE.cust:
+                              (parseInt(mx?.account)==formEnum.SUPPLIER)?MASTERFILE.sup:''
     const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
     Get(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
-    submitQuery( ctx, partnerCtx, parseInt(mx.account))
+    submitQuery( ctx, partnerCtx, parseInt(mx?.account))
     const currentx = rowData.length>0?rowData[0]:current_
     setCurrent(currentx)
   }
 
      function buildPostCall (rows: BigInt[], current:T, modifyUrl: string, token: string, setCurrent:Dispatch<SetStateAction<T>>) {
-         const ids = rows.length > 0 ? rows : [current.id]
-         const url_ = `${modifyUrl}/post/${ids.join(',')}/${current.modelid}/${current.company}`
+         const ids = rows.length > 0 ? rows : [current?.id]
+         const url_ = `${modifyUrl}/post/${ids.join(',')}/${current?.modelid}/${current?.company}`
          Get2(url_, token, setCurrent)
      }
 
@@ -146,7 +146,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
       buildPostCall(rows, current, modifyUrl, token, setCurrent)
   }
 
-  const submitPost = (event:any) => callSubmitPost(event, module_.ctx, token, current, setCurrent, rows)
+  const submitPost = (event:any) => callSubmitPost(event, module_?.ctx, token, current, setCurrent, rows)
   const submitAdd = (event:any) => {
     event.preventDefault()
     const row: T = { ...current, modelid: model, company: company}
@@ -155,7 +155,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
      const addLine = useCallback(
          ( line:L, setCurrent:Dispatch<SetStateAction<T>>) => {
              const dx: T = {...current}
-             const newLine:L = {...line, id: BigInt(-1), transid: current.id1}
+             const newLine:L = {...line, id: BigInt(-1), transid: current?.id1}
              dx.lines.push(newLine)
              gridApi!.applyTransaction({add: [newLine]})
              setCurrent(dx)
@@ -168,18 +168,18 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
              event.preventDefault()
              const dx: T = {...current}
             if(!dx.hasOwnProperty('lines')) dx['lines']=[]
-             const idx = dx.lines.findIndex((obj: ILine) => obj.id === currentLine.id)
+             const idx = dx.lines.findIndex((obj: ILine) => obj?.id === currentLine?.id)
              if (idx >= 0) dx.lines[idx] = {...currentLine, transid: BigInt(-2)}
              gridApi!.applyTransaction({remove: [currentLine]})
              setCurrent(dx)
      }, [currentLine]);
    const templateName:()=>string = () =>
-     templateFileName ? templateFileName: (fmodule.find((m:IFmodule) => Number(m.id) === current.modelid) ?? initfModule[0]).description
+     templateFileName ? templateFileName: (fmodule.find((m:IFmodule) => Number(m?.id) === current?.modelid) ?? initfModule[0]).description
 
   const callSubmitEdit = (event:any, modifyUrl:string, token:string, current:T
       , setCurrent:Dispatch<SetStateAction<T>>, data:T[], submitAdd: (arg:any)=>void) => {
       event.preventDefault();
-      BigInt(current.id) > 0 ? Edit(modifyUrl, token, current, data, setCurrent) : submitAdd(event)
+      BigInt(current?.id) > 0 ? Edit(modifyUrl, token, current, data, setCurrent) : submitAdd(event)
   }
   const submitCancel = (event:any) =>  callSubmitCancel(event, ctx, token, current, setCurrent, rowData )
   const callSubmitCancel = (event:any, _ctx:string, token:string, current:T
@@ -212,8 +212,8 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
     console.log('idx', idx)
     if (idx >= 0) {
       const tr = copyFromTransaction[idx] ?? current_
-      const linesx = tr.lines.map((line) => {
-        return {...line, id: BigInt(-1), transid: current_.id1}
+      const linesx = tr.lines?.map((line) => {
+        return {...line, id: BigInt(-1), transid: current_?.id1}
       })
       const newRow = {
         ...tr, id: current_.id, id1: current_.id1, modelid: model, company: company
@@ -241,7 +241,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
      const filename = templateName().split('.')[0]
     return `${filename}.${EXPORT_FILE_EXTENSION}`
   }
-   const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current.lines }
+   const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current?.lines??[] }
 
    return [{ profile, menu, selected, t, language, isFetching, storeData, accData, articleData, fmodule, rowData
      , setRowData, vatData, current_, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction,  setCopyFromTransaction

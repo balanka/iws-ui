@@ -2238,7 +2238,7 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                                     fieldName="id"
                                     current={current}
                                     setCurrent={setCurrent}
-                                    value={current.id}
+                                    value={current?.id}
                                     disabled={disable}
                                     style={{ height: 20, width: 120 }}/>
                             </Grid>
@@ -3688,9 +3688,9 @@ export const CustomerAccountBaseForm = (
     )
 }
   export const CustomerAccountForm  = (
-    { current, setCurrent, accData, vatData, t,  disable }:
+    { current, setCurrent, ccData, accData, vatData, t,  disable }:
     {current: IArticle|ICustomer|ISupplier|IEmployee|ICompany, setCurrent: (art:any)=>void, accData: IAccount[]
-      , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, height?: number, zIndex:number}) => {
+      , vatData: IVat[], ccData?: IMasterfile[],  t:TFunction<'transalation', undefined>,  disable: boolean, height?: number, zIndex:number}) => {
 
     const children = () =>(<>
       {!current?.hasOwnProperty('vatCode') && !current?.hasOwnProperty('vatcode') ? null:
@@ -3707,10 +3707,27 @@ export const CustomerAccountBaseForm = (
           </Grid>
         </Grid>
       }</>)
+    const costCenterChildren = () =>(<>
+      {!current?.hasOwnProperty('costcenter')? null:
+        <Grid item sm={12} xs={2}>
+          <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+              <div>{t('costcenter.title')}</div>
+            </Grid>
+            <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start">
+              <MasterfileXComboBox fieldName={'costcenter'} current={current} setCurrent={setCurrent}
+                                   data={ccData??[]} defaultValue={initCc[0]} zIndex={11} disable={disable}
+                                   styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+            </Grid>
+          </Grid>
+        </Grid>
+      }</>)
+    const child = current?.hasOwnProperty('vatCode')||current?.hasOwnProperty('vatcode')?children
+                                      :current?.hasOwnProperty('costcenter')?costCenterChildren:() =>null
     return (
       <Grid container spacing={0} style={{...styles.outer, height: 120}}>
         <CustomerAccountBaseForm current ={current} setCurrent = {setCurrent} accData ={accData} vatData ={vatData} t={t}
-                                 disable={disable}  children={children}/>
+                                 disable={disable}  children={child}/>
 
       </Grid>
     )

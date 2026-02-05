@@ -12,6 +12,7 @@ import {
 import Grid from 'react-fast-grid'
 import {IRole, IUserRight} from '../Models.ts'
 import {IDetailCellRendererParams, GridOptions} from 'ag-grid-community'
+import {initRole} from "./Menu.tsx";
 
 
 const UserTabs = ({ collapse, current, setCurrent, disable, t, height }:UserFormProps) => {
@@ -100,7 +101,7 @@ const UserTabs = ({ collapse, current, setCurrent, disable, t, height }:UserForm
           <RoleGrid
           // @ts-ignore
             theme="legacy" gridOptions ={gridOptions} onRowSelected={onRowSelected}
-            rowData={current.roles}/>
+            rowData={current?.roles??initRole}/>
       </Grid>
   )
   const GetTabContent = () => {

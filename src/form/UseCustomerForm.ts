@@ -84,7 +84,7 @@ const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFo
   }
 
   const initAdd = () => {
-    const newRow = { ...current_, company: company, currency: currency}
+    const newRow = { ...current_, bankaccounts:[], company: company, currency: currency}
     setCurrent(newRow)
     setAdded(true)
     setEdited(false)

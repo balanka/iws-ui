@@ -45,7 +45,7 @@ const CompanyTabs  = ({ current, setCurrent
             <BankAccountGrid
                 // @ts-ignore
                 theme="legacy" columnDefs ={bankAccountColumnDefs(t)}  defaultColDef={defaultColDef} onGridReady={onGridReady}
-                rowData ={current.bankaccounts??[initBankAccount]} onRowSelected ={onRowSelected}/>
+                rowData ={current?.bankaccounts??[initBankAccount]} onRowSelected ={onRowSelected}/>
      </Grid>
 
   const tabContent = [

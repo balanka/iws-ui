@@ -226,6 +226,7 @@ export interface StoreProps {
       collapse: boolean
     , current: IStore
     , setCurrent: (art: any | IStore) => void
+   , ccData: IMasterfile[]
     , accData: IAccount[]
     , locale: string
     , t: TFunction<'transalation', undefined>
