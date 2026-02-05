@@ -26,7 +26,7 @@ import { styles as stylesx} from './BasicTreeTableProps.tsx'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const AccountClassForm = () => {
-   const [{profile, t,  language, toggle, state, handleLanguageChange, modelid, company, module_ }] = useForm()
+   const [{profile, t,  language, toggle, state, modelid, company, module_ }] = useForm()
      const {token} = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
@@ -34,7 +34,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const current_: IMasterfile2 =  module_.state[0]
      const [iwsState, setIwsState] = useState(iwsStore.initialState)
      const [accData, setAccData] = useState<IAccount[]>(initAcc)
-     const [{initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
+     const [{initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload, handleLanguageChange
       , title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
      const acc_modelid  = formEnum.ACCOUNT
      const acc_ctx = `${modelid === formEnum.COSTCENTER ?  MASTERFILE.acc:-1}/${acc_modelid}/${company}`

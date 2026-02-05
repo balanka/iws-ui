@@ -24,7 +24,7 @@ import UseMasterfileForm from './UseMasterfileForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const PartnerForm = () => {
-     const [{ profile, menu, selected, t,  handleLanguageChange, state, toggle, modelid, company}]  = useForm()
+     const [{ profile, menu, selected, t, state, toggle, modelid, company}]  = useForm()
      const {token} = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
@@ -46,7 +46,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const minHeight = 400
      const maxHeight = 700
      const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload, title,  rowData, current
-              , setRowData, setCurrent}] = UseMasterfileForm(current_)
+              , setRowData, setCurrent, handleLanguageChange}] = UseMasterfileForm(current_)
      useEffect(() => {
          iwsStore.subscribe(setIwsState)
          setCurrent(current_)

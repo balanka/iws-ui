@@ -24,7 +24,7 @@ import {styles as stylesx} from "./BasicTreeTableProps.tsx";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const UserForm = () => {
-   const [{ t, toggle, state, handleLanguageChange, module_}] = useForm()
+   const [{ t, toggle, state, module_}] = useForm()
      const dispatch = useDispatch()
      let navigate = useNavigate()
      if (module_ === '11111' || module_ === 11111) return <Login/>
@@ -33,7 +33,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const [setIwsState] = useState(iwsStore.initialState)
      const minHeight = 400
      const maxHeight = 700
-     const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
+     const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload, handleLanguageChange
            , title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
      useEffect(() => {

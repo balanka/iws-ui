@@ -29,8 +29,9 @@ const UseForm = (): [UseFormResult] => {
   const handleLanguageChange = (event:any) => {
     event.preventDefault()
     const value = event.target.value
+    console.log('handleLanguageChange >>>value ', value)
     setLanguage(value)
-    i18n.changeLanguage(value)
+    i18n.changeLanguage(value).then(r => console.log('r >>>value ', r))
   }
   return [{ profile, setProfile, menu, setMenu, setModule, setRoutes, selected, t, i18n, title:title
     , language, setLanguage, handleLanguageChange, toggle, state, modelid, company, module_}]

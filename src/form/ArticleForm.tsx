@@ -25,7 +25,7 @@ import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const ArticleForm = () => {
-   const [{  selected, t, i18n, toggle, state, setLanguage, module_ }] = useForm()
+   const [{  selected, t, toggle, state, module_ }] = useForm()
      const dispatch = useDispatch()
      let navigate = useNavigate()
      if (module_ === '11111' || module_ === 11111) return <Login/>
@@ -44,7 +44,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const [vatData, setVatData] = useState<IVat[]>([])
      const [ccyData, setCcyData] = useState<IMasterfile[]>([])
      const [{profile, language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
-       , title, zIndex, rowData, current, setCurrent }] = UseMasterfileForm(current_)
+       , handleLanguageChange, title, zIndex, rowData, current, setCurrent }] = UseMasterfileForm(current_)
      const { token, company, locale, currency} = profile
      const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
      const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
@@ -66,12 +66,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          event.preventDefault()
         reload()
      }
-   const handleLanguageChange = (event:any) => {
-     event.preventDefault()
-     const value = event.target.value
-     setLanguage(value)
-     i18n.changeLanguage(value)
-   }
+
      const onRowSelected = (event: RowSelectedEvent) =>
               setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
      return (<>

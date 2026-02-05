@@ -22,7 +22,7 @@ import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const AccountForm = () => {
-   const [{profile, selected, t, toggle, state, handleLanguageChange, module_}] = useForm()
+   const [{profile, selected, t, toggle, state, module_}] = useForm()
    const {locale} = profile
    const dispatch = useDispatch()
    let navigate = useNavigate()
@@ -30,7 +30,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    const height = 33
    const current_: IAccount = initAcc[0]
    const [setIwsState] = useState(iwsStore.initialState)
-   const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
+   const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload, handleLanguageChange
      , title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
    useEffect(() => {
@@ -62,7 +62,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
              />
-                 <AccountMainForm  collapse={state.collapse} current={current}
+             <AccountMainForm  collapse={state.collapse} current={current}
                                   setCurrent={setCurrent}
                                   disable={disable}
                                   t={t}

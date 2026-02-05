@@ -34,7 +34,7 @@ import {Get, Get3} from './CrudController.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, SelectEditorModule,])
 
 const FinancialsForm = () => {
-  const [{ profile, selected, t, toggle, state, handleLanguageChange, module_ }] = useForm()
+  const [{ profile, selected, t, toggle, state, module_ }] = useForm()
     const { token, company} = profile
     let navigate = useNavigate()
     const dispatch = useDispatch()
@@ -46,7 +46,7 @@ const FinancialsForm = () => {
   const  [{  language, isFetching, fmodule, rowData
     , setRowData,  current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction, setCopyFromTransaction
     , onRowSelected, onNewLine, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex
-    , saveProps, modelid}] = useTransactionForm(current_, initialLine, currentLine)
+    , handleLanguageChange, saveProps, modelid}] = useTransactionForm(current_, initialLine, currentLine)
 
     const [_, setIwsState] = useState(iwsStore.initialState)
     const [title, setTitle] = useState(title_)

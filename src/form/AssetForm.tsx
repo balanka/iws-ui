@@ -45,7 +45,7 @@ const STYLES = {
 }
 const AssetForm = () => {
   // @ts-ignore
-  const [{profile, t, toggle, state, handleLanguageChange, module_}] = useForm()
+  const [{profile, t, toggle, state, module_}] = useForm()
   const { token, company, locale, currency } = profile
   const currencyx = currency ??'EUR'
   const dispatch = useDispatch()
@@ -60,7 +60,7 @@ const AssetForm = () => {
   const maxHeight = 700
   const height = 33
   const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
-    , title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
+    , handleLanguageChange, title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)

@@ -52,7 +52,7 @@ const STYLES = {
   }
 }
  const TransactionForm = () => {
-   const [{selected, t, toggle, state, handleLanguageChange, module_ }] = useForm()
+   const [{selected, t, toggle, state, module_ }] = useForm()
    const dispatch = useDispatch()
   let navigate = useNavigate()
   if (module_ === '11111' || module_ === 11111) return <Login/>
@@ -62,7 +62,7 @@ const STYLES = {
    const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
    const  [{  language, isFetching, storeData, articleData, fmodule, rowData
     , setRowData, vatData,  current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
-    , handleModuleChange, onRowSelected, onNewLine
+    , handleModuleChange, onRowSelected, onNewLine, handleLanguageChange
      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, partnerId, title}] =
      useTransactionForm(current_, initialLine, currentLine)
 

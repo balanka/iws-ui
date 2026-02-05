@@ -24,7 +24,7 @@ import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const StoreForm= () => {
-     const [{profile, t, state, handleLanguageChange, toggle, company, module_}] = useForm()
+     const [{profile, t, state, toggle, company, module_}] = useForm()
      const { token, locale } = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
@@ -36,7 +36,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
      const zIndex = 9999
      const height= 20
-   const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
+   const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload,handleLanguageChange
      , title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
      useEffect(() => {

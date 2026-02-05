@@ -22,7 +22,7 @@ import {Get2} from "./CrudController.ts";
 import { styles as stylesx} from './BasicTreeTableProps.tsx'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 const CompanyForm = () => {
-  const [{ profile, selected, t,  toggle, state, handleLanguageChange, modelid, company, module_ }] = useForm()
+  const [{ profile, selected, t,  toggle, state, modelid, company, module_ }] = useForm()
   const { token, locale } = profile
   const [, setIwsState] = useState(iwsStore.initialState)
 
@@ -30,7 +30,7 @@ const CompanyForm = () => {
   const current_ : ICompany= initComp[0]
   const  [{ edited, added, disable, language, accData, bankData, ccyData
     , rowData, setRowData, vatData, current, setCurrent, currentBankAccount, setCurrentBankAccount
-    , edit, initAdd, reload, cancelEdit, submitEdit, onNewBankAccount
+    , edit, initAdd, reload, cancelEdit, submitEdit, onNewBankAccount, handleLanguageChange
     , onDeleteBankAccount, submitQuery, onRowSelected, title:title, setGridApi}] = useCustomerForm<ICompany>(current_)
   const dispatch = useDispatch()
   let navigate = useNavigate()

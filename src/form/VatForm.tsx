@@ -24,7 +24,7 @@ import { styles as stylesx} from './BasicTreeTableProps.tsx'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const VatForm = () => {
-  const [{ profile, selected, t, toggle, state, handleLanguageChange, company, module_ }] = useForm()
+  const [{ profile, selected, t, toggle, state, company, module_ }] = useForm()
   const { token} = profile
   const dispatch = useDispatch()
   let navigate = useNavigate()
@@ -37,7 +37,7 @@ const VatForm = () => {
   const minHeight = 300
   const maxHeight = 600
   const height = 20
-  const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
+  const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload, handleLanguageChange
     , title, zIndex, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
   useEffect(() => {
