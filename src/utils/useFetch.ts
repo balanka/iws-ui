@@ -92,6 +92,21 @@ export const useFetchJson = <T,>(url:string, limit?: number) => {
     return { data, loading };
 };
 
+
+
+// Async function to fetch weather data
+export const fetchWeather = async (url:string) => {
+  const response:Response = await fetch(url)
+  let data =null
+  if (!response.ok) {
+    throw new Error('Failed to fetch weather')
+  } else {
+    data = response.json()
+    console.log('data', data)
+  }
+  return data
+}
+
 // Define custom error type
 // interface ApiError {
 //   message: string;

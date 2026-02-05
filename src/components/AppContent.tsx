@@ -1,4 +1,4 @@
-import React, {memo, Suspense} from 'react'
+import React, {Suspense} from 'react'
 import { Navigate,  Route, Routes } from 'react-router-dom'
 import {CSpinner } from '@coreui/react'
 import routes from '../routes'
@@ -14,7 +14,7 @@ const AppContent = () => {
       <Suspense fallback={<CSpinner color="primary" />}>
         <Routes>
           {routes().map((route:{path:string, name?:string, element?:any }, idx) => {
-              const LazyComponent = memo(createLazy(route.element))
+              const LazyComponent = createLazy(route.element)
               return (
               route.element && (
                 <Route

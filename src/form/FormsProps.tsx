@@ -2772,7 +2772,7 @@ export const CustomerGeneralForm =
                         <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
                             <div>{t('common.id')}</div>
                         </Grid>
-                        <Grid item sm ={2} xs={2} justify="flex-end">
+                        <Grid item sm ={3} xs={2} justify="flex-end">
                             <InputField
                                 fieldName="id"
                                 current={current}
