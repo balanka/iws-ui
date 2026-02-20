@@ -12,39 +12,58 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import PrintOutlined from '@mui/icons-material/PrintOutlined'
 import {
   CBadge,
-  CButton, CCard, CCardBody, CCardGroup,
-  CCol, CContainer, CForm,
+  CButton,
+  CCard,
+  CCardBody,
+  CCardGroup,
+  CCol,
+  CContainer,
+  CForm,
   CFormInput,
   CFormLabel,
   CFormSelect,
   CFormTextarea,
   CHeaderToggler,
-  CInputGroup, CInputGroupText, CRow,
+  CInputGroup,
+  CInputGroupText,
+  CRow,
 } from '@coreui/react'
 import {formEnum} from '../utils/FormEnum'
 import {sortById} from '../utils/Utils'
 import {saveXlsx} from './../utils/XlsUtils.ts'
 import {languages} from './languages.ts'
 import {
-  AccountMainProps, ArticleGeneralFormProps, ArticleQRFormProps,
-  JournalProps,
+  AccountMainProps,
+  ArticleGeneralFormProps,
+  ArticleQRFormProps,
   AssetProps,
   BankAccountFormProps,
   BankStatementParamProps,
   BankStatementProps,
-  CustomerGeneralFormProps, FinancialsCBoxProps2,
-  FinancialsDetailsFormProps, FModuleProps2, JournalToolBarProps, LoginProps, MasterfileComboboxProps,
+  CustomerGeneralFormProps,
+  FinancialsCBoxProps2,
+  FinancialsDetailsFormProps,
+  FModuleProps2,
+  IAddressProps,
+  IJournalProps,
+  JournalProps,
+  JournalToolBarProps,
+  LoginProps,
+  MasterfileComboboxProps,
   MasterfileProps,
   MasterfileProps2,
+  PartnerProps,
   StoreGeneralFormProps,
-  TransactionDetailsFormProps, TransactionToolBarProps,
-  UserFormProps, IJournalProps, IAddressProps, PartnerProps,
+  TransactionDetailsFormProps,
+  TransactionToolBarProps,
+  UserFormProps,
 } from '../Props.ts'
 import DatePicker, {setDefaultLocale} from 'react-datepicker'
 import '../../public/css/custom-datepicker.css'
 import {green} from '@mui/material/colors'
 import {
-  initAcc, initArticle,
+  initAcc,
+  initArticle,
   initArticleGroup,
   initCc,
   initCurrency,
@@ -67,7 +86,9 @@ import {
   IFmodule,
   ILineFinancials,
   ILineTransaction,
-  IMasterfile, IMasterfile2, IPartner,
+  IMasterfile,
+  IMasterfile2,
+  IPartner,
   IPayrollTaxRange,
   IPermission,
   IRole,
@@ -442,11 +463,11 @@ export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, i
                     </CFormSelect>
                 </CHeaderToggler>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={(event)=>onDeleteLine(event)} disabled={current.posted}>
+                            onClick={(event)=>onDeleteLine(event)} disabled={current?.posted}>
                     <RemoveCircleOutlineIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer"
-                            style={{ height: 20, padding:1}} onClick={onNewLine} disabled={current.posted}>
+                            style={{ height: 20, padding:1}} onClick={onNewLine} disabled={current?.posted}>
                     <AddCircleOutlineIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
@@ -454,15 +475,15 @@ export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, i
                     <AddBoxIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={(event)=>submitEdit(event)} disabled={current.posted}>
+                            onClick={(event)=>submitEdit(event)} disabled={current?.posted}>
                     <SaveIcon/>
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={(event) =>submitCancel(event)} disabled={current.posted}>
+                            onClick={(event) =>submitCancel(event)} disabled={current?.posted}>
                     <CancelIcon />
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={(event)=>submitPost(event)} disabled={current.posted}>
+                            onClick={(event)=>submitPost(event)} disabled={current?.posted}>
                     <CheckIcon />
                 </IconButton>
               <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
@@ -3122,7 +3143,12 @@ export const TransactionDetailsForm = (
     const setCurrent = setCurrentLineTransaction
     const currentArticle = articleData?.find((acc: { id: any }) => acc.id === current.article)
     const currentVat = vatData?.find((vat: { id: any }) => vat.id === current.vatCode)
-    console.log('currentVatX', currentVat)
+    const  getPrice = (article:IArticle) => {
+    return (transaction.modelid == formEnum.SALES_ORDER || transaction.modelid == formEnum.CUSTOMER_INVOICE||
+      transaction.modelid == formEnum.DELIVERY) ? article.sprice :
+      (transaction.modelid == formEnum.PURCHASE_ORDER || transaction.modelid == formEnum.SUPPLIER_INVOICE||
+        transaction.modelid == formEnum.GOODRECEIVING) ? article.pprice : 0.0
+    }
 
     return (
         <Grid container spacing={0} style={styles.outer}>
@@ -3139,16 +3165,18 @@ export const TransactionDetailsForm = (
                                 disable={disable}
                                 value={ {value:currentArticle?currentArticle.id:'', label: currentArticle?`${currentArticle.id} ${currentArticle.name}` :''}}
                                 onChange={(value:any, _event:any) => {
-                                    const article = articleData?.find((acc: { id: any }) => acc.id === value)
+                                    const article = articleData?.find((acc: { id: any }) => acc.id === value)??initArticle[0]
                                     const currentVat = vatData?.find((vat: { id: any }) => vat.id === article?.vatCode)
                                     const percent= currentVat?.percent??0.0
                                     const vatAmount = percent*current.quantity*current.price
                                     const vatCode = currentVat?currentVat?.id:''
                                     console.log('vatAmount', vatAmount)
                                     const currentx:ILineTransaction = {...current,
-                                        article: value, articleName: article ?article.name:'', unit:article ?article.quantityUnit:''
+                                        article: value, articleName: article ?article.name:''
+                                      , unit:article ?article.quantityUnit:'', price:getPrice(article)
                                         // @ts-ignore
-                                        ,  vatCode:vatCode, vat:vatAmount,  currency:article?article.currency:'', company:`-${transaction.company}`}
+                                      ,  vatCode:vatCode, vat:vatAmount,  currency:article?article.currency:''
+                                      , company:`-${transaction.company}`}
                                     setCurrent(currentx)
                                     setTransactionR(transaction, setTransaction, currentx, setCurrent)
                                 }}

@@ -26,8 +26,8 @@ const TransactionDetailsTabs = ({
                                 }: TransactionDetailsTabProps<ITransaction, ILineTransaction>) => {
 
     const height = 20
-    const disable = transaction.posted
-    transaction.lines = !transaction?.lines?.length?  [ {...currentLineTransaction, transid:transaction.id1}]:transaction?.lines
+    const disable = transaction?.posted
+    transaction.lines = !transaction?.lines?.length?  [ {...currentLineTransaction, transid:transaction?.id1}]:transaction?.lines
     const props: TransactionDetailsFormProps<ITransaction, ILineTransaction> = { transaction, setTransaction, currentLineTransaction
         , setCurrentLineTransaction, articleData, vatData, t, disable, height
     }
@@ -41,7 +41,7 @@ const TransactionDetailsTabs = ({
                   style={{...styles.outer, width: '100%', height: 130, paddingTop: 5, zIndex:zIndex-2}} maximize
                   direction="column" zeroMinWidth>
                 <LineTransactionGrid columnDefs={lineTransactionColumnDefs(t)} onRowSelected={onRowSelected}
-                   rowData={!transaction?.lines?.length?[ {...currentLineTransaction, transid:transaction.id1}]:transaction.lines}
+                   rowData={!transaction?.lines?.length?[ {...currentLineTransaction, transid:transaction?.id1}]:transaction?.lines}
                    onGridReady={onGridReady}  pagination={false}/>
             </Grid>
         )

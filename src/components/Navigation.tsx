@@ -60,12 +60,7 @@ const Navigation = () => {
   }
 
   const modules_ = module ? iwsStore.get(formEnum.MODULE) : []
-  // console.log('module', module)
-  // console.log('modules_', modules_)
-  // console.log('userMenu', userMenu)
-  // console.log('profile.modules', profile.modules)
   userMenu = modules_ //.map((m:IMasterfile)=>m.id)
-    console.log('userMenu', userMenu)
   const allItems:any[] = Array.isArray(modules_) && modules_.length > 0 ? modules_ : DEFAULT
   const allMenuItems:any[] = allItems.map((item:IMasterfile2) =>
     Array.isArray(allItems) && allItems.length > 0
@@ -80,7 +75,6 @@ const Navigation = () => {
           ...item,
         },
   )
-  console.log('allMenuItems', allMenuItems)
   return allMenuItems
     .filter((e:any) => (Array.isArray(e.items) && e.items.length > 0) || e.parent === -1)
     .map((e:any) => buildMenu(e.name, e.path, e.items))

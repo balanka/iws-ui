@@ -81,7 +81,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
 
   const handleKeyPress = useCallback((event:any) => {
     if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
-      submitEdit(event, )
+      submitEdit(event)
     } else if (event.ctrlKey && (event.key === 'l' || event.key === 'L')) {
       onNewLine()
     }
@@ -156,9 +156,11 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
          ( line:L, setCurrent:Dispatch<SetStateAction<T>>) => {
              const dx: T = {...current}
              const newLine:L = {...line, id: BigInt(-1), transid: current?.id1}
+           if(dx.hasOwnProperty('lines'))
              dx.lines.push(newLine)
-             gridApi!.applyTransaction({add: [newLine]})
-             setCurrent(dx)
+           else dx['lines'] = [{...newLine}]
+           gridApi!.applyTransaction({add: [newLine]})
+           setCurrent(dx)
          },
          [current],
      )
@@ -229,6 +231,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
     !iwsState.get(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData)
     !iwsState.get(store_modelid)&&Get(store_ctx, token, store_modelid, setStoreData)
     !iwsState.get(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData)
+    !iwsState.get(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
     !iwsState.get(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
     Get3(ctx, token, modelid, setRowData, setCurrent)
     setIsFetching(false)
