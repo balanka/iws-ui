@@ -232,17 +232,17 @@ const Edit = <A>(ctx:string, token:string, record:IWSModel, data:IWSModel[], set
     return result
 }
 
-const Add = <A>(ctx:string, token:string, record:A, data:A[], setCurrent:Dispatch<SetStateAction<A>>) => {
+const Add = <A>(ctx:string, token:string, record:A, data:A[]
+                , setRowData:Dispatch<SetStateAction<A[]>> , setCurrent:Dispatch<SetStateAction<A>> ) => {
     console.log('Adding ctx/record', `${ctx}/${record}`)
     const url = `${SERVER_URL}${ctx}`
     console.log('Adding url', url)
      fetchFn(url, 'POST', token, record )
       .then((response) => {
-            const resp = response
-            const index = data.length + 1
-            data[index] = resp
+            const resp = response as A
             console.log('response', resp)
             setCurrent(resp)
+           setRowData([...data, resp])
         })
         .catch(function (error: any) {
             console.log('error', error)

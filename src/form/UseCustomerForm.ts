@@ -69,7 +69,7 @@ const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFo
     if(edited) {
       Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
     } else if (!edited && !disable) {
-      Add(modifyUrl, token, { ...current }, rowData, setCurrent)
+      Add(modifyUrl, token, { ...current }, rowData, setRowData, setCurrent)
     }
     setDisable(true)
     setEdited(false)

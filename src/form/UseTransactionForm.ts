@@ -92,7 +92,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
   const submitAdd = (event:any) => {
     event.preventDefault()
     const row: T = { ...current, modelid: model, company: company}
-    Add(modifyUrl, token, row, rowData, setCurrent)
+    Add(modifyUrl, token, row, rowData, setRowData, setCurrent)
   }
      const addLine = useCallback(
          ( line:L, setCurrent:Dispatch<SetStateAction<T>>) => {
@@ -168,7 +168,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
         ...tr, id: current_.id, id1: current_.id1, modelid: model, company: company
         , currency: currency, posted: false, editing: false, lines: linesx
       }
-      Add(modifyUrl, token, newRow, rowData, setCurrent)
+      Add(modifyUrl, token, newRow, rowData, setRowData, setCurrent)
     }
   }
 

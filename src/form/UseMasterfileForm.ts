@@ -42,7 +42,7 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T, ctx_?:string, url?:s
     if(edited) {
       Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
     } else if (!edited && !disable) {
-      Add(modifyUrl, token, { ...current }, rowData, setCurrent)
+      Add(modifyUrl, token, {...current}, rowData, setRowData, setCurrent)
     }
     setDisable(true)
     setEdited(false)

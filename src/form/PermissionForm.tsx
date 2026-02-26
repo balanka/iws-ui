@@ -12,7 +12,7 @@ import {MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import {permissionColumnDefs} from '../ColumnsDefs.ts'
-import {IMasterfile2, IPermission} from '../Models.ts'
+import {IPermission} from '../Models.ts'
 import {MasterfileGrid} from '../IWSGrid'
 import Login from './Login'
 import {logout} from '../utils/FormUtils.tsx'
@@ -29,22 +29,20 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const dispatch = useDispatch()
      let navigate = useNavigate()
      let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-     const parent_ctx = `${module_?.state3}/${company}`
+    // const parent_ctx = `${module_?.state3}/${company}`
      module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
      if (module_ === '11111' || module_ === 11111) return <Login/>
      const height = 20
      const ctx =  `${MASTERFILE.perm}/${modelid}/${company}`
      const current_: IPermission =  module_.state[0]
      const [, setIwsState] = useState(iwsStore.initialState)
-     const [accData, setAccData] = useState<IMasterfile2[]>([])
-
      const minHeight = 400
      const maxHeight = 700
      const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload, title,  rowData, current
               , setRowData, setCurrent, handleLanguageChange}] = UseMasterfileForm(current_)
      useEffect(() => {
          iwsStore.subscribe(setIwsState)
-         Get(parent_ctx, token, module_.modelid, setAccData)
+         //Get(parent_ctx, token, module_.modelid, setAccData)
          setCurrent(current_)
      }, [current_])
 
@@ -64,7 +62,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          },
      }
      const collapse=  state.collapse
-   console.log('accountData', accData)
      return (
          <>
              <CommonFormHead
