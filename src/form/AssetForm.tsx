@@ -18,8 +18,9 @@ import Login from './Login'
 import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import UseMasterfileForm from "./UseMasterfileForm.ts";
-import useForm from "./UseForm.ts";
+import UseMasterfileForm from './UseMasterfileForm.ts'
+import useForm from './UseForm.ts'
+
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -93,6 +94,7 @@ const AssetForm = () => {
               handleLanguageChange={handleLanguageChange}
               dispatch={dispatch}
           />
+
           <Grid container style={{...STYLES.inner, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
             <AssetMainForm current={current} setCurrent={setCurrent} disable={disable} t={t}
                                  accData ={accData} height={height} locale ={locale ??'fr-FR'} currency ={currencyx} zIndex={9999}/>

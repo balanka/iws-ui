@@ -62,7 +62,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          Get(ccy_ctx, token??'noToken', ccy_modelid, setCcyData)
          setCurrent(current_)
      }, [selected])
-  console.log('ccyData', ccyData)
+
       const load = (event: any) => {
          event.preventDefault()
         reload()

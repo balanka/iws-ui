@@ -452,21 +452,20 @@ export interface UseCustomerFormResult<T extends IBusinespartner> {
   , title:string
   , setGridApi:Dispatch<SetStateAction<GridApi<any>|undefined>>
 }
-
+//[{ profile, menu, selected, t, language, accData, setAccData, fmodule, setFmodule
+//      , current_, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction, handleLanguageChange
+//      , setModel, handleKeyPress, onNewLine, onRowSelected, onDeleteLine, submitCancel, submitPost
+//      , copyCall, setGridApi, templateName, zIndex, saveProps, modelid, isFetching, setIsFetching}]
 export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends  IWSLine> {
   profile: IProfile
   , menu: Map<any, any>
   , selected: string
   , t:TFunction<'translation', undefined>
   , language:string
-  , isFetching:boolean
   , accData?:IAccount[]
-  , storeData:IStore[]
+  , setAccData:Dispatch<SetStateAction<IAccount[]>>
   , fmodule:IFmodule[]
-  , articleData?:IArticle[]
-  , vatData?:IVat[]
-  , rowData:T[]
-  , setRowData:Dispatch<SetStateAction<T[]>>
+  , setFmodule:Dispatch<SetStateAction<IFmodule[]>>
   , current_ :T
   , current:T
   , setCurrent:Dispatch<SetStateAction<T>>
@@ -476,7 +475,6 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , copyFromTransaction:T[]
   , setCopyFromTransaction:Dispatch<SetStateAction<T[]>>
   , handleLanguageChange:(event:any) =>void
-  , handleModuleChange:(event:any) =>void
   , setModel:Dispatch<SetStateAction<number>>
   , handleKeyPress:(event:any)=>void
   , onNewLine:()=>void
@@ -490,8 +488,10 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , zIndex:number
   , saveProps:SaveProps
   , modelid:number
-  , partnerId:number
-  , title:string
+  , isFetching:boolean
+  , setIsFetching:Dispatch<SetStateAction<boolean>>
+  //, partnerId:number
+  //, title:string
 }
 export interface UseJFormResult<T> {
   profile: IProfile
