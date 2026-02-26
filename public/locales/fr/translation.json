@@ -239,7 +239,7 @@
     "quantityUnit": "Unité",
     "packUnit": "Emballage",
     "stocked": "Stocké",
-    "group": "Groupe",
+    "group": "Groupe/fam.",
     "vat": "Code TVA",
     "stock": {
       "account": "Stock"
