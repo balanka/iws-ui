@@ -12,7 +12,7 @@ import {initAsset, MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import {assetColumnDefs} from '../ColumnsDefs.ts'
-import {IAccount, IAsset} from '../Models.ts'
+import {IAccount, IAsset, IMasterfile} from '../Models.ts'
 import {AssetGrid} from '../IWSGrid.tsx'
 import Login from './Login'
 import {logout} from '../utils/FormUtils.tsx'
@@ -53,10 +53,13 @@ const AssetForm = () => {
   let navigate = useNavigate()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const acc_modelid = formEnum.ACCOUNT
+  const ccy_modelid = formEnum.CURRENCY
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
+  const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
   const current_: IAsset = initAsset[0]
   const [, setIwsState] = useState(iwsStore.initialState)
   const [accData, setAccData] = useState<IAccount[]>([])
+  const [ccyData, setCcyData] = useState<IMasterfile[]>([])
   const minHeight = 350
   const maxHeight = 700
   const height = 33
@@ -66,6 +69,7 @@ const AssetForm = () => {
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
     !acc_ctx.includes('-1')&&Get(acc_ctx, token, acc_modelid, setAccData)
+    Get(ccy_ctx, token, ccy_modelid, setCcyData)
      setCurrent(current_)
   }, [])
 
@@ -97,7 +101,7 @@ const AssetForm = () => {
 
           <Grid container style={{...STYLES.inner, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
             <AssetMainForm current={current} setCurrent={setCurrent} disable={disable} t={t}
-                                 accData ={accData} height={height} locale ={locale ??'fr-FR'} currency ={currencyx} zIndex={9999}/>
+                                 accData ={accData} ccyData ={ccyData}  height={height} locale ={locale ??'fr-FR'} currency ={currencyx} zIndex={9999}/>
          </Grid>
         <Grid container
             // @ts-ignore

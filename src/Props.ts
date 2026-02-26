@@ -117,6 +117,7 @@ export interface AssetProps {
     current: IAsset
     , setCurrent: (arg: IAsset) => void
     , accData: IAccount[]
+    , ccyData: IMasterfile[]
     , t: TFunction<'transalation', undefined>
     , disable: boolean
     , locale: string

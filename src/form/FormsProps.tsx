@@ -1504,7 +1504,7 @@ export const BankStatementMainForm = ({ collapse, current, setCurrent, t, locale
     )
 }
 export const AssetMainForm =
-  ({ current, setCurrent, t, accData, height, disable, locale } :AssetProps) => {
+  ({ current, setCurrent, t, accData, ccyData, height, disable, locale } :AssetProps) => {
 
     const amountLabel = t('asset.amount')
     const scrapValueLabel = t('asset.scrapValue')
@@ -1603,14 +1603,9 @@ export const AssetMainForm =
                     <FieldLabel title={ t('common.currency')} />
                 </CCol>
                 <CCol sm="2">
-                    <InputField
-                        fieldName="currency"
-                        current={current}
-                        setCurrent={setCurrent}
-                        value={ current.currency}
-                        disabled={true}
-                        style={{ height: 30, textAlign: 'left', padding:5 }}
-                    />
+                    <MasterfileXComboBox fieldName={'currency'} current={current} setCurrent={setCurrent}
+                                             data={ccyData} defaultValue={initCurrency[0]} zIndex={11} disable={disable}
+                                             styles={{...styles, minHeight:25, height:25, width:'100%', color: '#6b7280'}}/>
                 </CCol>
             </CInputGroup>
             <CInputGroup  style={{ height: height }}>
