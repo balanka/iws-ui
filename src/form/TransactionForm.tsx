@@ -15,15 +15,16 @@ import {styles as stylesx} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {FinancialsFormHead, TransactionMainForm} from './FormsProps.tsx'
-import {initCust, initLineTransaction, initLtr, TRANSACTION} from './Menu.tsx'
+import {initCust, initfModule, initLineTransaction, initLtr, MASTERFILE, TRANSACTION} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 
 import {
+  IArticle,
   ICustomer,
   IFinancials, IFmodule,
   ILineFinancials,
-  ILineTransaction, ISupplier,
-  ITransaction,
+  ILineTransaction, IStore, ISupplier,
+  ITransaction, IVat,
 } from '../Models.ts'
 import {TransactionGrid} from '../IWSGrid.tsx'
 import {lineTransactionColumnDefs, transactionColumnDefs} from '../ColumnsDefs.ts'
@@ -36,6 +37,8 @@ import {useDispatch} from 'react-redux'
 import {generateDocx} from './../utils/XlsUtils.ts'
 import useTransactionForm from './UseTransactionForm.ts'
 import useForm from './UseForm.ts'
+import {formEnum} from '../utils/FormEnum.tsx'
+import {Get, Get3} from './CrudController.ts'
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
@@ -52,26 +55,56 @@ const STYLES = {
   }
 }
  const TransactionForm = () => {
-   const [{selected, t, toggle, state, module_ }] = useForm()
+   const [{profile, selected, t, toggle, state, module_, modelid }] = useForm()
+   const { token, company } = profile
    const dispatch = useDispatch()
   let navigate = useNavigate()
   if (module_ === '11111' || module_ === 11111) return <Login/>
+   let title_ = `${company}/${t(module_.title)}`
   const initialState:ITransaction = initLtr [0]
   const initialLine:ILineTransaction = initLineTransaction
   const current_:ITransaction = initialState
    const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
-   const  [{  language, isFetching, storeData, articleData, fmodule, rowData
-    , setRowData, vatData,  current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
-    , handleModuleChange, onRowSelected, onNewLine, handleLanguageChange
-     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, partnerId, title}] =
-     useTransactionForm(current_, initialLine, currentLine)
+   const [rowData, setRowData] = useState<ITransaction[]>([])
+   const  [{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
+     , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setAccData, setFmodule, setModel
+     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching, setIsFetching }] =
+     useTransactionForm(current_??initLtr [0], initialLine, currentLine, rowData, setRowData)
 
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
    const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
+   const acc_modelid = formEnum.ACCOUNT
+   const art_modelid = formEnum.ARTICLE
+   const vat_modelid = formEnum.VAT
+   const store_modelid = formEnum.STORE
+   const sup_modelid = formEnum.SUPPLIER
+   const cust_modelid = formEnum.CUSTOMER
+   const fmodule_modelid = formEnum.FMODULE
+   const art_ctx = `${MASTERFILE.article}/${art_modelid}/${company}`
+   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
+   const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
+   const store_ctx = `${MASTERFILE.store}/${store_modelid}/${company}`
+   const sup_ctx = `${MASTERFILE.sup}/${sup_modelid}/${company}`
+   const cust_ctx = `${MASTERFILE.cust}/${cust_modelid}/${company}`
+   const fmodule_ctx = `${MASTERFILE.fmodule}/${fmodule_modelid}/${company}`
+   const [storeData, setStoreData] = useState<IStore[]>([])
+   const [articleData, setArticleData] = useState<IArticle[]>([])
+   const [vatData, setVatData] = useState<IVat[]>([])
+   const [, setCustomerData] = useState<ICustomer[]>([])
+   const [, setSupplier] = useState<ISupplier[]>([])
+   const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
+   const [, setCopyFRom] = useState<number[]>([])
+   const [partnerId, setPartnerId] = useState<number>(-1)
+   const [title, setTitle] = useState(title_)
 
 
    useEffect(() => {
      iwsStore.subscribe(setIwsState)
+     Get(art_ctx, token, art_modelid, setArticleData)
+     Get(store_ctx, token, store_modelid, setStoreData)
+     Get(vat_ctx, token, vat_modelid, setVatData)
+     Get(cust_ctx, token, cust_modelid, setCustomerData)
+     Get(sup_ctx, token, sup_modelid, setSupplier)
      setCurrent(current_)
      setRowData([])
    }, [selected])
@@ -179,10 +212,49 @@ const STYLES = {
        , footText:current.footText
      }
    }
+   const submitQuery = (ctx:string, partnerCtx:string, partnerModelid:number) => {
+     setIsFetching(true)
+     !iwsState.get(fmodule_modelid)&&Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
+     !iwsState.get(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData)
+     !iwsState.get(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData)
+     !iwsState.get(store_modelid)&&Get(store_ctx, token, store_modelid, setStoreData)
+     !iwsState.get(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData)
+     !iwsState.get(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
+     !iwsState.get(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
+     Get3(ctx, token, modelid, current_, setRowData, setCurrent)
+     setIsFetching(false)
+   }
+
+   const handleModuleChange = (value:any) => {
+     setModel(value)
+     const mx:IFmodule = fmodule.find((m:IFmodule) => m?.id === value) ?? initfModule[0]
+     let templateFileName = mx.description
+     console.log('mx>>>>', mx)
+     console.log('value', value)
+     console.log('templateFileName >>>>', templateFileName)
+      title_ = mx?.name ? mx?.name : title_
+     const copyFromIds = mx? mx.copyFrom:-1
+     const titlex = `${company}/${title_}`
+     //console.log('titlex>>>>', titlex)
+     setTitle(titlex)
+     setCopyFRom([copyFromIds])
+     setPartnerId(parseInt(mx?.account))
+     setCurrent(current_)
+     const ctx = `${module_.ctx}/${mx.id}/${company}`
+     const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
+     const _partnerCtx:string = parseInt(mx?.account)===formEnum.CUSTOMER?MASTERFILE.cust:
+       (parseInt(mx?.account)==formEnum.SUPPLIER)?MASTERFILE.sup:''
+     const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
+     Get(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
+     submitQuery( ctx, partnerCtx, parseInt(mx?.account))
+     const rowDatax = rowData.filter(m=>m.modelid===current_.modelid)
+     const currentx = rowDatax.length>0?rowData[0]:current_
+     setCurrent(currentx)
+   }
+
   const ccData:ICustomer[]|ISupplier[] = iwsState.get(partnerId)??[initCust]
    const accData:ICustomer[]|ISupplier[] = ccData//.filter(m=>!m.id.toString().includes('*'))
    const stData = storeData.filter(m=>!m.id.toString().includes('*'))
-   console.log('stData>>>', stData)
     return isFetching?<CSpinner color="primary" />:(<>
             <FinancialsFormHead
                 title={title}

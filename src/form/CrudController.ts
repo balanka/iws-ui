@@ -270,16 +270,16 @@ const Login = (
 }
 
 const  Get3 = <A>(ctx:string, token:string, key: string|number
-                  , setRowData: (arg0:A[]) => void, setCurrent:Dispatch<SetStateAction<A>>): void => {
+                  , current_ :A, setRowData: (arg0:A[]) => void, setCurrent:Dispatch<SetStateAction<A>>): void => {
   const url = `${SERVER_URL}${ctx}`
     getFn(url, token ).then((data: A[]) => {
-      if (Array.isArray(data)) {
+      if (Array.isArray(data) && data.length>0) {
         iwsStore.put(key, data)
         setRowData(data as A[])
-        data.length>0? setCurrent(data[0]):void(0)
+        setCurrent(data[0])
       } else {
-        console.log('key>>>>', key)
-        console.log('data>>>>', data)
+        setRowData([])
+        setCurrent(current_)
       }
     }).catch(function (error) {
     console.log('Error', error)

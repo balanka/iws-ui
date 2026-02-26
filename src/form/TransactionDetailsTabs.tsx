@@ -31,7 +31,7 @@ const TransactionDetailsTabs = ({
     ...currentLineTransaction,
     transid: transaction?.id1
   }] : transaction?.lines
-  if(transaction.hasOwnProperty('lines')) {
+  if(transaction?.hasOwnProperty('lines')) {
     transaction.lines = linesx
   }else {
     transaction["lines"] = linesx

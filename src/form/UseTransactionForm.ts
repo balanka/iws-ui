@@ -10,19 +10,15 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {Add, Edit, EditRow, Get, Get2, Get3} from './CrudController.ts'
-import {initCust, initfModule, MASTERFILE} from './Menu.tsx'
+import {Add, Edit, EditRow, Get, Get2} from './CrudController.ts'
+import {initfModule, MASTERFILE} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {
   IAccount,
-  IArticle,
-  ICustomer,
   IFmodule,
   IModule,
-  IStore,
-  ISupplier,
-  IVat, IWSTransaction,
+  IWSTransaction,
 } from '../Models.ts'
 import {ILine, SaveProps, UseTransactionFormResult} from '../Props.ts'
 import useForm from './UseForm.ts'
@@ -30,54 +26,31 @@ import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const UseTransactionForm = <T extends IWSTransaction<ILine>,
-              L extends ILine>(current_ :T, initialLine :L, currentLine:L): [UseTransactionFormResult<T, ILine>]  => {
+              L extends ILine>(current_ :T, initialLine :L, currentLine:L, rowData:T[], setRowData:Dispatch<SetStateAction<T[]>>): [UseTransactionFormResult<T, ILine>]  => {
    const [{ profile, menu, selected, t, language, handleLanguageChange, modelid, module_}] = useForm()
    const { token, company, currency } = profile
    let templateFileName =''
   const [, setDisable] = useState(true)
-  let title_ = `${company}/${t(module_.title)}`
   const [current, setCurrent] = useState<T>(current_)
-  const [iwsState, setIwsState] = useState(iwsStore.initialState)
+  const [, setIwsState] = useState(iwsStore.initialState)
   const acc_modelid = formEnum.ACCOUNT
-  const art_modelid = formEnum.ARTICLE
-  const vat_modelid = formEnum.VAT
-  const store_modelid = formEnum.STORE
-  const sup_modelid = formEnum.SUPPLIER
-  const cust_modelid = formEnum.CUSTOMER
   const module_modelid = formEnum.MODULE
   const fmodule_modelid = formEnum.FMODULE
   const modifyUrl = selected
   let ctx = `${module_.ctx}/${modelid}/${company}`
-  const art_ctx = `${MASTERFILE.article}/${art_modelid}/${company}`
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
-  const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
-  const store_ctx = `${MASTERFILE.store}/${store_modelid}/${company}`
-  const sup_ctx = `${MASTERFILE.sup}/${sup_modelid}/${company}`
-  const cust_ctx = `${MASTERFILE.cust}/${cust_modelid}/${company}`
   const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
   const fmodule_ctx = `${MASTERFILE.fmodule}/${fmodule_modelid}/${company}`
   const [rows, ] = useState<bigint[]>([])
-  const [rowData, setRowData] = useState<T[]>([])
-  const [storeData, setStoreData] = useState<IStore[]>([])
    const [accData, setAccData] = useState<IAccount[]>([])
-  const [articleData, setArticleData] = useState<IArticle[]>([])
-  const [vatData, setVatData] = useState<IVat[]>([])
-  const [, setCustomerData] = useState<ICustomer[]>([])
-  const [, setSupplier] = useState<ISupplier[]>([])
-  const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
   const [, setModule] = useState<IModule[]>([])
-  const [copyFrom, setCopyFRom] = useState<number[]>([])
   const [copyFromTransaction, setCopyFromTransaction] = useState<T[]>([])
   const [fmodule, setFmodule] = useState<IFmodule[]>([])
   const [model, setModel] = useState<number>(-1)
-  const [partnerId, setPartnerId] = useState<number>(-1)
   const [isFetching, setIsFetching] = useState(false)
-  const [title, setTitle] = useState(title_)
   const [gridApi,   setGridApi] = useState<GridApi>()
   const zIndex:number = 99999
   const EXPORT_FILE_EXTENSION= "xlsx"
-  console.log('rowData', rowData)
-
   const handleKeyPress = useCallback((event:any) => {
     if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
       submitEdit(event)
@@ -91,47 +64,17 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
     if (!init.current) {
         iwsStore.subscribe(setIwsState)
         init.current = true
-        Get(art_ctx, token, art_modelid, setArticleData)
-        Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
-        Get(acc_ctx, token, acc_modelid, setAccData)
-        Get(store_ctx, token, store_modelid, setStoreData)
-        Get(vat_ctx, token, vat_modelid, setVatData)
-        Get(cust_ctx, token, cust_modelid, setCustomerData)
-        Get(sup_ctx, token, sup_modelid, setSupplier)
-        Get(module_ctx, token, fmodule_modelid, setModule)
+         Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
+         Get(acc_ctx, token, acc_modelid, setAccData)
+         Get(module_ctx, token, fmodule_modelid, setModule)
         // attach the event listener
-        document.addEventListener('keydown', handleKeyPress)
+         document.addEventListener('keydown', handleKeyPress)
     }
     // remove the event listener
     return () => {
       document.removeEventListener('keydown', handleKeyPress)
     }
-  }, [partnerId, copyFrom, current])
-
-  const handleModuleChange = (value:any) => {
-    setModel(value)
-    const mx:IFmodule = fmodule.find((m:IFmodule) => m?.id === value) ?? initfModule[0]
-     templateFileName = mx.description
-    console.log('mx>>>>', mx)
-    console.log('templateFileName >>>>', templateFileName)
-    title_ = mx?.name ? mx?.name : title_
-    const copyFromIds = mx? mx.copyFrom:-1
-    const titlex = `${company}/${title_}`
-    //console.log('titlex>>>>', titlex)
-    setTitle(titlex)
-    setCopyFRom([copyFromIds])
-    setPartnerId(parseInt(mx?.account))
-    setCurrent(current_)
-    ctx = `${module_.ctx}/${mx.id}/${company}`
-    const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
-    const _partnerCtx:string = parseInt(mx?.account)===formEnum.CUSTOMER?MASTERFILE.cust:
-                              (parseInt(mx?.account)==formEnum.SUPPLIER)?MASTERFILE.sup:''
-    const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
-    Get(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
-    submitQuery( ctx, partnerCtx, parseInt(mx?.account))
-    const currentx = rowData.length>0?rowData[0]:current_
-    setCurrent(currentx)
-  }
+  }, [current])
 
      function buildPostCall (rows: BigInt[], current:T, modifyUrl: string, token: string, setCurrent:Dispatch<SetStateAction<T>>) {
          const ids = rows.length > 0 ? rows : [current?.id]
@@ -148,8 +91,6 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
   const submitPost = (event:any) => callSubmitPost(event, module_?.ctx, token, current, setCurrent, rows)
   const submitAdd = (event:any) => {
     event.preventDefault()
-    ///console.log('model', model)
-    //console.log('modelid', modelid)
     const row: T = { ...current, modelid: model, company: company}
     Add(modifyUrl, token, row, rowData, setCurrent)
   }
@@ -162,7 +103,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
            if(dx.hasOwnProperty('lines'))
              dx.lines.push(newLine)
            else dx['lines'] = [{...newLine}]
-           gridApi!.applyTransaction({add: [newLine]})
+           gridApi!?.applyTransaction({add: [newLine]})
            console.log('dx', dx)
            setCurrent(dx)
          },
@@ -204,7 +145,9 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
 
   const initAdd = () => {
     setDisable(false)
-    const newRow:T = {...current_, company: company, currency: currency, editing: false}
+    console.log('current_', current_)
+    const currentN = {...current_, lines:[initialLine]}
+    const newRow:T = {...currentN, company: company, currency: currency, editing: false}
     EditRow(newRow, true, setCurrent)
   }
   const reload = () => {
@@ -228,20 +171,11 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
       Add(modifyUrl, token, newRow, rowData, setCurrent)
     }
   }
-  const submitQuery = (ctx:string, partnerCtx:string, partnerModelid:number) => {
-    setIsFetching(true)
-    !iwsState.get(fmodule_modelid)&&Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
-    !iwsState.get(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData)
-    !iwsState.get(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData)
-    !iwsState.get(store_modelid)&&Get(store_ctx, token, store_modelid, setStoreData)
-    !iwsState.get(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData)
-    !iwsState.get(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
-    !iwsState.get(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
-    Get3(ctx, token, modelid, setRowData, setCurrent)
-    setIsFetching(false)
-  }
 
-  const onRowSelected = (event: RowSelectedEvent) => setCurrent(event.data)
+  const onRowSelected = (event: RowSelectedEvent) => {
+     console.log('event.data', event)
+     setCurrent(event.data)
+  }
 
   const sheetName ="Sheet1"
   const exportFileName =()=> {
@@ -250,9 +184,9 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
   }
    const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current?.lines??[] }
 
-   return [{ profile, menu, selected, t, language, isFetching, storeData, accData, articleData, fmodule, rowData
-     , setRowData, vatData, current_, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction,  setCopyFromTransaction
-     , handleLanguageChange, handleModuleChange, setModel, handleKeyPress, onNewLine, onRowSelected, onDeleteLine, submitCancel, submitPost
-     , copyCall, setGridApi, templateName, zIndex, saveProps, partnerId, modelid, title}]
+   return [{ profile, menu, selected, t, language, accData, setAccData, fmodule, setFmodule
+     , current_, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction, setCopyFromTransaction
+     , handleLanguageChange, setModel, handleKeyPress, onNewLine, onRowSelected, onDeleteLine, submitCancel, submitPost
+     , copyCall, setGridApi, templateName, zIndex, saveProps, modelid, isFetching, setIsFetching}]
 }
 export default UseTransactionForm

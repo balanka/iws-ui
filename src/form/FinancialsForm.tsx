@@ -43,10 +43,11 @@ const FinancialsForm = () => {
   const current_: IFinancials = initFtr [0]
   const initialLine:ILineFinancials = initLineFinancials
   const [currentLine, setCurrentLine] = useState<ILineFinancials>(initialLine)
-  const  [{  language, isFetching, fmodule, rowData
-    , setRowData,  current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction, setCopyFromTransaction
-    , onRowSelected, onNewLine, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex
-    , handleLanguageChange, setModel, saveProps, modelid}] = useTransactionForm(current_, initialLine, currentLine)
+  const [rowData, setRowData] = useState<IFinancials[]>([])
+  const  [{  language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction
+    , setCopyFromTransaction, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex
+    , handleLanguageChange, setModel, saveProps, modelid, isFetching, setIsFetching }] = useTransactionForm(current_, initialLine, currentLine, rowData
+    , setRowData)
 
   const [_, setIwsState] = useState(iwsStore.initialState)
   const [title, setTitle] = useState(title_)
@@ -59,10 +60,9 @@ const FinancialsForm = () => {
   const [ccData, setCcData] = useState<IMasterfile[]>([])
 
   const handleModuleChange = (value:any) => {
-    //setModel(value)
+    setModel(value)
     const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]
     title_ = mx?.name ? mx.name : title_
-    console.log('title_', title_)
     title_ = `${company}/${title_}`
     const copyFromIds = mx? mx.copyFrom:-1
     setTitle(title_)
@@ -89,9 +89,11 @@ const FinancialsForm = () => {
 
   const submitQuery = (ctx:string, event?:any) => {
     event?.preventDefault()
+    setIsFetching(true)
     !accData&&Get(acc_ctx,  token, acc_modelid, setAccData)
     !ccData&&Get(cc_ctx, token, cc_modelid, setCcData)
-    Get3(ctx, token, modelid, setRowData, setCurrent)
+    Get3(ctx, token, modelid, current_, setRowData, setCurrent)
+    setIsFetching(false)
   }
 
   const fmoduleData = (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id)
