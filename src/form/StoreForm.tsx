@@ -25,11 +25,12 @@ import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const StoreForm= () => {
      const [{profile, t, state, toggle, company, module_}] = useForm()
-     const { token, locale } = profile
+     const { token, locale, stockAcc, expenseAcc } = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
      if (module_ === '11111' || module_ === 11111) return <Login/>
-     const current_: IStore = {...initStore[0], stocks:[], company:company}
+
+     const current_: IStore = {...initStore[0], account:stockAcc??'', oaccount:expenseAcc??'' , stocks:[], company:company}
      const [, setIwsState] = useState(iwsStore.initialState)
      const [ccData, setCcData] = useState<IMasterfile[]>([])
      const [accData, setAccData] = useState<IAccount[]>([])

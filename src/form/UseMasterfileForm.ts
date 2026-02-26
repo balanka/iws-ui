@@ -11,7 +11,7 @@ import {IWSModel} from '../Models.ts'
 import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,])
 
-const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormResult<T>] => {
+const UseMasterfileForm = <T extends IWSModel>(current_ :T, ctx_?:string, url?:string): [UseMasterfileFormResult<T>] => {
   const [{ profile, menu, selected, t, i18n, title:title, language, handleLanguageChange, modelid}]  = useForm()
   const { token, company} = profile
   const [edited, setEdited] = useState<boolean>(false)
@@ -19,8 +19,8 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T): [UseMasterfileFormR
   const [current, setCurrent] = useState<T>(current_)
   const [rowData, setRowData] = useState<T[]>([])
   const [disable, setDisable] = useState(true)
-  const modifyUrl = selected //??MASTERFILE.article
-  const ctx = `${selected}/${modelid}/${company}`
+  const modifyUrl = url??selected //??MASTERFILE.article
+  const ctx = ctx_??`${selected}/${modelid}/${company}`
   const zIndex = 9999
 
   console.log('modifyUrl',  modifyUrl)

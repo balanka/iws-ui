@@ -2,7 +2,7 @@ export const formEnum =  {
     SUPPLIER: 1,
     CUSTOMER: 3,
     COSTCENTER: 6,
-    FINANCIALS: 7,
+    FINANCIALS: 1300,
     JOURNAL:10002 ,
     ACCOUNT: 9,
     COMPANY: 10,

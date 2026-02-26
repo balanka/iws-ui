@@ -15,7 +15,7 @@ import {styles as stylesx} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {FinancialsFormHead, TransactionMainForm} from './FormsProps.tsx'
-import {initCust, initLtr, TRANSACTION} from './Menu.tsx'
+import {initCust, initLineTransaction, initLtr, TRANSACTION} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 
 import {
@@ -57,7 +57,7 @@ const STYLES = {
   let navigate = useNavigate()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const initialState:ITransaction = initLtr [0]
-  const initialLine:ILineTransaction = initLtr [0].lines[0]
+  const initialLine:ILineTransaction = initLineTransaction
   const current_:ITransaction = initialState
    const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
    const  [{  language, isFetching, storeData, articleData, fmodule, rowData

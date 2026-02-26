@@ -27,7 +27,15 @@ const TransactionDetailsTabs = ({
 
     const height = 20
     const disable = transaction?.posted
-    transaction.lines = !transaction?.lines?.length?  [ {...currentLineTransaction, transid:transaction?.id1}]:transaction?.lines
+  const linesx = !transaction?.lines?.length ? [{
+    ...currentLineTransaction,
+    transid: transaction?.id1
+  }] : transaction?.lines
+  if(transaction.hasOwnProperty('lines')) {
+    transaction.lines = linesx
+  }else {
+    transaction["lines"] = linesx
+  }
     const props: TransactionDetailsFormProps<ITransaction, ILineTransaction> = { transaction, setTransaction, currentLineTransaction
         , setCurrentLineTransaction, articleData, vatData, t, disable, height
     }

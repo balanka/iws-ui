@@ -25,17 +25,19 @@ import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const ArticleForm = () => {
-   const [{  selected, t, toggle, state, module_ }] = useForm()
+   const [{profile,  selected, t, toggle, state, module_ }] = useForm()
+   const { token, company, locale, currency, stockAcc, expenseAcc, revenueAcc, vat} = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
      if (module_ === '11111' || module_ === 11111) return <Login/>
      const height = 20
-     const initialState:IArticle = {...initArticle[0], stocks:[]}
      const acc_modelid = formEnum.ACCOUNT
      const vat_modelid = formEnum.VAT
      const qttyUnit_modelid = formEnum.QUANTITYUNIT
      const group_modelid = formEnum.ARTICLE_GROUP
      const ccy_modelid = formEnum.CURRENCY
+     const initialState:IArticle = {...initArticle[0], account:stockAcc??'',  oaccount:expenseAcc??''
+       , revenueAccount:revenueAcc??'', vatCode:vat??'',  currency:currency??'', stocks:[]}
      const current_: IArticle = initialState
      const [, setIwsState] = useState(iwsStore.initialState)
      const [accData, setAccData] = useState<IAccount[]>([])
@@ -43,9 +45,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const [quantityUnitData, setQuantityUnitData] = useState<IMasterfile[]>([])
      const [vatData, setVatData] = useState<IVat[]>([])
      const [ccyData, setCcyData] = useState<IMasterfile[]>([])
-     const [{profile, language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
+     const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
        , handleLanguageChange, title, zIndex, rowData, current, setCurrent }] = UseMasterfileForm(current_)
-     const { token, company, locale, currency} = profile
      const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
      const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
      const qttyUnit_ctx = `${MASTERFILE.masterfile}/${qttyUnit_modelid}/${company}`

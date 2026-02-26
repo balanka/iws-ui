@@ -168,7 +168,7 @@ export interface FModuleProps2<A extends IMasterfile2>{
   setCurrent: (arg: any) => void,
   accData: IMasterfile[],
   accountData: IMasterfile[],
-  rowData: IMasterfile2[],
+  rowData: A[],
   t: TFunction<'translation', undefined>,
   disable: boolean,
   height: number
@@ -477,6 +477,7 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , setCopyFromTransaction:Dispatch<SetStateAction<T[]>>
   , handleLanguageChange:(event:any) =>void
   , handleModuleChange:(event:any) =>void
+  , setModel:Dispatch<SetStateAction<number>>
   , handleKeyPress:(event:any)=>void
   , onNewLine:()=>void
   , onRowSelected: (event: RowSelectedEvent) => void

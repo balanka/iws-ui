@@ -18,7 +18,6 @@ const FinancialsDetailsTabs  = ({ transaction
 
     const height = 20
     const disable = transaction.posted
-    console.log('Financials current_', currentLineFinancials)
     let  props:FinancialsDetailsFormProps<IFinancials, ILineFinancials> = {transaction, setTransaction
                                                , currentLineFinancials
                                                , setCurrentLineFinancials, accData, t, zIndex, disable,  height}
@@ -35,7 +34,8 @@ const FinancialsDetailsTabs  = ({ transaction
           <LineTFinancialsGrid
               // @ts-ignore
               theme="legacy" columnDefs={LinesFinancialsColumns(t)} onRowSelected={onRowSelected}
-              onGridReady={onGridReady}  rowData={transaction?.lines??[]} pagination={false} />
+              onGridReady={onGridReady}  rowData={!transaction?.lines?.length?[ {...currentLineFinancials
+              , transid:transaction?.id1}]:transaction?.lines} pagination={false} />
       </Grid>
   const tabContent = [
       { title: t('financials.line.title'), id: 1, form: table },

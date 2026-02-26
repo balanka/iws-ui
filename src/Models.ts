@@ -161,6 +161,9 @@ export interface ICompany  extends IBusinespartner {
     balanceSheetAcc: string,
     incomeStmtAcc: string,
     cashAcc:string,
+    //stockAcc:string
+    //expenseAcc:string
+    //revenueAcc:string
     currency: string,
     pageHeaderText: string,
     pageFooterText: string,
@@ -283,7 +286,8 @@ export interface IVat extends IMasterfile {
 }
 export interface IProfile {
   token: string, company: string, currency?:string, locale?:string, language?: string, incomeStmtAcc?: string
-  , modules?: any[], roles?: any[], rights?: any[], error?: string,
+  , stockAcc?: string, expenseAcc?: string, revenueAcc?: string,  vat?: string, modules?: any[], roles?: any[]
+  , rights?: any[], error?: string,
 }
 
 export interface ISTORE_Return {

@@ -92,6 +92,11 @@ const getOtherUserData = (companyURL: string, token: string, moduleURL: string
             const locale: string = response.locale
             const currency: string = response.currency
             const incomeStmtAcc: string = response.incomeStmtAcc
+            const stockAcc = response.account??''
+            const expenseAcc= response.oaccount??''
+            const revenueAcc= response.salesClearingAcc??''
+            const vat= response.vatCode
+          console.log('response>>>', response)
           /* Fetch Module data from  api and use to build user menu on UI */
             getFn(moduleURL, token)
                 .then((response) => {
@@ -119,6 +124,10 @@ const getOtherUserData = (companyURL: string, token: string, moduleURL: string
                         locale: locale,
                         currency: currency,
                         incomeStmtAcc: incomeStmtAcc,
+                        stockAcc: stockAcc,
+                        expenseAcc: expenseAcc,
+                        revenueAcc: revenueAcc,
+                        vat:vat
                     }
                     const profile_ :IProfile = JSON.parse(JSON.stringify(profilex))
                     setProfile(profile_)

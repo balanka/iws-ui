@@ -30,11 +30,10 @@ import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const UseTransactionForm = <T extends IWSTransaction<ILine>,
-              L extends ILine>(current_ :T, currentLine_ :L, currentLine:L): [UseTransactionFormResult<T, ILine>]  => {
+              L extends ILine>(current_ :T, initialLine :L, currentLine:L): [UseTransactionFormResult<T, ILine>]  => {
    const [{ profile, menu, selected, t, language, handleLanguageChange, modelid, module_}] = useForm()
    const { token, company, currency } = profile
    let templateFileName =''
-
   const [, setDisable] = useState(true)
   let title_ = `${company}/${t(module_.title)}`
   const [current, setCurrent] = useState<T>(current_)
@@ -149,17 +148,22 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
   const submitPost = (event:any) => callSubmitPost(event, module_?.ctx, token, current, setCurrent, rows)
   const submitAdd = (event:any) => {
     event.preventDefault()
+    ///console.log('model', model)
+    //console.log('modelid', modelid)
     const row: T = { ...current, modelid: model, company: company}
     Add(modifyUrl, token, row, rowData, setCurrent)
   }
      const addLine = useCallback(
          ( line:L, setCurrent:Dispatch<SetStateAction<T>>) => {
              const dx: T = {...current}
-             const newLine:L = {...line, id: BigInt(-1), transid: current?.id1}
+           console.log('Line', line)
+             const newLine:L = {...line, id: BigInt(-1), transid: current?.id1, company:company}
+           console.log('newLine', newLine)
            if(dx.hasOwnProperty('lines'))
              dx.lines.push(newLine)
            else dx['lines'] = [{...newLine}]
            gridApi!.applyTransaction({add: [newLine]})
+           console.log('dx', dx)
            setCurrent(dx)
          },
          [current],
@@ -190,7 +194,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
     const url_ = _ctx.replace('ltr', 'cancelnLtr')
     BigInt(current.id )> 0 ? Edit(url_, token, current, data, setCurrent) : current
   }
-  const onNewLine = () => addLine (currentLine_,  setCurrent)
+  const onNewLine = () => addLine (initialLine,  setCurrent)
   const onDeleteLine = (event:any) => {
       onRemoveSelectedLine (event, current,  setCurrent);
       (BigInt(current.id) > 0) && Edit(modifyUrl, token, current, rowData, setCurrent)//submitAdd(current)
@@ -248,7 +252,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
 
    return [{ profile, menu, selected, t, language, isFetching, storeData, accData, articleData, fmodule, rowData
      , setRowData, vatData, current_, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction,  setCopyFromTransaction
-     , handleLanguageChange, handleModuleChange, handleKeyPress, onNewLine, onRowSelected, onDeleteLine, submitCancel, submitPost
+     , handleLanguageChange, handleModuleChange, setModel, handleKeyPress, onNewLine, onRowSelected, onDeleteLine, submitCancel, submitPost
      , copyCall, setGridApi, templateName, zIndex, saveProps, partnerId, modelid, title}]
 }
 export default UseTransactionForm

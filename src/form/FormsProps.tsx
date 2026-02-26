@@ -1792,7 +1792,7 @@ export const MasterfilesForm2 =
         <Grid item sm={8} xs={2}>
           <Grid container maximize style={STYLES.fuller} justify="flex-start" alignItems="stretch">
             <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-              <div>{current?.hasOwnProperty('parent') && current.parent?t('common.parent'):null}</div>
+              <div>{current?.hasOwnProperty('parent') && current.parent?t('article.group'):null}</div>
             </Grid>
             <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
               { current?.hasOwnProperty('parent')?// && current.parent?
@@ -2368,7 +2368,7 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                                     fieldName="pprice"
                                     current={current}
                                     setCurrent={setCurrent}
-                                    value={Number(current?.pprice).toFixed(2)}
+                                    value={Number(current?.pprice)}
                                     //value={current?.pprice}
                                     disabled={disable}
                                     style={{ height: 20, width:140, textAlign: 'right', padding: 2, fontSize:12}}
@@ -2403,7 +2403,7 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                                     current={current}
                                     setCurrent={setCurrent}
                                     //onChange={(value: any, _event: any) => setCurrent({...current, [fieldName]: value})}
-                                    value={Number(current?.sprice).toFixed(2)}
+                                    value={Number(current?.sprice)}
                                     disabled={disable}
                                     style={{ height: 20, width:140, textAlign: 'right', padding:5, fontSize:12}}
                                 />
@@ -2441,7 +2441,7 @@ export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
                                     fieldName="avgPrice"
                                     current={current}
                                     setCurrent={setCurrent}
-                                    value={Number(current?.avgPrice).toFixed(2)}
+                                    value={Number(current?.avgPrice)}
                                     disabled={disable}
                                     style={{ height: 20, width:140, textAlign: 'right', padding: 5, fontSize:12}}
                                 />

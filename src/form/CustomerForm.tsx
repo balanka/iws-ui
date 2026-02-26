@@ -26,10 +26,11 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const CustomerForm = () => {
   const [{ profile, selected, t, toggle, state, modelid, module_ }] = useForm()
-  const { locale } = profile
+  const { locale, stockAcc, expenseAcc, vat, currency } = profile
   const [, setIwsState] = useState(iwsStore.initialState)
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  const current_ : IBusinespartner= modelid ===formEnum.CUSTOMER?initCust[0]:(modelid ===formEnum.SUPPLIER)?initSup[0]:initEmp[0]
+  const initial = modelid ===formEnum.CUSTOMER?initCust[0]:(modelid ===formEnum.SUPPLIER)?initSup[0]:initEmp[0]
+  const current_ : IBusinespartner= {...initial, account:stockAcc??'', oaccount:expenseAcc??'', vatCode:vat??'', currency:currency??''}
   const  [{ edited, added, disable, language, accData, bankData, ccyData
     , rowData, setRowData, vatData, current, setCurrent, currentBankAccount, setCurrentBankAccount
     , edit, initAdd, reload, cancelEdit, submitEdit, handleLanguageChange, onNewBankAccount
