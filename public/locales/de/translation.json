@@ -62,6 +62,7 @@
     "amount"      : "Betrag",
     "quantity":  "Menge",
     "charge": "Charge",
+    "costcenter":   "C.coûts",
     "street"      : "Strasse",
     "period"      : "B.periode",
     "zip"         : "PLZ",
@@ -400,6 +401,11 @@
     "post":"Beleg buchen "
   },
   "menu": {
+    "purchasing": "Einkauf",
+    "sales": "Vertrieb",
+    "inventory": "Bestandsführung",
+    "favoris": "Favorit",
+    "transactions": "Belege",
     "salary":{
       "item": "Komponenten des Gehalts"
     },

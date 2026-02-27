@@ -61,6 +61,7 @@
     "transactions": "Mouvements",
     "balance": "Solde",
     "quantity":  "Qté",
+    "costcenter":"C.coûts",
     "charge": "Charge",
     "amount"      : "Montant",
     "street"      : "Rue",
@@ -412,6 +413,11 @@
     "post":"validate or post a transaction"
   },
   "menu": {
+    "purchasing": "Achats",
+    "sales": "Ventes",
+    "inventory": "Gestion de stock",
+    "favoris": "Favoris",
+    "transactions": "Transactions",
     "salary":{
       "item": "Composantes du salaire"
       },

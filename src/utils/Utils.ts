@@ -8,6 +8,7 @@ export const getDateFromString = (param:string)=>{
     return `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month}.${year}`
 }
 
+
 export const sanitizeForId = (label: string) => {
     return label
         .toLowerCase()

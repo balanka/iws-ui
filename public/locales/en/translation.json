@@ -62,6 +62,7 @@
     "transactions": "Transactions",
     "quantity":  "Qtty",
     "charge": "Charge",
+    "costcenter":   "C.coûts",
     "amount"      : "Amount",
     "street"      : "Street",
     "period"      : "Period",
@@ -422,6 +423,11 @@
     "post":"validate or post a transaction"
   },
   "menu": {
+    "purchasing": "Purchasing",
+    "sales": "Sales",
+    "inventory": "Inventory",
+    "favoris": "Favoris",
+    "transactions": "Transactions",
     "salary":{
       "item": "Salary items"
     },

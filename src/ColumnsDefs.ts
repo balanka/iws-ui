@@ -1359,15 +1359,15 @@ export const storeColumnDefs =  (t: (arg0: string) => any):ColDef<IStore>[] =>  
     filter: "agTextColumnFilter",
   },
   {
-    field: 'account',
-    headerName: t('common.account'),
-    minWidth: 20,
-    filter: "agTextColumnFilter",
-  },
-  {
     field: 'description',
     headerName: t('common.description'),
     minWidth: 180,
+    filter: "agTextColumnFilter",
+  },
+  {
+    field: 'costcenter',
+    headerName: t('common.costcenter'),
+    minWidth: 10,
     filter: "agTextColumnFilter",
   },
   {

@@ -6,7 +6,8 @@ import { CNavGroup, CNavItem } from '@coreui/react'
 import { cilPuzzle } from '@coreui/icons/dist/esm/free/cil-puzzle'
 import { useTranslation } from 'react-i18next'
 import CIcon from '@coreui/icons-react'
-import {IMasterfile, IMasterfile2} from "../Models.ts";
+import {IMasterfile, IMasterfile2} from '../Models.ts'
+import {isArrayAndNotEmpty} from '../utils/Utils.ts'
 
 const Navigation = () => {
   const { profile, module, setModule } = useStore()
@@ -61,10 +62,10 @@ const Navigation = () => {
 
   const modules_ = module ? iwsStore.get(formEnum.MODULE) : []
   userMenu = modules_ //.map((m:IMasterfile)=>m.id)
+    console.log('userMenu', userMenu)
   const allItems:any[] = Array.isArray(modules_) && modules_.length > 0 ? modules_ : DEFAULT
   const allMenuItems:any[] = allItems.map((item:IMasterfile2) =>
-    Array.isArray(allItems) && allItems.length > 0
-        ? {
+    isArrayAndNotEmpty(allItems) ? {
           ...item,
           items: [
             ...allItems.filter((e: IMasterfile2) => e.parent === item.id
