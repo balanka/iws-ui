@@ -1,5 +1,5 @@
 import React, {CSSProperties, Dispatch, FC, MouseEventHandler, ReactNode} from 'react'
-import {Show, toOption, transactionToOption} from '../utils/FormUtils.tsx'
+import {getFiltered, Show, toOption, transactionToOption} from '../utils/FormUtils.tsx'
 import Grid from 'react-fast-grid'
 import {IoMdMenu} from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
@@ -3136,8 +3136,8 @@ export const TransactionDetailsForm = (
         , articleData, vatData, t,  disable, height }: TransactionDetailsFormProps<ITransaction, ILineTransaction> ) => {
     const current = currentLineTransaction
     const setCurrent = setCurrentLineTransaction
-    const currentArticle = articleData?.find((acc: { id: any }) => acc.id === current.article)
-    const currentVat = vatData?.find((vat: { id: any }) => vat.id === current.vatCode)
+    const currentArticle = articleData?.find((acc: { id: any }) => acc.id === current.article)??initArticle[0]
+    const currentVat = vatData?.find((vat: { id: any }) => vat.id === current.vatCode)??initVat[0]
     const  getPrice = (article:IArticle) => {
     return (transaction.modelid == formEnum.SALES_ORDER || transaction.modelid == formEnum.CUSTOMER_INVOICE||
       transaction.modelid == formEnum.DELIVERY) ? article.sprice :
@@ -3337,15 +3337,16 @@ const setTransactionF = ( transaction:IFinancials
     const linex: ILineTransaction|ILineFinancials = {...line, transid: transaction.id1};
     (idx === -1) ? transaction.lines.push(linex) : (transaction.lines[idx] = linex)
     setTransaction(transaction)
+    console.log('linex', linex)
     setCurrent(linex)
 }
 export const FinancialsDetailsForm = (
     { transaction, setTransaction, currentLineFinancials, setCurrentLineFinancials
-        , accData,  t, zIndex, disable, height }: FinancialsDetailsFormProps<IFinancials, ILineFinancials>) => {
+        , accData, accountFilter, oaccountFilter, t, zIndex, disable, height }: FinancialsDetailsFormProps<IFinancials, ILineFinancials>) => {
     const current = currentLineFinancials
     const setCurrent = setCurrentLineFinancials
-    const currentAccount = accData?.find((acc: { id: any }) => acc.id === current.account)
-    const currentOAccount = accData?.find((acc: { id: any }) => acc.id === current.oaccount)
+    const currentAccount = (accData?.find((acc: IAccount) => acc.id === current.account))??initAcc[0]
+    const currentOAccount  = (accData?.find((acc:IAccount) => acc.id === current.oaccount))??initAcc[0]
 
     return (
         <Grid container spacing={0} style={styles.outer}>
@@ -3368,7 +3369,7 @@ export const FinancialsDetailsForm = (
                                     setCurrent(currentx)
                                     setTransactionF(transaction, setTransaction, currentx, setCurrent)
                                 }}
-                                values={accData.slice().sort(sortById).map(toOption)}
+                                values={getFiltered(accData, accountFilter).slice().sort(sortById).map(toOption)}
                                 zIndex={zIndex-1}
                             />
                         </Grid>
@@ -3427,7 +3428,7 @@ export const FinancialsDetailsForm = (
                                     setCurrent(currentx)
                                     setTransactionF(transaction, setTransaction, currentx, setCurrent)
                                 }}
-                                values={accData.slice().sort(sortById).map(toOption)}
+                                values={getFiltered(accData, oaccountFilter).slice().sort(sortById).map(toOption)}
                                 zIndex={zIndex-2}
                             />
                         </Grid>
@@ -3500,7 +3501,7 @@ const setBusinessPartnerR = ( businessPartner:IBusinespartner
 }
 
 const MasterfileXComboBox:FC<MasterfileComboboxProps<IMasterfile, IMasterfile>> = ({current, setCurrent, data
-                                                                                     , fieldName, defaultValue,  zIndex, styles, disable})=> {
+                          , fieldName, defaultValue,  zIndex, styles, disable})=> {
   // @ts-ignore
   const currentAcc = (data ?? [defaultValue]).find((acc) => acc.id === current[fieldName]) ?? defaultValue
   return (
@@ -3516,7 +3517,7 @@ const MasterfileXComboBox:FC<MasterfileComboboxProps<IMasterfile, IMasterfile>> 
   )
 }
 const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction, IMasterfile>> =({current, setCurrent, data
-                                                                                             , fieldName, defaultValue,  zIndex, styles})=>{
+                          , fieldName, defaultValue,  accFilter = [], zIndex, styles})=>{
   // @ts-ignore
   const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === current[fieldName])??defaultValue
 
@@ -3526,7 +3527,7 @@ const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction, IMast
       disable={current.posted}
       value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
       onChange={(value:any, _event:any) => setCurrent({...current, [fieldName]: value })}
-      values={data.slice().sort(sortById).map(toOption)}
+      values={getFiltered(data, accFilter).slice().sort(sortById).map(toOption)}
       zIndex={zIndex}
     />
   )
@@ -3887,16 +3888,15 @@ export const CompanyAccountForm = (
 
 export const FinancialsMainForm =
                      ({ collapse, current,  setCurrent, t, handleModuleChange, storeData, accData, modules
-                        , copyFromTransaction, submitCopy, height, zIndex}:
+                        , copyFromTransaction, submitCopy, accountFilter, height, zIndex}:
                       { collapse:boolean, current:IFinancials, setCurrent:(arg:IFinancials) =>void
                        , t:TFunction<'translation', undefined>
                        , storeData:IMasterfile[], accData:IAccount[], modules:IFmodule[]
                        , copyFromTransaction:IFinancials[]
                        , handleModuleChange:(value:any)=>void
                        , submitCopy:(id:BigInt) =>void
+                       , accountFilter:string[]
                        , height:number, zIndex:number}) => {
-
-                       console.log('storeData', storeData)
     const styles = STYLES
     const currentx:IFinancials = Array.isArray(current)?current[0]:current
     const currentModule= modules.find((m:IFmodule) =>m.id == BigInt(currentx?.modelid))??initfModule[0]
@@ -3999,7 +3999,7 @@ export const FinancialsMainForm =
                     </Grid>
                      <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start" style={{paddingLeft:5}}>
                        <MasterfileComboBox current ={current} setCurrent ={setCurrent} data={storeData}
-                                  fieldName={"costcenter"} defaultValue={initCc[0]} zIndex={zIndex} styles={styles}/>
+                                  fieldName={"costcenter"} defaultValue={initCc[0]}  zIndex={zIndex} styles={styles}/>
                       </Grid>
                   </Grid>
                 </Grid>
@@ -4028,7 +4028,7 @@ export const FinancialsMainForm =
                     </Grid>
                     <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start" style={{paddingLeft:5}}>
                       <MasterfileComboBox  current={current} setCurrent={setCurrent} data={accData}
-                                           fieldName={"account"} defaultValue={initAcc[0]} zIndex={zIndex} styles={styles}/>
+                                           fieldName={"account"} defaultValue={initAcc[0]} accFilter={accountFilter} zIndex={zIndex} styles={styles}/>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -4185,7 +4185,7 @@ export const TransactionMainForm =
                         </Grid>
                         <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start" style={{paddingLeft:5}}>
                           <MasterfileComboBox  current={current} setCurrent={setCurrent} data={storeData}
-                              fieldName={"store"} defaultValue={initStore[0]} zIndex={zIndex} styles={styles}/>
+                              fieldName={"store"} defaultValue={initStore[0]}  zIndex={zIndex} styles={styles}/>
                         </Grid>
                       </Grid>
                     </Grid>

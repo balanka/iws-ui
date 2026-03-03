@@ -21,8 +21,6 @@ import {NavigateFunction} from "react-router-dom";
 import './i18n.tsx'
 import I18n from "./i18n.tsx";
 
-
-
 export interface AddressProps {
     current: IAddress,
     setCurrent: (arg: any | ICustomer | ISupplier | IEmployee) => void,
@@ -250,6 +248,8 @@ export interface FinancialsDetailsTabProps<T extends IFinancials, L extends  ILi
     currentLineFinancials:L,
     setCurrentLineFinancials:Dispatch<SetStateAction<L>>,
     accData: IAccount[],
+    accountFilter:string[],
+    oaccountFilter:string[],
     t: TFunction<'transalation', undefined>,
     zIndex:number,
     onGridReady:(params: GridReadyEvent)=>void,
@@ -262,6 +262,8 @@ export interface FinancialsDetailsFormProps<T extends IWSTransaction<L>, L exten
     currentLineFinancials:L,
     setCurrentLineFinancials:Dispatch<SetStateAction<L>>,
     accData: IAccount[],
+    accountFilter:string[],
+    oaccountFilter:string[],
     t: TFunction<'transalation', undefined>,
     disable: boolean,
     height?: number,
@@ -273,6 +275,8 @@ export interface TransactionDetailsTabProps <T extends ITransaction, L extends I
     setTransaction:Dispatch<SetStateAction<T>>,
     currentLineTransaction:L,
     setCurrentLineTransaction:Dispatch<SetStateAction<L>>,
+    accountFilter:string[],
+    oaccountFilter:string[],
     articleData: IArticle[],
     vatData: IVat[],
     t: TFunction<'transalation', undefined>,
@@ -287,6 +291,8 @@ export interface TransactionDetailsFormProps<T extends IWSTransaction<L>, L exte
     setTransaction:Dispatch<SetStateAction<T>>
     currentLineTransaction: L,
     setCurrentLineTransaction: Dispatch<SetStateAction<L>>,
+    accountFilter:string[],
+    oaccountFilter:string[],
     articleData: IArticle[],
     vatData: IVat[],
     t: TFunction<'transalation', undefined>,
@@ -319,6 +325,7 @@ export interface FinancialsCBoxProps2<A, B> {
   data: B[],
   fieldName:string,
   defaultValue:B
+  accFilter?:string[],
   zIndex: number,
   styles: any
 }

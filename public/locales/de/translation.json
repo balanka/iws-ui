@@ -405,6 +405,7 @@
     "sales": "Vertrieb",
     "inventory": "Bestandsführung",
     "favoris": "Favorit",
+    "payroll": "Gehaltsabrechnung",
     "transactions": "Belege",
     "salary":{
       "item": "Komponenten des Gehalts"

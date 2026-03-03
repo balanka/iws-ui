@@ -22,7 +22,8 @@ const styles = {
 const TransactionDetailsTabs = ({
                                       transaction, setTransaction
                                     , currentLineTransaction, setCurrentLineTransaction
-                                    , articleData, vatData, t, onGridReady,  zIndex
+                                   ,  accountFilter, oaccountFilter
+                                  , articleData, vatData, t, onGridReady,  zIndex
                                 }: TransactionDetailsTabProps<ITransaction, ILineTransaction>) => {
 
     const height = 20
@@ -37,7 +38,7 @@ const TransactionDetailsTabs = ({
     transaction["lines"] = linesx
   }
     const props: TransactionDetailsFormProps<ITransaction, ILineTransaction> = { transaction, setTransaction, currentLineTransaction
-        , setCurrentLineTransaction, articleData, vatData, t, disable, height
+        , setCurrentLineTransaction, accountFilter, oaccountFilter, articleData, vatData, t, disable, height
     }
     const onRowSelected = (event: RowSelectedEvent) => setCurrentLineTransaction(event.data)
 

@@ -14,13 +14,14 @@ const FinancialsDetailsTabs  = ({ transaction
                                     , setTransaction
                                     , currentLineFinancials
                                     , setCurrentLineFinancials
-                                    , accData, t,  zIndex, onGridReady}: FinancialsDetailsTabProps<IFinancials, ILineFinancials>) => {
+                                    , accData, accountFilter
+                                    , oaccountFilter,t,  zIndex, onGridReady}: FinancialsDetailsTabProps<IFinancials, ILineFinancials>) => {
 
     const height = 20
     const disable = transaction.posted
     let  props:FinancialsDetailsFormProps<IFinancials, ILineFinancials> = {transaction, setTransaction
-                                               , currentLineFinancials
-                                               , setCurrentLineFinancials, accData, t, zIndex, disable,  height}
+                                               , currentLineFinancials, setCurrentLineFinancials, accData
+      , accountFilter, oaccountFilter, t, zIndex, disable,  height}
 
     const onRowSelected = (event: RowSelectedEvent) => {
         setCurrentLineFinancials(event.data)

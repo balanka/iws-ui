@@ -93,8 +93,10 @@ const STYLES = {
    const [, setCustomerData] = useState<ICustomer[]>([])
    const [, setSupplier] = useState<ISupplier[]>([])
    const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
-   const [, setCopyFRom] = useState<number[]>([])
+   //const [, setCopyFRom] = useState<number[]>([])
    const [partnerId, setPartnerId] = useState<number>(-1)
+   const [accFilter, setAccFilter] = useState<string[]>([])
+   const [oaccFilter, setOAccFilter] = useState<string[]>([])
    const [title, setTitle] = useState(title_)
 
 
@@ -237,9 +239,11 @@ const STYLES = {
      const titlex = `${company}/${title_}`
      //console.log('titlex>>>>', titlex)
      setTitle(titlex)
-     setCopyFRom([copyFromIds])
+     //setCopyFRom([copyFromIds])
      setPartnerId(parseInt(mx?.account))
      setCurrent(current_)
+     setAccFilter(mx.accFilter?.replace(/\s/g,'').split(','))
+     setOAccFilter(mx.oaccFilter?.replace(/\s/g,'').split(','))
      const ctx = `${module_.ctx}/${mx.id}/${company}`
      const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
      const _partnerCtx:string = parseInt(mx?.account)===formEnum.CUSTOMER?MASTERFILE.cust:
@@ -294,6 +298,7 @@ const STYLES = {
               <TransactionDetailsTabs   transaction={current}  setTransaction={setCurrent}
                                         currentLineTransaction ={currentLine}
                                         setCurrentLineTransaction={setCurrentLine}
+                                        accountFilter={accFilter} oaccountFilter={oaccFilter}
                                         articleData={articleData??[]} vatData={vatData??[]}  t={t}
                                         onGridReady={onGridReady}  zIndex={2}/>
           </Grid>

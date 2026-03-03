@@ -293,9 +293,9 @@ const  Get = <A>(ctx:string, token:string, key: string|number, setRowData: Dispa
     const url = `${SERVER_URL}${ctx}`
     console.log('url', url)
      getFn(url,  token ).then((data: A[]) => {
-            console.log('data>>>>', data)
+            //console.log('data>>>>', data)
             if (Array.isArray(data)) {
-                console.log('dataXXX>>>>', data)
+                //console.log('dataXXX>>>>', data)
                 iwsStore.put(key, data)
                 setRowData(data as A[])
             } else{

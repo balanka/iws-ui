@@ -48,6 +48,8 @@ export interface IFmodule  extends IMasterfile2  {
   account:string,
   isDebit:boolean,
   copyFrom:number,
+  accFilter:string,
+  oaccFilter:string
 }
 export interface IAsset  extends IMasterfile  {
   account: string,

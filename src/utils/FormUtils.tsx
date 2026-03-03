@@ -1,8 +1,16 @@
 import React, {useState} from 'react'
-import {IFinancials, ITransaction} from "../Models.ts";
+import {IFinancials, IMasterfile, ITransaction} from "../Models.ts";
 import {NavigateFunction} from "react-router-dom";
 import iwsStore from "./Store.tsx";
 
+
+
+export const getFiltered =(accounts:IMasterfile[], filter:string[]):IMasterfile[]=>{
+  //console.log('filter', filter)
+  const result:IMasterfile[]= accounts.filter(m => checkIfStringStartsWith(m.id.toString(), filter))
+  //console.log('result', result)
+  return filter.length>0?uniq(result):accounts
+}
 export const AgGridCheckbox =
     (props: { value: { toString: () => string };
         setValue: (arg0: boolean) => void })=> {
@@ -17,6 +25,14 @@ export const AgGridCheckbox =
             <input type="checkbox" checked={isChecked} onChange={onChanged}/>
         </div>
     )
+}
+export function checkIfStringStartsWith(str:string, substrs:string[]) {
+  //return substrs??[].some(substr => str.startsWith(substr));
+  return [...substrs].some(substr => str.toLowerCase().startsWith(substr.toLowerCase()))
+}
+
+export function uniq <A>(a:A[]):A[] {
+  return Array.from(new Set(a));
 }
 
 interface ShowProps<T> {

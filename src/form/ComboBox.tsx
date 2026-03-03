@@ -24,7 +24,7 @@ const ComboBox = <T extends Base>({
     //console.log('fontSize', fontSize);
      const zindex = zIndex ?? 99999
     //const [items, setItems] = useState<ValueType<typeof value[0], true>>()
-    //console.log(items)
+
      const customStyles = {
          menu: (base:any) => ({
              ...base, ...style,
@@ -121,6 +121,7 @@ const ComboBox = <T extends Base>({
     const onSelectChange = (e:any) => {
         const val = values.find((m) => m.value === e?.value )//isId?(value.id === e?.id):(value.name === e?.target?.value))
         if (val) {
+          console.log('val', val)
             onChange(val.value, e)
         }
     }
@@ -133,6 +134,7 @@ const ComboBox = <T extends Base>({
                  //defaultValue={current?.value ? current : value}
                  defaultValue={value }
                  value ={value}
+                 //onInputChange={e=> console.log('eeeee', e)}
                  onChange={onSelectChange}
                  options={values?.map((m, index: number) => {
                      return {...m, color: (index % 2 === 0) ? '#87CEFA' : '#E0FFFF'}

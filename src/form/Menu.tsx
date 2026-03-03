@@ -656,6 +656,8 @@ export const initfModule:IFmodule[] = [
     account: '-1',
     isDebit: false,
     company: '',
+    accFilter:'',
+    oaccFilter:'',
   },
 ]
 export const MASTERFILE = {

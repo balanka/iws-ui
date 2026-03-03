@@ -427,6 +427,7 @@
     "sales": "Sales",
     "inventory": "Inventory",
     "favoris": "Favoris",
+    "payroll": "Payroll",
     "transactions": "Transactions",
     "salary":{
       "item": "Salary items"

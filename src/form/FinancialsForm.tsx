@@ -58,6 +58,8 @@ const FinancialsForm = () => {
   const cc_ctx = `${MASTERFILE.masterfile}/${cc_modelid}/${company}`
   const [accData, setAccData] = useState<IAccount[]>(initAcc)
   const [ccData, setCcData] = useState<IMasterfile[]>([])
+  const [accFilter, setAccFilter] = useState<string[]>([])
+  const [oaccFilter, setOAccFilter] = useState<string[]>([])
 
   const handleModuleChange = (value:any) => {
     setModel(value)
@@ -66,8 +68,9 @@ const FinancialsForm = () => {
     title_ = `${company}/${title_}`
     const copyFromIds = mx? mx.copyFrom:-1
     setTitle(title_)
-    //setCopyFrom([copyFromIds])
     setCurrent(current_)
+    setAccFilter(mx.accFilter?.replace(/\s/g,'').split(','))
+    setOAccFilter(mx.oaccFilter?.replace(/\s/g,'').split(','))
     console.log('mx', mx)
     const modelidx = mx.id.toString()??0
     setModel(parseInt(modelidx))
@@ -208,6 +211,7 @@ const FinancialsForm = () => {
                           copyFromTransaction={copyFromTransaction}
                           handleModuleChange={handleModuleChange}
                           submitCopy={copyCall}
+                          accountFilter={accFilter}
                           t={t} height ={20}
                           zIndex={zIndex-2}/>
       <Grid container
@@ -217,7 +221,7 @@ const FinancialsForm = () => {
         <FinancialsDetailsTabs  transaction={current}  setTransaction={setCurrent}
                                 currentLineFinancials ={currentLine}
                                 setCurrentLineFinancials={setCurrentLine}
-                                accData={accData??[]}  t={t}  onGridReady={onGridReady} zIndex={2}/>
+                                accData={accData??[]}  accountFilter={accFilter} oaccountFilter={oaccFilter} t={t}  onGridReady={onGridReady} zIndex={2}/>
       </Grid>
       <Grid container
         // @ts-ignore

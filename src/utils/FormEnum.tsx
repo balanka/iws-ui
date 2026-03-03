@@ -53,4 +53,6 @@ export const formEnum =  {
     ARTICLE_ACCOUNT_FORM: 10008,
     STORE_GENERAL_INFO_FORM: 10009,
      IJOURNAL:10010 ,
+
+
 }
