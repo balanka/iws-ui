@@ -69,7 +69,7 @@ const STYLES = {
    const  [{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
      , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setAccData, setFmodule, setModel
      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching, setIsFetching }] =
-     useTransactionForm(current_??initLtr [0], initialLine, currentLine, rowData, setRowData)
+     useTransactionForm(current_??initLtr [0], initialLine, currentLine, setCurrentLine, rowData, setRowData)
 
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
    const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)

@@ -33,6 +33,7 @@ export const formEnum =  {
     PACB: 106,
     USER: 111,
     ROLE: 121,
+    BANK_PAYMENT_SETLLEMENT:118,
     PERMISSION: 141,
     FMODULE: 151,
     SALARY_ITEM: 171,

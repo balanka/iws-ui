@@ -121,7 +121,7 @@ const ComboBox = <T extends Base>({
     const onSelectChange = (e:any) => {
         const val = values.find((m) => m.value === e?.value )//isId?(value.id === e?.id):(value.name === e?.target?.value))
         if (val) {
-          console.log('val', val)
+           //console.log('val', val)
             onChange(val.value, e)
         }
     }

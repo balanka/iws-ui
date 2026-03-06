@@ -17,12 +17,11 @@ import {FinancialsFormHead, FinancialsMainForm} from './FormsProps.tsx'
 import {FINANCIALS, initAcc, initfModule, initFtr, initLineFinancials, MASTERFILE} from './Menu.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {IAccount, IFinancials, IFmodule, ILineFinancials, IMasterfile, ITransaction,} from '../Models.ts'
-import {TransactionGrid} from '../IWSGrid.tsx'
-import {financialsColumnDefs} from '../ColumnsDefs.ts'
+import {LineTFinancialsGrid, TransactionGrid} from '../IWSGrid.tsx'
+import {financialsColumnDefs, LinesFinancialsColumns} from '../ColumnsDefs.ts'
 import {logout} from '../utils/FormUtils.tsx'
 import Login from './Login'
 import {CSpinner} from '@coreui/react'
-import {FinancialsDetailsTabs} from './FinancialsDetailsTabs.tsx'
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {generateDocx} from '../utils/XlsUtils.ts'
@@ -46,8 +45,8 @@ const FinancialsForm = () => {
   const [rowData, setRowData] = useState<IFinancials[]>([])
   const  [{  language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction
     , setCopyFromTransaction, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex
-    , handleLanguageChange, setModel, saveProps, modelid, isFetching, setIsFetching }] = useTransactionForm(current_, initialLine, currentLine, rowData
-    , setRowData)
+    , handleLanguageChange, setModel, saveProps, modelid, isFetching, setIsFetching }] =
+    useTransactionForm(current_, initialLine, currentLine, setCurrentLine, rowData, setRowData)
 
   const [_, setIwsState] = useState(iwsStore.initialState)
   const [title, setTitle] = useState(title_)
@@ -85,7 +84,7 @@ const FinancialsForm = () => {
     iwsStore.subscribe(setIwsState)
     Get(acc_ctx, token, acc_modelid, setAccData)
     Get(cc_ctx, token, cc_modelid, setCcData)
-    setCurrent(current_)
+    //setCurrent(current_)
     setRowData([])
   }, [selected])
 
@@ -177,6 +176,7 @@ const FinancialsForm = () => {
       , lines: current.lines.map(formatLines)
     }
   }
+  console.log('current', current)
   return isFetching?<CSpinner color="primary" />:(<>
     <FinancialsFormHead
       title={title}
@@ -212,16 +212,20 @@ const FinancialsForm = () => {
                           handleModuleChange={handleModuleChange}
                           submitCopy={copyCall}
                           accountFilter={accFilter}
+                          oaccountFilter={oaccFilter}
+                          currentLineFinancials ={currentLine}
+                          setCurrentLineFinancials={setCurrentLine}
                           t={t} height ={20}
                           zIndex={zIndex-2}/>
       <Grid container
         // @ts-ignore
             style={{...stylesx.outer, display: !state.collapse?'none':'', width: '100%', height: 165
               , padding: 0, paddingTop: 3, zIndex:4}} maximize direction="column" zeroMinWidth>
-        <FinancialsDetailsTabs  transaction={current}  setTransaction={setCurrent}
-                                currentLineFinancials ={currentLine}
-                                setCurrentLineFinancials={setCurrentLine}
-                                accData={accData??[]}  accountFilter={accFilter} oaccountFilter={oaccFilter} t={t}  onGridReady={onGridReady} zIndex={2}/>
+        <LineTFinancialsGrid
+          // @ts-ignore
+          theme="legacy" columnDefs={LinesFinancialsColumns(t)} onRowSelected={onRowSelected}
+          onGridReady={onGridReady}  rowData={!current?.lines?.length?[ {...currentLine
+          , transid:current?.id1}]:current?.lines} pagination={false} />
       </Grid>
       <Grid container
         // @ts-ignore

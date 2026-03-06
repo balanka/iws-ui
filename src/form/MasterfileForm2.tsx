@@ -12,7 +12,7 @@ import {MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import {masterfileColumnDefs} from '../ColumnsDefs.ts'
-import {IMasterfile2, IPermission} from '../Models.ts'
+import {IMasterfile2} from '../Models.ts'
 import {MasterfileGrid} from '../IWSGrid'
 import Login from './Login'
 import {logout} from '../utils/FormUtils.tsx'
@@ -34,9 +34,9 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const height = 20
      const url = MASTERFILE.masterfile
      const ctx =  `${url}/${modelid}/${company}`
-     const current_: IPermission =  module_.state[0]
+     const current_:IMasterfile2 =  module_.state[0]
      const [, setIwsState] = useState(iwsStore.initialState)
-     const [, setAccData] = useState<IMasterfile2[]>([])
+     //const [, setAccData] = useState<IMasterfile2[]>([])
 
      const minHeight = 400
      const maxHeight = 700
@@ -44,17 +44,23 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
               , setRowData, setCurrent, handleLanguageChange}] = UseMasterfileForm(current_, ctx, url)
      useEffect(() => {
          iwsStore.subscribe(setIwsState)
-         Get(ctx, token, module_.modelid, setAccData)
-         setCurrent(current_)
-     }, [current_])
+         //Get(ctx, token, module_.modelid, setAccData)
+         //setCurrent(current??current_)
+     //}, [current_])
+     }, [])
 
      const submitQuery = (event: any) => {
          event.preventDefault()
          Get(ctx, token, modelid, setRowData)
-         setCurrent(current_)
+        // setCurrent(current??current_)
      }
-     const onRowSelected = (event: RowSelectedEvent) =>
-         setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
+     // onGridReady={onGridReady}
+     const onRowSelected = (event: RowSelectedEvent) =>{
+       console.log('current', current)
+       console.log('event.data', event.data)
+         const data = (event.data instanceof Array) ? event.data[0] : event.data
+         setCurrent(data)
+     }
 
      const styles = {
          outer: {
@@ -64,6 +70,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          },
      }
      const collapse=  state.collapse
+   console.log('current', current)
    return (
          <>
              <CommonFormHead
@@ -85,7 +92,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
              />
-           <MasterfileMainForm collapse={collapse} current={current} setCurrent={setCurrent} disable={disable}
+           <MasterfileMainForm collapse={collapse} current={current??current_} setCurrent={setCurrent} disable={disable}
                            height={height}  t={t}/>
            <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>
              <MasterfileGrid columnDefs={masterfileColumnDefs(t)} onRowSelected={onRowSelected} rowData={rowData}/>

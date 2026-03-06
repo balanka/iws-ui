@@ -44,7 +44,7 @@ const MasterfileForm = () => {
   const minHeight = 400
   const maxHeight = 700
   const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload, title,  rowData, current
-    , setRowData, setCurrent, handleLanguageChange}] = UseMasterfileForm(current_, ctx, url)
+    , setRowData, setCurrent, handleLanguageChange, onRowSelected}] = UseMasterfileForm(current_, ctx, url)
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
     Get(ctx, token, module_.modelid, setAccData)
@@ -57,8 +57,8 @@ const MasterfileForm = () => {
     Get(ctx, token, modelid, setRowData)
     setCurrent(current_)
   }
-  const onRowSelected = (event: RowSelectedEvent) =>
-    setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
+  // const onRowSelected = (event: RowSelectedEvent) =>
+  //   setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
 
   const styles = {
     outer: {
@@ -68,6 +68,7 @@ const MasterfileForm = () => {
     },
   }
   const collapse=  state.collapse
+  console.log('current', current)
   return (
     <>
       <CommonFormHead
@@ -89,7 +90,7 @@ const MasterfileForm = () => {
         handleLanguageChange={handleLanguageChange}
         dispatch={dispatch}
       />
-      <MasterfilesMainForm2 collapse={collapse} current={current} setCurrent={setCurrent} disable={disable}
+      <MasterfilesMainForm2 collapse={collapse} current={current??current_} setCurrent={setCurrent} disable={disable}
                             height={height} accData={accData} t={t}/>
       <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>
         <MasterfileGrid columnDefs={(formEnum.USER===modelid)?userColumnDefs(t):masterfileColumnDefs(t)} onRowSelected={onRowSelected} rowData={rowData}/>

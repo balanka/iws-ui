@@ -34,9 +34,9 @@ const fetchFnPost0 = (url: string,  record:any) =>
       })
 
 const fetchFn = (url: string, method_:HttpMethod, token:string, record:any) => {
-  console.log( 'method',method_ )
-  console.log( 'record', record)
-  console.log( 'url', url)
+  // console.log( 'method',method_ )
+  // console.log( 'record', record)
+  // console.log( 'url', url)
   return fetch(url, {
     body: JSON.stringify(record),
     method: method_,
@@ -213,18 +213,23 @@ const post1Fn = <A>(ctx: string, record: A,
     return profile
 }
 
-const Edit = <A>(ctx:string, token:string, record:IWSModel, data:IWSModel[], setCurrent:Dispatch<SetStateAction<A>>)=> {
+const Edit = <A extends IWSModel>(ctx:string, token:string, record:A, data:A[]
+                 , setRowData:Dispatch<SetStateAction<A[]>>, setCurrent:Dispatch<SetStateAction<A>>):A=> {
+  console.log('Edit called>>>')
+  console.log('data>>>', data)
     console.log('record>>>', record)
-    var result
+    let result = record
     const url = `${SERVER_URL}${ctx}`
     fetchFn(url, 'PUT', token, record )
         .then((response: any ) => {
             const resp = response
             console.log('response', response)
-            const index = data.findIndex((obj) => obj && (obj.id === record.id))
+            const index = data.findIndex((obj:A) => obj && (obj.id === record.id))
             data[index] = resp
             result = resp
-            setCurrent(resp)
+            setCurrent({...resp})
+            setRowData([...data])
+
         })
         .catch(function (error: any) {
             console.log('error', error)
@@ -233,8 +238,9 @@ const Edit = <A>(ctx:string, token:string, record:IWSModel, data:IWSModel[], set
 }
 
 const Add = <A>(ctx:string, token:string, record:A, data:A[]
-                , setRowData:Dispatch<SetStateAction<A[]>> , setCurrent:Dispatch<SetStateAction<A>> ) => {
-    console.log('Adding ctx/record', `${ctx}/${record}`)
+                , setRowData:Dispatch<SetStateAction<A[]>>, setCurrent:Dispatch<SetStateAction<A>> ) => {
+    console.log('Adding ctx/record', ctx)
+     console.log('Adding record', record)
     const url = `${SERVER_URL}${ctx}`
     console.log('Adding url', url)
      fetchFn(url, 'POST', token, record )
@@ -272,6 +278,7 @@ const Login = (
 const  Get3 = <A>(ctx:string, token:string, key: string|number
                   , current_ :A, setRowData: (arg0:A[]) => void, setCurrent:Dispatch<SetStateAction<A>>): void => {
   const url = `${SERVER_URL}${ctx}`
+  console.log('urlx', url)
     getFn(url, token ).then((data: A[]) => {
       if (Array.isArray(data) && data.length>0) {
         iwsStore.put(key, data)

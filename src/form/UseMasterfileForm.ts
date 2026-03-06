@@ -34,10 +34,24 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T, ctx_?:string, url?:s
       setAdded(true)
     }
   }
+  const onRowSelected = (event: RowSelectedEvent) =>{
+    if(event) {
+      console.log('event', event)
+      setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
+    }
+  }
   const submitEdit = (event:any) => {
     event.preventDefault()
+    console.log('rowData', rowData)
     if(edited) {
-      Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
+      const x = Edit(modifyUrl, token, { ...current }, rowData, setRowData, setCurrent)
+      //
+      console.log('x', x)
+      console.log('current', current)
+      console.log('rowData', rowData)
+      //setRowData(rowData)
+      //setCurrent(x)
+      //onRowSelected(x)
     } else if (!edited && !disable) {
       Add(modifyUrl, token, {...current}, rowData, setRowData, setCurrent)
     }
@@ -64,12 +78,12 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T, ctx_?:string, url?:s
   const reload = () => {
     iwsStore.deleteKey(current.modelid)
     Get(ctx, token??'noToken', current.modelid, setRowData)
-    const size= rowData.length
-    setCurrent(size>1?rowData[0]:current_)
+    //const size= rowData.length
+    //setCurrent(size>1?rowData[0]:current_)
   }
 
   return [{ profile, menu, selected, t, i18n, language, modelid, initAdd, added, disable, edit, edited, submitEdit
-    , cancelEdit, reload, handleLanguageChange, title:title, zIndex, rowData, setRowData, current, setCurrent }]
+    , cancelEdit, reload, handleLanguageChange, title:title, zIndex, rowData, setRowData, current, setCurrent, onRowSelected }]
 
 }
 export default UseMasterfileForm

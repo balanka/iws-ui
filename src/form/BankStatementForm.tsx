@@ -52,7 +52,7 @@ const BankStatementForm = () => {
   const cancelEdit = () => {
     setCurrent(current_)
   }
-  const submitEdit = () => Edit(modifyUrl, token, current, rowData, setCurrent)
+  const submitEdit = () => Edit(modifyUrl, token, current, rowData, setRowData, setCurrent)
 
   const reload = () => {
     iwsStore.deleteKey(current.modelid)

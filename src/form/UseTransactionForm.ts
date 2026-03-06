@@ -15,18 +15,20 @@ import {initfModule, MASTERFILE} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {
-  IAccount,
+  IAccount, IFinancials,
   IFmodule,
   IModule,
   IWSTransaction,
 } from '../Models.ts'
 import {ILine, SaveProps, UseTransactionFormResult} from '../Props.ts'
 import useForm from './UseForm.ts'
+import {isArrayAndNotEmpty} from "../utils/Utils.ts";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
-const UseTransactionForm = <T extends IWSTransaction<ILine>,
-              L extends ILine>(current_ :T, initialLine :L, currentLine:L, rowData:T[], setRowData:Dispatch<SetStateAction<T[]>>): [UseTransactionFormResult<T, ILine>]  => {
+const UseTransactionForm = <T extends IWSTransaction<L>,
+              L extends ILine>(current_ :T, initialLine :L, currentLine:L, setCurrentLine:Dispatch<SetStateAction<L>>
+           , rowData:T[], setRowData:Dispatch<SetStateAction<T[]>>): [UseTransactionFormResult<T, ILine>]  => {
    const [{ profile, menu, selected, t, language, handleLanguageChange, modelid, module_}] = useForm()
    const { token, company, currency } = profile
    let templateFileName =''
@@ -52,9 +54,13 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
   const zIndex:number = 99999
   const EXPORT_FILE_EXTENSION= "xlsx"
   const handleKeyPress = useCallback((event:any) => {
-    if (event.ctrlKey && (event.key === 's' || event.key === 'S')) {
-      submitEdit(event)
-    } else if (event.ctrlKey && (event.key === 'l' || event.key === 'L')) {
+    let isMetaKey =  event.metaKey
+    console.log('isMetaKey', isMetaKey)
+    if ((event.ctrlKey|| event.shiftKey) && (event.key === 's' || event.key === 'S')) {
+        console.log('Control edit')
+        submitEdit(event)
+    } else if ((event.ctrlKey|| event.shiftKey) && (event.key === 'l' || event.key === 'L')) {
+      console.log('Control new ')
       onNewLine()
     }
   }, [])
@@ -68,6 +74,7 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
          Get(acc_ctx, token, acc_modelid, setAccData)
          Get(module_ctx, token, fmodule_modelid, setModule)
         // attach the event listener
+          document.onkeydown = handleKeyPress
          document.addEventListener('keydown', handleKeyPress)
     }
     // remove the event listener
@@ -126,19 +133,31 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
   const callSubmitEdit = (event:any, modifyUrl:string, token:string, current:T
       , setCurrent:Dispatch<SetStateAction<T>>, data:T[], submitAdd: (arg:any)=>void) => {
       event.preventDefault();
-      BigInt(current?.id) > 0 ? Edit(modifyUrl, token, current, data, setCurrent) : submitAdd(event)
+      console.log('current', current)
+      if(BigInt(current?.id) > 0){
+        console.log('editing', current)
+       const x= Edit(modifyUrl, token, current, data, setRowData, setCurrent)
+        console.log('x', x)
+        setCurrent(x)
+        event.preventDefault();
+      } else {
+        console.log('adding', current)
+        submitAdd(event)
+        event.preventDefault();
+      }
+      //gridApi!.applyTransaction({update: [current]})
   }
   const submitCancel = (event:any) =>  callSubmitCancel(event, ctx, token, current, setCurrent, rowData )
   const callSubmitCancel = (event:any, _ctx:string, token:string, current:T
       , setCurrent:Dispatch<SetStateAction<T>>, data:T[],) => {
     event.preventDefault()
     const url_ = _ctx.replace('ltr', 'cancelnLtr')
-    BigInt(current.id )> 0 ? Edit(url_, token, current, data, setCurrent) : current
+    BigInt(current.id )> 0 ? Edit(url_, token, current, data, setRowData, setCurrent) : current
   }
   const onNewLine = () => addLine (initialLine,  setCurrent)
   const onDeleteLine = (event:any) => {
       onRemoveSelectedLine (event, current,  setCurrent);
-      (BigInt(current.id) > 0) && Edit(modifyUrl, token, current, rowData, setCurrent)//submitAdd(current)
+      (BigInt(current.id) > 0) && Edit(modifyUrl, token, current, rowData, setRowData, setCurrent)//submitAdd(current)
   }
   const submitEdit = (event:any) =>
       callSubmitEdit(event, modifyUrl, token, current, setCurrent, rowData, submitAdd)
@@ -174,7 +193,12 @@ const UseTransactionForm = <T extends IWSTransaction<ILine>,
 
   const onRowSelected = (event: RowSelectedEvent) => {
      console.log('event.data', event)
-     setCurrent(event.data)
+
+     let transaction:T= isArrayAndNotEmpty(event.data) ?event.data[0]:event.data
+     const line= transaction?.lines?.length>0?transaction?.lines[0]:initialLine
+     setCurrentLine(line)
+     setCurrent(transaction?? event as IFinancials)
+
   }
 
   const sheetName ="Sheet1"

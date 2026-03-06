@@ -67,7 +67,7 @@ const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFo
   const submitEdit = (event:any) => {
     event.preventDefault()
     if(edited) {
-      Edit(modifyUrl, token, { ...current }, rowData, setCurrent)
+      Edit(modifyUrl, token, { ...current }, rowData, setRowData, setCurrent)
     } else if (!edited && !disable) {
       Add(modifyUrl, token, { ...current }, rowData, setRowData, setCurrent)
     }
@@ -133,7 +133,7 @@ const UseCustomerForm = <T extends IBusinespartner>(current_ :T): [UseCustomerFo
 
   const onDeleteBankAccount = (event:any) => {
     onRemoveSelectedLine (event, current,  setCurrent);
-     Edit(modifyUrl, token, current, rowData, setCurrent)
+     Edit(modifyUrl, token, current, rowData, setRowData, setCurrent)
   }
   const onRowSelected = (event: RowSelectedEvent) => {
     const selected:T = event.data

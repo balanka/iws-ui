@@ -7,7 +7,7 @@ import iwsStore from "./Store.tsx";
 
 export const getFiltered =(accounts:IMasterfile[], filter:string[]):IMasterfile[]=>{
   //console.log('filter', filter)
-  const result:IMasterfile[]= accounts.filter(m => checkIfStringStartsWith(m.id.toString(), filter))
+  const result:IMasterfile[]= accounts.filter(m => checkIfStringStartsWith(m?.id?.toString(), filter))
   //console.log('result', result)
   return filter.length>0?uniq(result):accounts
 }

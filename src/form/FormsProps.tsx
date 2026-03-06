@@ -1,4 +1,4 @@
-import React, {CSSProperties, Dispatch, FC, MouseEventHandler, ReactNode} from 'react'
+import React, {CSSProperties, Dispatch, FC, MouseEventHandler, ReactNode, SetStateAction} from 'react'
 import {getFiltered, Show, toOption, transactionToOption} from '../utils/FormUtils.tsx'
 import Grid from 'react-fast-grid'
 import {IoMdMenu} from 'react-icons/io'
@@ -40,8 +40,8 @@ import {
   BankAccountFormProps,
   BankStatementParamProps,
   BankStatementProps,
-  CustomerGeneralFormProps,
-  FinancialsCBoxProps2,
+  CustomerGeneralFormProps, FinancialsCBoxProps2,
+  FinancialsCBoxProps3,
   FinancialsDetailsFormProps,
   FModuleProps2,
   IAddressProps,
@@ -737,7 +737,7 @@ const InputField = ({ fieldName, type, current, setCurrent, value, disabled, sty
 
 const BooleanField = ({ fieldName, label, current, setCurrent
                           , checked, disabled, style, styleC, onChange }:
-                      { fieldName:string, label:string, current:any, setCurrent:(arg:any)=>void, checked:boolean
+                      { fieldName:string, label?:string, current:any, setCurrent:(arg:any)=>void, checked:boolean
                           , disabled?:boolean, style?: CSSProperties | undefined, styleC?: CSSProperties | undefined
                           , onChange?:(event: React.ChangeEvent<HTMLInputElement>) => void }) => {
     return (
@@ -753,7 +753,7 @@ const BooleanField = ({ fieldName, label, current, setCurrent
                         setCurrent({...current, [fieldName]: event.target.checked})
                     }}
                 />}
-            label={label}
+            label={label??''}
             color="success"
             value={checked}
             style={style}
@@ -2063,7 +2063,7 @@ export const    MasterfileMainBaseForm:FC<MasterfileProps<IMasterfile>> = ({ col
                 fieldName="description"
                 placeholder={t('common.description')}
                 disabled={disable}
-                value={current.description}
+                value={current?.description}
                 current={current}
                 setCurrent={setCurrent}
                 style={{ width: 500 }}/>
@@ -3517,9 +3517,10 @@ const MasterfileXComboBox:FC<MasterfileComboboxProps<IMasterfile, IMasterfile>> 
   )
 }
 const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction, IMasterfile>> =({current, setCurrent, data
-                          , fieldName, defaultValue,  accFilter = [], zIndex, styles})=>{
+                                  , fieldName, defaultValue,  accFilter = [], zIndex, styles})=>{
   // @ts-ignore
   const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === current[fieldName])??defaultValue
+  const filtered= (current.modelid===formEnum.ACCOUNT)?getFiltered(data, accFilter):data
 
   return (
     <ComboBox<{value:string|bigint,  label:string}>
@@ -3527,7 +3528,38 @@ const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction, IMast
       disable={current.posted}
       value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
       onChange={(value:any, _event:any) => setCurrent({...current, [fieldName]: value })}
-      values={getFiltered(data, accFilter).slice().sort(sortById).map(toOption)}
+      values={filtered.slice().sort(sortById).map(toOption)}
+      zIndex={zIndex}
+    />
+  )
+}
+const MasterfileComboBox2:FC<FinancialsCBoxProps3<IFinancials, IMasterfile, ILineFinancials>> =({current
+                                   , setCurrent, currentLine, setCurrentLine, data, id, name, defaultValue,  accFilter = []
+                                   , zIndex, styles})=>{
+  // console.log('id', id)
+  // console.log('name', name)
+  // console.log('currentLine', currentLine)
+  // console.log('current', current)
+  // @ts-ignore
+  const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === currentLine[id])??defaultValue
+  const filtered= (current.modelid===formEnum.ACCOUNT)?getFiltered(data, accFilter):data
+  return (
+    <ComboBox<{value:string|bigint,  label:string}>
+      style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+      disable={current.posted}
+      value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
+      onChange={(value:any, _event:any) => {
+       const currentAccount = (data ?? [defaultValue]).find((acc: { id: any }) => acc.id ===value)
+        const currentLinex:ILineFinancials = {...currentLine, [id]: value
+                                      , [name]: currentAccount ?currentAccount.name:'',  company:`-${current.company}`}
+        setCurrentLine({...currentLinex})
+        const lines:ILineFinancials[] = current.lines
+        const idx = lines.findIndex((obj) => obj.id === currentLinex.id);
+        (idx === -1) ? current.lines.push(currentLinex) : (current.lines[idx] = currentLinex)
+        const x= {...current, account:currentLinex.account}
+        setCurrent(x)
+      }}
+      values={filtered.slice().sort(sortById).map(toOption)}
       zIndex={zIndex}
     />
   )
@@ -3537,7 +3569,7 @@ export const FromTransactionComboBox  = ({current, transactions, currentModule, 
                                          {current:IFinancials, transactions:IFinancials[], currentModule:IFmodule, onChange:(value:BigInt, event:any)=>void})=> {
   return (
     <ComboBox<{value:bigint|string,  label:string}>
-      style={{...styles, minHeight:25, height:25, minWidth:50, width:'100%', color: '#6b7280', fontSize:8}}
+      style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:8}}
       disable={current.posted}
       value={{value:BigInt(currentModule?currentModule?.id:0), label:currentModule?currentModule?.name:'' }}
       onChange={onChange}
@@ -3888,7 +3920,8 @@ export const CompanyAccountForm = (
 
 export const FinancialsMainForm =
                      ({ collapse, current,  setCurrent, t, handleModuleChange, storeData, accData, modules
-                        , copyFromTransaction, submitCopy, accountFilter, height, zIndex}:
+                        , copyFromTransaction, submitCopy, accountFilter, oaccountFilter, currentLineFinancials
+                        , setCurrentLineFinancials, height, zIndex}:
                       { collapse:boolean, current:IFinancials, setCurrent:(arg:IFinancials) =>void
                        , t:TFunction<'translation', undefined>
                        , storeData:IMasterfile[], accData:IAccount[], modules:IFmodule[]
@@ -3896,69 +3929,77 @@ export const FinancialsMainForm =
                        , handleModuleChange:(value:any)=>void
                        , submitCopy:(id:BigInt) =>void
                        , accountFilter:string[]
+                       , oaccountFilter:string[]
+                       , currentLineFinancials:ILineFinancials
+                       , setCurrentLineFinancials:Dispatch<SetStateAction<ILineFinancials>>
                        , height:number, zIndex:number}) => {
     const styles = STYLES
+     console.log('current>>', current)
     const currentx:IFinancials = Array.isArray(current)?current[0]:current
-    const currentModule= modules.find((m:IFmodule) =>m.id == BigInt(currentx?.modelid))??initfModule[0]
+    const modelid= currentx?.modelid??0
+    const currentModule= modules.find((m:IFmodule) =>m.id == BigInt(modelid))??initfModule[0]
     return (
         <Grid container spacing={0} style={{...STYLES.inner, display: !collapse?'none':''}}>
             {/**id, postingdate*/}
             <Grid container spacing={1} >
                 {/*<Grid container maximize  justify="flex-start" alignItems="stretch">*/}
                    <Grid item sm={8} xs={2}>
-                      <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller}>
-                        <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                            <div>{t('common.id')}</div>
-                        </Grid>
-                        <Grid item sm ={2} xs={2} justify="flex-start" >
-                            <InputField
-                                fieldName="id"
-                                current={current}
-                                setCurrent={setCurrent}
-                                value={current.id}
-                                disabled={current.posted}
-                                style={{ height: height, textAlign:'right' }}
-                            />
-                        </Grid>
-                    </Grid>
+                     <Grid container maximize style={styles.fuller} alignItems="stretch">
+                       <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">
+                         <div>{t('fmodule.title')}</div>
+                       </Grid>
+                       <Grid item sm={10} xs={4} alignItems="stretch" justify="flex-start">
+                         <ComboBox<{value:bigint|string,  label:string}>
+                           style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:10}}
+                           disable={false}
+                           value={{value:BigInt(currentModule?currentModule?.id:0),
+                             label: `${BigInt(currentModule?currentModule?.id:0)} ${currentModule?currentModule?.name:''}` }}
+                           onChange={handleModuleChange}
+                           values={modules.slice().sort(sortById).map(toOption)}
+                           zIndex={99999}
+                         />
+                       </Grid>
+                     </Grid>
                     </Grid>
                    <Grid item sm={4} xs={6}>
-                    <Grid container maximize style={styles.fuller} alignItems="stretch">
-                        <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                            <div>{t('fmodule.title')}</div>
-                        </Grid>
-                        <Grid item sm={8} xs={4} alignItems="stretch" justify="flex-start">
-                          <ComboBox<{value:bigint|string,  label:string}>
-                            style={{...styles, minHeight:25, height:25, minWidth:50, width:'100%', color: '#6b7280', fontSize:10}}
-                            disable={false}
-                            value={{value:BigInt(currentModule?currentModule?.id:0),
-                              label: `${BigInt(currentModule?currentModule?.id:0)} ${currentModule?currentModule?.name:''}` }}
-                            onChange={handleModuleChange}
-                            values={modules.slice().sort(sortById).map(toOption)}
-                            zIndex={99999}
-                          />
-                        </Grid>
-                    </Grid>
-                </Grid>
+                     <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller}>
+                       <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
+                         <div>{t('common.id')}</div>
+                       </Grid>
+                       <Grid item sm ={3} xs={2} justify="flex-start" >
+                         <InputField
+                           fieldName="id"
+                           current={current}
+                           setCurrent={setCurrent}
+                           value={current.id}
+                           disabled={current.posted}
+                           style={{ height: height, textAlign:'right' }}
+                         />
+                       </Grid>
+                       <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
+                         <div >{t('transaction.oid')}</div>
+                       </Grid>
+                       <Grid item sm ={3} xs={2} justify="flex-start">
+                         <InputField
+                           fieldName="oid"
+                           current={current}
+                           setCurrent={setCurrent}
+                           value={current.oid}
+                           disabled={current.posted}
+                           style={{ height: 20 , textAlign:'right'}}
+                         />
+                       </Grid>
+                     </Grid>
+                   </Grid>
             </Grid>
             {/**oid, transdate*/}
             <Grid container spacing={1}>
                 <Grid item sm={8} xs={2}>
                     <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
                         <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                            <div >{t('transaction.oid')}</div>
+                            <div >{t('common.copyFrom')}</div>
                         </Grid>
-                        <Grid item sm ={2} xs={2} justify="flex-start">
-                            <InputField
-                                fieldName="oid"
-                                current={current}
-                                setCurrent={setCurrent}
-                                value={current.oid}
-                                disabled={current.posted}
-                                style={{ height: 20 , textAlign:'right'}}
-                            />
-                        </Grid>
-                        <Grid item sm={8} xs={4} alignItems="stretch" justify="flex-start">
+                        <Grid item sm={10} xs={4} alignItems="stretch" justify="flex-start">
                           <FromTransactionComboBox current={current} transactions={copyFromTransaction}
                                                    currentModule={currentModule} onChange = {submitCopy}/>
                         </Grid>
@@ -3997,42 +4038,119 @@ export const FinancialsMainForm =
                     <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
                       <div>{t('financials.costcenter')}</div>
                     </Grid>
-                     <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start" style={{paddingLeft:5}}>
+                     <Grid item sm ={10} xs={5} justify="flex-start" alignItems="stretch" style={{paddingLeft:5}}>
                        <MasterfileComboBox current ={current} setCurrent ={setCurrent} data={storeData}
                                   fieldName={"costcenter"} defaultValue={initCc[0]}  zIndex={zIndex} styles={styles}/>
                       </Grid>
                   </Grid>
                 </Grid>
-                <Grid item sm={4} xs={6}>
-                    <Grid container maximize style={styles.fuller} alignItems="stretch">
-                        <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                            <div>{t('transaction.period')}</div>
-                        </Grid>
-                        <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                            <InputField fieldName="period" current={current}
-                                        setCurrent={setCurrent}
-                                        value={current.period}
-                                        disabled={true}
-                                        style={{ height: 20, width: 100, textAlign: 'right' }}
-                            />
-                        </Grid>
-                    </Grid>
+              <Grid item sm={4} xs={6}>
+                <Grid container maximize style={styles.fuller} alignItems="stretch">
+                  <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+                    <div>{t('financials.line.duedate')}</div>
+                  </Grid>
+                  <Grid item sm={4} xs={2} alignItems="flex-end" justify="flex-start">
+                    <DatePickerField
+                      fieldName="duedate"
+                      label={t('financials.line.duedate')}
+                      selected={currentLineFinancials.duedate}
+                      current={currentLineFinancials}
+                      onChange={(event:any) => {
+                        //event.preventDefault()
+                        const date = new Date(event)
+                        const currentLine = { ...currentLineFinancials, duedate: date, company:`-${current.company}`}
+                        setTransactionF(current, setCurrent, currentLine, setCurrentLineFinancials)
+                      }}
+                      setCurrent={setCurrent}
+                      disabled={current.posted}
+                    />
+                  </Grid>
                 </Grid>
+              </Grid>
+
             </Grid>
-            {/**OutputVat */}
+            {/**Account */}
             <Grid container spacing={1}>
                 <Grid item sm={8} xs={2}>
                   <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
                     <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                      <div>{t('transaction.account')}</div>
+                      <div>{t('financials.line.account')}</div>
                     </Grid>
                     <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start" style={{paddingLeft:5}}>
-                      <MasterfileComboBox  current={current} setCurrent={setCurrent} data={accData}
-                                           fieldName={"account"} defaultValue={initAcc[0]} accFilter={accountFilter} zIndex={zIndex} styles={styles}/>
+                      <MasterfileComboBox2  current={current} setCurrent={setCurrent} currentLine ={currentLineFinancials}
+                              setCurrentLine={setCurrentLineFinancials} data={accData} id={"account"}
+                              name={"accountName"} defaultValue={initAcc[0]} accFilter={accountFilter}
+                              zIndex={zIndex} styles={styles}/>
                     </Grid>
                   </Grid>
                 </Grid>
+              <Grid item sm={4} xs={6}>
+                <Grid container maximize style={styles.fuller} alignItems="stretch">
+                  <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+                    <div>{t('financials.line.amount')}</div>
+                  </Grid>
+                  <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
+                    <InputField
+                      fieldName ='amount'
+                      current={currentLineFinancials}
+                      setCurrent={setCurrentLineFinancials}
+                      value={Number(currentLineFinancials.amount)}
+                      onChange={(event:any) => {
+                        event.preventDefault()
+                        const currentLine = { ...currentLineFinancials, amount: Number(event.target.value)
+                          , company:`-${current.company}` }
+                        setTransactionF(current, setCurrent, currentLine, setCurrentLineFinancials)
+                      }}
+                      disabled={current.posted}
+                      style={ { height: height, padding: 1, textAlign: 'right' }}
+                    />
+                  </Grid>
+                  <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">
+                    <InputField
+                      fieldName ='currency'
+                      current={currentLineFinancials}
+                      setCurrent={setCurrentLineFinancials}
+                      value={currentLineFinancials.currency}
+                      disabled={true}
+                      style={ { height: height, padding: 1, textAlign: 'left' }}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+
             </Grid>
+          {/**OAccount */}
+            <Grid container spacing={1}>
+              <Grid item sm={8} xs={2}>
+                <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
+                   <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
+                     <div>{t('financials.line.oaccount')}</div>
+                   </Grid>
+                   <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start" style={{paddingLeft:5}}>
+                     <MasterfileComboBox2  current={current} setCurrent={setCurrent} currentLine ={currentLineFinancials}
+                                           setCurrentLine={setCurrentLineFinancials} data={accData} id={"oaccount"}
+                       name={"oaccountName"} defaultValue={initAcc[0]} accFilter={oaccountFilter} zIndex={zIndex} styles={styles}/>
+                   </Grid>
+                </Grid>
+              </Grid>
+              <Grid item sm={4} xs={6}>
+                <Grid container maximize style={styles.fuller} alignItems="stretch">
+                  <Grid item sm={3} xs={2} alignItems="stretch" justify="flex-start">
+                    <div>{t('transaction.period')}</div>
+                  </Grid>
+                  <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-end">
+                    <InputField fieldName="period" current={current}
+                                setCurrent={setCurrent}
+                                value={current.period}
+                                disabled={true}
+                                style={{ height: 20, width: 100, textAlign: 'right' }}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+
+            </Grid>
+
             <Grid container spacing={1}>
                 <Grid item sm={8} xs={2}>
                     <Grid container maximize style={styles.fuller40H} justify="flex-start" alignItems="stretch">
@@ -4045,9 +4163,15 @@ export const FinancialsMainForm =
                                 fieldName="text"
                                 placeholder={t('transaction.text')}
                                 disabled={current.posted}
-                                value={current.text}
-                                current={current}
-                                setCurrent={setCurrent}
+                                value={currentLineFinancials.text}
+                                onChange={(event:any) => {
+                                  event.preventDefault()
+                                  const currentLine = { ...currentLineFinancials, text: event.target.value
+                                    , company:`-${current.company}` }
+                                  setTransactionF(current, setCurrent, currentLine, setCurrentLineFinancials)
+                                }}
+                                current={currentLineFinancials}
+                                setCurrent={setCurrentLineFinancials}
                                 style={{ width: 1000 }}/>
                         </Grid>
                     </Grid>

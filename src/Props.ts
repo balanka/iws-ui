@@ -300,25 +300,19 @@ export interface TransactionDetailsFormProps<T extends IWSTransaction<L>, L exte
     height?: number
 }
 
-export interface MasterfileFormProps<A, B> {
-  collapse:boolean,
+export interface FinancialsCBoxProps3<A, B, L> {
   current: A,
-  setCurrent: (c: A) => void,
-  accData: B[],
-  disable: boolean,
-  height: number,
-  t: TFunction<'translation', undefined>
-} //,
-
-export interface Masterfile2FormProps<A> {
-    collapse:boolean,
-    current: A,
-    setCurrent: (c: A) => void,
-    accData: IMasterfile2[],
-    disable: boolean,
-    height: number,
-    t: TFunction<'translation', undefined>
-} //,
+  setCurrent: (arg: any) => void,
+  currentLine: L,
+  setCurrentLine: (arg: any) => void,
+  data: B[],
+  id:string,
+  name:string,
+  defaultValue:B
+  accFilter?:string[],
+  zIndex: number,
+  styles: any
+}
 export interface FinancialsCBoxProps2<A, B> {
   current: A,
   setCurrent: (arg: any) => void,
@@ -329,23 +323,7 @@ export interface FinancialsCBoxProps2<A, B> {
   zIndex: number,
   styles: any
 }
-export interface FinancialsCBoxProps<A, B> {
-  current: A,
-  setCurrent: (arg: A) => void,
-  data: B[],
-  zIndex: number,
-  styles: any
-}
-export interface CompanyCBoxProps<A, B> {
-  fieldName:string
-  current: A,
-  setCurrent: (arg: A) => void,
-  data: B[],
-  currentAcc:B,
-  zIndex: number,
-  styles: any,
-  disable:boolean
-}
+
 
 export interface UserFormProps { collapse: boolean, current:IUser, setCurrent:(arg:IUser)=>void
     , t:TFunction<'translation', undefined>, disable:boolean, height:number
@@ -426,6 +404,7 @@ export interface UseMasterfileFormResult<T> {
   , setRowData:Dispatch<SetStateAction<T[]>>
   , current:T
   , setCurrent:Dispatch<SetStateAction<T>>
+  , onRowSelected:(event: RowSelectedEvent)=>void
 }
 export interface UseCustomerFormResult<T extends IBusinespartner> {
   profile: IProfile
