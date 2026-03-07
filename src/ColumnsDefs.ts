@@ -121,7 +121,7 @@ export const masterfileColumnDefs=  (t: (arg0: string) => any) =>[
   {
     field: "description",
     headerName: t('common.description'),
-    minWidth: 400,
+    minWidth: 200,
     filter: "agTextColumnFilter",
   },
   {
@@ -195,7 +195,19 @@ export const fmoduleColumnDefs=  (t: (arg0: string) => any) => {
     },
     {
       field: "copyFrom",
-      headerName: t('account.copy_from'),
+      headerName: t('common.copyFrom'),
+      minWidth: 5,
+      cellStyle: {textAlign: 'left'},
+    },
+    {
+      field: "accFilter",
+      headerName: t('fmodule.accountFilter'),
+      minWidth: 5,
+      cellStyle: {textAlign: 'left'},
+    },
+    {
+      field: "oaccFilter",
+      headerName: t('fmodule.oaccountFilter'),
       minWidth: 5,
       cellStyle: {textAlign: 'left'},
     },

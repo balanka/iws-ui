@@ -29,6 +29,7 @@ import useTransactionForm from './UseTransactionForm.ts'
 import useForm from './UseForm.ts'
 import iwsStore from '../utils/Store.tsx'
 import { Get, Get3} from './CrudController.ts'
+import {isArrayAndNotEmpty} from "../utils/Utils.ts";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, SelectEditorModule,])
 
@@ -96,6 +97,13 @@ const FinancialsForm = () => {
     !ccData&&Get(cc_ctx, token, cc_modelid, setCcData)
     Get3(ctx, token, modelid, current_, setRowData, setCurrent)
     setIsFetching(false)
+  }
+  const onRowSelectedL = (event: RowSelectedEvent) => {
+    console.log('event.data', event)
+    let line:ILineFinancials= isArrayAndNotEmpty(event.data) ?event.data[0]:event.data
+    setCurrentLine(line)
+
+
   }
 
   const fmoduleData = (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id)
@@ -223,7 +231,7 @@ const FinancialsForm = () => {
               , padding: 0, paddingTop: 3, zIndex:4}} maximize direction="column" zeroMinWidth>
         <LineTFinancialsGrid
           // @ts-ignore
-          theme="legacy" columnDefs={LinesFinancialsColumns(t)} onRowSelected={onRowSelected}
+          theme="legacy" columnDefs={LinesFinancialsColumns(t)} onRowSelected={onRowSelectedL}
           onGridReady={onGridReady}  rowData={!current?.lines?.length?[ {...currentLine
           , transid:current?.id1}]:current?.lines} pagination={false} />
       </Grid>

@@ -6,9 +6,16 @@ import iwsStore from "./Store.tsx";
 
 
 export const getFiltered =(accounts:IMasterfile[], filter:string[]):IMasterfile[]=>{
-  //console.log('filter', filter)
-  const result:IMasterfile[]= accounts.filter(m => checkIfStringStartsWith(m?.id?.toString(), filter))
-  //console.log('result', result)
+  console.log('filter', filter)
+  const doFfilter= (id:string, filter:string)=>id.startsWith(filter)
+  const result:IMasterfile[]= accounts.filter(m => {
+    const res= filter.map((f)=> doFfilter (m.id.toString(),f)).reduce((a, b) => a || b, false)
+    //m.id.toString().startsWith()
+    //const res= checkIfStringStartsWith(m?.id?.toString(), filter)
+    console.log('filter res', res)
+    return res;
+  })
+  console.log('result', result)
   return filter.length>0?uniq(result):accounts
 }
 export const AgGridCheckbox =
@@ -26,10 +33,15 @@ export const AgGridCheckbox =
         </div>
     )
 }
-export function checkIfStringStartsWith(str:string, substrs:string[]) {
-  //return substrs??[].some(substr => str.startsWith(substr));
-  return [...substrs].some(substr => str.toLowerCase().startsWith(substr.toLowerCase()))
+export const  checkIfStringStartsWith= (str:string, substrs:string[])=> {
+  const x = substrs ?? [].some(substr => str.startsWith(substr))
+  console.log('x', x)
+  return x//substrs ?? [].some(substr => str.startsWith(substr))
 }
+// export function checkIfStringStartsWith(str:string, substrs:string[]) {
+//   return substrs??[].some(substr => str.startsWith(substr))
+//   //return [...substrs].some(substr => str.toLowerCase().startsWith(substr.toLowerCase()))
+// }
 
 export function uniq <A>(a:A[]):A[] {
   return Array.from(new Set(a));

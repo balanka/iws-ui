@@ -3539,10 +3539,13 @@ const MasterfileComboBox2:FC<FinancialsCBoxProps3<IFinancials, IMasterfile, ILin
   // console.log('id', id)
   // console.log('name', name)
   // console.log('currentLine', currentLine)
-  // console.log('current', current)
+  console.log('current', current)
+  console.log('accFilter', accFilter)
   // @ts-ignore
   const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === currentLine[id])??defaultValue
-  const filtered= (current.modelid===formEnum.ACCOUNT)?getFiltered(data, accFilter):data
+  //const filtered= (current.modelid===formEnum.ACCOUNT)?getFiltered(data, accFilter):data
+  const filtered= getFiltered(data, accFilter)
+  console.log('filtered', filtered)
   return (
     <ComboBox<{value:string|bigint,  label:string}>
       style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}

@@ -75,11 +75,11 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
          Get(module_ctx, token, fmodule_modelid, setModule)
         // attach the event listener
           document.onkeydown = handleKeyPress
-         document.addEventListener('keydown', handleKeyPress)
+         document.addEventListener('onKeyDown', handleKeyPress)
     }
     // remove the event listener
     return () => {
-      document.removeEventListener('keydown', handleKeyPress)
+      document.removeEventListener('onKeyDown', handleKeyPress)
     }
   }, [current])
 
@@ -133,15 +133,11 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   const callSubmitEdit = (event:any, modifyUrl:string, token:string, current:T
       , setCurrent:Dispatch<SetStateAction<T>>, data:T[], submitAdd: (arg:any)=>void) => {
       event.preventDefault();
-      console.log('current', current)
       if(BigInt(current?.id) > 0){
-        console.log('editing', current)
        const x= Edit(modifyUrl, token, current, data, setRowData, setCurrent)
-        console.log('x', x)
         setCurrent(x)
         event.preventDefault();
       } else {
-        console.log('adding', current)
         submitAdd(event)
         event.preventDefault();
       }

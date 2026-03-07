@@ -283,7 +283,10 @@
     "title":      "Permission"
   },
   "fmodule":{
-    "title": "Journal"
+    "title": "Journal",
+    "parent": "Parent",
+    "accountFilter": "Filtre débit",
+    "oaccountFilter": "Filtre crébit"
   },
   "financials": {
     "title":      "Pièce comptable",
