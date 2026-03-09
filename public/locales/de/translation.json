@@ -270,7 +270,10 @@
     "title": "Berechtigung"
   },
   "fmodule":{
-    "title": "Belegart"
+    "title": "Belegart",
+    "parent": "Parent",
+    "accountFilter": "Debit filter ",
+    "oaccountFilter": "Crebit filter"
   },
   "financials": {
     "title":      "Beleg",

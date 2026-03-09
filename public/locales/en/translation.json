@@ -292,7 +292,10 @@
     "title":      "Permission"
   },
   "fmodule":{
-    "title": "Transactions"
+    "title": "Transactions",
+    "parent": "Parent",
+    "accountFilter": "Debit filter ",
+    "oaccountFilter": "Crebit filter",
   },
   "financials": {
     "title":      "Financials",
