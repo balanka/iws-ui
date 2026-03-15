@@ -6,17 +6,34 @@ import {HttpMethod, ILoggingContext, IProfile, IWSModel} from '../Models.ts'
 import {NavigateFunction} from "react-router-dom";
 import {TFunction} from "i18next";
 import {Dispatch, SetStateAction} from "react";
+import {getEnvVariable} from "../utils/FormUtils.tsx";
 // @ts-ignore
-const SERVER_IP:string = 'REACT_APP_HOST_IP_ADDRESS'
+//const SERVER_IP:string = 'REACT_APP_HOST_IP_ADDRESS'
+const WEB_SERVER_IP:string = 'REACT_WEB_HOST_IP_ADDRESS'
 // @ts-ignore
 const SERVER_PORT:string  = 'REACT_APP_PORT'
 // @ts-ignore
 
 //const SERVER_URL = `http://${SERVER_IP}:${SERVER_PORT}`//'http://'.concat(SERVER_IP).concat(':').concat(SERVER_PORT) //'http://0.0.0.0:8091'
-const SERVER_URL = 'http://127.0.0.1:8091'// `http://${SERVER_IP}:${SERVER_PORT}` //'http://0.0.0.0:8091'
-
-//const SERVER_URL = 'http://0.0.0.0:8091'// `http://${SERVER_IP}:${SERVER_PORT}` //'http://0.0.0.0:8091'
+//const SERVER_URL = 'http://192.168.64.1/api'// `http://${SERVER_IP}:${SERVER_PORT}` //'http://0.0.0.0:8091'
+const apiBase = window?._env_?.REACT_APP_API_BASE; // "/api"
+const apiUrl = window?._env_?.API_URL; // "192.168.64.1"
+const apiPort = window?._env_?.API_PORT??"8080"; // "192.168.64.1"
+//const API_BASE= getEnvVariable('REACT_APP_API_BASE', '/api1');
+const SERVER_IP= getEnvVariable('API_URL', 'API_URL');
+const SERVER_URL = `http://${apiUrl}${apiBase}` //'http://192.168.64.1/api'
+//const SERVER_URL = 'http://192.168.64.1:8080'
+//const SERVER_URL = `http://${SERVER_IP}:${SERVER_PORT}` //'http://192.168.1.139:8091'
+//const SERVER_URL = `http://${WEB_SERVER_IP}:${SERVER_PORT}`
+//const apiUrl = getEnvVariable('API_URL', 'http://localhost:8080');
+//const apiBase = getEnvVariable('REACT_APP_API_BASE', '/api');
+console.log(' WEB_SERVER_IP', WEB_SERVER_IP)
+console.log(' API_BASE', apiBase)
+console.log(' apiPort', apiPort)
+console.log(' apiUrl', apiUrl);
 console.log(' SERVER_URL', SERVER_URL)
+console.log(' SERVER_IP', SERVER_IP)
+console.log(' WEB_SERVER_IP', WEB_SERVER_IP)
 const fetchFn00 = (url: string,  record:any) =>
    fetch(url,  {body: JSON.stringify(record), method: 'POST'}).then((response: any) => {
     if (!response.ok) {
@@ -25,18 +42,23 @@ const fetchFn00 = (url: string,  record:any) =>
     return response.json();
   })
 
-const fetchFnPost0 = (url: string,  record:any) =>
-      fetch (url, {body: JSON.stringify(record), method:'POST',}).then((response: any) => {
-           if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-              }
-         return response.json();
-      })
+const fetchFnPost0 = (url: string,  record:any) => {
+  console.log(' url…', url)
+  console.log(' record…', record)
+  return fetch(url, {body: JSON.stringify(record), method: 'POST',}).then((response: any) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const payload = response.json()
+    console.log(' payload', payload)
+    return payload;
+  })
+}
 
 const fetchFn = (url: string, method_:HttpMethod, token:string, record:any) => {
-  // console.log( 'method',method_ )
-  // console.log( 'record', record)
-  // console.log( 'url', url)
+  console.log( 'method',method_ )
+  console.log( 'record', record)
+  console.log( 'url', url)
   return fetch(url, {
     body: JSON.stringify(record),
     method: method_,
@@ -178,6 +200,8 @@ const post1Fn = <A>(ctx: string, record: A,
     , setRoutes: (argo: any) => void
     , navigate: NavigateFunction
 ):IProfile => {
+  console.log('companyURL', companyURL)
+  console.log('moduleURL', moduleURL)
    /* Login using the user provided credentials and get the user data and set the profile */
   fetchFnPost0(ctx, record).then((data:any) =>  {
        console.log(' response', data)

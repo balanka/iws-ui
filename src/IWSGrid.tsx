@@ -241,7 +241,7 @@ export const AccountGrid: FC<Props<IAccount>> = ({ columnDefs, defaultColDef, on
         theme = {myTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
         // @ts-ignore
-        gridOptions ={getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
+        gridOptions ={{...getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected), paginationPageSizeSelector: [20, 50, 80,120, 200]}}
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
     />

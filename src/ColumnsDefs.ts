@@ -92,16 +92,16 @@ export const accountColumnDefs=  (t: (arg0: string) => any):ColDef<IAccount>[] =
     minWidth: 10,
     cellRenderer: dateRenderer
   },
-  {
-    field: "modelid",
-    headerName: t('common.modelid'),
-    minWidth: 3,
-  },
-  {
-    field: "company",
-    headerName: t('common.company'),
-    minWidth: 5,
-  }
+  // {
+  //   field: "modelid",
+  //   headerName: t('common.modelid'),
+  //   minWidth: 3,
+  // },
+  // {
+  //   field: "company",
+  //   headerName: t('common.company'),
+  //   minWidth: 5,
+  // }
 ]
 
 export const masterfileColumnDefs=  (t: (arg0: string) => any) =>[

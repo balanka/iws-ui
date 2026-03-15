@@ -1,0 +1,7 @@
+window._env_ = {
+  API_URL: "${API_URL}",
+  API_PORT: "${IWS_API_PORT_TO}",
+  REACT_APP_API_BASE: "${REACT_APP_API_BASE}",
+  REACT_APP_VERSION: "${REACT_APP_VERSION}",
+  NODE_ENV: "${NODE_ENV}"
+}

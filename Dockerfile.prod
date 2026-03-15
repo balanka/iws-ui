@@ -18,6 +18,7 @@ RUN npm install
 FROM nginx:1.29-alpine-slim AS prod
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY --from=builder /app/dist/locales /usr/share/nginx/html
+#RUN mkdir -p /etc/nginx/templates
 #COPY nginx.conf  /etc/nginx/conf.d
 COPY nginx.conf.template  /etc/nginx/conf.d
 COPY env.sh /docker-entrypoint.d/env.sh

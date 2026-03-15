@@ -6,7 +6,7 @@ import App from './App'
 import store from './store'
 import React from 'react'
 
-
+console.log('env-config.js loaded?', window._env_);
 BigInt.prototype.toJSON = function () {
     return this.toString();
 };

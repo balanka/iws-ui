@@ -62,20 +62,23 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
              />
-             <AccountMainForm  collapse={state.collapse} current={current}
+
+            <Grid container style={{...stylesx.innerX, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
+                 <AccountMainForm  collapse={state.collapse} current={current}
                                   setCurrent={setCurrent}
                                   disable={disable}
                                   t={t}
                                   locale={`${locale}`}
                                   accData={rowData}
                                   height={height}/>
-             <Grid container
+                 </Grid>
+                 <Grid container
                  // @ts-ignore
-                   style={{...stylesx.outer, height: 400, paddingTop: 10}} maximize direction="column">
-                 <AccountGrid columnDefs={accountColumnDefs(t)} onRowSelected={onRowSelected}
+                     style={{...stylesx.outer, height: 400, paddingTop: 10}} maximize direction="column">
+                    <AccountGrid columnDefs={accountColumnDefs(t)} onRowSelected={onRowSelected}
                               defaultColDef={{...defaultColDefX, filter:true}}
                               rowData={rowData}/>
-             </Grid>
+                </Grid>
          </>
      )
 }

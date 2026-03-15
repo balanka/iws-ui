@@ -121,7 +121,7 @@ const styles = {
   outer: {
     borderRadius: 5,
     boxShadow: "0 30px 40px #BBB",
-    padding: 10,
+    padding: 5,
     //width: '100%',
     //height: 200,
     //padding: 50,
@@ -1845,7 +1845,7 @@ export const MasterfilesForm2 =
               <InputField fieldName="company" current={current}
                           setCurrent={setCurrent}
                           value={current.company}
-                          disabled={disable}
+                          disabled={true}
                           style={{ height: 20,width: 80, textAlign: 'right' }}/>
             </Grid>
           </Grid>
@@ -2167,6 +2167,7 @@ export const    PartnerMainForm:FC<PartnerProps<IPartner>> = ({ collapse,  curre
 export const    FModuleMainForm:FC<FModuleProps2<IFmodule>> = ({collapse, current, setCurrent, accData, accountData, rowData, disable, t,  height })=> {
     return (
       <Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >
+        {/*<Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >*/}
         <MasterfilesForm2 collapse ={collapse} current ={current} setCurrent={setCurrent} accData={accData} t={t} disable={disable} height={height}/>
         <Grid item sm={8} xs={2}>
           <Grid container maximize justify="flex-start" alignItems="stretch" style={STYLES.fuller}>
@@ -2179,6 +2180,24 @@ export const    FModuleMainForm:FC<FModuleProps2<IFmodule>> = ({collapse, curren
                 styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
             </Grid>
           </Grid>
+          {/*<Grid item sm={4} xs={6}>*/}
+            <Grid container maximize style={STYLES.fuller} alignItems="stretch">
+              <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">
+                <div>{t('fmodule.accountFilter')}</div>
+              </Grid>
+              <Grid item sm={3} xs={2} alignItems="stretch" justify="flex-start">
+                <InputField
+                  fieldName="accFilter"
+                  current={current}
+                  setCurrent={setCurrent}
+                  value={current.accFilter}
+                  disabled={disable}
+                  style={{ height: height }}/>
+              </Grid>
+            </Grid>
+          {/*</Grid>*/}
+        </Grid>
+        <Grid item sm={12} xs={2}>
           <Grid container maximize justify="flex-start" alignItems="stretch" style={STYLES.fuller}>
             <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
               <div>{t('common.copyFrom')}</div>
@@ -2189,8 +2208,22 @@ export const    FModuleMainForm:FC<FModuleProps2<IFmodule>> = ({collapse, curren
                   styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
             </Grid>
           </Grid>
+          <Grid container maximize style={STYLES.fuller} alignItems="stretch">
+            <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">
+              <div>{t('fmodule.oaccountFilter')}</div>
+            </Grid>
+            <Grid item sm={3} xs={2} alignItems="stretch" justify="flex-start">
+              <InputField
+                fieldName="oaccFilter"
+                current={current}
+                setCurrent={setCurrent}
+                value={current.oaccFilter}
+                disabled={disable}
+                style={{ height: height }}/>
+            </Grid>
+          </Grid>
         </Grid>
-      </Grid>
+     </Grid>
     )
 }
 

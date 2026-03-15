@@ -4,18 +4,17 @@ import {NavigateFunction} from "react-router-dom";
 import iwsStore from "./Store.tsx";
 
 
-
+export const getEnvVariable = (key:any, defaultValue = '') => {
+  // Check if window._env_ exists and has the key
+  return window._env_?.[key] || defaultValue;
+}
 export const getFiltered =(accounts:IMasterfile[], filter:string[]):IMasterfile[]=>{
   console.log('filter', filter)
   const doFfilter= (id:string, filter:string)=>id.startsWith(filter)
   const result:IMasterfile[]= accounts.filter(m => {
-    const res= filter.map((f)=> doFfilter (m.id.toString(),f)).reduce((a, b) => a || b, false)
-    //m.id.toString().startsWith()
-    //const res= checkIfStringStartsWith(m?.id?.toString(), filter)
-    console.log('filter res', res)
-    return res;
+    return filter.map((f) => doFfilter(m.id.toString(), f)).reduce((a, b) => a || b, false);
   })
-  console.log('result', result)
+  //console.log('result', result)
   return filter.length>0?uniq(result):accounts
 }
 export const AgGridCheckbox =
