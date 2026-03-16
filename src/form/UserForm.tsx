@@ -24,7 +24,7 @@ import {styles as stylesx} from "./BasicTreeTableProps.tsx";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const UserForm = () => {
-   const [{ t, toggle, state, module_}] = useForm()
+   const [{ t, toggle, toggleTable, state, module_}] = useForm()
      const dispatch = useDispatch()
      let navigate = useNavigate()
      if (module_ === '11111' || module_ === 11111) return <Login/>
@@ -59,6 +59,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  submitQuery={reload}
                  reload={reload}
                  toggle={toggle}
+                 toggleTable={toggleTable}
                  logout={logout}
                  navigate={navigate}
                  language={language}

@@ -26,7 +26,7 @@ import { styles as stylesx} from './BasicTreeTableProps.tsx'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const AccountClassForm = () => {
-   const [{profile, t,  language, toggle, state, modelid, company, module_ }] = useForm()
+   const [{profile, t,  language, toggle, toggleTable, state, visible, modelid, company, module_ }] = useForm()
      const {token} = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
@@ -63,6 +63,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  submitQuery={reload}
                  reload={reload}
                  toggle={toggle}
+                 toggleTable={toggleTable}
                  logout={logout}
                  navigate={navigate}
                  language={language}
@@ -73,7 +74,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                                        accData={ iwsState.get(formEnum.ACCOUNT) ?? accData}/>
                  <Grid item
                    // @ts-ignore
-                       style={{...stylesx.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>
+                       style={{...stylesx.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight, display: visible?'':'none'}}>
                      <MasterfileGrid columnDefs={masterfileColumnDefs(t)} onRowSelected={onRowSelected} rowData={rowData}/>
                  </Grid>
          </Grid>

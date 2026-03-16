@@ -10,6 +10,7 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import SaveIcon from '@mui/icons-material/Save'
 import LogoutIcon from '@mui/icons-material/Logout'
 import PrintOutlined from '@mui/icons-material/PrintOutlined'
+
 import {
   CBadge,
   CButton,
@@ -110,6 +111,7 @@ import {Link, NavigateFunction, useNavigate} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import ComboBox from './ComboBox.tsx'
 import QRCode from 'react-qr-code'
+import {CalendarViewMonth} from "@mui/icons-material";
 //import QRReader from 'react-qr-reader'
 
 const styles = {
@@ -249,18 +251,19 @@ const mapping = (item:{id:string, name:string}) => (
   </option>
 )
 export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable, added, cancelEdit, submitEdit //, submitQuery
-                                   , reload, toggle,  onNewBankAccount, onDeleteBankAccount //, onNewSalaryItem, disable
+                                   , reload, toggle,  toggleTable, onNewBankAccount, onDeleteBankAccount //, onNewSalaryItem, disable
                                    , handleLanguageChange, navigate, language, dispatch, logout}:
                                {title:string, collapse:boolean, initAdd:()=>void, edited:boolean, disable:boolean
                                    , added:boolean, edit:()=>void, cancelEdit:(e:any)=>void
                                    , submitEdit:(e:any)=>void, submitQuery:(e:any)=>void, reload:()=>void, toggle:()=>void
-                                   , onNewBankAccount?:()=>void, onDeleteBankAccount?:(e:any)=>void
+                                   , toggleTable:()=>void, onNewBankAccount?:()=>void, onDeleteBankAccount?:(e:any)=>void
                                    , onNewSalaryItem?:()=>void, handleLanguageChange: (arg:any)=>void
                                    , navigate:NavigateFunction, language:string, dispatch:Dispatch<any>
                                    , logout:(navigate:NavigateFunction) =>void }) => {
 
     const keyboardDoubleArrowUpIcon = <KeyboardDoubleArrowUpIcon/>
     const keyboardDoubleArrowDwnIcon = <KeyboardDoubleArrowDownIcon/>
+    const calendarViewMonth=<CalendarViewMonth/>
     const UpDownIcon =  collapse ? keyboardDoubleArrowUpIcon:keyboardDoubleArrowDwnIcon
     const sidebarShow = useSelector((state:any) => state.sidebarShow)
     return (
@@ -328,6 +331,10 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
                             onClick={()=>reload()}>
                     <HourglassTopTwoToneIcon/>
                 </IconButton>
+              <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
+                          onClick={() => toggleTable()}>
+                {calendarViewMonth}
+              </IconButton>
                 <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={() => toggle()}>
                     {UpDownIcon}
@@ -416,12 +423,13 @@ export const BSFormHead = ({title, collapse, cancelEdit, submitEdit, importData,
 }
 export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, initAdd
                                        , onNewLine, onDeleteLine,  submitCancel, submitEdit, getData, submitPrintPreview
-                                      , toggle, submitPost,  reload, handleLanguageChange
+                                      , toggle, toggleTable, submitPost,  reload, handleLanguageChange
                                        , navigate, language, dispatch, logout, current
                                     }:TransactionToolBarProps<ITransaction|IFinancials, ILineTransaction|ILineFinancials>)=> {
 
     const keyboardDoubleArrowUpIcon = <KeyboardDoubleArrowUpIcon/>
     const keyboardDoubleArrowDwnIcon = <KeyboardDoubleArrowDownIcon/>
+   const calendarViewMonth=<CalendarViewMonth/>
     const UpDownIcon =  collapse ? keyboardDoubleArrowUpIcon:keyboardDoubleArrowDwnIcon
 
     const sidebarShow = useSelector((state) =>
@@ -498,6 +506,10 @@ export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, i
                             onClick={reload}>
                     <HourglassTopTwoToneIcon/>
                 </IconButton>
+              <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
+                          onClick={toggleTable}>
+                {calendarViewMonth}
+              </IconButton>
                 <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={toggle}>
                     {UpDownIcon}

@@ -20,8 +20,9 @@ const UseForm = (): [UseFormResult] => {
   const title =  `${company}/${t(module_.title)}`
   const [language, setLanguage] = useState('en-US')
   const [state, setState] = useState <State>({collapse: true, fadeIn: true, timeout: 300})
+  const [visible, setVisible] = useState <boolean>( true)
   const toggle = () => setState({...state, collapse: !state.collapse})
-
+  const toggleTable = () => setVisible(!visible)
   const handleLanguageChange = (event:any) => {
     event.preventDefault()
     const value = event.target.value
@@ -29,6 +30,6 @@ const UseForm = (): [UseFormResult] => {
     i18n.changeLanguage(value).then(r => console.log('r >>>value ', r))
   }
   return [{ profile, setProfile, menu, setMenu, setModule, setRoutes, selected, t, i18n, title:title
-    , language, setLanguage, handleLanguageChange, toggle, state, modelid, company, module_}]
+    , language, setLanguage, handleLanguageChange, toggle, toggleTable, state, visible, modelid, company, module_}]
 }
 export default UseForm

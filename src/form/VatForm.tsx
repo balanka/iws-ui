@@ -24,7 +24,7 @@ import { styles as stylesx} from './BasicTreeTableProps.tsx'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const VatForm = () => {
-  const [{ profile, selected, t, toggle, state, company, module_ }] = useForm()
+  const [{ profile, selected, t, toggle, toggleTable, state, visible, company, module_ }] = useForm()
   const { token} = profile
   const dispatch = useDispatch()
   let navigate = useNavigate()
@@ -61,6 +61,7 @@ const VatForm = () => {
               submitQuery={reload}
               reload={reload}
               toggle={toggle}
+              toggleTable={toggleTable}
               logout={logout}
               navigate={navigate}
               language={language}
@@ -74,7 +75,7 @@ const VatForm = () => {
           </Grid>
           <Grid container
               // @ts-ignore
-                style={{...stylesx.outer, height:250, paddingTop: 10}} maximize direction="column">
+                style={{...stylesx.outer, height:250, paddingTop: 10, display:visible?'':'none'}} maximize direction="column">
             <VatGrid columnDefs ={vatColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData} />
           </Grid>
     </>

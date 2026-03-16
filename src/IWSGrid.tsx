@@ -234,9 +234,10 @@ interface Props <A>  {
     pagination?:boolean
     autoGroupColumnDef?:any,
     getRowId?: (params:GetRowIdParams<any, any>)=>string|null
+    onClick?:(e:any)=>void
 }
 // const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
-export const AccountGrid: FC<Props<IAccount>> = ({ columnDefs, defaultColDef, onRowSelected, rowData }:Props<IAccount>)=>
+export const AccountGrid: FC<Props<IAccount>> = ({ columnDefs, defaultColDef, onRowSelected, rowData, onClick }:Props<IAccount>)=>
     <AgGridReact
         theme = {myTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
@@ -244,6 +245,7 @@ export const AccountGrid: FC<Props<IAccount>> = ({ columnDefs, defaultColDef, on
         gridOptions ={{...getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected), paginationPageSizeSelector: [20, 50, 80,120, 200]}}
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
+        onClick={onClick}
     />
 export const BankAccountGrid: FC<Props<IBankAccount>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData
                                                          , gridRef, onGridReady}:Props<IBankAccount>)=>{

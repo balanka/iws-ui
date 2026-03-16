@@ -55,7 +55,7 @@ const STYLES = {
   }
 }
  const TransactionForm = () => {
-   const [{profile, selected, t, toggle, state, module_, modelid }] = useForm()
+   const [{profile, selected, t, toggle, toggleTable, state, visible, module_, modelid }] = useForm()
    const { token, company } = profile
    const dispatch = useDispatch()
   let navigate = useNavigate()
@@ -280,6 +280,7 @@ const STYLES = {
                 handleLanguageChange={handleLanguageChange}
                 dispatch={dispatch}
                 toggle={toggle}
+                toggleTable={toggleTable}
                 current={current}
         />
         <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
@@ -306,7 +307,7 @@ const STYLES = {
               // @ts-ignore
                 style={{...stylesx.outer,  height:state.collapse?minHeight:maxHeight
                     , paddingLeft: 10, paddingRight:5, paddingTop:state.collapse?minPadding:maxPadding, width: '100%'
-                    , zIndex:1}} maximize
+                    , zIndex:1, display:visible?'':'none'}} maximize
                 direction="column">
             <TransactionGrid gridOptions ={gridOptions}  columnDefs={transactionColumnDefs(t)}
                              onRowSelected={onRowSelected} rowData={rowData}/>

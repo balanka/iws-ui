@@ -46,7 +46,7 @@ const STYLES = {
 }
 const AssetForm = () => {
   // @ts-ignore
-  const [{profile, t, toggle, state, module_}] = useForm()
+  const [{profile, t, toggle, toggleTable, state, visible, module_}] = useForm()
   const { token, company, locale, currency } = profile
   const currencyx = currency ??'EUR'
   const dispatch = useDispatch()
@@ -92,6 +92,7 @@ const AssetForm = () => {
               submitQuery={reload}
               reload={reload}
               toggle={toggle}
+              toggleTable={toggleTable}
               logout={logout}
               navigate={navigate}
               language={language}
@@ -105,7 +106,7 @@ const AssetForm = () => {
          </Grid>
         <Grid container
             // @ts-ignore
-              style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 30}} maximize direction="column" >
+              style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 30, display: visible?'':'none'}} maximize direction="column" >
           <AssetGrid columnDefs ={assetColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
         </Grid>
     </>

@@ -25,7 +25,7 @@ import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const ArticleForm = () => {
-   const [{profile,  selected, t, toggle, state, module_ }] = useForm()
+   const [{profile,  selected, t, toggle, toggleTable, state, visible, module_ }] = useForm()
    const { token, company, locale, currency, stockAcc, expenseAcc, revenueAcc, vat} = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
@@ -84,6 +84,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  submitQuery={load}
                  reload={reload}
                  toggle={toggle}
+                 toggleTable={toggleTable}
                  logout={logout}
                  navigate={navigate}
                  language={language}
@@ -97,7 +98,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
              </Grid>
              <Grid container
                  // @ts-ignore
-                   style={{...stylesx.outer, height: 300, paddingTop: 10}} maximize direction="column">
+                   style={{...stylesx.outer, height: 300, paddingTop: 10, display: visible?'':'none'}} maximize direction="column">
                  <ArticleGrid columnDefs={articleColumnDefs(t)} onRowSelected={onRowSelected} rowData={rowData}/>
              </Grid>
          </>

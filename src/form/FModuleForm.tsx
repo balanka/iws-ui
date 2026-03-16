@@ -24,7 +24,7 @@ import UseMasterfileForm from './UseMasterfileForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const FModuleForm = () => {
-     const [{ profile, menu, selected, t, state, toggle, modelid, company}]  = useForm()
+     const [{ profile, menu, selected, t, state, visible, toggle, toggleTable, modelid, company}]  = useForm()
      const {token} = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
@@ -82,6 +82,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  submitQuery={submitQuery}
                  reload={reload}
                  toggle={toggle}
+                 toggleTable={toggleTable}
                  logout={logout}
                  navigate={navigate}
                  language={language}
@@ -91,7 +92,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
              <FModuleMainForm collapse={collapse} current={current} setCurrent={setCurrent} accData={accData.filter(m=>
                (parseInt(m.id.toString())===formEnum.FINANCIALS|| parseInt(m.id.toString())===formEnum.TRANSACTION))}
                       accountData ={accountData} rowData={rowData} disable={disable} height={height}  t={t}/>
-             <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>
+             <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
                  <MasterfileGrid columnDefs={fmoduleColumnDefs(t)} onRowSelected={onRowSelected} rowData={rowData}/>
              </Grid>
          </>

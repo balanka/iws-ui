@@ -335,7 +335,7 @@ export  interface TransactionToolBarProps<A extends IWSTransaction<L>, L extends
   , submitCancel:(e:any)=>void, submitEdit: (arg:any)=>void
   , getData:()=>any
   , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
-  , toggle:()=>void, submitPost:(arg:any)=>void,  reload:()=>void
+  , toggle:()=>void, toggleTable:()=>void, submitPost:(arg:any)=>void,  reload:()=>void
   , handleLanguageChange: (arg:any)=>void
   , navigate:NavigateFunction, language:string, dispatch:Dispatch<any>
   , logout:(navigate:NavigateFunction) =>void
@@ -375,7 +375,9 @@ export interface UseFormResult {
   , setLanguage:Dispatch<SetStateAction<string>>
   , handleLanguageChange:(language:any)=>void
   , state:State
+  , visible:boolean
   , toggle:() =>void
+  , toggleTable:()=>void
   , modelid : number
   , company:string
   , module_:any

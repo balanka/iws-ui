@@ -25,7 +25,7 @@ import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const CustomerForm = () => {
-  const [{ profile, selected, t, toggle, state, modelid, module_ }] = useForm()
+  const [{ profile, selected, t, toggle, toggleTable, state, visible, modelid, module_ }] = useForm()
   const { locale, stockAcc, expenseAcc, vat, currency } = profile
   const [, setIwsState] = useState(iwsStore.initialState)
   if (module_ === '11111' || module_ === 11111) return <Login/>
@@ -66,6 +66,7 @@ const CustomerForm = () => {
               submitQuery={submitQuery}
               reload={reload}
               toggle={toggle}
+              toggleTable={toggleTable}
               logout={logout}
               navigate={navigate}
               language={language}
@@ -86,7 +87,7 @@ const CustomerForm = () => {
           </Grid>
             <Grid container
                 // @ts-ignore
-                  style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 10}} maximize direction="column">
+                  style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 10, display:visible?'':'none'}} maximize direction="column">
               <CustomerGrid columnDefs ={customerColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
             </Grid>
       </>

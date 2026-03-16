@@ -24,7 +24,7 @@ import UseMasterfileForm from './UseMasterfileForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const PartnerForm = () => {
-     const [{ profile, menu, selected, t, state, toggle, modelid, company}]  = useForm()
+     const [{ profile, menu, selected, t, state, visible, toggle, toggleTable, modelid, company}]  = useForm()
      const {token} = profile
      const dispatch = useDispatch()
      let navigate = useNavigate()
@@ -83,6 +83,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  submitQuery={submitQuery}
                  reload={reload}
                  toggle={toggle}
+                 toggleTable={toggleTable}
                  logout={logout}
                  navigate={navigate}
                  language={language}
@@ -93,7 +94,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                <PartnerMainForm collapse={collapse} current={current} setCurrent={setCurrent}  disable={disable}
                               height={height}  t={t}/>
              {/*</Grid>*/}
-             <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>
+             <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
                  <MasterfileGrid columnDefs={PartnerColumnDefs(t)} onRowSelected={onRowSelected} rowData={rowData}/>
              </Grid>
          </>

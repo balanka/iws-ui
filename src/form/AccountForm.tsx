@@ -19,10 +19,11 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import UseMasterfileForm from './UseMasterfileForm.ts'
 import useForm from './UseForm.ts'
+import {CCollapse} from "@coreui/react";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const AccountForm = () => {
-   const [{profile, selected, t, toggle, state, module_}] = useForm()
+   const [{profile, selected, t, toggle, toggleTable, state, visible, module_}] = useForm()
    const {locale} = profile
    const dispatch = useDispatch()
    let navigate = useNavigate()
@@ -56,6 +57,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  submitQuery={reload}
                  reload={reload}
                  toggle={toggle}
+                 toggleTable={toggleTable}
                  logout={logout}
                  navigate={navigate}
                  language={language}
@@ -72,13 +74,16 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                                   accData={rowData}
                                   height={height}/>
                  </Grid>
-                 <Grid container
+       <CCollapse visible={visible}>
+
+       <Grid container
                  // @ts-ignore
-                     style={{...stylesx.outer, height: 400, paddingTop: 10}} maximize direction="column">
+                     style={{...stylesx.outer, height: 400, paddingTop: 10, display: visible?'none':'', display: visible?'':'none'}} maximize direction="column">
                     <AccountGrid columnDefs={accountColumnDefs(t)} onRowSelected={onRowSelected}
                               defaultColDef={{...defaultColDefX, filter:true}}
                               rowData={rowData}/>
                 </Grid>
+         </CCollapse>
          </>
      )
 }

@@ -34,7 +34,7 @@ import {isArrayAndNotEmpty} from "../utils/Utils.ts";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, SelectEditorModule,])
 
 const FinancialsForm = () => {
-  const [{ profile, selected, t, toggle, state, module_ }] = useForm()
+  const [{ profile, selected, t, toggle, toggleTable, state, visible, module_ }] = useForm()
   const { token, company} = profile
   let navigate = useNavigate()
   const dispatch = useDispatch()
@@ -206,6 +206,7 @@ const FinancialsForm = () => {
       handleLanguageChange={handleLanguageChange}
       dispatch={dispatch}
       toggle={toggle}
+      toggleTable={toggleTable}
       current={current}
       //zIndex={zIndex-1}
     />
@@ -238,8 +239,8 @@ const FinancialsForm = () => {
       <Grid container
         // @ts-ignore
             style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight
-              , paddingTop:state.collapse?minPadding:maxPadding, width: '100%'
-              , zIndex: 1}} maximize direction="column">
+              , paddingTop:state.collapse?minPadding:maxPadding, width: '100%', zIndex: 1, display:visible?'':'none'}}
+            maximize direction="column">
         <TransactionGrid
           // @ts-ignore
           gridOptions ={gridOptions} columnDefs={financialsColumnDefs(t)}
