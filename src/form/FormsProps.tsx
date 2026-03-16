@@ -25,6 +25,7 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
+  CTooltip,
 } from '@coreui/react'
 import {formEnum} from '../utils/FormEnum'
 import {sortById} from '../utils/Utils'
@@ -471,54 +472,78 @@ export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, i
                         {languages.map((item) => mapping(item))}
                     </CFormSelect>
                 </CHeaderToggler>
+              <CTooltip content="Remove the selected line" placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={(event)=>onDeleteLine(event)} disabled={current?.posted}>
                     <RemoveCircleOutlineIcon />
                 </IconButton>
+              </CTooltip>
+              <CTooltip content="Add new line" placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer"
                             style={{ height: 20, padding:1}} onClick={onNewLine} disabled={current?.posted}>
                     <AddCircleOutlineIcon />
                 </IconButton>
+              </CTooltip>
+              <CTooltip content="Add new entry" placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={initAdd} >
                     <AddBoxIcon />
                 </IconButton>
+              </CTooltip>
+              <CTooltip content="Save the new entry/changes " placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={(event)=>submitEdit(event)} disabled={current?.posted}>
                     <SaveIcon/>
                 </IconButton>
+              </CTooltip>
+              <CTooltip content="Cancel the new entry/changes" placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={(event) =>submitCancel(event)} disabled={current?.posted}>
                     <CancelIcon />
                 </IconButton>
+              </CTooltip>
+              <CTooltip content="Post the transaction" placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={(event)=>submitPost(event)} disabled={current?.posted}>
                     <CheckCircleOutlineIcon />
                 </IconButton>
+              </CTooltip>
+              <CTooltip content="Print the transaction" placement="top">
               <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                           onClick={()=>submitPrintPreview(current, templateName, getData)}>
                 <PrintOutlined/>
               </IconButton>
+              </CTooltip>
+              <CTooltip content="Export to excel" placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={()=>saveXlsx(saveProps)}>
                     <ArrowCircleDownIcon />
                 </IconButton>
+              </CTooltip>
+              <CTooltip content="Load the module data" placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={reload}>
                     <FilterListIcon/>
                 </IconButton>
-              <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
+              </CTooltip>
+              <CTooltip content="Display or hide the table " placement="top">
+                <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                           onClick={toggleTable}>
                 {listIcon}
-              </IconButton>
+                </IconButton>
+              </CTooltip>
+              <CTooltip content="Display or hide the form " placement="top">
                 <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={toggle}>
                     {UpDownIcon}
                 </IconButton>
+              </CTooltip>
+              <CTooltip content="Exit the application " placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={()=>logout(navigate)}>
                     <ExitToAppIcon/>
                 </IconButton>
+              </CTooltip>
             </Grid>
         </Grid>
     )
