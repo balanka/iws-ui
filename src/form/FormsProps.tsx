@@ -3,14 +3,11 @@ import {getFiltered, Show, toOption, transactionToOption} from '../utils/FormUti
 import Grid from 'react-fast-grid'
 import {IoMdMenu} from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
-import HourglassTopTwoToneIcon from '@mui/icons-material/HourglassTopTwoTone'
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload'
 import CancelIcon from '@mui/icons-material/Cancel'
 import SaveIcon from '@mui/icons-material/Save'
-import LogoutIcon from '@mui/icons-material/Logout'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import PrintOutlined from '@mui/icons-material/PrintOutlined'
-
 import {
   CBadge,
   CButton,
@@ -100,9 +97,12 @@ import {
 } from '../Models.ts'
 import {TFunction} from 'i18next'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import EditSquareIcon from '@mui/icons-material/EditSquare'
-import CheckIcon from '@mui/icons-material/Check'
+//import CheckIcon from '@mui/icons-material/Check'
+//import CheckBoxIcon from '@mui/icons-material/CheckBox'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
@@ -111,7 +111,8 @@ import {Link, NavigateFunction, useNavigate} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import ComboBox from './ComboBox.tsx'
 import QRCode from 'react-qr-code'
-import {CalendarViewMonth} from "@mui/icons-material";
+import FilterListIcon from '@mui/icons-material/FilterList';
+import ListIcon from '@mui/icons-material/List'
 //import QRReader from 'react-qr-reader'
 
 const styles = {
@@ -263,7 +264,7 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
 
     const keyboardDoubleArrowUpIcon = <KeyboardDoubleArrowUpIcon/>
     const keyboardDoubleArrowDwnIcon = <KeyboardDoubleArrowDownIcon/>
-    const calendarViewMonth=<CalendarViewMonth/>
+    const listIcon=<ListIcon/>
     const UpDownIcon =  collapse ? keyboardDoubleArrowUpIcon:keyboardDoubleArrowDwnIcon
     const sidebarShow = useSelector((state:any) => state.sidebarShow)
     return (
@@ -329,11 +330,11 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={()=>reload()}>
-                    <HourglassTopTwoToneIcon/>
+                    <FilterListIcon/>
                 </IconButton>
               <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                           onClick={() => toggleTable()}>
-                {calendarViewMonth}
+                {listIcon}
               </IconButton>
                 <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={() => toggle()}>
@@ -341,7 +342,7 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={()=>logout(navigate)}>
-                    <LogoutIcon/>
+                    <ExitToAppIcon/>
                 </IconButton>
             </Grid>
         </Grid>
@@ -399,7 +400,7 @@ export const BSFormHead = ({title, collapse, cancelEdit, submitEdit, importData,
             </IconButton>
             <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                         disabled={current.posted} onClick={(event)=>submitPost(event)}>
-              <CheckIcon />
+              <CheckCircleOutlineIcon />
             </IconButton>
             <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                 onClick={importData}>
@@ -407,7 +408,7 @@ export const BSFormHead = ({title, collapse, cancelEdit, submitEdit, importData,
             </IconButton>
             <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                         onClick={reload}>
-              <HourglassTopTwoToneIcon/>
+              <FilterListIcon/>
             </IconButton>
             <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                         onClick={toggle}>
@@ -415,7 +416,7 @@ export const BSFormHead = ({title, collapse, cancelEdit, submitEdit, importData,
             </IconButton>
             <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                         onClick={()=>logout(navigate)}>
-              <LogoutIcon/>
+              <ExitToAppIcon/>
             </IconButton>
           </Grid>
         </Grid>
@@ -429,7 +430,7 @@ export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, i
 
     const keyboardDoubleArrowUpIcon = <KeyboardDoubleArrowUpIcon/>
     const keyboardDoubleArrowDwnIcon = <KeyboardDoubleArrowDownIcon/>
-   const calendarViewMonth=<CalendarViewMonth/>
+   const listIcon=<ListIcon/>
     const UpDownIcon =  collapse ? keyboardDoubleArrowUpIcon:keyboardDoubleArrowDwnIcon
 
     const sidebarShow = useSelector((state) =>
@@ -492,7 +493,7 @@ export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, i
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={(event)=>submitPost(event)} disabled={current?.posted}>
-                    <CheckIcon />
+                    <CheckCircleOutlineIcon />
                 </IconButton>
               <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                           onClick={()=>submitPrintPreview(current, templateName, getData)}>
@@ -504,11 +505,11 @@ export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, i
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={reload}>
-                    <HourglassTopTwoToneIcon/>
+                    <FilterListIcon/>
                 </IconButton>
               <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                           onClick={toggleTable}>
-                {calendarViewMonth}
+                {listIcon}
               </IconButton>
                 <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={toggle}>
@@ -516,7 +517,7 @@ export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, i
                 </IconButton>
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={()=>logout(navigate)}>
-                    <LogoutIcon/>
+                    <ExitToAppIcon/>
                 </IconButton>
             </Grid>
         </Grid>
@@ -597,7 +598,7 @@ export const BalanceSheetHead = ({ style, title, submitQuery
               <CHeaderToggler className="ps-1">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={()=>logout(navigate)}>
-                  <LogoutIcon/>
+                  <ExitToAppIcon/>
                 </IconButton>
               </CHeaderToggler>
             </Grid>
@@ -679,7 +680,7 @@ export const JournalFormHead = ({ style, title, submitQuery, submitQuery2
                             <CHeaderToggler className="ps-1">
                                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                                             onClick={()=>logout(navigate)}>
-                                    <LogoutIcon/>
+                                    <ExitToAppIcon/>
                                 </IconButton>
                             </CHeaderToggler>
                         </Grid>
