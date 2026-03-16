@@ -4,6 +4,7 @@ export {};
 declare global {
   interface Window {
     _env_: {
+      SCHEME: string;
       API_URL: string;
       REACT_APP_API_BASE: string;
       REACT_APP_VERSION: string;

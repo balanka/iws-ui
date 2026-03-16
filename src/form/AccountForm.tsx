@@ -78,7 +78,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
        <Grid container
                  // @ts-ignore
-                     style={{...stylesx.outer, height: 400, paddingTop: 10, display: visible?'none':'', display: visible?'':'none'}} maximize direction="column">
+                     style={{...stylesx.outer, height: 400, paddingTop: 10, display: visible?'':'none'}} maximize direction="column">
                     <AccountGrid columnDefs={accountColumnDefs(t)} onRowSelected={onRowSelected}
                               defaultColDef={{...defaultColDefX, filter:true}}
                               rowData={rowData}/>

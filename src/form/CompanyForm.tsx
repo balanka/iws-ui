@@ -22,7 +22,7 @@ import {Get2} from "./CrudController.ts";
 import { styles as stylesx} from './BasicTreeTableProps.tsx'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 const CompanyForm = () => {
-  const [{ profile, selected, t,  toggle, state, modelid, company, module_ }] = useForm()
+  const [{ profile, selected, t,  toggle, toggleTable, state, visible, modelid, company, module_ }] = useForm()
   const { token, locale } = profile
   const [, setIwsState] = useState(iwsStore.initialState)
 
@@ -61,6 +61,7 @@ const CompanyForm = () => {
               submitQuery={submitQuery}
               reload={reload}
               toggle={toggle}
+              toggleTable={toggleTable}
               logout={logout}
               navigate={navigate}
               language={language}
@@ -80,7 +81,7 @@ const CompanyForm = () => {
           </Grid>
             <Grid container
                 // @ts-ignore
-                  style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 10}} maximize direction="column">
+                  style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 10, display:visible?'':'none'}} maximize direction="column">
               <CustomerGrid columnDefs ={customerColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData.filter(row =>row.id===company)} />
             </Grid>
     </>
