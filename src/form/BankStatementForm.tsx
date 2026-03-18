@@ -28,7 +28,7 @@ import { styles as stylesx} from './BasicTreeTableProps.tsx'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const BankStatementForm = () => {
-  const [{profile, t,  selected, language, toggle, handleLanguageChange, state, modelid, company,  module_ }] = useForm()
+  const [{profile, t,  selected, language, toggle, toggleTable, handleLanguageChange, state, modelid, company,  module_ }] = useForm()
   const { token, locale, currency } = profile
   const currencyx = currency ??'EUR'
   const dispatch = useDispatch()
@@ -94,12 +94,14 @@ const BankStatementForm = () => {
               submitPost={submitPost}
               reload={reload}
               toggle={toggle}
+              toggleTable={toggleTable}
               logout={logout}
               navigate={navigate}
               language={language}
               handleLanguageChange={handleLanguageChange}
               dispatch={dispatch}
               current={current}
+              t={t}
           />
           <Grid item
                 //@ts-ignore

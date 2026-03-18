@@ -254,14 +254,14 @@ const mapping = (item:{id:string, name:string}) => (
 )
 export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable, added, cancelEdit, submitEdit //, submitQuery
                                    , reload, toggle,  toggleTable, onNewBankAccount, onDeleteBankAccount //, onNewSalaryItem, disable
-                                   , handleLanguageChange, navigate, language, dispatch, logout}:
+                                   , handleLanguageChange, navigate, language, dispatch, logout, t}:
                                {title:string, collapse:boolean, initAdd:()=>void, edited:boolean, disable:boolean
                                    , added:boolean, edit:()=>void, cancelEdit:(e:any)=>void
                                    , submitEdit:(e:any)=>void, submitQuery:(e:any)=>void, reload:()=>void, toggle:()=>void
                                    , toggleTable:()=>void, onNewBankAccount?:()=>void, onDeleteBankAccount?:(e:any)=>void
                                    , onNewSalaryItem?:()=>void, handleLanguageChange: (arg:any)=>void
                                    , navigate:NavigateFunction, language:string, dispatch:Dispatch<any>
-                                   , logout:(navigate:NavigateFunction) =>void }) => {
+                                   , logout:(navigate:NavigateFunction) =>void, t:TFunction<'translation', undefined> }) => {
 
     const keyboardDoubleArrowUpIcon = <KeyboardDoubleArrowUpIcon/>
     const keyboardDoubleArrowDwnIcon = <KeyboardDoubleArrowDownIcon/>
@@ -295,67 +295,91 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
                         {languages.map((item) => mapping(item))}
                     </CFormSelect>
                 </CHeaderToggler>
+              <CTooltip content={t('toolTip.common.removeBankAccount')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer"
                             style={{ height: 20, padding:1, display:onDeleteBankAccount? 'block':'none'}}
                             onClick={(event)=>
                                 onDeleteBankAccount?onDeleteBankAccount(event):void(0)} disabled={!onDeleteBankAccount} >
                     <RemoveCircleOutlineIcon />
                 </IconButton>
+              </CTooltip>
+              <CTooltip content={t('toolTip.common.addBankAccount')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer"
                             style={{ height: 20, padding:1, display:onNewBankAccount?'block':'none'}} onClick={()=>
                     onNewBankAccount?onNewBankAccount():void(0)} disabled={!onNewBankAccount}>
                     <AddCircleOutlineIcon/>
                 </IconButton>
+              </CTooltip>
+              <CTooltip content={t('toolTip.common.add')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             disabled={!added}      onClick={()=>initAdd()}>
                     <AddBoxIcon />
                 </IconButton>
+              </CTooltip>
+              <CTooltip content={t('toolTip.common.save')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             disabled={disable && !edited && !added} onClick={(e)=>submitEdit(e)}>
                     <SaveIcon/>
                 </IconButton>
+              </CTooltip>
+              <CTooltip content={t('toolTip.common.edit')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             disabled={!edited && !added} onClick={(e)=>cancelEdit(e)}>
                     <CancelIcon />
                 </IconButton>
+              </CTooltip>
+              <CTooltip content={t('toolTip.common.edit')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={()=>edit()}>
                     <EditSquareIcon />
                 </IconButton>
-                <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            disabled={!edited}>
-                    <ArrowCircleDownIcon />
-                </IconButton>
-                <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}>
-                    <DriveFolderUploadIcon />
-                </IconButton>
+              </CTooltip>
+                {/*<IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}*/}
+                {/*            disabled={!edited}>*/}
+                {/*    <ArrowCircleDownIcon />*/}
+                {/*</IconButton>*/}
+              {/*<CTooltip content={t('toolTip.common.load')} placement="top">*/}
+              {/*  <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}>*/}
+              {/*      <DriveFolderUploadIcon />*/}
+              {/*  </IconButton>*/}
+              {/*</CTooltip>*/}
+              <CTooltip content={t('toolTip.common.load')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={()=>reload()}>
                     <FilterListIcon/>
                 </IconButton>
-              <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
-                          onClick={() => toggleTable()}>
-                {listIcon}
-              </IconButton>
+              </CTooltip>
+              <CTooltip content={t('toolTip.common.table')} placement="top">
                 <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={() => toggle()}>
+                            onClick={() => toggleTable}>
+                  {listIcon}
+                </IconButton>
+              </CTooltip>
+              <CTooltip content={t('toolTip.common.form')} placement="top">
+                <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
+                            onClick={() => toggle}>
                     {UpDownIcon}
                 </IconButton>
+              </CTooltip>
+              <CTooltip content={t('toolTip.common.exit')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={()=>logout(navigate)}>
                     <ExitToAppIcon/>
                 </IconButton>
+             </CTooltip>
             </Grid>
         </Grid>
     )
 }
 
-export const BSFormHead = ({title, collapse, cancelEdit, submitEdit, importData, submitPost, reload, toggle, logout, navigate
-                           , language, handleLanguageChange, dispatch, current}:{title:string, collapse:boolean
+export const BSFormHead = ({title, collapse, cancelEdit, submitEdit, importData
+                             , submitPost, reload, toggle, toggleTable, logout, navigate
+                           , language, handleLanguageChange, dispatch, current, t}:{title:string, collapse:boolean
                             ,  cancelEdit:(e:any)=>void, submitEdit: (e:any)=>void, importData:()=>void
-                            , submitPost:(e:any)=>void, reload: ()=>void, toggle:()=>void
+                            , submitPost:(e:any)=>void, reload: ()=>void, toggle:()=>void, toggleTable:()=>void
                             , logout:(navigate:NavigateFunction) =>void, navigate:NavigateFunction, language:string
-                            ,  handleLanguageChange: (arg:any)=>void,  dispatch:Dispatch<any>, current:IBankStatement }) => {
+                            ,  handleLanguageChange: (arg:any)=>void,  dispatch:Dispatch<any>, current:IBankStatement
+                            , t:TFunction<'translation', undefined>}) => {
     const keyboardDoubleArrowUpIcon = <KeyboardDoubleArrowUpIcon/>
     const keyboardDoubleArrowDwnIcon = <KeyboardDoubleArrowDownIcon/>
     const UpDownIcon =  collapse ? keyboardDoubleArrowUpIcon:keyboardDoubleArrowDwnIcon
@@ -390,35 +414,54 @@ export const BSFormHead = ({title, collapse, cancelEdit, submitEdit, importData,
                 {languages.map((item) => mapping(item))}
               </CFormSelect>
             </CHeaderToggler>
-
-            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+            <CTooltip content={t('toolTip.common.save')} placement="top">
+              <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                         disabled={current.posted} onClick={(e)=>submitEdit(e)}>
-              <SaveIcon/>
-            </IconButton>
-            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                  <SaveIcon/>
+                </IconButton>
+             </CTooltip>
+            <CTooltip content={t('toolTip.common.canceln')} placement="top">
+                  <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                         disabled={current.posted} onClick={(e)=>cancelEdit(e)}>
-              <CancelIcon />
-            </IconButton>
-            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                      <CancelIcon />
+                   </IconButton>
+            </CTooltip>
+            <CTooltip content={t('toolTip.transaction.post')} placement="top">
+                <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                         disabled={current.posted} onClick={(event)=>submitPost(event)}>
-              <CheckCircleOutlineIcon />
-            </IconButton>
-            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                  <CheckCircleOutlineIcon />
+              </IconButton>
+            </CTooltip>
+            <CTooltip content={t('toolTip.common.import')} placement="top">
+              <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                 onClick={importData}>
-              <DriveFolderUploadIcon />
-            </IconButton>
-            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                <DriveFolderUploadIcon />
+              </IconButton>
+            </CTooltip>
+            <CTooltip content={t('toolTip.common.load')} placement="top">
+              <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                         onClick={reload}>
-              <FilterListIcon/>
-            </IconButton>
-            <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
+                    <FilterListIcon/>
+              </IconButton>
+            </CTooltip>
+            <CTooltip content={t('toolTip.common.table')} placement="top">
+              <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
+                          onClick={toggleTable}>
+                <ListIcon/>
+              </IconButton>
+            </CTooltip>
+            <CTooltip content={t('toolTip.common.form')} placement="top">
+                <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                         onClick={toggle}>
-              {UpDownIcon}
-            </IconButton>
-            <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
+                  {UpDownIcon}
+                </IconButton>
+            </CTooltip>
+            <CTooltip content={t('toolTip.common.exit')} placement="top">
+              <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                         onClick={()=>logout(navigate)}>
-              <ExitToAppIcon/>
-            </IconButton>
+                <ExitToAppIcon/>
+              </IconButton>
+            </CTooltip>
           </Grid>
         </Grid>
     )
@@ -426,12 +469,11 @@ export const BSFormHead = ({title, collapse, cancelEdit, submitEdit, importData,
 export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, initAdd
                                        , onNewLine, onDeleteLine,  submitCancel, submitEdit, getData, submitPrintPreview
                                       , toggle, toggleTable, submitPost,  reload, handleLanguageChange
-                                       , navigate, language, dispatch, logout, current
+                                       , navigate, language, dispatch, logout, current, t
                                     }:TransactionToolBarProps<ITransaction|IFinancials, ILineTransaction|ILineFinancials>)=> {
 
     const keyboardDoubleArrowUpIcon = <KeyboardDoubleArrowUpIcon/>
     const keyboardDoubleArrowDwnIcon = <KeyboardDoubleArrowDownIcon/>
-   const listIcon=<ListIcon/>
     const UpDownIcon =  collapse ? keyboardDoubleArrowUpIcon:keyboardDoubleArrowDwnIcon
 
     const sidebarShow = useSelector((state) =>
@@ -472,67 +514,67 @@ export const FinancialsFormHead = ({ title, templateName, saveProps, collapse, i
                         {languages.map((item) => mapping(item))}
                     </CFormSelect>
                 </CHeaderToggler>
-              <CTooltip content="Remove the selected line" placement="top">
+              <CTooltip content={t('toolTip.transaction.removeLine')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={(event)=>onDeleteLine(event)} disabled={current?.posted}>
                     <RemoveCircleOutlineIcon />
                 </IconButton>
               </CTooltip>
-              <CTooltip content="Add new line" placement="top">
+              <CTooltip content={t('toolTip.transaction.addLine')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer"
                             style={{ height: 20, padding:1}} onClick={onNewLine} disabled={current?.posted}>
                     <AddCircleOutlineIcon />
                 </IconButton>
               </CTooltip>
-              <CTooltip content="Add new entry" placement="top">
+              <CTooltip content={t('toolTip.common.add')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={initAdd} >
                     <AddBoxIcon />
                 </IconButton>
               </CTooltip>
-              <CTooltip content="Save the new entry/changes " placement="top">
+              <CTooltip content={t('toolTip.common.save')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={(event)=>submitEdit(event)} disabled={current?.posted}>
                     <SaveIcon/>
                 </IconButton>
               </CTooltip>
-              <CTooltip content="Cancel the new entry/changes" placement="top">
+              <CTooltip content={t('toolTip.common.canceln')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={(event) =>submitCancel(event)} disabled={current?.posted}>
                     <CancelIcon />
                 </IconButton>
               </CTooltip>
-              <CTooltip content="Post the transaction" placement="top">
+              <CTooltip content={t('toolTip.transaction.post')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={(event)=>submitPost(event)} disabled={current?.posted}>
                     <CheckCircleOutlineIcon />
                 </IconButton>
               </CTooltip>
-              <CTooltip content="Print the transaction" placement="top">
+              <CTooltip content= {t('toolTip.common.print')} placement="top">
               <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                           onClick={()=>submitPrintPreview(current, templateName, getData)}>
                 <PrintOutlined/>
               </IconButton>
               </CTooltip>
-              <CTooltip content="Export to excel" placement="top">
+              <CTooltip content={t('toolTip.common.export')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={()=>saveXlsx(saveProps)}>
                     <ArrowCircleDownIcon />
                 </IconButton>
               </CTooltip>
-              <CTooltip content="Load the module data" placement="top">
+              <CTooltip content={t('toolTip.common.load')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={reload}>
                     <FilterListIcon/>
                 </IconButton>
               </CTooltip>
-              <CTooltip content="Display or hide the table " placement="top">
+              <CTooltip content={t('toolTip.common.table')} placement="top">
                 <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                           onClick={toggleTable}>
-                {listIcon}
+                  <ListIcon/>
                 </IconButton>
               </CTooltip>
-              <CTooltip content="Display or hide the form " placement="top">
+              <CTooltip content={t('toolTip.common.form')} placement="top">
                 <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={toggle}>
                     {UpDownIcon}
@@ -3609,30 +3651,35 @@ const MasterfileComboBox2:FC<FinancialsCBoxProps3<IFinancials, IMasterfile, ILin
                                    , zIndex, styles})=>{
   // console.log('id', id)
   // console.log('name', name)
-  // console.log('currentLine', currentLine)
+   console.log('currentLine', currentLine)
   console.log('current', current)
-  console.log('accFilter', accFilter)
+  //console.log('accFilter', accFilter)
   // @ts-ignore
-  const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === currentLine[id])??defaultValue
-  //const filtered= (current.modelid===formEnum.ACCOUNT)?getFiltered(data, accFilter):data
+  //const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === currentLine[id])??defaultValue
+
   const filtered= getFiltered(data, accFilter)
   console.log('filtered', filtered)
+  let currentLinex:ILineFinancials = {...currentLine}
+  let currentLinex1: {[index: string]:any} ={...currentLinex}
+
   return (
     <ComboBox<{value:string|bigint,  label:string}>
       style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
       disable={current.posted}
-      value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
       onChange={(value:any, _event:any) => {
        const currentAccount = (data ?? [defaultValue]).find((acc: { id: any }) => acc.id ===value)
-        const currentLinex:ILineFinancials = {...currentLine, [id]: value
-                                      , [name]: currentAccount ?currentAccount.name:'',  company:`-${current.company}`}
+         currentLinex = {...currentLine, [id]: value, [name]: currentAccount ?currentAccount.name:''
+           ,  company:`-${current.company}`}
         setCurrentLine({...currentLinex})
         const lines:ILineFinancials[] = current.lines
         const idx = lines.findIndex((obj) => obj.id === currentLinex.id);
         (idx === -1) ? current.lines.push(currentLinex) : (current.lines[idx] = currentLinex)
-        const x= {...current, account:currentLinex.account}
+        const x= {...current, account:currentLinex.account, lines: current.lines.filter((line)=>
+            (line.account.length==0|| line.oaccount.length==0))}
+        //console.log('x', x)
         setCurrent(x)
       }}
+      value={{value:currentLinex1[id], label: `${currentLinex1[id]} ${currentLinex1[name]}`}}
       values={filtered.slice().sort(sortById).map(toOption)}
       zIndex={zIndex}
     />
@@ -4009,6 +4056,7 @@ export const FinancialsMainForm =
                        , height:number, zIndex:number}) => {
     const styles = STYLES
      console.log('current>>', current)
+      console.log('currentLineFinancials>>', currentLineFinancials)
     const currentx:IFinancials = Array.isArray(current)?current[0]:current
     const modelid= currentx?.modelid??0
     const currentModule= modules.find((m:IFmodule) =>m.id == BigInt(modelid))??initfModule[0]

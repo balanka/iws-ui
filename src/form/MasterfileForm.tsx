@@ -90,6 +90,7 @@ const MasterfileForm = () => {
         language={language}
         handleLanguageChange={handleLanguageChange}
         dispatch={dispatch}
+        t={t}
       />
       <MasterfilesMainForm2 collapse={collapse} current={current??current_} setCurrent={setCurrent} disable={disable}
                             height={height} accData={accData} t={t}/>

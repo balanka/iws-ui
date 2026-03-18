@@ -70,6 +70,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  language={language}
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
+                 t={t}
              />
 
              <Grid container maximize direction="column"

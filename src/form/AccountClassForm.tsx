@@ -69,6 +69,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  language={language}
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
+                 t={t}
              />
              <MasterfilesMainForm2 collapse ={state.collapse} current={current} setCurrent={setCurrent} disable={disable} t={t} height={0}
                                        accData={ iwsState.get(formEnum.ACCOUNT) ?? accData}/>

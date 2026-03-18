@@ -72,6 +72,7 @@ const CustomerForm = () => {
               language={language}
               handleLanguageChange={handleLanguageChange}
               dispatch={dispatch}
+              t={t}
           />
           <Grid container style={{...stylesx.inner, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
               <CustomerTabs  current={current} setCurrent={setCurrent}

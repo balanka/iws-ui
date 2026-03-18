@@ -90,6 +90,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  language={language}
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
+                 t={t}
              />
              <Grid container style={{...stylesx.innerX, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
                  <ArticleTabs current={current} setCurrent={setCurrent} disable={disable} t={t} data ={rowData}

@@ -88,6 +88,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  language={language}
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
+                 t={t}
              />
              <FModuleMainForm collapse={collapse} current={current} setCurrent={setCurrent} accData={accData.filter(m=>
                (parseInt(m.id.toString())===formEnum.FINANCIALS|| parseInt(m.id.toString())===formEnum.TRANSACTION))}

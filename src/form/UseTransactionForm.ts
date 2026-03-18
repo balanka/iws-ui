@@ -105,7 +105,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
          ( line:L, setCurrent:Dispatch<SetStateAction<T>>) => {
              const dx: T = {...current}
            console.log('Line', line)
-             const newLine:L = {...line, id: BigInt(-1), transid: current?.id1, company:company}
+             let  newLine:L = {...line, id: BigInt(-1), transid: current?.id1, company:company}
            console.log('newLine', newLine)
            if(dx.hasOwnProperty('lines'))
              dx.lines.push(newLine)
@@ -113,6 +113,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
            gridApi!?.applyTransaction({add: [newLine]})
            console.log('dx', dx)
            setCurrent(dx)
+           setCurrentLine({...newLine})
          },
          [current],
      )
@@ -160,9 +161,10 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
 
   const initAdd = () => {
     setDisable(false)
-    console.log('current_', current_)
     const currentN = {...current_, lines:[initialLine]}
     const newRow:T = {...currentN, company: company, currency: currency, editing: false}
+    console.log('newRow',  newRow)
+    setCurrentLine(newRow?.lines[0])
     EditRow(newRow, true, setCurrent)
   }
   const reload = () => {

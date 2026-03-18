@@ -6,7 +6,7 @@ import iwsStore from "./Store.tsx";
 
 export const getEnvVariable = (key:any, defaultValue = '') => {
   // Check if window._env_ exists and has the key
-  return window._env_?.[key] || defaultValue;
+  return window._env_?.[key] ?? defaultValue;
 }
 export const getFiltered =(accounts:IMasterfile[], filter:string[]):IMasterfile[]=>{
   console.log('filter', filter)

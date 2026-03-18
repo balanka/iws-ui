@@ -56,13 +56,13 @@ const STYLES = {
 }
  const TransactionForm = () => {
    const [{profile, selected, t, toggle, toggleTable, state, visible, module_, modelid }] = useForm()
-   const { token, company } = profile
+   const { token, currency, company } = profile
    const dispatch = useDispatch()
   let navigate = useNavigate()
   if (module_ === '11111' || module_ === 11111) return <Login/>
    let title_ = `${company}/${t(module_.title)}`
   const initialState:ITransaction = initLtr [0]
-  const initialLine:ILineTransaction = initLineTransaction
+  const initialLine:ILineTransaction = {...initLineTransaction, currency:currency??''}
   const current_:ITransaction = initialState
    const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
    const [rowData, setRowData] = useState<ITransaction[]>([])
@@ -282,6 +282,7 @@ const STYLES = {
                 toggle={toggle}
                 toggleTable={toggleTable}
                 current={current}
+                t={t}
         />
         <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
           <TransactionMainForm collapse={state.collapse} current={current??current_} setCurrent={setCurrent}

@@ -35,13 +35,13 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, Se
 
 const FinancialsForm = () => {
   const [{ profile, selected, t, toggle, toggleTable, state, visible, module_ }] = useForm()
-  const { token, company} = profile
+  const { token, currency, company} = profile
   let navigate = useNavigate()
   const dispatch = useDispatch()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   let title_ = `${company} /${t(module_.title)}`
   const current_: IFinancials = initFtr [0]
-  const initialLine:ILineFinancials = initLineFinancials
+  const initialLine:ILineFinancials = {...initLineFinancials, currency:currency??''}
   const [currentLine, setCurrentLine] = useState<ILineFinancials>(initialLine)
   const [rowData, setRowData] = useState<IFinancials[]>([])
   const  [{  language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction
@@ -208,6 +208,7 @@ const FinancialsForm = () => {
       toggle={toggle}
       toggleTable={toggleTable}
       current={current}
+      t={t}
       //zIndex={zIndex-1}
     />
     <Grid container style={{borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 1}} maximize direction="row" zeroMinWidth>

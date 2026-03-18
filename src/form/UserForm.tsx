@@ -65,6 +65,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  language={language}
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
+                 t={t}
              />
            <UserTabs collapse ={state.collapse} current={current} setCurrent={setCurrent} disable={disable} t={t} height={0}/>
            <Grid item style={{...stylesx.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight}}>

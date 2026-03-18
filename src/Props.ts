@@ -340,6 +340,7 @@ export  interface TransactionToolBarProps<A extends IWSTransaction<L>, L extends
   , navigate:NavigateFunction, language:string, dispatch:Dispatch<any>
   , logout:(navigate:NavigateFunction) =>void
   , current:IFinancials|ITransaction
+  , t:TFunction<'translation', undefined>
 }
 export interface IJournalIF<A>  extends IWSModel  {
     fromPeriod:number

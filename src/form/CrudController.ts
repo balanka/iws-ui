@@ -6,7 +6,7 @@ import {HttpMethod, ILoggingContext, IProfile, IWSModel} from '../Models.ts'
 import {NavigateFunction} from "react-router-dom";
 import {TFunction} from "i18next";
 import {Dispatch, SetStateAction} from "react";
-import {getEnvVariable} from "../utils/FormUtils.tsx";
+//import {getEnvVariable} from "../utils/FormUtils.tsx";
 // @ts-ignore
 //const SERVER_IP:string = 'REACT_APP_HOST_IP_ADDRESS'
 const WEB_SERVER_IP:string = 'REACT_WEB_HOST_IP_ADDRESS'
@@ -19,10 +19,10 @@ const apiUrl = window?._env_?.API_URL; // "192.168.64.1"
 const apiPort = window?._env_?.API_PORT??"8080"; // "192.168.64.1"
 const scheme = window?._env_?.SCHEME??"http"
 //const API_BASE= getEnvVariable('REACT_APP_API_BASE', '/api1');
-const SERVER_IP= getEnvVariable('API_URL', 'API_URL');
+//const SERVER_IP= getEnvVariable('API_URL', 'API_URL');
 //const SERVER_URL = `http://${apiUrl}${apiBase}` //'http://192.168.64.1/api'
 const SERVER_URL = `${scheme}://${apiUrl}${apiBase}`
-//const SERVER_URL = 'http://192.168.64.1:8080'
+//const SERVER_URL = 'http://192.168.64.1:8080/api'
 //const SERVER_URL = `http://${SERVER_IP}:${SERVER_PORT}` //'http://192.168.1.139:8091'
 //const SERVER_URL = `http://${WEB_SERVER_IP}:${SERVER_PORT}`
 //const apiUrl = getEnvVariable('API_URL', 'http://localhost:8080');
@@ -33,7 +33,7 @@ console.log(' apiPort', apiPort)
 console.log(' scheme', scheme)
 console.log(' apiUrl', apiUrl);
 console.log(' SERVER_URL', SERVER_URL)
-console.log(' SERVER_IP', SERVER_IP)
+//console.log(' SERVER_IP', SERVER_IP)
 console.log(' WEB_SERVER_IP', WEB_SERVER_IP)
 const fetchFn00 = (url: string,  record:any) =>
    fetch(url,  {body: JSON.stringify(record), method: 'POST'}).then((response: any) => {

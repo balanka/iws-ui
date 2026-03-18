@@ -92,6 +92,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  language={language}
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
+                 t={t}
              />
            <MasterfileMainForm collapse={collapse} current={current??current_} setCurrent={setCurrent} disable={disable}
                            height={height}  t={t}/>

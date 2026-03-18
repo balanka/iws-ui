@@ -89,6 +89,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  language={language}
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
+                 t={t}
              />
              {/*<Grid item style={{...styles.outer, paddingTop:5, height: state.collapse?minHeight:maxHeight}}>*/}
                <PartnerMainForm collapse={collapse} current={current} setCurrent={setCurrent}  disable={disable}

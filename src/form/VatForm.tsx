@@ -66,7 +66,9 @@ const VatForm = () => {
               navigate={navigate}
               language={language}
               handleLanguageChange={handleLanguageChange}
-              dispatch={dispatch}/>
+              dispatch={dispatch}
+              t={t}
+          />
           <Grid container style={{ borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 10
                                     , height:state.collapse?minHeight:maxHeight
                                    , display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>

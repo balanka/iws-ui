@@ -31,6 +31,28 @@
   "searchTooltip": "Suche",
   "searchPlaceholder": "Suche"
 },
+  "toolTip": {
+    "common": {
+      "add": "Crée un nouvel enregistrement",
+      "edit": "Permet ou block l'édition/modification",
+      "addBankAccount": "Crée un nouveau compte bancaire",
+      "removeBankAccount": "Supprime un compte bancaire",
+      "save": "Enrgistre la/les modidifications/ajouts",
+      "canceln": "Annule la/les modidifications/ajouts",
+      "print": "Affice la transaction/l'enregistrement en mode impression",
+      "export": "Export la transaction/l'enregistrement format Excel",
+      "load": "Charge les données  de la base",
+      "import": "Import les données ",
+      "table": "Affiche ou cache la table",
+      "form": "Affiche ou cache le formulaire ",
+      "exit": "Quitter l'application"
+    },
+    "transaction": {
+      "addLine": "Ajoute une nouvelle ligne",
+      "removeLine": "Supprime la line ",
+      "post": "Valide la transaction/le journal"
+    }
+  },
   "common": {
     "print": "Drucken",
     "dashboard": "Dashboard",

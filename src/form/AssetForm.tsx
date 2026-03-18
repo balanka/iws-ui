@@ -98,6 +98,7 @@ const AssetForm = () => {
               language={language}
               handleLanguageChange={handleLanguageChange}
               dispatch={dispatch}
+              t={t}
           />
 
           <Grid container style={{...STYLES.inner, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>

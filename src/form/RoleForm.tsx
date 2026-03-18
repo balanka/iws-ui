@@ -85,6 +85,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  language={language}
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
+                 t={t}
              />
            <RoleTabs  collapse={collapse} current={current} setCurrent={setCurrent}
                       disable={disable} t={t}  height={height} />

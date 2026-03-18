@@ -31,8 +31,30 @@
     "searchTooltip": "search Tooltip",
     "searchPlaceholder": "search Placeholder"
   },
+"toolTip": {
   "common": {
-    "print": "Print",
+    "add": "Add new entry",
+    "edit": "Swich to edit/lock mode",
+    "addBankAccount": "Add bank account",
+    "removeBankAccount": "Remove bank account",
+    "save": "Save new entry/ or changes",
+    "canceln": "Cancels new entry/ or changes",
+    "print": "Print the transaction/ entry",
+    "export": "Export the transaction/ entry to Excel",
+    "load": "Load the data from the data store",
+    "import": "Import data",
+    "table": "Display  or hides the table",
+    "form": "Display  or hides the form",
+    "exit": "Exit the application"
+  },
+  "transaction": {
+    "addLine": "Add mew line",
+    "removeLine": "Remove the selected line",
+    "post": "Post the journal/transaction"
+  }
+},
+  "common": {
+    "print": "Prints",
     "dashboard": "Dashboard",
     "id": "Id",
     "title": "Title",
@@ -295,7 +317,7 @@
     "title": "Transactions",
     "parent": "Parent",
     "accountFilter": "Debit filter ",
-    "oaccountFilter": "Crebit filter",
+    "oaccountFilter": "Crebit filter"
   },
   "financials": {
     "title":      "Financials",

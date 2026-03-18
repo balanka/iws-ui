@@ -83,6 +83,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                  language={language}
                  handleLanguageChange={handleLanguageChange}
                  dispatch={dispatch}
+                 t={t}
              />
            <PermissionMainForm collapse={collapse} current={current} setCurrent={setCurrent}
                                disable={disable} t={t}  height={height} />
