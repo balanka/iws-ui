@@ -1,23 +1,19 @@
 import React, {useState, useEffect} from 'react'
-import { AllCommunityModule, ClientSideRowModelModule, ModuleRegistry } from 'ag-grid-community'
+import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import Grid from 'react-fast-grid'
-import { styles as stylesx } from './BasicTreeTableProps'
+import {styles} from './BasicTreeTableProps'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {CommonFormHead, AssetMainForm} from './FormsProps'
+import {AssetMainForm} from './FormsProps'
 import { Get} from './CrudController'
 import {initAsset, MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import {assetColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IAsset, IMasterfile} from '../Models.ts'
-import {AssetGrid} from '../IWSGrid.tsx'
 import Login from './Login'
-import {logout} from '../utils/FormUtils.tsx'
-import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
 import UseMasterfileForm from './UseMasterfileForm.ts'
 import useForm from './UseForm.ts'
 
@@ -46,11 +42,9 @@ const STYLES = {
 }
 const AssetForm = () => {
   // @ts-ignore
-  const [{profile, t, toggle, toggleTable, state, visible, module_}] = useForm()
+  const [{profile, t, module_}] = useForm()
   const { token, company, locale, currency } = profile
   const currencyx = currency ??'EUR'
-  const dispatch = useDispatch()
-  let navigate = useNavigate()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const acc_modelid = formEnum.ACCOUNT
   const ccy_modelid = formEnum.CURRENCY
@@ -63,8 +57,6 @@ const AssetForm = () => {
   const minHeight = 350
   const maxHeight = 700
   const height = 33
-  const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload
-    , handleLanguageChange, title, rowData, current, setCurrent}] = UseMasterfileForm(current_)
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
@@ -73,45 +65,20 @@ const AssetForm = () => {
      setCurrent(current_)
   }, [])
 
-  const onRowSelected = (event: RowSelectedEvent) =>
-        setCurrent((event.data instanceof Array)?event.data[0]:event.data)
-
-  // @ts-ignore
+  const colDef:ColDef[]= assetColumnDefs(t)
+  const [{header, body, disable, state, visible, table, current, setCurrent}] = UseMasterfileForm<IAsset>(current_,  colDef, MASTERFILE.asset)
+  const mainForm = AssetMainForm ({current:current, setCurrent:setCurrent, disable:disable, t:t, accData:accData
+    , ccyData:ccyData, height:height, locale:locale ??'fr-FR', currency:currencyx, zIndex:9999})
   return (
     <>
-          <CommonFormHead
-              title={title}
-              collapse={state.collapse}
-              initAdd={initAdd}
-              edited={edited??false}
-              added={added?? added ===undefined}
-              disable={disable}
-              edit={edit}
-              cancelEdit={cancelEdit}
-              submitEdit={submitEdit}
-              submitQuery={reload}
-              reload={reload}
-              toggle={toggle}
-              toggleTable={toggleTable}
-              logout={logout}
-              navigate={navigate}
-              language={language}
-              handleLanguageChange={handleLanguageChange}
-              dispatch={dispatch}
-              t={t}
-          />
-
-          <Grid container style={{...STYLES.inner, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
-            <AssetMainForm current={current} setCurrent={setCurrent} disable={disable} t={t}
-                                 accData ={accData} ccyData ={ccyData}  height={height} locale ={locale ??'fr-FR'} currency ={currencyx} zIndex={9999}/>
-         </Grid>
-        <Grid container
-            // @ts-ignore
-              style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, paddingTop: 30, display: visible?'':'none'}} maximize direction="column" >
-          <AssetGrid columnDefs ={assetColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
-        </Grid>
+      {header}
+      <Grid container style={{...STYLES.inner, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
+         {body??mainForm}
+      </Grid>
+      <Grid item style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+        {table}
+      </Grid>
     </>
-
   )
 }
 export default AssetForm

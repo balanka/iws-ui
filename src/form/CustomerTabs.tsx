@@ -19,13 +19,13 @@ const STYLES ={
         boxShadow: '0 10px 30px #BBB',
         padding: 5,
     },
-}
-const CustomerTabs  = ({ current, setCurrent
+} //, display: !collapse?'none':''
+const CustomerTabs  = ({ collapse, current, setCurrent
                            , currentBankAccount, setCurrentBankAccount, token, modifyUrl, t
                            , locale, data, accData, bankData, vatData, ccyData, height, disable, zIndex
                            , onGridReady
                        }: CustomerTabProps) => {
-    const props: CustomerTabProps = {
+    const props: CustomerTabProps = {collapse,
         current, setCurrent, currentBankAccount, setCurrentBankAccount
         , token, modifyUrl, t, locale, data, bankData, accData, vatData, ccyData, height, disable, zIndex, onGridReady
     }
@@ -57,7 +57,7 @@ const CustomerTabs  = ({ current, setCurrent
     }
 
   const table =
-      <Grid container spacing={1} style={{...STYLES.outer,  height:200,  padding:5,  paddingTop: 20}}
+      <Grid container spacing={1} style={{...STYLES.outer,  display: !collapse?'none':'', height:200,  padding:5,  paddingTop: 20}}
             maximize direction="row" justify="flex-start" alignItems="stretch" >
             <BankAccountGrid
                 // @ts-ignore

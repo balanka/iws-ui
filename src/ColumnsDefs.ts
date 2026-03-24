@@ -104,7 +104,7 @@ export const accountColumnDefs=  (t: (arg0: string) => any):ColDef<IAccount>[] =
   // }
 ]
 
-export const masterfileColumnDefs=  (t: (arg0: string) => any) =>[
+export const masterfileColumnDefs=  (t: (arg0: string) => any): ColDef[]=>[
   {
     field: "id",
     headerName: t('common.id'),
@@ -139,7 +139,7 @@ export const masterfileColumnDefs=  (t: (arg0: string) => any) =>[
   },
 ]
 
-export const PartnerColumnDefs=  (t: (arg0: string) => any) =>[
+export const PartnerColumnDefs=  (t: (arg0: string) => any):ColDef[] =>[
   {
     field: "id",
     headerName: t('common.id'),

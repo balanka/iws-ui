@@ -1,104 +1,42 @@
-import React, {useState, useEffect} from 'react'
-import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry} from 'ag-grid-community'
+import React from 'react'
+import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import Grid from 'react-fast-grid'
 
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {CommonFormHead, PartnerMainForm,} from './FormsProps'
-import { Get} from './CrudController'
+import {PartnerMainForm} from './FormsProps'
+
 import {MASTERFILE} from './Menu'
-import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import {PartnerColumnDefs} from '../ColumnsDefs.ts'
-import {IPartner} from '../Models.ts'
-import {MasterfileGrid} from '../IWSGrid'
-import Login from './Login'
-import {logout} from '../utils/FormUtils.tsx'
-import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
 import useForm from './UseForm.ts'
 import UseMasterfileForm from './UseMasterfileForm.ts'
+import {styles} from './BasicTreeTableProps.tsx'
+
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
-
  const PartnerForm = () => {
-     const [{ profile, menu, selected, t, state, visible, toggle, toggleTable, modelid, company}]  = useForm()
-     const {token} = profile
-     const dispatch = useDispatch()
-     let navigate = useNavigate()
-
-     // console.log('menu', menu)
+     const [{  menu, selected, t}]  = useForm()
      let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-     const parent_ctx = `${module_?.state3}/${company}`
-     console.log('parent_ctx', parent_ctx)
      module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-     console.log('module_', module_)
-     if (module_ === '11111' || module_ === 11111) return <Login/>
-     //const [state, setState] = useState({collapse: true, fadeIn: true, timeout: 300})
-     //const [disable, setDisable] = useState(true)
      const height = 20
-     const ctx =  `${MASTERFILE.partner}/${modelid}/${company}`
-     //const modifyUrl = module_.ctx
-     const current_: IPartner =  module_.state[0]
-     const [, setIwsState] = useState(iwsStore.initialState)
+     const current_ =  module_.state[0]
      const minHeight = 400
      const maxHeight = 700
-     const [{language, initAdd, added, disable, edit, edited, submitEdit, cancelEdit, reload, title,  rowData, current
-              , setRowData, setCurrent, handleLanguageChange}] = UseMasterfileForm(current_)
-     useEffect(() => {
-         iwsStore.subscribe(setIwsState)
-         setCurrent(current_)
-     }, [current_])
-
-     const submitQuery = (event: any) => {
-         event.preventDefault()
-         Get(ctx, token, modelid, setRowData)
-         setCurrent(current_)
-     }
-     const onRowSelected = (event: RowSelectedEvent) =>
-         setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
-
-     const styles = {
-         outer: {
-             borderRadius: 1, // 5,
-             boxShadow: "0 30px 40px #BBB",
-             padding: 5,
-         },
-     }
-     const collapse=  state.collapse
-     return (
-         <>
-             <CommonFormHead
-                 title={title}
-                 collapse={state.collapse}
-                 initAdd={initAdd}
-                 edited={edited??false}
-                 added={added?? added ===undefined}
-                 disable={disable??true}
-                 edit={edit}
-                 cancelEdit={cancelEdit}
-                 submitEdit={submitEdit}
-                 submitQuery={submitQuery}
-                 reload={reload}
-                 toggle={toggle}
-                 toggleTable={toggleTable}
-                 logout={logout}
-                 navigate={navigate}
-                 language={language}
-                 handleLanguageChange={handleLanguageChange}
-                 dispatch={dispatch}
-                 t={t}
-             />
-             {/*<Grid item style={{...styles.outer, paddingTop:5, height: state.collapse?minHeight:maxHeight}}>*/}
-               <PartnerMainForm collapse={collapse} current={current} setCurrent={setCurrent}  disable={disable}
-                              height={height}  t={t}/>
-             {/*</Grid>*/}
-             <Grid item style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
-                 <MasterfileGrid columnDefs={PartnerColumnDefs(t)} onRowSelected={onRowSelected} rowData={rowData}/>
-             </Grid>
-         </>
-     )
+     const colDef:ColDef[]= PartnerColumnDefs(t)
+    const [{header, body, disable, table, state, visible, current, setCurrent}] = UseMasterfileForm(current_,  colDef, MASTERFILE.partner)
+    const mainForm = PartnerMainForm ({collapse:state.collapse,  current:current, setCurrent:setCurrent
+     , disable:disable, t:t, height:height})
+    return (
+      <>
+       {header}
+        {body??mainForm}
+       <Grid item style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+         {table}
+       </Grid>
+     </>
+   )
 }
 export default  PartnerForm

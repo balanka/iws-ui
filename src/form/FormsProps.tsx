@@ -51,7 +51,6 @@ import {
   MasterfileComboboxProps,
   MasterfileProps,
   MasterfileProps2,
-  PartnerProps,
   StoreGeneralFormProps,
   TransactionDetailsFormProps,
   TransactionToolBarProps,
@@ -262,6 +261,9 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
                                    , onNewSalaryItem?:()=>void, handleLanguageChange: (arg:any)=>void
                                    , navigate:NavigateFunction, language:string, dispatch:Dispatch<any>
                                    , logout:(navigate:NavigateFunction) =>void, t:TFunction<'translation', undefined> }) => {
+  console.log('edited', edited)
+  console.log('edit', edit)
+  console.log('disable', disable)
 
     const keyboardDoubleArrowUpIcon = <KeyboardDoubleArrowUpIcon/>
     const keyboardDoubleArrowDwnIcon = <KeyboardDoubleArrowDownIcon/>
@@ -330,7 +332,7 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
               </CTooltip>
               <CTooltip content={t('toolTip.common.edit')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={()=>edit()}>
+                            onClick={edit}>
                     <EditSquareIcon />
                 </IconButton>
               </CTooltip>
@@ -345,19 +347,19 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
               {/*</CTooltip>*/}
               <CTooltip content={t('toolTip.common.load')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={()=>reload()}>
+                            onClick={reload}>
                     <FilterListIcon/>
                 </IconButton>
               </CTooltip>
               <CTooltip content={t('toolTip.common.table')} placement="top">
                 <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={() => toggleTable}>
+                            onClick={()=>toggleTable()}>
                   {listIcon}
                 </IconButton>
               </CTooltip>
               <CTooltip content={t('toolTip.common.form')} placement="top">
                 <IconButton size="small" edge="start"  color="primary" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            onClick={() => toggle}>
+                            onClick={()=>toggle()}>
                     {UpDownIcon}
                 </IconButton>
               </CTooltip>
@@ -1790,10 +1792,11 @@ export const AssetMainForm =
 }
 
 export const MasterfilesForm2 =
-  ({ current, setCurrent, accData, t,  disable}:MasterfileProps2<IMasterfile2>) => {
+  ({  current, setCurrent, accData, t,  disable}:MasterfileProps2<IMasterfile2>) => {
   return (
     <>
       <Grid container spacing={1}>
+      {/*<Grid container spacing={1} style={{ display: !collapse?'none':''}}>*/}
         <Grid item sm={8} xs={2}>
           <Grid container maximize justify="flex-start" alignItems="stretch" style={STYLES.fuller}>
             <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
@@ -2196,10 +2199,10 @@ export const    MasterfileMainBaseForm:FC<MasterfileProps<IMasterfile>> = ({ col
     </>
   )
 }
-export const    PartnerMainForm:FC<PartnerProps<IPartner>> = ({ collapse,  current, setCurrent, disable, t,  height })=> {
+
+export const    PartnerMainForm = ({ collapse,  current, setCurrent, disable, t,  height }: MasterfileProps<IPartner>) => {
   const addressProps:IAddressProps = {current, setCurrent, disable, t, height:20}
   return (
-    <>
     <Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >
       <MasterfileMainBase0Form collapse={collapse} current={current} setCurrent={setCurrent} disable={disable} t={t}
                                height={height}/>
@@ -2240,15 +2243,14 @@ export const    PartnerMainForm:FC<PartnerProps<IPartner>> = ({ collapse,  curre
       </Grid>
       <AddressForm current={current} setCurrent={setCurrent} t={t} disable={disable} height={addressProps.height}/>
     </Grid>
-    </>
   )
 }
 
-export const    FModuleMainForm:FC<FModuleProps2<IFmodule>> = ({collapse, current, setCurrent, accData, accountData, rowData, disable, t,  height })=> {
+export const    FModuleMainForm = ({collapse, current, setCurrent, accData, accountData, rowData, disable, t,  height }:FModuleProps2<IFmodule>)=> {
     return (
       <Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >
         {/*<Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >*/}
-        <MasterfilesForm2 collapse ={collapse} current ={current} setCurrent={setCurrent} accData={accData} t={t} disable={disable} height={height}/>
+        <MasterfilesForm2 collapse={collapse}  current ={current} setCurrent={setCurrent} accData={accData} t={t} disable={disable} height={height}/>
         <Grid item sm={8} xs={2}>
           <Grid container maximize justify="flex-start" alignItems="stretch" style={STYLES.fuller}>
             <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
@@ -2308,7 +2310,8 @@ export const    FModuleMainForm:FC<FModuleProps2<IFmodule>> = ({collapse, curren
 }
 
 
-export const MasterfileMainForm:FC<MasterfileProps<IMasterfile>> = ({collapse, current, setCurrent, disable, t,  height }) => {
+export const MasterfileMainForm = ({collapse, current, setCurrent, disable, t,  height }:MasterfileProps<IMasterfile>) => {
+  console.log('disable', disable)
     return (
         <Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >
             <MasterfileMainBaseForm collapse ={collapse} current={current} setCurrent ={setCurrent}

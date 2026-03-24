@@ -111,58 +111,8 @@ const getGridOptionsL= ( columnDefs:ColDef[], defaultColDef:DefaultColDefType, o
         autoSizeStrategy: {
             type: "fitGridWidth",
         },
-        // detailCellRendererParams: {
-        //     //refreshStrategy: "everything",
-        //     refreshStrategy:'rows'
-        // }
     })
-export const getGridOptionsBalance= ( columnDefs:ColDef[]
-                                      , onRowSelected:(event:RowSelectedEvent) =>void
-                                      , rowData:any
-                                      //, summaryRow:IPeriodicAccountBalance2[]
-                                      ) => {
- //console.log('summaryRow', summaryRow)
-  return   ({
-        rowStyle: {background: 'lightBlue'},
-        getRowStyle: (params: { node: { rowIndex: number } }) => {
-           if (params.node.rowIndex % 2 === 0) {
-                //  @ts-ignore
-                if (params.data.period <= 0) return { background: '#fff9e6', fontWeight:'bold', innerHeight:40}
-                return {background: '#fff9e6'};
-            }
-        },
-        //theme: "legacy",
-        theme: myTheme,
-        columnDefs,
-        rowData:rowData,
-      defaultColDef: {
-          resizable: true,
-          editable: false, //!current.posted,
-          flex: 1,
-          //filter:true,
-          //floatingFilter: true,
-          //filter: "agTextColumnFilter",
-      },
-        //defaultColDef,
-        rowHeight: 20,
-        rowSelection: {
-            mode: "multiRow",
-        },
-        onRowSelected: onRowSelected,
-        paginationPageSizeSelector: [5, 10, 20, 40, 60],
-        pagination: true,
-        paginationPageSize: 20,
-        //masterDetail: true,
-        // detailRowAutoHeight: true,
-        autoSizeStrategy: {
-            type: "fitGridWidth",
-        },
-        //grandTotalRow: "bottom",
-        //sideBar: true,
-        enableRowPinning: true,
-        //detailCellRendererParams,
-    })
-}
+
 const getGridOptions= ( columnDefs:ColDef[], defaultColDef:DefaultColDefType, onRowSelected:(event:RowSelectedEvent) =>void ) =>
     ({
         rowStyle: { background: 'lightBlue' },
@@ -217,14 +167,7 @@ export const defaultColDefX:DefaultColDefType = {
 }
 interface Props <A>  {
     columnDefs: ColDef[],
-    defaultColDef?:ColDef //= {
-    //     ...defaultColDefXL,
-    //     resizable: true,
-    //     editable: true,
-    //     floatingFilter: false,
-    //     filter:false,
-    //     //filter: "agTextColumnFilter",
-    // }
+    defaultColDef?:ColDef,
     onRowSelected: (event: RowSelectedEvent<A, any>) => void,
     onCellValueChanged?: (event: CellValueChangedEvent<A, any>) => void,
     gridOptions?: GridOptions<A>,
@@ -236,7 +179,6 @@ interface Props <A>  {
     getRowId?: (params:GetRowIdParams<any, any>)=>string|null
     onClick?:(e:any)=>void
 }
-// const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
 export const AccountGrid: FC<Props<IAccount>> = ({ columnDefs, defaultColDef, onRowSelected, rowData, onClick }:Props<IAccount>)=>
     <AgGridReact
         theme = {myTheme} //{theme ?? "legacy"}

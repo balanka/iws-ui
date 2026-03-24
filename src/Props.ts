@@ -11,7 +11,7 @@ import {
   IVat, IWSLine, IWSModel, IWSTransaction
 } from "./Models.ts";
 import {type i18n, TFunction} from "i18next";
-import React, {CSSProperties, Dispatch, SetStateAction} from "react";
+import React, {CSSProperties, Dispatch, ReactNode, SetStateAction} from "react";
 import {GridApi, GridReadyEvent} from "ag-grid-community";
 // @ts-ignore
 import type {RowSelectedEvent} from "ag-grid-community/dist/types/src/events";
@@ -42,7 +42,8 @@ export interface BankAccountFormProps {
     , height?: number}
 
 export interface CustomerTabProps {
-     current: ICustomer | ISupplier | IEmployee
+  collapse:boolean
+    , current: ICustomer | ISupplier | IEmployee
     , setCurrent: (set: any ) => void
     , currentBankAccount:IBankAccount
     , setCurrentBankAccount:(arg:IBankAccount) =>void
@@ -410,42 +411,25 @@ export interface UseMasterfileFormResult<T> {
   , onRowSelected:(event: RowSelectedEvent)=>void
 }
 export interface UseCustomerFormResult<T extends IBusinespartner> {
-  profile: IProfile
-  , menu: Map<any, any>
-  , selected: string
-  , t:TFunction<'translation', undefined>
-  , edited:boolean|undefined, added:boolean|undefined
+  header: ReactNode
+  , body:React.JSX.Element|null
+  , table:ReactNode
   , disable:boolean
-  , language:string
+  , visible:boolean
+  , state:State
+  ,  rowData:T[]
+  , setRowData:Dispatch<SetStateAction<T[]>>
   , accData:IAccount[]
   , bankData:IMasterfile[]
-  , ccyData:IMasterfile[]
   , vatData:IVat[]
-  , rowData:T[]
-  , setRowData:Dispatch<SetStateAction<T[]>>
-  , current_ :T
+  , ccyData:IMasterfile[]
   , current:T
   , setCurrent:Dispatch<SetStateAction<T>>
   , currentBankAccount:IBankAccount
   , setCurrentBankAccount:Dispatch<SetStateAction<IBankAccount>>
-  , edit:()=>void
-  , initAdd:()=>void
-  , reload:()=>void
-  , submitEdit: (event: any) => void
-  , cancelEdit:()=>void
-  , handleLanguageChange:(event:any) =>void
-  , onNewBankAccount: ()=>void
-  , onDeleteBankAccount:(event:any) =>void
-  , onNewSalaryItem:()=>void
-  , submitQuery: (event: any) => void
-  , onRowSelected: (event: RowSelectedEvent) => void
-  , title:string
   , setGridApi:Dispatch<SetStateAction<GridApi<any>|undefined>>
 }
-//[{ profile, menu, selected, t, language, accData, setAccData, fmodule, setFmodule
-//      , current_, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction, handleLanguageChange
-//      , setModel, handleKeyPress, onNewLine, onRowSelected, onDeleteLine, submitCancel, submitPost
-//      , copyCall, setGridApi, templateName, zIndex, saveProps, modelid, isFetching, setIsFetching}]
+
 export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends  IWSLine> {
   profile: IProfile
   , menu: Map<any, any>
