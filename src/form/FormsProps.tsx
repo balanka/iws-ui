@@ -3552,34 +3552,11 @@ export const BankAccountForm = (
     )
 }
 
-// export const MComboBox  = <A extends IMasterfile>( { current, setCurrent
-//                                                            , data, init, name, fieldName, zIndex, disable, styles1 }:
-//                                                          {current: A, setCurrent: (art:any)=>void, data: A[], init:A, name:string
-//                                                            , fieldName:string , zIndex:number, disable: boolean, styles1:CSSProperties }) => {
-//   return (<>
-//       <Grid item sm={12} xs={2}>
-//         <Grid container maximize style={styles1} justify="flex-start" alignItems="stretch">
-//           <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-//             {name}
-//           </Grid>
-//             <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-//               <MasterfileXComboBox fieldName={fieldName} current={current} setCurrent={setCurrent}
-//                                  data={data} defaultValue={init} zIndex={zIndex} disable={disable}
-//                                  styles={{...styles1, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-//             </Grid>
-//           </Grid>
-//       </Grid>
-//     </>
-//   )
 export const ArticleAccountForm = (
   { current, setCurrent, accData, vatData, t,  disable, height }: ArticleAcccountProps ) => {
-  //{current: IArticle, setCurrent: (art:any)=>void, accData: IAccount[]
-   // , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, height: number, zIndex:number}) => {
+
   return (
     <div  style={{...styles.outer}} >
-    {/*<div  style={{...styles.outer, display: !collapse?'none':''}} >*/}
-    {/*  <CustomerAccountBaseForm current ={current} setCurrent = {setCurrent} accData ={accData} vatData ={vatData} t={t}*/}
-    {/*                           disable={disable}  children={()=>null} height ={height}/>*/}
       {/**Account,  accountName*/}
       <CInputGroup  style={{ height: height-3 }}>
         <CCol sm="2">
@@ -3588,7 +3565,7 @@ export const ArticleAccountForm = (
         <CCol sm="4">
           <MasterfileXComboBox fieldName={'account'} current={current} setCurrent={setCurrent}
                                data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
-                               styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+                     styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
         </CCol>
       </CInputGroup>
       {/**Oaccount oaccountName */}
@@ -3599,7 +3576,7 @@ export const ArticleAccountForm = (
         <CCol sm="4">
           <MasterfileXComboBox fieldName={'oaccount'} current={current} setCurrent={setCurrent}
                                data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
-                               styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+               styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
         </CCol>
       </CInputGroup>
       {/**revenue account*/}
@@ -3610,10 +3587,9 @@ export const ArticleAccountForm = (
         <CCol sm="4">
           <MasterfileXComboBox fieldName={'revenueAccount'} current={current} setCurrent={setCurrent}
                                data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
-                               styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+             styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
         </CCol>
       </CInputGroup>
-
         {/**Vat */}
         { !current?.hasOwnProperty('vatCode') && !current?.hasOwnProperty('vatcode') ? null:
           <CInputGroup  style={{ height: height-3 }}>
@@ -3623,7 +3599,7 @@ export const ArticleAccountForm = (
             <CCol sm="4">
               <MasterfileXComboBox fieldName={'vatCode'} current={current} setCurrent={setCurrent}
                                    data={vatData} defaultValue={initVat[0]} zIndex={11} disable={disable}
-                                   styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+               styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
             </CCol>
           </CInputGroup>
         }
