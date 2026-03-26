@@ -2,6 +2,10 @@
 export {};
 
 declare global {
+
+  interface BigInt {
+    toJSON: () => string;
+  }
   interface Window {
     _env_: {
       SCHEME: string;

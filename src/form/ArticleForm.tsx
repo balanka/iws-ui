@@ -2,31 +2,24 @@ import React, {useState, useEffect} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import Grid from 'react-fast-grid'
-import {styles, styles as stylesx} from './BasicTreeTableProps'
+import {styles} from './BasicTreeTableProps'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {initArticle, MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
 import  { ArticleTabs }  from './ArticleTabs.tsx'
-//import {ArticleGrid} from '../IWSGrid.tsx'
 import { formEnum } from '../utils/FormEnum'
 import { Get } from './CrudController.ts'
 import {articleColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IArticle, IMasterfile, IVat} from '../Models.ts'
-import Login from './Login'
 import UseMasterfileForm from './UseMasterfileForm.ts'
 import useForm from './UseForm.ts'
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
-
- const ArticleForm = () => {
-   const [{profile,  selected, t,  module_ }] = useForm()
-   const { token, company, locale, currency, stockAcc, expenseAcc, revenueAcc, vat} = profile
-
-     if (module_ === '11111' || module_ === 11111) return <Login/>
-     const height = 20
+     const ArticleForm = () => {
+     const [{profile,  selected, t }] = useForm()
+     const { token, company, locale, currency, stockAcc, expenseAcc, revenueAcc, vat} = profile
      const acc_modelid = formEnum.ACCOUNT
      const vat_modelid = formEnum.VAT
      const qttyUnit_modelid = formEnum.QUANTITYUNIT
@@ -46,6 +39,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const qttyUnit_ctx = `${MASTERFILE.masterfile}/${qttyUnit_modelid}/${company}`
      const group_ctx = `${MASTERFILE.masterfile}/${group_modelid}/${company}`
      const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
+     const height = 33
      const minHeight = 350
      const maxHeight = 700
 
@@ -61,18 +55,16 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
       const colDef:ColDef[]= articleColumnDefs(t)
       const [{header, body, disable, table, state, visible, rowData, current, setCurrent, zIndex}] = UseMasterfileForm<IArticle>(current_,  colDef, MASTERFILE.article)
-      const mainForm = ArticleTabs ({current:current, setCurrent:setCurrent, disable:disable, t:t
+      const mainForm = ArticleTabs ({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t
                              , data:rowData, accData:accData, quantityUnitData:quantityUnitData,  locale:`${locale}`, currency:`${currency}`
                               , vatData:vatData, groupData:groupData, ccyData:ccyData, height:height, zIndex:zIndex-1})
       return (
         <>
           {header}
-          <Grid container style={{...stylesx.innerX, display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
             {body??mainForm}
-          </Grid>
-          <Grid item style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+          <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
             {table}
-          </Grid>
+          </div>
         </>
       )
 }

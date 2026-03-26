@@ -14,7 +14,6 @@ import {IRole, IUserRight} from '../Models.ts'
 import {IDetailCellRendererParams, GridOptions} from 'ag-grid-community'
 import {initRole} from "./Menu.tsx";
 
-
 const UserTabs = ({ collapse, current, setCurrent, disable, t, height }:UserFormProps) => {
   const styles = {
     outer: {
@@ -89,12 +88,12 @@ const UserTabs = ({ collapse, current, setCurrent, disable, t, height }:UserForm
       <UserMainForm collapse ={collapse} current={current} setCurrent={setCurrent} disable={disable} t={t} height={height}/>
 
   const getRightTable = () => (
-      <Grid item style={{...styles.outer, paddingTop:15, height: collapse?minHeight:maxHeight, display: !collapse ? 'none' : ''}}>
+      <div  style={{...styles.outer, paddingTop:15, height: collapse?minHeight:maxHeight,  minWidth:"100%"}}>
         <RightGrid
             // @ts-ignore
             theme="legacy" columnDefs={UserRightsColumns(t)} onRowSelected={onRightSelected}
             rowData={current?.rights}/>
-      </Grid>
+      </div>
   )
   const getRoleTable = () => (
       <Grid item style={{...styles.outer, paddingTop:15, height: collapse?minHeight:maxHeight, display: !collapse ? 'none' : ''}}>

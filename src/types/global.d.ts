@@ -1,3 +1,3 @@
-interface BigInt {
-  toJSON: () => string;
-}
+// interface BigInt {
+//   toJSON: () => string;
+// }

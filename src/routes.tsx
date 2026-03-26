@@ -8,7 +8,7 @@ const ArticleForm = () =>  import('./form/ArticleForm.tsx')
 const AssetForm = () =>  import('./form/AssetForm.tsx')
 const CustomerForm = () =>  import('./form/CustomerForm.tsx')
 //const MasterfileForm = () =>   import('./form/MasterfileForm')
-const MasterfileForm2 = () =>   import('./form/MasterfileForm2')
+//const MasterfileForm2 = () =>   import('./form/MasterfileForm2')
 const FinancialsForm = () =>   import('./form/FinancialsForm')
 const TransactionForm = () =>   import('./form/TransactionForm')
 const JForm = () =>  import('./form/JForm')
@@ -50,17 +50,17 @@ const routes = ():{path:string, name?:string, element?: ()=>Promise<any>}[] => [
   },
   { path: MASTERFILE.article, name: 'Article', element: ArticleForm},
   { path: MASTERFILE.articleGroup, name: 'Article group', element: MasterfileForm },
-  { path: MASTERFILE.cc, name: 'Cost center', element: MasterfileForm2 },
+  { path: MASTERFILE.cc, name: 'Cost center', element: MasterfileForm },
   { path: MASTERFILE.cust, name: 'Customer', element: CustomerForm},
   { path: MASTERFILE.sup, name: 'Supplier', element: CustomerForm },
   { path: MASTERFILE.store, name: 'Store', element: StoreForm},
   { path: MASTERFILE.emp, name: 'Employee', element: CustomerForm },
   { path: MASTERFILE.user, name: 'Users', element: UserForm },
   { path: MASTERFILE.vat, name: 'VAT', element: VatForm },
-  { path: MASTERFILE.bank, name: 'Bank', element: MasterfileForm2 },
+  { path: MASTERFILE.bank, name: 'Bank', element: MasterfileForm },
   { path: MASTERFILE.partner, name: 'Partner', element: PartnerForm },
-  { path: MASTERFILE.currency, name: 'Currency', element: MasterfileForm2 },
-  { path: MASTERFILE.qty, name: 'Quantity unit', element: MasterfileForm2},
+  { path: MASTERFILE.currency, name: 'Currency', element: MasterfileForm },
+  { path: MASTERFILE.qty, name: 'Quantity unit', element: MasterfileForm},
   { path: MASTERFILE.accountClass, name: 'Account class', element: MasterfileForm},
   { path: MASTERFILE.accountGroup, name: 'Account group', element: MasterfileForm },
   { path: MASTERFILE.payrollTaxRange, name: 'PayRoll tax range', element: MasterfileForm },

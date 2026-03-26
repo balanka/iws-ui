@@ -2,31 +2,27 @@ import React, {useEffect, useState} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, GridReadyEvent, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import Grid from 'react-fast-grid'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {initComp} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {customerColumnDefs} from '../ColumnsDefs.ts'
 import {ICompany} from '../Models.ts'
-import Login from './Login.tsx'
 import {CompanyTabs} from './CompanyTabs.tsx'
 import useForm from './UseForm.ts'
 import {Get2} from "./CrudController.ts";
-import {styles, styles as stylesx} from './BasicTreeTableProps.tsx'
+import {styles} from './BasicTreeTableProps.tsx'
 import UseCustomerForm from "./UseCustomerForm.ts";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const CompanyForm = () => {
-  const [{ profile, selected, t, modelid,  module_ }] = useForm()
+  const [{ profile, selected, t, modelid }] = useForm()
   const { token, locale } = profile
   const [, setIwsState] = useState(iwsStore.initialState)
-
-  if (module_ === '11111' || module_ === 11111) return <Login/>
   const current_ : ICompany= initComp[0]
 
-  const height = 20
-  const minHeight = 350
+  const height = 33
+  const minHeight = 450
   const maxHeight = 700
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
@@ -40,7 +36,7 @@ const CompanyForm = () => {
     , setCurrent, currentBankAccount, setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t))
 
 
-  const mainForm = CompanyTabs({current:current, setCurrent:setCurrent
+  const mainForm = CompanyTabs({ collapse: state.collapse, current:current, setCurrent:setCurrent
     , currentBankAccount:currentBankAccount
     , setCurrentBankAccount:setCurrentBankAccount
     , disable:disable, t:t, locale:locale?? 'fr-FR'
@@ -53,12 +49,10 @@ const CompanyForm = () => {
   return (
     <>
       {header}
-      <Grid container style={{...stylesx.inner, display: !state?.collapse?'none':''}} maximize direction="row" zeroMinWidth>
-         {body??mainForm}
-      </Grid>
-      <Grid item style={{...styles.outer0, paddingTop:15, height: state?.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+      {body??mainForm}
+      <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
         {table}
-      </Grid>
+      </div>
     </>
   )
 

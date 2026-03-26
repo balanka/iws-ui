@@ -2,11 +2,10 @@ import React, {useState, useEffect} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import Grid from 'react-fast-grid'
 
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {MasterfilesForm2} from './FormsProps'
+import {MasterfilesForm} from './FormsProps'
 import {Get} from './CrudController'
 import {initAcc, MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
@@ -43,15 +42,15 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
    const [{header, body, disable, table, state, visible, current, setCurrent}] = UseMasterfileForm(current_,  colDef, MASTERFILE.accountClass)
 
-   const mainForm = MasterfilesForm2({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
-     ,   height:height, accData:accData, t:t, disable:disable,})
+   const mainForm = MasterfilesForm({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
+      , height:height, accData:accData, t:t, disable:disable, fieldName:t('common.account'), propertyName:'account' })
    return (
      <>
        {header}
        {body??mainForm}
-       <Grid item style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
          {table}
-       </Grid>
+       </div>
      </>
    )
 

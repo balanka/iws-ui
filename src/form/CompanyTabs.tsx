@@ -1,5 +1,5 @@
 import React from 'react'
-import {AddressForm, BankAccountForm, CompanyAccountForm, CompanyGeneralForm} from './FormsProps'
+import {AddressForm, BankAccountForm, CompanyAccountForm, CustomerGeneralForm} from './FormsProps'
 import { BankAccountGrid } from "../IWSGrid"
 import Grid from "react-fast-grid";
 import {bankAccountColumnDefs} from "../ColumnsDefs"
@@ -18,14 +18,14 @@ const STYLES ={
         padding: 5,
     },
 }
-const CompanyTabs  = ({ current, setCurrent
+const CompanyTabs  = ({collapse, current, setCurrent
                            , currentBankAccount, setCurrentBankAccount, token, modifyUrl, t
                   , locale, data, accData, bankData, vatData, ccyData, height, disable
                   , zIndex, onGridReady }:CompanyTabProps) => {
-  const  props:CompanyTabProps = {current, setCurrent, currentBankAccount, setCurrentBankAccount
+  const  props:CompanyTabProps = { collapse, current, setCurrent, currentBankAccount, setCurrentBankAccount
       , token, modifyUrl, t, locale, data, accData, bankData, vatData, ccyData, height, disable, zIndex, onGridReady }
 
-  const  addressProps:AddressProps = { current, setCurrent,  t, disable, height:20 }
+  const  addressProps:AddressProps = { current, setCurrent,  t, disable, height:height }
     const businessPartner = current
     const setBusinessPartner = setCurrent
  const  bankAccountProps:BankAccountFormProps =
@@ -49,7 +49,7 @@ const CompanyTabs  = ({ current, setCurrent
      </Grid>
 
   const tabContent = [
-      { title: t('common.general'), id: 1, form: CompanyGeneralForm (props)},
+      { title: t('common.general'), id: 1, form: CustomerGeneralForm (props)},
       { title: t('common.address'), id: 2, form: AddressForm(addressProps) },
       { title: t('common.accounts'), id: 3, form: CompanyAccountForm(props)},
       { title: t('common.bankaccounts'), id: 4, form: table },

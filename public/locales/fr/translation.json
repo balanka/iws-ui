@@ -65,7 +65,7 @@
     "type": "Type",
     "birthYear": "Ann.naissance",
     "birthCity": "Lieu de naissance",
-    "account":  "Cpte déb.",
+    "account":  "Cpte.",
     "oaccount": "Cpte créd.",
     "currency"    : "Monaie",
     "from"       :  "De",

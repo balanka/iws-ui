@@ -62,7 +62,8 @@ export interface CustomerTabProps {
     , onGridReady:(params: GridReadyEvent)=>void
 }
 export interface CompanyTabProps {
-      current: ICompany
+     collapse:boolean
+    ,  current: ICompany
     , setCurrent: (set: any ) => void
     , currentBankAccount:IBankAccount
     , setCurrentBankAccount:(arg:IBankAccount) =>void
@@ -80,11 +81,21 @@ export interface CompanyTabProps {
     , zIndex:number
     , onGridReady:(params: GridReadyEvent)=>void
 }
+export interface ArticleAcccountProps {
+    current: IArticle
+  , setCurrent: (art: IArticle) => void
+  , accData: IAccount[]
+  , vatData: IVat[]
+  , t: TFunction<'transalation', undefined>
+  , disable: boolean
+  , height: number
+}
 
 export interface ArticleProps {
-  current: IArticle
+    collapse:boolean
+  , current: IArticle
   , setCurrent: (art: IArticle) => void
-  ,  accData: IAccount[]
+  , accData: IAccount[]
   , vatData: IVat[]
   , data:IArticle[]
   , quantityUnitData:IMasterfile[]
@@ -94,7 +105,7 @@ export interface ArticleProps {
   , currency: string
   , t: TFunction<'transalation', undefined>
   , disable: boolean
-  , height?: number
+  , height: number
   , zIndex:number
 }
 
@@ -103,17 +114,20 @@ export interface ArticleQRFormProps {
   , t: TFunction<'transalation', undefined>
 }
 export interface ArticleGeneralFormProps {
-    current: IArticle
+     collapse:boolean
+    , current: IArticle
     , setCurrent: (art: IArticle) => void
     , quantityUnitData:IMasterfile[]
     , groupData:IMasterfile[]
     , ccyData:IMasterfile[]
     , t: TFunction<'transalation', undefined>
     , disable: boolean
+    , height:number
 }
 
 export interface AssetProps {
-    current: IAsset
+    collapse:boolean
+    , current: IAsset
     , setCurrent: (arg: IAsset) => void
     , accData: IAccount[]
     , ccyData: IMasterfile[]
@@ -153,17 +167,19 @@ export interface AccountMainProps {
 }
 export interface IAddressProps {
   current:IAddress, setCurrent:(arg:IAddress)=>void, disable:boolean, t:TFunction<'transation', undefined>, height:number }
-export interface MasterfileProps2<A extends IMasterfile2>{
-    collapse:boolean
+export interface MasterfileProps2<A extends IMasterfile2|IStore>{
+    collapse:boolean,
     current: A,
     setCurrent: (arg: any) => void,
     accData: IMasterfile[],
     t: TFunction<'translation', undefined>,
     disable: boolean,
-    height: number
+    height: number,
+    propertyName:string,
+   fieldName:string
 }
 export interface FModuleProps2<A extends IMasterfile2>{
-  collapse:boolean
+  collapse:boolean,
   current: A,
   setCurrent: (arg: any) => void,
   accData: IMasterfile[],
@@ -233,14 +249,17 @@ export interface StoreProps {
     , zIndex:number
     , disable: boolean
     , height: number
+   , minMaxHieght:number
 }
 
 export interface CustomerGeneralFormProps {
+    collapse:boolean,
     current: IBusinespartner,
     setCurrent: (arg: IBusinespartner) => void,
     ccyData:IMasterfile[]
     disable: boolean,
-    t: TFunction<'transalation', undefined>
+    t: TFunction<'transalation', undefined>,
+     height:number
 }
 export type ILine = ILineTransaction|ILineFinancials
 export interface FinancialsDetailsTabProps<T extends IFinancials, L extends  ILine> {

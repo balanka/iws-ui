@@ -15,13 +15,13 @@ export const IWSTabs= ({ tabList, zIndex}:Props):React.JSX.Element => {
 
     const getTabContent = (item:TabItem) =>
       <CTabPanel  itemKey={item.id} style={{zIndex:index-1}}> {item.form} </CTabPanel>
-    //  'pills', 'tabs', 'underline', 'underline-border'
+
     return (
         <CTabs activeItemKey={activeTab} onChange={setActiveTab} >
-            <CTabList  variant='pills' style={{backgroundColor:"#d7d0f2", fontSize:'small', zIndex:index-1}} >
+            <CTabList  variant='pills' style={{ fontSize:'small', zIndex:index-1}}>
                 {tabList.map((item) => getTabList(item))}
             </CTabList>
-            <CTabContent style={{backgroundColor:"#d7d0f2", fontSize:'small', zIndex:index-1}}>
+            <CTabContent style={{ fontSize:'small', paddingTop:15, zIndex:index-1}}>
                 {tabList.map((item) => getTabContent(item))}
             </CTabContent>
         </CTabs>

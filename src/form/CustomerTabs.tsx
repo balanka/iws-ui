@@ -30,7 +30,7 @@ const CustomerTabs  = ({ collapse, current, setCurrent
         , token, modifyUrl, t, locale, data, bankData, accData, vatData, ccyData, height, disable, zIndex, onGridReady
     }
 
-    const addressProps: AddressProps = {current, setCurrent, t, disable, height: 20}
+    const addressProps: AddressProps = {current, setCurrent, t, disable, height: height}
     const businessPartner = current
     const setBusinessPartner = setCurrent
 
@@ -64,7 +64,7 @@ const CustomerTabs  = ({ collapse, current, setCurrent
                 theme="legacy" columnDefs ={bankAccountColumnDefs(t)}  defaultColDef={defaultColDef} onGridReady={onGridReady}
                 rowData ={current?.bankaccounts??[initBankAccount]} onRowSelected ={onRowSelected}/>
      </Grid>
-console.log('bankAccountProps', bankAccountProps)
+
   const tabContent = [
       { title: t('common.general'), id: 1, form: CustomerGeneralForm (props)},
       { title: t('common.address'), id: 2, form: AddressForm(addressProps) },

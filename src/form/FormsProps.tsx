@@ -32,7 +32,7 @@ import {sortById} from '../utils/Utils'
 import {saveXlsx} from './../utils/XlsUtils.ts'
 import {languages} from './languages.ts'
 import {
-  AccountMainProps,
+  AccountMainProps, ArticleAcccountProps,
   ArticleGeneralFormProps,
   ArticleQRFormProps,
   AssetProps,
@@ -89,7 +89,6 @@ import {
   IPartner,
   IPayrollTaxRange,
   IPermission,
-  IRole,
   IStore,
   ISupplier,
   ITransaction,
@@ -1586,13 +1585,13 @@ export const BankStatementMainForm = ({ collapse, current, setCurrent, t, locale
     )
 }
 export const AssetMainForm =
-  ({ current, setCurrent, t, accData, ccyData, height, disable, locale } :AssetProps) => {
+  ({collapse, current, setCurrent, t, accData, ccyData, height, disable, locale } :AssetProps) => {
 
     const amountLabel = t('asset.amount')
     const scrapValueLabel = t('asset.scrapValue')
     console.log('locale', locale)
     return (
-        <>
+        <CInputGroup  style={{...styles.outer, display: !collapse?'none':''}} >
             <CInputGroup  style={{ height: height }}>
                 <CCol sm="2">
                     <FieldLabel title={t('common.id')} />
@@ -1787,167 +1786,143 @@ export const AssetMainForm =
                     />
                 </CCol>
             </CInputGroup>
-        </>
+        </CInputGroup>
     )
 }
 
-export const MasterfilesForm2 =
-  ({  current, setCurrent, accData, t,  disable}:MasterfileProps2<IMasterfile2>) => {
+export const MasterfilesForm =
+  ({collapse,  current, setCurrent, accData, t,  disable, height, fieldName, propertyName}:MasterfileProps2<IMasterfile2|IStore>) => {
   return (
-    <>
-      <Grid container spacing={1}>
-      {/*<Grid container spacing={1} style={{ display: !collapse?'none':''}}>*/}
-        <Grid item sm={8} xs={2}>
-          <Grid container maximize justify="flex-start" alignItems="stretch" style={STYLES.fuller}>
-            <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-              <div>{t('common.id')}</div>
-            </Grid>
-            <Grid item sm ={4} xs={2} justify="flex-end">
-              <InputField
-                fieldName="id"
-                current={current}
-                setCurrent={setCurrent}
-                value={current.id}
-                disabled={disable}
-                style={{ height: 20}}/>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item sm={4} xs={6}>
-          <Grid container maximize style={STYLES.fuller} alignItems="stretch">
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <div>{t('common.enterdate')}</div>
-            </Grid>
-            <Grid item sm={4} xs={1} alignItems="stretch" justify="flex-start">
-              <DatePickerField
-                fieldName="enterdate"
-                label={t('common.enterdate')}
-                selected={current.enterdate}
-                current={current}
-                setCurrent={setCurrent}
-                disabled={true}/>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+    <div  style={{...styles.outer, display: !collapse?'none':''}} >
+      <CInputGroup  style={{ height: height }}>
+        <CCol sm="2">
+          <FieldLabel title={t('common.id')} />
+        </CCol>
+        <CCol sm="4">
+          <InputField
+            fieldName="id"
+            current={current}
+            setCurrent={setCurrent}
+            value={current.id}
+            disabled={disable}
+            style={{ height: height-3 }}
+          />
+        </CCol>
+        <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+          <FieldLabel title={t('common.enterdate')} />
+        </CCol>
+        <CCol sm="2">
+          <DatePickerField
+            fieldName="enterdate"
+            label={t('common.enterdate')}
+            selected={current.enterdate}
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
+          />
+        </CCol>
+      </CInputGroup>
       {/**Name */}
-      <Grid container spacing={1}>
-        <Grid item sm={8} xs={12}>
-          <Grid container maximize style={STYLES.fuller} justify="flex-start" alignItems="stretch"  >
-            <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-              <div >{t('common.name')}</div>
-            </Grid>
-            <Grid item sm ={10} xs={10} justify="flex-start" alignItems="stretch">
-              <InputField
-                fieldName="name"
-                current={current}
-                setCurrent={setCurrent}
-                value={current.name}
-                disabled={disable}
-                style={{ height: 20, width: 300 }}/>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item sm={4} xs={6}>
-          <Grid container maximize style={STYLES.fuller} alignItems="stretch">
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <div>{t('common.changedate')}</div>
-            </Grid>
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <DatePickerField
-                fieldName="changedate"
-                label={t('common.changedate')}
-                selected={current.changedate}
-                current={current}
-                setCurrent={setCurrent}
-                disabled={true}/>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+      <CInputGroup  style={{ height: height }}>
+        <CCol sm="2">
+          <FieldLabel title={t('common.name')} />
+        </CCol>
+        <CCol sm="4">
+          <InputField
+            fieldName="name"
+            current={current}
+            setCurrent={setCurrent}
+            value={current.name}
+            disabled={disable}
+            style={{ height: height-3 }}
+          />
+        </CCol>
+        <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+          <FieldLabel title={t('common.changedate')} />
+        </CCol>
+        <CCol sm="2">
+          <DatePickerField
+            fieldName="enterdate"
+            label={t('common.changedate')}
+            selected={current.enterdate}
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
+          />
+        </CCol>
+      </CInputGroup>
       {/**InputVat */}
-      <Grid container spacing={1}>
-        <Grid item sm={8} xs={2}>
-          <Grid container maximize style={STYLES.fuller} justify="flex-start" alignItems="stretch">
-            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-              <div>{current?.hasOwnProperty('parent') && current.parent?t('article.group'):null}</div>
-            </Grid>
-            <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-              { current?.hasOwnProperty('parent')?// && current.parent?
-                <MasterfileXComboBox fieldName={'parent'} current={current} setCurrent={setCurrent}
-                    data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
-                  styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-                :null}
-
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item sm={4} xs={6}>
-          <Grid container maximize style={STYLES.fuller} alignItems="stretch">
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <div>{t('common.postingdate')}</div>
-            </Grid>
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <DatePickerField
-                fieldName="postingdate"
-                label={t('common.postingdate')}
-                selected={current.postingdate}
-                current={current}
-                setCurrent={setCurrent}
-                disabled={true}/>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      {/**OutputVat */}
-      <Grid container spacing={1}>
-        <Grid item sm={8} xs={2}>
-          <Grid container maximize style={STYLES.fuller40H} justify="flex-start" alignItems="stretch">
-            <Grid item sm={2} xs={12}
-                  justify="flex-start" alignItems="flex-start">
-              <div>{t('common.description')}</div>
-            </Grid>
-            <Grid item sm={10} xs={10} justify="flex-start" alignItems="stretch">
-              <TextareaField
-                fieldName="description"
-                placeholder={t('common.description')}
-                disabled={disable}
-                value={current.description}
-                current={current}
-                setCurrent={setCurrent}
-                style={{ width: 1000 }}/>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item sm={4} xs={6}>
-          <Grid container maximize style={STYLES.fuller} alignItems="stretch">
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <div>{t('common.company')}</div>
-            </Grid>
-            <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">
-              <InputField fieldName="company" current={current}
-                          setCurrent={setCurrent}
-                          value={current.company}
-                          disabled={true}
-                          style={{ height: 20,width: 80, textAlign: 'right' }}/>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    </>
+      <CInputGroup  style={{ height: height-3 }}>
+        <CCol sm="2">
+          <FieldLabel title={current?.hasOwnProperty(propertyName)?fieldName:'group'} />
+        </CCol>
+        <CCol sm="4">
+          {current?.hasOwnProperty(propertyName)?
+          <MasterfileXComboBox fieldName={propertyName} current={current} setCurrent={setCurrent}
+                               data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
+                               styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+            :
+            <CInputGroup  style={{ height: height }}>
+              <CCol md="2">
+                <FieldLabel title={t('common.description')} />
+              </CCol>
+              <CCol xs="12" md="9">
+                <TextareaField
+                  fieldName="description"
+                  placeholder={t('common.description')}
+                  disabled={disable}
+                  value={current.description}
+                  current={current}
+                  setCurrent={setCurrent}
+                  style={{ height: height-3 }}
+                />
+              </CCol>
+            </CInputGroup>
+          }
+        </CCol>
+        <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+          <FieldLabel title={t('common.postingdate')} />
+        </CCol>
+        <CCol sm="2">
+          <DatePickerField
+            fieldName="postingdate"
+            label={t('common.postingdate')}
+            selected={current.postingdate}
+            current={current}
+            setCurrent={setCurrent}
+            disabled={true}
+          />
+        </CCol>
+      </CInputGroup>
+      {/**description */}
+      {current?.hasOwnProperty(propertyName)?
+      <CInputGroup  style={{ height: height }}>
+        <CCol md="2">
+          <FieldLabel title={t('common.description')} />
+        </CCol>
+        <CCol xs="12" md="9">
+          <TextareaField
+            fieldName="description"
+            placeholder={t('common.description')}
+            disabled={disable}
+            value={current.description}
+            current={current}
+            setCurrent={setCurrent}
+            style={{ height: height-3 }}
+          />
+        </CCol>
+      </CInputGroup>
+        : null
+      }
+    </div>
   )
 }
-export const MasterfilesMainForm2 = ({collapse,  current, setCurrent, accData, t,  disable, height}:MasterfileProps2<IMasterfile2>) =>
-     (
-        <Grid container spacing={0} style={{...STYLES.outer0, display: !collapse?'none':''}}>
-            <MasterfilesForm2 collapse ={collapse} current ={current} setCurrent={setCurrent} accData={accData} t={t} disable={disable} height={height}/>
-        </Grid>
-    )
 
 
 export const PayrollTaxForm = ({ current, setCurrent, disable, t, locale, currency, height }:
                                { current:IPayrollTaxRange, setCurrent:(arg:IPayrollTaxRange)=>void,  t:TFunction<'translation', undefined>
                                    , disable:boolean, locale:string, currency:string, height:number }) => {
+
     return (
         <>
             <CInputGroup  style={{ height: height }}>
@@ -2054,195 +2029,120 @@ export const PayrollTaxForm = ({ current, setCurrent, disable, t, locale, curren
         </>
     )
 }
-export const    MasterfileMainBase0Form:FC<MasterfileProps<IMasterfile>> = ({ current, setCurrent, disable, t,  height })=> {
-  return (
-    <>
-      <Grid container spacing={1}>
-        <Grid item sm={8} xs={2}>
-          <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller}>
-            <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-              <div>{t('common.id')}</div>
-            </Grid>
-            <Grid item sm ={3} xs={2} justify="flex-end">
-              <InputField
-                fieldName="id"
-                current={current}
-                setCurrent={setCurrent}
-                value={current.id}
-                disabled={disable}
-                style={{ height: height}}/>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item sm={4} xs={6}>
-          <Grid container maximize style={styles.fuller} alignItems="stretch">
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <div>{t('common.enterdate')}</div>
-            </Grid>
-            <Grid item sm={4} xs={1} alignItems="stretch" justify="flex-start">
-              <DatePickerField
-                fieldName="enterdate"
-                label={t('common.enterdate')}
-                selected={current.enterdate}
-                current={current}
-                setCurrent={setCurrent}
-                disabled={true}/>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      {/**Name */}
-      <Grid container spacing={1}>
-        <Grid item sm={8} xs={2}>
-          <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
-            <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-              <div >{t('common.name')}</div>
-            </Grid>
-            <Grid item sm ={10} xs={10} justify="flex-end">
-              <InputField
-                fieldName="name"
-                current={current}
-                setCurrent={setCurrent}
-                value={current.name}
-                disabled={disable}
-                style={{ height: height }}/>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item sm={4} xs={6}>
-          <Grid container maximize style={styles.fuller} alignItems="stretch">
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <div>{t('common.changedate')}</div>
-            </Grid>
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <DatePickerField
-                fieldName="changedate"
-                label={t('common.changedate')}
-                selected={current.changedate}
-                current={current}
-                setCurrent={setCurrent}
-                disabled={true}/>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    </>
-  )
-}
+export const MasterfileMainBase0Form =
+  ({ current, setCurrent, t,  disable, height}:MasterfileProps<IMasterfile>) => {
+    return (
+      <>
+        {/*<div style={{...styles.outer, display: !collapse?'none':''}} >*/}
+        <CInputGroup  style={{ height: height }}>
+          <CCol sm="2">
+            <FieldLabel title={t('common.id')} />
+          </CCol>
+          <CCol sm="4">
+            <InputField
+              fieldName="id"
+              current={current}
+              setCurrent={setCurrent}
+              value={current.id}
+              disabled={disable}
+              style={{ height: height-3 }}
+            />
+          </CCol>
+          <CCol sm="2" style={{ height: 30, paddingLeft: 10 }}>
+            <FieldLabel title={t('common.enterdate')} />
+          </CCol>
+          <CCol sm="2">
+            <DatePickerField
+              fieldName="enterdate"
+              label={t('common.enterdate')}
+              selected={current.enterdate}
+              current={current}
+              setCurrent={setCurrent}
+              disabled={true}
+            />
+          </CCol>
+        </CInputGroup>
+        {/**Name */}
+        <CInputGroup  style={{ height: height }}>
+          <CCol sm="2">
+            <FieldLabel title={t('common.name')} />
+          </CCol>
+          <CCol sm="4">
+            <InputField
+              fieldName="name"
+              current={current}
+              setCurrent={setCurrent}
+              value={current.name}
+              disabled={disable}
+              style={{ height: height-3 }}
+            />
+          </CCol>
+          <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+            <FieldLabel title={t('common.changedate')} />
+          </CCol>
+          <CCol sm="2">
+            <DatePickerField
+              fieldName="enterdate"
+              label={t('common.changedate')}
+              selected={current.enterdate}
+              current={current}
+              setCurrent={setCurrent}
+              disabled={true}
+            />
+          </CCol>
+        </CInputGroup>
+      </>
+    )
+  }
 
-export const    MasterfileMainBaseForm:FC<MasterfileProps<IMasterfile>> = ({ collapse,  current, setCurrent, disable, t,  height })=> {
+
+export const    MasterfileMainBaseForm = ({ collapse,  current, setCurrent, disable, t,  height }:MasterfileProps<IMasterfile>)=> {
   return (
     <>
+     {/*<div style={{...styles.outer, display: !collapse?'none':''}} >*/}
       <MasterfileMainBase0Form collapse ={collapse} current={current} setCurrent={setCurrent} disable={disable} t={t}  height={height}/>
       {/** Description */}
-      <Grid container spacing={1}>
-        <Grid item sm={8} xs={2}>
-          <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-              <div>{t('common.description')}</div>
-            </Grid>
-            <Grid item sm={10} xs={10} justify="flex-start" alignItems="stretch">
-              <TextareaField
-                fieldName="description"
-                placeholder={t('common.description')}
-                disabled={disable}
-                value={current?.description}
-                current={current}
-                setCurrent={setCurrent}
-                style={{ width: 500 }}/>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item sm={4} xs={6}>
-          <Grid container maximize style={styles.fuller} alignItems="stretch">
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <div>{t('common.postingdate')}</div>
-            </Grid>
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <DatePickerField
+        <CInputGroup  style={{ height: height }}>
+          <CCol md="2">
+             <FieldLabel title={t('common.description')} />
+          </CCol>
+          <CCol xs="12" md="9">
+             <TextareaField
+               fieldName="description"
+               placeholder={t('common.description')}
+               disabled={disable}
+               value={current.description}
+               current={current}
+               setCurrent={setCurrent}
+               style={{ height: height-3 }}
+             />
+          </CCol>
+          <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+            <FieldLabel title={t('common.postingdate')} />
+           </CCol>
+           <CCol sm="2">
+             <DatePickerField
                 fieldName="postingdate"
                 label={t('common.postingdate')}
                 selected={current.postingdate}
                 current={current}
                 setCurrent={setCurrent}
-                disabled={true}/>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      {/**company */}
-      {/*<Grid container spacing={1}>*/}
-      {/*  <Grid item sm={8} xs={2}>*/}
-      {/*    <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">*/}
-      {/*      <Grid item sm ={12} xs={2} justify="flex-start" alignItems="flex-start">*/}
-      {/*        <div></div>*/}
-      {/*      </Grid>*/}
-      {/*    </Grid>*/}
-      {/*  </Grid>*/}
-      {/*  <Grid item sm={4} xs={6}>*/}
-      {/*    <Grid container maximize style={styles.fuller} alignItems="stretch">*/}
-      {/*      <Grid item  sm={4}  xs={2} alignItems="stretch" justify="flex-start">*/}
-      {/*        <div>{t('common.company')}</div>*/}
-      {/*      </Grid>*/}
-      {/*      <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">*/}
-      {/*        <InputField*/}
-      {/*          fieldName="company"*/}
-      {/*          current={current}*/}
-      {/*          setCurrent={setCurrent}*/}
-      {/*          value={current.company}*/}
-      {/*          disabled={true}*/}
-      {/*          style={{ height: height, width: 90, textAlign: 'right' }}/>*/}
-      {/*      </Grid>*/}
-      {/*    </Grid>*/}
-      {/*  </Grid>*/}
-      {/*</Grid>*/}
-    </>
+                disabled={true}
+            />
+          </CCol>
+      </CInputGroup>
+     </>
   )
 }
 
 export const    PartnerMainForm = ({ collapse,  current, setCurrent, disable, t,  height }: MasterfileProps<IPartner>) => {
-  const addressProps:IAddressProps = {current, setCurrent, disable, t, height:20}
+  //const addressProps:IAddressProps = {current, setCurrent, disable, t, height:20}
   return (
-    <Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >
+    <div style={{...styles.outer, display: !collapse?'none':''}} >
       <MasterfileMainBase0Form collapse={collapse} current={current} setCurrent={setCurrent} disable={disable} t={t}
                                height={height}/>
-      {/** Description */}
-      <Grid container spacing={1}>
-        <Grid item sm={8} xs={2}>
-          <Grid container maximize style={{...styles.fuller, padding:1}} justify="flex-start" alignItems="stretch">
-            <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-              <div>{t('common.prenom')}</div>
-            </Grid>
-            <Grid item sm={10} xs={10} justify="flex-start" alignItems="stretch">
-              <InputField
-                fieldName="description"
-                current={current}
-                setCurrent={setCurrent}
-                value={current.description}
-                disabled={disable}
-                style={{height: height}}/>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item sm={4} xs={6}>
-          <Grid container maximize style={styles.fuller} alignItems="stretch">
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <div>{t('common.postingdate')}</div>
-            </Grid>
-            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-              <DatePickerField
-                fieldName="postingdate"
-                label={t('common.postingdate')}
-                selected={current.postingdate}
-                current={current}
-                setCurrent={setCurrent}
-                disabled={true}/>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      <AddressForm current={current} setCurrent={setCurrent} t={t} disable={disable} height={addressProps.height}/>
-    </Grid>
+      <AddressForm current={current} setCurrent={setCurrent} t={t} disable={disable} height={height}/>
+    </div>
   )
 }
 
@@ -2250,7 +2150,8 @@ export const    FModuleMainForm = ({collapse, current, setCurrent, accData, acco
     return (
       <Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >
         {/*<Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >*/}
-        <MasterfilesForm2 collapse={collapse}  current ={current} setCurrent={setCurrent} accData={accData} t={t} disable={disable} height={height}/>
+        <MasterfilesForm collapse={collapse} current ={current} setCurrent={setCurrent} accData={accData} t={t}
+                         disable={disable} height={height} fieldName={t('fmodule.parent')} propertyName={'parent'}/>
         <Grid item sm={8} xs={2}>
           <Grid container maximize justify="flex-start" alignItems="stretch" style={STYLES.fuller}>
             <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
@@ -2310,270 +2211,222 @@ export const    FModuleMainForm = ({collapse, current, setCurrent, accData, acco
 }
 
 
-export const MasterfileMainForm = ({collapse, current, setCurrent, disable, t,  height }:MasterfileProps<IMasterfile>) => {
-  console.log('disable', disable)
-    return (
-        <Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >
-            <MasterfileMainBaseForm collapse ={collapse} current={current} setCurrent ={setCurrent}
-                                    disable ={disable} t ={t} height ={height}/>
-        </Grid>
-    )
-}
-export const RoleMainForm = ({collapse, current, setCurrent, disable, t,  height }: MasterfileProps<IRole>) => {
-    return (
-        <Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >
-            <MasterfileMainBaseForm collapse ={collapse} current={current} setCurrent ={setCurrent}
-                                     disable ={disable} t ={t}  height ={height}/>
-        </Grid>
-    )
-}
+// export const MasterfileMainForm = ({collapse, current, setCurrent, disable, t,  height }:MasterfileProps<IMasterfile>) => {
+//     return (
+//       <div style={{...styles.outer, display: !collapse?'none':''}} >
+//             <MasterfileMainBaseForm collapse ={collapse} current={current} setCurrent ={setCurrent}
+//                                     disable ={disable} t ={t} height ={height}/>
+//       </div>
+//     )
+// }
+
 export const PermissionMainForm = ({collapse, current, setCurrent, disable, t,  height }: MasterfileProps<IPermission>) => {
   const  current1:IPermission = current
   return (
-    <Grid container spacing={0}  style={{...STYLES.outer0, display: !collapse?'none':''}} >
+    <div style={{...styles.outer, display: !collapse?'none':''}} >
       <MasterfileMainBaseForm collapse ={collapse} current={current} setCurrent ={setCurrent}
                               disable ={disable} t ={t}  height ={height}/>
-      <Grid item sm={8} xs={2}>
-        <Grid container maximize justify="flex-start" alignItems="stretch" style={STYLES.fuller}>
-          <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-            <div>{t('common.permission')}</div>
-          </Grid>
-          <Grid item sm ={2} xs={2} justify="flex-end">
-            <InputField
-              fieldName="permission"
-              current={current1}
-              setCurrent={setCurrent}
-              value={current1.short}
-              disabled={disable}
-              style={{ height: height}}/>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
+      <CInputGroup  style={{ height: height }}>
+        <CCol md="2">
+          <FieldLabel title={t('common.permission')} />
+        </CCol>
+        <CCol xs="12" md="9">
+          <InputField
+            fieldName="permission"
+            current={current1}
+            setCurrent={setCurrent}
+            value={current1.short}
+            disabled={disable}
+            style={{ height: height}}/>
+        </CCol>
+      </CInputGroup>
+    </div>
   )
 }
 
-export const ArticleGeneralForm:FC<ArticleGeneralFormProps> =
-    ({ current, setCurrent,  t, quantityUnitData, groupData, ccyData, disable }) => {
+export const ArticleGeneralForm =
+    ({ collapse, current, setCurrent,  t, quantityUnitData, groupData, ccyData, disable, height}:ArticleGeneralFormProps) => {
 
         return (
-            <Grid container spacing={0} style={styles.outer}>
+          <div  style={{...styles.outer, display: !collapse?'none':''}} >
                 {/**Id, enterdate*/}
-                <Grid container spacing={1}>
-                    <Grid item sm={8} xs={2}>
-                        <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller}>
-                            <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                                <div>{t('common.id')}</div>
-                            </Grid>
-                            <Grid item sm ={3} xs={10} justify="flex-start">
-                                <InputField
-                                    fieldName="id"
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    value={current?.id}
-                                    disabled={disable}
-                                    style={{ height: 20, width: 120 }}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item sm={4} xs={6}>
-                        <Grid container maximize style={styles.fuller} alignItems="stretch">
-                           <BooleanField
-                               fieldName="stocked" current={current}
-                               setCurrent={setCurrent}
-                               label={t('article.stocked')}
-                               disabled={disable}
-                               checked={current.stocked}
-                               style={{height: 20, paddingLeft: 2, fontSize: 10}}
-                            />
-                        </Grid>
-                    </Grid>
-                </Grid>
-                {/**Name, changedate*/}
-                <Grid container spacing={1}>
-                    <Grid item sm={8} xs={2}>
-                        <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
-                            <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                                <div >{t('common.name')}</div>
-                            </Grid>
-                            <Grid item sm ={10} xs={5} justify="flex-start">
-                                <InputField
-                                    fieldName="name"
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    value={current.name}
-                                    disabled={disable}
-                                    style={{ height: 20 }}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item sm={4} xs={6}>
-                        <Grid container maximize style={styles.fuller} alignItems="stretch">
-                            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                                <div>{t('common.changedate')}</div>
-                            </Grid>
-                            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                                <DatePickerField
-                                    fieldName="changedate"
-                                    label={t('common.changedate')}
-                                    selected={current.changedate}
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    disabled={true}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
+              <CInputGroup  style={{ height: height }}>
+                <CCol sm="2">
+                  <FieldLabel title={t('common.id')} />
+                </CCol>
+                <CCol sm="4">
+                  <InputField
+                    fieldName="id"
+                    current={current}
+                    setCurrent={setCurrent}
+                    value={current.id}
+                    disabled={disable}
+                    style={{ height: height-3 }}
+                  />
+                </CCol>
+                <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+                  <FieldLabel title={t('common.enterdate')} />
+                </CCol>
+                <CCol sm="2">
+                  <DatePickerField
+                    fieldName="enterdate"
+                    label={t('common.enterdate')}
+                    selected={current.enterdate}
+                    current={current}
+                    setCurrent={setCurrent}
+                    disabled={true}
+                  />
+                </CCol>
+              </CInputGroup>
+              {/**Name */}
+              <CInputGroup  style={{ height: height }}>
+                <CCol sm="2">
+                  <FieldLabel title={t('common.name')} />
+                </CCol>
+                <CCol sm="4">
+                  <InputField
+                    fieldName="name"
+                    current={current}
+                    setCurrent={setCurrent}
+                    value={current.name}
+                    disabled={disable}
+                    style={{ height: height-3 }}
+                  />
+                </CCol>
+                <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+                  <FieldLabel title={t('common.changedate')} />
+                </CCol>
+                <CCol sm="2">
+                  <DatePickerField
+                    fieldName="enterdate"
+                    label={t('common.changedate')}
+                    selected={current.enterdate}
+                    current={current}
+                    setCurrent={setCurrent}
+                    disabled={true}
+                  />
+                </CCol>
+              </CInputGroup>
                 {/**QuantityUnit, changedate */}
-                <Grid container spacing={1}>
-                    <Grid item sm={8} xs={2}>
-                        <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
-                            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                                <div>{t('article.quantityUnit')}</div>
-                            </Grid>
-                            <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-                              <MasterfileXComboBox fieldName={'quantityUnit'} current={current} setCurrent={setCurrent}
-                                   data={quantityUnitData} defaultValue={initQuantity[0]} zIndex={11} disable={disable}
-                                 styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item sm={4} xs={6}>
-                        <Grid container maximize style={styles.fuller} alignItems="stretch">
-                            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                                <div>{t('common.postingdate')}</div>
-                            </Grid>
-                            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                                <DatePickerField
-                                    fieldName="postingdate"
-                                    label={t('common.postingdate')}
-                                    selected={current.changedate}
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    disabled={true}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
+              <CInputGroup  style={{ height: height }}>
+                <CCol sm="2">
+                  <FieldLabel title={t('article.quantityUnit')} />
+                </CCol>
+                <CCol sm="4">
+                  <MasterfileXComboBox fieldName={'quantityUnit'} current={current} setCurrent={setCurrent}
+                           data={quantityUnitData} defaultValue={initQuantity[0]} zIndex={11} disable={disable}
+                    styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
+                </CCol>
+                <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+                  <FieldLabel title={t('common.postingdate')} />
+                </CCol>
+                <CCol sm="2">
+                  <DatePickerField
+                    fieldName="postingdate"
+                    label={t('common.postingdate')}
+                    selected={current.enterdate}
+                    current={current}
+                    setCurrent={setCurrent}
+                    disabled={true}
+                  />
+                </CCol>
+              </CInputGroup>
+
                 {/**PackUnit, PPrice*/}
-                <Grid container spacing={1}>
-                    <Grid item sm={8} xs={2}>
-                        <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
-                            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                                <div>{t('article.packUnit')}</div>
-                            </Grid>
-                            <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-                              <MasterfileXComboBox fieldName={'packUnit'} current={current} setCurrent={setCurrent}
-                                  data={quantityUnitData} defaultValue={initQuantity[0]} zIndex={11} disable={disable}
-                                  styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item sm={4} xs={6}>
-                        <Grid container maximize style={styles.fuller} alignItems="stretch">
-                            <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                                <div>{t('article.pprice')}</div>
-                            </Grid>
-                            <Grid item sm ={2} xs={4} justify="flex-start" alignItems="stretch">
-                                <InputNumberField
-                                    fieldName="pprice"
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    value={Number(current?.pprice)}
-                                    //value={current?.pprice}
-                                    disabled={disable}
-                                    style={{ height: 20, width:140, textAlign: 'right', padding: 2, fontSize:12}}
-                                />
-                                <FieldLabel  title={current.currency}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
+              <CInputGroup  style={{ height: height }}>
+                <CCol sm="2">
+                  <FieldLabel title={t('article.packUnit')} />
+                </CCol>
+                <CCol sm="4">
+                  <MasterfileXComboBox fieldName={'packUnit'} current={current} setCurrent={setCurrent}
+                       data={quantityUnitData} defaultValue={initQuantity[0]} zIndex={11} disable={disable}
+                     styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
+                </CCol>
+                <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+                  <FieldLabel title={t('article.pprice')} />
+                </CCol>
+                <CCol sm="2">
+                  <InputNumberField
+                    fieldName="pprice"
+                    current={current}
+                    setCurrent={setCurrent}
+                    value={Number(current?.pprice)}
+                    //value={current?.pprice}
+                    disabled={disable}
+                    style={{ height: 20, width:140, textAlign: 'right', padding: 2, fontSize:12}}
+                  />
+                  <FieldLabel  title={current.currency}/>
+                </CCol>
+              </CInputGroup>
+
                  {/**Group, SPrice*/}
-                <Grid container spacing={1}>
-                  <Grid item sm={8} xs={2}>
-                      <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
-                          <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                              <div>{t('article.group')}</div>
-                          </Grid>
-                          <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-                            <MasterfileXComboBox fieldName={'parent'} current={current} setCurrent={setCurrent}
-                                  data={groupData} defaultValue={initArticleGroup[0]} zIndex={11} disable={disable}
-                                 styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
-                          </Grid>
-                      </Grid>
-                  </Grid>
-                    <Grid item sm={4} xs={6}>
-                        <Grid container maximize style={styles.fuller} alignItems="stretch">
-                            <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                                <div>{t('article.sprice')}</div>
-                            </Grid>
-                            <Grid item sm ={2} xs={4} justify="flex-start" alignItems="stretch">
-                                <InputNumberField
-                                    fieldName="sprice"
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    //onChange={(value: any, _event: any) => setCurrent({...current, [fieldName]: value})}
-                                    value={Number(current?.sprice)}
-                                    disabled={disable}
-                                    style={{ height: 20, width:140, textAlign: 'right', padding:5, fontSize:12}}
-                                />
-                                <FieldLabel  title={current.currency}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
+              <CInputGroup  style={{ height: height }}>
+                <CCol sm="2">
+                  <FieldLabel title={t('article.group')} />
+                </CCol>
+                <CCol sm="4">
+                  <MasterfileXComboBox fieldName={'parent'} current={current} setCurrent={setCurrent}
+                         data={groupData} defaultValue={initArticleGroup[0]} zIndex={11} disable={disable}
+                      styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
+                </CCol>
+                <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+                  <FieldLabel title={t('article.sprice')} />
+                </CCol>
+                <CCol sm="2">
+                  <InputNumberField
+                    fieldName="sprice"
+                    current={current}
+                    setCurrent={setCurrent}
+                    value={Number(current?.sprice)}
+                    //value={current?.pprice}
+                    disabled={disable}
+                    style={{ height: 20, width:140, textAlign: 'right', padding: 2, fontSize:12}}
+                  />
+                  <FieldLabel  title={current.currency}/>
+                </CCol>
+              </CInputGroup>
                 {/**Description, avgPrice */}
-                <Grid container spacing={1}>
-                    <Grid item sm={8} xs={2}>
-                        <Grid container maximize style={styles.fuller40H} justify="flex-start" alignItems="stretch">
-                            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                                <div>{t('common.description')}</div>
-                            </Grid>
-                            <Grid item sm={10} xs={10} justify="flex-start" alignItems="stretch">
-                                <TextareaField
-                                    fieldName="description"
-                                    placeholder={t('common.description')}
-                                    disabled={disable}
-                                    value={current.description}
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item sm={4} xs={6}>
-                        <Grid container maximize style={styles.fuller} alignItems="stretch">
-                            <Grid item  sm={2} xs={3} justify="flex-start" alignItems="flex-start">
-                                <div>{t('article.avgPrice')}</div>
-                            </Grid>
-                            <Grid item sm ={2} xs={4} justify="flex-start" alignItems="stretch">
-                                <InputField
-                                    fieldName="avgPrice"
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    value={Number(current?.avgPrice)}
-                                    disabled={disable}
-                                    style={{ height: 20, width:140, textAlign: 'right', padding: 5, fontSize:12}}
-                                />
-                                <FieldLabel  title={current.currency}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                  <Grid item sm={8} xs={6}>
-                    <Grid container maximize style={styles.fuller} alignItems="stretch">
-                      <Grid item  sm={2}  xs={2} alignItems="stretch" justify="flex-start">
-                        <div>{t('common.currency')}</div>
-                      </Grid>
-                      <Grid item sm={10} xs={10} alignItems="stretch" justify="flex-start">
-                        <MasterfileXComboBox fieldName={'currency'} current={current} setCurrent={setCurrent}
-                                             data={ccyData} defaultValue={initCurrency[0]} zIndex={11} disable={disable}
-                                             styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-            </Grid>
+              <CInputGroup  style={{ height: height }}>
+                <CCol sm="2">
+                  <FieldLabel title={t('common.description')} />
+                </CCol>
+                <CCol sm="4">
+                  <TextareaField
+                    fieldName="description"
+                    placeholder={t('common.description')}
+                    disabled={disable}
+                    value={current.description}
+                    current={current}
+                    setCurrent={setCurrent}
+                  />
+                </CCol>
+                <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+                  <FieldLabel title={t('article.avgPrice')} />
+                </CCol>
+                <CCol sm="2">
+                  <InputNumberField
+                    fieldName="avgPrice"
+                    current={current}
+                    setCurrent={setCurrent}
+                    value={Number(current?.avgPrice)}
+                    //value={current?.pprice}
+                    disabled={disable}
+                    style={{ height: 20, width:140, textAlign: 'right', padding: 2, fontSize:12}}
+                  />
+                  <FieldLabel  title={current.currency}/>
+                </CCol>
+              </CInputGroup>
+              <CInputGroup  style={{ height: height }}>
+                <CCol sm="2">
+                  <FieldLabel title={t('common.currency')} />
+                </CCol>
+                <CCol sm="4">
+                  <MasterfileXComboBox fieldName={'currency'} current={current} setCurrent={setCurrent}
+                                       data={ccyData} defaultValue={initCurrency[0]} zIndex={11} disable={disable}
+                                       styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
+                </CCol>
+              </CInputGroup>
+          </div>
         )
     }
 
@@ -2773,284 +2626,219 @@ export const UserMainForm = ({ collapse, current, setCurrent, disable, t }:UserF
 
 }
 export const AddressForm = ({ current, setCurrent, disable, t, height }:IAddressProps) => {
-    return (<>
-            <Grid container spacing={0} style={{...styles.outer, height:120}}>
-                {/*street, zip */}
-                <Grid container spacing={1}>
-                    <Grid item sm={8} xs={2}>
-                        <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller}>
-                            <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                                <div>{t('common.street')}</div>
-                            </Grid>
-                            <Grid item sm ={10} xs={2} justify="flex-end">
-                                <InputField
-                                    fieldName="street"
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    value={current.street}
-                                    disabled={disable}
-                                    style={{ height: height}}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item sm={4} xs={6}>
-                        <Grid container maximize style={{...styles.fuller, height:20}} alignItems="stretch">
-                            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                                <div>{t('common.zip')}</div>
-                            </Grid>
-                            <Grid item sm={6} xs={1} alignItems="stretch" justify="flex-start">
-                                <InputField
-                                    fieldName="zip"
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    value={current.zip}
-                                    disabled={disable}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                {/*city, country */}
-                <Grid container spacing={1}>
-                    <Grid item sm={8} xs={2}>
-                        <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
-                            <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                                <div >{t('common.city')}</div>
-                            </Grid>
-                          <Grid item sm ={5} xs={10} justify="flex-end">
-                            <InputField
-                              fieldName="city"
-                              current={current}
-                              setCurrent={setCurrent}
-                              value={current.city}
-                              disabled={disable}
-                              style={{ height: height}}/>
-                          </Grid>
-                            <Grid item sm ={5} xs={10} justify="flex-end">
-                                <InputField
-                                    fieldName="state"
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    value={current.state}
-                                    disabled={disable}
-                                    style={{ height: height}}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item sm={4} xs={6}>
-                        <Grid container maximize style={styles.fuller} alignItems="stretch">
-                            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                                <div>{t('common.country')}</div>
-                            </Grid>
-                            <Grid item sm={6} xs={2} alignItems="stretch" justify="flex-start">
-                                <InputField
-                                    fieldName="country"
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    value={current.country}
-                                    disabled={disable}
-                                    style={{ height: height}}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
+
+    return (
+        <CInputGroup  style={{...styles.outer}} >
+              {/*street, zip */}
+              <CInputGroup  style={{ height: height }}>
+                <CCol sm="2">
+                  <FieldLabel title={t('common.street')} />
+                </CCol>
+                <CCol sm="4">
+                  <InputField
+                    fieldName="street"
+                    current={current}
+                    setCurrent={setCurrent}
+                    value={current.street}
+                    disabled={disable}
+                    style={{ height: height-3 }}
+                  />
+                </CCol>
+                <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+                  <FieldLabel title={t('common.zip')} />
+                </CCol>
+                <CCol sm="2">
+                  <InputField
+                    fieldName="zip"
+                    current={current}
+                    setCurrent={setCurrent}
+                    value={current.zip}
+                    disabled={disable}
+                    style={{ height: height-3 }}
+                  />
+                </CCol>
+              </CInputGroup>
+                  <CInputGroup  style={{ height: height }}>
+                    <CCol sm="2">
+                      <FieldLabel title={t('common.city')} />
+                    </CCol>
+                    <CCol sm="4">
+                      <InputField
+                        fieldName="city"
+                        current={current}
+                        setCurrent={setCurrent}
+                        value={current.city}
+                        disabled={disable}
+                        style={{ height: height-3 }}
+                      />
+                    </CCol>
+                    <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+                      <FieldLabel title={t('common.state')} />
+                    </CCol>
+                    <CCol sm="2">
+                      <InputField
+                        fieldName="state"
+                        current={current}
+                        setCurrent={setCurrent}
+                        value={current.state}
+                        disabled={disable}
+                        style={{ height: height-3 }}
+                      />
+                    </CCol>
+                  </CInputGroup>
+                  <CInputGroup  style={{ height: height }}>
+                    <CCol sm="2">
+                      <FieldLabel title={t('common.country')} />
+                    </CCol>
+                    <CCol sm="4">
+                      <InputField
+                        fieldName="country"
+                        current={current}
+                        setCurrent={setCurrent}
+                        value={current.country}
+                        disabled={disable}
+                        style={{ height: height-3 }}
+                      />
+                    </CCol>
+                  </CInputGroup>
                 {/*email,  */}
-                <Grid container spacing={1}>
-                    <Grid item sm={8} xs={2}>
-                        <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
-                            <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                                <div >{t('common.email')}</div>
-                            </Grid>
-                            <Grid item sm ={10} xs={10} justify="flex-end">
-                                <InputField
-                                    fieldName="email"
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    value={current.email}
-                                    disabled={disable}
-                                    style={{ height: height}}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item sm={4} xs={6}>
-                        <Grid container maximize style={styles.fuller} alignItems="stretch">
-                            <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                                <div>{t('common.phone')}</div>
-                            </Grid>
-                            <Grid item sm={6} xs={2} alignItems="stretch" justify="flex-start">
-                                <InputField
-                                    fieldName="phone"
-                                    current={current}
-                                    setCurrent={setCurrent}
-                                    value={current.phone}
-                                    disabled={disable}
-                                    style={{ height: height}}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </>
+            <CInputGroup  style={{ height: height }}>
+              <CCol sm="2">
+                <FieldLabel title={t('common.email')} />
+              </CCol>
+              <CCol sm="4">
+                <InputField
+                  fieldName="email"
+                  current={current}
+                  setCurrent={setCurrent}
+                  value={current.email}
+                  disabled={disable}
+                  style={{ height: height-3 }}
+                />
+              </CCol>
+              <CCol sm="2" style={{ height: 30, paddingLeft: 10 }}>
+                <FieldLabel title={t('common.phone')} />
+              </CCol>
+              <CCol sm="2">
+                <InputField
+                  fieldName="phone"
+                  current={current}
+                  setCurrent={setCurrent}
+                  value={current.phone}
+                  disabled={disable}
+                  style={{ height: height-3 }}
+                />
+              </CCol>
+            </CInputGroup>
+          </CInputGroup>
     )
 }
 
 export const CustomerGeneralForm =
-  ({current, setCurrent, ccyData, disable, t }: CustomerGeneralFormProps) => {
+  ({collapse, current, setCurrent, disable, t, height }: CustomerGeneralFormProps) => {
 
     return (
-        <Grid container spacing={0} style={{...styles.outer, height: 200}}>
-            <Grid container spacing={1}>
-                <Grid item sm={8} xs={2}>
-                    <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller}>
-                        <Grid item sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                            <div>{t('common.id')}</div>
-                        </Grid>
-                        <Grid item sm ={3} xs={2} justify="flex-end">
-                            <InputField
-                                fieldName="id"
-                                current={current}
-                                setCurrent={setCurrent}
-                                value={current.id}
-                                disabled={disable}
-                                style={{ height: 20}}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item sm={4} xs={6}>
-                    <Grid container maximize style={styles.fuller} alignItems="stretch">
-                        <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                            <div>{t('common.enterdate')}</div>
-                        </Grid>
-                        <Grid item sm={4} xs={1} alignItems="stretch" justify="flex-start">
-                            <DatePickerField
-                                fieldName="enterdate"
-                                label={t('common.enterdate')}
-                                selected={current.enterdate}
-                                current={current}
-                                setCurrent={setCurrent}
-                                disabled={true}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-            {/**Name */}
-            <Grid container spacing={1}>
-                <Grid item sm={8} xs={2}>
-                    <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
-                        <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                            <div >{t('common.name')}</div>
-                        </Grid>
-                        <Grid item sm ={10} xs={10} justify="flex-end">
-                            <InputField
-                                fieldName="name"
-                                current={current}
-                                setCurrent={setCurrent}
-                                value={current.name}
-                                disabled={disable}
-                                style={{ height: 20 }}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item sm={4} xs={6}>
-                    <Grid container maximize style={styles.fuller} alignItems="stretch">
-                        <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                            <div>{t('common.changedate')}</div>
-                        </Grid>
-                        <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                            <DatePickerField
-                                fieldName="changedate"
-                                label={t('common.changedate')}
-                                selected={current.changedate}
-                                current={current}
-                                setCurrent={setCurrent}
-                                disabled={true}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-            {/**taxCode postingdate */}
-            <Grid container spacing={1}>
-                <Grid item sm={8} xs={2}>
-                    <Grid container maximize justify="flex-start" alignItems="stretch" style={styles.fuller} >
-                        <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
-                            <div >{t('common.taxCode')}</div>
-                        </Grid>
-                        <Grid item sm ={10} xs={10} justify="flex-end">
-                            <InputField
-                                fieldName="taxCode"
-                                current={current}
-                                setCurrent={setCurrent}
-                                value={current.taxCode}
-                                disabled={disable}
-                                style={{ height: 20 }}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item sm={4} xs={6}>
-                    <Grid container maximize style={styles.fuller} alignItems="stretch">
-                        <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                            <div>{t('common.postingdate')}</div>
-                        </Grid>
-                        <Grid item sm={4} xs={2} alignItems="stretch" justify="flex-start">
-                            <DatePickerField
-                                fieldName="postingdate"
-                                label={t('common.postingdate')}
-                                selected={current.postingdate}
-                                current={current}
-                                setCurrent={setCurrent}
-                                disabled={true}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-            {/**Description  companyId*/}
-            <Grid container spacing={1}>
-                <Grid item sm={8} xs={2}>
-                    <Grid container maximize style={styles.fuller40H} justify="flex-start" alignItems="stretch">
-                        <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                            <div>{t('common.description')}</div>
-                        </Grid>
-                        <Grid item sm={10} xs={10} justify="flex-start" alignItems="stretch">
-                            <TextareaField
-                                fieldName="description"
-                                placeholder={t('common.description')}
-                                disabled={disable}
-                                value={current.description}
-                                current={current}
-                                setCurrent={setCurrent}
-                                style={{ width: 500 }}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item sm={4} xs={6}>
-                    <Grid container maximize style={styles.fuller} alignItems="stretch">
-                        <Grid item  sm={4}  xs={2} alignItems="stretch" justify="flex-start">
-                            <div>{t('common.company')}</div>
-                        </Grid>
-                        <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">
-                            <InputField
-                                fieldName="company"
-                                current={current}
-                                setCurrent={setCurrent}
-                                value={current.company}
-                                disabled={true}
-                                style={{ height: 20, width: 90, textAlign: 'right' }}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item sm={8} xs={6}>
-                    <Grid container maximize style={styles.fuller} alignItems="stretch">
-                        <Grid item  sm={2}  xs={2} alignItems="stretch" justify="flex-start">
-                            <div>{t('common.currency')}</div>
-                        </Grid>
-                        <Grid item sm={10} xs={10} alignItems="stretch" justify="flex-start">
-                          <MasterfileXComboBox fieldName={'currency'} current={current} setCurrent={setCurrent}
-                                  data={ccyData} defaultValue={initCurrency[0]} zIndex={11} disable={disable}
-                             styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Grid>
+      <CInputGroup  style={{...styles.outer, display: !collapse?'none':''}} >
+        <CInputGroup  style={{ height: height }}>
+          <CCol sm="2">
+            <FieldLabel title={t('common.id')} />
+          </CCol>
+          <CCol sm="4">
+            <InputField
+              fieldName="id"
+              current={current}
+              setCurrent={setCurrent}
+              value={current.id}
+              disabled={disable}
+              style={{ height: height-3 }}
+            />
+          </CCol>
+          <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+            <FieldLabel title={t('common.enterdate')} />
+          </CCol>
+          <CCol sm="2">
+            <DatePickerField
+              fieldName="enterdate"
+              label={t('common.enterdate')}
+              selected={current.enterdate}
+              current={current}
+              setCurrent={setCurrent}
+              disabled={true}
+            />
+          </CCol>
+        </CInputGroup>
+        <CInputGroup  style={{ height: height }}>
+          <CCol sm="2">
+            <FieldLabel title={t('common.name')} />
+          </CCol>
+          <CCol sm="4">
+            <InputField
+              fieldName="name"
+              current={current}
+              setCurrent={setCurrent}
+              value={current.name}
+              disabled={disable}
+              style={{ height: height-3 }}
+            />
+          </CCol>
+          <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+            <FieldLabel title={t('common.changedate')} />
+          </CCol>
+          <CCol sm="2">
+            <DatePickerField
+              fieldName="changedate"
+              label={t('common.changedate')}
+              selected={current.enterdate}
+              current={current}
+              setCurrent={setCurrent}
+              disabled={true}
+            />
+          </CCol>
+        </CInputGroup>
+        <CInputGroup  style={{ height: height }}>
+          <CCol sm="2">
+            <FieldLabel title={t('common.taxCode')} />
+          </CCol>
+          <CCol sm="4">
+            <InputField
+              fieldName="taxCode"
+              current={current}
+              setCurrent={setCurrent}
+              value={current.taxCode}
+              disabled={disable}
+              style={{ height: height-3 }}/>
+          </CCol>
+          <CCol sm="2" style={{ height: height, paddingLeft: 10 }}>
+            <FieldLabel title={t('common.postingdate')} />
+          </CCol>
+          <CCol sm="2">
+            <DatePickerField
+              fieldName="postingdate"
+              label={t('common.postingdate')}
+              selected={current.postingdate}
+              current={current}
+              setCurrent={setCurrent}
+              disabled={true}
+            />
+          </CCol>
+        </CInputGroup>
+        <CInputGroup  style={{ height: height }}>
+          <CCol md="2">
+            <FieldLabel title={t('common.description')} />
+          </CCol>
+          <CCol xs="12" md="9">
+            <TextareaField
+              fieldName="description"
+              placeholder={t('common.description')}
+              disabled={disable}
+              value={current.description}
+              current={current}
+              setCurrent={setCurrent}
+              style={{ height: height}}
+            />
+          </CCol>
+        </CInputGroup>
+      </CInputGroup>
     )
 }
 export const CompanyGeneralForm =
@@ -3182,10 +2970,10 @@ export const CompanyGeneralForm =
 
 export const StoreGeneralForm = ({collapse, current, setCurrent, disable, t, height}: StoreGeneralFormProps) => {
     return (
-      <Grid container spacing={0}  style={{...styles.outer, display: !collapse?'none':''}} >
+      <div  style={{...styles.outer, display: !collapse?'none':''}} >
         <MasterfileMainBaseForm collapse ={collapse} current={current} setCurrent ={setCurrent}
                                 disable ={disable} t ={t} height ={height}/>
-      </Grid>
+      </div>
     )
 }
 
@@ -3281,7 +3069,6 @@ export const TransactionDetailsForm = (
                                     const percent= currentVat?.percent??0.0
                                     const vatAmount = percent*current.quantity*current.price
                                     const vatCode = currentVat?currentVat?.id:''
-                                    console.log('vatAmount', vatAmount)
                                     const currentx:ILineTransaction = {...current,
                                         article: value, articleName: article ?article.name:''
                                       , unit:article ?article.quantityUnit:'', price:getPrice(article)
@@ -3785,92 +3572,102 @@ export const BankAccountForm = (
 //     </>
 //   )
 export const ArticleAccountForm = (
-  { current, setCurrent, accData, vatData, t,  disable }:
-  {current: IArticle, setCurrent: (art:any)=>void, accData: IAccount[]
-    , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, height?: number, zIndex:number}) => {
+  { current, setCurrent, accData, vatData, t,  disable, height }: ArticleAcccountProps ) => {
+  //{current: IArticle, setCurrent: (art:any)=>void, accData: IAccount[]
+   // , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, height: number, zIndex:number}) => {
   return (
-    <Grid container spacing={0} style={{...styles.outer, height: 140, display: 'flex'}}>
-      <CustomerAccountBaseForm current ={current} setCurrent = {setCurrent} accData ={accData} vatData ={vatData} t={t}
-                               disable={disable}  children={()=>null}/>
+    <div  style={{...styles.outer}} >
+    {/*<div  style={{...styles.outer, display: !collapse?'none':''}} >*/}
+    {/*  <CustomerAccountBaseForm current ={current} setCurrent = {setCurrent} accData ={accData} vatData ={vatData} t={t}*/}
+    {/*                           disable={disable}  children={()=>null} height ={height}/>*/}
+      {/**Account,  accountName*/}
+      <CInputGroup  style={{ height: height-3 }}>
+        <CCol sm="2">
+          <FieldLabel title={t('article.stock.account')} />
+        </CCol>
+        <CCol sm="4">
+          <MasterfileXComboBox fieldName={'account'} current={current} setCurrent={setCurrent}
+                               data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
+                               styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+        </CCol>
+      </CInputGroup>
+      {/**Oaccount oaccountName */}
+      <CInputGroup  style={{ height: height-3 }}>
+        <CCol sm="2">
+          <FieldLabel title={t('article.expense.account')} />
+        </CCol>
+        <CCol sm="4">
+          <MasterfileXComboBox fieldName={'oaccount'} current={current} setCurrent={setCurrent}
+                               data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
+                               styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+        </CCol>
+      </CInputGroup>
       {/**revenue account*/}
-      <Grid container spacing={1}>
-        <Grid item sm={12} xs={2}>
-          <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-              {t('article.revenue.account')}
-            </Grid>
-            <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-              <MasterfileXComboBox fieldName={'revenueAccount'} current={current} setCurrent={setCurrent}
-                                   data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
-                                   styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-            </Grid>
-          </Grid>
-        </Grid>
+      <CInputGroup  style={{ height: height-3 }}>
+        <CCol sm="2">
+          <FieldLabel title={t('article.revenue.account')} />
+        </CCol>
+        <CCol sm="4">
+          <MasterfileXComboBox fieldName={'revenueAccount'} current={current} setCurrent={setCurrent}
+                               data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
+                               styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+        </CCol>
+      </CInputGroup>
+
         {/**Vat */}
         { !current?.hasOwnProperty('vatCode') && !current?.hasOwnProperty('vatcode') ? null:
-        <Grid item sm={12} xs={2}>
-          <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-            <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-              <div>{t('common.vatCode')}</div>
-            </Grid>
-            <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start">
+          <CInputGroup  style={{ height: height-3 }}>
+            <CCol sm="2">
+              <FieldLabel title={t('common.vatCode')} />
+            </CCol>
+            <CCol sm="4">
               <MasterfileXComboBox fieldName={'vatCode'} current={current} setCurrent={setCurrent}
                                    data={vatData} defaultValue={initVat[0]} zIndex={11} disable={disable}
                                    styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-            </Grid>
-          </Grid>
-        </Grid>
+            </CCol>
+          </CInputGroup>
         }
-      </Grid>
-    </Grid>
+    </div>
   )
 }
 export const CustomerAccountBaseForm = (
-    { current, setCurrent, accData,  t,  disable, children }:
+    { current, setCurrent, accData,  t,  disable, children, height }:
     {current: IArticle|ICustomer|ISupplier|IEmployee|ICompany, setCurrent: (art:any)=>void, accData: IAccount[]
-        , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, children:() =>ReactNode}) => {
+        , vatData: IVat[],  t:TFunction<'transalation', undefined>,  disable: boolean, children:() =>ReactNode, height:number}) => {
     const accountLabel = getAccountLabel(current, t)
     const oaccountLabel = getOAccountLabel(current, t)
     return (<>
             {/**Account,  accountName*/}
-            <Grid container spacing={1}>
-                <Grid item sm={12} xs={2}>
-                    <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-                        <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                            <div>{accountLabel}</div>
-                        </Grid>
-                        <Grid item sm ={10} xs={5} justify="flex-start" alignItems="flex-start">
-                          <MasterfileXComboBox fieldName={'account'} current={current} setCurrent={setCurrent}
-                               data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
-                            styles={{...styles, minHeight:20, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-            {/**Oaccount oaccountName */}
-            <Grid container spacing={1}>
-                <Grid item sm={12} xs={2}>
-                    <Grid container maximize style={styles.fuller} justify="flex-start" alignItems="stretch">
-                        <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
-                            <div>{oaccountLabel}</div>
-                        </Grid>
-                        <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start">
-                          <MasterfileXComboBox fieldName={'oaccount'} current={current} setCurrent={setCurrent}
-                              data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
-                            styles={{...styles, minHeight:20, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
+        <CInputGroup  style={{ height: height-3 }}>
+          <CCol sm="2">
+            <FieldLabel title={accountLabel} />
+          </CCol>
+          <CCol sm="4">
+              <MasterfileXComboBox fieldName={'account'} current={current} setCurrent={setCurrent}
+                                   data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
+                                   styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+          </CCol>
+        </CInputGroup>
+         {/**Oaccount oaccountName */}
+        <CInputGroup  style={{ height: height-3 }}>
+          <CCol sm="2">
+            <FieldLabel title={oaccountLabel} />
+          </CCol>
+          <CCol sm="4">
+            <MasterfileXComboBox fieldName={'oaccount'} current={current} setCurrent={setCurrent}
+                                 data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable}
+                                 styles={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280'}}/>
+          </CCol>
+        </CInputGroup>
         {/**Vat */}
         {children ()}
         </>
     )
 }
   export const CustomerAccountForm  = (
-    { current, setCurrent, ccData, accData, vatData, t,  disable }:
+    { current, setCurrent, ccData, accData, vatData, t,  disable, height }:
     {current: IArticle|ICustomer|ISupplier|IEmployee|ICompany, setCurrent: (art:any)=>void, accData: IAccount[]
-      , vatData: IVat[], ccData?: IMasterfile[],  t:TFunction<'transalation', undefined>,  disable: boolean, height?: number, zIndex:number}) => {
+      , vatData: IVat[], ccData?: IMasterfile[],  t:TFunction<'transalation', undefined>,  disable: boolean, height: number, zIndex:number}) => {
 
     const children = () =>(<>
       {!current?.hasOwnProperty('vatCode') && !current?.hasOwnProperty('vatcode') ? null:
@@ -3905,11 +3702,11 @@ export const CustomerAccountBaseForm = (
     const child = current?.hasOwnProperty('vatCode')||current?.hasOwnProperty('vatcode')?children
                                       :current?.hasOwnProperty('costcenter')?costCenterChildren:() =>null
     return (
-      <Grid container spacing={0} style={{...styles.outer, height: 120}}>
+      <div  style={{...styles.outer, height: 120}}>
         <CustomerAccountBaseForm current ={current} setCurrent = {setCurrent} accData ={accData} vatData ={vatData} t={t}
-                                 disable={disable}  children={child}/>
+                                 disable={disable}  children={child} height={height}/>
 
-      </Grid>
+      </div>
     )
   }
 export const CompanyAccountForm = (
