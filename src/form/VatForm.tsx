@@ -43,14 +43,13 @@ const VatForm = () => {
   return (
     <>
       {header}
-      <Grid container style={{ borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 10
-                                          , height:state.collapse?minHeight:maxHeight
-                                         , display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
+      <div  style={{ borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 1
+        , height:state.collapse?minHeight:maxHeight, display: !state.collapse?'none':''}} >
         {body??mainForm}
-      </Grid>
-      <Grid item style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+      </div>
+      <div  style={{...styles.outer0, paddingTop:5, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
         {table}
-      </Grid>
+      </div>
     </>
   )
 
