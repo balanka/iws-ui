@@ -71,14 +71,18 @@ const FinancialsForm = () => {
     setCurrent(current_)
     setAccFilter(mx.accFilter?.replace(/\s/g,'').split(','))
     setOAccFilter(mx.oaccFilter?.replace(/\s/g,'').split(','))
-    console.log('mx', mx)
+    // console.log('mx', mx)
     const modelidx = mx.id.toString()??0
     setModel(parseInt(modelidx))
     ctx = `${module_.ctx}/${mx.id}/${company}`
-    console.log('ctx', ctx)
+    // console.log('ctx', ctx)
     const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
     Get(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
     submitQuery(ctx)
+    const currentx = rowData.filter(m=>m.modelid===current_.modelid).length>0?rowData[0]:current_
+    console.log('currentx', currentx)
+    setCurrent(currentx)
+
   }
 
   useEffect(() => {
@@ -99,7 +103,7 @@ const FinancialsForm = () => {
     setIsFetching(false)
   }
   const onRowSelectedL = (event: RowSelectedEvent) => {
-    console.log('event.data', event)
+    // console.log('event.data', event)
     let line:ILineFinancials= isArrayAndNotEmpty(event.data) ?event.data[0]:event.data
     setCurrentLine(line)
 
@@ -139,26 +143,6 @@ const FinancialsForm = () => {
     autoSizeStrategy: {
       type: "fitGridWidth",
     },
-    // @ts-ignore
-    //columnDefs: financialsColumnDefs(t),
-    // @ts-ignore
-    // detailCellRendererParams: {
-    //     detailGridOptions: {
-    //         getRowStyle: (params: { node: { rowIndex: number} }) => {
-    //             if (params.node.rowIndex % 2 === 0) {
-    //                 return { background: '#fff9e6' }
-    //             }
-    //         },
-    //         columnDefs:LinesFinancialsColumns(t),
-    //         defaultColDef: {
-    //             flex: 1,
-    //         },
-    //     },
-    //     getDetailRowData: (params:any) => {
-    //         params.successCallback(params.data.lines);
-    //     },
-    // } as IDetailCellRendererParams<IFinancials, ILineFinancials>,
-    //onFirstDataRendered: onFirstDataRendered,
   }
   const minHeight=300
   const maxHeight =650
@@ -230,7 +214,7 @@ const FinancialsForm = () => {
       <Grid container
         // @ts-ignore
             style={{...stylesx.outer, display: !state.collapse?'none':'', width: '100%', height: 165
-              , padding: 0, paddingTop: 3, zIndex:4}} maximize direction="column" zeroMinWidth>
+              , padding: 2, paddingTop: 3, zIndex:4}} maximize direction="column" zeroMinWidth>
         <LineTFinancialsGrid
           // @ts-ignore
           theme="legacy" columnDefs={LinesFinancialsColumns(t)} onRowSelected={onRowSelectedL}
@@ -239,7 +223,7 @@ const FinancialsForm = () => {
       </Grid>
       <Grid container
         // @ts-ignore
-            style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight
+            style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, padding: 2
               , paddingTop:state.collapse?minPadding:maxPadding, width: '100%', zIndex: 1, display:visible?'':'none'}}
             maximize direction="column">
         <TransactionGrid

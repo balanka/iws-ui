@@ -19,12 +19,8 @@ import {styles} from './BasicTreeTableProps.tsx'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const MasterfileForm = () => {
-  const [{ profile, menu, selected, t,  modelid, company}]  = useForm()
+  const [{ profile,  t,  modelid, company, module_}]  = useForm()
   const {token} = profile
-  let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-
-  //const height = 20
   const url = MASTERFILE.masterfile
   const ctx =  `${url}/${modelid}/${company}`
   const current_: IMasterfile2 =  module_.state[0]
@@ -42,7 +38,6 @@ const MasterfileForm = () => {
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
     Get(ctx, token, module_.modelid, setAccData)
-    //Get(acc_ctx, token, formEnum.ACCOUNT, setAccountData)
     setCurrent(current_)
   }, [current_])
 

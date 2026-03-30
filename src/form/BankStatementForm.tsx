@@ -7,7 +7,6 @@ import {
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import Grid from 'react-fast-grid'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { BSFormHead} from './FormsProps'
@@ -23,12 +22,12 @@ import {logout} from '../utils/FormUtils.tsx'
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import useForm from './UseForm.ts'
-import { styles as stylesx} from './BasicTreeTableProps.tsx'
+import {styles} from './BasicTreeTableProps.tsx'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const BankStatementForm = () => {
-  const [{profile, t,  selected, language, toggle, toggleTable, handleLanguageChange, state, modelid, company,  module_ }] = useForm()
+  const [{profile, t,  selected, visible, language, toggle, toggleTable, handleLanguageChange, state, modelid, company,  module_ }] = useForm()
   const { token, locale, currency } = profile
   const currencyx = currency ??'EUR'
   const dispatch = useDispatch()
@@ -103,18 +102,18 @@ const BankStatementForm = () => {
               current={current}
               t={t}
           />
-          <Grid item
-                //@ts-ignore
-                style={{...stylesx.outer0, paddingTop:2, paddingBottom:1, display: !state.collapse?'none':''}}>
+          <div
+            //@ts-ignore
+            style={{...styles.outer0, paddingTop:1, paddingBottom:10, display: !state.collapse?'none':''}}>
             <BankStatementTabs collapse ={state.collapse} current={current} setCurrent={setCurrent}  t={t}  height={height}
               currency={currencyx}  locale={locale ??'fr-FR'}/>
-          </Grid>
-            <Grid item
-                  //@ts-ignore
-                  style={{...stylesx.outer, paddingTop: 10, height: state.collapse?minHeight:maxHeight, width:'100%' }}>
+          </div>
+          <div
+            //@ts-ignore
+            style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
               <BankStatementGrid
                    columnDefs ={bankStatementColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData}/>
-            </Grid>
+            </div>
     </>
   )
 }

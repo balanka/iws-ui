@@ -23,10 +23,9 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T, coldef:ColDef[],  ur
   const [{ profile, menu, selected, t, title:title, language, visible, state, toggle, toggleTable, handleLanguageChange, modelid}]  = useForm()
   const { token, company} = profile
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
-  // const parent_ctx = `${module_?.state3}/${company}`
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
   let body =(module_ === '11111' || module_ === 11111)?Login ():null
-  //let body =(module_ === '11111' || module_ === 11111)?Login ():null
+
   const dispatch = useDispatch()
   let navigate = useNavigate()
   const [edited, setEdited] = useState<boolean>(false)

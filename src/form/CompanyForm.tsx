@@ -20,7 +20,6 @@ const CompanyForm = () => {
   const { token, locale } = profile
   const [, setIwsState] = useState(iwsStore.initialState)
   const current_ : ICompany= initComp[0]
-
   const height = 33
   const minHeight = 450
   const maxHeight = 700
@@ -35,7 +34,6 @@ const CompanyForm = () => {
   const [{header, body, table, disable,  state, visible, rowData, setRowData, accData, bankData, vatData, ccyData, current
     , setCurrent, currentBankAccount, setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t))
 
-
   const mainForm = CompanyTabs({ collapse: state.collapse, current:current, setCurrent:setCurrent
     , currentBankAccount:currentBankAccount
     , setCurrentBankAccount:setCurrentBankAccount
@@ -44,7 +42,7 @@ const CompanyForm = () => {
     , vatData:vatData, height:height, ccyData:ccyData
     , onGridReady:onGridReady
     // @ts-ignore
-    ,  stylesx:{...stylesx, height:state.collapse?minHeight:maxHeight, padding: 5, paddingLeft: 10, paddingBottom: 5}})
+    ,  stylesx:{...styles, height:state.collapse?minHeight:maxHeight, padding: 5, paddingLeft: 10, paddingBottom: 5}})
 
   return (
     <>

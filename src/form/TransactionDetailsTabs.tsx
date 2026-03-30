@@ -1,6 +1,5 @@
 import React from 'react'
 import { LineTransactionGrid} from "../IWSGrid"
-import Grid from 'react-fast-grid'
 import { lineTransactionColumnDefs} from "../ColumnsDefs"
 import IWSTabs from './IWSTabs.tsx'
 import {TransactionDetailsFormProps, TransactionDetailsTabProps} from '../Props'
@@ -16,7 +15,7 @@ const styles = {
         backgroundColor: blue,
         borderRadius: 5,
         boxShadow: '0 10px 30px #BBB',
-        padding: 5,
+        padding: 0,
     }
 }
 const TransactionDetailsTabs = ({
@@ -28,10 +27,8 @@ const TransactionDetailsTabs = ({
 
     const height = 20
     const disable = transaction?.posted
-  const linesx = !transaction?.lines?.length ? [{
-    ...currentLineTransaction,
-    transid: transaction?.id1
-  }] : transaction?.lines
+    const linesx = !transaction?.lines?.length ? [{
+    ...currentLineTransaction, transid: transaction?.id1}] : transaction?.lines
   if(transaction?.hasOwnProperty('lines')) {
     transaction.lines = linesx
   }else {
@@ -42,17 +39,15 @@ const TransactionDetailsTabs = ({
     }
     const onRowSelected = (event: RowSelectedEvent) => setCurrentLineTransaction(event.data)
 
-
     const table = () => {
         return (
-            <Grid container
+            <div
                 // @ts-ignore
-                  style={{...styles.outer, width: '100%', height: 130, paddingTop: 5, zIndex:zIndex-2}} maximize
-                  direction="column" zeroMinWidth>
+                  style={{...styles.outer, width: '100%', height: 130, paddingTop:1, zIndex:zIndex-2}}>
                 <LineTransactionGrid columnDefs={lineTransactionColumnDefs(t)} onRowSelected={onRowSelected}
                    rowData={!transaction?.lines?.length?[ {...currentLineTransaction, transid:transaction?.id1}]:transaction?.lines}
                    onGridReady={onGridReady}  pagination={false}/>
-            </Grid>
+            </div>
         )
     }
 

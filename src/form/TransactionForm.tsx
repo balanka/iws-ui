@@ -10,8 +10,7 @@ import {
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import Grid from 'react-fast-grid'
-import {styles as stylesx} from './BasicTreeTableProps.tsx'
+import {styles} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {FinancialsFormHead, TransactionMainForm} from './FormsProps.tsx'
@@ -43,30 +42,19 @@ import {Get, Get3} from './CrudController.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
-const STYLES = {
-  inner: {
-    borderRadius: 5,
-    boxShadow: '0 20px 50px #BBF',
-    padding: 1,
-    paddingLeft: 3,
-    paddingRight: 2,
-    //height: 350,
-    //paddingTop: 30,
-  }
-}
- const TransactionForm = () => {
-   const [{profile, selected, t, toggle, toggleTable, state, visible, module_, modelid }] = useForm()
-   const { token, currency, company } = profile
-   const dispatch = useDispatch()
+  const TransactionForm = () => {
+  const [{profile, selected, t, toggle, toggleTable, state, visible, module_, modelid }] = useForm()
+  const { token, currency, company } = profile
+  const dispatch = useDispatch()
   let navigate = useNavigate()
   if (module_ === '11111' || module_ === 11111) return <Login/>
-   let title_ = `${company}/${t(module_.title)}`
+  let title_ = `${company}/${t(module_.title)}`
   const initialState:ITransaction = initLtr [0]
   const initialLine:ILineTransaction = {...initLineTransaction, currency:currency??''}
   const current_:ITransaction = initialState
-   const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
-   const [rowData, setRowData] = useState<ITransaction[]>([])
-   const  [{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
+  const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
+  const [rowData, setRowData] = useState<ITransaction[]>([])
+  const  [{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
      , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setAccData, setFmodule, setModel
      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching, setIsFetching }] =
      useTransactionForm(current_??initLtr [0], initialLine, currentLine, setCurrentLine, rowData, setRowData)
@@ -93,7 +81,6 @@ const STYLES = {
    const [, setCustomerData] = useState<ICustomer[]>([])
    const [, setSupplier] = useState<ISupplier[]>([])
    const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
-   //const [, setCopyFRom] = useState<number[]>([])
    const [partnerId, setPartnerId] = useState<number>(-1)
    const [accFilter, setAccFilter] = useState<string[]>([])
    const [oaccFilter, setOAccFilter] = useState<string[]>([])
@@ -174,18 +161,10 @@ const STYLES = {
          //onFirstDataRendered: onFirstDataRendered,
      }
 
-     const onGridReady = (params: GridReadyEvent) =>   {
-      console.log('onGridReady', params)
-      setGridApi(params.api)
-     }
-
-  const minHeight=300
-  const maxHeight = 800
-  const minPadding=20
-  const maxPadding =35
-
-
-   const formatLines = (line:ILineTransaction|ILineFinancials):ILineTransaction|ILineFinancials =>  {
+     const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
+     const minHeight=300
+     const maxHeight = 800
+     const formatLines = (line:ILineTransaction|ILineFinancials):ILineTransaction|ILineFinancials =>  {
      // @ts-ignore
      return {
        ...line
@@ -230,16 +209,10 @@ const STYLES = {
    const handleModuleChange = (value:any) => {
      setModel(value)
      const mx:IFmodule = fmodule.find((m:IFmodule) => m?.id === value) ?? initfModule[0]
-     let templateFileName = mx.description
-     console.log('mx>>>>', mx)
-     console.log('value', value)
-     console.log('templateFileName >>>>', templateFileName)
       title_ = mx?.name ? mx?.name : title_
      const copyFromIds = mx? mx.copyFrom:-1
      const titlex = `${company}/${title_}`
-     //console.log('titlex>>>>', titlex)
      setTitle(titlex)
-     //setCopyFRom([copyFromIds])
      setPartnerId(parseInt(mx?.account))
      setCurrent(current_)
      setAccFilter(mx.accFilter?.replace(/\s/g,'').split(','))
@@ -251,8 +224,7 @@ const STYLES = {
      const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
      Get(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
      submitQuery( ctx, partnerCtx, parseInt(mx?.account))
-     const rowDatax = rowData.filter(m=>m.modelid===current_.modelid)
-     const currentx = rowDatax.length>0?rowData[0]:current_
+     const currentx = rowData.filter(m=>m.modelid===current_.modelid).length>0?rowData[0]:current_
      setCurrent(currentx)
    }
 
@@ -284,7 +256,6 @@ const STYLES = {
                 current={current}
                 t={t}
         />
-        <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
           <TransactionMainForm collapse={state.collapse} current={current??current_} setCurrent={setCurrent}
                                t={t} accData={accData}
                                storeData={stData} modules={fmoduleData}
@@ -292,28 +263,23 @@ const STYLES = {
                                handleModuleChange={handleModuleChange}
                                submitCopy={copyCall}
                                height={20} zIndex={zIndex-2}/>
-          <Grid container
-              // @ts-ignore
-                style={{...stylesx.outer, display: !state.collapse?'none':'', width: '100%', height: 160
-                    , paddingTop: 5, zIndex: 4}} maximize
-                direction="column" zeroMinWidth>
+          <div
+            // @ts-ignore
+            style={{...styles.outer, display: !state.collapse?'none':'', width: '100%', height: 160, padding:2 , paddingTop:3}}>
               <TransactionDetailsTabs   transaction={current}  setTransaction={setCurrent}
                                         currentLineTransaction ={currentLine}
                                         setCurrentLineTransaction={setCurrentLine}
                                         accountFilter={accFilter} oaccountFilter={oaccFilter}
                                         articleData={articleData??[]} vatData={vatData??[]}  t={t}
                                         onGridReady={onGridReady}  zIndex={2}/>
-          </Grid>
-          <Grid container
+          </div>
+          <div
               // @ts-ignore
-                style={{...stylesx.outer,  height:state.collapse?minHeight:maxHeight
-                    , paddingLeft: 10, paddingRight:5, paddingTop:state.collapse?minPadding:maxPadding, width: '100%'
-                    , zIndex:1, display:visible?'':'none'}} maximize
-                direction="column">
+                style={{...styles.outer,  height:state.collapse?minHeight:maxHeight, padding:2, width: '100%'
+                  , zIndex:1, display:visible?'':'none'}}>
             <TransactionGrid gridOptions ={gridOptions}  columnDefs={transactionColumnDefs(t)}
                              onRowSelected={onRowSelected} rowData={rowData}/>
-          </Grid>
-        </Grid>
+          </div>
     </>)
 }
 export default TransactionForm
