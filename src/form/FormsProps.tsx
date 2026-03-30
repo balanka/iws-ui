@@ -2167,7 +2167,7 @@ export const ArticleGeneralForm =
     ({ collapse, current, setCurrent,  t, quantityUnitData, groupData, ccyData, disable, height}:ArticleGeneralFormProps) => {
 
         return (
-          <div  style={{...styles.outer, paddingBottom:10, display: !collapse?'none':''}} >
+          <div  style={{...styles.outer, paddingBottom:15, display: !collapse?'none':''}} >
                 {/**Id, enterdate*/}
               <CInputGroup  style={{ height: height }}>
                 <CCol sm="2">
@@ -2250,7 +2250,6 @@ export const ArticleGeneralForm =
                   />
                 </CCol>
               </CInputGroup>
-
                 {/**PackUnit, PPrice*/}
               <CInputGroup  style={{ height: height }}>
                 <CCol sm="2">
@@ -2261,18 +2260,17 @@ export const ArticleGeneralForm =
                        data={quantityUnitData} defaultValue={initQuantity[0]} zIndex={11} disable={disable}
                      styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
                 </CCol>
-                <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+                <CCol sm="2" style={{ height: height-3, paddingLeft: 5 }}>
                   <FieldLabel title={t('article.pprice')} />
                 </CCol>
-                <CCol sm="2">
+                <CCol sm="4">
                   <InputNumberField
                     fieldName="pprice"
                     current={current}
                     setCurrent={setCurrent}
-                    value={Number(current?.pprice)}
-                    //value={current?.pprice}
+                    value={Number(current?.pprice).toFixed(2)}
                     disabled={disable}
-                    style={{ height: 20, width:140, textAlign: 'right', padding: 2, fontSize:12}}
+                    style={{ height: 20, width:120, textAlign: 'right', padding: 2, fontSize:12}}
                   />
                   <FieldLabel  title={current.currency}/>
                 </CCol>
@@ -2288,53 +2286,23 @@ export const ArticleGeneralForm =
                          data={groupData} defaultValue={initArticleGroup[0]} zIndex={11} disable={disable}
                       styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
                 </CCol>
-                <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
+                <CCol sm="2" style={{ height: height-3, paddingLeft: 5 }}>
                   <FieldLabel title={t('article.sprice')} />
                 </CCol>
-                <CCol sm="2">
+                <CCol sm="3">
                   <InputNumberField
                     fieldName="sprice"
                     current={current}
                     setCurrent={setCurrent}
-                    value={Number(current?.sprice)}
+                    value={Number(current?.sprice).toFixed(2)}
                     //value={current?.pprice}
                     disabled={disable}
-                    style={{ height: 20, width:140, textAlign: 'right', padding: 2, fontSize:12}}
+                    style={{ height: 20, width:120, textAlign: 'right', padding: 2, fontSize:12}}
                   />
                   <FieldLabel  title={current.currency}/>
                 </CCol>
               </CInputGroup>
                 {/**Description, avgPrice */}
-              <CInputGroup  style={{ height: height }}>
-                <CCol sm="2">
-                  <FieldLabel title={t('common.description')} />
-                </CCol>
-                <CCol sm="4">
-                  <TextareaField
-                    fieldName="description"
-                    placeholder={t('common.description')}
-                    disabled={disable}
-                    value={current.description}
-                    current={current}
-                    setCurrent={setCurrent}
-                  />
-                </CCol>
-                <CCol sm="2" style={{ height: height-3, paddingLeft: 10 }}>
-                  <FieldLabel title={t('article.avgPrice')} />
-                </CCol>
-                <CCol sm="2">
-                  <InputNumberField
-                    fieldName="avgPrice"
-                    current={current}
-                    setCurrent={setCurrent}
-                    value={Number(current?.avgPrice)}
-                    //value={current?.pprice}
-                    disabled={disable}
-                    style={{ height: 20, width:140, textAlign: 'right', padding: 2, fontSize:12}}
-                  />
-                  <FieldLabel  title={current.currency}/>
-                </CCol>
-              </CInputGroup>
               <CInputGroup  style={{ height: height }}>
                 <CCol sm="2">
                   <FieldLabel title={t('common.currency')} />
@@ -2343,6 +2311,36 @@ export const ArticleGeneralForm =
                   <MasterfileXComboBox fieldName={'currency'} current={current} setCurrent={setCurrent}
                                        data={ccyData} defaultValue={initCurrency[0]} zIndex={11} disable={disable}
                                        styles={{...styles, minHeight:25, height:25, minWidth:140, width:'100%', color: '#6b7280'}}/>
+                </CCol>
+
+                <CCol sm="2" style={{ height: height-3, paddingLeft: 5 }}>
+                  <FieldLabel title={t('article.avgPrice')} />
+                </CCol>
+                <CCol sm="3">
+                  <InputNumberField
+                    fieldName="avgPrice"
+                    current={current}
+                    setCurrent={setCurrent}
+                    value={Number(current?.avgPrice).toFixed(2)}
+                    disabled={disable}
+                    style={{ height: 20, width:120, textAlign: 'right', padding: 2, fontSize:12}}
+                  />
+                  <FieldLabel  title={current.currency}/>
+                </CCol>
+              </CInputGroup>
+              <CInputGroup  style={{ height: height }}>
+                <CCol sm="2">
+                  <FieldLabel title={t('common.description')} />
+                </CCol>
+                <CCol sm="10">
+                  <TextareaField
+                    fieldName="description"
+                    placeholder={t('common.description')}
+                    disabled={disable}
+                    value={current.description}
+                    current={current}
+                    setCurrent={setCurrent}
+                  />
                 </CCol>
               </CInputGroup>
           </div>
@@ -4405,7 +4403,7 @@ export const VatMainForm =
      {current:IVat, setCurrent:(arg:IVat)=>void, accData:IAccount[]
          , t:TFunction<'transalation', undefined>, disable:boolean, height:number, zIndex:number}) => {
         return (
-            <Grid container spacing={0} style={STYLES.outer50}>
+            <>
                 <Grid container spacing={1}>
                     <Grid item sm={8} xs={2}>
                         <Grid container maximize justify="flex-start" alignItems="stretch" style={STYLES.fuller}>
@@ -4570,7 +4568,7 @@ export const VatMainForm =
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
+            </>
         )
     }
 const signUp = (t:TFunction<'translation', undefined>) =>(

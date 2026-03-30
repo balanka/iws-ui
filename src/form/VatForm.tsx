@@ -42,11 +42,14 @@ const VatForm = () => {
   return (
     <>
       {header}
-      <div  style={{ borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 1
-        , height:state.collapse?minHeight:maxHeight, display: !state.collapse?'none':''}} >
+      <div
+        //@ts-ignore
+        style={{...styles.outer,  borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 1
+         //, height:state.collapse?minHeight:maxHeight
+          , display: !state.collapse?'none':''}} >
         {body??mainForm}
       </div>
-      <div  style={{...styles.outer0, paddingTop:5, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+      <div  style={{...styles.outer0, paddingTop:2, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
         {table}
       </div>
     </>
