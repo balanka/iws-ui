@@ -2,7 +2,7 @@ import {MASTERFILE, MENU} from './Menu'
 import iwsStore from '../utils/Store.jsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {groupBy} from '../utils/Utils'
-import {HttpMethod, ILoggingContext, IProfile, IWSModel} from '../Models.ts'
+import {HttpMethod, ILoggingContext, IProfile, IUser, IUserRight, IWSModel} from '../Models.ts'
 import {NavigateFunction} from "react-router-dom";
 import {TFunction} from "i18next";
 import {Dispatch, SetStateAction} from "react";
@@ -91,7 +91,7 @@ const getFn = (url:string, token:string) =>fetchFn(url, 'GET', token, undefined 
 /* Helper function for fetching  and setting  user menu, profile, etc... */
 const getFn1 = (url: string, token: string, profile: IProfile, setProfile: (argo: IProfile) => void) =>
           fetchFn00(url, token).then((data:any) => {
-            console.log(' data ', data)
+            //console.log(' data ', data)
             const resp:any = JSON.parse(JSON.stringify(data))
             const profile_ = {...profile, locale: resp.locale, currency: resp.currency, incomeStmtAcc: resp.incomeStmtAcc}
             setProfile(profile_)
@@ -119,7 +119,7 @@ const getOtherUserData = (companyURL: string, token: string, moduleURL: string
             const expenseAcc= response.oaccount??''
             const revenueAcc= response.salesClearingAcc??''
             const vat= response.vatCode
-          console.log('response>>>', response)
+            //console.log('response>>>', response)
           /* Fetch Module data from  api and use to build user menu on UI */
             getFn(moduleURL, token)
                 .then((response) => {
@@ -204,23 +204,24 @@ const post1Fn = <A>(ctx: string, record: A,
   console.log('companyURL', companyURL)
   console.log('moduleURL', moduleURL)
    /* Login using the user provided credentials and get the user data and set the profile */
-  fetchFnPost0(ctx, record).then((data:any) =>  {
+  fetchFnPost0(ctx, record).then((data:IUser) =>  {
        console.log(' response', data)
         profile.token=data.hash
         profile.company=data.company
         profile.rights=data.rights
-        profile.roles=data.roles
+        //profile.roles=data.roles
         setProfile({...profile, token:data.hash, company:data.company
-            , roles:data.roles, rights:data.rights})
+            //, roles:data.roles
+            , rights:data.rights})
         const token = profile.token
-        const rights = profile.rights??[]
+        const rights:IUserRight[] = profile.rights??[]
         const allRights =  [...rights]
         const result:Map<number, any> = groupBy(allRights, ({ moduleid }) => moduleid)
-        const userRights = Array.from(result, (entry) => ({
+        const userRights = Array.from(result, (entry:[number, IUserRight]) => ({
             // @ts-ignore
             key: entry[0],
             // @ts-ignore
-            value: entry[1].map((e:any) => e.short).reduce((a:string, b:string) => `${a}${b}`),
+            value: entry[1].map((e:IUserRight) => e.short).reduce((a:string, b:string) => `${a}${b}`),
         }))
         /* Get and set user menu, profile, etc... */
         loginFunction(companyURL, token, moduleURL, result, company, profile, setProfile, userRights
@@ -325,9 +326,7 @@ const  Get = <A>(ctx:string, token:string, key: string|number, setRowData: Dispa
     const url = `${SERVER_URL}${ctx}`
     console.log('url', url)
      getFn(url,  token ).then((data: A[]) => {
-            //console.log('data>>>>', data)
             if (Array.isArray(data)) {
-                //console.log('dataXXX>>>>', data)
                 iwsStore.put(key, data)
                 setRowData(data as A[])
             } else{

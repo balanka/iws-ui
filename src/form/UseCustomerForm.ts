@@ -140,7 +140,6 @@ const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: ColDef[
     () => {
       setEdited(true)
       setDisable(false)
-      console.log('current>>>>', current)
       const record = addLine({...initBankAccount, owner: `${current.id}`})
       setCurrent(record)
     }

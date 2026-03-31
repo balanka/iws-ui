@@ -1066,7 +1066,7 @@ export const useStore = create<ISTORE_Return>((set) => ({
     revenueAcc: '',
     vat:'',
     modules: [],
-    roles: [],
+    //roles: [],
     rights: [],
     error: '',
   },

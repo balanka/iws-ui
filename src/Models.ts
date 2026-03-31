@@ -270,16 +270,32 @@ export interface ISalaryItem extends IMasterfile3 {
 
 export interface IRole extends IMasterfile { rights:IUserRight[] }
 
-export interface IUser  extends IWSModel {
+// export interface IUser  extends IWSModel {
+//   userName: string,
+//   firstName: string,
+//   lastName: string,
+//   email: string,
+//   hash: string,
+//   phone: string,
+//   menu: string,
+//   roles: IRole[],
+//   rights: IUserRight[],
+// }
+export interface IUser extends IWSModel {
+  //id: number,
   userName: string,
   firstName: string,
   lastName: string,
-  email: string,
   hash: string,
   phone: string,
-  menu: string,
-  roles: IRole[],
-  rights: IUserRight[],
+  email: string,
+  department: string,
+  menu: string ,
+  company: string,
+  modelid: number,
+  roles:IRole[],
+  rights:IUserRight[],
+  modules:number[]
 }
 export interface IVat extends IMasterfile {
   percent:number,
