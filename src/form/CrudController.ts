@@ -14,8 +14,8 @@ const WEB_SERVER_IP:string = 'REACT_WEB_HOST_IP_ADDRESS'
 const SERVER_PORT:string  = 'REACT_APP_PORT'
 // @ts-ignore
 
-const apiBase = window?._env_?.REACT_APP_API_BASE; // "/api"
-const apiUrl = window?._env_?.API_URL; // "192.168.64.1"
+const apiBase = window?._env_?.REACT_APP_API_BASE??"/api"
+const apiUrl = window?._env_?.API_URL?? "192.168.64.1"
 const apiPort = window?._env_?.API_PORT??"8080"; // "192.168.64.1"
 const scheme = window?._env_?.SCHEME??"http"
 //const API_BASE= getEnvVariable('REACT_APP_API_BASE', '/api1');

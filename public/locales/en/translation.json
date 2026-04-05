@@ -493,6 +493,9 @@
     "transaction": "Transaction",
     "financials_stmt": "Financials statements",
     "payroll.tax.range": "Pay roll tax table",
+    "room": "Room",
+    "apartment": "Apartment",
+    "realEstate": "Real estate",
     "closeAccountingPeriod": "Close accounting period",
     "createPayrollTransaction": "Generate payroll transaction",
     "createDepreciationTransaction": "Generate depr. transaction"

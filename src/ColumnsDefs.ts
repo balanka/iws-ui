@@ -856,14 +856,14 @@ export const financialsColumnDefs = (t: (arg0: string) => any) => {
       minWidth: 6,
 
     },
-    {
-      field: 'id1',
-      headerName: t('financials.id'),
-      cellStyle: {textAlign: 'right'},
-      //filter: "agTextColumnFilter",
-      minWidth: 6,
-
-    },
+    // {
+    //   field: 'id1',
+    //   headerName: t('financials.id'),
+    //   cellStyle: {textAlign: 'right'},
+    //   //filter: "agTextColumnFilter",
+    //   minWidth: 6,
+    //
+    // },
     {
       field: 'account',
       headerName: t('financials.account'),

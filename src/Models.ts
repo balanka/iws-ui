@@ -307,6 +307,9 @@ export interface IProfile {
   , stockAcc?: string, expenseAcc?: string, revenueAcc?: string,  vat?: string, modules?: any[], roles?: any[]
   , rights?: any[], error?: string,
 }
+export interface IRoom extends IMasterfile2 { kind:number, area:number}
+export interface IApartment extends IMasterfile2 {rooms:IRoom[]}
+export interface IRealEstate extends IMasterfile {apartments:IApartment[]}
 
 export interface ISTORE_Return {
   profile:IProfile, selected: string, menu: Map<any,any>, routes: string, module:string,

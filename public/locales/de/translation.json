@@ -471,6 +471,9 @@
     "transaction": "Logistik",
     "financials_stmt": "Jahresabschluss/GuV",
     "payroll.tax.range": "Lohnsteuertabelle",
+    "room": "Zimmer",
+    "apartment": "Wohnung",
+    "realEstate": "Haus",
     "closeAccountingPeriod": "Buchungsperiode abschliessen",
     "createPayrollTransaction": "Gehaltsliste generieren",
     "createDepreciationTransaction": "Abschreibungsbelege generieren"

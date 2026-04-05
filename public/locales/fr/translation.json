@@ -482,6 +482,9 @@
     "bankstatement": "Rélévé bancaire",
     "financials_stmt": "Bilan",
     "payroll.tax.range": "Lohnsteuertabelle",
+    "room": "Chambre",
+    "apartment": "Appartement",
+    "realEstate": "Bâtiment",
     "createPayrollTransaction": "Générer les journaux de paie",
     "createDepreciationTransaction": "Générer les journaux  amort."
 
