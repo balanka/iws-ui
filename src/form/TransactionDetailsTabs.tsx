@@ -28,7 +28,7 @@ const TransactionDetailsTabs = ({
     const height = 20
     const disable = transaction?.posted
     const linesx = !transaction?.lines?.length ? [{
-    ...currentLineTransaction, transid: transaction?.id1}] : transaction?.lines
+    ...currentLineTransaction, transid: transaction?.id}] : transaction?.lines
   if(transaction?.hasOwnProperty('lines')) {
     transaction.lines = linesx
   }else {
@@ -45,7 +45,7 @@ const TransactionDetailsTabs = ({
                 // @ts-ignore
                   style={{...styles.outer, width: '100%', height: 130, paddingTop:1, zIndex:zIndex-2}}>
                 <LineTransactionGrid columnDefs={lineTransactionColumnDefs(t)} onRowSelected={onRowSelected}
-                   rowData={!transaction?.lines?.length?[ {...currentLineTransaction, transid:transaction?.id1}]:transaction?.lines}
+                   rowData={!transaction?.lines?.length?[ {...currentLineTransaction, transid:transaction?.id}]:transaction?.lines}
                    onGridReady={onGridReady}  pagination={false}/>
             </div>
         )

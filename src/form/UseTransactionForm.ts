@@ -56,10 +56,10 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   const handleKeyPress = useCallback((event:any) => {
     let isMetaKey =  event.metaKey
     console.log('isMetaKey', isMetaKey)
-    if ((event.ctrlKey|| event.shiftKey) && (event.key === 's' || event.key === 'S')) {
+    if ((event.shiftKey) && (event.key === 's' || event.key === 'S')) {
         console.log('Control edit')
         submitEdit(event)
-    } else if ((event.ctrlKey|| event.shiftKey) && (event.key === 'l' || event.key === 'L')) {
+    } else if (( event.shiftKey) && (event.key === 'l' || event.key === 'L')) {
       console.log('Control new ')
       onNewLine()
     }
@@ -105,7 +105,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
          ( line:L, setCurrent:Dispatch<SetStateAction<T>>) => {
              const dx: T = {...current}
            console.log('Line', line)
-             let  newLine:L = {...line, id: BigInt(-1), transid: current?.id1, company:company}
+             let  newLine:L = {...line, id: BigInt(-1), transid: current?.id, company:company}
            console.log('newLine', newLine)
            if(dx.hasOwnProperty('lines'))
              dx.lines.push(newLine)
@@ -123,7 +123,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
              event.preventDefault()
              const dx: T = {...current}
             if(!dx.hasOwnProperty('lines')) dx['lines']=[]
-             const idx = dx.lines.findIndex((obj: ILine) => obj?.id === currentLine?.id)
+             const idx = dx?.lines?.findIndex((obj: ILine) => obj?.id === currentLine?.id)
              if (idx >= 0) dx.lines[idx] = {...currentLine, transid: BigInt(-2)}
              gridApi!.applyTransaction({remove: [currentLine]})
              setCurrent(dx)
@@ -161,7 +161,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
 
   const initAdd = () => {
     setDisable(false)
-    const currentN = {...current_, lines:[initialLine]}
+    const currentN = {...current_, lines:[{...initialLine}]}
     const newRow:T = {...currentN, company: company, currency: currency, editing: false}
     console.log('newRow',  newRow)
     setCurrentLine(newRow?.lines[0])
@@ -179,7 +179,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
     if (idx >= 0) {
       const tr = copyFromTransaction[idx] ?? current_
       const linesx = tr.lines?.map((line) => {
-        return {...line, id: BigInt(-1), transid: current_?.id1}
+        return {...line, id: BigInt(-1), transid: current_?.id}
       })
       const newRow = {
         ...tr, id: current_.id, id1: current_.id1, modelid: model, company: company

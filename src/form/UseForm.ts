@@ -14,8 +14,10 @@ const UseForm = (): [UseFormResult] => {
   const {profile, setProfile, menu, setMenu, setModule, setRoutes, selected} = useStore()
   const { company} = profile
   const {t, i18n} = useTranslation()
+  console.log('selected', selected)
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
+  console.log('module_', module_)
   const modelid: number = module_ ? module_.modelid : 1111
   const title =  `${company}/${t(module_.title)}`
   const [language, setLanguage] = useState('en-US')

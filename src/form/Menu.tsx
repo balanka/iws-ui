@@ -1,11 +1,11 @@
 import { formEnum } from '../utils/FormEnum'
 import { create } from 'zustand'
 import {
-  IAccount, IArticle, IAsset, IBankAccount, IBankStatement, ICompany,
+  IAccount, IApartment, IArticle, IAsset, IBankAccount, IBankStatement, ICompany,
   ICustomer,
   IEmployee, IFinancials,
   IFmodule, ILineFinancials, ILineTransaction, ILoggingContext, IMasterfile, IMasterfile2, IPartner,
-  IProfile, IStore,
+  IProfile, IRealEstate, IRoom, IStore,
   ISTORE_Return,
   ISupplier, ITransaction
 } from '../Models'
@@ -488,7 +488,7 @@ export const initLineFinancials:ILineFinancials = {
   amount: 0.0,
   duedate: new Date(),
   text: '',
-  currency: 'EUR',
+  currency: '',
   company: '',
 }
 export const initFtr:IFinancials[] = [
@@ -660,6 +660,49 @@ export const initfModule:IFmodule[] = [
     oaccFilter:'',
   },
 ]
+export const initRoom:IRoom[] = [
+  {
+    id: '152',
+    name: '',
+    description: '',
+    parent: '',
+    enterdate: new Date(),
+    postingdate: new Date(),
+    changedate: new Date(),
+    area: 0.0,
+    company: '',
+    kind: 0,
+    modelid: 152
+  },
+]
+export const initApartment:IApartment[] = [
+  {
+    id: '153',
+    name: '',
+    description: '',
+    parent: '',
+    enterdate: new Date(),
+    postingdate: new Date(),
+    changedate: new Date(),
+    rooms:[],
+    company: '',
+    modelid: 153
+  },
+]
+
+export const initRealEstate:IRealEstate[] = [
+  {
+    id: '154',
+    name: '',
+    description: '',
+    enterdate: new Date(),
+    postingdate: new Date(),
+    changedate: new Date(),
+    company: '',
+    modelid: 154,
+    apartments:[]
+  },
+]
 export const MASTERFILE = {
   acc: '/acc',
   asset: '/asset',
@@ -692,6 +735,9 @@ export const MASTERFILE = {
   salaryItem: '/s_item',
   payrollTaxRange: '/payrollTax',
   masterfile: '/mf',
+  apartment:'/apt',
+  room: '/room',
+  realEstate: '/real',
   accountClass: '/class',
   accountGroup: '/group',
   closeAccountPeriod: '/close',
@@ -738,7 +784,6 @@ export const ARTICLE ={
   ctx: MASTERFILE.article,
   state: initArticle,
   state2: '',
-  state3: '/art',
   modelid: formEnum.ARTICLE,
 }
 export const STORE = {
@@ -782,7 +827,6 @@ export const ASSET = {
   ctx: MASTERFILE.asset,
   state: initAsset,
   state2: '',
-  state3: '/asset',
   modelid: formEnum.ASSET
 }
 export const BANK = {
@@ -799,7 +843,6 @@ export const CURRENCY = {
   title: 'ccy.title',
   ctx: MASTERFILE.masterfile,
   state: initCurrency,
-  state3: '',
   modelid: formEnum.CURRENCY,
 }
 export const QUANTITYUNIT = {
@@ -895,7 +938,7 @@ export const VAT = {
   title: 'vat.title',
   ctx: MASTERFILE.vat,
   state: initVat,
-  state3: '/vat',
+  state3: MASTERFILE.vat,
   modelid: formEnum.VAT,
 }
 export const PAYROLL_TAX_RANGE = {
@@ -922,7 +965,6 @@ const PACB = {
   name: 'PAC',
   title: 'pac.title',
   ctx: MASTERFILE.pac,
-  state3: MASTERFILE.pac,
   modelid: formEnum.PACB,
 }
 const USER = {
@@ -959,7 +1001,6 @@ export const TRANSACTION = {
   name: 'Transaction',
   title: 'transaction.title',
   ctx: MASTERFILE.ltr,
-  state3: '',
   modelid: formEnum.TRANSACTION,
 }
 const BALANCESHEET = {
@@ -983,7 +1024,6 @@ export const ROLE = {
   ctx: MASTERFILE.role,
   state: initRole,
   state2: '',
-  state3: '/role',
   modelid: formEnum.ROLE,
 }
 export const PERMISSION ={
@@ -993,7 +1033,6 @@ export const PERMISSION ={
   ctx: MASTERFILE.perm,
   state: initPermission,
   state2: '',
-  state3: '/perm',
   modelid: formEnum.PERMISSION,
 }
 
@@ -1006,6 +1045,36 @@ export const FMODULE = {
   state2: `${MASTERFILE.acc}/${formEnum.ACCOUNT}`,
   state3: `${MASTERFILE.module}/${formEnum.MODULE}`,
   modelid: formEnum.FMODULE,
+}
+export const ROOM ={
+  id: '152',
+  name: 'Room',
+  title: 'room.title',
+  ctx: MASTERFILE.room,
+  state: initRoom,
+  state2: '',
+  state3: MASTERFILE.room,
+  modelid: formEnum.ROOM,
+}
+export const APARTMENT ={
+  id: '153',
+  name: 'Apartment',
+  title: 'apartment.title',
+  ctx: MASTERFILE.apartment,
+  state: initApartment,
+  state2: '',
+  state3: MASTERFILE.apartment,
+  modelid: formEnum.APARTMENT,
+}
+export const REAL_ESTATE ={
+  id: '154',
+  name: 'RealEstate',
+  title: 'realEstate.title',
+  ctx: MASTERFILE.realEstate,
+  state: initRealEstate,
+  state2: '',
+  state3: MASTERFILE.realEstate,
+  modelid: formEnum.REALESTATE,
 }
 export const LOGIN_MENU = (t: (arg0: string) => any) => [LOGIN(t)]
 
@@ -1035,6 +1104,9 @@ export const MENU = (t: { (arg0: string): any; (arg0: string): any; }) =>
     [MASTERFILE.user, USER],
     [MASTERFILE.role, ROLE],
     [MASTERFILE.perm, PERMISSION],
+    [MASTERFILE.room, ROOM],
+    [MASTERFILE.apartment, APARTMENT],
+    [MASTERFILE.realEstate, REAL_ESTATE],
     [MASTERFILE.login, LOGIN(t)],
     ['/dashboard', LOGIN(t)],
     [MASTERFILE.comp, COMPANY],

@@ -7,8 +7,6 @@ const CompanyForm = ()  =>   import('./form/CompanyForm.tsx')
 const ArticleForm = () =>  import('./form/ArticleForm.tsx')
 const AssetForm = () =>  import('./form/AssetForm.tsx')
 const CustomerForm = () =>  import('./form/CustomerForm.tsx')
-//const MasterfileForm = () =>   import('./form/MasterfileForm')
-//const MasterfileForm2 = () =>   import('./form/MasterfileForm2')
 const FinancialsForm = () =>   import('./form/FinancialsForm')
 const TransactionForm = () =>   import('./form/TransactionForm')
 const JForm = () =>  import('./form/JForm')
@@ -23,7 +21,9 @@ const FModuleForm = () => import('./form/FModuleForm')
 const PermissionForm = () => import('./form/PermissionForm')
 const RoleForm = () => import('./form/RoleForm')
 const MasterfileForm = () => import('./form/MasterfileForm')
-//const BasicTreeTable = () => import('./form/BasicTreeTable')
+const RoomForm = () => import('./form/RoomForm')
+const ApartmentForm = () => import('./form/ApartmentForm')
+const RealEstateForm = () => import('./form/RealEstateForm')
 const BasicTreeTable = () => import('./form/Main')
 //const BasicTreeTable = () => import('./form/BasicTreeData')
 //const ImageEditorExample = () => import('./form/ImageEditorExample')
@@ -74,6 +74,9 @@ const routes = ():{path:string, name?:string, element?: ()=>Promise<any>}[] => [
   { path: MASTERFILE.comp, name: 'Company', element: MasterfileForm },
   { path: MASTERFILE.asset, name: 'Assets', element: AssetForm},
   { path: '/users/login', name: 'Login', element: Login },
+  { path: MASTERFILE.room, name: 'Room', element: RoomForm},
+  { path: MASTERFILE.apartment, name: 'Apartment', element: ApartmentForm},
+  { path: MASTERFILE.realEstate, name: 'Real estate', element: RealEstateForm},
   { path: '/',  name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
 

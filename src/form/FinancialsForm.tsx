@@ -103,8 +103,9 @@ const FinancialsForm = () => {
     setIsFetching(false)
   }
   const onRowSelectedL = (event: RowSelectedEvent) => {
-    // console.log('event.data', event)
+     console.log('event.data', event)
     let line:ILineFinancials= isArrayAndNotEmpty(event.data) ?event.data[0]:event.data
+    !current.hasOwnProperty('lines')?[{...currentLine, transid:current?.id}]:current.lines
     setCurrentLine(line)
 
 
@@ -197,7 +198,7 @@ const FinancialsForm = () => {
     />
     <Grid container style={{borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 1}} maximize direction="row" zeroMinWidth>
       <FinancialsMainForm collapse ={state.collapse}
-                          current={current}
+                          current={current??current_}
                           setCurrent={setCurrent}
                           accData={accData}
                           storeData={ccData}
@@ -207,7 +208,7 @@ const FinancialsForm = () => {
                           submitCopy={copyCall}
                           accountFilter={accFilter}
                           oaccountFilter={oaccFilter}
-                          currentLineFinancials ={currentLine}
+                          currentLineFinancials ={currentLine??initialLine}
                           setCurrentLineFinancials={setCurrentLine}
                           t={t} height ={20}
                           zIndex={zIndex-2}/>
@@ -218,8 +219,8 @@ const FinancialsForm = () => {
         <LineTFinancialsGrid
           // @ts-ignore
           theme="legacy" columnDefs={LinesFinancialsColumns(t)} onRowSelected={onRowSelectedL}
-          onGridReady={onGridReady}  rowData={!current?.lines?.length?[ {...currentLine
-          , transid:current?.id1}]:current?.lines} pagination={false} />
+          onGridReady={onGridReady}  rowData={!current.hasOwnProperty('line')?[{...currentLine
+          , transid:current?.id}]:current.lines} pagination={false} />
       </Grid>
       <Grid container
         // @ts-ignore

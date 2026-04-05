@@ -2945,8 +2945,8 @@ const setTransactionR = ( transaction:ITransaction
     , setTransaction:(arg:ITransaction)=>void
     , line:ILineTransaction
     , setCurrent:(arg:ILineTransaction)=>void) => {
-    const idx = transaction.lines.findIndex((obj) => obj.id === line.id);
-    const linex: ILineTransaction = {...line, transid: transaction.id1};
+    const idx = transaction?.lines?.findIndex((obj) => obj.id === line.id);
+    const linex: ILineTransaction = {...line, transid: transaction.id};
     (idx === -1) ? transaction.lines.push(linex) : (transaction.lines[idx] = linex)
     setTransaction(transaction)
     setCurrent(linex)
@@ -3153,9 +3153,10 @@ const setTransactionF = ( transaction:IFinancials
     , setTransaction:(arg:IFinancials)=>void
     , line:ILineFinancials
     , setCurrent:(arg:ILineFinancials)=>void) => {
-    const idx = transaction.lines.findIndex((obj) => obj.id === line.id);
-    const linex: ILineTransaction|ILineFinancials = {...line, transid: transaction.id1};
-    (idx === -1) ? transaction.lines.push(linex) : (transaction.lines[idx] = linex)
+    const idx = transaction?.lines?.findIndex((obj) => obj.id === line.id);
+    const linex: ILineTransaction|ILineFinancials = {...line, transid: transaction.id};
+
+    (idx === -1) ? transaction?.lines?.push(linex) : (transaction.lines[idx] = linex)
     setTransaction(transaction)
     console.log('linex', linex)
     setCurrent(linex)
@@ -3378,12 +3379,12 @@ const MasterfileComboBox2:FC<FinancialsCBoxProps3<IFinancials, IMasterfile, ILin
          currentLinex = {...currentLine, [id]: value, [name]: currentAccount ?currentAccount.name:''
            ,  company:`-${current.company}`}
         setCurrentLine({...currentLinex})
-        const lines:ILineFinancials[] = current.lines
-        const idx = lines.findIndex((obj) => obj.id === currentLinex.id);
-        (idx === -1) ? current.lines.push(currentLinex) : (current.lines[idx] = currentLinex)
+        const lines:ILineFinancials[] = current?.hasOwnProperty('lines')?current.lines:current['lines']=[]
+        const idx = lines?.findIndex((obj) => obj.id === currentLinex.id);
+        (idx === -1) ? current.lines?.push(currentLinex) : (current.lines[idx] = currentLinex)
         const x= {...current, account:currentLinex.account, lines: current.lines.filter((line)=>
             (line.account.length==0|| line.oaccount.length==0))}
-        //console.log('x', x)
+        console.log('x', x)
         setCurrent(x)
       }}
       value={{value:currentLinex1[id], label: `${currentLinex1[id]} ${currentLinex1[name]}`}}
@@ -3748,11 +3749,13 @@ export const FinancialsMainForm =
                        , setCurrentLineFinancials:Dispatch<SetStateAction<ILineFinancials>>
                        , height:number, zIndex:number}) => {
     const styles = STYLES
-     // console.log('current>>', current)
-     //  console.log('currentLineFinancials>>', currentLineFinancials)
+     console.log('current>>', current)
+      console.log('currentLineFinancials>>', currentLineFinancials)
     const currentx:IFinancials = Array.isArray(current)?current[0]:current
     const modelid= currentx?.modelid??0
     const currentModule= modules.find((m:IFmodule) =>m.id == BigInt(modelid))??initfModule[0]
+
+     const total = current?.lines?.reduce((prev, cur)=>  prev + cur?.amount, 0)
     return (
         <Grid container spacing={0} style={{...STYLES.inner, display: !collapse?'none':''}}>
             {/**id, postingdate*/}
@@ -3787,7 +3790,7 @@ export const FinancialsMainForm =
                            current={current}
                            setCurrent={setCurrent}
                            value={current.id}
-                           disabled={current.posted}
+                           disabled={true}
                            style={{ height: height, textAlign:'right' }}
                          />
                        </Grid>
@@ -3918,7 +3921,7 @@ export const FinancialsMainForm =
                       fieldName="posted" current={current}
                       setCurrent={setCurrent}
                       label=''
-                      disabled={current.posted}
+                      disabled={true}
                       checked={current.posted}
                       style={{ height: 20, paddingLeft:15, textAlign:'right' }}
                       styleC={{ height: 20, paddingLeft:25, textAlign:'right' }}
@@ -3952,11 +3955,11 @@ export const FinancialsMainForm =
                       fieldName ='amount'
                       current={currentLineFinancials}
                       setCurrent={setCurrentLineFinancials}
-                      value={Number(currentLineFinancials.amount)}
+                      value={Number(currentLineFinancials?.amount)}
                       onChange={(event:any) => {
                         event.preventDefault()
                         const currentLine = { ...currentLineFinancials, amount: Number(event.target.value)
-                          , company:`-${current.company}` }
+                          , company:`-${current?.company}` }
                         setTransactionF(current, setCurrent, currentLine, setCurrentLineFinancials)
                       }}
                       disabled={current.posted}
@@ -3968,7 +3971,7 @@ export const FinancialsMainForm =
                       fieldName ='currency'
                       current={currentLineFinancials}
                       setCurrent={setCurrentLineFinancials}
-                      value={currentLineFinancials.currency}
+                      value={currentLineFinancials?.currency}
                       disabled={true}
                       style={ { height: height, padding: 1, textAlign: 'left' }}
                     />
@@ -3989,11 +3992,11 @@ export const FinancialsMainForm =
                                 fieldName="text"
                                 placeholder={t('transaction.text')}
                                 disabled={current.posted}
-                                value={currentLineFinancials.text}
+                                value={currentLineFinancials?.text}
                                 onChange={(event:any) => {
                                   event.preventDefault()
                                   const currentLine = { ...currentLineFinancials, text: event.target.value
-                                    , company:`-${current.company}` }
+                                    , company:`-${current?.company}` }
                                   setTransactionF(current, setCurrent, currentLine, setCurrentLineFinancials)
                                 }}
                                 current={currentLineFinancials}
@@ -4012,7 +4015,7 @@ export const FinancialsMainForm =
                       fieldName ='total'
                       current={currentLineFinancials}
                       setCurrent={setCurrentLineFinancials}
-                      value={Number(current.lines.reduce((prev, cur)=>  prev + cur.amount, 0)).toFixed(2)}
+                      value={Number(total??0.0).toFixed(2)}
                       disabled={true}
                       style={ { fontWeight: 'bold', height: height, padding: 1, textAlign: 'right' }}
                     />
