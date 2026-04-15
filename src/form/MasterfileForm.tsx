@@ -30,7 +30,7 @@ const MasterfileForm = () => {
   const minHeight = 350
   const maxHeight = 700
   const height = 33
-  const [{header, body, table, disable,  state, visible, current, setCurrent}] = UseMasterfileForm(current_,coldef, MASTERFILE.masterfile)
+  const [{header, body, table, disable,  state, visible, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_,coldef, MASTERFILE.masterfile)
   const mainForm = MasterfilesForm({collapse:state.collapse,  current:current??current_, setCurrent:setCurrent
                                             , disable:disable, height:height, accData:accData, t:t
                                             , fieldName:t('common.parent'), propertyName:'parent'})
@@ -39,6 +39,9 @@ const MasterfileForm = () => {
     iwsStore.subscribe(setIwsState)
     Get(ctx, token, module_.modelid, setAccData)
     setCurrent(current_)
+    // attach the event listener
+    document.onkeydown = handleKeyPress
+    document.addEventListener('onKeyDown', handleKeyPress)
   }, [current_])
 
   return (

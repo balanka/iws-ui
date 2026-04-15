@@ -22,21 +22,25 @@ export const accountColumnDefs=  (t: (arg0: string) => any):ColDef<IAccount>[] =
     headerName: t('common.id'),
     minWidth: 50,
     width: 80,
+    filter: "agTextColumnFilter",
   },
   {
     field: "name",
     headerName: t('common.name'),
     minWidth: 180,
+    filter: "agTextColumnFilter",
   },
   {
     field: "description",
     headerName: t('common.description'),
     minWidth: 200,
+    filter: "agTextColumnFilter",
   },
   {
     field: "account",
     headerName: t('common.account'),
     minWidth: 30,
+    filter: "agTextColumnFilter",
   },
   {
     field: "isDebit",

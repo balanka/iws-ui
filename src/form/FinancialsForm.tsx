@@ -35,7 +35,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, Se
 
 const FinancialsForm = () => {
   const [{ profile, selected, t, toggle, toggleTable, state, visible, module_ }] = useForm()
-  const { token, currency, company} = profile
+  const { token, currency, company, locale} = profile
+  console.log('profile', profile)
   let navigate = useNavigate()
   const dispatch = useDispatch()
   if (module_ === '11111' || module_ === 11111) return <Login/>
@@ -66,22 +67,22 @@ const FinancialsForm = () => {
     const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]
     title_ = mx?.name ? mx.name : title_
     title_ = `${company}/${title_}`
-    const copyFromIds = mx? mx.copyFrom:-1
+    const copyFromIds = (mx? mx.copyFrom:'-1').split(',')
+    console.log('copyFromIds', copyFromIds)
     setTitle(title_)
     setCurrent(current_)
     setAccFilter(mx.accFilter?.replace(/\s/g,'').split(','))
     setOAccFilter(mx.oaccFilter?.replace(/\s/g,'').split(','))
-    // console.log('mx', mx)
-    const modelidx = mx.id.toString()??0
-    setModel(parseInt(modelidx))
-    ctx = `${module_.ctx}/${mx.id}/${company}`
-    // console.log('ctx', ctx)
-    const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
-    Get(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
+    const modelidx = parseInt(mx.id.toString()??0)
+    setModel(modelidx)
+    ctx = `${module_.ctx}/${modelidx}/${company}`
+    const ctx_copyFrom = `${module_.ctx}/n/${company}/${copyFromIds}`
+    const idx= copyFromIds.map((i)=>
+      parseInt(i)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+    Get(ctx_copyFrom, token, idx, setCopyFromTransaction)
     submitQuery(ctx)
     const currentx = rowData.filter(m=>m.modelid===current_.modelid).length>0?rowData[0]:current_
-    console.log('currentx', currentx)
-    setCurrent(currentx)
+    setCurrent( {...currentx, modelid:modelidx})
 
   }
 
@@ -105,8 +106,9 @@ const FinancialsForm = () => {
   const onRowSelectedL = (event: RowSelectedEvent) => {
      console.log('event.data', event)
     let line:ILineFinancials= isArrayAndNotEmpty(event.data) ?event.data[0]:event.data
-    !current.hasOwnProperty('lines')?[{...currentLine, transid:current?.id}]:current.lines
-    setCurrentLine(line)
+    const  linex:ILineFinancials=line??initialLine
+    //!current.hasOwnProperty('lines')?[{...currentLine, transid:current?.id}]:current.lines
+    setCurrentLine(linex)
 
 
   }
@@ -211,7 +213,10 @@ const FinancialsForm = () => {
                           currentLineFinancials ={currentLine??initialLine}
                           setCurrentLineFinancials={setCurrentLine}
                           t={t} height ={20}
-                          zIndex={zIndex-2}/>
+                          zIndex={zIndex-2}
+                          locale={locale??'fr-GN'}
+                          currency={currency??'GNF'}
+      />
       <Grid container
         // @ts-ignore
             style={{...stylesx.outer, display: !state.collapse?'none':'', width: '100%', height: 165
@@ -219,7 +224,7 @@ const FinancialsForm = () => {
         <LineTFinancialsGrid
           // @ts-ignore
           theme="legacy" columnDefs={LinesFinancialsColumns(t)} onRowSelected={onRowSelectedL}
-          onGridReady={onGridReady}  rowData={!current.hasOwnProperty('line')?[{...currentLine
+          onGridReady={onGridReady}  rowData={!current.hasOwnProperty('lines')?[{...currentLine
           , transid:current?.id}]:current.lines} pagination={false} />
       </Grid>
       <Grid container

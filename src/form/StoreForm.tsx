@@ -36,13 +36,16 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const maxHeight = 600
      const height = 33
      const colDef:ColDef[] = storeColumnDefs(t)
-     const [{header, body, disable, table, state, visible, current, setCurrent, zIndex}] = UseMasterfileForm(current_, colDef, MASTERFILE.store)
+     const [{header, body, disable, table, state, visible, current, setCurrent, handleKeyPress, zIndex}] = UseMasterfileForm(current_, colDef, MASTERFILE.store)
      const mainForm = StoreTabs({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t
      , zIndex:zIndex-1, ccData:ccData, accData:accData, locale:locale??'fr-FR', height:height, minMaxHieght:state.collapse?minHeight:maxHeight })
      useEffect(() => {
        iwsStore.subscribe(setIwsState)
        Get(cc_ctx, token, cc_modelid, setCcData)
        Get(acc_ctx, token, acc_modelid, setAccData)
+       // attach the event listener
+       document.onkeydown = handleKeyPress
+       document.addEventListener('onKeyDown', handleKeyPress)
      }, [])
 
    return (

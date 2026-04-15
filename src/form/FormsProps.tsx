@@ -112,6 +112,7 @@ import ComboBox from './ComboBox.tsx'
 import QRCode from 'react-qr-code'
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ListIcon from '@mui/icons-material/List'
+import CurrencyInput from 'react-currency-input-field';
 //import QRReader from 'react-qr-reader'
 
 const styles = {
@@ -172,9 +173,6 @@ const STYLES = {
     },
     inner: {
         borderRadius: 5,
-        //boxShadow: '0 20px 30px #cce0e3', //#66a6ff, #97baeb #36a3ff
-        //boxShadow: '0 20px 30px #97baeb',
-        //boxShadow: '0 20px 30px #BBB',
         boxShadow: '0 20px 50px #BBF',
         padding: 10,
         //height: 350,
@@ -182,8 +180,6 @@ const STYLES = {
     },
     innerX: {
         borderRadius: 5,
-        //boxShadow: '0 20px 30px #cce0e3', //#66a6ff, #97baeb #36a3ff
-        //boxShadow: '0 20px 30px #97baeb',
         boxShadow: '0 20px 30px #BBB',
         //boxShadow: '0 20px 50px #BBF',
         padding: 10,
@@ -270,7 +266,7 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
     const UpDownIcon =  collapse ? keyboardDoubleArrowUpIcon:keyboardDoubleArrowDwnIcon
     const sidebarShow = useSelector((state:any) => state.sidebarShow)
     return (
-        <Grid container xs style={{ ...headStyle.header }} justify="flex-start" alignItems="center">
+      <Grid container xs style={{ ...headStyle.header }} justify="flex-start" alignItems="center">
             <Grid item justify="center" alignItems="center">
                 <CHeaderToggler
                     className="ps-1"
@@ -313,7 +309,7 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
               </CTooltip>
               <CTooltip content={t('toolTip.common.add')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
-                            disabled={!added}      onClick={()=>initAdd()}>
+                            disabled={!edited}      onClick={()=>initAdd()}>
                     <AddBoxIcon />
                 </IconButton>
               </CTooltip>
@@ -335,15 +331,7 @@ export const CommonFormHead = ({title, collapse, initAdd, edited, edit, disable,
                     <EditSquareIcon />
                 </IconButton>
               </CTooltip>
-                {/*<IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}*/}
-                {/*            disabled={!edited}>*/}
-                {/*    <ArrowCircleDownIcon />*/}
-                {/*</IconButton>*/}
-              {/*<CTooltip content={t('toolTip.common.load')} placement="top">*/}
-              {/*  <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}>*/}
-              {/*      <DriveFolderUploadIcon />*/}
-              {/*  </IconButton>*/}
-              {/*</CTooltip>*/}
+
               <CTooltip content={t('toolTip.common.load')} placement="top">
                 <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                             onClick={reload}>
@@ -797,24 +785,47 @@ const InputNumberField = ({ fieldName, type, current, setCurrent, value, disable
     />
   )
 }
+
 const InputField = ({ fieldName, type, current, setCurrent, value, disabled, style, onChange, placeholder }:
                     { fieldName:string, type?:'text', current:any, setCurrent:(arg:any)=>void, value:any
-                     , disabled?:boolean, style?: CSSProperties | undefined, onChange?:(event:any)=>void, placeholder?:string}) => {
-    const style_ = style ? style : { height: 20 }
-    //onChange=(event:any) => setCurrent({ ...current, [fieldName]: event.target.value })
-    return (
-        <CFormInput
-            type={type ? type : 'text'}
-            id={fieldName?.concat('id')}
-            className="input-sm"
-            disabled={disabled}
-            style={style_}
-            value={value}
-            placeholder={placeholder?? fieldName}
-            onChange={onChange?onChange:(event:any) => setCurrent({ ...current, [fieldName]: event.target.value })}
-        />
-    )
+                      , disabled?:boolean, style?: CSSProperties | undefined, onChange?:(event:any)=>void, placeholder?:string}) => {
+  const style_ = style ? style : { height: 20 }
+  //onChange=(event:any) => setCurrent({ ...current, [fieldName]: event.target.value })
+  return (
+    <CFormInput
+      type={type ? type : 'text'}
+      id={fieldName?.concat('id')}
+      className="input-sm"
+      disabled={disabled}
+      style={style_}
+      value={value}
+      placeholder={placeholder?? fieldName}
+      onChange={onChange?onChange:(event:any) => setCurrent({ ...current, [fieldName]: event.target.value })}
+    />
+  )
 }
+// const CurrencyInputField = ({ fieldName, type, current, setCurrent, value, disabled, style, onChange, placeholder }:
+//                     { fieldName:string, type?:'text', current:any, setCurrent:(arg:any)=>void, value:any
+//                      , disabled?:boolean, style?: CSSProperties | undefined, onChange?:(event:any)=>void, placeholder?:string}) => {
+//     const style_ = style ? style : { height: 20 }
+//     //onChange=(event:any) => setCurrent({ ...current, [fieldName]: event.target.value })
+//     return (
+//       <CurrencyInput
+//         id={fieldName?.concat('id')}
+//         name={fieldName}
+//         intlConfig={{ locale: 'fr-FR', currency: 'EUR' }}
+//         style={style_}
+//         //className={`form-control`}
+//         onValueChange={onChange?onChange:(event:any) => setCurrent({ ...current, [fieldName]: event.target.value })}
+//         defaultValue={1000}
+//         decimalsLimit={2}
+//         value={value}
+//         step={1}
+//         disabled={disabled}
+//         placeholder={placeholder?? fieldName}
+//       />
+//     )
+// }
 
 const BooleanField = ({ fieldName, label, current, setCurrent
                           , checked, disabled, style, styleC, onChange }:
@@ -3366,9 +3377,10 @@ const MasterfileComboBox2:FC<FinancialsCBoxProps3<IFinancials, IMasterfile, ILin
   //const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === currentLine[id])??defaultValue
 
   const filtered= getFiltered(data, accFilter)
-  console.log('filtered', filtered)
+  //console.log('filtered', filtered)
   let currentLinex:ILineFinancials = {...currentLine}
   let currentLinex1: {[index: string]:any} ={...currentLinex}
+  console.log('currentLinex1', currentLinex1)
 
   return (
     <ComboBox<{value:string|bigint,  label:string}>
@@ -3376,16 +3388,27 @@ const MasterfileComboBox2:FC<FinancialsCBoxProps3<IFinancials, IMasterfile, ILin
       disable={current.posted}
       onChange={(value:any, _event:any) => {
        const currentAccount = (data ?? [defaultValue]).find((acc: { id: any }) => acc.id ===value)
+        console.log('currentAccount', currentAccount);
          currentLinex = {...currentLine, [id]: value, [name]: currentAccount ?currentAccount.name:''
            ,  company:`-${current.company}`}
-        setCurrentLine({...currentLinex})
-        const lines:ILineFinancials[] = current?.hasOwnProperty('lines')?current.lines:current['lines']=[]
+        console.log('currentLinex', currentLinex);
+        //setCurrentLine({...currentLinex})
+        console.log('current?.hasOwnProperty(\'lines\')>>>>>>>>>>>>',current?.hasOwnProperty('lines') )
+        if(!current?.hasOwnProperty('lines')||current?.lines.length===0) current['lines']=[currentLinex]
+        const lines:ILineFinancials[] = current.lines
+        console.log('lines>>>>>>>>>>>>', lines)
         const idx = lines?.findIndex((obj) => obj.id === currentLinex.id);
-        (idx === -1) ? current.lines?.push(currentLinex) : (current.lines[idx] = currentLinex)
-        const x= {...current, account:currentLinex.account, lines: current.lines.filter((line)=>
-            (line.account.length==0|| line.oaccount.length==0))}
-        console.log('x', x)
+        console.log('idx>>>>>>>>>>>>', idx);
+        if(idx === -1) {
+          current.lines?.push(currentLinex)
+        } else current.lines[idx] = currentLinex
+        const x= {...current, account:currentLinex.account}
+        //const x= {...current, account:currentLinex.account, lines: current.lines.filter((line)=>
+         //   (line.account.length==0|| line.oaccount.length==0))}
+        console.log('x>>>>>>>>>>>>', x)
+        console.log('currentLinex1>>>>>>>>>>>>', currentLinex1)
         setCurrent(x)
+        setCurrentLine({...currentLinex})
       }}
       value={{value:currentLinex1[id], label: `${currentLinex1[id]} ${currentLinex1[name]}`}}
       values={filtered.slice().sort(sortById).map(toOption)}
@@ -3736,19 +3759,20 @@ export const CompanyAccountForm = (
 export const FinancialsMainForm =
                      ({ collapse, current,  setCurrent, t, handleModuleChange, storeData, accData, modules
                         , copyFromTransaction, submitCopy, accountFilter, oaccountFilter, currentLineFinancials
-                        , setCurrentLineFinancials, height, zIndex}:
+                        , setCurrentLineFinancials, height, zIndex, locale, currency}:
                       { collapse:boolean, current:IFinancials, setCurrent:(arg:IFinancials) =>void
                        , t:TFunction<'translation', undefined>
                        , storeData:IMasterfile[], accData:IAccount[], modules:IFmodule[]
                        , copyFromTransaction:IFinancials[]
                        , handleModuleChange:(value:any)=>void
-                       , submitCopy:(id:BigInt) =>void
+                       , submitCopy:(id:BigInt, modelid:number) =>void
                        , accountFilter:string[]
                        , oaccountFilter:string[]
                        , currentLineFinancials:ILineFinancials
                        , setCurrentLineFinancials:Dispatch<SetStateAction<ILineFinancials>>
-                       , height:number, zIndex:number}) => {
+                       , height:number, zIndex:number, locale:string, currency:string}) => {
     const styles = STYLES
+      console.log('locale>>', locale)
      console.log('current>>', current)
       console.log('currentLineFinancials>>', currentLineFinancials)
     const currentx:IFinancials = Array.isArray(current)?current[0]:current
@@ -3766,7 +3790,7 @@ export const FinancialsMainForm =
                        <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">
                          <div>{t('fmodule.title')}</div>
                        </Grid>
-                       <Grid item sm={10} xs={4} alignItems="stretch" justify="flex-start">
+                       <Grid item sm={10} xs={5} alignItems="stretch" justify="flex-start" style={{paddingLeft:5}}>
                          <ComboBox<{value:bigint|string,  label:string}>
                            style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:10}}
                            disable={false}
@@ -3817,7 +3841,7 @@ export const FinancialsMainForm =
                         <Grid item  sm={2} xs={2} justify="flex-start" alignItems="flex-start">
                             <div >{t('common.copyFrom')}</div>
                         </Grid>
-                        <Grid item sm={10} xs={4} alignItems="stretch" justify="flex-start">
+                        <Grid item sm={10} xs={5} alignItems="stretch" justify="flex-start" style={{paddingLeft:5}}>
                           <FromTransactionComboBox current={current} transactions={copyFromTransaction}
                                                    currentModule={currentModule} onChange = {submitCopy}/>
                         </Grid>
@@ -3894,7 +3918,7 @@ export const FinancialsMainForm =
                     <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
                       <div>{t('financials.line.account')}</div>
                     </Grid>
-                    <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start" style={{paddingLeft:5}}>
+                    <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="stretch" style={{paddingLeft:5}}>
                       <MasterfileComboBox2  current={current} setCurrent={setCurrent} currentLine ={currentLineFinancials}
                               setCurrentLine={setCurrentLineFinancials} data={accData} id={"account"}
                               name={"accountName"} defaultValue={initAcc[0]} accFilter={accountFilter}
@@ -3937,7 +3961,7 @@ export const FinancialsMainForm =
                    <Grid item sm ={2} xs={2} justify="flex-start" alignItems="flex-start">
                      <div>{t('financials.line.oaccount')}</div>
                    </Grid>
-                   <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="flex-start" style={{paddingLeft:5}}>
+                   <Grid item sm ={10} xs={5}  justify="flex-start"  alignItems="stretch" style={{paddingLeft:5}}>
                      <MasterfileComboBox2  current={current} setCurrent={setCurrent} currentLine ={currentLineFinancials}
                                            setCurrentLine={setCurrentLineFinancials} data={accData} id={"oaccount"}
                        name={"oaccountName"} defaultValue={initAcc[0]} accFilter={oaccountFilter} zIndex={zIndex} styles={styles}/>
@@ -3951,29 +3975,22 @@ export const FinancialsMainForm =
                     <div>{t('financials.line.amount')}</div>
                   </Grid>
                   <Grid item sm={4} xs={3} alignItems="stretch" justify="flex-start">
-                    <InputField
-                      fieldName ='amount'
-                      current={currentLineFinancials}
-                      setCurrent={setCurrentLineFinancials}
-                      value={Number(currentLineFinancials?.amount)}
-                      onChange={(event:any) => {
-                        event.preventDefault()
-                        const currentLine = { ...currentLineFinancials, amount: Number(event.target.value)
+                    <CurrencyInput
+                      value={currentLineFinancials?.amount}
+                      intlConfig={{ locale:locale, currency:currency}}
+                      groupSeparator ={'.'}
+                      decimalSeparator=","
+                      decimalsLimit={2}
+                      decimalScale={2}
+                      onValueChange ={(value, name, values) => {
+                        console.log(value, name, values)
+                        //event.preventDefault()
+                        const currentLine = { ...currentLineFinancials, amount: Number(value??'0.0')
                           , company:`-${current?.company}` }
                         setTransactionF(current, setCurrent, currentLine, setCurrentLineFinancials)
                       }}
                       disabled={current.posted}
-                      style={ { height: height, padding: 1, textAlign: 'right' }}
-                    />
-                  </Grid>
-                  <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">
-                    <InputField
-                      fieldName ='currency'
-                      current={currentLineFinancials}
-                      setCurrent={setCurrentLineFinancials}
-                      value={currentLineFinancials?.currency}
-                      disabled={true}
-                      style={ { height: height, padding: 1, textAlign: 'left' }}
+                      style={ { height: height, padding: 5, textAlign: 'right' }}
                     />
                   </Grid>
                 </Grid>
@@ -4011,23 +4028,15 @@ export const FinancialsMainForm =
                     <div style={{ fontWeight: 'bold'}}>{t('common.total')} </div>
                   </Grid>
                   <Grid item sm={4} xs={3} alignItems="stretch" justify="flex-start">
-                    <InputField
-                      fieldName ='total'
-                      current={currentLineFinancials}
-                      setCurrent={setCurrentLineFinancials}
-                      value={Number(total??0.0).toFixed(2)}
+                    <CurrencyInput
+                      value={total}
+                      intlConfig={{ locale:locale, currency:currency}}
+                      groupSeparator ='.'
+                      decimalSeparator=","
+                      decimalsLimit={2}
+                      decimalScale={2}
                       disabled={true}
-                      style={ { fontWeight: 'bold', height: height, padding: 1, textAlign: 'right' }}
-                    />
-                  </Grid>
-                  <Grid item sm={2} xs={2} alignItems="stretch" justify="flex-start">
-                    <InputField
-                      fieldName ='currency'
-                      current={currentLineFinancials}
-                      setCurrent={setCurrentLineFinancials}
-                      value={currentLineFinancials.currency}
-                      disabled={true}
-                      style={ { height: height, padding: 1, textAlign: 'left' }}
+                      style={ { fontWeight: 'bold', height: height, padding:5, textAlign: 'right' }}
                     />
                   </Grid>
                 </Grid>

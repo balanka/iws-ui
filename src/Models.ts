@@ -47,7 +47,7 @@ export interface IMasterfile3  extends IMasterfile {
 export interface IFmodule  extends IMasterfile2  {
   account:string,
   isDebit:boolean,
-  copyFrom:number,
+  copyFrom:string,
   accFilter:string,
   oaccFilter:string
 }
@@ -270,19 +270,7 @@ export interface ISalaryItem extends IMasterfile3 {
 
 export interface IRole extends IMasterfile { rights:IUserRight[] }
 
-// export interface IUser  extends IWSModel {
-//   userName: string,
-//   firstName: string,
-//   lastName: string,
-//   email: string,
-//   hash: string,
-//   phone: string,
-//   menu: string,
-//   roles: IRole[],
-//   rights: IUserRight[],
-// }
 export interface IUser extends IWSModel {
-  //id: number,
   userName: string,
   firstName: string,
   lastName: string,
@@ -294,6 +282,7 @@ export interface IUser extends IWSModel {
   company: string,
   modelid: number,
   roles:IRole[],
+  locale: string,
   rights:IUserRight[],
   modules:number[]
 }

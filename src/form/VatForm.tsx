@@ -31,12 +31,15 @@ const VatForm = () => {
   const maxHeight = 600
   const height = 20
   const colDef:ColDef[] = vatColumnDefs(t)
-  const [{header, body, disable, table, visible, state, current, setCurrent, zIndex}] = UseMasterfileForm(current_,  colDef, selected)
+  const [{header, body, disable, table, visible, state, current, setCurrent, handleKeyPress, zIndex}] = UseMasterfileForm(current_,  colDef, selected)
   const mainForm = VatMainForm ({current:current, setCurrent:setCurrent, disable:disable, t:t, accData:accData, height:height, zIndex:zIndex})
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
     Get(acc_ctx, token, acc_modelid, setAccData)
+    // attach the event listener
+    document.onkeydown = handleKeyPress
+    document.addEventListener('onKeyDown', handleKeyPress)
   }, [selected])
 
   return (

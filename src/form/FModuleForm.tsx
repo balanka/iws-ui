@@ -33,7 +33,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const height = 33
      const minHeight = 400
      const maxHeight = 700
-     const [{header, body, table, disable,  state, visible, rowData, current, setCurrent}] = UseMasterfileForm(current_, fmoduleColumnDefs(t), MASTERFILE.fmodule)
+     const [{header, body, table, disable,  state, visible, rowData, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_, fmoduleColumnDefs(t), MASTERFILE.fmodule)
     const mainForm = FModuleMainForm ({collapse: state.collapse, current:current, setCurrent:setCurrent, accData:accData.filter(m=>
                    (parseInt(m.id.toString())===formEnum.FINANCIALS|| parseInt(m.id.toString())===formEnum.TRANSACTION))
                    , accountData:accountData, rowData:rowData, disable:disable, height:height,  t:t})
@@ -42,6 +42,9 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          Get(parent_ctx, token, module_.modelid, setAccData)
          Get(acc_ctx, token, formEnum.ACCOUNT, setAccountData)
          setCurrent(current_)
+         // attach the event listener
+         document.onkeydown = handleKeyPress
+         document.addEventListener('onKeyDown', handleKeyPress)
      }, [current_])
    return (
      <>

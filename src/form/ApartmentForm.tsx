@@ -38,9 +38,12 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      iwsStore.subscribe(setIwsState)
      Get(ctx, token, formEnum.REALESTATE, setAccData)
      setCurrent(current_)
+     // attach the event listener
+     document.onkeydown = handleKeyPress
+     document.addEventListener('onKeyDown', handleKeyPress)
    }, [current_])
    console.log('ctx', ctx)
-   const [{header, body, table, disable,  state, visible, current, setCurrent}] = UseMasterfileForm(current_, colDef, MASTERFILE.apartment)
+   const [{header, body, table, disable,  state, visible, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_, colDef, MASTERFILE.apartment)
    const mainForm = MasterfilesForm({collapse:state.collapse,  current:current??current_, setCurrent:setCurrent
      , disable:disable, height:height, accData:accData, t:t
      , fieldName:t('common.parent'), propertyName:'parent'})

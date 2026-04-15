@@ -10,7 +10,7 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {Add, Edit, EditRow, Get, Get2} from './CrudController.ts'
+import {Add, COPY, Edit, EditRow, Get, Get2} from './CrudController.ts'
 import {initfModule, MASTERFILE} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
@@ -54,14 +54,18 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   const zIndex:number = 99999
   const EXPORT_FILE_EXTENSION= "xlsx"
   const handleKeyPress = useCallback((event:any) => {
-    let isMetaKey =  event.metaKey
-    console.log('isMetaKey', isMetaKey)
-    if ((event.shiftKey) && (event.key === 's' || event.key === 'S')) {
-        console.log('Control edit')
-        submitEdit(event)
-    } else if (( event.shiftKey) && (event.key === 'l' || event.key === 'L')) {
-      console.log('Control new ')
-      onNewLine()
+   // let isMetaKey =  event.metaKey
+    console.log('event.keyCode', event.keyCode)
+    console.log('event.functionKey', event.functionKey)
+    switch (event.keyCode) {
+      case 112:
+        submitEdit(event); return
+      case 113:
+        onNewLine();return
+      case 114:
+        reload();return
+      default:
+        return
     }
   }, [])
 
@@ -105,7 +109,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
          ( line:L, setCurrent:Dispatch<SetStateAction<T>>) => {
              const dx: T = {...current}
            console.log('Line', line)
-             let  newLine:L = {...line, id: BigInt(-1), transid: current?.id, company:company}
+             const  newLine:L = {...line, id: BigInt(-1), transid: current?.id, company:company}
            console.log('newLine', newLine)
            if(dx.hasOwnProperty('lines'))
              dx.lines.push(newLine)
@@ -134,6 +138,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   const callSubmitEdit = (event:any, modifyUrl:string, token:string, current:T
       , setCurrent:Dispatch<SetStateAction<T>>, data:T[], submitAdd: (arg:any)=>void) => {
       event.preventDefault();
+      console.log(' newly added or edited current', current )
       if(BigInt(current?.id) > 0){
        const x= Edit(modifyUrl, token, current, data, setRowData, setCurrent)
         setCurrent(x)
@@ -161,37 +166,34 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
 
   const initAdd = () => {
     setDisable(false)
-    const currentN = {...current_, lines:[{...initialLine}]}
+    const currentN = {...current_, modelid:model, lines:[{...initialLine}]}
     const newRow:T = {...currentN, company: company, currency: currency, editing: false}
     console.log('newRow',  newRow)
-    setCurrentLine(newRow?.lines[0])
+    setCurrentLine(initialLine)
     EditRow(newRow, true, setCurrent)
   }
   const reload = () => {
     iwsStore.deleteKey(current.modelid)
     Get(ctx, token, current.modelid, setRowData)
-    setCurrent(current_)
+    //setCurrent(current_)
   }
-  const copyCall = (id:BigInt) => {
+  // copyFromFTr/id/modelidFrom/modelidTo/company
+  const copyCall = (id:BigInt, event:any) => {
     setDisable(false)
-    const idx = copyFromTransaction.findIndex((obj: T) => obj.id === id)
-    console.log('idx', idx)
-    if (idx >= 0) {
-      const tr = copyFromTransaction[idx] ?? current_
-      const linesx = tr.lines?.map((line) => {
-        return {...line, id: BigInt(-1), transid: current_?.id}
-      })
-      const newRow = {
-        ...tr, id: current_.id, id1: current_.id1, modelid: model, company: company
-        , currency: currency, posted: false, editing: false, lines: linesx
-      }
-      Add(modifyUrl, token, newRow, rowData, setRowData, setCurrent)
-    }
+    const  eventx: string[]= event.toString().split(' ')
+    // console.log('eventx', eventx)
+    const  modelidFrom= parseInt(eventx[1])
+    // console.log('modelidFrom', modelidFrom)
+    // console.log('model', model)
+    // console.log('current', current)
+    const company= current.company
+    const url = `/copyFromFTr/${id}/${modelidFrom}/${model}/${company}`
+    console.log('url', url)
+    COPY(url, token, rowData, setRowData, setCurrent)
   }
 
   const onRowSelected = (event: RowSelectedEvent) => {
-     console.log('event.data', event)
-
+     // console.log('event.data', event)
      let transaction:T= isArrayAndNotEmpty(event.data) ?event.data[0]:event.data
      const line= transaction?.lines?.length>0?transaction?.lines[0]:initialLine
      setCurrentLine(line)

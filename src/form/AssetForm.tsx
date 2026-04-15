@@ -38,11 +38,14 @@ const AssetForm = () => {
     iwsStore.subscribe(setIwsState)
     !acc_ctx.includes('-1')&&Get(acc_ctx, token, acc_modelid, setAccData)
     Get(ccy_ctx, token, ccy_modelid, setCcyData)
-     setCurrent(current_)
+    setCurrent(current_)
+    // attach the event listener
+    document.onkeydown = handleKeyPress
+    document.addEventListener('onKeyDown', handleKeyPress)
   }, [])
 
   const colDef:ColDef[]= assetColumnDefs(t)
-  const [{header, body, disable, state, visible, table, current, setCurrent}] = UseMasterfileForm<IAsset>(current_,  colDef, MASTERFILE.asset)
+  const [{header, body, disable, state, visible, table, current, setCurrent, handleKeyPress}] = UseMasterfileForm<IAsset>(current_,  colDef, MASTERFILE.asset)
   const mainForm = AssetMainForm ({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t, accData:accData
     , ccyData:ccyData, height:height, locale:locale ??'fr-FR', currency:currencyx, zIndex:9999})
   return (

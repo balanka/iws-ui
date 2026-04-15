@@ -62,8 +62,23 @@ const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: ColDef[
     Get(vat_ctx, token, vat_modelid, setVatData)
     setCurrent(current_)
     setRowData([])
+    // attach the event listener
+    document.onkeydown = handleKeyPress
+    document.addEventListener('onKeyDown', handleKeyPress)
   }, [selected])
 
+  const handleKeyPress = useCallback((event:any) => {
+    switch (event.keyCode) {
+      case 112:
+        submitEdit(event)
+        return
+      case 114:
+        reload()
+        return
+      default:
+        return
+
+    }}, [])
   const onNewSalaryItem = () => {
   }
   const edit = () => {

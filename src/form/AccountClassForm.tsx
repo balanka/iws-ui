@@ -36,11 +36,14 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          iwsStore.subscribe(setIwsState)
          !acc_ctx.includes('-1')&&Get(acc_ctx, token??'noToken', acc_modelid, setAccData)
          setCurrent(current_)
+       // attach the event listener
+       document.onkeydown = handleKeyPress
+       document.addEventListener('onKeyDown', handleKeyPress)
      }, [current_])
 
 
 
-   const [{header, body, disable, table, state, visible, current, setCurrent}] = UseMasterfileForm(current_,  colDef, MASTERFILE.accountClass)
+   const [{header, body, disable, table, state, visible, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_,  colDef, MASTERFILE.accountClass)
 
    const mainForm = MasterfilesForm({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
       , height:height, accData:accData, t:t, disable:disable, fieldName:t('common.account'), propertyName:'account' })

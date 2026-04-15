@@ -51,10 +51,13 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          Get(vat_ctx, token??'noToken', vat_modelid, setVatData)
          Get(ccy_ctx, token??'noToken', ccy_modelid, setCcyData)
          setCurrent(current_)
+         // attach the event listener
+         document.onkeydown = handleKeyPress
+         document.addEventListener('onKeyDown', handleKeyPress)
      }, [selected])
 
       const colDef:ColDef[]= articleColumnDefs(t)
-      const [{header, body, disable, table, state, visible, rowData, current, setCurrent, zIndex}] = UseMasterfileForm<IArticle>(current_,  colDef, MASTERFILE.article)
+      const [{header, body, disable, table, state, visible, rowData, current, setCurrent, handleKeyPress, zIndex}] = UseMasterfileForm<IArticle>(current_,  colDef, MASTERFILE.article)
       const mainForm = ArticleTabs ({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t
                              , data:rowData, accData:accData, quantityUnitData:quantityUnitData,  locale:`${locale}`, currency:`${currency}`
                               , vatData:vatData, groupData:groupData, ccyData:ccyData, height:height, zIndex:zIndex-1})

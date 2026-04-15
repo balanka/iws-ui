@@ -5,7 +5,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {Add, Edit, Get} from './CrudController.ts'
 import iwsStore from '../utils/Store.tsx'
-import {Dispatch, ReactNode, SetStateAction, useState} from 'react'
+import {Dispatch, ReactNode, SetStateAction, useCallback, useState} from 'react'
 import {IWSModel} from '../Models.ts'
 import useForm from './UseForm.ts'
 import {CommonFormHead} from "./FormsProps.tsx";
@@ -20,7 +20,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, Pi
 
 const UseMasterfileForm = <T extends IWSModel>(current_ :T, coldef:ColDef[],  url:string):
   [{header:ReactNode, body:ReactNode, table:ReactNode, disable:boolean, visible:boolean, state:State, rowData: T[]
-    , current:T, setCurrent:Dispatch<SetStateAction<T>>, zIndex:number }] => {
+    , current:T, setCurrent:Dispatch<SetStateAction<T>>, zIndex:number, handleKeyPress:(event:any)=>void }] => {
   const [{ profile, menu, selected, t, title:title
     , language, visible, state, toggle, toggleTable, handleLanguageChange, modelid}]  = useForm()
   const { token, company} = profile
@@ -42,7 +42,6 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T, coldef:ColDef[],  ur
   console.log('ctx', ctx)
   console.log('url', url)
   console.log('edited', edited)
-  //const zIndex = 9999
 
   const edit = () => {
     if(edited) {
@@ -107,6 +106,18 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T, coldef:ColDef[],  ur
     Get(ctx, token, modelid, setRowData)
     setCurrent(current_)
   }
+  const handleKeyPress = useCallback((event:any) => {
+    switch (event.keyCode) {
+      case 112:
+        submitEdit(event)
+        return
+      case 114:
+        reload()
+        return
+      default:
+        return
+
+    }}, [])
 
   const header:ReactNode = CommonFormHead({title:title, collapse:state.collapse, initAdd:initAdd, edited:edited??false
     , added:added?? added ===undefined
@@ -117,7 +128,7 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T, coldef:ColDef[],  ur
   // @ts-ignore
   const table:ReactNode = MasterfileGrid( {columnDefs:coldef, onRowSelected:onRowSelected, rowData:rowData})
 
-  return [{header:header, body:body, table, disable, visible, state,  rowData, current, setCurrent, zIndex}]
+  return [{header:header, body:body, table, disable, visible, state,  rowData, current, setCurrent, zIndex, handleKeyPress}]
 
 
 }

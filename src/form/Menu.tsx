@@ -626,6 +626,7 @@ export const initUser = [
     roles: [{ ...initRole }],
     modelid: 111,
     menu: '',
+    locale:'fr-FR',
     rights: [[]],
   },
 ]
@@ -648,7 +649,7 @@ export const initfModule:IFmodule[] = [
     name: '',
     description: '',
     parent:'',
-    copyFrom:-1,
+    copyFrom:'',
     enterdate: new Date(),
     postingdate: new Date(),
     changedate: new Date(),

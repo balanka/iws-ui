@@ -15,14 +15,14 @@ const SERVER_PORT:string  = 'REACT_APP_PORT'
 // @ts-ignore
 
 const apiBase = window?._env_?.REACT_APP_API_BASE??"/api"
-const apiUrl = window?._env_?.API_URL?? "192.168.64.1"
+const apiUrl = window?._env_?.API_URL?? "localhost"
 const apiPort = window?._env_?.API_PORT??"8080"; // "192.168.64.1"
 const scheme = window?._env_?.SCHEME??"http"
 //const API_BASE= getEnvVariable('REACT_APP_API_BASE', '/api1');
 //const SERVER_IP= getEnvVariable('API_URL', 'API_URL');
 //const SERVER_URL = `http://${apiUrl}${apiBase}` //'http://192.168.64.1/api'
-const SERVER_URL = `${scheme}://${apiUrl}${apiBase}`
-//const SERVER_URL = 'http://192.168.64.1:8080/api'
+//const SERVER_URL = `${scheme}://${apiUrl}${apiBase}`
+const SERVER_URL = 'http://localhost:8080'
 //const SERVER_URL = `http://${SERVER_IP}:${SERVER_PORT}` //'http://192.168.1.139:8091'
 //const SERVER_URL = `http://${WEB_SERVER_IP}:${SERVER_PORT}`
 //const apiUrl = getEnvVariable('API_URL', 'http://localhost:8080');
@@ -46,7 +46,9 @@ const fetchFn00 = (url: string,  record:any) =>
 const fetchFnPost0 = (url: string,  record:any) => {
   console.log(' url…', url)
   console.log(' record…', record)
-  return fetch(url, {body: JSON.stringify(record), method: 'POST',}).then((response: any) => {
+  return fetch(url, {body: JSON.stringify(record), method: 'POST',
+    headers: {Authorization: `Bearer`, Accept: "application/json", "Content-Type": "application/json",}
+  }).then((response: any) => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -209,7 +211,7 @@ const post1Fn = <A>(ctx: string, record: A,
         profile.token=data.hash
         profile.company=data.company
         profile.rights=data.rights
-        //profile.roles=data.roles
+        profile.locale=data.locale
         setProfile({...profile, token:data.hash, company:data.company
             //, roles:data.roles
             , rights:data.rights})
@@ -262,14 +264,30 @@ const Edit = <A extends IWSModel>(ctx:string, token:string, record:A, data:A[]
         })
     return result
 }
-
 const Add = <A>(ctx:string, token:string, record:A, data:A[]
+  , setRowData:Dispatch<SetStateAction<A[]>>, setCurrent:Dispatch<SetStateAction<A>> ) => {
+  console.log('Adding ctx/record', ctx)
+  console.log('Adding record', record)
+  const url = `${SERVER_URL}${ctx}`
+  console.log('Adding url', url)
+  fetchFn(url, 'POST', token, record )
+    .then((response) => {
+      const resp = response as A
+      console.log('response', resp)
+      setCurrent(resp)
+      setRowData([...data, resp])
+    })
+    .catch(function (error: any) {
+      console.log('error', error)
+    })
+}
+const COPY = <A>(ctx:string, token:string,  data:A[]
                 , setRowData:Dispatch<SetStateAction<A[]>>, setCurrent:Dispatch<SetStateAction<A>> ) => {
-    console.log('Adding ctx/record', ctx)
-     console.log('Adding record', record)
+    console.log('Copying ctx/record', ctx)
+     console.log('Copying record')
     const url = `${SERVER_URL}${ctx}`
-    console.log('Adding url', url)
-     fetchFn(url, 'POST', token, record )
+    console.log('Copying url', url)
+    getFn(url,  token )
       .then((response) => {
             const resp = response as A
             console.log('response', resp)
@@ -368,4 +386,4 @@ const Get2 = <A>(ctx:string, token:string, setCurrent:Dispatch<SetStateAction<A>
 const EditRow = <A>(edited:A, isNew:boolean, setCurrent :Dispatch<SetStateAction<A>>) =>
     setCurrent({ ...edited, editing: !isNew })
 
-export { Get, Get1, Get2, Get3,  Login, Add, Edit, EditRow }
+export { COPY, Get, Get1, Get2, Get3,  Login, Add, Edit, EditRow }
