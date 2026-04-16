@@ -5,8 +5,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     hmr: {
-      host: '192.168.1.139',
+      host: 'localhost',
       allowedHosts:'mac',
     }
-  }
+  },
 })
