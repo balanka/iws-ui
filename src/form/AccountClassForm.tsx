@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {MasterfilesForm} from './FormsProps'
+import {MasterfileFormWithout} from './MasterfileFormWithout'
 import {Get} from './CrudController'
 import {initAcc, MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
@@ -13,7 +13,7 @@ import { formEnum } from '../utils/FormEnum'
 import {masterfileColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IMasterfile2} from '../Models.ts'
 import Login from './Login'
-import UseMasterfileForm from './UseMasterfileForm.ts'
+import UseMasterfileForm from './UseMasterfileForm.tsx'
 import useForm from './UseForm.ts'
 import {styles} from './BasicTreeTableProps.tsx'
 
@@ -45,7 +45,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
    const [{header, body, disable, table, state, visible, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_,  colDef, MASTERFILE.accountClass)
 
-   const mainForm = MasterfilesForm({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
+   const mainForm = MasterfileFormWithout({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
       , height:height, accData:accData, t:t, disable:disable, fieldName:t('common.account'), propertyName:'account' })
    return (
      <>

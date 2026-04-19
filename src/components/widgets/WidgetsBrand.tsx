@@ -3,7 +3,6 @@ import { CWidgetStatsD, CRow, CCol } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cibFacebook, cibLinkedin, cibTwitter, cilCalendar } from '@coreui/icons'
 import { CChart } from '@coreui/react-chartjs'
-import React from 'react'
 
 const WidgetsBrand = ( {className, withCharts}:{className?:string, withCharts?:boolean}) => {
   const chartOptions = {

@@ -1,4 +1,4 @@
-import React from "react"
+//import React from "react"
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -17,9 +17,10 @@ import {formEnum} from '../utils/FormEnum.tsx'
 import {IBusinespartner} from '../Models.ts'
 import useForm from './UseForm.ts'
 import { CustomerTabs } from "./CustomerTabs.tsx"
-import UseCustomerForm from "./UseCustomerForm.ts";
+import {UseCustomerForm} from "./UseCustomerForm.tsx";
 import {customerColumnDefs} from "../ColumnsDefs.ts";
 import {styles} from './BasicTreeTableProps.tsx'
+import {CInputGroup} from "@coreui/react";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -28,7 +29,7 @@ const CustomerForm = () => {
   const { locale, stockAcc, expenseAcc, vat, currency } = profile
   const initial = modelid ===formEnum.CUSTOMER?initCust[0]:(modelid ===formEnum.SUPPLIER)?initSup[0]:initEmp[0]
   const current_ : IBusinespartner= {...initial, account:stockAcc??'', oaccount:expenseAcc??'', vatCode:vat??'', currency:currency??''}
-  const height = 33
+  const height = 28
   const minHeight = 350
   const maxHeight = 700
   const zIndex = 9999
@@ -50,7 +51,11 @@ const CustomerForm = () => {
   return (
     <>
       {header}
-      {body??mainForm}
+      <CInputGroup
+        //@ts-ignore
+          style={{...styles.outer , display: !state.collapse?'none':''}} >
+         {body??mainForm}
+       </CInputGroup>
       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
         {table}
       </div>

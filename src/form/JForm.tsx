@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react'
+import  { useEffect, useState } from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule} from 'ag-grid-community'
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import Grid from 'react-fast-grid'
+
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {JournalFormHead, JournalMainForm} from './FormsProps'
+import { JournalFormHead } from './JournalFormHead'
+import { JournalMainForm } from './JournalMainForm'
 import {initAcc} from './Menu'
 import iwsStore from '../utils/Store'
 import {pacColumnsDefs} from '../ColumnsDefs.ts'
@@ -148,20 +149,22 @@ const JForm = () => {
 
   buildTotal(rowData)
 
+
   return (
-        <Grid container style={{...styles.inner}} maximize direction="row" zeroMinWidth>
+        <div  style={{...styles.inner}}>
             <JournalFormHead style={{...styles.inner2}} title={title} submitQuery={submitQuery} dispatch={dispatch}
                              logout={logout} submitQuery2={submitQuery2} balancesheet={true} t={t}
                              templateName ={templateName} getData={getData} current ={{...current, currency:currency, company:company}}
+                             // @ts-ignore
                              submitPrintPreview = {generateDocx}/>
             <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
                 // @ts-ignore
                              stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
-            <Grid item style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: 1500}}>
+            <div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: '100%'}}>
                 <PeriodicAccountBalanceGrid columnDefs ={pacColumnsDefs(t)} defaultColDef ={defaultColDefX}
                       onRowSelected={onRowSelected} rowData={ rowData.map(format)}/>
-            </Grid>
-        </Grid>
+            </div>
+        </div>
     )
 }
 export default JForm

@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import Grid from 'react-fast-grid'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {JournalFormHead, JournalMainForm} from './FormsProps'
+import { JournalMainForm} from './JournalMainForm'
+import { JournalFormHead } from './JournalFormHead'
 
 import {initAcc} from './Menu'
 import iwsStore from '../utils/Store'
@@ -74,7 +74,7 @@ const Journal = () => {
   }
 
   return (
-    <Grid container style={{...styles.inner}} maximize direction="row" zeroMinWidth>
+    <div style={{...styles.inner}} >
       <JournalFormHead style={{...styles.inner2}} title={title} submitQuery={submitQuery} dispatch={dispatch}
                        logout ={logout} submitQuery2={submitQuery2} balancesheet={false} t={t}
                        templateName={templateName}
@@ -85,11 +85,11 @@ const Journal = () => {
       <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
         // @ts-ignore
                        stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
-      <Grid item style={{paddingLeft: 1, paddingRight: 1, paddingTop: 5, height: 560, width: 1500}}>
+      <div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 5, height: 560, width: '100%'}}>
         <JournalGrid columnDefs ={journalColumnsDefs(t)} defaultColDef ={{...defaultColDefX, filter:true}}
                      onRowSelected={onRowSelected} rowData={rowData}/>
-      </Grid>
-    </Grid>
+      </div>
+    </div>
   )
 }
 export default Journal

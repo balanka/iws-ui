@@ -1,14 +1,16 @@
-import React from 'react'
 import {IWSTabs, TabItem} from './IWSTabs.tsx'
 import { StockGrid } from "../IWSGrid.tsx"
 import { styles } from './BasicTreeTableProps'
 import {stockColumnDefs} from '../ColumnsDefs.ts'
-import {ArticleAccountForm, ArticleGeneralForm, ArticleQRForm} from './FormsProps'
+import {ArticleGeneralForm} from './ArticleGeneralForm'
+import {ArticleAccountForm} from './ArticleAccountForm'
+import {ArticleQRForm} from './ArticleQRForm.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {IStock} from "../Models.ts";
 import {ArticleProps} from "../Props.ts";
 import {initArticle} from "./Menu.tsx";
+
 
 export  const ArticleTabs = ({collapse, current, setCurrent,  accData, vatData
                                , quantityUnitData, groupData, ccyData,  t,  disable, height}:ArticleProps) => {

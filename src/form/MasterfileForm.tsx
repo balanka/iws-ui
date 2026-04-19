@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import  {useState, useEffect} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {MasterfilesForm} from './FormsProps'
+//import {MasterfilesForm} from './FormsProps'
 import { Get} from './CrudController'
 import {MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
@@ -13,8 +13,10 @@ import { formEnum } from '../utils/FormEnum'
 import {masterfileColumnDefs, userColumnDefs} from '../ColumnsDefs.ts'
 import {IMasterfile2} from '../Models.ts'
 import useForm from './UseForm.ts'
-import UseMasterfileForm from './UseMasterfileForm.ts'
+import UseMasterfileForm from './UseMasterfileForm.tsx'
 import {styles} from './BasicTreeTableProps.tsx'
+import {CInputGroup} from "@coreui/react";
+import {MasterfileFormWithout} from './MasterfileFormWithout'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -29,9 +31,9 @@ const MasterfileForm = () => {
   const coldef:ColDef[]= (formEnum.USER===modelid)?userColumnDefs(t):masterfileColumnDefs(t)
   const minHeight = 350
   const maxHeight = 700
-  const height = 33
+  const height = 28
   const [{header, body, table, disable,  state, visible, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_,coldef, MASTERFILE.masterfile)
-  const mainForm = MasterfilesForm({collapse:state.collapse,  current:current??current_, setCurrent:setCurrent
+  const mainForm = MasterfileFormWithout({collapse:state.collapse,  current:current??current_, setCurrent:setCurrent
                                             , disable:disable, height:height, accData:accData, t:t
                                             , fieldName:t('common.parent'), propertyName:'parent'})
 
@@ -47,7 +49,11 @@ const MasterfileForm = () => {
   return (
     <>
       {header}
-      {body??mainForm}
+      <CInputGroup
+        //@ts-ignore
+          style={{...styles.outer,  width:'100%', display: !state.collapse?'none':''}} >
+          {body??mainForm}
+      </CInputGroup>
       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
         {table}
       </div>

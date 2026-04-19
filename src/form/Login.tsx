@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import  {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Login as Login_ } from './CrudController'
 import { LOGIN_MENU } from './Menu'
@@ -7,7 +7,7 @@ import {ILoggingContext} from '../Models.ts'
 import '../i18n.tsx';
 import {IMenu} from '../Props.ts'
 import useForm from './UseForm.ts'
-import {LoginForm} from './FormsProps.tsx'
+import {LoginForm} from './LoginForm.tsx'
 import {languages} from './languages.ts'
 import {companies} from './company.ts'
 

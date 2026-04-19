@@ -1,18 +1,18 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import {styles} from './BasicTreeTableProps'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {AssetMainForm} from './FormsProps'
+import {AssetMainForm} from './AssetMainForm'
 import { Get} from './CrudController'
 import {initAsset, MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import {assetColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IAsset, IMasterfile} from '../Models.ts'
-import UseMasterfileForm from './UseMasterfileForm.ts'
+import UseMasterfileForm from './UseMasterfileForm.tsx'
 import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
@@ -32,7 +32,7 @@ const AssetForm = () => {
   const [ccyData, setCcyData] = useState<IMasterfile[]>([])
   const minHeight = 350
   const maxHeight = 700
-  const height = 33
+  const height = 30
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)

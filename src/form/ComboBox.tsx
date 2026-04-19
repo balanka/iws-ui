@@ -1,154 +1,153 @@
 import React from 'react'
-  import Select from 'react-select'
+import Select from 'react-select'
 
 type Base = { value: string|bigint, label: string, }
 type GenericSelectProps<T> = {
-    style?: React.CSSProperties,
-    value: T,
-    disable?: boolean,
-    zIndex?: number,
-    values: T[],
-    onChange: (value: any, event:any) => void,
-    fontSize?: number,
+  style?: React.CSSProperties,
+  value: T,
+  disable?: boolean,
+  zIndex?: number,
+  values: T[],
+  onChange: (value: any, event:any) => void,
+  fontSize?: number,
 };
 
 const ComboBox = <T extends Base>({
-                                            style,
-                                            value,
-                                            disable,
-                                            zIndex,
-                                            values,
-                                            onChange,
-                                            fontSize
-                                        }: GenericSelectProps<T>) => {
-    //console.log('fontSize', fontSize);
-     const zindex = zIndex ?? 99999
-    //const [items, setItems] = useState<ValueType<typeof value[0], true>>()
+                                    style,
+                                    value,
+                                    disable,
+                                    zIndex,
+                                    values,
+                                    onChange,
+                                    fontSize
+                                  }: GenericSelectProps<T>) => {
+  const zindex = zIndex ?? 99999
 
-     const customStyles = {
-         menu: (base:any) => ({
-             ...base, ...style,
-             zIndex: zindex,
+  const customStyles = {
+    menu: (base: any) => ({
+      ...base, ...style,
+      zIndex: zindex,
+    }),
+    select: (base: any) => ({
+      ...base, ...style,
+      borderColor: '#6b7280',
+    }),
+    container: (base: any) => ({
+      ...base, ...style,
+    }),
 
-         }),
-         select: (base:any) => ({
-             ...base, ...style,
-             borderColor: '#6b7280',
-             padding: '0 0 0px',
-         }),
-         container: (base:any ) => ({
-             ...base, ...style,
-             padding: '0 0 0px',
-         }),
+    control: (base: any, state: any): any => {
+      return {
+        ...base, ...style,
+        borderColor: state.isFocused ? '#2684FF' : '#ced4da',
+        boxShadow: state.isFocused ? '0 0 0 1px #2684FF' : 'none',
+        '&:hover': {
+          borderColor: state.isFocused ? '#2684FF' : '#a1a7ae'
+        },
+        opacity: state.isDisabled ? .8 : 1.0,
+        borderRadius: 2,
+        border: '1px solid gray',
+        outline: state.isFocused ? "none" : undefined,
+        minHeight: '28px',
+        height: '28px',
+        display: 'flex',
+        alignItems: 'center',
+      }
+    },
 
-         control: (base:any, state:any):any => {
-             return {
-                 ...base, ...style,
-                 borderColor: state.isFocused ? '#2684FF' : '#ced4da',
-                 boxShadow: state.isFocused ? '0 0 0 1px #2684FF' : 'none',
-                 '&:hover': {
-                     borderColor: state.isFocused ? '#2684FF' : '#a1a7ae'
-                 },
-                 //background: '#fff',
-                 //borderColor: '#9e9e9e',
-                 // '&:hover': {
-                 //     outline: 'none',
-                 // },
-                 //boxShadow: 'none',
-                 opacity: state.isDisabled ? .8 : 1.0,
-                 paddingBottom: '10px',
-                 //borderColor: "#6b7280",
-                 borderRadius: 2,
-                 //borderRadius: "px",
-                 paddingTop: '0px',
-                 border: '1px solid gray',
-                 color: "#fff",
-                 //color: state.isSelected ? "#212529" : "#fff",
-                 //backgroundColor: 'lightgray',
-                 outline: state.isFocused ? "none" : undefined,
-                 // backgroundColor: state.isDisabled ? 'blue' : 'lightGreen',
-                 //boxShadow: state.isFocused ? null : null,
-             }
-         },
+    input: (base: any, state: any): any => ({
+      ...base, ...style,
+      margin: '0px',
+      outline: state.isFocused ? "none" : undefined,
+      fontSize: fontSize ?? 12,
+      opacity: state.isDisabled ? .4 : 1.0,
+      padding: '0px',
+      lineHeight: '28px',
+    }),
 
-         input: (base:any, state:any):any => ({
-             ...base, ...style,
-             margin: '0px',
-             //boxShadow: 'none',{
-             // borderColor: "#6b7280",
-             //borderRadius: "0px",
-             alignText: 'left',
-             outline: state.isFocused ? "none" : undefined,
-             //fontSize: style.fontSize ? style.fontSize : 12,
-             fontSize: fontSize?? 12,
-             opacity: state.isDisabled ? .4 : 1.0,
-             //paddingTop: '0px',
-             //paddingBottom: '10px'
-             // backgroundColor:'white',
-             //backgroundColor: state.isDisabled ? 'blue': 'lightGreen',
-         }),
-         option: (base:any, {data, isDisabled}: {data:any, isDisabled:boolean}):any => {
-             return {
-                 ...base, ...style,
-                 border: '1px solid lightGray',
-                 backgroundColor: data.color,
-                 //backgroundColor: isDisabled ? 'red' : blue,
-                 //color: '#9587ca',
-                 cursor: isDisabled ? 'not-allowed' : 'default',
-             }
-         },
-         dropdownIndicator: (base:any):any => ({
-             ...base,// all your override styles
-             //icon: 'caret-up',
-             //icon:'caret-down',
-             //backgroundColor: 'lightBlue',
-             paddingTop: '0px',
-             paddingButtom: '0px',
-             margin: '0px',
-             //margin: '4px',
-             boxShadow: 'none',
-             // borderColor: "#6b7280",
-             borderRadius: "0px",
-         }),
-         clearIndicator: (base: any):any => ({
-             ...base,
-             position: 'relative',
-             //position: isDisabled?'absolute':'relative',
-             right: -1,
-         }),
-     }
+    valueContainer: (base: any) => ({
+      ...base,
+      padding: '0px 0px 0px 8px',
+      display: 'flex',
+      alignItems: 'center',
+      height: '28px',
+      flex: '1 1 auto',
+    }),
 
-    const onSelectChange = (e:any) => {
-        const val = values.find((m) => m.value === e?.value )//isId?(value.id === e?.id):(value.name === e?.target?.value))
-        if (val) {
-           console.log('val', val)
-            onChange(val.value, val.label)
-        }
+    singleValue: (base: any) => ({
+      ...base,
+      margin: '0px',
+      padding: '0px',
+      lineHeight: '28px',
+      position: 'relative',
+      top: 'auto',
+      transform: 'none',
+    }),
+
+    placeholder: (base: any) => ({
+      ...base,
+      lineHeight: '28px',
+      position: 'relative',
+      top: 'auto',
+      transform: 'none',
+    }),
+
+    dropdownIndicator: (base: any): any => ({
+      ...base,
+      padding: '0px 8px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '28px',
+      width: '28px',
+      boxSizing: 'border-box',
+    }),
+
+    indicatorSeparator: (base: any): any => ({
+      ...base,
+      display: 'none',
+    }),
+
+    // Fixed option styling with centered text
+    option: (base: any, { data, isDisabled }: { data: any, isDisabled: boolean }): any => {
+      return {
+        ...base, ...style,
+        border: '1px solid lightGray',
+        backgroundColor: data.color,
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '8px 12px',
+        lineHeight: '1.2',
+      }
+    },
+  }
+
+  const onSelectChange = (e: any) => {
+    const val = values.find((m) => m.value === e?.value)
+    if (val) {
+      onChange(val.value, val.label)
     }
+  }
 
-     return (
-        //<Select styles ={{...customStyles,  zIndex: zindex }}
-         <Select styles ={{...customStyles }}
-                 className="w-1/3 mr-1"
-                 //autosize={true}
-                 //defaultValue={current?.value ? current : value}
-                 defaultValue={value }
-                 value ={value}
-                 //onInputChange={e=> console.log('eeeee', e)}
-                 onChange={onSelectChange}
-                 options={values?.map((m, index: number) => {
-                     return {...m, color: (index % 2 === 0) ? '#87CEFA' : '#E0FFFF'}
-                 })}
-                 isDisabled={disable}
-                 isClearable={true}
-                 isSearchable={true}
-                 components={{
-                     IndicatorSeparator: () => null,
-                     ClearIndicator: () => null,
-                     //DropdownIndicator,
-                 }}
-         />
-     )
-
+  return (
+    <Select
+      styles={customStyles}
+      defaultValue={value}
+      value={value}
+      onChange={onSelectChange}
+      options={values?.map((m, index: number) => {
+        return { ...m, color: (index % 2 === 0) ? '#87CEFA' : '#E0FFFF' }
+      })}
+      isDisabled={disable}
+      isClearable={false}
+      isSearchable={true}
+      components={{
+        IndicatorSeparator: () => null,
+        ClearIndicator: () => null,
+      }}
+    />
+  )
 }
+
 export default ComboBox

@@ -1,5 +1,5 @@
 import { useStore } from '../form/Menu'
-import React, {useEffect} from 'react'
+import {useEffect} from 'react'
 import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import { CNavGroup, CNavItem } from '@coreui/react'

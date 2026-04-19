@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import  {useEffect, useState} from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -9,11 +9,11 @@ import {
 } from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import Grid from 'react-fast-grid'
 import {styles as stylesx} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {FinancialsFormHead, FinancialsMainForm} from './FormsProps.tsx'
+import {FinancialsMainForm} from './FinancialsMainForm'
+import {FinancialsFormHead} from './FinancialsFormHead.tsx'
 import {FINANCIALS, initAcc, initfModule, initFtr, initLineFinancials, MASTERFILE} from './Menu.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {IAccount, IFinancials, IFmodule, ILineFinancials, IMasterfile, ITransaction,} from '../Models.ts'
@@ -198,7 +198,7 @@ const FinancialsForm = () => {
       t={t}
       //zIndex={zIndex-1}
     />
-    <Grid container style={{borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 1}} maximize direction="row" zeroMinWidth>
+    <div  style={{borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 1}} >
       <FinancialsMainForm collapse ={state.collapse}
                           current={current??current_}
                           setCurrent={setCurrent}
@@ -212,22 +212,22 @@ const FinancialsForm = () => {
                           oaccountFilter={oaccFilter}
                           currentLineFinancials ={currentLine??initialLine}
                           setCurrentLineFinancials={setCurrentLine}
-                          t={t} height ={20}
+                          t={t} height ={22}
                           zIndex={zIndex-2}
                           locale={locale??'fr-GN'}
                           currency={currency??'GNF'}
       />
-      <Grid container
+      <div
         // @ts-ignore
             style={{...stylesx.outer, display: !state.collapse?'none':'', width: '100%', height: 165
-              , padding: 2, paddingTop: 3, zIndex:4}} maximize direction="column" zeroMinWidth>
+              , padding: 2, paddingTop: 3, zIndex:4}}>
         <LineTFinancialsGrid
           // @ts-ignore
           theme="legacy" columnDefs={LinesFinancialsColumns(t)} onRowSelected={onRowSelectedL}
           onGridReady={onGridReady}  rowData={!current.hasOwnProperty('lines')?[{...currentLine
           , transid:current?.id}]:current.lines} pagination={false} />
-      </Grid>
-      <Grid container
+      </div>
+      <div
         // @ts-ignore
             style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, padding: 2
               , paddingTop:state.collapse?minPadding:maxPadding, width: '100%', zIndex: 1, display:visible?'':'none'}}
@@ -236,8 +236,8 @@ const FinancialsForm = () => {
           // @ts-ignore
           gridOptions ={gridOptions} columnDefs={financialsColumnDefs(t)}
           onRowSelected={onRowSelected} rowData={rowData}/>
-      </Grid>
-    </Grid>
+      </div>
+    </div>
   </>)
 }
 export default FinancialsForm

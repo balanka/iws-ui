@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {FModuleMainForm,} from './FormsProps'
+import {FModuleMainForm,} from './FModuleMainForm'
 import { Get} from './CrudController'
 import {MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
@@ -13,8 +13,9 @@ import { formEnum } from '../utils/FormEnum'
 import {fmoduleColumnDefs} from '../ColumnsDefs.ts'
 import {IFmodule, IMasterfile2} from '../Models.ts'
 import useForm from './UseForm.ts'
-import UseMasterfileForm from './UseMasterfileForm.ts'
+import UseMasterfileForm from './UseMasterfileForm.tsx'
 import {styles} from "./BasicTreeTableProps.tsx";
+import {CInputGroup} from "@coreui/react";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -49,9 +50,12 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    return (
      <>
        {header}
-       {body??mainForm}
-       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
-       {/*<Grid item style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>*/}
+       <CInputGroup
+         //@ts-ignore
+         style={{...styles.outer, display: !state.collapse?'none':'', width:"100%"}} >
+         {body??mainForm}
+       </CInputGroup>
+       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, width:"100%", display:visible?'':'none'}}>
          {table}
        </div>
      </>

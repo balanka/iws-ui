@@ -1,7 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react'
-import Grid from 'react-fast-grid'
+import { useEffect, useRef, useState} from 'react'
 import {formEnum} from '../utils/FormEnum'
-import {BalanceSheetHead, JournalMainForm} from './FormsProps'
 import {Get, Get2} from './CrudController'
 import {LOGIN, MASTERFILE, useStore} from './Menu'
 import {useNavigate} from 'react-router-dom'
@@ -12,6 +10,8 @@ import {logout} from '../utils/FormUtils.tsx'
 import {styles as stylesx} from "./BasicTreeTableProps.tsx";
 import {useDispatch} from "react-redux";
 import {IAccount} from "../Models.ts";
+import { JournalMainForm } from './JournalMainForm'
+import { BalanceSheetHead } from './BalanceSheetHead'
 
 const STYLES = {
   inner: {
@@ -153,31 +153,19 @@ const BasicTreeTable = () => {
     console.log('dataXXX', data)
     const buildForm = () => {
       return (
-        <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
+        <div style={{...STYLES.inner}}>
           <BalanceSheetHead style={{...STYLES.inner2}} title={title} submitQuery={load} dispatch={dispatch}
                             logout={logout} t={t}
-                            templateFileName={""}/>
+                            //@ts-ignore
+                            templateFileName ={() =>""}/>
           <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
             //@ts-ignore
                            stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
-          <Grid container
+          <div
             //@ts-ignore
-                style={{...stylesx.outer, height: 600, width: "100%", paddingTop: 10}} maximize direction="column">
-            {/*<EditableTable*/}
-            {/*  Options={{*/}
-            {/*    ...buildExportOption(t('common.exportCSV'), t('common.exportPDF'), title),*/}
-            {/*    selection: false,*/}
-            {/*    toolbar: toolbar,*/}
-            {/*    exportAllData: true,*/}
-            {/*  }}*/}
-            {/*  flag={false}*/}
-            {/*  data={data}*/}
-            {/*  columns={columnsX}*/}
-            {/*  t={t}*/}
-            {/*  parentChildData={parentChildFn}*/}
-            {/*/>*/}
-          </Grid>
-        </Grid>
+                style={{...stylesx.outer, height: 600, width: "100%", paddingTop: 10}} >
+          </div>
+        </div>
       )
     }
     return buildForm()
