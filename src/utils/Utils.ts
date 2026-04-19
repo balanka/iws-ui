@@ -52,17 +52,18 @@ export const numberCellFormatter =(params: ValueFormatterParams)=>
  * The mask defaults to dateFormat.masks.default.
  */
 const strcmp = (ax:string|bigint, bx:string|bigint)=> {
-    let a = ax.toString()
-    let b = bx.toString();
-    for (var i=0,n=Math.max(a.length, b.length); i<n && a.charAt(i) === b.charAt(i); ++i);
+    let a = ax?.toString()
+    let b = bx?.toString();
+    for (var i=0,n=Math.max(a?a.length:0, b?b.length:0); i<n && a?.charAt(i) === b?.charAt(i); ++i);
     if (i === n) return 0;
-    return a.charAt(i) > b.charAt(i) ? 1 : -1; //a.charAt(i) > b.charAt(i) ? -1 : 1;
+    return a?.charAt(i) > b?.charAt(i) ? 1 : -1; //a.charAt(i) > b.charAt(i) ? -1 : 1;
 }
 // const sortById = (a:& {id:string|bigint, name:string}, b:& {id:string|bigint, name:string}) => strcmp(a.id, b.id) //(a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
 // const sortByName = (a:& {id:string|bigint, name:string}, b:& {id:string|bigint, name:string}) => strcmp(a.name,b.name) //(a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
 
 // const sortById = (a:& {id:string|bigint}, b:& {id:string|bigint}) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
 // const sortByName = (a:& {name:string}, b:& {name:string}) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
+
 const sortById = (a:& {id:string|bigint}, b:& {id:string|bigint}) => strcmp (a.id, b.id) // .toLocaleString().localeCompare(b.id.toLocaleString()) //(a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
 const sortByName = (a:& {name:string}, b:& {name:string}) => strcmp (a.name, b.name) // a.name.toLocaleString().localeCompare(b.name.toLocaleString()) //(a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
 

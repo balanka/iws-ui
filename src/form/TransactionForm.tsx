@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -13,7 +13,8 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 import {styles} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {FinancialsFormHead, TransactionMainForm} from './FormsProps.tsx'
+import { FinancialsFormHead } from './FinancialsFormHead.tsx'
+import { TransactionMainForm} from './TransactionMainForm.tsx'
 import {initCust, initfModule, initLineTransaction, initLtr, MASTERFILE, TRANSACTION} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 
@@ -162,7 +163,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      }
 
      const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
-     const minHeight=300
+     const minHeight=260
      const maxHeight = 800
      const formatLines = (line:ILineTransaction|ILineFinancials):ILineTransaction|ILineFinancials =>  {
      // @ts-ignore
@@ -256,6 +257,9 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                 current={current}
                 t={t}
         />
+       <div
+       //@ts-ignore
+         style={{ ...styles.outer, width:'100%', height: 400, display: !state.collapse ? 'none' : ''  }}>
           <TransactionMainForm collapse={state.collapse} current={current??current_} setCurrent={setCurrent}
                                t={t} accData={accData}
                                storeData={stData} modules={fmoduleData}
@@ -265,7 +269,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                                height={20} zIndex={zIndex-2}/>
           <div
             // @ts-ignore
-            style={{...styles.outer, display: !state.collapse?'none':'', width: '100%', height: 160, padding:2 , paddingTop:3}}>
+            style={{...styles.outer, display: !state.collapse?'none':'', width: '100%', height: 160, paddingTop:3, paddingBottom: 10,}}>
               <TransactionDetailsTabs   transaction={current}  setTransaction={setCurrent}
                                         currentLineTransaction ={currentLine}
                                         setCurrentLineTransaction={setCurrentLine}
@@ -273,9 +277,10 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                                         articleData={articleData??[]} vatData={vatData??[]}  t={t}
                                         onGridReady={onGridReady}  zIndex={2}/>
           </div>
+       </div>
           <div
               // @ts-ignore
-                style={{...styles.outer,  height:state.collapse?minHeight:maxHeight, padding:2, width: '100%'
+                style={{...styles.outer,  height:state.collapse?minHeight:maxHeight, width: '100%'
                   , zIndex:1, display:visible?'':'none'}}>
             <TransactionGrid gridOptions ={gridOptions}  columnDefs={transactionColumnDefs(t)}
                              onRowSelected={onRowSelected} rowData={rowData}/>

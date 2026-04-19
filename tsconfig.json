@@ -19,7 +19,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "jsx": "react"
+    /* "jsx": "react" */
+    "jsx": "react-jsx",  // or "react" for React 17+
   },
   "include": ["src"]
 }

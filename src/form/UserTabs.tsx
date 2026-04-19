@@ -1,5 +1,5 @@
-import React from 'react'
-import { UserMainForm } from './FormsProps'
+
+import { UserMainForm } from './UserMainForm'
 import IWSTabs from './IWSTabs.tsx'
 import {UserFormProps} from '../Props.ts'
 import {RightGrid, RoleGrid} from '../IWSGrid.tsx'
@@ -9,7 +9,6 @@ import {
   UserRightsColumns,
   UserRoleColumnDefs
 } from '../ColumnsDefs.ts'
-import Grid from 'react-fast-grid'
 import {IRole, IUserRight} from '../Models.ts'
 import {IDetailCellRendererParams, GridOptions} from 'ag-grid-community'
 import {initRole} from "./Menu.tsx";
@@ -96,12 +95,12 @@ const UserTabs = ({ collapse, current, setCurrent, disable, t, height }:UserForm
       </div>
   )
   const getRoleTable = () => (
-      <Grid item style={{...styles.outer, paddingTop:15, height: collapse?minHeight:maxHeight, display: !collapse ? 'none' : ''}}>
+      <div  style={{...styles.outer, paddingTop:15, height: collapse?minHeight:maxHeight, display: !collapse ? 'none' : ''}}>
           <RoleGrid
           // @ts-ignore
             theme="legacy" gridOptions ={gridOptions} onRowSelected={onRowSelected}
             rowData={current?.roles??initRole}/>
-      </Grid>
+      </div>
   )
   const GetTabContent = () => {
     return [

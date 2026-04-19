@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react'
+import  {useCallback, useEffect, useRef, useState } from 'react'
 import {
   ClientSideRowModelModule,
   ModuleRegistry,
@@ -9,17 +9,17 @@ import { TreeDataModule } from "ag-grid-enterprise"
 import {MASTERFILE, PACB_JOURNAL_QUERY_PARM } from './Menu.tsx'
 import Login from './Login'
 import {logout} from '../utils/FormUtils.tsx'
-import {BalanceSheetHead, JournalMainForm} from './FormsProps.tsx'
 import {styles as stylesx} from './BasicTreeTableProps.tsx'
-import Grid from 'react-fast-grid'
 import {AgGridReact} from 'ag-grid-react'
 import {JournalProps} from '../Props.ts'
-import {IAccount, IAccount2} from '../Models'
-import { useDispatch } from "react-redux";
-import iwsStore from '../utils/Store.tsx'
-import { Get } from './CrudController.ts'
+import { IAccount, IAccount2 } from '../Models'
+import { JournalMainForm } from './JournalMainForm'
+import { BalanceSheetHead } from './BalanceSheetHead'
 import useForm from './UseForm.ts'
 import { formEnum } from "../utils/FormEnum.tsx"
+import { Get } from "./CrudController.ts"
+import iwsStore from "../utils/Store.tsx"
+import { useDispatch } from "react-redux"
 
 ModuleRegistry.registerModules([
     ClientSideRowModelModule,
@@ -67,7 +67,7 @@ const STYLES = {
         paddingRight: 2,
     },
 }
-const Main  = () => {
+export const Main  = () => {
   const [{profile, selected, t,  module_ }] = useForm()
   const {token, currency, company} = profile
   const init = useRef(false)
@@ -78,8 +78,8 @@ const Main  = () => {
         const current_ = {...PACB_JOURNAL_QUERY_PARM, modelid:modelid, currency:currency??''}
         const [current, setCurrent] = useState<JournalProps>(current_)
         const [, setIwsState] = useState(iwsStore.initialState)
-        const [accData, setAccData] = useState <IAccount[] >([])
-        const [rowData, setRowData] = useState <IAccount[]>([])
+        const [accData, setAccData] = useState <IAccount []>([])
+        const [rowData, setRowData] = useState <IAccount []>([])
         const dispatch = useDispatch()
         const acc_modelid = formEnum.ACCOUNT
         const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
@@ -107,27 +107,27 @@ const Main  = () => {
 
           columnDefs: [
           {
-            field: 'init Balance',
-            headerName: t('common.report'),
-            cellStyle: {textAlign: 'center'},
-            children: [
-            {
-              headerName: t('common.idebit'),
-              //aggFunc: "sum",
-              field: "idebit",
-              flex: 1,
-              cellStyle: {textAlign: 'right'},
-              cellRenderer: (params:any) => params.data.idebit.toFixed(2)
-            },
-            {
-              headerName: t('common.icredit'),
-              //aggFunc: "sum",
-              field: "icredit",
-              flex: 1,
-              cellStyle: {textAlign: 'right'},
-              cellRenderer: (params:any) => params.data.icredit.toFixed(2)
-            },
-            ],
+              field: 'init Balance',
+              headerName: t('common.report'),
+              cellStyle: {textAlign: 'center'},
+                children: [
+                  {
+                    headerName: t('common.idebit'),
+                    //aggFunc: "sum",
+                    field: "idebit",
+                    flex: 1,
+                    cellStyle: {textAlign: 'right'},
+                    cellRenderer: (params:any) => params.data.idebit.toFixed(2)
+                  },
+                  {
+                    headerName: t('common.icredit'),
+                    //aggFunc: "sum",
+                    field: "icredit",
+                    flex: 1,
+                    cellStyle: {textAlign: 'right'},
+                    cellRenderer: (params:any) => params.data.icredit.toFixed(2)
+                  },
+                ],
           },
           {
             field: 'Transaction',
@@ -152,39 +152,39 @@ const Main  = () => {
               },
             ],
           },
-         {
+          {
             field: 'balance',
             headerName: t('common.balance'),
             cellStyle: {textAlign: 'center'},
-            children: [
-        {
-            headerName: t('common.debit'),
-            //aggFunc: "sum",
-            field: "bdebit",
-            flex: 1,
-            cellStyle: {textAlign: 'right'},
-            cellRenderer: (params:any) => params.data.bdebit.toFixed(2)
-        },
-      {
-        headerName: t('common.credit'),
-        //aggFunc: "sum",
-        field: "bcredit",
-        flex: 1,
-        cellStyle: {textAlign: 'right'},
-        cellRenderer: (params:any) =>params.data.bcredit.toFixed(2)
-      },
-        {
-          headerName: t('common.balance'),
-          //aggFunc: "sum",
-          field: "balance",
-          flex: 1,
-          cellStyle: {textAlign: 'right'},
-          //valueFormatter: currencyFormatter,
-          //valueParser: currencyParser,
-           cellRenderer: (params:any) => params.data.balance.toFixed(2)
-        },
-        ],
-        },
+              children: [
+                {
+                  headerName: t('common.debit'),
+                  //aggFunc: "sum",
+                  field: "bdebit",
+                  flex: 1,
+                  cellStyle: {textAlign: 'right'},
+                  cellRenderer: (params:any) => params.data.bdebit.toFixed(2)
+                },
+                {
+                  headerName: t('common.credit'),
+                  //aggFunc: "sum",
+                  field: "bcredit",
+                  flex: 1,
+                  cellStyle: {textAlign: 'right'},
+                  cellRenderer: (params:any) =>params.data.bcredit.toFixed(2)
+                },
+                {
+                  headerName: t('common.balance'),
+                  //aggFunc: "sum",
+                  field: "balance",
+                  flex: 1,
+                  cellStyle: {textAlign: 'right'},
+                  //valueFormatter: currencyFormatter,
+                  //valueParser: currencyParser,
+                  cellRenderer: (params:any) => params.data.balance.toFixed(2)
+                },
+              ],
+          },
         ],
         defaultColDef: {
           flex: 1,
@@ -251,25 +251,27 @@ const Main  = () => {
       console.log('rowDatav', v)
       const getDataPath = useCallback((data: any) => data.account, [])
     return (
-        <Grid container style={{...STYLES.inner}} maximize direction="row" zeroMinWidth>
+        <div  style={{...STYLES.inner}}>
             <BalanceSheetHead style={{...STYLES.inner2}} title={title} submitQuery={load} dispatch={dispatch}
                 logout={logout}  t={t}
+                    //@ts-ignore
                     templateFileName={""}/>
             <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
                    //@ts-ignore
                       stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
-            <Grid container
+            <div
                   //@ts-ignore
-                  style={{...stylesx.outer, height:600, width:"100%", paddingTop: 10}} maximize direction="column">
+                  style={{...stylesx.outer, height:600, width:"100%", paddingTop: 10}}>
                <AgGridReact theme = {myTheme}
                             treeData: true
                             getDataPath={getDataPath}
                           //@ts-ignore
                             gridOptions = {gridOptions()} rowData ={v}/>
-            </Grid>
-       </Grid>
+            </div>
+       </div>
    )
 }
+
 export  default Main
 
 

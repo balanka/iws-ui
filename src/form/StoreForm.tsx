@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -13,7 +13,7 @@ import { formEnum } from '../utils/FormEnum'
 import {storeColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IMasterfile, IStore} from '../Models.ts'
 import Login from "./Login.tsx";
-import UseMasterfileForm from './UseMasterfileForm.ts'
+import UseMasterfileForm from './UseMasterfileForm.tsx'
 import useForm from './UseForm.ts'
 
 

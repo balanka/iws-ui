@@ -1,11 +1,10 @@
-import React from 'react'
 import { LineTransactionGrid} from "../IWSGrid"
 import { lineTransactionColumnDefs} from "../ColumnsDefs"
 import IWSTabs from './IWSTabs.tsx'
 import {TransactionDetailsFormProps, TransactionDetailsTabProps} from '../Props'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import { TransactionDetailsForm} from './FormsProps.tsx'
+import { TransactionDetailsForm} from './TransactionDetailsForm.tsx'
 import {blue} from '@mui/material/colors'
 import FileOutput from './FileOutput.tsx'
 import {ILineTransaction, ITransaction} from '../Models.ts'

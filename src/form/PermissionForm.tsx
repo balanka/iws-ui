@@ -1,17 +1,14 @@
-import React from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import Grid from 'react-fast-grid'
-
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {MASTERFILE} from './Menu'
 import { formEnum } from '../utils/FormEnum'
 import useForm from './UseForm.ts'
-import {PermissionMainForm} from './FormsProps.tsx'
+import {PermissionMainForm} from './PermissionMainForm.tsx'
 import {permissionColumnDefs} from "../ColumnsDefs.ts";
-import UseMasterfileForm from "./UseMasterfileForm.ts";
+import UseMasterfileForm from "./UseMasterfileForm.tsx";
 import {styles} from './BasicTreeTableProps.tsx'
 
 
@@ -34,9 +31,9 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
       <>
         {header}
         {body??mainForm}
-         <Grid item style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+         <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
           {table}
-        </Grid>
+        </div>
       </>
     )
 

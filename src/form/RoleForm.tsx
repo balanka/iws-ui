@@ -1,4 +1,3 @@
-import React  from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -9,7 +8,7 @@ import {MASTERFILE} from './Menu'
 import { masterfileColumnDefs} from '../ColumnsDefs.ts'
 import {IRole} from '../Models.ts'
 import useForm from './UseForm.ts'
-import UseMasterfileForm from './UseMasterfileForm.ts';
+import UseMasterfileForm from './UseMasterfileForm.tsx';
 import RoleTabs from "./RoleTabs.tsx";
 import {styles} from './BasicTreeTableProps.tsx'
 

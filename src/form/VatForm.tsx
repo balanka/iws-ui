@@ -7,14 +7,15 @@ import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {Get} from './CrudController.ts'
 import {initVat, MASTERFILE} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
-import { VatMainForm } from './FormsProps.tsx'
 import { formEnum } from '../utils/FormEnum.tsx'
-import {IVat} from '../Models.ts'
+import { IVat } from '../Models.ts'
 import {vatColumnDefs} from '../ColumnsDefs'
 import Login from './Login'
-import UseMasterfileForm from './UseMasterfileForm.ts'
+import UseMasterfileForm from './UseMasterfileForm.tsx'
 import useForm from './UseForm.ts'
 import {styles} from './BasicTreeTableProps.tsx'
+import {VatMainForm} from "./VatMainForm.tsx";
+import {CInputGroup} from "@coreui/react";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const VatForm = () => {
@@ -29,10 +30,10 @@ const VatForm = () => {
   const [accData, setAccData] = useState([])
   const minHeight = 300
   const maxHeight = 600
-  const height = 20
+  const height = 28
   const colDef:ColDef[] = vatColumnDefs(t)
-  const [{header, body, disable, table, visible, state, current, setCurrent, handleKeyPress, zIndex}] = UseMasterfileForm(current_,  colDef, selected)
-  const mainForm = VatMainForm ({current:current, setCurrent:setCurrent, disable:disable, t:t, accData:accData, height:height, zIndex:zIndex})
+  const hookResult = UseMasterfileForm(current_,  colDef, selected)
+  const [{header, body, disable, table, visible, state, current, setCurrent, handleKeyPress, zIndex}] = hookResult
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
@@ -41,61 +42,22 @@ const VatForm = () => {
     document.onkeydown = handleKeyPress
     document.addEventListener('onKeyDown', handleKeyPress)
   }, [selected])
+  const safeBody = React.isValidElement(body) ? body : null;
 
   return (
     <>
       {header}
-      <div
+      <CInputGroup
         //@ts-ignore
-        style={{...styles.outer,  borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 1
-         //, height:state.collapse?minHeight:maxHeight
-          , display: !state.collapse?'none':''}} >
-        {body??mainForm}
-      </div>
+        style={{...styles.outer , display: !state.collapse?'none':''}} >
+        {safeBody ? safeBody :VatMainForm({current, setCurrent, accData, t, disable, height, zIndex})
+        }
+      </CInputGroup>
       <div  style={{...styles.outer0, paddingTop:2, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
         {table}
       </div>
     </>
   )
 
-
-  //
-  // const onRowSelected = (event: RowSelectedEvent) => setCurrent(event.data)
-  //
-  // return (<>
-  //         <CommonFormHead
-  //             title={title}
-  //             collapse={state.collapse}
-  //             initAdd={initAdd}
-  //             edited={edited??false}
-  //             added={added?? added ===undefined}
-  //             disable={disable??true}
-  //             edit={edit}
-  //             cancelEdit={cancelEdit}
-  //             submitEdit={submitEdit}
-  //             submitQuery={reload}
-  //             reload={reload}
-  //             toggle={toggle}
-  //             toggleTable={toggleTable}
-  //             logout={logout}
-  //             navigate={navigate}
-  //             language={language}
-  //             handleLanguageChange={handleLanguageChange}
-  //             dispatch={dispatch}
-  //             t={t}
-  //         />
-  //         <Grid container style={{ borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 10
-  //                                   , height:state.collapse?minHeight:maxHeight
-  //                                  , display: !state.collapse?'none':''}} maximize direction="row" zeroMinWidth>
-  //             <VatMainForm current={current} setCurrent={setCurrent}
-  //                          disable={disable} t={t} accData ={accData} height={height} zIndex={zIndex}/>
-  //         </Grid>
-  //         <Grid container
-  //             // @ts-ignore
-  //               style={{...stylesx.outer, height:250, paddingTop: 10, display:visible?'':'none'}} maximize direction="column">
-  //           <VatGrid columnDefs ={vatColumnDefs(t)}  onRowSelected={onRowSelected} rowData ={rowData} />
-  //         </Grid>
-  //   </>
-  // )
 }
 export default VatForm

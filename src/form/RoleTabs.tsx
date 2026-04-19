@@ -1,5 +1,4 @@
-import React from 'react'
-import {MasterfileMainBaseForm} from './FormsProps'
+import {MasterfileMainBaseForm} from './MasterfileMainBaseForm'
 import IWSTabs from './IWSTabs.tsx'
 import {RoleProps} from '../Props.ts'
 import {RightGrid} from '../IWSGrid.tsx'

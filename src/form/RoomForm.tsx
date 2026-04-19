@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -6,12 +6,11 @@ import Grid from 'react-fast-grid'
 
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {MasterfilesForm} from './FormsProps'
-
+import { MasterfileFormWithout } from './MasterfileFormWithout'
 import {MASTERFILE} from './Menu'
 import {masterfileColumnDefs} from '../ColumnsDefs.ts'
 import useForm from './UseForm.ts'
-import UseMasterfileForm from './UseMasterfileForm.ts'
+import UseMasterfileForm from './UseMasterfileForm.tsx'
 import {styles} from './BasicTreeTableProps.tsx'
 import iwsStore from "../utils/Store.tsx";
 import {Get} from "./CrudController.ts";
@@ -39,7 +38,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    }, [current_])
    console.log('ctx')
    const [{header, body, table, disable,  state, visible, current, setCurrent}] = UseMasterfileForm(current_, colDef, MASTERFILE.room)
-   const mainForm = MasterfilesForm({collapse:state.collapse,  current:current??current_, setCurrent:setCurrent
+   const mainForm = MasterfileFormWithout({collapse:state.collapse,  current:current??current_, setCurrent:setCurrent
      , disable:disable, height:height, accData:accData, t:t
      , fieldName:t('common.parent'), propertyName:'parent'})
     return (
