@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react'
-
 import { CChartLine } from '@coreui/react-chartjs'
 import { getStyle } from '@coreui/utils'
-import React from 'react'
+
 
 const MainChart = () => {
   const chartRef = useRef(null)

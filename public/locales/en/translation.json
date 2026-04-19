@@ -128,6 +128,17 @@
     "copyFrom": "Copy from",
     "image_QR_code": "Image/QR Code"
   },
+  "address": {
+    "street"      : "Street",
+    "period"      : "Period",
+    "zip"        : "Zip",
+    "city"       : "City",
+    "country"       : "Country",
+    "state"        : "State",
+    "phone"       : "Tel",
+    "fax"       : "Fax",
+    "email"       : "Email"
+  },
   "asset": {
     "title":      "Asset",
     "name":       "Name",
@@ -358,6 +369,7 @@
     "store": "Store",
     "account" :   "Cust./Sup.",
     "text" :       "Text",
+    "footText":     "Footnote",
     "posted":     "Validée",
     "line": {
       "title": "Lines/Details",

@@ -1,4 +1,3 @@
-import React from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {CBadge, CNavLink, CSidebarNav} from '@coreui/react'
@@ -6,10 +5,8 @@ import { useStore } from '../form/Menu'
 import SimpleBar from "simplebar-react";
 
 export const AppSidebarNav = ({ items}:{items:any[]}) => {
-  //console.log('items>>>>>>>>', items)
+
   const { setSelected } = useStore()
- // console.log('selected>>>>>>>>', selected)
-  //console.log('setSelected>>>>>>>>', setSelected)
   const location = useLocation()
   const navigate = useNavigate()
   const navLink = (name:any, icon:any, badge?:any, indent = false) => {

@@ -127,6 +127,16 @@
     "copyFrom": "Kopieren von",
     "image_QR_code": "Image/QR Code"
   },
+  "address": {
+    "street"      : "Strasse",
+    "zip"         : "PLZ",
+    "city"       : "Stadt",
+    "country"       : "Bundesland",
+    "state"        : "Land",
+    "phone"       : "Tel",
+    "fax"       : "Fax",
+    "email"       : "Email"
+  },
   "asset": {
     "title":  "Anlage",
     "name":       "Name",
@@ -336,6 +346,7 @@
     "account":      "Deb./Kred.",
     "store":   "Lager",
     "text" :       "Text",
+    "footText":     "Fußnote",
     "type":         "B.Art",
     "posted":     "Gebucht",
     "line": {

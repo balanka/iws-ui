@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import  {useState, useEffect} from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -9,7 +9,6 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import { BSFormHead} from './FormsProps'
 import {Edit, Get, Get2} from './CrudController'
 import {initBS, MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
@@ -23,6 +22,7 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import useForm from './UseForm.ts'
 import {styles} from './BasicTreeTableProps.tsx'
+import BankStatementFormHead from "./BankStatementFormHead.tsx";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -84,7 +84,7 @@ const BankStatementForm = () => {
   const height = 33
   return (
         <>
-          <BSFormHead
+          <BankStatementFormHead
               title={title}
               collapse={state.collapse}
               cancelEdit={cancelEdit}
@@ -104,7 +104,7 @@ const BankStatementForm = () => {
           />
           <div
             //@ts-ignore
-            style={{...styles.outer0, paddingTop:1, paddingBottom:10, display: !state.collapse?'none':''}}>
+            style={{...styles.outer, paddingTop:1, paddingBottom:10, display: !state.collapse?'none':''}}>
             <BankStatementTabs collapse ={state.collapse} current={current} setCurrent={setCurrent}  t={t}  height={height}
               currency={currencyx}  locale={locale ??'fr-FR'}/>
           </div>

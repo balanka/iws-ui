@@ -1,4 +1,3 @@
-import React from 'react'
 import { AppContent, AppSidebar, AppFooter } from './index'
 const DefaultLayout = () => {
   return (

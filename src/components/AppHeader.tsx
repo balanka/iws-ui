@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {NavLink, useNavigate} from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -180,7 +180,6 @@ const AppHeader = () => {
           <li className="nav-item py-1">
             <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
           </li>
-          {/*<AppHeaderDropdown />*/}
           <IconButton size="small" edge="start" color="inherit" aria-label="open drawer" style={{ height: 20, padding:1}}
                       onClick={()=>logout()}>
             <ExitToAppTwoToneIcon/>

@@ -128,6 +128,16 @@
     "copyFrom": "Copier de",
     "image_QR_code": "Image/QR Code"
   },
+  "address": {
+    "street"      : "Rue",
+    "zip"        : "Code P.",
+    "city"       : "Ville",
+    "country"    : "Région",
+    "state"      : "Pays",
+    "phone"      : "Tel",
+    "fax"       : "Fax",
+    "email"     : "Email"
+  },
   "asset": {
     "title":      "Immobilisation",
     "name":       "Nom",
@@ -349,6 +359,7 @@
     "store": "Magasin",
     "account":   "Client/Fourn.",
     "text" :       "Texte",
+    "footText":     "Note bas de page",
     "file_content":  "Contenu",
     "posted":     "Validée",
     "line": {

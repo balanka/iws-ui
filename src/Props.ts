@@ -1,7 +1,7 @@
 import {
   IAccount,
   IAddress,
-  IArticle, IAsset, IBankAccount, IBankStatement, IBankStatementParam, IBusinespartner, ICompany,
+  IArticle, IAsset, IBankAccount, IBankStatement, IBusinespartner, ICompany,
   ICustomer,
   IEmployee, IFinancials, IFmodule, ILineFinancials, ILineTransaction, ILoggingContext,
   IMasterfile,
@@ -124,7 +124,17 @@ export interface ArticleGeneralFormProps {
     , disable: boolean
     , height:number
 }
-
+export interface CustomerAccountMainFormProps {
+  readonly current: IArticle | ICustomer | ISupplier | IEmployee | ICompany|IStore
+  readonly setCurrent: (art: any) => void;
+  readonly accData: IAccount[];
+  readonly vatData: IVat[];
+  readonly ccData?: IMasterfile[];
+  readonly t: TFunction<'translation', undefined>;
+  readonly disable: boolean;
+  readonly height: number;
+  readonly zIndex: number;
+}
 export interface AssetProps {
     collapse:boolean
     , current: IAsset
@@ -149,12 +159,12 @@ export interface BankStatementProps {
     height: number
 }
 
-export interface BankStatementParamProps {
-    current: IBankStatementParam,
-    setCurrent: (arg: IBankStatementParam) => void,
-    t: TFunction<'transalation', undefined>,
-    height: number
-}
+// export interface BankStatementParamProps {
+//     current: IBankStatementParam,
+//     setCurrent: (arg: IBankStatementParam) => void,
+//     t: TFunction<'transalation', undefined>,
+//     height: number
+// }
 export interface AccountMainProps {
   collapse:boolean,
   current: IAccount,
@@ -185,6 +195,14 @@ export interface FModuleProps2<A extends IMasterfile2>{
   accData: IMasterfile[],
   accountData: IMasterfile[],
   rowData: A[],
+  t: TFunction<'translation', undefined>,
+  disable: boolean,
+  height: number
+}
+export interface MasterfileBaseProps<A extends IMasterfile> {
+  //collapse: boolean,
+  current: A,
+  setCurrent: (arg: any) => void,
   t: TFunction<'translation', undefined>,
   disable: boolean,
   height: number
