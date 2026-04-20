@@ -19,19 +19,23 @@ import {State} from "../Props.ts";
 
 import { CommonFormHead } from './CommonFormHead'
 import {logout} from "../utils/FormUtils.tsx"
+import Login from "./Login.tsx";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,])
 
 const UseMasterfileForm = <T extends IWSModel>(current_ :T, coldef:ColDef[]
                                                ,  url:string):
-  [{header:ReactNode, body:ReactNode, table:ReactNode, disable:boolean, visible:boolean, state:State, rowData: T[]
+  [{header:ReactNode, body: (()=> JSX.Element)|null, table:ReactNode, disable:boolean, visible:boolean, state:State, rowData: T[]
     , current:T, setCurrent:Dispatch<SetStateAction<T>>, zIndex:number, handleKeyPress:(event:any)=>void }] => {
-  const [{ profile, menu, selected, t, title:title
-    , language, visible, state, toggle, toggleTable, handleLanguageChange, modelid}]  = useForm()
-  const { token, company} = profile
+  const [{
+    profile, menu, selected, t, title: title
+    , language, visible, state, toggle, toggleTable, handleLanguageChange, modelid
+  }] = useForm()
+  const {token, company} = profile
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-  let body = null
-  // let body =(module_ === '11111' || module_ === 11111) ?Login :null
+  //let body = null
+  let body =  ((module_ === '11111' || module_ === 11111)) ? Login : null
+
   console.log('body', body)
   const dispatch = useDispatch()
   let navigate = useNavigate()
@@ -47,6 +51,7 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T, coldef:ColDef[]
   console.log('ctx', ctx)
   console.log('url', url)
   console.log('edited', edited)
+  console.log('rowData', rowData)
 
   const edit = () => {
     if(edited) {

@@ -1,12 +1,5 @@
 import {CSSProperties, FC, ReactNode} from 'react'
 import { toOption} from '../utils/FormUtils.tsx'
-
-// import {IoMdMenu} from 'react-icons/io'
-// import IconButton from '@mui/material/IconButton'
-// import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload'
-// import CancelIcon from '@mui/icons-material/Cancel'
-// import SaveIcon from '@mui/icons-material/Save'
-// import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import {
   // CBadge,
   CCol,
@@ -35,7 +28,6 @@ import {
 import {
   IAccount,
   IArticle,
-  // IBankStatement,
   ICompany,
   ICustomer,
   IEmployee,
@@ -47,21 +39,8 @@ import {
   IVat
 } from '../Models.ts'
 import {TFunction} from 'i18next'
-// import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
-// import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-// import AddBoxIcon from '@mui/icons-material/AddBox'
-// import EditSquareIcon from '@mui/icons-material/EditSquare'
-//import CheckIcon from '@mui/icons-material/Check'
-//import CheckBoxIcon from '@mui/icons-material/CheckBox'
-// import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-// import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp'
-// import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
-// import { NavigateFunction} from 'react-router-dom'
-// import {useSelector} from 'react-redux'
 import ComboBox from './ComboBox.tsx'
-// import FilterListIcon from '@mui/icons-material/FilterList';
-// import ListIcon from '@mui/icons-material/List'
-
+import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 
 export const styles = {
   outer0: {
@@ -815,14 +794,21 @@ export const DatePickerField = ({ fieldName,  current, setCurrent, selected, lab
             selected={selected}
             title={label}
             showTimeInput
-            calendarClassName="custom-calendar"
+            wrapperClassName="custom-datepicker-width"
+           // calendarClassName="custom-calendar"
             z-Index ={9999}
             className="text-center date-picker-reports"
             dateFormat="dd.MM.YYYY"
             id={fieldName?.concat('id')}
-            onChange={ onChange ? onChange :(newValue) => {
+            onChange={ onChange ? onChange :(newValue:any) => {
               setCurrent?({...current, [fieldName]: newValue}):void(0)
             }}
+            customInput={
+              <input
+                style={{ width: "80%" }}
+                onFocus={(e) => e.target.style.border = "2px solid blue"}
+              />
+            }
         />
     )
 }

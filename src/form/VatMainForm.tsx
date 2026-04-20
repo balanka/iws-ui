@@ -53,9 +53,7 @@ export const VatMainForm = ({
 
       <CInputGroup style={{ height: 'auto', minHeight: height }}>
         <CCol sm="2"><FieldLabel title={t('common.description')} /></CCol>
-        <CCol sm="6"><TextareaField fieldName="description" placeholder={t('common.description')} disabled={disable} value={current.description} current={current} setCurrent={setCurrent} style={{ width: '100%', minHeight: 40, fontSize: '0.875rem' }} /></CCol>
-        {/*<CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('common.company')} /></CCol>*/}
-        {/*<CCol sm="2"><InputField fieldName="company" current={current} setCurrent={setCurrent} value={current.company} disabled={disable} style={{ ...s, textAlign: 'right' }} /></CCol>*/}
+        <CCol sm="8"><TextareaField fieldName="description" placeholder={t('common.description')} disabled={disable} value={current.description} current={current} setCurrent={setCurrent} style={{ width: '100%', minHeight: 40, fontSize: '0.875rem' }} /></CCol>
       </CInputGroup>
     </div>
   )

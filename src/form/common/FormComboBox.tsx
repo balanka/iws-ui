@@ -243,7 +243,7 @@ export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction
 
   return (
     <ComboBox<{value:string|bigint,  label:string}>
-      style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+      style={{...styles,  minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
       disable={current.posted}
       value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
       onChange={(value:any, _event:any) => setCurrent({...current, [fieldName]: value })}

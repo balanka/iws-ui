@@ -45,7 +45,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
   const TransactionForm = () => {
   const [{profile, selected, t, toggle, toggleTable, state, visible, module_, modelid }] = useForm()
-  const { token, currency, company } = profile
+  const { token, currency, locale, company } = profile
   const dispatch = useDispatch()
   let navigate = useNavigate()
   if (module_ === '11111' || module_ === 11111) return <Login/>
@@ -163,8 +163,9 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      }
 
      const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
-     const minHeight=260
+     const minHeight=220
      const maxHeight = 800
+     const height = 35
      const formatLines = (line:ILineTransaction|ILineFinancials):ILineTransaction|ILineFinancials =>  {
      // @ts-ignore
      return {
@@ -259,17 +260,17 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
         />
        <div
        //@ts-ignore
-         style={{ ...styles.outer, width:'100%', height: 400, display: !state.collapse ? 'none' : ''  }}>
+         style={{ ...styles.outer, width:'100%', height: 400,  display: !state.collapse ? 'none' : ''  }}>
           <TransactionMainForm collapse={state.collapse} current={current??current_} setCurrent={setCurrent}
                                t={t} accData={accData}
                                storeData={stData} modules={fmoduleData}
                                copyFromTransaction={copyFromTransaction}
                                handleModuleChange={handleModuleChange}
                                submitCopy={copyCall}
-                               height={20} zIndex={zIndex-2}/>
+                               height={height} zIndex={zIndex-2} locale = {locale} currency ={currency}/>
           <div
             // @ts-ignore
-            style={{...styles.outer, display: !state.collapse?'none':'', width: '100%', height: 160, paddingTop:3, paddingBottom: 10,}}>
+            style={{...styles.outer,  padding:1, display: !state.collapse?'none':'', width: '100%', height: 40}}>
               <TransactionDetailsTabs   transaction={current}  setTransaction={setCurrent}
                                         currentLineTransaction ={currentLine}
                                         setCurrentLineTransaction={setCurrentLine}
@@ -278,13 +279,13 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                                         onGridReady={onGridReady}  zIndex={2}/>
           </div>
        </div>
-          <div
-              // @ts-ignore
-                style={{...styles.outer,  height:state.collapse?minHeight:maxHeight, width: '100%'
+       <div
+           // @ts-ignore
+            style={{...styles.outer,  height:state.collapse?minHeight:maxHeight, width: '100%'
                   , zIndex:1, display:visible?'':'none'}}>
-            <TransactionGrid gridOptions ={gridOptions}  columnDefs={transactionColumnDefs(t)}
+         <TransactionGrid gridOptions ={gridOptions}  columnDefs={transactionColumnDefs(t)}
                              onRowSelected={onRowSelected} rowData={rowData}/>
-          </div>
+       </div>
     </>)
 }
 export default TransactionForm

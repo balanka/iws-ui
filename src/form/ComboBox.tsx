@@ -49,7 +49,7 @@ const ComboBox = <T extends Base>({
         border: '1px solid gray',
         outline: state.isFocused ? "none" : undefined,
         minHeight: '28px',
-        height: '28px',
+        //height: '28px',
         display: 'flex',
         alignItems: 'center',
       }
@@ -62,7 +62,7 @@ const ComboBox = <T extends Base>({
       fontSize: fontSize ?? 12,
       opacity: state.isDisabled ? .4 : 1.0,
       padding: '0px',
-      lineHeight: '28px',
+      lineHeight: '18px',
     }),
 
     valueContainer: (base: any) => ({

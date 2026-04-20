@@ -151,6 +151,7 @@ const FinancialsForm = () => {
   const maxHeight =650
   const minPadding=0
   const maxPadding=40
+  const height = 22
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   const buildTotal =(current:ITransaction|IFinancials) => {
     //@ts-ignore
@@ -212,7 +213,7 @@ const FinancialsForm = () => {
                           oaccountFilter={oaccFilter}
                           currentLineFinancials ={currentLine??initialLine}
                           setCurrentLineFinancials={setCurrentLine}
-                          t={t} height ={22}
+                          t={t} height ={height}
                           zIndex={zIndex-2}
                           locale={locale??'fr-GN'}
                           currency={currency??'GNF'}

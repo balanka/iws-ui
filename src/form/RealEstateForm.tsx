@@ -28,7 +28,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
         <div
           // @ts-ignore
           style={{...styles.outer, height:180, padding:5, paddingTop: 20 }} >
-        {body??mainForm}
+        {body?body():mainForm}
        </div>
        <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
          {table}

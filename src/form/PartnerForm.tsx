@@ -32,7 +32,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
         <CInputGroup
           //@ts-ignore
           style={{...styles.outer , display: !state.collapse?'none':''}} >
-          {body??mainForm}
+          {body?body():mainForm}
         </CInputGroup>
         <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
          {table}

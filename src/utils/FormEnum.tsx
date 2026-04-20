@@ -39,6 +39,7 @@ export const formEnum =  {
     ROOM:152,
     APARTMENT: 153,
     REALESTATE:154,
+    FLOOR:155,
     SALARY_ITEM: 171,
     PAYROLL_TAX_RANGE: 172,
     PARTNER: 173,

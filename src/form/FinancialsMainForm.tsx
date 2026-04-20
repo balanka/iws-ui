@@ -1,7 +1,7 @@
 import { JSX, Dispatch, SetStateAction } from 'react'
 import { CCol } from '@coreui/react'
 import { BooleanField, FormMasterfileXComboBox, FormMasterfileComboBox2, FromTransactionComboBox } from './common'
-import { DatePickerField, InputField, TextareaField, FieldLabel, styles } from './FormsProps'
+import { DatePickerField, InputField, TextareaField, styles } from './FormsProps'
 import CurrencyInput from 'react-currency-input-field'
 import { IFinancials, IMasterfile, IAccount, IFmodule, ILineFinancials } from '../Models'
 import { TFunction } from 'i18next'
@@ -61,7 +61,10 @@ export const FinancialsMainForm = ({
 
   const inputStyle = { height: height - 10, width: '100%', fontSize: '0.875rem' };
   const currencyStyle = { height: height - 3, padding: 5, textAlign: 'right' as const, width: '100%' };
-  const totalStyle = { fontWeight: 'bold', height: height - 3, padding: 5, textAlign: 'right' as const, width: '100%' };
+  const Label = ({ children, width = 80, bold = false }: any) => (
+    <div style={{ minWidth: width, fontWeight: bold ? 'bold' : 'normal', paddingLeft:10 }}>{children}</div>)
+
+  //const totalStyle = { fontWeight: 'bold', height: height - 3, padding: 5, textAlign: 'right' as const, width: '100%' };
 
   // Row margin - adjust this value to increase/decrease space between rows
   const rowMargin = 8;  // Increased from default 8 to 12 for more spacing
@@ -70,8 +73,8 @@ export const FinancialsMainForm = ({
     <div style={{ ...styles.outer, paddingBottom: 10, display: !collapse ? 'none' : '' }}>
       {/* Row 1: Module + ID + OID */}
       <FormRow height={height} marginBottom={rowMargin}>
-        <CCol sm="2"><FieldLabel title={t('fmodule.title')} /></CCol>
-        <CCol sm="4" >
+        <CCol sm="2"> <Label>{t('fmodule.title')}</Label></CCol>
+        <CCol sm="5"  style={{height: height, paddingTop:2}}>
           <ComboBox<{ value: bigint | string; label: string }>
             style={{ ...inputStyle, minWidth: 100, fontSize: 12}}
             disable={false}
@@ -85,7 +88,8 @@ export const FinancialsMainForm = ({
             zIndex={99999}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 5 }}><FieldLabel title={t('common.id')} /></CCol>
+        <CCol sm="1" style={{ paddingLeft: 5 }}><Label>{t('common.id')}</Label></CCol>
+          {/*<FieldLabel title={t('common.id')} /></CCol>*/}
         <CCol sm="2">
           <InputField
             fieldName="id"
@@ -96,7 +100,7 @@ export const FinancialsMainForm = ({
             style={inputStyle}
           />
         </CCol>
-        <CCol sm="1" style={{ paddingLeft: 5 }}><FieldLabel title={t('transaction.oid')} /></CCol>
+        <CCol sm="1" style={{ paddingLeft: 5 }}><Label>{t('transaction.oid')}</Label></CCol>
         <CCol sm="1">
           <InputField
             fieldName="oid"
@@ -111,8 +115,8 @@ export const FinancialsMainForm = ({
 
       {/* Row 2: Copy From + Trans Date */}
       <FormRow height={height} marginBottom={rowMargin}>
-        <CCol sm="2"><FieldLabel title={t('common.copyFrom')} /></CCol>
-        <CCol sm="4">
+        <CCol sm="2" style={{height: height }}><Label>{t('common.copyFrom')}</Label></CCol>
+        <CCol sm="5" style={{height: height, paddingTop:2}}>
           <FromTransactionComboBox
             current={current}
             transactions={copyFromTransaction}
@@ -120,8 +124,8 @@ export const FinancialsMainForm = ({
             onChange={submitCopy}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('transaction.transdate')} /></CCol>
-        <CCol sm="4">
+        <CCol sm="3" style={{ paddingLeft: 10 }}><Label>{t('transaction.transdate')}</Label></CCol>
+        <CCol sm={2} className="d-flex gap-2 align-items-center">
           <DatePickerField
             fieldName="transdate"
             label={t('transaction.transdate')}
@@ -142,8 +146,8 @@ export const FinancialsMainForm = ({
 
       {/* Row 3: Cost Center + Due Date */}
       <FormRow height={height} marginBottom={rowMargin}>
-        <CCol sm="2"><FieldLabel title={t('financials.costcenter')} /></CCol>
-        <CCol sm="4">
+        <CCol sm="2"><Label>{t('financials.costcenter')}</Label></CCol>
+        <CCol sm="5">
           <FormMasterfileXComboBox
             fieldName="costcenter"
             current={current}
@@ -156,8 +160,8 @@ export const FinancialsMainForm = ({
             fontSize={12}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('financials.line.duedate')} /></CCol>
-        <CCol sm="4">
+        <CCol sm="3" style={{ paddingLeft: 10 }}><Label>{t('financials.line.duedate')}</Label></CCol>
+        <CCol sm={2} className="d-flex gap-2 align-items-center">
           <DatePickerField
             fieldName="duedate"
             label={t('financials.line.duedate')}
@@ -175,8 +179,8 @@ export const FinancialsMainForm = ({
 
       {/* Row 4: Account + Period/Posted */}
       <FormRow height={height} marginBottom={rowMargin}>
-        <CCol sm="2"><FieldLabel title={t('financials.line.account')} /></CCol>
-        <CCol sm="4">
+        <CCol sm="2"><Label>{t('financials.line.account')}</Label></CCol>
+        <CCol sm="5">
           <FormMasterfileComboBox2
             current={current}
             setCurrent={setCurrent}
@@ -192,7 +196,7 @@ export const FinancialsMainForm = ({
             fontSize={12}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('transaction.period')} /></CCol>
+        <CCol sm="3" style={{ paddingLeft: 10 }}><Label>{t('transaction.period')}</Label></CCol>
         <CCol sm="1">
           <InputField
             fieldName="period"
@@ -200,7 +204,7 @@ export const FinancialsMainForm = ({
             setCurrent={setCurrent}
             value={current.period}
             disabled={true}
-            style={{ height: height - 3, width: 80, textAlign: 'left' }}
+            style={{ height: height - 3,  paddingLeft:3, width: '100%', textAlign: 'right' }}
           />
         </CCol>
         <CCol sm="1">
@@ -211,15 +215,15 @@ export const FinancialsMainForm = ({
             label=""
             disabled={true}
             checked={current.posted}
-            style={{ height: 20, paddingLeft: 10 }}
+            style={{ height: 20, paddingLeft:0, align:'right' }}
           />
         </CCol>
       </FormRow>
 
       {/* Row 5: OAccount + Amount */}
       <FormRow height={height} marginBottom={rowMargin}>
-        <CCol sm="2"><FieldLabel title={t('financials.line.oaccount')} /></CCol>
-        <CCol sm="4">
+        <CCol sm="2"><Label>{t('financials.line.oaccount')}</Label></CCol>
+        <CCol sm="5">
           <FormMasterfileComboBox2
             current={current}
             setCurrent={setCurrent}
@@ -235,8 +239,10 @@ export const FinancialsMainForm = ({
             fontSize={12}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('financials.line.amount')} /></CCol>
-        <CCol sm="4">
+        <CCol sm={4} className="d-flex gap-2 align-items-center">
+          <Label>{t('financials.line.amount')}</Label>
+        {/*<CCol sm="1" style={{ paddingLeft: 10 }}><FieldLabel title={t('financials.line.amount')} /></CCol>*/}
+        {/*<CCol sm="2">*/}
           <CurrencyInput
             value={currentLineFinancials?.amount}
             intlConfig={{ locale, currency }}
@@ -252,15 +258,15 @@ export const FinancialsMainForm = ({
               });
             }}
             disabled={current.posted}
-            style={currencyStyle}
+            style={{...currencyStyle, fontSize:12}}
           />
         </CCol>
       </FormRow>
 
       {/* Row 6: Text + Total - autoHeight for textarea */}
-      <FormRow autoHeight height={height} marginBottom={0}>
-        <CCol md="2"><FieldLabel title={t('transaction.text')} /></CCol>
-        <CCol xs="10" md="7">
+      <FormRow autoHeight height={height} marginBottom={0}  >
+        <CCol md="2"><Label>{t('transaction.text')}</Label></CCol>
+        <CCol sm="5" >
           <TextareaField
             fieldName="text"
             placeholder={t('transaction.text')}
@@ -276,11 +282,12 @@ export const FinancialsMainForm = ({
             }}
             current={currentLineFinancials}
             setCurrent={setCurrentLineFinancials}
-            style={{ width: '80%', minHeight: 60, fontSize: '0.875rem' }}
+            style={{ width: '100%', minHeight: 60, fontSize: '0.875rem' }}
           />
         </CCol>
-        <CCol sm="1" style={{ paddingLeft: 1 }}><FieldLabel title={t('common.total')} /></CCol>
-        <CCol sm="2">
+        <CCol sm={4} className="d-flex gap-2 align-items-center">
+          <Label bold>{t('common.total')}</Label>
+        {/*<CCol sm="2">*/}
           <CurrencyInput
             value={total}
             intlConfig={{ locale, currency }}
@@ -289,7 +296,7 @@ export const FinancialsMainForm = ({
             decimalsLimit={2}
             decimalScale={2}
             disabled={true}
-            style={totalStyle}
+            style={{...currencyStyle, fontSize:14, fontWeight:'bold'}}
           />
         </CCol>
       </FormRow>

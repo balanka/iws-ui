@@ -3,7 +3,7 @@ import { create } from 'zustand'
 import {
   IAccount, IApartment, IArticle, IAsset, IBankAccount, IBankStatement, ICompany,
   ICustomer,
-  IEmployee, IFinancials,
+  IEmployee, IFinancials, IFloor,
   IFmodule, ILineFinancials, ILineTransaction, ILoggingContext, IMasterfile, IMasterfile2, IPartner,
   IProfile, IRealEstate, IRoom, IStore,
   ISTORE_Return,
@@ -690,7 +690,19 @@ export const initApartment:IApartment[] = [
     modelid: 153
   },
 ]
-
+export const initFloor:IFloor[] = [
+  {
+    id: '155',
+    name: '',
+    description: '',
+    enterdate: new Date(),
+    postingdate: new Date(),
+    changedate: new Date(),
+    company: '',
+    modelid: 155,
+    apartments:[]
+  },
+]
 export const initRealEstate:IRealEstate[] = [
   {
     id: '154',
@@ -701,7 +713,8 @@ export const initRealEstate:IRealEstate[] = [
     changedate: new Date(),
     company: '',
     modelid: 154,
-    apartments:[]
+    apartments:[],
+    floors:[],
   },
 ]
 export const MASTERFILE = {
@@ -738,6 +751,7 @@ export const MASTERFILE = {
   masterfile: '/mf',
   apartment:'/apt',
   room: '/room',
+  floor: '/floor',
   realEstate: '/real',
   accountClass: '/class',
   accountGroup: '/group',
@@ -794,6 +808,7 @@ export const STORE = {
   ctx: MASTERFILE.masterfile,
   state: initStore,
   state3: '/store',
+  parent:formEnum.COSTCENTER,
   modelid: formEnum.STORE
 }
 export const ACCOUNT = {
@@ -810,6 +825,7 @@ export const COSTCENTER ={
   title: 'costcenter.title',
   ctx: MASTERFILE.masterfile,
   state: initCc,
+  parent:formEnum.ACCOUNT,
   state2: '',
   state3: `${MASTERFILE.masterfile}/${formEnum.COSTCENTER}`,
   modelid: formEnum.COSTCENTER,
@@ -819,6 +835,7 @@ const COMPANY = {
   name: 'Company',
   title: 'company.title',
   ctx: MASTERFILE.comp,
+  parent:-1,
   modelid: formEnum.COMPANY,
 }
 export const ASSET = {
@@ -828,6 +845,7 @@ export const ASSET = {
   ctx: MASTERFILE.asset,
   state: initAsset,
   state2: '',
+  parent:-1,
   modelid: formEnum.ASSET
 }
 export const BANK = {
@@ -836,6 +854,7 @@ export const BANK = {
   title: 'bank.title',
   ctx: MASTERFILE.masterfile,
   state: initBank,
+  parent:-1,
   modelid: formEnum.BANK,
 }
 export const CURRENCY = {
@@ -844,6 +863,7 @@ export const CURRENCY = {
   title: 'ccy.title',
   ctx: MASTERFILE.masterfile,
   state: initCurrency,
+  parent:-1,
   modelid: formEnum.CURRENCY,
 }
 export const QUANTITYUNIT = {
@@ -852,6 +872,7 @@ export const QUANTITYUNIT = {
   title: 'quantityUnit.title',
   ctx: MASTERFILE.masterfile,
   state: initQuantity,
+  parent:-1,
   modelid: formEnum.QUANTITYUNIT,
 }
 export const PARTNER = {
@@ -860,6 +881,7 @@ export const PARTNER = {
   title: 'partner.title',
   ctx: MASTERFILE.partner,
   state: initPartner,
+  parent:-1,
   modelid: formEnum.PARTNER,
 }
 export const SALARY_ITEM = {
@@ -878,6 +900,7 @@ export const MODULE = {
   ctx: MASTERFILE.module,
   state: initModule,
   state3: '/module/400',
+  parent:formEnum.MODULE,
   modelid: formEnum.MODULE,
 }
 export const ACCOUNT_CLASS = {
@@ -887,6 +910,7 @@ export const ACCOUNT_CLASS = {
   ctx: MASTERFILE.masterfile,
   state: initAccountClass,
   state3: `${MASTERFILE.masterfile}/${formEnum.ACCOUNT_CLASS}`,
+  parent:-1,
   modelid: formEnum.ACCOUNT_CLASS,
 }
 export const ACCOUNT_GROUP = {
@@ -897,6 +921,7 @@ export const ACCOUNT_GROUP = {
   state: initAccountGroup,
   state2: '',
   state3:  `${MASTERFILE.masterfile}/${formEnum.ACCOUNT_GROUP}`,
+  parent:formEnum.ACCOUNT_CLASS,
   modelid: formEnum.ACCOUNT_GROUP
 }
 export const ARTICLE_GROUP = {
@@ -907,6 +932,7 @@ export const ARTICLE_GROUP = {
   state: initArticleGroup,
   state2: '',
   state3: MASTERFILE.masterfile,
+  parent:formEnum.ARTICLE_GROUP,
   modelid: formEnum.ARTICLE_GROUP,
 }
 export const CLOSE_ACCOUNT_PERIOD = {
@@ -940,6 +966,7 @@ export const VAT = {
   ctx: MASTERFILE.vat,
   state: initVat,
   state3: MASTERFILE.vat,
+  parent:-1,
   modelid: formEnum.VAT,
 }
 export const PAYROLL_TAX_RANGE = {
@@ -1045,6 +1072,7 @@ export const FMODULE = {
   state: initfModule,
   state2: `${MASTERFILE.acc}/${formEnum.ACCOUNT}`,
   state3: `${MASTERFILE.module}/${formEnum.MODULE}`,
+  parent:formEnum.MODULE,
   modelid: formEnum.FMODULE,
 }
 export const ROOM ={
@@ -1055,6 +1083,7 @@ export const ROOM ={
   state: initRoom,
   state2: '',
   state3: MASTERFILE.room,
+  parent:formEnum.APARTMENT,
   modelid: formEnum.ROOM,
 }
 export const APARTMENT ={
@@ -1065,7 +1094,19 @@ export const APARTMENT ={
   state: initApartment,
   state2: '',
   state3: MASTERFILE.apartment,
+  parent:formEnum.FLOOR,
   modelid: formEnum.APARTMENT,
+}
+export const FLOOR ={
+  id: '156',
+  name: 'Floor',
+  title: 'floor.title',
+  ctx: MASTERFILE.floor,
+  state: initFloor,
+  state2: '',
+  state3: MASTERFILE.floor,
+  parent:formEnum.REALESTATE,
+  modelid: formEnum.FLOOR,
 }
 export const REAL_ESTATE ={
   id: '154',
@@ -1075,6 +1116,7 @@ export const REAL_ESTATE ={
   state: initRealEstate,
   state2: '',
   state3: MASTERFILE.realEstate,
+  parent:-1,
   modelid: formEnum.REALESTATE,
 }
 export const LOGIN_MENU = (t: (arg0: string) => any) => [LOGIN(t)]
@@ -1108,6 +1150,7 @@ export const MENU = (t: { (arg0: string): any; (arg0: string): any; }) =>
     [MASTERFILE.room, ROOM],
     [MASTERFILE.apartment, APARTMENT],
     [MASTERFILE.realEstate, REAL_ESTATE],
+    [MASTERFILE.floor, FLOOR],
     [MASTERFILE.login, LOGIN(t)],
     ['/dashboard', LOGIN(t)],
     [MASTERFILE.comp, COMPANY],
