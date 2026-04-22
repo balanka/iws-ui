@@ -1,6 +1,6 @@
 import React from 'react'
 import { CRow, CCol } from '@coreui/react'
-import { InputField, DatePickerField } from './FormsProps'
+import { InputField, DatePickerField } from './common'
 import { UserFormProps } from '../Props'
 import { STYLES } from './FormsProps'
 

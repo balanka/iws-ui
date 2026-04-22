@@ -1,6 +1,7 @@
 import { JSX } from 'react';
 import { CCol, CInputGroup } from '@coreui/react';
-import { DatePickerField, InputField, FieldLabel, styles } from './FormsProps';
+import { DatePickerField, InputField, FieldLabel } from './common';
+import { styles } from './FormsProps';
 import { MasterfileBaseProps } from '../Props';
 import { IMasterfile } from '../Models';
 
@@ -28,4 +29,4 @@ export const MasterfileMainBase0Form = ({
     </div>
   )
 }
-export default MasterfileMainBase0Form;
+//export default MasterfileMainBase0Form;

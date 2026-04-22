@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { CCol, CInputGroup } from '@coreui/react';
-import { FormMasterfileXComboBox } from './common';
-import { DatePickerField, InputField, TextareaField, FieldLabel, styles } from './FormsProps';
+import { FormMasterfileXComboBox, DatePickerField, InputField, TextareaField, FieldLabel } from './common';
+import { styles } from './FormsProps';
 import { initAcc } from './Menu';
 import {IAccount, IVat} from "../Models.ts";
 import {TFunction} from "i18next";

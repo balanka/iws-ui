@@ -9,19 +9,18 @@ export const getEnvVariable = (key:any, defaultValue = '') => {
   return window._env_?.[key] ?? defaultValue;
 }
 
+export const getFiltered = <T extends { id: string | number | bigint }>(
+  data: T[],
+  filter: string[] = []
+): T[] => {
+  if (!filter?.length) return data;
 
-export const getFiltered = <T extends { id: string }>(data: T[], filter: string[] = []):T[] =>
-  filter.length ? data.filter(item => filter.includes(item.id)) : data
+  return data.filter(item => {
+    const idString = String(item.id);
+    return filter.some(filterValue => idString.startsWith(filterValue));
+  });
+};
 
-// export const getFiltered =(accounts:IMasterfile[], filter:string[]):IMasterfile[]=>{
-//   console.log('filter', filter)
-//   const doFfilter= (id:string, filter:string)=>id.startsWith(filter)
-//   const result:IMasterfile[]= accounts.filter(m => {
-//     return filter.map((f) => doFfilter(m.id.toString(), f)).reduce((a, b) => a || b, false);
-//   })
-//   //console.log('result', result)
-//   return filter.length>0?uniq(result):accounts
-// }
 export const AgGridCheckbox =
     (props: { value: { toString: () => string };
         setValue: (arg0: boolean) => void })=> {
@@ -61,7 +60,7 @@ export const transactionToOption = (m: ITransaction|IFinancials) => {
 }
 //export const toOption = (m: {id:string|bigint, name:string}):{ value:string|bigint, label:string } => {
 export const toOption = (m: {id:string|bigint, name:string}) => {
-    return {value:m.id, label:`${m.id} ${m.name}`}
+    return {value:m?.id, label:`${m?.id} ${m?.name}`}
 }
 
 export function Show <T>({ when, fallback = null, children }:ShowProps<T>) {

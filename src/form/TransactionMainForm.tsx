@@ -2,8 +2,8 @@ import React from 'react'
 import { CRow, CCol } from '@coreui/react'
 import ComboBox from "./ComboBox.tsx"
 import { MasterfileComboBox } from './common'
-import { BooleanField } from './common'
-import {DatePickerField, InputField, styles, TextareaField} from "./FormsProps.tsx"
+import { BooleanField, DatePickerField, InputField, TextareaField } from './common'
+import { styles} from "./FormsProps.tsx"
 import { sortById } from "../utils/Utils.ts"
 import { toOption, transactionToOption } from "../utils/FormUtils.tsx"
 import { initCust, initStore } from "./Menu.tsx"

@@ -1,10 +1,10 @@
-import { JSX } from 'react';
-import { MasterfileProps } from '../Props';
-import { IPartner } from '../Models';
-import { MasterfileMainBase0Form } from './MasterfileMainBase0Form';
-import { AddressForm } from './AddressForm';
-import {styles} from "./FormsProps.tsx";
-import { CInputGroup } from "@coreui/react";
+import { JSX } from 'react'
+import { MasterfileProps } from '../Props'
+import { IPartner } from '../Models'
+import { AddressForm } from './AddressForm'
+import {styles} from './FormsProps'
+import { CInputGroup } from "@coreui/react"
+import MasterfileFormWithout from "./MasterfileFormWithout.tsx"
 
 export const PartnerMainForm = ({
                                   collapse = true,
@@ -14,15 +14,15 @@ export const PartnerMainForm = ({
                                   t,
                                   height = 28
                                 }: MasterfileProps<IPartner> & { collapse?: boolean; height?: number }): JSX.Element | null => (
+
   !collapse ? null : (
     <CInputGroup  style={{...styles.outer , display: !collapse?'none':''}} >
-    <MasterfileMainBase0Form
+    <MasterfileFormWithout
       current={current}
       setCurrent={setCurrent}
       disable={disable}
       t={t}
-      height={height}
-    />
+      height={height} collapse={false} accData={[]} propertyName={""} fieldName={""}    />
     <AddressForm
       current={current}
       setCurrent={setCurrent}

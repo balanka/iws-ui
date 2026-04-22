@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box } from "@mui/material"
 
 // 6-Column Row Component
 export const FormRow6Col = ({

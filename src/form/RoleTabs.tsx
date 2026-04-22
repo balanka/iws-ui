@@ -1,4 +1,3 @@
-import {MasterfileMainBaseForm} from './MasterfileMainBaseForm'
 import IWSTabs from './IWSTabs.tsx'
 import {RoleProps} from '../Props.ts'
 import {RightGrid} from '../IWSGrid.tsx'
@@ -9,6 +8,7 @@ import {
 } from "../ColumnsDefs.ts";
 
 import {styles} from "./BasicTreeTableProps.tsx";
+import MasterfileFormWithout from "./MasterfileFormWithout.tsx";
 
 const RoleTabs = ({ collapse, current, setCurrent, disable, t, height }:RoleProps) => {
 
@@ -21,8 +21,9 @@ const RoleTabs = ({ collapse, current, setCurrent, disable, t, height }:RoleProp
   }
 
   const getGeneralForm = () =>
-    <MasterfileMainBaseForm collapse ={collapse} current={current} setCurrent ={setCurrent}
-                            disable ={disable} t ={t}  height ={height}/>
+    <MasterfileFormWithout collapse={collapse}
+                           current={current} setCurrent={setCurrent}
+                           disable={disable} t={t} height={height} accData={[]} propertyName={""} fieldName={""}/>
 
   const getRightTable = () => (
         <div

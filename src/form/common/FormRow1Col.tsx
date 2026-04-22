@@ -1,7 +1,6 @@
-import React, {JSX} from 'react';
-
-import {CCol, CInputGroup} from "@coreui/react";
-import {FieldLabel, } from "../FormsProps.tsx";
+import React, {JSX} from 'react'
+import {CCol, CInputGroup} from '@coreui/react'
+import {FieldLabel, } from '../common'
 
 interface FormRow1ColProps {
   readonly label: string;

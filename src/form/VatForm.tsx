@@ -21,7 +21,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 const VatForm = () => {
   const [{ profile, selected, t,  company, module_ }] = useForm()
   const { token} = profile
-
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const current_ :IVat = initVat[0]
   const [, setIwsState] = useState(iwsStore.initialState)

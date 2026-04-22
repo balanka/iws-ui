@@ -56,31 +56,33 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
   const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
   const [rowData, setRowData] = useState<ITransaction[]>([])
   const  [{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
-     , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setAccData, setFmodule, setModel
+    , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setModel
+     //, setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setAccData, setFmodule1, setModel
      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching, setIsFetching }] =
      useTransactionForm(current_??initLtr [0], initialLine, currentLine, setCurrentLine, rowData, setRowData)
 
   const [iwsState, setIwsState] = useState(iwsStore.initialState)
    const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
-   const acc_modelid = formEnum.ACCOUNT
+   //const acc_modelid = formEnum.ACCOUNT
    const art_modelid = formEnum.ARTICLE
    const vat_modelid = formEnum.VAT
    const store_modelid = formEnum.STORE
    const sup_modelid = formEnum.SUPPLIER
    const cust_modelid = formEnum.CUSTOMER
-   const fmodule_modelid = formEnum.FMODULE
+   //const fmodule_modelid = formEnum.FMODULE
    const art_ctx = `${MASTERFILE.article}/${art_modelid}/${company}`
-   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
+   //const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
    const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
    const store_ctx = `${MASTERFILE.store}/${store_modelid}/${company}`
    const sup_ctx = `${MASTERFILE.sup}/${sup_modelid}/${company}`
    const cust_ctx = `${MASTERFILE.cust}/${cust_modelid}/${company}`
-   const fmodule_ctx = `${MASTERFILE.fmodule}/${fmodule_modelid}/${company}`
+   //const fmodule_ctx = `${MASTERFILE.fmodule}/${fmodule_modelid}/${company}`
    const [storeData, setStoreData] = useState<IStore[]>([])
    const [articleData, setArticleData] = useState<IArticle[]>([])
    const [vatData, setVatData] = useState<IVat[]>([])
    const [, setCustomerData] = useState<ICustomer[]>([])
    const [, setSupplier] = useState<ISupplier[]>([])
+    //const [accData, setAccData] = useState<IAccount[]>([])
    const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
    const [partnerId, setPartnerId] = useState<number>(-1)
    const [accFilter, setAccFilter] = useState<string[]>([])
@@ -95,7 +97,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      Get(vat_ctx, token, vat_modelid, setVatData)
      Get(cust_ctx, token, cust_modelid, setCustomerData)
      Get(sup_ctx, token, sup_modelid, setSupplier)
-     setCurrent(current_)
+     //Get(acc_ctx, token, acc_modelid, setAccData)
+     //setCurrent(current_)
      setRowData([])
    }, [selected])
 
@@ -197,8 +200,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    }
    const submitQuery = (ctx:string, partnerCtx:string, partnerModelid:number) => {
      setIsFetching(true)
-     !iwsState.get(fmodule_modelid)&&Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
-     !iwsState.get(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData)
+     //!iwsState.get(fmodule_modelid)&&Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
+     //!iwsState.get(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData)
      !iwsState.get(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData)
      !iwsState.get(store_modelid)&&Get(store_ctx, token, store_modelid, setStoreData)
      !iwsState.get(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData)

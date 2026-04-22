@@ -15,7 +15,7 @@ import {initfModule, MASTERFILE} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {
-  IAccount, IFinancials,
+  IFinancials,
   IFmodule,
   IModule,
   IWSTransaction,
@@ -29,22 +29,22 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 const UseTransactionForm = <T extends IWSTransaction<L>,
               L extends ILine>(current_ :T, initialLine :L, currentLine:L, setCurrentLine:Dispatch<SetStateAction<L>>
            , rowData:T[], setRowData:Dispatch<SetStateAction<T[]>>): [UseTransactionFormResult<T, ILine>]  => {
-   const [{ profile, menu, selected, t, language, handleLanguageChange, modelid, module_}] = useForm()
+   const [{ profile,  selected, language, handleLanguageChange, modelid, module_}] = useForm()
    const { token, company, currency } = profile
    let templateFileName =''
   const [, setDisable] = useState(true)
   const [current, setCurrent] = useState<T>(current_)
   const [, setIwsState] = useState(iwsStore.initialState)
-  const acc_modelid = formEnum.ACCOUNT
+  //const acc_modelid = formEnum.ACCOUNT
   const module_modelid = formEnum.MODULE
   const fmodule_modelid = formEnum.FMODULE
   const modifyUrl = selected
   let ctx = `${module_.ctx}/${modelid}/${company}`
-  const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
+ //const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
   const fmodule_ctx = `${MASTERFILE.fmodule}/${fmodule_modelid}/${company}`
   const [rows, ] = useState<bigint[]>([])
-   const [accData, setAccData] = useState<IAccount[]>([])
+  // const [accData, setAccData] = useState<IAccount[]>([])
   const [, setModule] = useState<IModule[]>([])
   const [copyFromTransaction, setCopyFromTransaction] = useState<T[]>([])
   const [fmodule, setFmodule] = useState<IFmodule[]>([])
@@ -53,21 +53,21 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   const [gridApi,   setGridApi] = useState<GridApi>()
   const zIndex:number = 99999
   const EXPORT_FILE_EXTENSION= "xlsx"
-  const handleKeyPress = useCallback((event:any) => {
-   // let isMetaKey =  event.metaKey
-    console.log('event.keyCode', event.keyCode)
-    console.log('event.functionKey', event.functionKey)
-    switch (event.keyCode) {
-      case 112:
-        submitEdit(event); return
-      case 113:
-        onNewLine();return
-      case 114:
-        reload();return
-      default:
-        return
-    }
-  }, [])
+  // const handleKeyPress = useCallback((event:any) => {
+  //  // let isMetaKey =  event.metaKey
+  //   console.log('event.keyCode', event.keyCode)
+  //   console.log('event.functionKey', event.functionKey)
+  //   switch (event.keyCode) {
+  //     case 112:
+  //       submitEdit(event); return
+  //     case 113:
+  //       onNewLine();return
+  //     case 114:
+  //       reload();return
+  //     default:
+  //       return
+  //   }
+  // }, [])
 
   let init = useRef(false)
   useEffect(() => {
@@ -75,16 +75,16 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
         iwsStore.subscribe(setIwsState)
         init.current = true
          Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
-         Get(acc_ctx, token, acc_modelid, setAccData)
+         //Get(acc_ctx, token, acc_modelid, setAccData)
          Get(module_ctx, token, fmodule_modelid, setModule)
         // attach the event listener
-          document.onkeydown = handleKeyPress
-         document.addEventListener('onKeyDown', handleKeyPress)
+        //   document.onkeydown = handleKeyPress
+        //  document.addEventListener('onKeyDown', handleKeyPress)
     }
     // remove the event listener
-    return () => {
-      document.removeEventListener('onKeyDown', handleKeyPress)
-    }
+    // return () => {
+    //   document.removeEventListener('onKeyDown', handleKeyPress)
+    // }
   }, [current])
 
      function buildPostCall (rows: BigInt[], current:T, modifyUrl: string, token: string, setCurrent:Dispatch<SetStateAction<T>>) {
@@ -109,7 +109,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
          ( line:L, setCurrent:Dispatch<SetStateAction<T>>) => {
              const dx: T = {...current}
            console.log('Line', line)
-             const  newLine:L = {...line, id: BigInt(-1), transid: current?.id, company:company}
+             const  newLine:L = {...line, id: BigInt(-1), transid: current?.id, company:-company}
            console.log('newLine', newLine)
            if(dx.hasOwnProperty('lines'))
              dx.lines.push(newLine)
@@ -207,10 +207,18 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
     return `${filename}.${EXPORT_FILE_EXTENSION}`
   }
    const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current?.lines??[] }
+   //{  language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction
+  //     , setCopyFromTransaction, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex
+  //     , handleLanguageChange, setModel, saveProps, modelid, isFetching, setIsFetching }
 
-   return [{ profile, menu, selected, t, language, accData, setAccData, fmodule, setFmodule
-     , current_, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction, setCopyFromTransaction
-     , handleLanguageChange, setModel, handleKeyPress, onNewLine, onRowSelected, onDeleteLine, submitCancel, submitPost
-     , copyCall, setGridApi, templateName, zIndex, saveProps, modelid, isFetching, setIsFetching}]
+  //{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
+  //      , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setAccData, setFmodule, setModel
+  //      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching, setIsFetching }
+
+   return [{ language, fmodule, setFmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction, setCopyFromTransaction
+     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex,  handleLanguageChange, setModel
+     , saveProps, modelid, isFetching, setIsFetching }]
+    // , accData, setAccData, setFmodule
+
 }
 export default UseTransactionForm

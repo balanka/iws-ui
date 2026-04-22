@@ -1,7 +1,7 @@
 import React from 'react'
 import { CRow, CCol } from '@coreui/react'
 import { MasterfileMainBase0Form } from './MasterfileMainBase0Form'
-import { FieldLabel, TextareaField, DatePickerField } from './FormsProps'
+import { FieldLabel, TextareaField, DatePickerField } from './common'
 import { MasterfileProps } from '../Props'
 import { IMasterfile } from '../Models'
 import { styles } from './FormsProps'
@@ -24,4 +24,4 @@ export const MasterfileMainBaseForm = ({
   </div>
 )
 
-export default MasterfileMainBaseForm
+//export default MasterfileMainBaseForm

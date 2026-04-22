@@ -10,23 +10,27 @@ import UserTabs from "./UserTabs.tsx";
 import useForm from './UseForm.ts'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
 import {styles} from "./BasicTreeTableProps.tsx";
+import React from "react";
+import Login from "./Login.tsx";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const UserForm = () => {
    const [{ t,  state, module_, selected, visible}] = useForm()
+   console.log('module_', module_)
+   if (module_ === '11111' || module_ === 11111) return <Login/>
    const current_: IUser =  module_.state[0]
    const minHeight = 400
    const maxHeight = 700
    const colDef:ColDef[] = userColumnDefs(t)
    const [{header, body, disable, table, current, setCurrent}] = UseMasterfileForm(current_, colDef, selected)
    const mainForm = UserTabs({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t, height:33})
-
+   const safeBody = React.isValidElement(body) ? body : null;
    return (
      <>
        {header}
-         {body??mainForm}
+         {safeBody??mainForm}
        <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
          {table}
        </div>

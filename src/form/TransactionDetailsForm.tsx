@@ -1,7 +1,7 @@
 import React from 'react'
 import { CRow, CCol, CContainer } from '@coreui/react'
 import ComboBox from './ComboBox'
-import { InputField, TextareaField, DatePickerField } from './FormsProps'
+import { InputField, TextareaField, DatePickerField } from './common'
 import { ILineTransaction, IArticle } from '../Models'
 import { sortById } from '../utils/Utils'
 import { toOption } from '../utils/FormUtils'

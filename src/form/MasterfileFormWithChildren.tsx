@@ -1,7 +1,7 @@
 import { JSX, ReactNode } from 'react';
 import { CCol, CInputGroup } from '@coreui/react';
-import { FormMasterfileXComboBox } from './common';
-import { DatePickerField, InputField, TextareaField, FieldLabel, styles } from './FormsProps';
+import { DatePickerField, InputField, TextareaField, FieldLabel, FormMasterfileXComboBox } from './common';
+import { styles } from './FormsProps';
 import { MasterfileProps2 } from '../Props';
 import { IMasterfile2, IStore } from '../Models';
 import { initAcc } from './Menu';

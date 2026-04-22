@@ -1,6 +1,5 @@
-import React, {JSX} from 'react';
-import Box from '@mui/material/Box';
-
+import React, {JSX} from 'react'
+import Box from '@mui/material/Box'
 type Alignment = 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline';
 
 interface FormRow2ColProps {
