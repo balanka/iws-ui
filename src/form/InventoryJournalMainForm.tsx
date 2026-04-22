@@ -6,7 +6,7 @@ import ComboBox from './ComboBox.tsx'
 import { initArticle, initStore } from './Menu.tsx'
 import { sortById } from '../utils/Utils.ts'
 import { toOption } from '../utils/FormUtils.tsx'
-import { FromPeriod } from './FormsProps.tsx'
+import { FromPeriod } from './common'
 
 
 export const InventoryJournalMainForm = ({
@@ -55,15 +55,14 @@ export const InventoryJournalMainForm = ({
         <FromPeriod
           name="fromPeriod" label="common.from"
           current={current} value={current.fromPeriod} setCurrent={setCurrent} t={t}
-          style={{ height, width: '100%' }}
-        />
+          style={{height, width: '100%'}} labelStyle={undefined}        />
       </CCol>
 
       <CCol xs={6} sm={3}>
         <FromPeriod
           name="toPeriod" label="common.to"
           current={current} value={current.toPeriod} setCurrent={setCurrent} t={t}
-          style={{height, width: '100%'}}/>
+          style={{height, width: '100%'}} labelStyle={undefined}/>
       </CCol>
     </CRow>
   )

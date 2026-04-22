@@ -1,9 +1,9 @@
-import { JSX } from 'react';
-import { CCol, CInputGroup } from '@coreui/react';
-import { FormMasterfileXComboBox } from './common';
-import { DatePickerField, InputField, TextareaField, FieldLabel, styles } from './FormsProps';
-import { ArticleGeneralFormProps } from '../Props';
-import { initArticleGroup, initCurrency, initQuantity } from './Menu';
+import { JSX } from 'react'
+import { CCol, CInputGroup } from '@coreui/react'
+import { DatePickerField, InputField, TextareaField, FieldLabel, FormMasterfileXComboBox } from './common'
+import {  styles } from './FormsProps.tsx'
+import { ArticleGeneralFormProps } from '../Props'
+import { initArticleGroup, initCurrency, initQuantity } from './Menu'
 
 export const ArticleGeneralForm = ({
                                      collapse = true,

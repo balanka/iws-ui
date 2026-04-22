@@ -2,7 +2,7 @@ import React from 'react';
 import { CRow, CCol, CInputGroup, CFormLabel } from '@coreui/react'
 import { TFunction } from 'i18next'
 import ComboBox from './ComboBox.tsx'
-import { FromPeriod } from './FormsProps.tsx'
+import { FromPeriod } from './common'
 import { JournalProps } from '../Props'
 import { IAccount } from "../Models.ts"
 import { sortById } from '../utils/Utils.ts'
@@ -47,8 +47,7 @@ export const JournalMainForm = ({
             value={current.fromPeriod}
             setCurrent={setCurrent}
             t={t}
-            style={{ height, width: '100%' }}
-          />
+            style={{height, width: '100%'}} labelStyle={undefined}          />
         </CCol>
 
         {/* To Period - 3 columns */}
@@ -60,8 +59,7 @@ export const JournalMainForm = ({
             value={current.toPeriod}
             setCurrent={setCurrent}
             t={t}
-            style={{ height, width: '100%' }}
-          />
+            style={{height, width: '100%'}} labelStyle={undefined}          />
         </CCol>
       </CRow>
     </CInputGroup>

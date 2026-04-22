@@ -1,7 +1,7 @@
 import React from 'react'
 import { CRow, CCol, CContainer } from '@coreui/react'
 import CurrencyInput from 'react-currency-input-field'
-import { DatePickerField, InputField, TextareaField } from "./FormsProps.tsx"
+import { DatePickerField, InputField, TextareaField } from './common'
 import { BankStatementProps } from "../Props.ts"
 
 const FormRow = ({ children }: any) => <CRow className="g-2 align-items-center mb-2">{children}</CRow>

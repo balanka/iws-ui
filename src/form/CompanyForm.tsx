@@ -1,4 +1,4 @@
-import  {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, GridReadyEvent, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -14,11 +14,13 @@ import {Get2} from "./CrudController.ts";
 import {styles} from './BasicTreeTableProps.tsx'
 import {UseCustomerForm} from "./UseCustomerForm.tsx";
 import {CInputGroup} from "@coreui/react";
+import Login from "./Login.tsx";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const CompanyForm = () => {
-  const [{ profile, selected, t, modelid }] = useForm()
+  const [{ profile, selected, t, module_, modelid }] = useForm()
   const { token, locale } = profile
+  if (module_ === '11111' || module_ === 11111) return <Login/>
   const [, setIwsState] = useState(iwsStore.initialState)
   const current_ : ICompany= initComp[0]
   const height = 25
@@ -44,6 +46,7 @@ const CompanyForm = () => {
     , onGridReady:onGridReady
     // @ts-ignore
     ,  stylesx:{...styles, height:state.collapse?minHeight:maxHeight, padding: 5, paddingLeft: 10, paddingBottom: 5}})
+  const safeBody = React.isValidElement(body) ? body : null;
 
   return (
     <>
@@ -51,7 +54,7 @@ const CompanyForm = () => {
       <CInputGroup
         //@ts-ignore
         style={{...styles.outer , display: !state.collapse?'none':''}} >
-        {body?body:mainForm}
+        {safeBody??mainForm}
       </CInputGroup>
       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
         {table}

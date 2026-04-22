@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -16,16 +16,16 @@ import useForm from './UseForm.ts'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
 import {styles} from "./BasicTreeTableProps.tsx";
 import {CInputGroup} from "@coreui/react";
+import Login from "./Login.tsx";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
  const FModuleForm = () => {
-     const [{ profile, menu, selected, t,  company}]  = useForm()
+     const [{ profile,  t, module_, company}]  = useForm()
      const {token} = profile
-     let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
+     if (module_ === '11111' || module_ === 11111) return <Login/>
+    // let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
      const parent_ctx = `${module_?.state3}/${company}`
-     module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-
      const acc_ctx = `${module_?.state2}/${company}`
      const current_: IFmodule =  module_.state[0]
      const [, setIwsState] = useState(iwsStore.initialState)
@@ -47,13 +47,14 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          document.onkeydown = handleKeyPress
          document.addEventListener('onKeyDown', handleKeyPress)
      }, [current_])
+   const safeBody = React.isValidElement(body) ? body : null;
    return (
      <>
        {header}
        <CInputGroup
          //@ts-ignore
          style={{...styles.outer, display: !state.collapse?'none':'', width:"100%"}} >
-         {body?body():mainForm}
+         {safeBody ? safeBody :mainForm}
        </CInputGroup>
        <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, width:"100%", display:visible?'':'none'}}>
          {table}

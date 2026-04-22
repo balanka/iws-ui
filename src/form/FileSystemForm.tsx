@@ -1,6 +1,6 @@
 import React from 'react'
 import { CRow, CCol, CContainer } from '@coreui/react'
-import { InputField } from './FormsProps'
+import { InputField } from './common'
 import { TFunction } from 'i18next'
 
 interface FileSystemFormProps {

@@ -134,13 +134,13 @@ export const masterfileColumnDefs=  (t: (arg0: string) => any): ColDef[]=>[
     minWidth: 60,
     filter: "agTextColumnFilter",
   },
-  {
-    field: "modelid",
-    headerName: t('common.modelid'),
-    cellStyle: {textAlign: 'right'},
-    minWidth: 3,
-    filter: "agNumberColumnFilter"
-  },
+  // {
+  //   field: "modelid",
+  //   headerName: t('common.modelid'),
+  //   cellStyle: {textAlign: 'right'},
+  //   minWidth: 3,
+  //   filter: "agNumberColumnFilter"
+  // },
 ]
 
 export const PartnerColumnDefs=  (t: (arg0: string) => any):ColDef[] =>[

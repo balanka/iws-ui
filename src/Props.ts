@@ -177,7 +177,7 @@ export interface AccountMainProps {
 }
 export interface IAddressProps {
   current:IAddress, setCurrent:(arg:IAddress)=>void, disable:boolean, t:TFunction<'transation', undefined>, height:number }
-export interface MasterfileProps2<A extends IMasterfile2|IStore>{
+export interface MasterfileProps2<A extends IMasterfile|IMasterfile2|IStore>{
     collapse:boolean,
     current: A,
     setCurrent: (arg: any) => void,
@@ -467,29 +467,24 @@ export interface UseCustomerFormResult<T extends IBusinespartner> {
   , setGridApi:Dispatch<SetStateAction<GridApi<any>|undefined>>
 }
 
+//language, fmodule, setFmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction, setCopyFromTransaction
+//      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex,  handleLanguageChange, setModel
+//      , saveProps, modelid, isFetching, setIsFetching
 export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends  IWSLine> {
-  profile: IProfile
-  , menu: Map<any, any>
-  , selected: string
-  , t:TFunction<'translation', undefined>
-  , language:string
-  , accData?:IAccount[]
-  , setAccData:Dispatch<SetStateAction<IAccount[]>>
+    language:string
+  //, accData?:IAccount[]
+  //, setAccData:Dispatch<SetStateAction<IAccount[]>>
   , fmodule:IFmodule[]
   , setFmodule:Dispatch<SetStateAction<IFmodule[]>>
-  , current_ :T
   , current:T
   , setCurrent:Dispatch<SetStateAction<T>>
   , initAdd:()=>void
   , reload:()=>void
   , submitEdit: (event: any) => void
+  , onRowSelected: (event: RowSelectedEvent) => void
+  , onNewLine:()=>void
   , copyFromTransaction:T[]
   , setCopyFromTransaction:Dispatch<SetStateAction<T[]>>
-  , handleLanguageChange:(event:any) =>void
-  , setModel:Dispatch<SetStateAction<number>>
-  , handleKeyPress:(event:any)=>void
-  , onNewLine:()=>void
-  , onRowSelected: (event: RowSelectedEvent) => void
   , onDeleteLine:(arg:any) =>void
   , submitCancel:(event:any) =>void
   , submitPost:(event:any)=>void
@@ -497,6 +492,8 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , setGridApi:Dispatch<SetStateAction<GridApi<any>|undefined>>
   , templateName:()=>string
   , zIndex:number
+  , handleLanguageChange:(event:any) =>void
+  , setModel:Dispatch<SetStateAction<number>>
   , saveProps:SaveProps
   , modelid:number
   , isFetching:boolean

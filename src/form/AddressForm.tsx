@@ -1,7 +1,8 @@
-import { JSX } from 'react';
-import { CCol, CInputGroup } from '@coreui/react';
-import { InputField, FieldLabel, styles } from './FormsProps';
-import {AddressProps} from "../Props.ts";
+import { JSX } from 'react'
+import { CCol, CInputGroup } from '@coreui/react'
+import { InputField, FieldLabel } from './common'
+import { styles } from './FormsProps'
+import {AddressProps} from '../Props'
 
 export const AddressForm = ({
                               current, setCurrent, t, disable, height = 28

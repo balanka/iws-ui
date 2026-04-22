@@ -126,7 +126,8 @@
     "runAll": "Exécuter tous",
     "permission": "Permission",
     "copyFrom": "Copier de",
-    "image_QR_code": "Image/QR Code"
+    "image_QR_code": "Image/QR Code",
+    "export": "Exporter"
   },
   "address": {
     "street"      : "Rue",
@@ -358,8 +359,8 @@
     "transdate":   "Date pièce",
     "store": "Magasin",
     "account":   "Client/Fourn.",
-    "text" :       "Texte",
-    "footText":     "Note bas de page",
+    "text" :       "Entête",
+    "footText":     "Bas de page",
     "file_content":  "Contenu",
     "posted":     "Validée",
     "line": {

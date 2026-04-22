@@ -1,8 +1,9 @@
 // CustomerGeneralForm.tsx - Super Compact
 import { JSX } from 'react';
-import { CCol, CInputGroup } from '@coreui/react';
-import { DatePickerField, InputField, TextareaField, FieldLabel, styles } from './FormsProps';
-import { CustomerGeneralFormProps } from '../Props';
+import { CCol, CInputGroup } from '@coreui/react'
+import { DatePickerField, InputField, TextareaField, FieldLabel } from './common'
+import { styles } from './FormsProps'
+import { CustomerGeneralFormProps } from '../Props'
 
 export const CustomerGeneralForm = ({
                                       collapse = true,

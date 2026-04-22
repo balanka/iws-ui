@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { CCol, CInputGroup } from '@coreui/react';
-import { FormMasterfileXComboBox } from './common';
-import { FieldLabel, styles } from './FormsProps';
+import { FieldLabel, FormMasterfileXComboBox } from './common';
+import { styles } from './FormsProps';
 import { ArticleAcccountProps } from '../Props';
 import { initAcc, initVat } from './Menu';
 

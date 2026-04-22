@@ -1,4 +1,4 @@
-import  {useEffect, useState} from 'react'
+import { useEffect, useState} from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -41,8 +41,8 @@ const FinancialsForm = () => {
   const dispatch = useDispatch()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   let title_ = `${company} /${t(module_.title)}`
-  const current_: IFinancials = initFtr [0]
-  const initialLine:ILineFinancials = {...initLineFinancials, currency:currency??''}
+  const current_: IFinancials = {...initFtr [0], company:company}
+  const initialLine:ILineFinancials = {...initLineFinancials, currency:currency??'', company:`-${company}`}
   const [currentLine, setCurrentLine] = useState<ILineFinancials>(initialLine)
   const [rowData, setRowData] = useState<IFinancials[]>([])
   const  [{  language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction
@@ -95,6 +95,7 @@ const FinancialsForm = () => {
   }, [selected])
 
 
+  console.log('AccData>>>>>>', accData)
   const submitQuery = (ctx:string, event?:any) => {
     event?.preventDefault()
     setIsFetching(true)
@@ -151,7 +152,7 @@ const FinancialsForm = () => {
   const maxHeight =650
   const minPadding=0
   const maxPadding=40
-  const height = 22
+  const height = 35
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   const buildTotal =(current:ITransaction|IFinancials) => {
     //@ts-ignore
@@ -199,7 +200,7 @@ const FinancialsForm = () => {
       t={t}
       //zIndex={zIndex-1}
     />
-    <div  style={{borderRadius: 5, boxShadow: '0 20px 50px #BBF', padding: 1}} >
+    <div  style={{borderRadius: 5, height:700, boxShadow: '0 20px 50px #BBF', padding: 1}} >
       <FinancialsMainForm collapse ={state.collapse}
                           current={current??current_}
                           setCurrent={setCurrent}

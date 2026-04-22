@@ -1,15 +1,15 @@
 import { JSX } from 'react';
 import { CCol, CInputGroup } from '@coreui/react';
-import { FormMasterfileXComboBox } from './common';
-import { DatePickerField, InputField, TextareaField, FieldLabel, styles } from './FormsProps';
+import { DatePickerField, InputField, TextareaField, FieldLabel, FormMasterfileXComboBox } from './common';
+import {  styles } from './FormsProps';
 import { MasterfileProps2 } from '../Props';
-import { IMasterfile2, IStore } from '../Models';
+import {IMasterfile, IMasterfile2, IStore} from '../Models';
 import { initAcc } from './Menu';
 
 
 export const MasterfileFormWithout = ({
                                         current, setCurrent, accData, t, disable, height = 28, fieldName, propertyName
-                                      }: MasterfileProps2<IMasterfile2 | IStore> &
+                                      }: MasterfileProps2<IMasterfile|IMasterfile2 | IStore> &
                       { fieldName: string; propertyName: string; accData: any[] }): JSX.Element => {
   const s = { height: height - 3, width: '100%', fontSize: '0.875rem' };
   const ta = { width: '100%', minHeight: 60, fontSize: '0.875rem' };

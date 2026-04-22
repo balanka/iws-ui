@@ -126,7 +126,8 @@
     "runAll": "run 4 all",
     "permission": "Permission",
     "copyFrom": "Copy from",
-    "image_QR_code": "Image/QR Code"
+    "image_QR_code": "Image/QR Code",
+    "export": "Exporter"
   },
   "address": {
     "street"      : "Street",

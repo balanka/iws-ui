@@ -1,10 +1,11 @@
-import { JSX } from 'react';
-import { CCol, CInputGroup } from '@coreui/react';
-import { InputField, FieldLabel, styles } from './FormsProps';
-import ComboBox from './ComboBox';
-import { BankAccountFormProps } from '../Props';
-import { sortById } from '../utils/Utils';
-import { toOption } from '../utils/FormUtils';
+import { JSX } from 'react'
+import { CCol, CInputGroup } from '@coreui/react'
+import { InputField, FieldLabel } from './common'
+import { styles } from './FormsProps'
+import ComboBox from './ComboBox'
+import { BankAccountFormProps } from '../Props'
+import { sortById } from '../utils/Utils'
+import { toOption } from '../utils/FormUtils'
 
 const setBusinessPartnerR = (bp: any, setBp: any, selected: any, old: any, setCurrent: any) => {
   const idx = bp?.bankaccounts?.findIndex((obj: any) => obj.id === selected.id || obj.modelid === -1 || obj.id === old.id);
