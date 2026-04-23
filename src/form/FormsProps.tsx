@@ -1,6 +1,5 @@
 import {green} from '@mui/material/colors'
-import '../../public/css/custom-datepicker.css'
-import 'react-datepicker/dist/react-datepicker-cssmodules.css';
+
 
 export const styles = {
   outer0: {

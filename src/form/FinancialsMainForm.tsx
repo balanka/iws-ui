@@ -10,7 +10,7 @@ import {  styles } from './FormsProps'
 import CurrencyInput from 'react-currency-input-field'
 import {IFinancials, IMasterfile, IAccount, IFmodule, ILineFinancials } from '../Models'
 import { TFunction } from 'i18next'
-import {initCc, initfModule, initAcc } from './Menu'
+import {initCc, initfModule } from './Menu'
 import {toOption} from '../utils/FormUtils'
 import { sortById } from '../utils/Utils'
 import ComboBox from './ComboBox'
@@ -82,7 +82,7 @@ export const FinancialsMainForm = ({
   const currentModule = modules.find((m: IFmodule) => m.id === BigInt(modelid)) ?? initfModule[0];
   const total = current?.lines?.reduce((prev, cur) => prev + (cur?.amount || 0), 0) ?? 0;
   const inputStyle = { height: height - 10, width: '100%', fontSize: '0.875rem' };
-  const currencyStyle = { height: height - 3, padding: 5, textAlign: 'right' as const, width: '100%' };
+  const currencyStyle = { height: height - 3, padding:4, textAlign: 'right' as const, width: '100%' };
 
   // FormRow component (same pattern as TransactionMainForm)
   const FormRow = ({ children }: any) =>
@@ -152,7 +152,7 @@ export const FinancialsMainForm = ({
         <CCol sm={8} className="d-flex gap-2 align-items-md-center" style={{height: height, paddingTop:2}}>
           <Label>{t('financials.line.account')}</Label>
           <FormMasterfileComboBox2 current={current} setCurrent={setCurrent} currentLine={currentLineFinancials} setCurrentLine={setCurrentLineFinancials}
-              data={accData} id="account" name="accountName" defaultValue={initAcc[0]} accFilter={accountFilter}
+              data={accData} id="account" name="accountName"  accFilter={accountFilter}
               //zIndex={zIndex}
                                    styles={inputStyle} fontSize={12} setTransaction ={setTransactionF}/>
         </CCol>
@@ -190,7 +190,6 @@ export const FinancialsMainForm = ({
           data={accData}
           id="oaccount"
           name="oaccountName"
-          defaultValue={initAcc[0]}
           accFilter={oaccountFilter}
           //zIndex={zIndex}
           styles={inputStyle}
@@ -221,7 +220,7 @@ export const FinancialsMainForm = ({
             }
           }
             disabled={current.posted}
-            style={{ ...currencyStyle, fontSize: 12, width: '180px' }}
+            style={{ ...currencyStyle, fontSize: 12, width: '170px' }}
           />
         </CCol>
       </FormRow>
@@ -257,7 +256,7 @@ export const FinancialsMainForm = ({
             decimalsLimit={2}
             decimalScale={2}
             disabled={true}
-            style={{ ...currencyStyle, fontSize: 14, fontWeight: 'bold', width: '180px' }}
+            style={{ ...currencyStyle, fontSize: 12, fontWeight: 'bold', width: '170px' }}
           />
         </CCol>
       </FormRow>

@@ -3,9 +3,7 @@ import { BankStatementMainForm } from './BankStatementMainForm'
 import { FileSystemForm } from './FileSystemForm'
 import {BankStatementProps} from '../Props'
 
-
 const BankStatementTabs = ({ collapse, current, setCurrent,  locale,  t,  currency, height }:BankStatementProps) => {
-
   const GetTabContent = () => {
     return [
       { title: t('common.general'), id: 1,

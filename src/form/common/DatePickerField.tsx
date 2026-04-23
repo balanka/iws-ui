@@ -20,7 +20,7 @@ export const DatePickerField = ({ fieldName,  current, setCurrent, selected, lab
       }}
       customInput={
         <input
-          style={{ width: "80%" }}
+          style={{ width: "100%" }}
           onFocus={(e) => e.target.style.border = "2px solid blue"}
         />
       }

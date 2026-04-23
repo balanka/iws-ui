@@ -7,20 +7,9 @@ import { BankStatementProps } from "../Props.ts"
 const FormRow = ({ children }: any) => <CRow className="g-2 align-items-center mb-2">{children}</CRow>
 const Label = ({ children }: any) => <div style={{ minWidth: 80 }}>{children}</div>
 
-const currencyInputConfig = {
-  groupSeparator: ".",
-  decimalSeparator: ",",
-  decimalsLimit: 2,
-  decimalScale: 2,
-}
-
 export const BankStatementMainForm = ({ current, setCurrent, t, locale, currency, height }: BankStatementProps): React.JSX.Element => {
   const inputStyle = { height: height - 3, flex: 1 }
   const currencyStyle = { height: height - 3, flex: 1, textAlign: 'right' as const }
-
-  const handleAmountChange = (value: string | undefined) => {
-    setCurrent({ ...current, amount: Number(value ?? '0.0') })
-  }
 
   return (
     <CContainer fluid className="p-0">
@@ -45,10 +34,19 @@ export const BankStatementMainForm = ({ current, setCurrent, t, locale, currency
           <CurrencyInput
             value={current.amount}
             intlConfig={{ locale, currency }}
-            {...currencyInputConfig}
-            onValueChange={handleAmountChange}
+            groupSeparator="."
+            decimalSeparator=","
+            decimalsLimit={2}
+            decimalScale={2}
+            onValueChange={(value) => {
+              let cleanValue = value || '0';
+              cleanValue = cleanValue.replace(/\./g, ''); // Remove thousands separators
+              cleanValue = cleanValue.replace(/,/g, '.'); // Convert decimal comma to dot
+              const numberValue = parseFloat(cleanValue);
+              const finalValue = isNaN(numberValue) ? 0 : numberValue;
+              setCurrent({...current, amount: finalValue})}}
             disabled={current.posted}
-            style={currencyStyle}
+            style={{ ...currencyStyle}}
           />
         </CCol>
       </FormRow>

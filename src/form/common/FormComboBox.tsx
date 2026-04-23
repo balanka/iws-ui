@@ -117,7 +117,6 @@ interface FormMasterfileComboBox2Props {
   data: any[];
   id: string;        // Field name for the id (e.g., "account")
   name: string;      // Field name for the name (e.g., "accountName")
-  defaultValue?: any;
   accFilter?: string[];
   //zIndex?: number;
   styles?: React.CSSProperties;
@@ -137,7 +136,6 @@ export const FormMasterfileComboBox2 = ({
                                                 data,
                                                 id,
                                                 name,
-                                                defaultValue,
                                                 accFilter = [],
                                                 //zIndex = 1000,
                                                 styles = {},
@@ -147,166 +145,28 @@ export const FormMasterfileComboBox2 = ({
                                               }:FormMasterfileComboBox2Props) => {
   const filtered = getFiltered(data, accFilter);
 console.log('filtered', filtered)
-  // Get the current value from currentLine (like FormMasterfileXComboBox)
-  const currentValue = currentLine?.[id] ?? defaultValue?.id ?? '';
-  const currentAccount = (filtered ?? [defaultValue]).find((acc) => acc.id === currentValue) ?? defaultValue;
-  //console.log('currentValue', currentValue)
-  console.log('currentAccount', currentAccount)
 
-  // Get the label text
-  const currentLabel = currentAccount
-    ? `${currentAccount.id} ${currentAccount.name}`
-    : '';
-  console.log('currentLabel', currentLabel)
   let currentLinex: any = { ...currentLine };
   let currentLinex1: { [index: string]: any } = { ...currentLinex };
-  console.log('currentAccount', currentAccount)
   return (
     <ComboBox<{value:string|bigint,  label:string}>
       style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
       disable={current.posted}
       value={{value: currentLinex1[id], label: `${currentLinex1[id]} ${currentLinex1[name]}`}}
-      //value={{value:currentAccount?currentAccount.id:'', label: currentAccount?`${currentAccount.id} ${currentAccount.name}` :''}}
       onChange={(value:any,  _event:any) => {
         const currentAccountx = filtered?.find((acc: { id: any }) => acc.id ===value)
-       /// const x = { ...currentLine, transid:BigInt(-1), [id]:currentLinex[id], [name]: currentLinex[name] };
         console.log('currentAccountx', currentAccountx)
         const currentLinex = {...currentLine, transid:BigInt(-1), [id]: currentAccountx?currentAccountx.id:'', [name]: currentAccountx ?currentAccountx.name:''}
         console.log('x>>>>>>>>currentLinex', currentLinex)
-          //,  company:`${current.company.replaceAll("-","")}`}
         setCurrentLine(currentLinex)
         setTransaction(current, setCurrent, currentLinex, setCurrentLine)
       }}
 
       values={filtered.slice().sort(sortById).map(toOption)}
     />
-    // <ComboBox<{ value: string | bigint; label: string }>
-    //   style={{
-    //     minWidth: 100,
-    //     width: '100%',
-    //     color: '#6b7280',
-    //     ...styles
-    //   }}
-    //   fontSize={fontSize}
-    //  // disable={disable || current?.posted}
-    //   value={{
-    //     value: currentAccount?.id ?? '',
-    //     label: currentLabel
-    //   }}
-    //   onChange={(value: any, _event: any) => {
-    //     // Find the selected account (same pattern as working version)
-    //     const selectedAccount = (filtered ?? [defaultValue]).find((acc: { id: any }) => acc.id === value);
-    //     console.log('selectedAccount', selectedAccount)
-    //     if (!selectedAccount) return;
-    //
-    //     // Create updated currentLine object
-    //     const updatedCurrentLine = {
-    //       ...currentLine,
-    //       [id]: selectedAccount.id,
-    //       [name]: selectedAccount.name,
-    //       company: `-${current?.company ?? ''}`
-    //     };
-    //
-    //     // Handle lines array (simplified)
-    //     if (current && !current?.hasOwnProperty('lines')) {
-    //       current['lines'] = [];
-    //     }
-    //
-    //     const lines = current?.lines ?? [];
-    //     const idx = lines.findIndex((obj: any) => obj.id === currentLine?.id);
-    //
-    //     if (idx === -1) {
-    //       lines.push(updatedCurrentLine);
-    //     } else {
-    //       lines[idx] = updatedCurrentLine;
-    //     }
-    //
-    //     // Update both current and currentLine (similar to working version)
-    //     setCurrent({ ...current, [id]: selectedAccount.id, [name]: selectedAccount.name, lines });
-    //     setCurrentLine(updatedCurrentLine);
-    //   }}
-    //   values={filtered.slice().sort(sortById).map(toOption)}
-    //   zIndex={zIndex}
-    // />
   )
 }
-// export const FormMasterfileComboBox2: FC<FormMasterfileComboBox2Props> = ({
-//                                                                             current,
-//                                                                             setCurrent,
-//                                                                             currentLine,
-//                                                                             setCurrentLine,
-//                                                                             data,
-//                                                                             id,
-//                                                                             name,
-//                                                                             defaultValue,
-//                                                                             accFilter = [],
-//                                                                             zIndex = 1000,
-//                                                                             styles = {},
-//                                                                             fontSize = 12
-//                                                                           }) => {
-//   const filtered = data //getFiltered(data, accFilter)
-//   console.log('filtered', filtered)
-//   let currentLinex: any = { ...currentLine };
-//   let currentLinex1: { [index: string]: any } = { ...currentLinex };
-//
-//   return (
-//     <ComboBox<{ value: string | bigint; label: string }>
-//       style={{
-//         // minHeight: 20,
-//         // height: 20,
-//         minWidth: 100,
-//         width: '100%',
-//         color: '#6b7280',
-//         ...styles
-//       }}
-//       // style={{
-//       //   minHeight: 28,
-//       //   height: 28,
-//       //   minWidth: 100,
-//       //   width: '100%',
-//       //   color: '#000000', // Explicit black text for input
-//       //   backgroundColor: '#ffffff', // White background for input
-//       //   ...styles
-//       // }}
-//
-//       fontSize={fontSize}
-//       disable={current.posted}
-//       onChange={(value: any, _event: any) => {
-//         const currentAccount = (data ?? [defaultValue]).find((acc: { id: any }) => acc.id === value);
-//         currentLinex = {
-//           ...currentLine,
-//           [id]: value,
-//           [name]: currentAccount ? currentAccount.name : '',
-//           company: `-${current.company}`
-//         };
-//
-//         if (!current?.hasOwnProperty('lines') || current.lines.length === 0) {
-//           current['lines'] = [currentLinex];
-//         }
-//
-//         const lines: any[] = current.lines;
-//         const idx = lines?.findIndex((obj) => obj.id === currentLinex.id);
-//
-//         if (idx === -1) {
-//           current.lines?.push(currentLinex);
-//         } else {
-//           current.lines[idx] = currentLinex;
-//         }
-//
-//         const x = { ...current, [id]: currentLinex[id], [name]: currentLinex[name] };
-//         setCurrent(x);
-//         setCurrentLine({ ...currentLinex });
-//       }}
-//       value={{
-//         value: currentLinex1[id],
-//         label: `${currentLinex1[id]} ${currentLinex1[name]}`
-//       }}
-//       values={filtered ?? [].slice().sort(sortById).map(toOption)}
-//       zIndex={zIndex}
-//     />
-//   )
-// }
-//
+
 // Type 4: From Transaction ComboBox
 interface FromTransactionComboBoxProps {
   current: any;
