@@ -31,7 +31,31 @@
   "searchTooltip": "Suche",
   "searchPlaceholder": "Suche"
 },
+  "toolTip": {
+    "common": {
+      "add": "Crée un nouvel enregistrement",
+      "edit": "Permet ou block l'édition/modification",
+      "addBankAccount": "Crée un nouveau compte bancaire",
+      "removeBankAccount": "Supprime un compte bancaire",
+      "save": "Enrgistre la/les modidifications/ajouts",
+      "canceln": "Annule la/les modidifications/ajouts",
+      "print": "Affice la transaction/l'enregistrement en mode impression",
+      "export": "Export la transaction/l'enregistrement format Excel",
+      "load": "Charge les données  de la base",
+      "import": "Import les données ",
+      "table": "Affiche ou cache la table",
+      "form": "Affiche ou cache le formulaire ",
+      "exit": "Quitter l'application"
+    },
+    "transaction": {
+      "addLine": "Ajoute une nouvelle ligne",
+      "removeLine": "Supprime la line ",
+      "post": "Valide la transaction/le journal"
+    }
+  },
   "common": {
+    "print": "Drucken",
+    "dashboard": "Dashboard",
     "id":"Nr.",
     "title": "Ansprache",
     "name": "Name",
@@ -48,14 +72,21 @@
     "to"        :  "Bis",
     "total"     : "Total",
     "company"   : "Mandant",
+    "parent": "Ueberg.",
     "modelid"     : "Model",
     "idebit": "AB Soll",
     "debit": "Soll",
     "icredit": "AB Haben",
     "credit": "Haben",
     "balance": "Saldo",
+    "report": "Salden N-1",
+    "transactions": "Bewegungen",
     "amount"      : "Betrag",
+    "quantity":  "Menge",
+    "charge": "Charge",
+    "costcenter":   "C.coûts",
     "street"      : "Strasse",
+    "period"      : "B.periode",
     "zip"         : "PLZ",
     "city"       : "Stadt",
     "country"       : "Bundesland",
@@ -75,16 +106,37 @@
     "paymentClearingAcc":"ZE Clearing",
     "settlementClearingAcc": "ZA Clearing.",
     "taxCode":"Steuernummer",
-    "vatCode": "VAT-ID",
+    "vatCode": "Mwst.",
+    "vat": "Mwst.",
     "general": "Allg. Info",
     "address": "Addresse",
     "accounts": "Konten",
+    "edited":{
+      "bankaccount":"Bankverb. bearbeiten"
+    },
     "bankaccounts":"Bankverbingungen",
     "iban":"IBAN",
+    "bic": "BIC",
     "bank":"Bank",
     "owner":"Inhaber",
     "exportCSV": "Exportieren CSV",
-    "exportPDF": "Exportieren PDF"
+    "exportPDF": "Exportieren PDF",
+    "run": "Ausführen",
+    "runAll": "Ausführen alle",
+    "permission": "Berechtigung",
+    "copyFrom": "Kopieren von",
+    "image_QR_code": "Image/QR Code",
+    "export": "Exportieren"
+  },
+  "address": {
+    "street"      : "Strasse",
+    "zip"         : "PLZ",
+    "city"       : "Stadt",
+    "country"       : "Bundesland",
+    "state"        : "Land",
+    "phone"       : "Tel",
+    "fax"       : "Fax",
+    "email"       : "Email"
   },
   "asset": {
     "title":  "Anlage",
@@ -95,10 +147,11 @@
     "changedate":  "Geändert am",
     "account":  "Konto",
     "oaccount": "G. Konto",
+    "amount": "Anschaffungskosten",
     "rate":     "Satz",
     "scrapValue": "Restwert",
     "lifeSpan":   "Laufzeit",
-    "frequency":   "Frequency",
+    "frequency":   "Frequenz",
     "depreciation":   "Methode"
   },
   "account": {
@@ -117,12 +170,7 @@
     "balancesheet": "Bilanz?"
   },
   "bank": {
-    "title":      "Bank",
-    "name":       "Name",
-    "description": "Beschreibung",
-    "enterdate"  : "Eingabedatum",
-    "postingdate": "Gebucht am",
-    "changedate":  "Geaendert"
+    "title":      "Bank"
   },
   "bankstatement": {
     "title":      "Bankauszug",
@@ -171,16 +219,6 @@
     "account":  "Kreditor",
     "oaccount": "Aufwand"
   },
-  "costcenter": {
-    "title":"Kostenstelle",
-    "name":"Name",
-    "description":"Beschreibung",
-    "enterdate":"Enterdate",
-    "postingdate":"Gebucht am",
-    "changedate":"Geaendert am",
-    "account"    : "Konto",
-    "company"    : "Mandant"
-  },
   "module": {
     "title":"Module",
     "name":"Name",
@@ -191,19 +229,52 @@
     "parent":"Gruppe",
     "path": "Path"
   },
+  "payroll": {
+    "tax" : {
+      "range": {
+        "title": "Lohnsteuertabelle",
+        "from": "Von",
+        "to": "Bis",
+        "tax": "Betrag",
+        "class": "Steuerklasse"
+      }
+    }
+  },
   "salary": {
     "item": {
-      "title": "Komponenten des Gehalts"
+      "title": "Komponenten des Gehalts",
+        "amount" : "Betrag",
+       "percentage": "Prozentsatz"
     }
   },
   "article": {
-    "title":      "Artikel",
+    "title": "Artikel",
+    "price": "Preis",
     "sprice": "Verkaufspreis",
     "pprice": "Einkaufspreis",
-    "avgPrice": "G.D.P"
+    "avgPrice": "G.D.P",
+    "quantityUnit": "M.E.",
+    "packUnit": "V.E.",
+    "stocked": "Bestand ?",
+    "vat": "Mwst.",
+    "group": "W.gruppe",
+    "wholeStock": "Gesamtbestand",
+    "stock": {
+      "account": "Bestand"
+    },
+    "expense": {
+      "account": "Verbrauch"
+    },
+    "revenue": {
+      "account": "Verkauf"
+    }
   },
+  "partner": {"title": "Kontakt"},
   "store": {
     "title":      "Lager"
+  },
+  "stock": {
+    "title":  "Bestand"
   },
   "vat": {
     "title":      "MwSt.",
@@ -212,8 +283,12 @@
     "enterdate"  : "Eingabedatum",
     "postingdate": "Gebucht am",
     "changedate":  "Geaendert am",
-    "input_account": "Vorsteuerkonto",
-    "output_account": "Umsatsteuerkonto",
+    "input":{
+      "account" : "Vorsteuerkonto"
+    },
+    "output":{
+      "account" : "Umsatsteuerkonto"
+    },
     "percent":     "Prozent"
   },
   "pac": {
@@ -228,7 +303,10 @@
     "title": "Berechtigung"
   },
   "fmodule":{
-    "title": "Belegart"
+    "title": "Belegart",
+    "parent": "Parent",
+    "accountFilter": "Debit filter ",
+    "oaccountFilter": "Crebit filter"
   },
   "financials": {
     "title":      "Beleg",
@@ -258,6 +336,32 @@
       "text": "Text"
     }
   },
+  "transaction": {
+    "title":      "Beleg",
+    "id":        "Nr.",
+    "oid":        "O.BelegNr",
+    "period":       "Periode",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Buchungsdatum",
+    "transdate":   "Belegdatum",
+    "account":      "Deb./Kred.",
+    "store":   "Lager",
+    "text" :       "Text",
+    "footText":     "Fußnote",
+    "type":         "B.Art",
+    "posted":     "Gebucht",
+    "line": {
+      "title": "Positione(n)",
+      "id": "LineNr.",
+      "article": "Artikel",
+      "articleName": "Name",
+      "quantity": "Menge",
+      "unit": "M.E.",
+      "price": "Preis",
+      "duedate": "Fällig am",
+      "text": "Text"
+    }
+  },
   "journal": {
     "title":      "Journal",
     "transid":    "BelegNr",
@@ -276,6 +380,9 @@
     "type":         "Typ",
     "file":         "Datei",
     "modelid"     : "Model"
+  },
+  "ijournal": {
+    "title": "Artikelkonto"
   },
   "balancesheet": {
     "title":      "Bilanz",
@@ -320,19 +427,41 @@
     "menu": "Menü",
     "email": "Email"
   },
+  "toolBar":{
+    "reload":"Neuladen aller Belege ",
+    "duplicate":"Beleg kopieren",
+    "add":"Anlegen",
+    "addLine":"Neue Zeile anlegen",
+    "cancel":"Anlegen bzw. Aenderung abbrechen",
+    "void":"Beleg stornieren",
+    "save":"Beleg speichern",
+    "post":"Beleg buchen "
+  },
   "menu": {
+    "purchasing": "Einkauf",
+    "sales": "Vertrieb",
+    "inventory": "Bestandsführung",
+    "favoris": "Favorit",
+    "payroll": "Gehaltsabrechnung",
+    "transactions": "Belege",
     "salary":{
       "item": "Komponenten des Gehalts"
     },
     "admin": "Verwaltung",
     "article": "Artikel",
+    "articleGroup": "Artikelgruppe",
     "asset": "Anlage",
     "dashboard": "Dashboard",
     "accounting": "Buchhaltung",
     "journal": "Journal",
+    "ijournal": "Artikelkonto",
     "pacb": "Salden",
+    "partner":  "Kontact",
     "account": "Konten",
+    "accountGroup": "Kontengruppen ",
+    "accountClass": "Kontenklassen",
     "bank": "Bank",
+    "quantityUnit": "Mengeneinheit",
     "module": "Module",
     "costcenter": "Kostenstelle",
     "customer": "Kunden",
@@ -345,11 +474,46 @@
     "user": "Benutzer",
     "permission": "Berechtigung",
     "fmodule": "Belegart",
+    "currency": "Währung",
     "role": "Role",
     "bankstatement": "Bankauszug",
     "masterfiles": "Stammdaten",
     "balancesheet": "Jahresabschluss",
     "financials": "Belege",
-    "financials_stmt": "Jahresabschluss/GuV"
+    "transaction": "Logistik",
+    "financials_stmt": "Jahresabschluss/GuV",
+    "payroll.tax.range": "Lohnsteuertabelle",
+    "room": "Zimmer",
+    "apartment": "Wohnung",
+    "realEstate": "Haus",
+    "closeAccountingPeriod": "Buchungsperiode abschliessen",
+    "createPayrollTransaction": "Gehaltsliste generieren",
+    "createDepreciationTransaction": "Abschreibungsbelege generieren"
+  },
+  "accountClass": {
+    "title":      "Kontenklassen"
+  },
+  "accountGroup": {
+    "title":      "Kontengruppen"
+  },
+  "quantityUnit": {
+    "title": "Mengeneinheit"
+  },
+  "closeAccountingPeriod": {
+    "title": "Buchungsperiode abschliessen",
+    "account": "Konto",
+    "close": "Close"
+  },
+  "createPayrollTransaction": {
+    "title": "Gehaltsliste generieren",
+    "generate": "Generieren"
+  },
+  "createDepreciationTransaction": {
+    "title": "Abschreibungsbelege generieren",
+    "generate": "Generieren"
+  },
+  "ccy": {
+    "title": "Währung"
   }
+
 }
