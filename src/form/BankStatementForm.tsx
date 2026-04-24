@@ -51,7 +51,15 @@ const BankStatementForm = () => {
   const cancelEdit = () => {
     setCurrent(current_)
   }
-  const submitEdit = () => Edit(modifyUrl, token, current, rowData, setRowData, setCurrent)
+  const submitEdit = () => {
+    const updated = Edit(modifyUrl, token, current, setCurrent)
+    const index = rowData.findIndex((obj:IBankStatement) => obj && (obj.id === updated.id))
+    if (index>=0) {
+      rowData[index] = updated
+      setRowData([...rowData])
+    }
+    setCurrent(updated)
+  }
 
   const reload = () => {
     iwsStore.deleteKey(current.modelid)

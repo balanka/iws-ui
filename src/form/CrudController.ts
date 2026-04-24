@@ -241,23 +241,26 @@ const post1Fn = <A>(ctx: string, record: A,
     return profile
 }
 
-const Edit = <A extends IWSModel>(ctx:string, token:string, record:A, data:A[]
-                 , setRowData:Dispatch<SetStateAction<A[]>>, setCurrent:Dispatch<SetStateAction<A>>):A=> {
+const Edit = <A extends IWSModel>(ctx:string, token:string, record:A
+                 , setCurrent:Dispatch<SetStateAction<A>>):A=> {
   console.log('Edit called>>>')
-  console.log('data>>>', data)
+  //console.log('data>>>', data)
     console.log('record>>>', record)
     let result = record
     const url = `${SERVER_URL}${ctx}`
     fetchFn(url, 'PUT', token, record )
         .then((response: any ) => {
-            const resp = response
+          const newCurrent = {
+            ...response,
+            // Force React to detect change
+            __version: Date.now()
+          } as A;
+            //const newCurrent = JSON.parse(JSON.stringify(response))
             console.log('response', response)
-            const index = data.findIndex((obj:A) => obj && (obj.id === record.id))
-            data[index] = resp
-            result = resp
-            setCurrent({...resp})
-            setRowData([...data])
 
+            result = newCurrent
+            setCurrent({...newCurrent})
+            //setRowData([...data])
         })
         .catch(function (error: any) {
             console.log('error', error)

@@ -140,8 +140,13 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
       event.preventDefault();
       console.log(' newly added or edited current', current )
       if(BigInt(current?.id) > 0){
-       const x= Edit(modifyUrl, token, current, data, setRowData, setCurrent)
-        setCurrent(x)
+       const updated= Edit(modifyUrl, token, current,  setCurrent)
+        const index = data.findIndex((obj: T) => obj?.id === updated?.id)
+        if (index >= 0) {
+          data[index] = updated
+          setRowData(data)
+        }
+        setCurrent(updated)
         event.preventDefault();
       } else {
         submitAdd(event)
@@ -154,12 +159,25 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
       , setCurrent:Dispatch<SetStateAction<T>>, data:T[],) => {
     event.preventDefault()
     const url_ = _ctx.replace('ltr', 'cancelnLtr')
-    BigInt(current.id )> 0 ? Edit(url_, token, current, data, setRowData, setCurrent) : current
+    const updated=BigInt(current.id )> 0 ? Edit(url_, token, current,  setCurrent) : current
+    const index = data.findIndex((obj: T) => obj?.id === updated?.id)
+    if (index >= 0) {
+      data[index] = updated
+      setRowData(data)
+    }
+    setCurrent(updated)
+    return updated
   }
   const onNewLine = () => addLine (initialLine,  setCurrent)
   const onDeleteLine = (event:any) => {
       onRemoveSelectedLine (event, current,  setCurrent);
-      (BigInt(current.id) > 0) && Edit(modifyUrl, token, current, rowData, setRowData, setCurrent)//submitAdd(current)
+      const updated= (BigInt(current.id) > 0) ? Edit(modifyUrl, token, current, setCurrent):current
+    const index = rowData.findIndex((obj: T) => obj?.id === updated?.id)
+    if (index >= 0) {
+      rowData[index] = updated
+      setRowData(rowData)
+    }
+    setCurrent(updated)
   }
   const submitEdit = (event:any) =>
       callSubmitEdit(event, modifyUrl, token, current, setCurrent, rowData, submitAdd)

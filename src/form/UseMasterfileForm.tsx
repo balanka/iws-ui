@@ -33,10 +33,7 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T, coldef:ColDef[]
   const {token, company} = profile
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
   module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-  //let body = null
   let body =  ((module_ === '11111' || module_ === 11111)) ? Login : null
-
-  console.log('body', body)
   const dispatch = useDispatch()
   let navigate = useNavigate()
   const [edited, setEdited] = useState<boolean>(false)
@@ -48,10 +45,6 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T, coldef:ColDef[]
   const ctx = `${url}/${modelid}/${company}`
 
   const zIndex = 9999
-  console.log('ctx', ctx)
-  console.log('url', url)
-  console.log('edited', edited)
-  console.log('rowData', rowData)
 
   const edit = () => {
     if(edited) {
@@ -74,12 +67,18 @@ const UseMasterfileForm = <T extends IWSModel>(current_ :T, coldef:ColDef[]
     event.preventDefault()
     console.log('rowData', rowData)
     if(edited) {
-      const x = Edit(modifyUrl, token, { ...current }, rowData, setRowData, setCurrent)
+      const updatedRecord = Edit(modifyUrl, token, { ...current }, setCurrent)
+      console.log('updatedRecord', updatedRecord)
+      setCurrent({ ...updatedRecord });
+      const index = rowData.findIndex((obj:T) => obj && (obj.id === updatedRecord.id))
+      rowData[index] = updatedRecord
+      setRowData([...rowData])
+      setCurrent(updatedRecord)
       //
-      console.log('x', x)
+      console.log('updatedRecord', updatedRecord)
       console.log('current', current)
       console.log('rowData', rowData)
-      //setRowData(rowData)
+
       //setCurrent(x)
       //onRowSelected(x)
     } else if (!edited && !disable) {

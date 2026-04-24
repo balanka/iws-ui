@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import {JSX, useEffect} from 'react';
 import { CCol, CInputGroup } from '@coreui/react';
 import { FormMasterfileXComboBox, DatePickerField, InputField, TextareaField, FieldLabel } from './common';
 import { styles } from './FormsProps';
@@ -20,6 +20,11 @@ export const VatMainForm = ({
                             }: VatMainFormProps): JSX.Element => {
   const s = { height: height - 3, width: '100%', fontSize: '0.875rem' };
   const rm = { marginBottom: '6px' };
+
+  useEffect(() => {
+    console.log('🟢 VatMainForm current changed:', current);
+    console.log('🟢 VatMainForm current object reference:', current);
+  }, [current]);
 
   return (
     <div style={{ ...styles.outer, paddingBottom: 10, width:'100%' }}>

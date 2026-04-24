@@ -96,7 +96,13 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
   const submitEdit = (event: any) => {
     event.preventDefault()
     if (edited) {
-      Edit(modifyUrl, token, {...current}, rowData, setRowData, setCurrent)
+      const updated= Edit(modifyUrl, token, {...current}, setCurrent)
+      const index = rowData.findIndex((obj:T) => obj && (obj.id === updated.id))
+      if (index>=0) {
+        rowData[index] = updated
+        setRowData([...rowData])
+      }
+      setCurrent(updated)
     } else if (!edited && !disable) {
       Add(modifyUrl, token, {...current}, rowData, setRowData, setCurrent)
     }
@@ -161,7 +167,13 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
 
   const onDeleteBankAccount = (event: any) => {
     onRemoveSelectedLine(event, current, setCurrent);
-    Edit(modifyUrl, token, current, rowData, setRowData, setCurrent)
+    const updated =Edit(modifyUrl, token, current, setCurrent)
+    const index = rowData.findIndex((obj:T) => obj && (obj.id === updated.id))
+    if (index>=0) {
+      rowData[index] = updated
+      setRowData([...rowData])
+    }
+    setCurrent(updated)
   }
   const onRowSelected = (event: RowSelectedEvent) => {
     const selected: T = event.data

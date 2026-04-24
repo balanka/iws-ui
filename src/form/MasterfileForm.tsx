@@ -5,7 +5,6 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-//import {MasterfilesForm} from './FormsProps'
 import { Get} from './CrudController'
 import {MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
@@ -17,19 +16,7 @@ import UseMasterfileForm from './UseMasterfileForm.tsx'
 import {styles} from './BasicTreeTableProps.tsx'
 import {CInputGroup} from "@coreui/react";
 import {MasterfileFormWithChildren} from './MasterfileFormWithChildren'
-//import {FormMasterfileXComboBox} from "./common";
 
-
-// <MasterfileFormWithChildren
-// current={current}
-// setCurrent={setCurrent}
-// accData={accData}
-// t={t}
-// disable={disable}
-// height={height}
-// fieldName={t('fmodule.parent')}
-// propertyName="parent"
-//   />
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -47,9 +34,6 @@ const MasterfileForm = () => {
   const maxHeight = 700
   const height = 28
   const [{header, body, table, disable,  state, visible, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_,coldef, MASTERFILE.masterfile)
-  // const mainForm = MasterfileFormWithChildren({current:current??current_, setCurrent:setCurrent, disable:disable, height:height, t:t
-  //   , fieldName:t('common.parent'), propertyName:'parent'})
-
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)

@@ -18,18 +18,39 @@ const iwsStore = {
     //console.debug('store', store)
     subject.next(store)
   },
-  update: (key:string|number, id:string|number, message:any) => {
-    const temp = store.get(key)
-    const temp1 = temp ? Array.from(temp) : []
-    // @ts-ignore
-    const idx = temp1.findIndex((obj) => obj.id === id)
+  update: (key: string | number, id: string | number, message: any) => {
+    console.log('📦 Store.update called with:', { key, id, message });
+
+    const temp = store.get(key);
+    let temp1 = temp ? (Array.isArray(temp) ? [...temp] : Array.from(temp)) : [];
+
+    const idx = temp1.findIndex((obj: any) => obj && obj.id === id);
+    console.log('📦 Store.update idx:', idx);
+
     if (idx !== -1) {
-      temp1[idx] = message
-      store.set(key, new Set(temp1))
-      store = new Map([...store.entries()])
-      subject.next(store)
+      temp1[idx] = { ...message }; // Create a new object
+      store.set(key, temp1);
+      // ✅ Create a new Map to trigger updates
+      store = new Map([...store.entries()]);
+      console.log('📦 Store.update - store updated:', store);
+      subject.next(store);
+    } else {
+      console.warn('📦 Store.update - item not found:', id);
     }
   },
+  // update: (key:string|number, id:string|number, message:any) => {
+  //   console.log('📦 Store.update called with:', { key, id, message });
+  //   const temp = store.get(key)
+  //   const temp1 = temp ? Array.from(temp) : []
+  //   // @ts-ignore
+  //   const idx = temp1.findIndex((obj) => obj.id === id)
+  //   if (idx !== -1) {
+  //     temp1[idx] = message
+  //     store.set(key, new Set(temp1))
+  //     store = new Map([...store.entries()])
+  //     subject.next(store)
+  //   }
+  // },
   deleteKey: (key:string|number) => {
     store.delete(key)
     subject.next(store)
