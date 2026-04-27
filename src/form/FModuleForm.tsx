@@ -24,7 +24,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const [{ profile,  t, module_, company}]  = useForm()
      const {token} = profile
      if (module_ === '11111' || module_ === 11111) return <Login/>
-    // let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
      const parent_ctx = `${module_?.state3}/${company}`
      const acc_ctx = `${module_?.state2}/${company}`
      const current_: IFmodule =  module_.state[0]

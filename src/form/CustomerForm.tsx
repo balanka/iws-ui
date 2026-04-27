@@ -21,11 +21,15 @@ import {UseCustomerForm} from "./UseCustomerForm.tsx";
 import {customerColumnDefs} from "../ColumnsDefs.ts";
 import {styles} from './BasicTreeTableProps.tsx'
 import {CInputGroup} from "@coreui/react";
+import Login from "./Login.tsx";
+import React from "react";
+
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const CustomerForm = () => {
-  const [{ profile, t,  modelid }] = useForm()
+  const [{ profile, t,  modelid, module_ }] = useForm()
+  if (module_ === '11111' || module_ === 11111) return <Login/>
   const { locale, stockAcc, expenseAcc, vat, currency } = profile
   const initial = modelid ===formEnum.CUSTOMER?initCust[0]:(modelid ===formEnum.SUPPLIER)?initSup[0]:initEmp[0]
   const current_ : IBusinespartner= {...initial, account:stockAcc??'', oaccount:expenseAcc??'', vatCode:vat??'', currency:currency??''}
@@ -36,6 +40,7 @@ const CustomerForm = () => {
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   const [{header, body, table, disable,  state, visible, rowData, accData, bankData, vatData, ccyData, current
     , setCurrent, currentBankAccount, setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t))
+  const safeBody = React.isValidElement(body) ? body : null;
 
   const mainForm = CustomerTabs({ collapse:state.collapse, current:current, setCurrent:setCurrent
                              , currentBankAccount:currentBankAccount
@@ -54,7 +59,7 @@ const CustomerForm = () => {
       <CInputGroup
         //@ts-ignore
           style={{...styles.outer , display: !state.collapse?'none':''}} >
-         {body??mainForm}
+         {safeBody??mainForm}
        </CInputGroup>
       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
         {table}

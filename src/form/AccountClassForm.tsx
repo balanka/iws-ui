@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -44,13 +44,14 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 
    const [{header, body, disable, table, state, visible, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_,  colDef, MASTERFILE.accountClass)
-
+   const safeBody = React.isValidElement(body) ? body : null;
    const mainForm = MasterfileFormWithout({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
       , height:height, accData:accData, t:t, disable:disable, fieldName:t('common.account'), propertyName:'account' })
    return (
      <>
        {header}
-       {body??mainForm}
+       {safeBody ? safeBody :MasterfileFormWithout({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
+         , height:height, accData:accData, t:t, disable:disable, fieldName:t('common.account'), propertyName:'account' })}
        <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
          {table}
        </div>

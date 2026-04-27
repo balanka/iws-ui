@@ -13,6 +13,7 @@ export interface Props {
   zIndex?: number;
 }
 
+
 export const IWSTabs = ({ tabList, zIndex }: Props): React.JSX.Element => {
   const activeTabIndex = isArrayAndNotEmpty(tabList) ? tabList[0]?.id : 0;
   const [activeTab, setActiveTab] = useState<number | string>(activeTabIndex);

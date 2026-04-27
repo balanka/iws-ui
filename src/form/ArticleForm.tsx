@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -14,11 +14,14 @@ import {articleColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IArticle, IMasterfile, IVat} from '../Models.ts'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
 import useForm from './UseForm.ts'
+import {CInputGroup} from "@coreui/react";
+import Login from "./Login.tsx";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const ArticleForm = () => {
-     const [{profile,  selected, t }] = useForm()
+     const [{profile, selected, t, module_ }] = useForm()
+      if (module_ === '11111' || module_ === 11111) return <Login/>
      const { token, company, locale, currency, stockAcc, expenseAcc, revenueAcc, vat} = profile
      const acc_modelid = formEnum.ACCOUNT
      const vat_modelid = formEnum.VAT
@@ -58,13 +61,16 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
       const colDef:ColDef[]= articleColumnDefs(t)
       const [{header, body, disable, table, state, visible, rowData, current, setCurrent, handleKeyPress, zIndex}] = UseMasterfileForm<IArticle>(current_,  colDef, MASTERFILE.article)
-      const mainForm = ArticleTabs ({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t
+      const safeBody = React.isValidElement(body) ? body : null;
+       const mainForm = ArticleTabs ({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t
                              , data:rowData, accData:accData, quantityUnitData:quantityUnitData,  locale:`${locale}`, currency:`${currency}`
                               , vatData:vatData, groupData:groupData, ccyData:ccyData, height:height, zIndex:zIndex-1})
       return (
         <>
           {header}
-            {body??mainForm}
+          <CInputGroup>
+            {safeBody ? safeBody :mainForm}
+          </CInputGroup>
           <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
             {table}
           </div>

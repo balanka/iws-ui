@@ -11,10 +11,13 @@ import {IAccount} from '../Models.ts'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
 import useForm from './UseForm.ts'
 import {CInputGroup} from "@coreui/react";
+import Login from "./Login.tsx";
+import React from "react";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const AccountForm = () => {
-   const [{profile, t}] = useForm()
+   const [{profile, t, module_}] = useForm()
+   if (module_ === '11111' || module_ === 11111) return <Login/>
    const { locale} = profile
    const height = 33
    const minHeight = 350
@@ -23,6 +26,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    const colDef = accountColumnDefs(t)
 
    const [{header, body, disable, table, state, visible, rowData, current, setCurrent}] = UseMasterfileForm(current_,  colDef, MASTERFILE.acc)
+   const safeBody = React.isValidElement(body) ? body : null;
    const mainForm = AccountMainForm({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
      ,  disable:disable, t:t, locale:`${locale}`, accData:rowData, height:height})
    return (
@@ -31,7 +35,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
        <CInputGroup
        //@ts-ignore
          style={{...styles.outer, display: !state.collapse?'none':''}}>
-          {body?body():mainForm}
+          {safeBody??mainForm}
        </CInputGroup>
        <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
          {table}

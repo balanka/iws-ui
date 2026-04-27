@@ -31,8 +31,7 @@ const VatForm = () => {
   const maxHeight = 600
   const height = 28
   const colDef:ColDef[] = vatColumnDefs(t)
-  const hookResult = UseMasterfileForm(current_,  colDef, selected)
-  const [{header, body, disable, table, visible, state, current, setCurrent, handleKeyPress, zIndex}] = hookResult
+  const [{header, body, disable, table, visible, state, current, setCurrent, handleKeyPress, zIndex}] = UseMasterfileForm(current_,  colDef, selected)
 
   useEffect(() => {
     iwsStore.subscribe(setIwsState)
@@ -49,8 +48,7 @@ const VatForm = () => {
       <CInputGroup
         //@ts-ignore
         style={{...styles.outer , display: !state.collapse?'none':''}} >
-        {safeBody ? safeBody :VatMainForm({current, setCurrent, accData, t, disable, height, zIndex})
-        }
+        {safeBody??VatMainForm({current, setCurrent, accData, t, disable, height, zIndex})}
       </CInputGroup>
       <div  style={{...styles.outer0, paddingTop:2, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
         {table}

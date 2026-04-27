@@ -33,7 +33,6 @@ const BankStatementForm = () => {
   const dispatch = useDispatch()
   let navigate = useNavigate()
   const modifyUrl = module_.ctx
-
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const title = t(module_.title)
   const ctx = `${module_.ctx}/${modelid}/${company}`

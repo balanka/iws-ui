@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -14,12 +14,14 @@ import {assetColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IAsset, IMasterfile} from '../Models.ts'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
 import useForm from './UseForm.ts'
+import Login from "./Login.tsx";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const AssetForm = () => {
   // @ts-ignore
   const [{profile, t, module_}] = useForm()
+  if (module_ === '11111' || module_ === 11111) return <Login/>
   const { token, company, locale, currency } = profile
   const currencyx = currency ??'EUR'
   const acc_modelid = formEnum.ACCOUNT
