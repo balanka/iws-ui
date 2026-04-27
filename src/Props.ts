@@ -366,20 +366,20 @@ export interface FinancialsCBoxProps2<A, B> {
 export interface UserFormProps { collapse: boolean, current:IUser, setCurrent:(arg:IUser)=>void
     , t:TFunction<'translation', undefined>, disable:boolean, height:number
 }
-export  interface TransactionToolBarProps<A extends IWSTransaction<L>, L extends  IWSLine>{
-  title:string, templateName: ()=> string
-  , saveProps:SaveProps, collapse:boolean
-  ,  initAdd:()=>void, onNewLine:()=>void, onDeleteLine:(arg:any)=>void
-  , submitCancel:(e:any)=>void, submitEdit: (arg:any)=>void
-  , getData:()=>any
-  , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
-  , toggle:()=>void, toggleTable:()=>void, submitPost:(arg:any)=>void,  reload:()=>void
-  , handleLanguageChange: (arg:any)=>void
-  , navigate:NavigateFunction, language:string, dispatch:Dispatch<any>
-  , logout:(navigate:NavigateFunction) =>void
-  , current:IFinancials|ITransaction
-  , t:TFunction<'translation', undefined>
-}
+// export  interface TransactionToolBarProps<A extends IWSTransaction<L>, L extends  IWSLine>{
+//   title:string, templateName: ()=> string
+//   , saveProps:SaveProps, collapse:boolean
+//   ,  initAdd:()=>void, onNewLine:()=>void, onDeleteLine:(arg:any)=>void
+//   , submitCancel:(e:any)=>void, submitEdit: (arg:any)=>void
+//   , getData:()=>any
+//   , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
+//   , toggle:()=>void, toggleTable:()=>void, submitPost:(arg:any)=>void,  reload:()=>void
+//   , handleLanguageChange: (arg:any)=>void
+//   , navigate:NavigateFunction, language:string, dispatch:Dispatch<any>
+//   , logout:(navigate:NavigateFunction) =>void
+//   , current:IFinancials|ITransaction
+//   , t:TFunction<'translation', undefined>
+// }
 export interface IJournalIF<A>  extends IWSModel  {
     fromPeriod:number
   , toPeriod:number
@@ -398,6 +398,8 @@ export  interface JournalToolBarProps<A> {
   , templateName: ()=>string
   , getData: ()=>any
   , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
+  , language:string
+  , handleLanguageChange:(language:any)=>void
    }
 export interface UseFormResult {
     profile: IProfile

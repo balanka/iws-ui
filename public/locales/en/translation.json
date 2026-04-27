@@ -45,7 +45,9 @@
     "import": "Import data",
     "table": "Display  or hides the table",
     "form": "Display  or hides the form",
-    "exit": "Exit the application"
+    "exit": "Exit the application",
+    "run": "run",
+    "runAll": "run all"
   },
   "transaction": {
     "addLine": "Add mew line",

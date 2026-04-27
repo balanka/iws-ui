@@ -45,7 +45,9 @@
       "import": "Import les données ",
       "table": "Affiche ou cache la table",
       "form": "Affiche ou cache le formulaire ",
-      "exit": "Quitter l'application"
+      "exit": "Quitter l'application",
+      "run": "Exécuter",
+      "runAll": "Exécuter toutes"
     },
     "transaction": {
       "addLine": "Ajoute une nouvelle ligne",

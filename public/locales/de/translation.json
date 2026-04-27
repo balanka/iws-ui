@@ -41,16 +41,18 @@
       "canceln": "Annule la/les modidifications/ajouts",
       "print": "Affice la transaction/l'enregistrement en mode impression",
       "export": "Export la transaction/l'enregistrement format Excel",
-      "load": "Charge les données  de la base",
-      "import": "Import les données ",
-      "table": "Affiche ou cache la table",
-      "form": "Affiche ou cache le formulaire ",
-      "exit": "Quitter l'application"
+      "load": "Alle Datensätze laden",
+      "import": "Daten importieren",
+      "table": "Daten in Tabellenansicht anzeigen",
+      "form": "Datensatz anzeigen",
+      "exit": "Anwendung verlassen",
+      "run": "Ausführen",
+      "runAll": "Ausführen für alle"
     },
     "transaction": {
-      "addLine": "Ajoute une nouvelle ligne",
-      "removeLine": "Supprime la line ",
-      "post": "Valide la transaction/le journal"
+      "addLine": "Neue Zeile hinzufügen",
+      "removeLine": "Position loeschen",
+      "post": "Beleg buchen"
     }
   },
   "common": {

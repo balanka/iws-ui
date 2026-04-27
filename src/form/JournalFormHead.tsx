@@ -1,5 +1,5 @@
 import React, {CSSProperties, MouseEventHandler} from 'react';
-import {CHeaderToggler, CBadge, CInputGroup, CTooltip, CButton} from '@coreui/react';
+import {CHeaderToggler, CBadge, CInputGroup, CTooltip, CButton, CFormSelect} from '@coreui/react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { IoMdMenu } from 'react-icons/io';
@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import PrintOutlined from '@mui/icons-material/PrintOutlined';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { JournalToolBarProps } from '../Props';
+import {languages} from "./languages.ts";
 
 const ToolbarButton = ({ tooltip, onClick, disabled, icon }: any) => (
   <CTooltip content={tooltip} placement="top">
@@ -36,6 +37,7 @@ const FormButton = ({ title, type, color, style, size, height, onClick, classNam
 export const JournalFormHead = <T,>({
                                       style, title, submitQuery, submitQuery2, balancesheet,
                                       t, dispatch, logout, templateName, current, getData, submitPrintPreview
+                                      , language, handleLanguageChange
                                     }: JournalToolBarProps<T>): React.JSX.Element => {
 
   const sidebarShow = useSelector((state: any) => state.sidebarShow);
@@ -48,7 +50,7 @@ export const JournalFormHead = <T,>({
       minHeight: 28, flexWrap: 'wrap', gap: 0.2, ...style
     }}>
       {/* Left section */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div style={{ display: 'flex', alignItems:'flex-end', gap: 8 }}>
         <CHeaderToggler className="ps-1" onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}>
           <IoMdMenu size={20} />
         </CHeaderToggler>
@@ -59,6 +61,11 @@ export const JournalFormHead = <T,>({
 
       {/* Right section */}
       <div style={{ display: 'flex', height: 30, alignItems: 'center', gap: 0.5, flexWrap: 'wrap' }}>
+        <CHeaderToggler onClick={(e) => handleLanguageChange(e)}>
+          <CFormSelect style={{ height: 25, width: 100, fontSize: 10 }} value={language} onChange={(e) => handleLanguageChange(e)}>
+            {languages.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+          </CFormSelect>
+        </CHeaderToggler>
         <ToolbarButton
           tooltip={t('toolTip.common.print')}
           //@ts-ignore

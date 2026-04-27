@@ -29,7 +29,7 @@ ModuleRegistry.registerModules([
 
 
 const JForm = () => {
-  const [{ profile, selected, t, title, module_}] = useForm()
+  const [{ profile, selected, t, title, language, handleLanguageChange, module_}] = useForm()
   const [, setIwsState] = useState(iwsStore.initialState)
   const  [{ accData, rowData, setRowData, current_, current, setCurrent, submitQuery, submitQuery2
     , onRowSelected, templateName, styles}] = useJForm<IPeriodicAccountBalance>()
@@ -156,7 +156,7 @@ const JForm = () => {
                              logout={logout} submitQuery2={submitQuery2} balancesheet={true} t={t}
                              templateName ={templateName} getData={getData} current ={{...current, currency:currency, company:company}}
                              // @ts-ignore
-                             submitPrintPreview = {generateDocx}/>
+                             submitPrintPreview = {generateDocx} language={language} handleLanguageChange={handleLanguageChange}/>
             <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
                 // @ts-ignore
                              stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>

@@ -27,7 +27,7 @@ ModuleRegistry.registerModules([
 ])
 
 const InventoryJournalForm = () => {
-  const [{ profile,  selected, t, title, company, module_}] = useForm()
+  const [{ profile,  selected, t, title, language, handleLanguageChange, company, module_}] = useForm()
   const { token} = profile
   const  [{ rowData, current_, current, setCurrent, submitQuery, onRowSelected
     , templateName, styles}] = useArticleAccountForm<InventoryJournal>()
@@ -59,8 +59,7 @@ const InventoryJournalForm = () => {
                        logout ={logout}  balancesheet={false} t={t}
                        templateName={templateName}
                        current={ { ...current, id: `${current.fromPeriod}${current.toPeriod}`, modelid:current.modelid, company:company}}
-                       getData={getData}
-                       submitPrintPreview = {generateDocx}
+                       getData={getData} submitPrintPreview = {generateDocx} language={language} handleLanguageChange={handleLanguageChange}
       />
       <InventoryJournalMainForm current={current} setCurrent={setCurrent} t={t} artData={artData} storeData ={storeData} height={height}
         // @ts-ignore

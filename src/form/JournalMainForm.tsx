@@ -24,10 +24,10 @@ export const JournalMainForm = ({
 
   return (
     <CInputGroup className="p-1 bg-light" style={{ borderBottom: '1px solid #ddd', minHeight: 28 }}>
-      <CRow className="w-100 align-items-center g-1">
+      <CRow className="w-100 align-items-center g-2">
         {/* Account Selection - 6 columns on large screens */}
-        <CCol xs={12} md={6} lg={5}>
-          <div className="d-flex align-items-center gap-1">
+        <CCol xs={8} md={6} lg={5}>
+          <div className="d-flex align-items-center gap-2">
             <CFormLabel className="m-0" style={{ minWidth: 60 }}>{t('common.account')}</CFormLabel>
             <ComboBox
               style={{ height: 25, width: '100%', fontSize: 12 }}
@@ -47,7 +47,7 @@ export const JournalMainForm = ({
             value={current.fromPeriod}
             setCurrent={setCurrent}
             t={t}
-            style={{height, width: '100%'}} labelStyle={undefined}          />
+            style={{height, width: '90%', textAlign:'center'}} labelStyle={{ minWidth: 80 }}/>
         </CCol>
 
         {/* To Period - 3 columns */}
@@ -59,7 +59,7 @@ export const JournalMainForm = ({
             value={current.toPeriod}
             setCurrent={setCurrent}
             t={t}
-            style={{height, width: '100%'}} labelStyle={undefined}          />
+            style={{height, width: '90%', textAlign:'center'}} labelStyle={{ minWidth: 80 }} />
         </CCol>
       </CRow>
     </CInputGroup>

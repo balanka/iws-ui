@@ -27,7 +27,7 @@ ModuleRegistry.registerModules([
 ])
 
 const Journal = () => {
-  const [{ selected, t, title, company, module_}] = useForm()
+  const [{ selected, t, title, language, handleLanguageChange, company, module_}] = useForm()
   const  [{ accData, rowData, current_, current, setCurrent, submitQuery, submitQuery2, onRowSelected
     , templateName, styles}] = useJForm<IJournal>()
   if (module_ === '11111' || module_ === 11111) return <Login/>
@@ -79,8 +79,7 @@ const Journal = () => {
                        logout ={logout} submitQuery2={submitQuery2} balancesheet={false} t={t}
                        templateName={templateName}
                        current={ { ...current, id: `${current.fromPeriod}${current.toPeriod}`, modelid:current.modelid, company:company}}
-                       getData={getData}
-                       submitPrintPreview = {generateDocx}
+                       getData={getData} submitPrintPreview = {generateDocx} language={language} handleLanguageChange={handleLanguageChange}
       />
       <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
         // @ts-ignore
