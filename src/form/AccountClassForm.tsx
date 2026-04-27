@@ -50,8 +50,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    return (
      <>
        {header}
-       {safeBody ? safeBody :MasterfileFormWithout({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
-         , height:height, accData:accData, t:t, disable:disable, fieldName:t('common.account'), propertyName:'account' })}
+       {safeBody ? safeBody :mainForm}
        <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
          {table}
        </div>
