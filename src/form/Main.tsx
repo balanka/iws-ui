@@ -78,8 +78,8 @@ export const Main  = () => {
         const current_ = {...PACB_JOURNAL_QUERY_PARM, modelid:modelid, currency:currency??''}
         const [current, setCurrent] = useState<JournalProps>(current_)
         const [, setIwsState] = useState(iwsStore.initialState)
-        const [accData, setAccData] = useState <IAccount []>([])
-        const [rowData, setRowData] = useState <IAccount []>([])
+        const [accData, setAccData] = useState <IAccount[]>([])
+        const [rowData, setRowData] = useState <IAccount[]>([])
         const dispatch = useDispatch()
         const acc_modelid = formEnum.ACCOUNT
         const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
@@ -194,9 +194,9 @@ export const Main  = () => {
           field: "name",
           flex: 2,
           cellRendererParams: {
-          suppressCount: true,
+            suppressCount: true,
+         },
        },
-      },
         //rowData: accData,
         getRowId: (params:any) => params.data.id, // This is required
         treeData: true, // enable Tree Data mode

@@ -15,14 +15,15 @@ const SERVER_PORT:string  = 'REACT_APP_PORT'
 // @ts-ignore
 
 const apiBase = window?._env_?.REACT_APP_API_BASE??"/api"
-const apiUrl = window?._env_?.API_URL?? "localhost"
-const apiPort = window?._env_?.API_PORT??"8080"; // "192.168.64.1"
+//const apiUrl = window?._env_?.API_URL?? "localhost"
+const apiUrl = window?._env_?.REACT_WEB_HOST_IP_ADDRESS?? "localhost"
+  const apiPort = window?._env_?.API_PORT??"8080"; // "192.168.64.1"
 const scheme = window?._env_?.SCHEME??"http"
 //const API_BASE= getEnvVariable('REACT_APP_API_BASE', '/api1');
 //const SERVER_IP= getEnvVariable('API_URL', 'API_URL');
 //const SERVER_URL = `http://${apiUrl}${apiBase}` //'http://192.168.64.1/api'
-//const SERVER_URL = `${scheme}://${apiUrl}${apiBase}`
-const SERVER_URL = 'http://localhost:8080'
+const SERVER_URL = `${scheme}://${apiUrl}${apiBase}`
+//const SERVER_URL = 'http://localhost:8080'
 //const SERVER_URL = `http://${SERVER_IP}:${SERVER_PORT}` //'http://192.168.1.139:8091'
 //const SERVER_URL = `http://${WEB_SERVER_IP}:${SERVER_PORT}`
 //const apiUrl = getEnvVariable('API_URL', 'http://localhost:8080');
@@ -47,7 +48,7 @@ const fetchFnPost0 = (url: string,  record:any) => {
   console.log(' url…', url)
   console.log(' record…', record)
   return fetch(url, {body: JSON.stringify(record), method: 'POST',
-    headers: {Authorization: `Bearer`, Accept: "application/json", "Content-Type": "application/json",}
+    headers: { Accept: "application/json", "Content-Type": "application/json",}
   }).then((response: any) => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -55,6 +56,8 @@ const fetchFnPost0 = (url: string,  record:any) => {
     const payload = response.json()
     console.log(' payload', payload)
     return payload;
+  }).catch(function (error: any) {
+    console.log(' error', error)
   })
 }
 
@@ -362,15 +365,6 @@ const  Get = <A>(ctx:string, token:string, key: string|number, setRowData: Dispa
     })
 }
 
-const Get1 = (ctx:string, token:string, key_ : string|number) => {
-    const url = `${SERVER_URL}${ctx}`
-    console.log('url', url)
-    getFn(url, token).then((response) => iwsStore.put(key_, response))
-        .catch(function (error) {
-            console.log('error', error)
-        })
-}
-
 const Get2 = <A>(ctx:string, token:string, setCurrent:Dispatch<SetStateAction<A>> ) => {
     const url = `${SERVER_URL}${ctx}`
     console.log('url', url)
@@ -389,4 +383,4 @@ const Get2 = <A>(ctx:string, token:string, setCurrent:Dispatch<SetStateAction<A>
 const EditRow = <A>(edited:A, isNew:boolean, setCurrent :Dispatch<SetStateAction<A>>) =>
     setCurrent({ ...edited, editing: !isNew })
 
-export { COPY, Get, Get1, Get2, Get3,  Login, Add, Edit, EditRow }
+export { COPY, Get, Get2, Get3,  Login, Add, Edit, EditRow }
