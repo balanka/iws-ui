@@ -12,7 +12,7 @@ const iwsStore = {
     const temp = store instanceof Map ? store.get(key) : new Set()
     const temp1 = temp ?? []
     //console.debug('message', message)
-    const temp2 = Array.isArray(temp1) && temp1.length > 0 ? [...temp1] : [...message]
+    const temp2 = Array.isArray(temp1) && temp1?.length > 0 ? [...temp1] : [...message]
     store.set(key, temp2)
     store = new Map([...store.entries()])
     //console.debug('store', store)

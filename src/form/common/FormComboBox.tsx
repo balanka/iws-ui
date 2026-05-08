@@ -21,7 +21,7 @@ interface BaseComboBoxProps {
 const strcmp = (ax:string|bigint, bx:string|bigint)=> {
   let a = ax.toString()
   let b = bx.toString();
-  for (var i=0,n=Math.max(a.length, b.length); i<n && a.charAt(i) === b.charAt(i); ++i);
+  for (var i=0,n=Math.max(a?.length, b?.length); i<n && a.charAt(i) === b.charAt(i); ++i);
   if (i === n) return 0;
   return a.charAt(i) > b.charAt(i) ? 1 : -1; //a.charAt(i) > b.charAt(i) ? -1 : 1;
 }

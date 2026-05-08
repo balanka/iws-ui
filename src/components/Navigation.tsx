@@ -43,7 +43,7 @@ const Navigation = () => {
   }
   const buildMenu = (name_:string, path:string, children:any) => {
     let obj:any
-    if (Array.isArray(children) && children.length > 0) {
+    if (Array.isArray(children) && children?.length > 0) {
       obj = { component: CNavGroup, name: t(name_), to: path, icon: buildIcon(cilPuzzle) }
       obj['items'] = [...children].map((e) => {
         return {
@@ -66,7 +66,7 @@ const Navigation = () => {
   // console.log('modules_', modules_)
   // console.log('modules_', userMenu.map((m:IMasterfile)=>parseInt(`${m.id}`)).includes(153))
 
-  const allItems:any[] = Array.isArray(modules_) && modules_.length > 0 ? modules_ : DEFAULT
+  const allItems:any[] = Array.isArray(modules_) && modules_?.length > 0 ? modules_ : DEFAULT
   const allMenuItems:any[] = allItems.map((item:IMasterfile2) =>
     isArrayAndNotEmpty(allItems) ? {
           ...item,
@@ -81,7 +81,7 @@ const Navigation = () => {
   )
   //console.log('allMenuItems', allMenuItems)
   return allMenuItems
-    .filter((e:any) => (Array.isArray(e.items) && e.items.length > 0) || e.parent === -1)
+    .filter((e:any) => (Array.isArray(e.items) && e.items?.length > 0) || e.parent === -1)
     .map((e:any) => buildMenu(e.name, e.path, e.items))
 }
 export default Navigation

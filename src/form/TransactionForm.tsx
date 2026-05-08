@@ -229,7 +229,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
      Get(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
      submitQuery( ctx, partnerCtx, parseInt(mx?.account))
-     const currentx = rowData.filter(m=>m.modelid===current_.modelid).length>0?rowData[0]:current_
+     const currentx = rowData.filter(m=>m.modelid===current_.modelid)?.length>0?rowData[0]:current_
      setCurrent(currentx)
    }
 

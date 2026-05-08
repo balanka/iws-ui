@@ -331,7 +331,7 @@ const  Get3 = <A>(ctx:string, token:string, key: string|number
   const url = `${SERVER_URL}${ctx}`
   console.log('urlx', url)
     getFn(url, token ).then((data: A[]) => {
-      if (Array.isArray(data) && data.length>0) {
+      if (Array.isArray(data) && data?.length>0) {
         iwsStore.put(key, data)
         setRowData(data as A[])
         setCurrent(data[0])

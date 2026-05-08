@@ -73,7 +73,7 @@ export const FinancialsMainForm = ({
   console.log('currentLineFinancials', currentLineFinancials)
   const currentx: IFinancials =  current?? current
   let currentLine = isArrayAndNotEmpty(currentx?.lines)? currentx?.lines[0]:currentLineFinancials
-  currentLine = (currentx?.lines.length===1)?currentLine:currentLineFinancials
+  currentLine = (currentx?.lines?.length===1)?currentLine:currentLineFinancials
   console.log('currentLine', currentLine)
   const modelid = currentx?.modelid ?? 0;
   const currentModule = modules.find((m: IFmodule) => m.id === BigInt(modelid)) ?? initfModule[0];

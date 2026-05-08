@@ -28,7 +28,7 @@ const TransactionDetailsTabs = ({
     const height = 20
     const disable = transaction?.posted
   let currentLine:ILineTransaction = isArrayAndNotEmpty(transaction?.lines)? transaction?.lines[0]:currentLineTransaction
-  currentLine = (transaction?.lines.length===1)?currentLine:currentLineTransaction
+  currentLine = (transaction?.lines?.length===1)?currentLine:currentLineTransaction
     const linesx = !transaction?.lines?.length ? [{
     ...currentLine, transid: transaction?.id}] : transaction?.lines
   if(transaction?.hasOwnProperty('lines')) {

@@ -34,6 +34,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const minHeight = 400
      const maxHeight = 700
      const [{header, body, table, disable,  state, visible, rowData, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_, fmoduleColumnDefs(t), MASTERFILE.fmodule)
+   console.log('accDataX', accData);
+   console.log('accountDataX', accountData);
     const mainForm = FModuleMainForm ({collapse: state.collapse, current:current, setCurrent:setCurrent, accData:accData.filter(m=>
                    (parseInt(m.id.toString())===formEnum.FINANCIALS|| parseInt(m.id.toString())===formEnum.TRANSACTION))
                    , accountData:accountData, rowData:rowData, disable:disable, height:height,  t:t})

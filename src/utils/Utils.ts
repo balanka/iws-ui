@@ -27,7 +27,7 @@ export const  formatumber2Digits = (num:number, locale:string, digits:number) =>
     return    num?.toLocaleString(locale, { minimumFractionDigits: digits })
  //return    num?num?.toLocaleString(locale, { minimumFractionDigits: digits }):0.0.toLocaleString(locale, { minimumFractionDigits: digits })
 }
-export const isArrayAndNotEmpty = (array:any) => Array.isArray(array) && array.length>0
+export const isArrayAndNotEmpty = (array:any) => Array.isArray(array) && array?.length>0
 
 // const isNotArrayOrEmpty = (array:any) => !Array.isArray(array) || !array.length
 // export const fetchDataX2 =

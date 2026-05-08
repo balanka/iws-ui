@@ -19,7 +19,7 @@ const AppBreadcrumb = () => {
         breadcrumbs.push({
           pathname: currentPathname,
           name: routeName,
-          active: index + 1 === array.length,
+          active: index + 1 === array?.length,
         })
       return currentPathname
     })

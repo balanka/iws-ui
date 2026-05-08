@@ -27,7 +27,8 @@ const FormRow = ({ children, style, className = "g-2 align-items-center" }: any)
 export const FModuleMainForm = ({
                                   collapse, current, setCurrent, accData, accountData, rowData, disable, t, height
                                 }: FModuleProps2<IFmodule>): React.JSX.Element => {
-
+  console.log('accData', accData)
+  console.log('accountData', accountData)
   return (
     <div style={{ ...STYLES.outer0, paddingBottom: 10, width:"100%" }}>
       <MasterfileFormWithout
@@ -43,7 +44,6 @@ export const FModuleMainForm = ({
             fieldName="account" current={current} setCurrent={setCurrent}
             //@ts-ignore
             data={accountData.map((m:IMasterfile)=>{m.id, m.name})}
-            MasterfileXComboBox
             //@ts-ignore
             defaultValue={initAcc[0]} disable={disable} styles={comboStyles}
           />

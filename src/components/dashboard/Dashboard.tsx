@@ -218,7 +218,7 @@ const Dashboard = () => {
             {progressExample.map((item, index, items) => (
               <CCol
                 className={classNames({
-                  'd-none d-xl-block': index + 1 === items.length,
+                  'd-none d-xl-block': index + 1 === items?.length,
                 })}
                 key={index}
               >
