@@ -8,7 +8,31 @@ export default defineConfig({
     copyPublicDir: true,
     rollupOptions: {
       external: ['/env-config.js'], // not actually external, but we want to leave it alone
-    }
+      output: {
+        manualChunks(id, { getModuleInfo, getModuleIds }) {
+          // React vendor chunk
+          if (id.includes('node_modules/react') ||
+            id.includes('node_modules/react-dom') ||
+            id.includes('node_modules/react-router-dom')) {
+            return 'react-vendor';
+          }
+
+          // CoreUI vendor chunk
+          if (id.includes('node_modules/@coreui')) {
+            return 'coreui-vendor';
+          }
+
+          // Redux vendor chunk
+          if (id.includes('node_modules/react-redux') ||
+            id.includes('node_modules/@reduxjs/toolkit')) {
+            return 'redux-vendor';
+          }
+
+          // Default - let Vite decide
+          return null;
+        },
+      },
+    },
   },
   server: {
     https: true,

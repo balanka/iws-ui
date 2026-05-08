@@ -7,7 +7,8 @@ import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { TransactionDetailsForm} from './TransactionDetailsForm.tsx'
 import {blue} from '@mui/material/colors'
 import FileOutput from './FileOutput.tsx'
-import {ILineTransaction, ITransaction} from '../Models.ts'
+import { ILineTransaction, ITransaction} from '../Models.ts'
+import {isArrayAndNotEmpty} from "../utils/Utils.ts";
 
 const styles = {
     outer: {
@@ -26,15 +27,18 @@ const TransactionDetailsTabs = ({
 
     const height = 20
     const disable = transaction?.posted
+  let currentLine:ILineTransaction = isArrayAndNotEmpty(transaction?.lines)? transaction?.lines[0]:currentLineTransaction
+  currentLine = (transaction?.lines.length===1)?currentLine:currentLineTransaction
     const linesx = !transaction?.lines?.length ? [{
-    ...currentLineTransaction, transid: transaction?.id}] : transaction?.lines
+    ...currentLine, transid: transaction?.id}] : transaction?.lines
   if(transaction?.hasOwnProperty('lines')) {
     transaction.lines = linesx
   }else {
     transaction["lines"] = linesx
   }
-    const props: TransactionDetailsFormProps<ITransaction, ILineTransaction> = { transaction, setTransaction, currentLineTransaction
-        , setCurrentLineTransaction, accountFilter, oaccountFilter, articleData, vatData, t, disable, height
+    const props: TransactionDetailsFormProps<ITransaction, ILineTransaction> = { transaction, setTransaction
+      , currentLineTransaction:currentLine
+      , setCurrentLineTransaction, accountFilter, oaccountFilter, articleData, vatData, t, disable, height
     }
     const onRowSelected = (event: RowSelectedEvent) => setCurrentLineTransaction(event.data)
 

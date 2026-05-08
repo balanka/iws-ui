@@ -1,5 +1,4 @@
 import { InputField} from '../common'
-import Box from "@mui/material/Box";
 import {TFunction} from "i18next";
 import { CFormLabel} from "@coreui/react";
 
@@ -20,12 +19,12 @@ export const InputNumberField = ({ fieldName, current, setCurrent, value, disabl
   <InputField fieldName={fieldName} current={current} setCurrent={setCurrent} value={value} disabled={disabled} style={{ ...style, textAlign: 'right' }} />
 )
 
-export const CurrencyField = ({ fieldName, current, setCurrent, value, disabled, style, currency }: any) => (
-  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
-    <InputNumberField fieldName={fieldName} current={current} setCurrent={setCurrent} value={value} disabled={disabled} style={style} />
-    <span style={{ fontSize: '0.875rem', whiteSpace: 'nowrap' }}>{currency}</span>
-  </Box>
-)
+// export const CurrencyField = ({ fieldName, current, setCurrent, value, disabled, style, currency }: any) => (
+//   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
+//     <InputNumberField fieldName={fieldName} current={current} setCurrent={setCurrent} value={value} disabled={disabled} style={style} />
+//     <span style={{ fontSize: '0.875rem', whiteSpace: 'nowrap' }}>{currency}</span>
+//   </Box>
+// )
 
 
 export const FromPeriod = ({

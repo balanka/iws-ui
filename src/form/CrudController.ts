@@ -16,9 +16,9 @@ const SERVER_PORT:string  = 'REACT_APP_PORT'
 
 const apiBase = window?._env_?.REACT_APP_API_BASE??"/api"
 //const apiUrl = window?._env_?.API_URL?? "localhost"
-const apiUrl = window?._env_?.REACT_WEB_HOST_IP_ADDRESS?? "localhost"
+const apiUrl = window?._env_?.REACT_WEB_HOST_IP_ADDRESS?? "localhost:8080"
   const apiPort = window?._env_?.API_PORT??"8080"; // "192.168.64.1"
-const scheme = window?._env_?.SCHEME??"http"
+const scheme = window?._env_?.SCHEME??"https"
 //const API_BASE= getEnvVariable('REACT_APP_API_BASE', '/api1');
 //const SERVER_IP= getEnvVariable('API_URL', 'API_URL');
 //const SERVER_URL = `http://${apiUrl}${apiBase}` //'http://192.168.64.1/api'
@@ -50,15 +50,16 @@ const fetchFnPost0 = (url: string,  record:any) => {
   return fetch(url, {body: JSON.stringify(record), method: 'POST',
     headers: { Accept: "application/json", "Content-Type": "application/json",}
   }).then((response: any) => {
+    console.log(' response', response)
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const payload = response.json()
     console.log(' payload', payload)
     return payload;
-  }).catch(function (error: any) {
-    console.log(' error', error)
-  })
+   })//.catch(function (error: any) {
+  //   console.log(' error', error)
+  // })
 }
 
 const fetchFn = (url: string, method_:HttpMethod, token:string, record:any) => {

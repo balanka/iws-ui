@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { IFinancials, IMasterfile, IAccount, IFmodule, ILineFinancials } from '../Models';
+import {IFinancials, IMasterfile, IAccount, IFmodule, ILineFinancials} from '../Models';
 import { TFunction } from 'i18next';
 
 

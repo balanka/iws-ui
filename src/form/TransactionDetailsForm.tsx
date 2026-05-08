@@ -2,68 +2,59 @@ import React from 'react'
 import { CRow, CCol, CContainer } from '@coreui/react'
 import ComboBox from './ComboBox'
 import { InputField, TextareaField, DatePickerField } from './common'
-import { ILineTransaction, IArticle } from '../Models'
+import { ILineTransaction, IArticle, ITransaction } from '../Models'
 import { sortById } from '../utils/Utils'
 import { toOption } from '../utils/FormUtils'
 import { initArticle, initVat } from './Menu'
-import {formEnum} from '../utils/FormEnum'
-
+import { formEnum } from '../utils/FormEnum'
+import { TransactionDetailsFormProps } from "../Props.ts"
 
 const styles = { minHeight: 25, height: 25, width: '100%', color: '#6b7280', fontSize: 12 }
 const FormRow = ({ children }: any) => <CRow className="g-2 align-items-center mb-2">{children}</CRow>
 const Label = ({ children, w = 80 }: any) => <div style={{ minWidth: w }}>{children}</div>
 
-const updateTransaction = (transaction: any, setTransaction: any, line: any, setLine: any) => {
-  const lines = [...(transaction.lines || [])]
-  const idx = lines.findIndex((l: any) => l.id === line.id)
-  idx === -1 ? lines.push(line) : (lines[idx] = line)
-  setTransaction({ ...transaction, lines })
-  setLine(line)
+const setTransactionR = (
+  transaction: ITransaction,
+  setTransaction: (arg: ITransaction) => void,
+  line: ILineTransaction,
+  setCurrent: (arg: ILineTransaction) => void
+) => {
+  const idx = transaction?.lines?.findIndex((obj) => obj.id === line.id );
+  if (idx === -1) {
+    transaction.lines.push({...line})
+  } else {
+    transaction.lines[idx] = {...line, transid:line.id >BigInt(0)?BigInt(-1):line.transid}
+  }
+  setCurrent({...line})
+  // console.log('transactionX', transaction)
+  setTransaction({ ...transaction })
+
 }
-
+const getPrice = (transaction:ITransaction, article: IArticle) => {
+  return (transaction.modelid === formEnum.SALES_ORDER ||
+    transaction.modelid === formEnum.CUSTOMER_INVOICE ||
+    transaction.modelid === formEnum.DELIVERY)
+    ? article.sprice
+    : (transaction.modelid === formEnum.PURCHASE_ORDER ||
+      transaction.modelid === formEnum.SUPPLIER_INVOICE ||
+      transaction.modelid === formEnum.GOODRECEIVING)
+      ? article.pprice
+      : 0.0
+}
 export const TransactionDetailsForm = ({
-                                         transaction, setTransaction, currentLineTransaction, setCurrentLineTransaction,
-                                         articleData, vatData, t, disable, height
-                                       }: any): React.JSX.Element => {
-
-  const current = currentLineTransaction
-  const setCurrent = setCurrentLineTransaction
-  const article = articleData?.find((a: any) => a.id === current.article) ?? initArticle[0]
-  const vat = vatData?.find((v: any) => v.id === current.vatCode) ?? initVat[0]
-
-  const getPrice = (a: IArticle) => {
-    const mid = transaction.modelid
-    return (mid === formEnum.SALES_ORDER || mid === formEnum.CUSTOMER_INVOICE || mid === formEnum.DELIVERY) ? a.sprice :
-      (mid === formEnum.PURCHASE_ORDER || mid === formEnum.SUPPLIER_INVOICE || mid === formEnum.GOODRECEIVING) ? a.pprice : 0
-  }
-
-  const handleChange = (updates: Partial<ILineTransaction>) => {
-    const updated = { ...current, ...updates, company: `-${transaction.company}` }
-    updateTransaction(transaction, setTransaction, updated, setCurrent)
-  }
-
-  const handleArticleChange = (value: string) => {
-    const a = articleData?.find((a: any) => a.id === value) ?? initArticle[0]
-    const v = vatData?.find((v: any) => v.id === a?.vatCode)
-    handleChange({
-      article: value, articleName: a?.name || '', unit: a?.quantityUnit || '',
-      price: getPrice(a), vatCode: v?.id || '', vat: (v?.percent ?? 0) * current.quantity * getPrice(a),
-      currency: a?.currency || ''
-    })
-  }
-
-  const handleVatChange = (value: string) => {
-    const v = vatData?.find((v: any) => v.id === value)
-    handleChange({ vatCode: value, vat: (v?.percent ?? 0) * current.quantity * current.price })
-  }
-
-  const handleQuantityChange = (val: number) => {
-    handleChange({ quantity: val, vat: (vat?.percent ?? 0) * val * current.price })
-  }
-
-  const handlePriceChange = (val: number) => {
-    handleChange({ price: val, vat: (vat?.percent ?? 0) * current.quantity * val })
-  }
+                                         transaction,
+                                         setTransaction,
+                                         currentLineTransaction,
+                                         setCurrentLineTransaction,
+                                         articleData,
+                                         vatData,
+                                         t,
+                                         disable,
+                                         height
+                                       }: TransactionDetailsFormProps<ITransaction, ILineTransaction>): React.JSX.Element => {
+  // Find current article and vat
+  const currentArticle = articleData?.find((acc: { id: any }) => acc.id === currentLineTransaction.article) ?? initArticle[0]
+  const currentVat = vatData?.find((vat: { id: any }) => vat.id === currentLineTransaction.vatCode) ?? initVat[0]
 
   return (
     <CContainer fluid className="p-0">
@@ -71,12 +62,60 @@ export const TransactionDetailsForm = ({
       <FormRow>
         <CCol sm={8} className="d-flex gap-2">
           <Label>{t('transaction.line.article')}</Label>
-          <ComboBox style={styles} disable={disable} value={{ value: article?.id || '', label: article ? `${article.id} ${article.name}` : '' }} onChange={handleArticleChange} values={articleData?.slice().sort(sortById).map(toOption)} />
+          <ComboBox
+            style={styles}
+            disable={disable}
+            key={`article-${currentLineTransaction?.article || 'empty'}`}
+            value={{ value: currentArticle?.id || '', label: currentArticle ? `${currentArticle.id} ${currentArticle.name}` : '' }}
+            onChange={(value: any) => {
+              const article = articleData?.find((acc: { id: any }) => acc.id === value) ?? initArticle[0]
+              const vat = vatData?.find((vat: { id: any }) => vat.id === article?.vatCode) ?? initVat[0]
+              const percent = vat?.percent ?? 0.0
+              const vatAmount = percent * currentLineTransaction.quantity * currentLineTransaction.price
+              const vatCode = vat?.id || ''
+              const currentx: ILineTransaction = {
+                ...currentLineTransaction,
+                article: value,
+                articleName: article?.name || '',
+                unit: article?.quantityUnit || '',
+                price: getPrice(transaction, article),
+                vatCode: vatCode.toString(),
+                vat: vatAmount,
+                currency: article?.currency || '',
+                company: transaction.company
+              }
+              setCurrentLineTransaction(currentx)
+              setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
+            }}
+            values={articleData?.slice().sort(sortById).map(toOption)}
+          />
         </CCol>
         <CCol sm={4} className="d-flex gap-2">
           <Label>{t('transaction.line.quantity')}</Label>
-          <InputField fieldName="quantity" current={current} setCurrent={setCurrent} value={Number(current.quantity)} onChange={(e: any) => handleQuantityChange(e.target.value)} disabled={disable} style={{ height, width: 100, textAlign: 'right' }} />
-          <InputField fieldName="unit" current={current} setCurrent={setCurrent} value={current.unit} disabled style={{ height, width: 80 }} />
+          <InputField
+            fieldName="quantity"
+            current={currentLineTransaction}
+            setCurrent={setCurrentLineTransaction}
+            value={Number(currentLineTransaction.quantity)}
+            onChange={(event: any) => {
+              const netAmount =  event.target.value * currentLineTransaction.price
+              const vatAmount = (currentVat?.percent ?? 0.0) * netAmount
+              const currentx = { ...currentLineTransaction, quantity: Number(event.target.value)
+                , vat: vatAmount, net:netAmount, total:netAmount+vatAmount, company:transaction.company }
+              setCurrentLineTransaction(currentx)
+              setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
+            }}
+            disabled={disable}
+            style={{ height: height, textAlign: 'right' }}
+          />
+          <InputField
+            fieldName="unit"
+            current={currentLineTransaction}
+            setCurrent={setCurrentLineTransaction}
+            value={currentLineTransaction.unit}
+            disabled={true}
+            style={{ height: height, textAlign: 'left' }}
+          />
         </CCol>
       </FormRow>
 
@@ -84,12 +123,49 @@ export const TransactionDetailsForm = ({
       <FormRow>
         <CCol sm={8} className="d-flex gap-2">
           <Label>{t('common.vatCode')}</Label>
-          <ComboBox style={styles} disable={disable} value={{ value: vat?.id || '', label: vat ? `${vat.id} ${vat.name}` : '' }} onChange={handleVatChange} values={vatData?.slice().sort(sortById).map(toOption)} />
+          <ComboBox
+            style={styles}
+            disable={disable}
+            key={`vat-${currentLineTransaction?.vatCode || 'empty'}`}
+            value={{ value: currentVat?.id || '', label: currentVat ? `${currentVat.id} ${currentVat.name}` : '' }}
+            onChange={(value: any) => {
+              const vat = vatData?.find((vat: { id: any }) => vat.id === value) ?? initVat[0]
+              const netAmount =  currentLineTransaction.quantity * currentLineTransaction.price
+              const vatAmount = (vat?.percent ?? 0.0) * netAmount
+              const currentx = { ...currentLineTransaction, vatCode: value, vat: vatAmount, net:netAmount
+                , total:netAmount+vatAmount, company:transaction.company }
+              setCurrentLineTransaction(currentx)
+              setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
+            }}
+            values={vatData?.slice().sort(sortById).map(toOption)}
+          />
         </CCol>
         <CCol sm={4} className="d-flex gap-2">
           <Label>{t('transaction.line.price')}</Label>
-          <InputField fieldName="price" current={current} setCurrent={setCurrent} value={Number(current.price)} onChange={(e: any) => handlePriceChange(e.target.value)} disabled={disable} style={{ height, width: 100, textAlign: 'right' }} />
-          <InputField fieldName="currency" current={current} setCurrent={setCurrent} value={current.currency} disabled style={{ height, width: 80 }} />
+          <InputField
+            fieldName="price"
+            current={currentLineTransaction}
+            setCurrent={setCurrentLineTransaction}
+            value={Number(currentLineTransaction.price)}
+            onChange={(event: any) => {
+              const netAmount =  currentLineTransaction.quantity * event.target.value
+              const vatAmount = (currentVat?.percent ?? 0.0) * netAmount
+              const currentx = { ...currentLineTransaction, price: Number(event.target.value), vat: vatAmount,  net:netAmount
+                , total:netAmount+vatAmount, company: transaction.company }
+              setCurrentLineTransaction(currentx)
+              setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
+            }}
+            disabled={disable}
+            style={{ height: height, textAlign: 'right' }}
+          />
+          <InputField
+            fieldName="currency"
+            current={currentLineTransaction}
+            setCurrent={setCurrentLineTransaction}
+            value={currentLineTransaction.currency}
+            disabled={true}
+            style={{ height: height, textAlign: 'left' }}
+          />
         </CCol>
       </FormRow>
 
@@ -97,11 +173,42 @@ export const TransactionDetailsForm = ({
       <FormRow>
         <CCol sm={8} className="d-flex gap-2">
           <Label>{t('transaction.line.text')}</Label>
-          <TextareaField fieldName="text" placeholder={t('transaction.line.text')} disabled={disable} value={current.text} current={current} setCurrent={setCurrent} onChange={(e: any) => handleChange({ text: e.target.value })} style={{ width: '100%' }} />
+          <TextareaField
+            fieldName="text"
+            placeholder={t('transaction.line.text')}
+            disabled={disable}
+            value={currentLineTransaction.text}
+            current={currentLineTransaction}
+            setCurrent={setCurrentLineTransaction}
+            onChange={(event: any) => {
+              const netAmount =  currentLineTransaction.quantity * currentLineTransaction.price
+              const vatAmount = (currentVat?.percent ?? 0.0) * netAmount
+              const currentx = { ...currentLineTransaction, text: event.target.value, vat: vatAmount,  net:netAmount
+                , total:netAmount+vatAmount, company: transaction.company }
+              setCurrentLineTransaction(currentx)
+              setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
+            }}
+            style={{ width: '100%' }}
+          />
         </CCol>
         <CCol sm={4} className="d-flex gap-2">
           <Label w={70}>{t('transaction.line.duedate')}</Label>
-          <DatePickerField fieldName="duedate" label={t('transaction.line.duedate')} selected={current.duedate} current={current} setCurrent={setCurrent} onChange={(date: any) => handleChange({ duedate: date })} disabled={disable} />
+          <DatePickerField
+            fieldName="duedate"
+            label={t('transaction.line.duedate')}
+            selected={currentLineTransaction.duedate}
+            current={currentLineTransaction}
+            setCurrent={setCurrentLineTransaction}
+            onChange={(date: any) => {
+              const netAmount =  currentLineTransaction.quantity * currentLineTransaction.price
+              const vatAmount = (currentVat?.percent ?? 0.0) * netAmount
+              const currentx = { ...currentLineTransaction, duedate: date, vat: vatAmount,  net:netAmount
+                , total:netAmount+vatAmount, company: transaction.company }
+              setCurrentLineTransaction(currentx)
+              setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
+            }}
+            disabled={disable}
+          />
         </CCol>
       </FormRow>
     </CContainer>

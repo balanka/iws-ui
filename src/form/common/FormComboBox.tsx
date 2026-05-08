@@ -156,9 +156,9 @@ console.log('filtered', filtered)
       onChange={(value:any,  _event:any) => {
         const currentAccountx = filtered?.find((acc: { id: any }) => acc.id ===value)
         console.log('currentAccountx', currentAccountx)
-        const currentLinex = {...currentLine, transid:BigInt(-1), [id]: currentAccountx?currentAccountx.id:'', [name]: currentAccountx ?currentAccountx.name:''}
+        const currentLinex = {...currentLine, [id]: currentAccountx?currentAccountx.id:'', [name]: currentAccountx ?currentAccountx.name:''}
         console.log('x>>>>>>>>currentLinex', currentLinex)
-        setCurrentLine(currentLinex)
+        setCurrentLine({...currentLinex})
         setTransaction(current, setCurrent, currentLinex, setCurrentLine)
       }}
 
@@ -283,20 +283,14 @@ export default MasterfileXComboBox;
 export const MasterfileComboBox2:FC<FinancialsCBoxProps3<IFinancials, IMasterfile, ILineFinancials>> =({current
                                                                                                   , setCurrent, currentLine, setCurrentLine, data, id, name, defaultValue,  accFilter = []
                                                                                                   , zIndex, styles})=>{
-  // console.log('id', id)
-  // console.log('name', name)
+
   console.log('currentLine', currentLine)
   console.log('current', current)
-  //console.log('accFilter', accFilter)
-  // @ts-ignore
-  //const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === currentLine[id])??defaultValue
-
   const filtered= getFiltered(data, accFilter)
   console.log('filtered', filtered)
   let currentLinex:ILineFinancials = {...currentLine}
   let currentLinex1: {[index: string]:any} ={...currentLinex}
   console.log('currentLinex1', currentLinex1)
-
   return (
     <ComboBox<{value:string|bigint,  label:string}>
       style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
@@ -313,10 +307,7 @@ export const MasterfileComboBox2:FC<FinancialsCBoxProps3<IFinancials, IMasterfil
         console.log('idx', idx);
         (idx === -1) ? current.lines.push(currentLinex) : (current.lines[idx] = currentLinex)
         console.log('current>>>>>>>', current)
-       // const x= {...current, account:currentLinex.account, lines: current.lines.filter((line)=>
-       //     (line.account.length==0|| line.oaccount.length==0))}
-       // console.log('x>>>>>>>', x)
-        setCurrent(current)
+        setCurrent({...current})
       }}
       value={{value:currentLinex1[id], label: `${currentLinex1[id]} ${currentLinex1[name]}`}}
       values={filtered.slice().sort(sortById).map(toOption)}

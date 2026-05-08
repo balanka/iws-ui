@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {IFinancials, ITransaction} from "../Models.ts";
 import {NavigateFunction} from "react-router-dom";
 import iwsStore from "./Store.tsx";
+import {CRow} from "@coreui/react";
 
 
 export const getEnvVariable = (key:any, defaultValue = '') => {
@@ -71,6 +72,14 @@ export const logout = (navigate:NavigateFunction) => {
   navigate('/dashboard')
   window.location.reload()
 }
+
+// FormRow component (same pattern as TransactionMainForm)
+export  const FormRow = ({ children, height }: { children: React.ReactNode, height:number }) =>
+  <CRow className="g-2 align-items-center mb-2" style={{ height: height - 4 }}>{children}</CRow>
+
+export const Label = ({ children, width = 80, bold = false }: any) =>
+  <div style={{ minWidth: width, fontWeight: bold ? 'bold' : 'normal', paddingLeft: 10 }}>{children}</div>
+
 // export const  print = <A extends object>(templateFileName:string, data:A[]):Element => {
 //     return (
 //         <>

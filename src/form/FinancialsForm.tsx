@@ -12,7 +12,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 import {styles as stylesx} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {FinancialsMainForm} from './FinancialsMainForm'
+import { FinancialsMainForm } from './FinancialsMainForm'
 import {FinancialsFormHead} from './FinancialsFormHead.tsx'
 import {FINANCIALS, initAcc, initfModule, initFtr, initLineFinancials, MASTERFILE} from './Menu.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
@@ -152,7 +152,7 @@ const FinancialsForm = () => {
   const maxHeight =650
   const minPadding=0
   const maxPadding=40
-  const height = 35
+  const height = 30
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   const buildTotal =(current:ITransaction|IFinancials) => {
     //@ts-ignore
@@ -200,7 +200,7 @@ const FinancialsForm = () => {
       t={t}
       //zIndex={zIndex-1}
     />
-    <div  style={{borderRadius: 5, height:700, boxShadow: '0 20px 50px #BBF', padding: 1}} >
+    <div  style={{...stylesx.outer, height:650, boxShadow: '0 20px 50px #BBF', padding: 1, paddingBottom:2, backgroundColor: '#e9ecef'}} >
       <FinancialsMainForm collapse ={state.collapse}
                           current={current??current_}
                           setCurrent={setCurrent}
@@ -221,7 +221,7 @@ const FinancialsForm = () => {
       />
       <div
         // @ts-ignore
-            style={{...stylesx.outer, display: !state.collapse?'none':'', width: '100%', height: 165
+            style={{...stylesx.outer, display: !state.collapse?'none':'', width: '100%', height: 160
               , padding: 2, paddingTop: 3, zIndex:4}}>
         <LineTFinancialsGrid
           // @ts-ignore

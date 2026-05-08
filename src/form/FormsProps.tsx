@@ -9,7 +9,7 @@ export const styles = {
   },
   outer: {
     borderRadius: 5,
-    boxShadow: "0 30px 40px #BBB",
+    boxShadow: "0 30px 50px #BBB",
     padding: 5,
     //width: '100%',
     //height: 200,

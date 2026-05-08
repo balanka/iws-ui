@@ -105,22 +105,26 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
     const row: T = { ...current, modelid: model, company: company}
     Add(modifyUrl, token, row, rowData, setRowData, setCurrent)
   }
-     const addLine = useCallback(
-         ( line:L, setCurrent:Dispatch<SetStateAction<T>>) => {
-             const dx: T = {...current}
-           console.log('Line', line)
-             const  newLine:L = {...line, id: BigInt(-1), transid: current?.id, company:-company}
-           console.log('newLine', newLine)
-           if(dx.hasOwnProperty('lines'))
-             dx.lines.push(newLine)
-           else dx['lines'] = [{...newLine}]
-           gridApi!?.applyTransaction({add: [newLine]})
-           console.log('dx', dx)
-           setCurrent(dx)
-           setCurrentLine({...newLine})
-         },
-         [current],
-     )
+  const addLine = useCallback(
+    (line: L, setCurrent: Dispatch<SetStateAction<T>>) => {
+      console.log('addLine called - THIS SHOULD NOT HAPPEN ON EVERY KEYSTROKE', new Date().toLocaleTimeString())
+      setCurrent((prevCurrent: T) => {
+        const newLine: L = {...line, id: BigInt(-1), transid: prevCurrent?.id, company: company}
+        const dx: T = {...prevCurrent}
+        if (dx.hasOwnProperty('lines')) {
+          dx.lines.push(newLine)
+        } else {
+          dx['lines'] = [{...newLine}]
+        }
+        if (gridApi) {
+          gridApi.applyTransactionAsync({add: [newLine]})
+        }
+        setCurrentLine({...newLine})
+        return dx
+      })
+    },
+    [current]
+  )
 
      const onRemoveSelectedLine = useCallback(
          ( event:any, current:T, setCurrent:Dispatch<SetStateAction<T>>) => {

@@ -1,0 +1,22 @@
+/* CurrencyInput.css - Make currency input responsive */
+.react-currency-input-field {
+  width: 100% !important;
+  box-sizing: border-box;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: inherit;
+}
+
+/* Optional: Focus state styling */
+.react-currency-input-field:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Optional: Disabled state styling */
+.react-currency-input-field:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}

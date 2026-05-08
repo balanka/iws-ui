@@ -125,11 +125,11 @@ const ComboBox = <T extends Base>({
 
   const onSelectChange = (e: any) => {
     const val = values.find((m) => m.value === e?.value)
+    console.log('value ZZZZZZZZZZZ$e', val)
     if (val) {
       onChange(val.value, val.label)
     }
   }
-
   return (
     <Select
       styles={customStyles}

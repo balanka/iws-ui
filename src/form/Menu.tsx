@@ -489,7 +489,7 @@ export const initLineFinancials:ILineFinancials = {
   duedate: new Date(),
   text: '',
   currency: '',
-  company: '-',
+  company: '',
 }
 export const initFtr:IFinancials[] = [
   {

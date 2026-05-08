@@ -1,5 +1,5 @@
 import React from 'react'
-import { CRow, CCol } from '@coreui/react'
+import { CCol } from '@coreui/react'
 import ComboBox from "./ComboBox.tsx"
 import { MasterfileComboBox } from './common'
 import { BooleanField, DatePickerField, InputField, TextareaField } from './common'
@@ -8,25 +8,21 @@ import { sortById } from "../utils/Utils.ts"
 import { toOption, transactionToOption } from "../utils/FormUtils.tsx"
 import { initCust, initStore } from "./Menu.tsx"
 import CurrencyInput from "react-currency-input-field";
+import  { FormRow, Label} from '../utils/FormUtils'
+
 export const TransactionMainForm = ({
                                       collapse, current, setCurrent, t, handleModuleChange, storeData, accData,
                                       modules, copyFromTransaction, submitCopy, height, zIndex, locale, currency
                                     }: any): React.JSX.Element => {
-  //height: height-10,
   const inputStyle = { height: height-10, width: '100%', color: '#6b7280', fontSize: 12 }
-  const FormRow = ({ children }: any) => <CRow className="g-2 align-items-center mb-2" style={{height: height-4}}>{children}</CRow>
-  const Label = ({ children, width = 80, bold = false }: any) => (
-    <div style={{ minWidth: width, fontWeight: bold ? 'bold' : 'normal' }}>{children}</div>)
   const currencyStyle = { height: height - 3, padding: 5, textAlign: 'right' as const, width: '100%' };
   const currentModule = modules.find((m: any) => m.id === BigInt(current?.modelid ?? 0))
   const copyFromModule = modules.find((m: any) => m.id === BigInt(currentModule?.copyFrom ?? 0))
-  const total = current?.lines?.reduce((prev: number, line: any) => prev + line?.quantity * line?.price + line?.vat, 0) ?? 0
-
-
+  const total:number = current?.lines?.reduce((prev: number, line: any) => prev + line?.quantity * line?.price + line?.vat, 0) ?? 0
   return (
     <div style={{ ...styles.outer, paddingBottom:2, width:'100%', height:210,  display: !collapse ? 'none' : ''  }}>
       {/* Row 1 */}
-      <FormRow>
+      <FormRow height={height}>
         <CCol sm={8} className="d-flex gap-2 align-items-center" style={{height: height}}>
           <Label>{t('common.id')}</Label>
           <InputField fieldName="id" current={current} setCurrent={setCurrent} value={current.id} disabled={current.posted} style={{ ...inputStyle, width: '50%', textAlign: 'right' }} />
@@ -36,7 +32,7 @@ export const TransactionMainForm = ({
       </FormRow>
 
       {/* Row 2 */}
-      <FormRow>
+      <FormRow height={height}>
         <CCol sm={8} className="d-flex gap-2 align-items-center" style={{height: height, paddingTop:2}}>
           <Label>{t('transaction.oid')}</Label>
           <InputField fieldName="oid" current={current} setCurrent={setCurrent} value={current.oid} disabled={current.posted} style={{...inputStyle, width:'50%', textAlign: 'right' }} />
@@ -51,7 +47,7 @@ export const TransactionMainForm = ({
       </FormRow>
 
       {/* Row 3 */}
-      <FormRow>
+      <FormRow height={height}>
         <CCol sm={8} className="d-flex gap-2 align-items-center" style={{height: height, paddingTop:2}}>
           <Label>{t('transaction.store')}</Label>
           <MasterfileComboBox current={current} setCurrent={setCurrent} data={storeData} fieldName="store" defaultValue={initStore[0]} zIndex={zIndex} styles={inputStyle} />
@@ -63,7 +59,7 @@ export const TransactionMainForm = ({
       </FormRow>
 
       {/* Row 4 */}
-      <FormRow>
+      <FormRow height={height}>
         <CCol sm={8} className="d-flex gap-2 align-items-center" style={{height: height, paddingTop:2}}>
           <Label>{t('transaction.account')}</Label>
           <MasterfileComboBox current={current} setCurrent={setCurrent} data={accData} fieldName="account" defaultValue={initCust[0]} zIndex={zIndex} styles={inputStyle} />
@@ -83,14 +79,14 @@ export const TransactionMainForm = ({
         </CCol>
       </FormRow>
       {/* Row 5 */}
-      <FormRow>
+      <FormRow height={height}>
         <CCol sm={12} className="d-flex gap-2 align-items-start" style={{height: height, paddingTop:4}}>
           <Label>{t('transaction.text')}</Label>
           <TextareaField fieldName="text" placeholder={t('transaction.text')} disabled={current.posted} value={current.text} current={current} setCurrent={setCurrent} style={{ width: '100%' }} />
         </CCol>
       </FormRow>
       {/* Row 6 */}
-      <FormRow>
+      <FormRow height={height}>
         <CCol sm={12} className="d-flex gap-2 align-items-start" style={{height: height, paddingTop:4}}>
           <Label>{t('transaction.footText')}</Label>
           <TextareaField fieldName="footText" placeholder={t('transaction.footText')} disabled={current.posted} value={current.footText} current={current} setCurrent={setCurrent} style={{ width: '100%' }} />

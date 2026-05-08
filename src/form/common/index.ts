@@ -7,9 +7,10 @@ export { FormRow6ColAligned } from './FormRow6ColAligned'
 export { FormRow4ColAligned } from './FormRow4ColAligned'
 export { FormButton, ToolbarButton } from './FormButton'
 export { FieldLabel } from './FieldLabel'
-export { BooleanField, CurrencyField, InputNumberField, FromPeriod } from './FormFields'
+export { BooleanField, InputNumberField, FromPeriod } from './FormFields'
 export { DatePickerField } from './DatePickerField'
 export { InputField } from './InputField'
+export { CurrencyField } from './CurrencyField'
 export { TextareaField } from './TextareaField'
 export {
   MasterfileComboBox2,
