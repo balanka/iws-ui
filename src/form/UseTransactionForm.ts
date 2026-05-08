@@ -88,7 +88,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   }, [current])
 
      function buildPostCall (rows: BigInt[], current:T, modifyUrl: string, token: string, setCurrent:Dispatch<SetStateAction<T>>) {
-         const ids = rows.length > 0 ? rows : [current?.id]
+         const ids = rows?.length > 0 ? rows : [current?.id]
          const url_ = `${modifyUrl}/post/${ids.join(',')}/${current?.modelid}/${current?.company}`
          Get2(url_, token, setCurrent)
      }
