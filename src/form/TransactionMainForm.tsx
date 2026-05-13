@@ -54,7 +54,7 @@ export const TransactionMainForm = ({
         </CCol>
         <CCol sm={4} className="d-flex gap-2 align-items-center">
           <Label>{t('transaction.transdate')}</Label>
-          <DatePickerField fieldName="transdate" label={t('transaction.transdate')} selected={current.transdate} current={current} setCurrent={setCurrent} disabled={current.posted} />
+          <DatePickerField fieldName="transdate" label={t('transaction.transdate')} selected={current.transdate} current={current} setCurrent={setCurrent} disabled={current.posted} zIndex={zIndex} />
         </CCol>
       </FormRow>
 

@@ -260,16 +260,7 @@ export interface IFinancials extends  IWSTransaction<ILineFinancials> {
   lines: ILineFinancials [],
   //total ():number
 }
-export interface IFinancials2 extends  IFinancials {
-  transid:bigint,
-  accountName: string,
-  side: boolean,
-  oaccount: string,
-  oaccountName: string,
-  amount: number,
-  currency: string,
-  duedate: Date,
-}
+
 export interface ISalaryItem extends IMasterfile3 {
   amount: number,
   currency:string,

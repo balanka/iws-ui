@@ -6,7 +6,7 @@ import routes from '../routes'
 const createLazy = (importCompnent:any)=> {
     const Content = React.lazy(importCompnent)
     const spinner = <CSpinner color="primary" />
-    return (props: any) => <Suspense fallback={spinner}><Content {...props} /></Suspense>
+    return (props: any) => <Suspense fallback={spinner}><Content {...props}  style={{ paddingLeft: 0, paddingRight: 0 }}/></Suspense>
 }
 const AppContent = () => {
   return (

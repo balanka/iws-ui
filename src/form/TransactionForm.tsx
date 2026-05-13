@@ -260,6 +260,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                 toggleTable={toggleTable}
                 current={current}
                 t={t}
+                zIndex={zIndex??99999}
         />
        <div
        //@ts-ignore

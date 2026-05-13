@@ -23,7 +23,7 @@ export const DatePickerField = ({
             }
           }}
           //@ts-ignore
-          style={{ height: `${height??28 - 3}px`, width: '100%' }}
+          style={{ height: `${height??28 - 3}px`, width: '100%', zIndex: zIndex }}
        />
       </div>
   )

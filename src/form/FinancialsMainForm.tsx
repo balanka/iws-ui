@@ -122,7 +122,7 @@ export const FinancialsMainForm = ({
                              const period = Number(`${date.getFullYear()}${month}`);
                              setCurrent({...currentx, transdate: date, period})
                            }}
-                           zIndex={9999}
+                           zIndex={zIndex-10}
                            height={height}/>
         </CCol>
       </FormRow>
@@ -150,7 +150,7 @@ export const FinancialsMainForm = ({
                              currentLine = {...currentLine, transid:BigInt(-1), duedate: date}
                              setCurrentLineFinancials({...currentLine})
                              setTransactionF(current, setCurrent, currentLine, setCurrentLineFinancials)}}
-                             disabled={current.posted}  height={height}/>
+                             disabled={current.posted}  height={height} zIndex={zIndex-10}/>
         </CCol>
       </FormRow>
       {/* Row 4: Account + Period/Posted */}

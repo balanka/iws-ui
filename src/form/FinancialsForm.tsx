@@ -173,7 +173,7 @@ const FinancialsForm = () => {
       , lines: current.lines.map(formatLines)
     }
   }
-  console.log('current', current)
+  console.log('current #E9EFEC #e9ecef #cfdce5 #cfdce5  #F3F0F3 #E3DAF6 #FDF8FD #BDBABD  #D5D3D5 #F1ECFA', current)
   return isFetching?<CSpinner color="primary" />:(<>
     <FinancialsFormHead
       title={title}
@@ -198,9 +198,10 @@ const FinancialsForm = () => {
       toggleTable={toggleTable}
       current={current}
       t={t}
-      //zIndex={zIndex-1}
+      zIndex={zIndex-1}
     />
-    <div  style={{...stylesx.outer, height:650, boxShadow: '0 20px 50px #BBF', padding: 1, paddingBottom:2, backgroundColor: '#e9ecef'}} >
+
+    <div  style={{...stylesx.outer, height:650, boxShadow: '0 20px 50px #BBF', padding: 1, paddingBottom:2, backgroundColor: '#E3F1C5'}} >
       <FinancialsMainForm collapse ={state.collapse}
                           current={current??current_}
                           setCurrent={setCurrent}
