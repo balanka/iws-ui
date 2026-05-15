@@ -4,38 +4,69 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {initComp} from './Menu.tsx'
+import {initComp, MASTERFILE} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {customerColumnDefs} from '../ColumnsDefs.ts'
-import {ICompany} from '../Models.ts'
+import {IAccount, ICompany, IMasterfile, IVat} from '../Models.ts'
 import {CompanyTabs} from './CompanyTabs.tsx'
 import useForm from './UseForm.ts'
-import {Get2} from "./CrudController.ts";
+import {Get, Get2} from "./CrudController.ts";
 import {styles} from './BasicTreeTableProps.tsx'
 import {UseCustomerForm} from "./UseCustomerForm.tsx";
 import {CInputGroup} from "@coreui/react";
 import Login from "./Login.tsx";
+import {formEnum} from "../utils/FormEnum.tsx";
+;
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const CompanyForm = () => {
-  const [{ profile, selected, t, module_, modelid }] = useForm()
+  const [{ profile, selected, t, module_, modelid, company }] = useForm()
   const { token, locale } = profile
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  const [, setIwsState] = useState(iwsStore.initialState)
+
   const current_ : ICompany= initComp[0]
   const height = 25
   const minHeight = 450
   const maxHeight = 700
+  const acc_modelid = formEnum.ACCOUNT
+  const bank_modelid = formEnum.BANK
+  const ccy_modelid = formEnum.CURRENCY
+  const vat_modelid = formEnum.VAT
+
+  const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
+  const bank_ctx = `${MASTERFILE.masterfile}/${bank_modelid}/${company}`
+  const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
+  const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
+  const [accData, setAccData] = useState<IAccount[]>([])
+  const [vatData, setVatData] = useState<IVat[]>([])
+  const [bankData, setBankData] = useState<IMasterfile[]>([])
+  const [ccyData, setCcyData] = useState<IMasterfile[]>([])
+  const [{header, body, table, disable,  state, visible, rowData, setRowData,  current
+    , setCurrent, currentBankAccount, setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t))
+
+  // const {header, body, table, disable, visible, state, setRowData, current, setCurrent,
+  //   handleKeyPress} = UseCustomerForm(current_, customerColumnDefs(t))
   useEffect(() => {
-    iwsStore.subscribe(setIwsState)
+    const subscription = iwsStore.subscribe((store) => {
+      setRowData(store.get(current_.modelid) as unknown as ICompany[]);
+      Get2(`${selected}/${modelid}`, token, setRowData)
+      setCurrent(current_)
+    });
+    return () => subscription.unsubscribe();
+  }, [current_])
+
+  useEffect(() => {
+    Get(acc_ctx, token, acc_modelid, setAccData)
+    Get(bank_ctx, token, bank_modelid, setBankData)
+    Get(ccy_ctx, token, ccy_modelid, setCcyData)
+    Get(vat_ctx, token, vat_modelid, setVatData)
     setCurrent(current_)
-    Get2(`${selected}/${modelid}`, token, setRowData)
-  }, [selected])
+
+  }, [])
 
 
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
-  const [{header, body, table, disable,  state, visible, rowData, setRowData, accData, bankData, vatData, ccyData, current
-    , setCurrent, currentBankAccount, setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t))
+
 
   const mainForm = CompanyTabs({ collapse: state.collapse, current:current, setCurrent:setCurrent
     , currentBankAccount:currentBankAccount

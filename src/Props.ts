@@ -359,7 +359,8 @@ export interface FinancialsCBoxProps2<A, B> {
   defaultValue:B
   accFilter?:string[],
   zIndex: number,
-  styles: any
+  styles: any,
+  height?: number
 }
 
 
@@ -459,10 +460,10 @@ export interface UseCustomerFormResult<T extends IBusinespartner> {
   , state:State
   ,  rowData:T[]
   , setRowData:Dispatch<SetStateAction<T[]>>
-  , accData:IAccount[]
-  , bankData:IMasterfile[]
-  , vatData:IVat[]
-  , ccyData:IMasterfile[]
+  // , accData:IAccount[]
+  // , bankData:IMasterfile[]
+  // , vatData:IVat[]
+  // , ccyData:IMasterfile[]
   , current:T
   , setCurrent:Dispatch<SetStateAction<T>>
   , currentBankAccount:IBankAccount

@@ -8,7 +8,6 @@ import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {AssetMainForm} from './AssetMainForm'
 import { Get} from './CrudController'
 import {initAsset, MASTERFILE} from './Menu'
-import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import {assetColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IAsset, IMasterfile} from '../Models.ts'
@@ -29,25 +28,21 @@ const AssetForm = () => {
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
   const current_: IAsset = initAsset[0]
-  const [, setIwsState] = useState(iwsStore.initialState)
   const [accData, setAccData] = useState<IAccount[]>([])
   const [ccyData, setCcyData] = useState<IMasterfile[]>([])
   const minHeight = 350
   const maxHeight = 700
   const height = 30
+  const colDef:ColDef[]= assetColumnDefs(t)
+  const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm<IAsset>(current_,  colDef, MASTERFILE.asset)
 
   useEffect(() => {
-    iwsStore.subscribe(setIwsState)
-    !acc_ctx.includes('-1')&&Get(acc_ctx, token, acc_modelid, setAccData)
-    Get(ccy_ctx, token, ccy_modelid, setCcyData)
+    Get(acc_ctx, token, acc_modelid, setAccData)
+    Get(ccy_ctx, token, acc_modelid, setCcyData)
     setCurrent(current_)
-    // attach the event listener
-    document.onkeydown = handleKeyPress
-    document.addEventListener('onKeyDown', handleKeyPress)
   }, [])
 
-  const colDef:ColDef[]= assetColumnDefs(t)
-  const [{header, body, disable, state, visible, table, current, setCurrent, handleKeyPress}] = UseMasterfileForm<IAsset>(current_,  colDef, MASTERFILE.asset)
+
   const mainForm = AssetMainForm ({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t, accData:accData
     , ccyData:ccyData, height:height, locale:locale ??'fr-FR', currency:currencyx, zIndex:9999})
   return (

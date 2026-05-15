@@ -13,7 +13,7 @@ import {Edit, Get, Get2} from './CrudController'
 import {initBS, MASTERFILE} from './Menu'
 import iwsStore from '../utils/Store'
 import {bankStatementColumnDefs} from '../ColumnsDefs.ts'
-import {IBankStatement} from '../Models.ts'
+import {IBankStatement } from '../Models.ts'
 import {BankStatementGrid} from '../IWSGrid.tsx'
 import BankStatementTabs from './BankStatementTabs.tsx'
 import Login from './Login'
@@ -39,13 +39,22 @@ const BankStatementForm = () => {
   const current_: IBankStatement = initBS[0]
   const [current, setCurrent] = useState<IBankStatement>(current_)
   const [rows, setRows] = useState<string[]|bigint[]>([])
-  const [, setIwsState] = useState(iwsStore.initialState)
+  //const [, setIwsState] = useState(iwsStore.initialState)
   const [rowData, setRowData] = useState<IBankStatement[]>([])
 
+  // const {header, body, table, disable, visible, state, setRowData, current, setCurrent,
+  //   handleKeyPress} = UseMasterfileForm(current_, coldef, MASTERFILE.perm)
+
   useEffect(() => {
-    iwsStore.subscribe(setIwsState)
-     setCurrent(current_)
-  }, [selected])
+    const subscription = iwsStore.subscribe((store) => {
+      setRowData(store.get(current_.modelid) as unknown as IBankStatement[]);
+      setCurrent(current_)
+      // attach the event listener
+     // document.onkeydown = handleKeyPress
+      //document.addEventListener('onKeyDown', handleKeyPress)
+    });
+    return () => subscription.unsubscribe();
+  }, [current_, selected])
 
   const cancelEdit = () => {
     setCurrent(current_)
@@ -61,7 +70,7 @@ const BankStatementForm = () => {
   }
 
   const reload = () => {
-    iwsStore.deleteKey(current.modelid)
+    iwsStore.deleteByModelId(current.modelid)
     Get(ctx, token, modelid, setRowData)
     setCurrent(current_)
 }

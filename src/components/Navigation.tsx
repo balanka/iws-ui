@@ -60,7 +60,7 @@ const Navigation = () => {
     return obj
   }
 
-  const modules_ = module ? iwsStore.get(formEnum.MODULE) : []
+  const modules_ = module ? iwsStore.getByModelId(formEnum.MODULE) : []
   userMenu = modules_ //.map((m:IMasterfile)=>m.id)
   //   console.log('userMenu', userMenu)
   // console.log('modules_', modules_)

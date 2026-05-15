@@ -82,22 +82,22 @@ export const FinancialsMainForm = ({
   const currencyStyle = { height: height - 5, padding:4, textAlign: 'right' as const, width: '100%' };
 
   return (
-    <div style={{ ...styles.outer, height:200, display: !collapse ? 'none' : '' }}>
+  <div style={{ ...styles.outer, height:200, display: !collapse ? 'none' : '' }}>
     <CContainer fluid className="p-0">
       {/* Row 1: Module + ID + OID */}
       <FormRow height={height}>
-        <CCol sm={8} className="d-flex gap-2 align-items-center" style={{height: height}}>
+        <CCol sm={8} className="d-flex gap-2" style={{height: height}}>
           <Label>{t('common.id')}</Label>
           <InputField fieldName="id" current={currentx} setCurrent={setCurrent} value={currentx.id} disabled={currentx.posted} style={{ ...inputStyle, width: '50%', textAlign: 'right' }} />
           <Label>{t('fmodule.title')}</Label>
           <ComboBox style={inputStyle} value={{ value: BigInt(currentModule?.id ?? 0), label: `${BigInt(currentModule?.id ?? 0)}
            ${currentModule?.name ?? ''}` }} onChange={handleModuleChange} values={modules.slice().sort(sortById).map(toOption)}
-                    key="moduleComboBox"
+                    key="moduleComboBox" height ={height-5}
                     zIndex={99999} />
         </CCol>
       </FormRow>
       <FormRow height={height}>
-        <CCol sm={8} className="d-flex gap-2 align-items-center" style={{height: height, paddingTop:2}}>
+        <CCol sm={8} className="d-flex gap-2" style={{height: height, paddingTop:2}}>
           <Label>{t('transaction.oid')}</Label>
           <InputField fieldName="oid" current={currentx} setCurrent={setCurrent} value={current.oid} disabled={current.posted} style={{...inputStyle, width:'50%', textAlign: 'right' }} />
           <Label>{t('common.copyFrom')}</Label>
@@ -106,9 +106,10 @@ export const FinancialsMainForm = ({
             transactions={copyFromTransaction}
             currentModule={currentModule}
             onChange={submitCopy}
+            height ={height-10}
           />
         </CCol>
-        <CCol sm={4} className="d-flex gap-2 align-items-center">
+        <CCol sm={4} className="d-flex gap-2 ">
           <Label>{t('transaction.transdate')}</Label>
           <DatePickerField fieldName="transdate" label={t('financials.transdate')}
                            selected={currentx.transdate|| null}
@@ -128,7 +129,7 @@ export const FinancialsMainForm = ({
       </FormRow>
       {/* Row 3: Cost Center + Due Date */}
       <FormRow height={height}>
-        <CCol sm={8} className="d-flex gap-2 align-items-center" style={{height: height,   paddingTop:2}}>
+        <CCol sm={8} className="d-flex gap-2" style={{height: height,   paddingTop:2}}>
           <Label>{t('financials.costcenter')}</Label>
           <FormMasterfileXComboBox key="costcenterComboBox"
             fieldName="costcenter"
@@ -137,9 +138,9 @@ export const FinancialsMainForm = ({
             data={storeData}
             defaultValue={initCc[0]}
             zIndex={zIndex}
-            disable={currentx.posted} styles={inputStyle} fontSize={12}/>
+            disable={currentx.posted} styles={inputStyle} fontSize={12} height ={height-10}/>
         </CCol>
-        <CCol sm={4} className="d-flex gap-2 align-items-center">
+        <CCol sm={4} className="d-flex gap-2">
           <Label>{t('financials.line.duedate')}</Label>
             <DatePickerField fieldName="duedate" label={t('financials.duedate')}
                            selected={currentLine.duedate|| null}
@@ -155,7 +156,7 @@ export const FinancialsMainForm = ({
       </FormRow>
       {/* Row 4: Account + Period/Posted */}
       <FormRow height={height}>
-        <CCol sm={8} className="d-flex gap-2 align-items-md-center" style={{height: height, paddingTop:2}}>
+        <CCol sm={8} className="d-flex gap-2" style={{height: height, paddingTop:2}}>
           <Label>{t('financials.line.account')}</Label>
           <FormMasterfileComboBox2 key="line.financials.accountComboBox" current={currentx}
                                    setCurrent={setCurrent}
@@ -164,9 +165,10 @@ export const FinancialsMainForm = ({
                                    data={accData}
                                    id="account" name="accountName"
                                    accFilter={accountFilter}
+                                   height={height-10}
                                    styles={inputStyle} fontSize={12} setTransaction ={setTransactionF}/>
         </CCol>
-        <CCol sm={4} className="d-flex gap-2 align-items-center">
+        <CCol sm={4} className="d-flex gap-2">
           <Label>{t('transaction.period')}</Label>
             <CInputGroup>
               <InputField
@@ -175,7 +177,7 @@ export const FinancialsMainForm = ({
                 setCurrent={setCurrent}
                 value={currentx.period}
                 disabled={true}
-                style={{ height: height - 3, paddingLeft: 3, width: '70%', textAlign: 'right' }}
+                style={{ height: height - 7, paddingLeft: 3, width: '70%', textAlign: 'right' }}
               />
               <BooleanField
                 fieldName="posted"
@@ -192,7 +194,7 @@ export const FinancialsMainForm = ({
 
       {/* Row 5: OAccount + Amount */}
       <FormRow height={height}>
-        <CCol sm={8} className="d-flex gap-2 align-items-center"  style={{ height: height, paddingTop:2}}>
+        <CCol sm={8} className="d-flex gap-2"  style={{ height: height, paddingTop:2}}>
           <Label>{t('financials.line.oaccount')}</Label>
           <FormMasterfileComboBox2 key="line.financials.oaccountComboBox"
             current={currentx}
@@ -203,6 +205,7 @@ export const FinancialsMainForm = ({
             id="oaccount"
             name="oaccountName"
             accFilter={oaccountFilter}
+            height={height-10}
             //zIndex={zIndex}
             styles={inputStyle}
             fontSize={12}
@@ -210,7 +213,7 @@ export const FinancialsMainForm = ({
           />
 
         </CCol>
-        <CCol sm={4} className="d-flex gap-2 align-items-center">
+        <CCol sm={4} className="d-flex gap-2">
           <Label>{t('financials.line.amount')}</Label>
           <CurrencyField
             value={currentLine?.amount}
@@ -234,7 +237,7 @@ export const FinancialsMainForm = ({
 
       {/* Row 6: Text + Total */}
       <FormRow height={height}>
-        <CCol sm={8} className="d-flex gap-2 align-items-start" style={{ height: height, paddingTop: 4 }}>
+        <CCol sm={8} className="d-flex gap-2" style={{ height: height, paddingTop: 4 }}>
           <Label>{t('transaction.text')}</Label>
           <TextareaField
             fieldName="text"
@@ -253,7 +256,7 @@ export const FinancialsMainForm = ({
             style={{ width: '100%',  fontSize: '0.875rem' }}
           />
         </CCol>
-        <CCol sm={4} className="d-flex gap-2 align-items-center">
+        <CCol sm={4} className="d-flex gap-2">
           <Label bold>{t('common.total')}</Label>
           <CurrencyField
             value={total}

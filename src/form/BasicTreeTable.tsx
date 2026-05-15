@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState} from 'react'
+import { useEffect, useState} from 'react'
 import {formEnum} from '../utils/FormEnum'
 import {Get, Get2} from './CrudController'
 import {LOGIN, MASTERFILE, useStore} from './Menu'
@@ -55,20 +55,32 @@ const BasicTreeTable = () => {
   const [data, setData] = useState<IAccount[]>(initAcc)
   const [accData, setAccData] = useState(initAcc)
   // const [toolbar, setToolbar] = useState(false)
-  const [, setIwsState] = useState(iwsStore.initialState)
+  // const [, setIwsState] = useState(iwsStore.getByModelId(modelid))
   //const accData_ = iwsState.get(formEnum.ACCOUNT) ?? [...initAcc]
-  const init = useRef(false)
+  //const init = useRef(false)
   const dispatch = useDispatch()
   const height = 20
   useEffect(() => {
-    if (!init.current) {
-      iwsStore.subscribe(setIwsState)
-      init.current = true
-    }
-    // load account data as they are needed
-    accUrl && Get2(accUrl, token, setAccData)
-    setCurrent(current_)
+    const subscription = iwsStore.subscribe((store) => {
+      setData(store.get(current_.modelid) as unknown as IAccount[]);
+      accUrl && Get2(accUrl, token, setAccData)
+      setCurrent(current_)
+      // attach the event listener
+      // document.onkeydown = handleKeyPress
+      //document.addEventListener('onKeyDown', handleKeyPress)
+    });
+    return () => subscription.unsubscribe();
   }, [current_, accUrl])
+
+  // useEffect(() => {
+  //   if (!init.current) {
+  //     iwsStore.subscribe(setIwsState)
+  //     init.current = true
+  //   }
+  //   // load account data as they are needed
+  //   accUrl && Get2(accUrl, token, setAccData)
+  //   setCurrent(current_)
+  // }, [current_, accUrl])
   //const toggleToolbar = () => setToolbar(!toolbar)
   //const toggle = () => setState({ ...state, collapse: !state.collapse })
   //const columnsX = columns(t, locale ?? 'en_US', currency ?? 'EUR')

@@ -326,13 +326,13 @@ const Login = (
         , t, setMenu, setModule, setRoutes, navigate)
 }
 
-const  Get3 = <A>(ctx:string, token:string, key: string|number
+const  Get3 = <A>(ctx:string, token:string, modelid: number
                   , current_ :A, setRowData: (arg0:A[]) => void, setCurrent:Dispatch<SetStateAction<A>>): void => {
   const url = `${SERVER_URL}${ctx}`
   console.log('urlx', url)
     getFn(url, token ).then((data: A[]) => {
       if (Array.isArray(data) && data?.length>0) {
-        iwsStore.put(key, data)
+        iwsStore.put(modelid, data as IWSModel[])
         setRowData(data as A[])
         setCurrent(data[0])
       } else {
@@ -347,15 +347,15 @@ const  Get3 = <A>(ctx:string, token:string, key: string|number
     }
   })
 }
-const  Get = <A>(ctx:string, token:string, key: string|number, setRowData: Dispatch<SetStateAction<A[]>>): void => {
+const  Get = <A>(ctx:string, token:string, modelid: number, setRowData: Dispatch<SetStateAction<A[]>>): void => {
     const url = `${SERVER_URL}${ctx}`
     console.log('url', url)
      getFn(url,  token ).then((data: A[]) => {
             if (Array.isArray(data)) {
-                iwsStore.put(key, data)
+                iwsStore.put(modelid, data as IWSModel[])
                 setRowData(data as A[])
             } else{
-                console.log('key>>>>', key)
+                console.log('key>>>>', modelid)
                 console.log('data>>>>', data)
             }
         }).catch(function (error) {
@@ -364,6 +364,26 @@ const  Get = <A>(ctx:string, token:string, key: string|number, setRowData: Dispa
             console.log('error', 'Session expired!!!!! Login again!!!!')
         }
     })
+}
+const  Gets = <A>(ctx:string, token:string, modelids: number [], setRowData: Dispatch<SetStateAction<A[]>>): void => {
+  const url = `${SERVER_URL}${ctx}`
+  console.log('url', url)
+  modelids.forEach((modelid) => {
+    getFn(url, token).then((data: A[]) => {
+      if (Array.isArray(data)) {
+        iwsStore.put(modelid, data as IWSModel[])
+        setRowData(data as A[])
+      } else {
+        console.log('key>>>>', modelid)
+        console.log('data>>>>', data)
+      }
+    }).catch(function (error) {
+      console.log('Error', error)
+      if (JSON.stringify(error).includes('401')) {
+        console.log('error', 'Session expired!!!!! Login again!!!!')
+      }
+    })
+  })
 }
 
 const Get2 = <A>(ctx:string, token:string, setCurrent:Dispatch<SetStateAction<A>> ) => {
@@ -384,4 +404,4 @@ const Get2 = <A>(ctx:string, token:string, setCurrent:Dispatch<SetStateAction<A>
 const EditRow = <A>(edited:A, isNew:boolean, setCurrent :Dispatch<SetStateAction<A>>) =>
     setCurrent({ ...edited, editing: !isNew })
 
-export { COPY, Get, Get2, Get3,  Login, Add, Edit, EditRow }
+export { COPY, Get, Gets, Get2, Get3,  Login, Add, Edit, EditRow }

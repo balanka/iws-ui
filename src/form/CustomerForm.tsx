@@ -11,10 +11,10 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 
-import {initCust, initEmp, initSup} from './Menu.tsx'
+import {initCust, initEmp, initSup, MASTERFILE} from './Menu.tsx'
 
 import {formEnum} from '../utils/FormEnum.tsx'
-import {IBusinespartner} from '../Models.ts'
+import {IAccount, IBusinespartner, IMasterfile, IVat} from '../Models.ts'
 import useForm from './UseForm.ts'
 import { CustomerTabs } from "./CustomerTabs.tsx"
 import {UseCustomerForm} from "./UseCustomerForm.tsx";
@@ -22,24 +22,49 @@ import {customerColumnDefs} from "../ColumnsDefs.ts";
 import {styles} from './BasicTreeTableProps.tsx'
 import {CInputGroup} from "@coreui/react";
 import Login from "./Login.tsx";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {Get} from "./CrudController.ts";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const CustomerForm = () => {
-  const [{ profile, t,  modelid, module_ }] = useForm()
+  const [{ profile, t,  modelid, module_, company }] = useForm()
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  const { locale, stockAcc, expenseAcc, vat, currency } = profile
+  const { token, locale, stockAcc, expenseAcc, vat, currency } = profile
   const initial = modelid ===formEnum.CUSTOMER?initCust[0]:(modelid ===formEnum.SUPPLIER)?initSup[0]:initEmp[0]
   const current_ : IBusinespartner= {...initial, account:stockAcc??'', oaccount:expenseAcc??'', vatCode:vat??'', currency:currency??''}
   const height = 28
   const minHeight = 350
   const maxHeight = 700
   const zIndex = 9999
+  const acc_modelid = formEnum.ACCOUNT
+  const bank_modelid = formEnum.BANK
+  const ccy_modelid = formEnum.CURRENCY
+  const vat_modelid = formEnum.VAT
+
+
+  const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
+  const bank_ctx = `${MASTERFILE.masterfile}/${bank_modelid}/${company}`
+  const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
+  const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
+  const [accData, setAccData] = useState<IAccount[]>([])
+  const [vatData, setVatData] = useState<IVat[]>([])
+  const [bankData, setBankData] = useState<IMasterfile[]>([])
+  const [ccyData, setCcyData] = useState<IMasterfile[]>([])
+
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
-  const [{header, body, table, disable,  state, visible, rowData, accData, bankData, vatData, ccyData, current
-    , setCurrent, currentBankAccount, setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t))
+  const [{header, body, table, disable,  state, visible, rowData, current , setCurrent, currentBankAccount
+    , setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t))
+
+  useEffect(() => {
+    Get(acc_ctx, token, acc_modelid, setAccData)
+    Get(bank_ctx, token, bank_modelid, setBankData)
+    Get(ccy_ctx, token, ccy_modelid, setCcyData)
+    Get(vat_ctx, token, vat_modelid, setVatData)
+    setCurrent(current_)
+
+  }, [])
   const safeBody = React.isValidElement(body) ? body : null;
 
   const mainForm = CustomerTabs({ collapse:state.collapse, current:current, setCurrent:setCurrent

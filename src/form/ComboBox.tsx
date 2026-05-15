@@ -10,6 +10,7 @@ type GenericSelectProps<T> = {
   values: T[],
   onChange: (value: any, event:any) => void,
   fontSize?: number,
+  height?:number
 };
 
 const ComboBox = <T extends Base>({
@@ -19,13 +20,14 @@ const ComboBox = <T extends Base>({
                                     zIndex,
                                     values,
                                     onChange,
-                                    fontSize
+                                    fontSize,
+                                    height
                                   }: GenericSelectProps<T>) => {
   const zindex = zIndex ?? 99999
 
   const customStyles = {
     menu: (base: any) => ({
-      ...base, ...style,
+      ...base, ...style, height:height,
       zIndex: zindex,
     }),
     select: (base: any) => ({
@@ -56,7 +58,7 @@ const ComboBox = <T extends Base>({
     },
 
     input: (base: any, state: any): any => ({
-      ...base, ...style,
+      ...base, ...style,  height:height,
       margin: '0px',
       outline: state.isFocused ? "none" : undefined,
       fontSize: fontSize ?? 12,

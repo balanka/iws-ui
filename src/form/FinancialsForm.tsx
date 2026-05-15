@@ -9,7 +9,7 @@ import {
 } from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import {styles as stylesx} from './BasicTreeTableProps.tsx'
+import {styles, styles as stylesx} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { FinancialsMainForm } from './FinancialsMainForm'
@@ -27,7 +27,6 @@ import {useDispatch} from "react-redux";
 import {generateDocx} from '../utils/XlsUtils.ts'
 import useTransactionForm from './UseTransactionForm.ts'
 import useForm from './UseForm.ts'
-import iwsStore from '../utils/Store.tsx'
 import { Get, Get3} from './CrudController.ts'
 import {isArrayAndNotEmpty} from "../utils/Utils.ts";
 
@@ -50,7 +49,7 @@ const FinancialsForm = () => {
     , handleLanguageChange, setModel, saveProps, modelid, isFetching, setIsFetching }] =
     useTransactionForm(current_, initialLine, currentLine, setCurrentLine, rowData, setRowData)
 
-  const [_, setIwsState] = useState(iwsStore.initialState)
+
   const [title, setTitle] = useState(title_)
   const acc_modelid = formEnum.ACCOUNT
   const cc_modelid = formEnum.COSTCENTER
@@ -85,14 +84,10 @@ const FinancialsForm = () => {
     setCurrent( {...currentx, modelid:modelidx})
 
   }
-
   useEffect(() => {
-    iwsStore.subscribe(setIwsState)
-    Get(acc_ctx, token, acc_modelid, setAccData)
-    Get(cc_ctx, token, cc_modelid, setCcData)
-    //setCurrent(current_)
-    setRowData([])
-  }, [selected])
+      Get(acc_ctx, token, acc_modelid, setAccData)
+      Get(cc_ctx, token, cc_modelid, setCcData)
+  },[selected])
 
 
   console.log('AccData>>>>>>', accData)
@@ -200,8 +195,11 @@ const FinancialsForm = () => {
       t={t}
       zIndex={zIndex-1}
     />
-
-    <div  style={{...stylesx.outer, height:650, boxShadow: '0 20px 50px #BBF', padding: 1, paddingBottom:2, backgroundColor: '#E3F1C5'}} >
+    {/*<div  style={{...stylesx.outer, height:650, boxShadow: '0 20px 50px #BBF', padding: 1, paddingBottom:2, backgroundColor: '#E3F1C5'}} >*/}
+    <div
+      //@ts-ignore
+      style={{ ...styles.outer,   width:'100%', height: 400,  display: !state.collapse ? 'none' : ''}}>
+      {/*style={{...stylesx.outer, backgroundColor: 'transparent', height:650, boxShadow: '0 20px 50px #BBF', padding: 1, paddingBottom:2}} >*/}
       <FinancialsMainForm collapse ={state.collapse}
                           current={current??current_}
                           setCurrent={setCurrent}

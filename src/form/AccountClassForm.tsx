@@ -8,7 +8,6 @@ import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {MasterfileFormWithout} from './MasterfileFormWithout'
 import {Get} from './CrudController'
 import {initAcc, MASTERFILE} from './Menu'
-import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import {masterfileColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount, IMasterfile2} from '../Models.ts'
@@ -24,7 +23,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const {token} = profile
      if (module_ === '11111' || module_ === 11111) return <Login/>
      const current_: IMasterfile2 =  module_.state[0]
-     const [ setIwsState] = useState(iwsStore.initialState)
      const [accData, setAccData] = useState<IAccount[]>(initAcc)
      const acc_modelid  = formEnum.ACCOUNT
      const acc_ctx = `${modelid === formEnum.COSTCENTER ?  MASTERFILE.acc:-1}/${acc_modelid}/${company}`
@@ -32,18 +30,12 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const maxHeight = 700
      const height = 20
      const colDef:ColDef[]= masterfileColumnDefs(t)
-     useEffect(() => {
-         iwsStore.subscribe(setIwsState)
-         !acc_ctx.includes('-1')&&Get(acc_ctx, token??'noToken', acc_modelid, setAccData)
-         setCurrent(current_)
-       // attach the event listener
-       document.onkeydown = handleKeyPress
-       document.addEventListener('onKeyDown', handleKeyPress)
-     }, [current_])
+   useEffect(() => {
+     !acc_ctx.includes('-1')&&Get(acc_ctx, token??'noToken', acc_modelid, setAccData)
+     setCurrent(current_)
+   }, [])
 
-
-
-   const [{header, body, disable, table, state, visible, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_,  colDef, MASTERFILE.accountClass)
+   const {header, body, table, disable, visible, state, current, setCurrent}  = UseMasterfileForm(current_,  colDef, MASTERFILE.accountClass)
    const safeBody = React.isValidElement(body) ? body : null;
    const mainForm = MasterfileFormWithout({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
       , height:height, accData:accData, t:t, disable:disable, fieldName:t('common.account'), propertyName:'account' })

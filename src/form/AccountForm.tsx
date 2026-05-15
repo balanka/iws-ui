@@ -4,7 +4,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 import {styles} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {initAcc, MASTERFILE} from './Menu.tsx'
+import {initAcc} from './Menu.tsx'
 import { AccountMainForm } from './AccountMainForm.tsx'
 import {accountColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount} from '../Models.ts'
@@ -14,9 +14,11 @@ import {CInputGroup} from "@coreui/react";
 import Login from "./Login.tsx";
 import React from "react";
 
+
+
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const AccountForm = () => {
-   const [{profile, t, module_}] = useForm()
+   const [{selected, profile, t, module_}] = useForm()
    if (module_ === '11111' || module_ === 11111) return <Login/>
    const { locale} = profile
    const height = 33
@@ -24,8 +26,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    const maxHeight = 700
    const current_: IAccount = initAcc[0]
    const colDef = accountColumnDefs(t)
-
-   const [{header, body, disable, table, state, visible, rowData, current, setCurrent}] = UseMasterfileForm(current_,  colDef, MASTERFILE.acc)
+   const {header, body, table, disable, visible, state, rowData, current, setCurrent} =  UseMasterfileForm(current_,  colDef, selected)
    const safeBody = React.isValidElement(body) ? body : null;
    const mainForm = AccountMainForm({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
      ,  disable:disable, t:t, locale:`${locale}`, accData:rowData, height:height})

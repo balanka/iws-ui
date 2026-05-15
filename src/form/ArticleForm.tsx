@@ -6,7 +6,7 @@ import {styles} from './BasicTreeTableProps'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {initArticle, MASTERFILE} from './Menu'
-import iwsStore from '../utils/Store'
+
 import  { ArticleTabs }  from './ArticleTabs.tsx'
 import { formEnum } from '../utils/FormEnum'
 import { Get } from './CrudController.ts'
@@ -20,7 +20,7 @@ import Login from "./Login.tsx";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const ArticleForm = () => {
-     const [{profile, selected, t, module_ }] = useForm()
+     const [{profile, t, module_ }] = useForm()
       if (module_ === '11111' || module_ === 11111) return <Login/>
      const { token, company, locale, currency, stockAcc, expenseAcc, revenueAcc, vat} = profile
      const acc_modelid = formEnum.ACCOUNT
@@ -31,7 +31,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const initialState:IArticle = {...initArticle[0], account:stockAcc??'',  oaccount:expenseAcc??''
        , revenueAccount:revenueAcc??'', vatCode:vat??'',  currency:currency??'', stocks:[]}
      const current_: IArticle = initialState
-     const [, setIwsState] = useState(iwsStore.initialState)
+       //const modelid: number = module_ ? module_.modelid : 1111
+     //const [, setIwsState] = useState(iwsStore.getByModelId(modelid))
      const [accData, setAccData] = useState<IAccount[]>([])
      const [groupData, setGroupData] = useState<IMasterfile[]>([])
      const [quantityUnitData, setQuantityUnitData] = useState<IMasterfile[]>([])
@@ -45,22 +46,18 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const height = 33
      const minHeight = 350
      const maxHeight = 700
+      const colDef:ColDef[]= articleColumnDefs(t)
+      const {header, body, table, disable, visible, state, rowData, current, setCurrent, zIndex} =
+        UseMasterfileForm<IArticle>(current_,  colDef, MASTERFILE.article)
 
-     useEffect(() => {
-         iwsStore.subscribe(setIwsState)
+       useEffect(() => {
          Get(acc_ctx, token??'noToken', acc_modelid, setAccData)
          Get(group_ctx, token??'noToken', group_modelid, setGroupData)
          Get(qttyUnit_ctx, token??'noToken', qttyUnit_modelid, setQuantityUnitData)
          Get(vat_ctx, token??'noToken', vat_modelid, setVatData)
          Get(ccy_ctx, token??'noToken', ccy_modelid, setCcyData)
          setCurrent(current_)
-         // attach the event listener
-         document.onkeydown = handleKeyPress
-         document.addEventListener('onKeyDown', handleKeyPress)
-     }, [selected])
-
-      const colDef:ColDef[]= articleColumnDefs(t)
-      const [{header, body, disable, table, state, visible, rowData, current, setCurrent, handleKeyPress, zIndex}] = UseMasterfileForm<IArticle>(current_,  colDef, MASTERFILE.article)
+       }, [])
       const safeBody = React.isValidElement(body) ? body : null;
        const mainForm = ArticleTabs ({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t
                              , data:rowData, accData:accData, quantityUnitData:quantityUnitData,  locale:`${locale}`, currency:`${currency}`

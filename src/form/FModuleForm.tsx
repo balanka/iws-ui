@@ -8,7 +8,6 @@ import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {FModuleMainForm,} from './FModuleMainForm'
 import { Get} from './CrudController'
 import {MASTERFILE} from './Menu'
-import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import {fmoduleColumnDefs} from '../ColumnsDefs.ts'
 import {IFmodule, IMasterfile2} from '../Models.ts'
@@ -27,27 +26,25 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const parent_ctx = `${module_?.state3}/${company}`
      const acc_ctx = `${module_?.state2}/${company}`
      const current_: IFmodule =  module_.state[0]
-     const [, setIwsState] = useState(iwsStore.initialState)
+
      const [accData, setAccData] = useState<IMasterfile2[]>([])
      const [accountData, setAccountData] = useState<IMasterfile2[]>([])
      const height = 33
      const minHeight = 400
      const maxHeight = 700
-     const [{header, body, table, disable,  state, visible, rowData, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_, fmoduleColumnDefs(t), MASTERFILE.fmodule)
+     const colDef=fmoduleColumnDefs(t)
+   const {header, body, table, disable, visible, state, rowData, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.fmodule)
+   useEffect(() => {
+     Get(parent_ctx, token, module_.modelid, setAccData)
+     Get(acc_ctx, token, formEnum.ACCOUNT, setAccountData)
+     setCurrent(current_)
+   }, [])
+
    console.log('accDataX', accData);
    console.log('accountDataX', accountData);
     const mainForm = FModuleMainForm ({collapse: state.collapse, current:current, setCurrent:setCurrent, accData:accData.filter(m=>
                    (parseInt(m.id.toString())===formEnum.FINANCIALS|| parseInt(m.id.toString())===formEnum.TRANSACTION))
                    , accountData:accountData, rowData:rowData, disable:disable, height:height,  t:t})
-     useEffect(() => {
-         iwsStore.subscribe(setIwsState)
-         Get(parent_ctx, token, module_.modelid, setAccData)
-         Get(acc_ctx, token, formEnum.ACCOUNT, setAccountData)
-         setCurrent(current_)
-         // attach the event listener
-         document.onkeydown = handleKeyPress
-         document.addEventListener('onKeyDown', handleKeyPress)
-     }, [current_])
    const safeBody = React.isValidElement(body) ? body : null;
    return (
      <>
