@@ -6,9 +6,8 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {Get} from './CrudController.ts'
 import {initVat, MASTERFILE} from './Menu.tsx'
-import iwsStore from '../utils/Store.tsx'
 import { formEnum } from '../utils/FormEnum.tsx'
-import { IVat } from '../Models.ts'
+import { IVat} from '../Models.ts'
 import {vatColumnDefs} from '../ColumnsDefs'
 import Login from './Login'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
@@ -23,7 +22,6 @@ const VatForm = () => {
   const { token} = profile
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const current_ :IVat = initVat[0]
-  const [, setIwsState] = useState(iwsStore.initialState)
   const acc_modelid = formEnum.ACCOUNT
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const [accData, setAccData] = useState([])
@@ -31,17 +29,13 @@ const VatForm = () => {
   const maxHeight = 600
   const height = 28
   const colDef:ColDef[] = vatColumnDefs(t)
-  const [{header, body, disable, table, visible, state, current, setCurrent, handleKeyPress, zIndex}] = UseMasterfileForm(current_,  colDef, selected)
-
+  const {header, body, table, disable, visible, state, current, setCurrent, zIndex} =  UseMasterfileForm(current_,  colDef, selected)
   useEffect(() => {
-    iwsStore.subscribe(setIwsState)
     Get(acc_ctx, token, acc_modelid, setAccData)
-    // attach the event listener
-    document.onkeydown = handleKeyPress
-    document.addEventListener('onKeyDown', handleKeyPress)
-  }, [selected])
-  const safeBody = React.isValidElement(body) ? body : null;
+    setCurrent(current_)
+  }, [])
 
+  const safeBody = React.isValidElement(body) ? body : null;
   return (
     <>
       {header}

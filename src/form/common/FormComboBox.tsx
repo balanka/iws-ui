@@ -17,6 +17,7 @@ interface BaseComboBoxProps {
   disable?: boolean;
   styles?: React.CSSProperties;
   fontSize?: number;
+  height?: number;
 }
 const strcmp = (ax:string|bigint, bx:string|bigint)=> {
   let a = ax.toString()
@@ -38,7 +39,8 @@ export const FormMasterfileXComboBox = ({
                                                                         zIndex = 1000,
                                                                         styles = {},
                                                                         disable = false,
-                                                                        fontSize = 12
+                                                                        fontSize = 12,
+                                                                        height
                                                                       }:MasterfileXComboBoxProps) => {
   const currentAcc = (data ?? [defaultValue]).find((acc) => acc.id === current[fieldName]) ?? defaultValue;
 
@@ -46,7 +48,7 @@ export const FormMasterfileXComboBox = ({
     <ComboBox<{ value: string | bigint; label: string }>
       style={{
         // minHeight: 20,
-        // height: 20,
+        height:height,
         minWidth: 100,
         width: '100%',
         color: '#6b7280',
@@ -78,6 +80,7 @@ export const FormMasterfileComboBox: FC<FormMasterfileComboBoxProps> = ({
                                                                           defaultValue,
                                                                           accFilter = [],
                                                                           zIndex = 1000,
+                                                                          height =25,
                                                                           styles = {},
                                                                           disable = false,
                                                                           fontSize = 12
@@ -88,8 +91,8 @@ export const FormMasterfileComboBox: FC<FormMasterfileComboBoxProps> = ({
   return (
     <ComboBox<{ value: string | bigint; label: string }>
       style={{
-        minHeight: 28,
-        height: 28,
+        minHeight: 20,
+        height: height,
         minWidth: 100,
         width: '100%',
         color: '#6b7280',
@@ -118,6 +121,7 @@ interface FormMasterfileComboBox2Props {
   id: string;        // Field name for the id (e.g., "account")
   name: string;      // Field name for the name (e.g., "accountName")
   accFilter?: string[];
+  height?:number,
   //zIndex?: number;
   styles?: React.CSSProperties;
   fontSize?: number;
@@ -137,6 +141,7 @@ export const FormMasterfileComboBox2 = ({
                                                 id,
                                                 name,
                                                 accFilter = [],
+                                                height,
                                                 //zIndex = 1000,
                                                 styles = {},
                                                 //fontSize = 12,
@@ -144,20 +149,17 @@ export const FormMasterfileComboBox2 = ({
                                                 setTransaction,
                                               }:FormMasterfileComboBox2Props) => {
   const filtered = getFiltered(data, accFilter);
-console.log('filtered', filtered)
-
+  //console.log('filtered', filtered)
   let currentLinex: any = { ...currentLine };
   let currentLinex1: { [index: string]: any } = { ...currentLinex };
   return (
     <ComboBox<{value:string|bigint,  label:string}>
-      style={{...styles, minHeight:25, height:25, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+      style={{...styles, minHeight:22, height:height, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
       disable={current.posted}
       value={{value: currentLinex1[id], label: `${currentLinex1[id]} ${currentLinex1[name]}`}}
       onChange={(value:any,  _event:any) => {
         const currentAccountx = filtered?.find((acc: { id: any }) => acc.id ===value)
-        console.log('currentAccountx', currentAccountx)
         const currentLinex = {...currentLine, [id]: currentAccountx?currentAccountx.id:'', [name]: currentAccountx ?currentAccountx.name:''}
-        console.log('x>>>>>>>>currentLinex', currentLinex)
         setCurrentLine({...currentLinex})
         setTransaction(current, setCurrent, currentLinex, setCurrentLine)
       }}
@@ -177,6 +179,7 @@ interface FromTransactionComboBoxProps {
   styles?: React.CSSProperties;
   fontSize?: number;
   disable?: boolean;
+  height?:number
 }
 
 export const FromTransactionComboBox: FC<FromTransactionComboBoxProps> = ({
@@ -187,13 +190,14 @@ export const FromTransactionComboBox: FC<FromTransactionComboBoxProps> = ({
                                                                             zIndex = 99999,
                                                                             styles = {},
                                                                             fontSize = 12,
+                                                                            height =25,
                                                                             disable = false
                                                                           }) => {
   return (
     <ComboBox<{ value: bigint | string; label: string }>
       style={{
-        minHeight: 25,
-        height: 25,
+        minHeight: 22,
+        height: height,
         minWidth: 100,
         width: '100%',
         color: '#6b7280',
@@ -212,7 +216,7 @@ export const FromTransactionComboBox: FC<FromTransactionComboBoxProps> = ({
   )
 }
 export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction, IMasterfile>> =({current, setCurrent, data
-                                                                                             , fieldName, defaultValue,  accFilter = [], zIndex, styles})=>{
+                                                               , fieldName, defaultValue,  accFilter = [], zIndex, styles, height })=>{
   // @ts-ignore
   const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === current[fieldName])??defaultValue
   // @ts-ignore
@@ -220,7 +224,7 @@ export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction
 
   return (
     <ComboBox<{value:string|bigint,  label:string}>
-      style={{...styles,  minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+      style={{...styles, height:height, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
       disable={current.posted}
       value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
       onChange={(value:any, _event:any) => setCurrent({...current, [fieldName]: value })}

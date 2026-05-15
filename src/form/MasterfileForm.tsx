@@ -7,7 +7,6 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { Get} from './CrudController'
 import {MASTERFILE} from './Menu'
-import iwsStore from '../utils/Store'
 import { formEnum } from '../utils/FormEnum'
 import {masterfileColumnDefs, userColumnDefs} from '../ColumnsDefs.ts'
 import {IMasterfile, IMasterfile2} from '../Models.ts'
@@ -30,22 +29,18 @@ const MasterfileForm = () => {
   console.log('module_', module_)
   const current_: IMasterfile =  module_.state[0]
   console.log('module_xxx', module_)
-  const [, setIwsState] = useState(iwsStore.initialState)
+
   const [accData, setAccData] = useState<IMasterfile2[]>([])
   const coldef:ColDef[]= (formEnum.USER===modelid)?userColumnDefs(t):masterfileColumnDefs(t)
   const minHeight = 350
   const maxHeight = 700
   const height = 28
-  const [{header, body, table, disable,  state, visible, current, setCurrent, handleKeyPress}] = UseMasterfileForm(current_,coldef, MASTERFILE.masterfile)
+  const {header, body, table, disable, visible, state, current, setCurrent} =  UseMasterfileForm(current_,coldef, MASTERFILE.masterfile)
   const safeBody = React.isValidElement(body) ? body : null
   useEffect(() => {
-    iwsStore.subscribe(setIwsState)
     Get(ctx, token, module_.modelid, setAccData)
     setCurrent(current_)
-    // attach the event listener
-    document.onkeydown = handleKeyPress
-    document.addEventListener('onKeyDown', handleKeyPress)
-  }, [current_])
+  }, [])
    console.log('body', body)
   return (
     <>

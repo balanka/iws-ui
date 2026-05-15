@@ -1,66 +1,114 @@
-import { Subject } from 'rxjs'
-const subject = new Subject()
-const initialState = new Map()
-let store:Map<string|number, any> = initialState
-const iwsStore = {
-  init: () => {
-    store = new Map([...store.entries()])
-    subject.next(store)
-  },
-  subscribe: (setState:any) => subject.subscribe(setState),
-  put:(key:string|number, message:any) => {
-    const temp = store instanceof Map ? store.get(key) : new Set()
-    const temp1 = temp ?? []
-    //console.debug('message', message)
-    const temp2 = Array.isArray(temp1) && temp1?.length > 0 ? [...temp1] : [...message]
-    store.set(key, temp2)
-    store = new Map([...store.entries()])
-    //console.debug('store', store)
-    subject.next(store)
-  },
-  update: (key: string | number, id: string | number, message: any) => {
-    console.log('📦 Store.update called with:', { key, id, message });
+import { BehaviorSubject } from 'rxjs';
+import type { IWSModel } from '../Models.ts';
 
-    const temp = store.get(key);
-    let temp1 = temp ? (Array.isArray(temp) ? [...temp] : Array.from(temp)) : [];
+export type ModelId = number;
+export type EntityId = string | number | bigint;
 
-    const idx = temp1.findIndex((obj: any) => obj && obj.id === id);
-    console.log('📦 Store.update idx:', idx);
+class IwsStore {
+  private store = new Map<ModelId, Map<EntityId, IWSModel>>();
+  private subject = new BehaviorSubject<Map<ModelId, Map<EntityId, IWSModel>>>(this.store);
 
-    if (idx !== -1) {
-      temp1[idx] = { ...message }; // Create a new object
-      store.set(key, temp1);
-      // ✅ Create a new Map to trigger updates
-      store = new Map([...store.entries()]);
-      console.log('📦 Store.update - store updated:', store);
-      subject.next(store);
-    } else {
-      console.warn('📦 Store.update - item not found:', id);
+  // Subscribe to full store changes
+  subscribe(callback: (store: Map<ModelId, Map<EntityId, IWSModel>>) => void) {
+    return this.subject.subscribe(callback);
+  }
+
+  // Get all objects of a given modelid (as IWSModel[])
+  getByModelId(modelId: ModelId): IWSModel[] {
+    const innerMap = this.store.get(modelId);
+    return innerMap ? Array.from(innerMap.values()) : [];
+  }
+
+  // Get a single object
+  getOne(modelId: ModelId, id: EntityId): IWSModel | undefined {
+    return this.store.get(modelId)?.get(id);
+  }
+
+  // Insert or replace a single item
+  set(item: IWSModel): void {
+    const modelId = item.modelid;
+    const id = item.id;
+    if (modelId === undefined || id === undefined || !item.company) {
+      console.warn('Item must have modelid, id, and company', item);
+      return;
     }
-  },
-  // update: (key:string|number, id:string|number, message:any) => {
-  //   console.log('📦 Store.update called with:', { key, id, message });
-  //   const temp = store.get(key)
-  //   const temp1 = temp ? Array.from(temp) : []
-  //   // @ts-ignore
-  //   const idx = temp1.findIndex((obj) => obj.id === id)
-  //   if (idx !== -1) {
-  //     temp1[idx] = message
-  //     store.set(key, new Set(temp1))
-  //     store = new Map([...store.entries()])
-  //     subject.next(store)
-  //   }
-  // },
-  deleteKey: (key:string|number) => {
-    store.delete(key)
-    subject.next(store)
-  },
-  get: (key:string|number) => store.get(key),
-  clear: () => {
-    store = initialState
-    subject.next(store)
-    console.debug('storeXXXXX', store)
-  },
-  initialState,
+    let innerMap = this.store.get(modelId);
+    if (!innerMap) {
+      innerMap = new Map();
+      this.store.set(modelId, innerMap);
+    }
+    innerMap.set(id, item);
+    this.emit();
+  }
+
+  /**
+   * PUT – replace all items for a given modelid.
+   * @param modelId The modelid (e.g., 42 for articles)
+   * @param items Array of items (must have `id` and `modelid` matching the modelId)
+   */
+  put<T extends IWSModel>(modelId: ModelId, items: T[]): void {
+    const newInnerMap = new Map<EntityId, IWSModel>();
+    for (const item of items) {
+      if (item.modelid !== modelId) {
+        console.warn(`Item modelid ${item.modelid} does not match put modelid ${modelId}, skipping`, item);
+        continue;
+      }
+      if (item.id === undefined) {
+        console.warn('Item missing id, skipping', item);
+        continue;
+      }
+      newInnerMap.set(item.id, item);
+    }
+    this.store.set(modelId, newInnerMap);
+    this.emit();
+  }
+
+  // Update a single item (partial merge)
+  update(modelId: ModelId, id: EntityId, partialItem: Partial<IWSModel>): void {
+    const innerMap = this.store.get(modelId);
+    if (!innerMap) {
+      console.warn(`No data for modelid ${modelId}`);
+      return;
+    }
+    const existing = innerMap.get(id);
+    if (!existing) {
+      console.warn(`No item with id ${id} for modelid ${modelId}`);
+      return;
+    }
+    const updated = { ...existing, ...partialItem };
+    innerMap.set(id, updated);
+    this.emit();
+  }
+
+  // Delete one object
+  deleteOne(modelId: ModelId, id: EntityId): void {
+    const innerMap = this.store.get(modelId);
+    if (!innerMap) return;
+    innerMap.delete(id);
+    if (innerMap.size === 0) this.store.delete(modelId);
+    this.emit();
+  }
+
+  // Delete all objects of a given modelid
+  deleteByModelId(modelId: ModelId): void {
+    if (this.store.delete(modelId)) this.emit();
+  }
+
+  // Clear everything
+  clear(): void {
+    this.store.clear();
+    this.emit();
+  }
+
+  // Raw map access
+  getRawMap(): Map<ModelId, Map<EntityId, IWSModel>> {
+    return this.store;
+  }
+
+  private emit(): void {
+    this.subject.next(new Map(this.store));
+  }
 }
-export default iwsStore
+
+const iwsStore = new IwsStore();
+export default iwsStore;

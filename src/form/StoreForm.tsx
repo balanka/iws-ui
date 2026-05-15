@@ -7,7 +7,6 @@ import {styles} from './BasicTreeTableProps'
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {Get} from './CrudController.ts'
 import {initStore, MASTERFILE, } from './Menu'
-import iwsStore from '../utils/Store'
 import  { StoreTabs }  from './StoreTabs.tsx'
 import { formEnum } from '../utils/FormEnum'
 import {storeColumnDefs} from '../ColumnsDefs.ts'
@@ -23,7 +22,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const { token, locale, stockAcc, expenseAcc } = profile
      if (module_ === '11111' || module_ === 11111) return <Login/>
      const current_: IStore = {...initStore[0], account:stockAcc??'', oaccount:expenseAcc??'' , stocks:[], company:company}
-     const [, setIwsState] = useState(iwsStore.initialState)
      const [ccData, setCcData] = useState<IMasterfile[]>([])
      const [accData, setAccData] = useState<IAccount[]>([])
      const acc_modelid = formEnum.ACCOUNT
@@ -34,18 +32,15 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const maxHeight = 600
      const height = 33
      const colDef:ColDef[] = storeColumnDefs(t)
-     const [{header, body, disable, table, state, visible, current, setCurrent, handleKeyPress, zIndex}] = UseMasterfileForm(current_, colDef, MASTERFILE.store)
+   const {header, body, table, disable, visible, state, current, setCurrent, zIndex} =  UseMasterfileForm(current_, colDef, MASTERFILE.store)
      const safeBody = React.isValidElement(body) ? body : null;
      const mainForm = StoreTabs({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t
      , zIndex:zIndex-1, ccData:ccData, accData:accData, locale:locale??'fr-FR', height:height, minMaxHieght:state.collapse?minHeight:maxHeight })
-     useEffect(() => {
-       iwsStore.subscribe(setIwsState)
-       Get(cc_ctx, token, cc_modelid, setCcData)
-       Get(acc_ctx, token, acc_modelid, setAccData)
-       // attach the event listener
-       document.onkeydown = handleKeyPress
-       document.addEventListener('onKeyDown', handleKeyPress)
-     }, [])
+   useEffect(() => {
+     Get(cc_ctx, token, cc_modelid, setCcData)
+     Get(acc_ctx, token, acc_modelid, setAccData)
+     setCurrent(current_)
+   }, [])
 
    return (
      <>

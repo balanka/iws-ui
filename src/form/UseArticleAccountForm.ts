@@ -9,7 +9,6 @@ import {ARTICLE_ACCOUNT_QUERY_PARM, initModule, MASTERFILE} from './Menu'
 import {formEnum} from '../utils/FormEnum'
 import {IJournalProps, UseArticleAccountResult} from '../Props.ts'
 import {IArticle, IModule, IStore} from '../Models.ts'
-import iwsStore from '../utils/Store.tsx'
 import useForm from './UseForm.ts'
 
 ModuleRegistry.registerModules([
@@ -46,19 +45,23 @@ const UseArticleAccountForm = <T>(): [UseArticleAccountResult<T>] => {
   const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
   const current_:IJournalProps = {...ARTICLE_ACCOUNT_QUERY_PARM, modelid: modelid, currency:currency??''}
   const [current, setCurrent] = useState<IJournalProps>(current_)
-  const [, setIwsState] = useState(iwsStore.initialState)
+
   const [articleData, setArticleData] = useState<IArticle[]>([])
   const [storeData, setStoreData] = useState<IStore[]>([])
   const [rowData, setRowData] = useState<T[]>([])
   const [module, setModule] = useState<IModule[]>([])
 
   useEffect(() => {
-    iwsStore.subscribe(setIwsState)
+    // const subscription = iwsStore.subscribe(() => {
+    //   const freshData = iwsStore.getByModelId(modelid) as T[];
+    //   setRowData(freshData);
     Get(art_ctx, token, art_modelid, setArticleData)
     Get(store_ctx, token, store_modelid, setStoreData)
     Get(module_ctx, token, module_modelid, setModule)
-    setCurrent(current_)
-  }, [selected])
+    //setCurrent(current_)
+    // });
+    // return () => subscription.unsubscribe();
+  }, [])
 
  const fromPeriod = current.fromPeriod ===-1 ? `${current.toPeriod.toString().substring(0,4)}00`
                                                             :current.fromPeriod
@@ -68,6 +71,7 @@ const UseArticleAccountForm = <T>(): [UseArticleAccountResult<T>] => {
   const submitQuery = (event: any, current:IJournalProps) => {
     event.preventDefault()
     Get(buildUrl(current), token, modelid, setRowData)
+    // Get(module_ctx, token, module_modelid, setModule)
   }
 
    const onRowSelected = (event: RowSelectedEvent) =>

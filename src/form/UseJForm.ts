@@ -9,7 +9,6 @@ import {initModule, MASTERFILE, PACB_JOURNAL_QUERY_PARM} from './Menu'
 import {formEnum} from '../utils/FormEnum'
 import {JournalProps} from '../Props.ts'
 import {IAccount, IModule} from '../Models.ts'
-import iwsStore from '../utils/Store.tsx'
 import {UseJFormResult} from '../Props.ts'
 import useForm from './UseForm.ts'
 
@@ -45,17 +44,18 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
   const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
   const current_ = {...PACB_JOURNAL_QUERY_PARM, modelid: modelid, currency:currency??''}
   const [current, setCurrent] = useState<JournalProps>(current_)
-  const [, setIwsState] = useState(iwsStore.initialState)
   const [accData, setAccData] = useState<IAccount[]>([])
   const [rowData, setRowData] = useState<T[]>([])
   const [module, setModule] = useState<IModule[]>([])
-
   useEffect(() => {
-    iwsStore.subscribe(setIwsState)
-    Get(acc_ctx, token, acc_modelid, setAccData)
-    Get(module_ctx, token, module_modelid, setModule)
-    setCurrent(current_)
-  }, [selected])
+    //const subscription = iwsStore.subscribe(() => {
+      //const freshData = iwsStore.getByModelId(modelid) as T[];
+      //setRowData(freshData);
+      Get(acc_ctx, token, acc_modelid, setAccData)
+      Get(module_ctx, token, module_modelid, setModule)
+      setCurrent(current_)
+   // return () => subscription.unsubscribe();
+  }, [selected]);
 
  const fromPeriod = current.fromPeriod ===-1 ? `${current.toPeriod.toString().substring(0,4)}00`
                                                             :current.fromPeriod

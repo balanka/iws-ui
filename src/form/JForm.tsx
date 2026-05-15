@@ -1,4 +1,3 @@
-import  { useEffect, useState } from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule} from 'ag-grid-community'
 
 import 'ag-grid-community/styles/ag-grid.css'
@@ -9,7 +8,6 @@ import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { JournalFormHead } from './JournalFormHead'
 import { JournalMainForm } from './JournalMainForm'
 import {initAcc} from './Menu'
-import iwsStore from '../utils/Store'
 import {pacColumnsDefs} from '../ColumnsDefs.ts'
 import {IPeriodicAccountBalance} from '../Models.ts'
 import {defaultColDefX, PeriodicAccountBalanceGrid} from '../IWSGrid.tsx'
@@ -29,9 +27,9 @@ ModuleRegistry.registerModules([
 
 
 const JForm = () => {
-  const [{ profile, selected, t, title, language, handleLanguageChange, module_}] = useForm()
-  const [, setIwsState] = useState(iwsStore.initialState)
-  const  [{ accData, rowData, setRowData, current_, current, setCurrent, submitQuery, submitQuery2
+  const [{ profile,  t, title, language, handleLanguageChange, module_}] = useForm()
+
+  const  [{ accData, rowData, setRowData,  current, setCurrent, submitQuery, submitQuery2
     , onRowSelected, templateName, styles}] = useJForm<IPeriodicAccountBalance>()
 
   const {currency, company} = profile
@@ -39,10 +37,6 @@ const JForm = () => {
   const dispatch = useDispatch()
   const height = 20
 
-  useEffect(() => {
-    iwsStore.subscribe(setIwsState)
-    setCurrent(current_)
-  }, [selected])
 
   const format = (d: IPeriodicAccountBalance) => {
     const  totalx_debit= d.idebit + d.debit

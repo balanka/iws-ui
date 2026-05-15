@@ -20,14 +20,17 @@ export const TransactionMainForm = ({
   const copyFromModule = modules.find((m: any) => m.id === BigInt(currentModule?.copyFrom ?? 0))
   const total:number = current?.lines?.reduce((prev: number, line: any) => prev + line?.quantity * line?.price + line?.vat, 0) ?? 0
   return (
-    <div style={{ ...styles.outer, paddingBottom:2, width:'100%', height:210,  display: !collapse ? 'none' : ''  }}>
+    <div
+      //@ts-ignore
+      style={{ ...styles.outer, paddingBottom:2, width:'100%', height:210,  display: !collapse ? 'none' : ''  }}>
       {/* Row 1 */}
       <FormRow height={height}>
         <CCol sm={8} className="d-flex gap-2 align-items-center" style={{height: height}}>
           <Label>{t('common.id')}</Label>
           <InputField fieldName="id" current={current} setCurrent={setCurrent} value={current.id} disabled={current.posted} style={{ ...inputStyle, width: '50%', textAlign: 'right' }} />
           <Label>{t('fmodule.title')}</Label>
-          <ComboBox style={inputStyle} value={{ value: BigInt(currentModule?.id ?? 0), label: `${BigInt(currentModule?.id ?? 0)} ${currentModule?.name ?? ''}` }} onChange={handleModuleChange} values={modules.slice().sort(sortById).map(toOption)} zIndex={99999} />
+          <ComboBox style={inputStyle} value={{ value: BigInt(currentModule?.id ?? 0), label: `${BigInt(currentModule?.id ?? 0)} ${currentModule?.name ?? ''}` }}
+                    onChange={handleModuleChange} values={modules.slice().sort(sortById).map(toOption)} zIndex={99999}  height ={height-5}/>
         </CCol>
       </FormRow>
 
@@ -37,11 +40,12 @@ export const TransactionMainForm = ({
           <Label>{t('transaction.oid')}</Label>
           <InputField fieldName="oid" current={current} setCurrent={setCurrent} value={current.oid} disabled={current.posted} style={{...inputStyle, width:'50%', textAlign: 'right' }} />
           <Label>{t('common.copyFrom')}</Label>
-          <ComboBox style={inputStyle} value={{ value: BigInt(copyFromModule?.id ?? 0), label: `${BigInt(copyFromModule?.id ?? 0)} ${copyFromModule?.name ?? ''}` }} onChange={submitCopy} values={copyFromTransaction.slice().sort(sortById).map(transactionToOption)} zIndex={99999} />
+          <ComboBox style={inputStyle} value={{ value: BigInt(copyFromModule?.id ?? 0), label: `${BigInt(copyFromModule?.id ?? 0)} ${copyFromModule?.name ?? ''}` }}
+                    onChange={submitCopy} values={copyFromTransaction.slice().sort(sortById).map(transactionToOption)} zIndex={99999} height ={height-5}/>
         </CCol>
         <CCol sm={4} className="d-flex gap-2 align-items-center">
           <Label>{t('transaction.period')}</Label>
-          <InputField fieldName="period" current={current} setCurrent={setCurrent} value={current.period} disabled={true} style={{ height, paddingLeft:5, width: 90, textAlign:'right' }} />
+          <InputField fieldName="period" current={current} setCurrent={setCurrent} value={current.period} disabled={true} style={{ paddingLeft:5, width: 90, textAlign:'right', height:height-5 }} />
           <BooleanField fieldName="posted" current={current} setCurrent={setCurrent} label="" disabled={current.posted} checked={current.posted} />
         </CCol>
       </FormRow>
@@ -50,7 +54,7 @@ export const TransactionMainForm = ({
       <FormRow height={height}>
         <CCol sm={8} className="d-flex gap-2 align-items-center" style={{height: height, paddingTop:2}}>
           <Label>{t('transaction.store')}</Label>
-          <MasterfileComboBox current={current} setCurrent={setCurrent} data={storeData} fieldName="store" defaultValue={initStore[0]} zIndex={zIndex} styles={inputStyle} />
+          <MasterfileComboBox current={current} setCurrent={setCurrent} data={storeData} fieldName="store" defaultValue={initStore[0]} zIndex={zIndex} styles={inputStyle}  height ={height-5}/>
         </CCol>
         <CCol sm={4} className="d-flex gap-2 align-items-center">
           <Label>{t('transaction.transdate')}</Label>

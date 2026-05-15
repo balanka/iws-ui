@@ -11,7 +11,6 @@ import {masterfileColumnDefs} from '../ColumnsDefs.ts'
 import useForm from './UseForm.ts'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
 import {styles} from './BasicTreeTableProps.tsx'
-import iwsStore from "../utils/Store.tsx";
 import {Get} from "./CrudController.ts";
 import {IMasterfile2} from "../Models.ts";
 import {formEnum} from "../utils/FormEnum.tsx";
@@ -25,20 +24,22 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
     const {token} = profile
     const url = MASTERFILE.apartment
     const ctx =  `${url}/${formEnum.APARTMENT}/${company}`
-    const [, setIwsState] = useState(iwsStore.initialState)
+
     const [accData, setAccData] = useState<IMasterfile2[]>([])
      const height = 33
      const current_ =  module_.state[0]
      const minHeight = 450
      const maxHeight = 700
      const colDef:ColDef[]= masterfileColumnDefs(t)
+     console.log('ctx')
+     const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.room)
+
    useEffect(() => {
-     iwsStore.subscribe(setIwsState)
      Get(ctx, token, formEnum.APARTMENT, setAccData)
      setCurrent(current_)
-   }, [current_])
-   console.log('ctx')
-   const [{header, body, table, disable,  state, visible, current, setCurrent}] = UseMasterfileForm(current_, colDef, MASTERFILE.room)
+   }, [])
+
+
    const safeBody = React.isValidElement(body) ? body : null;
    const mainForm = MasterfileFormWithout({collapse:state.collapse,  current:current??current_, setCurrent:setCurrent
      , disable:disable, height:height, accData:accData, t:t

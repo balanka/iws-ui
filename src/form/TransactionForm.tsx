@@ -13,18 +13,22 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 import {styles} from './BasicTreeTableProps.tsx'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import { FinancialsFormHead } from './FinancialsFormHead.tsx'
-import { TransactionMainForm} from './TransactionMainForm.tsx'
+import {FinancialsFormHead} from './FinancialsFormHead.tsx'
+import {TransactionMainForm} from './TransactionMainForm.tsx'
 import {initCust, initfModule, initLineTransaction, initLtr, MASTERFILE, TRANSACTION} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 
 import {
   IArticle,
   ICustomer,
-  IFinancials, IFmodule,
+  IFinancials,
+  IFmodule,
   ILineFinancials,
-  ILineTransaction, IStore, ISupplier,
-  ITransaction, IVat,
+  ILineTransaction,
+  IStore,
+  ISupplier,
+  ITransaction,
+  IVat,
 } from '../Models.ts'
 import {TransactionGrid} from '../IWSGrid.tsx'
 import {lineTransactionColumnDefs, transactionColumnDefs} from '../ColumnsDefs.ts'
@@ -38,7 +42,7 @@ import {generateDocx} from './../utils/XlsUtils.ts'
 import useTransactionForm from './UseTransactionForm.ts'
 import useForm from './UseForm.ts'
 import {formEnum} from '../utils/FormEnum.tsx'
-import {Get, Get3} from './CrudController.ts'
+import {Get, Get3, Gets} from './CrudController.ts'
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
@@ -61,7 +65,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching, setIsFetching }] =
      useTransactionForm(current_??initLtr [0], initialLine, currentLine, setCurrentLine, rowData, setRowData)
 
-  const [iwsState, setIwsState] = useState(iwsStore.initialState)
    const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
    //const acc_modelid = formEnum.ACCOUNT
    const art_modelid = formEnum.ARTICLE
@@ -89,18 +92,13 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    const [oaccFilter, setOAccFilter] = useState<string[]>([])
    const [title, setTitle] = useState(title_)
 
-
    useEffect(() => {
-     iwsStore.subscribe(setIwsState)
      Get(art_ctx, token, art_modelid, setArticleData)
      Get(store_ctx, token, store_modelid, setStoreData)
      Get(vat_ctx, token, vat_modelid, setVatData)
      Get(cust_ctx, token, cust_modelid, setCustomerData)
      Get(sup_ctx, token, sup_modelid, setSupplier)
-     //Get(acc_ctx, token, acc_modelid, setAccData)
-     //setCurrent(current_)
-     setRowData([])
-   }, [selected])
+   },[selected])
 
      const gridOptions: GridOptions<ITransaction|IFinancials> = {
          rowStyle: { background: 'lightBlue' },
@@ -202,11 +200,11 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      setIsFetching(true)
      //!iwsState.get(fmodule_modelid)&&Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
      //!iwsState.get(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData)
-     !iwsState.get(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData)
-     !iwsState.get(store_modelid)&&Get(store_ctx, token, store_modelid, setStoreData)
-     !iwsState.get(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData)
-     !iwsState.get(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
-     !iwsState.get(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
+     !iwsStore.getByModelId(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData)
+     !iwsStore.getByModelId(store_modelid)&&Get(store_ctx, token, store_modelid, setStoreData)
+     !iwsStore.getByModelId(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData)
+     !iwsStore.getByModelId(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
+     !iwsStore.getByModelId(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
      Get3(ctx, token, modelid, current_, setRowData, setCurrent)
      setIsFetching(false)
    }
@@ -215,7 +213,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      setModel(value)
      const mx:IFmodule = fmodule.find((m:IFmodule) => m?.id === value) ?? initfModule[0]
       title_ = mx?.name ? mx?.name : title_
-     const copyFromIds = mx? mx.copyFrom:-1
+     const copyFromIds = (mx? mx.copyFrom.split(','):[]).map( (modelid) => parseInt(modelid))
      const titlex = `${company}/${title_}`
      setTitle(titlex)
      setPartnerId(parseInt(mx?.account))
@@ -227,14 +225,13 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const _partnerCtx:string = parseInt(mx?.account)===formEnum.CUSTOMER?MASTERFILE.cust:
        (parseInt(mx?.account)==formEnum.SUPPLIER)?MASTERFILE.sup:''
      const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
-     Get(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
+     Gets(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
      submitQuery( ctx, partnerCtx, parseInt(mx?.account))
      const currentx = rowData.filter(m=>m.modelid===current_.modelid)?.length>0?rowData[0]:current_
      setCurrent(currentx)
    }
 
-  const ccData:ICustomer[]|ISupplier[] = iwsState.get(partnerId)??[initCust]
-   const accData:ICustomer[]|ISupplier[] = ccData//.filter(m=>!m.id.toString().includes('*'))
+   const accData:ICustomer[]|ISupplier[] = iwsStore.getByModelId(partnerId) as ICustomer[] | ISupplier[] ?? [initCust]//.filter(m=>!m.id.toString().includes('*'))
    const stData = storeData.filter(m=>!m.id.toString().includes('*'))
     return isFetching?<CSpinner color="primary" />:(<>
             <FinancialsFormHead
@@ -264,7 +261,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
         />
        <div
        //@ts-ignore
-         style={{ ...styles.outer, width:'100%', height: 400,  display: !state.collapse ? 'none' : ''  }}>
+         style={{ ...styles.outer,   width:'100%', height: 400,  display: !state.collapse ? 'none' : ''}}>
           <TransactionMainForm collapse={state.collapse} current={current??current_} setCurrent={setCurrent}
                                t={t} accData={accData}
                                storeData={stData} modules={fmoduleData}
@@ -274,7 +271,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                                height={height} zIndex={zIndex-2} locale = {locale} currency ={currency}/>
           <div
             // @ts-ignore
-            style={{...styles.outer,  padding:1, display: !state.collapse?'none':'', width: '100%', height: 40}}>
+            style={{ backgroundColor: 'transparent',  padding:1, display: !state.collapse?'none':'', width: '100%', height: 40}}>
               <TransactionDetailsTabs   transaction={current}  setTransaction={setCurrent}
                                         currentLineTransaction ={currentLine}
                                         setCurrentLineTransaction={setCurrentLine}

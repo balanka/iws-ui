@@ -26,7 +26,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const minHeight = 450
      const maxHeight = 700
      const colDef:ColDef[]= PartnerColumnDefs(t)
-    const [{header, body, disable, table, state, visible, current, setCurrent}] = UseMasterfileForm(current_,  colDef, MASTERFILE.partner)
+     const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm(current_,  colDef, MASTERFILE.partner)
     const safeBody = React.isValidElement(body) ? body : null
     const mainForm = PartnerMainForm ({collapse:state.collapse,  current:current, setCurrent:setCurrent
      , disable:disable, t:t, height:height})

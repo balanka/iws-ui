@@ -1,4 +1,4 @@
-import  {useCallback, useEffect, useRef, useState } from 'react'
+import  {useCallback, useEffect, useState } from 'react'
 import {
   ClientSideRowModelModule,
   ModuleRegistry,
@@ -70,14 +70,13 @@ const STYLES = {
 export const Main  = () => {
   const [{profile, selected, t,  module_ }] = useForm()
   const {token, currency, company} = profile
-  const init = useRef(false)
+  //const init = useRef(false)
 
-    if (module_ === '11111' || module_ === 11111) return <Login / >
+        if (module_ === '11111' || module_ === 11111) return <Login / >
         const height = 20
         const modelid :number = module_? module_.modelid:1111
         const current_ = {...PACB_JOURNAL_QUERY_PARM, modelid:modelid, currency:currency??''}
         const [current, setCurrent] = useState<JournalProps>(current_)
-        const [, setIwsState] = useState(iwsStore.initialState)
         const [accData, setAccData] = useState <IAccount[]>([])
         const [rowData, setRowData] = useState <IAccount[]>([])
         const dispatch = useDispatch()
@@ -213,22 +212,27 @@ export const Main  = () => {
         event.preventDefault()
          Get(buildUrl0(), token, modelid, setRowData)
       }
-
       useEffect(() => {
-        if (!init.current) {
-          iwsStore.subscribe(setIwsState)
-          init.current = true
-        }
-        // load account data as they are needed
+        const subscription = iwsStore.subscribe(() => {
+        const freshData = iwsStore.getByModelId(modelid) as IAccount[];
+        setRowData(freshData);
         acc_ctx && Get(acc_ctx, token, acc_modelid, setAccData)
         setCurrent(current_)
+      });
+        return () => subscription.unsubscribe();
       }, [selected])
 
-      {/*const onGridReady = (params: GridReadyEvent) =>   {*/}
-      {/*  console.log('onGridReady', params)*/}
-      {/*  setGridApi(params.api)*/}
-      {/*}*/}
-      {/*const onBtExport = ()=> gridApi!.exportDataAsExcel()*/}
+      {/*useEffect(() => {*/}
+      {/*  if (!init.current) {*/}
+      {/*    iwsStore.subscribe(setIwsState)*/}
+      {/*    init.current = true*/}
+      {/*  }*/}
+      {/*  // load account data as they are needed*/}
+      {/*  acc_ctx && Get(acc_ctx, token, acc_modelid, setAccData)*/}
+      {/*  setCurrent(current_)*/}
+      {/*}, [selected])*/}
+
+
 
       const formatIt= (d:IAccount2) => {
           const balance= Number((d.isDebit?(d.idebit+d.debit-d.icredit-d.credit):

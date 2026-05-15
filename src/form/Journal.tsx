@@ -1,4 +1,3 @@
-import {useEffect, useState} from 'react'
 import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -8,7 +7,6 @@ import { JournalMainForm} from './JournalMainForm'
 import { JournalFormHead } from './JournalFormHead'
 
 import {initAcc} from './Menu'
-import iwsStore from '../utils/Store'
 import {journalColumnsDefs} from '../ColumnsDefs.ts'
 import {IJournal} from '../Models.ts'
 import {defaultColDefX, JournalGrid} from '../IWSGrid.tsx'
@@ -27,18 +25,20 @@ ModuleRegistry.registerModules([
 ])
 
 const Journal = () => {
-  const [{ selected, t, title, language, handleLanguageChange, company, module_}] = useForm()
-  const  [{ accData, rowData, current_, current, setCurrent, submitQuery, submitQuery2, onRowSelected
+  const [{  t, title, language, handleLanguageChange, company, module_}] = useForm()
+  const  [{ accData, rowData, current, setCurrent, submitQuery, submitQuery2, onRowSelected
     , templateName, styles}] = useJForm<IJournal>()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const dispatch = useDispatch()
-  const [, setIwsState] = useState(iwsStore.initialState)
   const height = 20
 
-  useEffect(() => {
-    iwsStore.subscribe(setIwsState)
-    setCurrent(current_)
-  }, [selected])
+  // useEffect(() => {
+  //   const subscription = iwsStore.subscribe((store) => {
+  //     setRowData(store.get(current_.modelid) as unknown as IJournal[]);
+  //     setCurrent(current_)
+  //   });
+  //   return () => subscription.unsubscribe();
+  // }, [current_, selected])
 
   const formatter = new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const toBalance2 = (m:IJournal) => {

@@ -12,7 +12,6 @@ import {styles} from './BasicTreeTableProps.tsx'
 import React from "react";
 import Login from "./Login.tsx";
 
-
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const RealEstateForm = () => {
      const [{t, module_}]  = useForm()
@@ -22,7 +21,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const minHeight = 450
      const maxHeight = 700
      const colDef:ColDef[]= masterfileColumnDefs(t)
-     const [{header, body, disable, table, state, visible, current, setCurrent}] = UseMasterfileForm(current_,  colDef, MASTERFILE.realEstate)
+   const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.realEstate)
      const safeBody = React.isValidElement(body) ? body : null;
      const mainForm = MasterfileFormWithout({collapse:state.collapse,  current:current??current_, setCurrent:setCurrent
      , disable:disable, height:height, accData:[], t:t, fieldName:t('common.parent'), propertyName:'parent'})

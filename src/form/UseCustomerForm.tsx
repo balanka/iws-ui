@@ -6,10 +6,10 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {Add, Edit, Get} from './CrudController.ts'
-import {initBankAccount, MASTERFILE} from './Menu.tsx'
+import {initBankAccount} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
-import {IAccount, IBankAccount, IBusinespartner, IMasterfile, IVat} from '../Models.ts'
+import {IBankAccount, IBusinespartner} from '../Models.ts'
 import {UseCustomerFormResult} from '../Props.ts'
 import useForm from './UseForm.ts'
 import {CustomerGrid} from '../IWSGrid.tsx'
@@ -30,16 +30,16 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
   let body: React.JSX.Element | null = (module_ === '11111' || module_ === 11111) ? Login() : null
   const [disable, setDisable] = useState(true)
   const [gridApi, setGridApi] = useState<GridApi>()
-  const acc_modelid = formEnum.ACCOUNT
-  const bank_modelid = formEnum.BANK
-  const ccy_modelid = formEnum.CURRENCY
-  const vat_modelid = formEnum.VAT
+  // const acc_modelid = formEnum.ACCOUNT
+  // const bank_modelid = formEnum.BANK
+  // const ccy_modelid = formEnum.CURRENCY
+  // const vat_modelid = formEnum.VAT
   const ctx = `${selected}/${modelid}/${company}`
   const modifyUrl = selected
-  const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
-  const bank_ctx = `${MASTERFILE.masterfile}/${bank_modelid}/${company}`
-  const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
-  const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
+  // const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
+  // const bank_ctx = `${MASTERFILE.masterfile}/${bank_modelid}/${company}`
+  // const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
+  // const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
 
   //let body =(module_ === '11111' || module_ === 11111)?Login ():null
   const dispatch = useDispatch()
@@ -47,25 +47,73 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
   const [current, setCurrent] = useState<T>(current_)
   const [edited, setEdited] = useState<boolean | undefined>(false)
   const [added, setAdded] = useState<boolean | undefined>(undefined)
-  const [, setIwsState] = useState(iwsStore.initialState)
-  const [accData, setAccData] = useState<IAccount[]>([])
+  //const [, setIwsState] = useState(iwsStore.initialState)
+  // const [accData, setAccData] = useState<IAccount[]>([])
   const [rowData, setRowData] = useState<T[]>([])
-  const [vatData, setVatData] = useState<IVat[]>([])
-  const [bankData, setBankData] = useState<IMasterfile[]>([])
-  const [ccyData, setCcyData] = useState<IMasterfile[]>([])
+  // const [vatData, setVatData] = useState<IVat[]>([])
+  // const [bankData, setBankData] = useState<IMasterfile[]>([])
+  // const [ccyData, setCcyData] = useState<IMasterfile[]>([])
   const [currentBankAccount, setCurrentBankAccount] = useState<IBankAccount>(initBankAccount)
+
+  // Subscribe to store changes (when other components modify the same modelid)
+  // useEffect(() => {
+  //   const subscription = iwsStore.subscribe(() => {
+  //     const freshData = iwsStore.getByModelId(modelid) as T[];
+  //     setRowData(freshData);
+  //     Get(acc_ctx, token, acc_modelid, setAccData)
+  //     Get(bank_ctx, token, bank_modelid, setBankData)
+  //     Get(ccy_ctx, token, ccy_modelid, setCcyData)
+  //     Get(vat_ctx, token, vat_modelid, setVatData)
+  //     document.onkeydown = handleKeyPress
+  //     document.addEventListener('onKeyDown', handleKeyPress)
+  //   });
+  //   return () => subscription.unsubscribe();
+  // }, [modelid]);
+
   useEffect(() => {
-    iwsStore.subscribe(setIwsState)
-    Get(acc_ctx, token, acc_modelid, setAccData)
-    Get(bank_ctx, token, bank_modelid, setBankData)
-    Get(ccy_ctx, token, ccy_modelid, setCcyData)
-    Get(vat_ctx, token, vat_modelid, setVatData)
-    setCurrent(current_)
-    setRowData([])
-    // attach the event listener
-    document.onkeydown = handleKeyPress
-    document.addEventListener('onKeyDown', handleKeyPress)
-  }, [selected])
+    const subscription = iwsStore.subscribe(() => {
+      const freshData = iwsStore.getByModelId(modelid) as T[];
+      setRowData(freshData);
+      // attach the event listener
+      document.onkeydown = handleKeyPress
+      document.addEventListener('onKeyDown', handleKeyPress)
+    });
+    return () => {subscription.unsubscribe(); document.removeEventListener('onKeyDown', handleKeyPress)}
+  }, []);
+
+  useEffect(() => {
+    if (rowData.length === 0) {
+      Get(ctx, token, modelid, setRowDataAndStore);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Wrapper that updates both state and the store
+  const setRowDataAndStore = useCallback((value: React.SetStateAction<T[]>) => {
+    if (typeof value === 'function') {
+      setRowData(prev => {
+        const newData = value(prev);
+        newData.forEach(item => iwsStore.set(item));
+        return newData;
+      });
+    } else {
+      setRowData(value);
+      value.forEach(item => iwsStore.set(item));
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   iwsStore.subscribe(setIwsState)
+  //   Get(acc_ctx, token, acc_modelid, setAccData)
+  //   Get(bank_ctx, token, bank_modelid, setBankData)
+  //   Get(ccy_ctx, token, ccy_modelid, setCcyData)
+  //   Get(vat_ctx, token, vat_modelid, setVatData)
+  //   setCurrent(current_)
+  //   setRowData([])
+  //   // attach the event listener
+  //   document.onkeydown = handleKeyPress
+  //   document.addEventListener('onKeyDown', handleKeyPress)
+  // }, [selected])
 
   const handleKeyPress = useCallback((event:any) => {
     switch (event.keyCode) {
@@ -127,15 +175,15 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
   }
 
   const reload = () => {
-    iwsStore.deleteKey(current.modelid)
+    iwsStore.deleteByModelId(current.modelid)
     Get(ctx, token, current.modelid, setRowData)
     setCurrent(current_)
   }
   const submitQuery = (event: any) => {
     event.preventDefault()
     Get(ctx, token, modelid, setRowData)
-    Get(acc_ctx, token, acc_modelid, setAccData)
-    Get(vat_ctx, token, vat_modelid, setVatData)
+    // Get(acc_ctx, token, acc_modelid, setAccData)
+    // Get(vat_ctx, token, vat_modelid, setVatData)
   }
   const addLine =
     (line: IBankAccount) => {
@@ -223,10 +271,10 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
     currentBankAccount,
     setCurrentBankAccount,
     setGridApi,
-    accData: accData,
-    bankData: bankData,
-    vatData: vatData,
-    ccyData: ccyData,
+    // accData: accData,
+    // bankData: bankData,
+    // vatData: vatData,
+    // ccyData: ccyData,
     setRowData,
     state:state
 

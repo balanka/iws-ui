@@ -34,7 +34,6 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
    let templateFileName =''
   const [, setDisable] = useState(true)
   const [current, setCurrent] = useState<T>(current_)
-  const [, setIwsState] = useState(iwsStore.initialState)
   //const acc_modelid = formEnum.ACCOUNT
   const module_modelid = formEnum.MODULE
   const fmodule_modelid = formEnum.FMODULE
@@ -53,38 +52,41 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   const [gridApi,   setGridApi] = useState<GridApi>()
   const zIndex:number = 99999
   const EXPORT_FILE_EXTENSION= "xlsx"
-  // const handleKeyPress = useCallback((event:any) => {
-  //  // let isMetaKey =  event.metaKey
-  //   console.log('event.keyCode', event.keyCode)
-  //   console.log('event.functionKey', event.functionKey)
-  //   switch (event.keyCode) {
-  //     case 112:
-  //       submitEdit(event); return
-  //     case 113:
-  //       onNewLine();return
-  //     case 114:
-  //       reload();return
-  //     default:
-  //       return
-  //   }
-  // }, [])
+  const handleKeyPress = useCallback((event:any) => {
+   // let isMetaKey =  event.metaKey
+    console.log('event.keyCode', event.keyCode)
+    console.log('event.functionKey', event.functionKey)
+    switch (event.keyCode) {
+      case 112:
+        submitEdit(event); return
+      case 113:
+        onNewLine();return
+      case 114:
+        reload();return
+      default:
+        return
+    }
+  }, [])
 
   let init = useRef(false)
   useEffect(() => {
-    if (!init.current) {
-        iwsStore.subscribe(setIwsState)
+    const subscription = iwsStore.subscribe((store) => {
+      if (!init.current) {
         init.current = true
-         Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
-         //Get(acc_ctx, token, acc_modelid, setAccData)
-         Get(module_ctx, token, fmodule_modelid, setModule)
+        setRowData(store.get(current_.modelid) as unknown as T[]);
+        Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
+        //Get(acc_ctx, token, acc_modelid, setAccData)
+        Get(module_ctx, token, fmodule_modelid, setModule)
         // attach the event listener
-        //   document.onkeydown = handleKeyPress
-        //  document.addEventListener('onKeyDown', handleKeyPress)
-    }
+      }
+    })
+      document.onkeydown = handleKeyPress
+      document.addEventListener('onKeyDown', handleKeyPress)
     // remove the event listener
-    // return () => {
-    //   document.removeEventListener('onKeyDown', handleKeyPress)
-    // }
+    return () => {
+      subscription.unsubscribe()
+      document.removeEventListener('onKeyDown', handleKeyPress)
+    }
   }, [current])
 
      function buildPostCall (rows: BigInt[], current:T, modifyUrl: string, token: string, setCurrent:Dispatch<SetStateAction<T>>) {
@@ -195,7 +197,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
     EditRow(newRow, true, setCurrent)
   }
   const reload = () => {
-    iwsStore.deleteKey(current.modelid)
+    iwsStore.deleteByModelId(current.modelid)
     Get(ctx, token, current.modelid, setRowData)
     //setCurrent(current_)
   }
