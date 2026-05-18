@@ -1627,49 +1627,131 @@ export const vatColumnDefs = ( t: (arg0: string) => any) => [
     minWidth: 6,
   },
 ]
-export const BalanceSheetColDef = ( t: (arg0: string) => any) => [
-    {
-        field: 'init Balance',
-        headerName: t('common.report'),
-        cellStyle: {textAlign: 'center'},
-        children: [
-            {
-                headerName: t('common.idebit'),
-                aggFunc: "sum",
-                field: "idebit",
-                flex: 1,
-                cellStyle: {textAlign: 'right'},
-            },
-            {
-                headerName: t('common.icredit'),
-                aggFunc: "sum",
-                field: "icredit",
-                flex: 1,
-                cellStyle: {textAlign: 'right'},
-            },
-        ],
-    },
-    {
-        field: 'Transaction',
-        headerName: t('common.transactions'),
-        cellStyle: {textAlign: 'center'},
-        children: [
-            {
-                headerName: t('common.debit'),
-                aggFunc: "sum",
-                field: "debit",
-                flex: 1,
-                cellStyle: {textAlign: 'right'},
-            },
-            {
-                headerName: t('common.credit'),
-                aggFunc: "sum",
-                field: "credit",
-                flex: 1,
-                cellStyle: {textAlign: 'right'},
-            },
-        ]
-    },
+// export const BalanceSheetColDef = ( t: (arg0: string) => any) => [
+//     {
+//         field: 'init Balance',
+//         headerName: t('common.report'),
+//         cellStyle: {textAlign: 'center'},
+//         children: [
+//             {
+//                 headerName: t('common.idebit'),
+//                 aggFunc: "sum",
+//                 field: "idebit",
+//                 flex: 1,
+//                 cellStyle: {textAlign: 'right'},
+//             },
+//             {
+//                 headerName: t('common.icredit'),
+//                 aggFunc: "sum",
+//                 field: "icredit",
+//                 flex: 1,
+//                 cellStyle: {textAlign: 'right'},
+//             },
+//         ],
+//     },
+//     {
+//         field: 'Transaction',
+//         headerName: t('common.transactions'),
+//         cellStyle: {textAlign: 'center'},
+//         children: [
+//             {
+//                 headerName: t('common.debit'),
+//                 aggFunc: "sum",
+//                 field: "debit",
+//                 flex: 1,
+//                 cellStyle: {textAlign: 'right'},
+//             },
+//             {
+//                 headerName: t('common.credit'),
+//                 aggFunc: "sum",
+//                 field: "credit",
+//                 flex: 1,
+//                 cellStyle: {textAlign: 'right'},
+//             },
+//         ]
+//     },
+// ]
+
+export  const BalanceSheetColDef = ( t: (arg0: string) => any) => [
+  {
+    field: 'init Balance',
+    headerName: t('common.report'),
+    cellStyle: {textAlign: 'center'},
+    children: [
+      {
+        headerName: t('common.idebit'),
+        //aggFunc: "sum",
+        field: "idebit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) => (params.data.idebit ?? 0).toFixed(2)
+      },
+      {
+        headerName: t('common.icredit'),
+        //aggFunc: "sum",
+        field: "icredit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) => params.data.icredit.toFixed(2)
+      },
+    ],
+  },
+  {
+    field: 'Transaction',
+    headerName: t('common.transactions'),
+    cellStyle: {textAlign: 'center'},
+    children: [
+      {
+        headerName: t('common.debit'),
+        //aggFunc: "sum",
+        field: "debit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) =>params.data.debit.toFixed(2)
+      },
+      {
+        headerName: t('common.credit'),
+        //aggFunc: "sum",
+        field: "credit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) => params.data.credit.toFixed(2)
+      },
+    ],
+  },
+  {
+    field: 'balance',
+    headerName: t('common.balance'),
+    cellStyle: {textAlign: 'center'},
+    children: [
+      {
+        headerName: t('common.debit'),
+        //aggFunc: "sum",
+        field: "bdebit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) => params.data.bdebit.toFixed(2)
+      },
+      {
+        headerName: t('common.credit'),
+        //aggFunc: "sum",
+        field: "bcredit",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        cellRenderer: (params:any) =>params.data.bcredit.toFixed(2)
+      },
+      {
+        headerName: t('common.balance'),
+        //aggFunc: "sum",
+        field: "balance",
+        flex: 1,
+        cellStyle: {textAlign: 'right'},
+        //valueFormatter: currencyFormatter,
+        //valueParser: currencyParser,
+        cellRenderer: (params:any) => params.data.balance.toFixed(2)
+      },
+    ],
+  },
 ]
 
 

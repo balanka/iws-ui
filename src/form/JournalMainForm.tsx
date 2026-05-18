@@ -30,10 +30,11 @@ export const JournalMainForm = ({
           <div className="d-flex align-items-center gap-2">
             <CFormLabel className="m-0" style={{ minWidth: 60 }}>{t('common.account')}</CFormLabel>
             <ComboBox
-              style={{ height: 25, width: '100%', fontSize: 12 }}
+              style={{ height: height-5, width: '100%', fontSize: 12 }}
               value={{ value: currentAccount?.id || '', label: currentAccount ? `${currentAccount.id} ${currentAccount.name}` : '' }}
               onChange={(value) => setCurrent({ ...current, account: value })}
               values={accounts?.slice().sort(sortById).map(toOption)}
+              height ={height-5}
             />
           </div>
         </CCol>

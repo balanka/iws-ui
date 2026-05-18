@@ -28,6 +28,7 @@ const basicTreeTable = () => import('./form/Main')
 //const BasicTreeTable = () => import('./form/BasicTreeData')
 //const ImageEditorExample = () => import('./form/ImageEditorExample')
 //const weatherComponent = () => import('./form/WeatherComponent')
+//const SmartTableExternalDataExample = () => import('./form/SmartTableExternalDataExample')
 
 
 const Login = ()   => import('./form/Login')
@@ -45,7 +46,6 @@ const routes = ():{path:string, name?:string, element?: ()=>Promise<any>}[] => [
   {
     path: MASTERFILE.createDepreciationTransaction,
     name: 'Generate depreciation transaction',
-    //element:weatherComponent
     element: masterfileForm,
   },
   { path: MASTERFILE.article, name: 'Article', element: articleForm},
