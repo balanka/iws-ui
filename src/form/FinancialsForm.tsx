@@ -2,7 +2,6 @@ import { useEffect, useState} from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
-  GridOptions,
   GridReadyEvent,
   ModuleRegistry,
   SelectEditorModule,
@@ -46,7 +45,7 @@ const FinancialsForm = () => {
   const [rowData, setRowData] = useState<IFinancials[]>([])
   const  [{  language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction
     , setCopyFromTransaction, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex
-    , handleLanguageChange, setModel, saveProps, modelid, isFetching, setIsFetching }] =
+    , handleLanguageChange, setModel, saveProps, modelid, isFetching, setIsFetching, gridOptions }] =
     useTransactionForm(current_, initialLine, currentLine, setCurrentLine, rowData, setRowData)
 
 
@@ -110,39 +109,6 @@ const FinancialsForm = () => {
   }
 
   const fmoduleData = (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id)
-  const gridOptions: GridOptions<IFinancials> = {
-    rowStyle: { background: 'lightBlue' },
-    // @ts-ignore
-    getRowStyle: (params: { node: { rowIndex: number} }) => {
-      if (params.node.rowIndex % 2 === 0) {
-        return { background: '#fff9e6' }
-      }
-    },
-    defaultColDef: {
-      resizable: true,
-      editable: false, //!current.posted,
-      flex: 1,
-      filter:true,
-      //floatingFilter: true,
-      //filter: "agTextColumnFilter",
-    },
-    //pivotMode: true,
-    //sideBar: true,
-    rowHeight: 20,
-    rowSelection: {
-      mode: "multiRow",
-    },
-    enableClickSelection: true,
-    onRowSelected:onRowSelected,
-    paginationPageSizeSelector: [5, 10, 20, 50],
-    pagination: true,
-    paginationPageSize: 10,
-    //masterDetail: true,
-    detailRowAutoHeight: true,
-    autoSizeStrategy: {
-      type: "fitGridWidth",
-    },
-  }
   const minHeight=300
   const maxHeight =650
   const minPadding=0
@@ -235,7 +201,7 @@ const FinancialsForm = () => {
             maximize direction="column">
         <TransactionGrid
           // @ts-ignore
-          gridOptions ={gridOptions} columnDefs={financialsColumnDefs(t)}
+          gridOptions ={gridOptions (financialsColumnDefs, LinesFinancialsColumns, t)}
           onRowSelected={onRowSelected} rowData={rowData}/>
       </div>
     </div>

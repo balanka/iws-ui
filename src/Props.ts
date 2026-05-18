@@ -12,7 +12,7 @@ import {
 } from "./Models.ts";
 import {type i18n, TFunction} from "i18next";
 import React, {CSSProperties, Dispatch, ReactNode, SetStateAction} from "react";
-import {GridApi, GridReadyEvent} from "ag-grid-community";
+import {ColDef, GridApi, GridReadyEvent} from "ag-grid-community";
 // @ts-ignore
 import type {RowSelectedEvent} from "ag-grid-community/dist/types/src/events";
 
@@ -502,8 +502,9 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , modelid:number
   , isFetching:boolean
   , setIsFetching:Dispatch<SetStateAction<boolean>>
-  //, partnerId:number
-  //, title:string
+  , gridOptions:(columnDefs:        (t:TFunction<'transalation', undefined>) =>ColDef[]
+                  , lineColumnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[]
+                  , t:TFunction<'transalation', undefined>) =>ColDef[]
 }
 export interface UseJFormResult<T> {
   profile: IProfile

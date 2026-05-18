@@ -1,8 +1,8 @@
 import {Dispatch, SetStateAction, useCallback, useEffect, useRef, useState} from 'react'
 import {
   AllCommunityModule,
-  ClientSideRowModelModule,
-  GridApi,
+  ClientSideRowModelModule, ColDef,
+  GridApi, IDetailCellRendererParams,
   ModuleRegistry,
 } from 'ag-grid-community'
 
@@ -23,6 +23,7 @@ import {
 import {ILine, SaveProps, UseTransactionFormResult} from '../Props.ts'
 import useForm from './UseForm.ts'
 import {isArrayAndNotEmpty} from "../utils/Utils.ts";
+import {TFunction} from "i18next";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -231,17 +232,78 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
     return `${filename}.${EXPORT_FILE_EXTENSION}`
   }
    const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current?.lines??[] }
-   //{  language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction
-  //     , setCopyFromTransaction, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex
-  //     , handleLanguageChange, setModel, saveProps, modelid, isFetching, setIsFetching }
 
-  //{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
-  //      , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setAccData, setFmodule, setModel
-  //      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching, setIsFetching }
+  const gridOptions =  (columnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[],
+                       lineColumnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[], t:TFunction<'transalation', undefined>)=> {
+    return {
+      rowStyle: {background: 'lightBlue'},
+      // @ts-ignore
+      getRowStyle: (params: { node: { rowIndex: number } }): { background: string } => {
+        if (params.node.rowIndex % 2 === 0) {
+          return {background: '#fff9e6'}
+        }
+      },
+      defaultColDef: {
+        resizable: true,
+        editable: false, //!current.posted,
+        flex: 1,
+        filter: true,
+        //floatingFilter: true,
+        //filter: "agTextColumnFilter",
+      },
+      rowHeight: 20,
+      copySelectedRows: true,
+      rowSelection: {
+        mode: "multiRow",
+        checkboxes: true,
+      },
+      //onRowSelected: onRowSelected,
+      paginationPageSizeSelector: [5, 10, 20, 50],
+      pagination: true,
+      paginationPageSize: 10,
+      //masterDetail: true,
+      detailRowAutoHeight: true,
+      autoSizeStrategy: {
+        type: "fitGridWidth",
+      },
+      // @ts-ignore
+      columnDefs: columnDefs (t), //transactionColumnDefs(t),
+      // @ts-ignore
+      detailCellRendererParams: {
+        detailGridOptions: {
+          getRowStyle: (params: { node: { rowIndex: number } }) => {
+            if (params.node.rowIndex % 2 === 0) {
+              return {background: '#fff9e6'}
+            }
+          },
+          columnDefs: lineColumnDefs(t), //lineTransactionColumnDefs(t),
+          defaultColDef: {
+            flex: 1,
+          },
+        },
+        getDetailRowData: (params: any) => {
+          params.successCallback(params.data.lines);
+        },
+      } as IDetailCellRendererParams<T, L>,
+
+      // detailCellRendererParams: {
+      //     detailGridOptions: {
+      //         columnDefs:lineTransactionColumnDefs(t),
+      //         defaultColDef: {
+      //             flex: 1,
+      //         },
+      //     },
+      //     getDetailRowData: (params:any) => params.successCallback(params.data.lines)
+      // } as IDetailCellRendererParams<ITransaction, ILineTransaction>,
+      //onFirstDataRendered: onFirstDataRendered,
+    }
+  }
 
    return [{ language, fmodule, setFmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction, setCopyFromTransaction
      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex,  handleLanguageChange, setModel
-     , saveProps, modelid, isFetching, setIsFetching }]
+     , saveProps, modelid, isFetching, setIsFetching
+     //@ts-ignore
+     , gridOptions }]
     // , accData, setAccData, setFmodule
 
 }

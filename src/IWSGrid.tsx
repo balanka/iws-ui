@@ -344,12 +344,11 @@ export const BankStatementGrid: FC<Props<IBankStatement>> = ({ columnDefs, defau
 
 export const TransactionGrid: FC<Props<ITransaction|IFinancials>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<ITransaction|IFinancials>)=>
     <AgGridReact
-        theme = {myTheme} //{theme ?? "legacy"}
+        theme = {myTheme}
         onRowSelected = {onRowSelected}
         // @ts-ignore
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
-        columnDefs={columnDefs}
         resetRowDataOnUpdate ={true}
         //rowSelection="multiple"
     />

@@ -177,7 +177,7 @@ export const FinancialsMainForm = ({
                 setCurrent={setCurrent}
                 value={currentx.period}
                 disabled={true}
-                style={{ height: height - 7, paddingLeft: 3, width: '70%', textAlign: 'right' }}
+                style={{ height: height - 7, paddingLeft: 3, width: '50%', textAlign: 'right' }}
               />
               <BooleanField
                 fieldName="posted"
@@ -186,7 +186,7 @@ export const FinancialsMainForm = ({
                 label=""
                 disabled={true}
                 checked={currentx.posted}
-                style={{ height: 20, paddingLeft: 0, align: 'right' }}
+                style={{ height: 20, paddingLeft: 5, align: 'right' }}
               />
             </CInputGroup>
         </CCol>
@@ -215,6 +215,7 @@ export const FinancialsMainForm = ({
         </CCol>
         <CCol sm={4} className="d-flex gap-2">
           <Label>{t('financials.line.amount')}</Label>
+          <div style={{ minWidth:'60%',  width:'80%'}}>
           <CurrencyField
             value={currentLine?.amount}
             locale={locale}
@@ -226,12 +227,12 @@ export const FinancialsMainForm = ({
               const numberValue = parseFloat(cleanValue)
               const finalValue = isNaN(numberValue) ? 0 : numberValue
               currentLine = {...currentLine, amount: finalValue, company: current?.company}
-              console.log('currentLine', currentLine)
               setCurrentLineFinancials({...currentLine})
               setTransactionF(currentx, setCurrent, currentLine, setCurrentLineFinancials)
             }}
             disabled={currentx.posted}
-            style={{...currencyStyle, fontSize: 12, width: '170px'}}/>
+            style={{...currencyStyle, fontSize: 12, width: '65%'}}/>
+          </div>
         </CCol>
       </FormRow>
 
@@ -263,7 +264,7 @@ export const FinancialsMainForm = ({
             locale={locale}
             currency={currency}
             disabled={true}
-            style={{...currencyStyle, fontSize: 12, fontWeight: 'bold', width: '170px'}}/>
+            style={{...currencyStyle, paddingLeft:5, fontSize: 12, fontWeight: 'bold', width: '65%'}}/>
         </CCol>
       </FormRow>
      </CContainer>

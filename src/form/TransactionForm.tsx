@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react'
 import {
   AllCommunityModule,
-  ClientSideRowModelModule,
-  GridOptions,
+  ClientSideRowModelModule, ColDef,
+  //GridOptions,
   GridReadyEvent,
   IDetailCellRendererParams,
   ModuleRegistry,
@@ -43,9 +43,76 @@ import useTransactionForm from './UseTransactionForm.ts'
 import useForm from './UseForm.ts'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {Get, Get3, Gets} from './CrudController.ts'
+import {TFunction} from "i18next";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
+
+const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[],
+                      lineColumnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[], t:TFunction<'transalation', undefined>)=> {
+  return {
+    rowStyle: {background: 'lightBlue'},
+    // @ts-ignore
+    getRowStyle: (params: { node: { rowIndex: number } }): { background: string } => {
+      if (params.node.rowIndex % 2 === 0) {
+        return {background: '#fff9e6'}
+      }
+    },
+    defaultColDef: {
+      resizable: true,
+      editable: false, //!current.posted,
+      flex: 1,
+      filter: true,
+      //floatingFilter: true,
+      //filter: "agTextColumnFilter",
+    },
+    rowHeight: 20,
+    copySelectedRows: true,
+    rowSelection: {
+      mode: "multiRow",
+      checkboxes: true,
+    },
+    //onRowSelected: onRowSelected,
+    paginationPageSizeSelector: [5, 10, 20, 50],
+    pagination: true,
+    paginationPageSize: 10,
+    //masterDetail: true,
+    detailRowAutoHeight: true,
+    autoSizeStrategy: {
+      type: "fitGridWidth",
+    },
+    // @ts-ignore
+    columnDefs: columnDefs (t), //transactionColumnDefs(t),
+    // @ts-ignore
+    detailCellRendererParams: {
+      detailGridOptions: {
+        getRowStyle: (params: { node: { rowIndex: number } }) => {
+          if (params.node.rowIndex % 2 === 0) {
+            return {background: '#fff9e6'}
+          }
+        },
+        columnDefs: lineColumnDefs(t), //lineTransactionColumnDefs(t),
+        defaultColDef: {
+          flex: 1,
+        },
+      },
+      getDetailRowData: (params: any) => {
+        params.successCallback(params.data.lines);
+      },
+    } as IDetailCellRendererParams<ITransaction, ILineTransaction>,
+
+    // detailCellRendererParams: {
+    //     detailGridOptions: {
+    //         columnDefs:lineTransactionColumnDefs(t),
+    //         defaultColDef: {
+    //             flex: 1,
+    //         },
+    //     },
+    //     getDetailRowData: (params:any) => params.successCallback(params.data.lines)
+    // } as IDetailCellRendererParams<ITransaction, ILineTransaction>,
+    //onFirstDataRendered: onFirstDataRendered,
+  }
+}
 
   const TransactionForm = () => {
   const [{profile, selected, t, toggle, toggleTable, state, visible, module_, modelid }] = useForm()
@@ -100,68 +167,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      Get(sup_ctx, token, sup_modelid, setSupplier)
    },[selected])
 
-     const gridOptions: GridOptions<ITransaction|IFinancials> = {
-         rowStyle: { background: 'lightBlue' },
-         // @ts-ignore
-         getRowStyle: (params: { node: { rowIndex: number} }):{background:string } => {
-             if (params.node.rowIndex % 2 === 0) {
-                 return { background: '#fff9e6' }
-             }
-         },
-             defaultColDef: {
-                 resizable: true,
-                 editable: false, //!current.posted,
-                 flex: 1,
-                 filter:true,
-                 //floatingFilter: true,
-                 //filter: "agTextColumnFilter",
-             },
-         rowHeight: 20,
-         copySelectedRows:true,
-         rowSelection: {
-             mode: "multiRow",
-             checkboxes: true,
-         },
-         onRowSelected:onRowSelected,
-         paginationPageSizeSelector: [5, 10, 20, 50],
-         pagination: true,
-         paginationPageSize: 10,
-         //masterDetail: true,
-         detailRowAutoHeight: true,
-         autoSizeStrategy: {
-             type: "fitGridWidth",
-         },
-         // @ts-ignore
-         columnDefs: transactionColumnDefs(t),
-         // @ts-ignore
-         detailCellRendererParams: {
-             detailGridOptions: {
-                 getRowStyle: (params: { node: { rowIndex: number} }) => {
-                     if (params.node.rowIndex % 2 === 0) {
-                         return { background: '#fff9e6' }
-                     }
-                 },
-                 columnDefs:lineTransactionColumnDefs(t),
-                 defaultColDef: {
-                     flex: 1,
-                 },
-             },
-             getDetailRowData: (params:any) => {
-                 params.successCallback(params.data.lines);
-             },
-         } as IDetailCellRendererParams<ITransaction, ILineTransaction>,
-
-         // detailCellRendererParams: {
-         //     detailGridOptions: {
-         //         columnDefs:lineTransactionColumnDefs(t),
-         //         defaultColDef: {
-         //             flex: 1,
-         //         },
-         //     },
-         //     getDetailRowData: (params:any) => params.successCallback(params.data.lines)
-         // } as IDetailCellRendererParams<ITransaction, ILineTransaction>,
-         //onFirstDataRendered: onFirstDataRendered,
-     }
 
      const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
      const minHeight=220
@@ -284,7 +289,9 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
            // @ts-ignore
             style={{...styles.outer,  height:state.collapse?minHeight:maxHeight, width: '100%'
                   , zIndex:1, display:visible?'':'none'}}>
-         <TransactionGrid gridOptions ={gridOptions}  columnDefs={transactionColumnDefs(t)}
+         <TransactionGrid
+           //@ts-ignore
+           gridOptions ={gridOptions (transactionColumnDefs, lineTransactionColumnDefs, t)}  columnDefs={transactionColumnDefs(t)}
                              onRowSelected={onRowSelected} rowData={rowData}/>
        </div>
     </>)
