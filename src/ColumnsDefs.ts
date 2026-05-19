@@ -1360,7 +1360,9 @@ export const inventoryJournalColumnsDefs = (t: (arg0: string) => any) => [
     minWidth: 1,
   },
 ]
-export const storeColumnDefs =  (t: (arg0: string) => any):ColDef<IStore>[] =>  [
+//(t:TFunction<'transalation', undefined>)
+export const storeColumnDefs = (t:TFunction<'transalation', undefined>):ColDef<IStore>[]=>[
+//(t: (arg0: string) => any):ColDef<IStore>[] =>  [
   {
     field: 'id',
     headerName: t('common.id'),
@@ -1627,52 +1629,9 @@ export const vatColumnDefs = ( t: (arg0: string) => any) => [
     minWidth: 6,
   },
 ]
-// export const BalanceSheetColDef = ( t: (arg0: string) => any) => [
-//     {
-//         field: 'init Balance',
-//         headerName: t('common.report'),
-//         cellStyle: {textAlign: 'center'},
-//         children: [
-//             {
-//                 headerName: t('common.idebit'),
-//                 aggFunc: "sum",
-//                 field: "idebit",
-//                 flex: 1,
-//                 cellStyle: {textAlign: 'right'},
-//             },
-//             {
-//                 headerName: t('common.icredit'),
-//                 aggFunc: "sum",
-//                 field: "icredit",
-//                 flex: 1,
-//                 cellStyle: {textAlign: 'right'},
-//             },
-//         ],
-//     },
-//     {
-//         field: 'Transaction',
-//         headerName: t('common.transactions'),
-//         cellStyle: {textAlign: 'center'},
-//         children: [
-//             {
-//                 headerName: t('common.debit'),
-//                 aggFunc: "sum",
-//                 field: "debit",
-//                 flex: 1,
-//                 cellStyle: {textAlign: 'right'},
-//             },
-//             {
-//                 headerName: t('common.credit'),
-//                 aggFunc: "sum",
-//                 field: "credit",
-//                 flex: 1,
-//                 cellStyle: {textAlign: 'right'},
-//             },
-//         ]
-//     },
-// ]
 
-export  const BalanceSheetColDef = ( t: (arg0: string) => any) => [
+
+export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>):any=>[
   {
     field: 'init Balance',
     headerName: t('common.report'),

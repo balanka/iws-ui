@@ -84,7 +84,8 @@ const Journal = () => {
       <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
         // @ts-ignore
                        stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
-      <div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 5, height: 560, width: '100%'}}>
+      <div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: '100%'}}>
+      {/*<div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 5, height: 560, width: '100%'}}>*/}
         <JournalGrid columnDefs ={journalColumnsDefs(t)} defaultColDef ={{...defaultColDefX, filter:true}}
                      onRowSelected={onRowSelected} rowData={rowData}/>
       </div>

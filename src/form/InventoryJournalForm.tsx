@@ -59,7 +59,7 @@ const InventoryJournalForm = () => {
       <InventoryJournalMainForm current={current} setCurrent={setCurrent} t={t} artData={articleData} storeData ={storeData} height={height}
         // @ts-ignore
                        stylesx={{height: 950, paddingBottom: 5}} />
-      <div  style={{paddingLeft: 1, paddingRight: 1, paddingTop: 15, height: 560, width: 1500}}>
+      <div  style={{paddingLeft: 1, paddingRight: 1, paddingTop: 10, height: 560, width: "100%"}}>
         <InventoryJournalGrid columnDefs ={inventoryJournalColumnsDefs(t)} defaultColDef ={{...defaultColDefX, filter:true}}
                      onRowSelected={onRowSelected} rowData={rowData}/>
       </div>

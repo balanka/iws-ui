@@ -19,18 +19,10 @@ export const InputNumberField = ({ fieldName, current, setCurrent, value, disabl
   <InputField fieldName={fieldName} current={current} setCurrent={setCurrent} value={value} disabled={disabled} style={{ ...style, textAlign: 'right' }} />
 )
 
-// export const CurrencyField = ({ fieldName, current, setCurrent, value, disabled, style, currency }: any) => (
-//   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
-//     <InputNumberField fieldName={fieldName} current={current} setCurrent={setCurrent} value={value} disabled={disabled} style={style} />
-//     <span style={{ fontSize: '0.875rem', whiteSpace: 'nowrap' }}>{currency}</span>
-//   </Box>
-// )
-
-
 export const FromPeriod = ({
-                             name, label, value, current, setCurrent, t, labelStyle, style}: {
-  name: string, label: string, value: any, current: any, setCurrent: (arg: any) => void;
-  t: TFunction<'translation', undefined>, labelStyle?: React.CSSProperties, style?: React.CSSProperties}) => {
+                             name, label, value, current, setCurrent, t, height, labelStyle, style}: {
+  name: string, label: string, value: any, current: any, setCurrent: (arg: any) => void, height?: number
+  , t: TFunction<'translation', undefined>, labelStyle?: React.CSSProperties, style?: React.CSSProperties}) => {
   const defaultLabelStyle: React.CSSProperties = {
     minWidth: 80,
     height: 'auto',
@@ -46,7 +38,7 @@ export const FromPeriod = ({
         current={current}
         setCurrent={setCurrent}
         value={value}
-        style={{ flex: 1, minWidth: 60, ...style }}
+        style={{ flex: 1, height:height, minWidth: 60, ...style }}
       />
     </div>
   )

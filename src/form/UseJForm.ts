@@ -20,10 +20,10 @@ export const  styles = {
   inner: {
     borderRadius: 5,
     boxShadow: '0 20px 50px #BBF',
-    padding: 10,
-    paddingTop: 30,
+    padding: 5,
+    // paddingTop:5,
     // paddingLeft: 5,
-    paddingRight: 5,
+    // paddingRight: 5,
     paddingBottom: 3,
   },
   inner2: {

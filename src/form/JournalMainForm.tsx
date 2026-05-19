@@ -1,5 +1,5 @@
 import React from 'react';
-import { CRow, CCol, CInputGroup, CFormLabel } from '@coreui/react'
+import { CRow, CCol, CFormLabel } from '@coreui/react'
 import { TFunction } from 'i18next'
 import ComboBox from './ComboBox.tsx'
 import { FromPeriod } from './common'
@@ -23,8 +23,9 @@ export const JournalMainForm = ({
   const currentAccount = accounts?.find(acc => acc.id === current.account);
 
   return (
-    <CInputGroup className="p-1 bg-light" style={{ borderBottom: '1px solid #ddd', minHeight: 28 }}>
-      <CRow className="w-100 align-items-center g-2">
+    // <CInputGroup className="p-1 bg-light" style={{ borderBottom: '1px solid #ddd', minHeight: 28, height:400 }}>
+      <CRow className="g-1 align-items-center">
+      {/*<CRow className="w-100 align-items-center g-2">*/}
         {/* Account Selection - 6 columns on large screens */}
         <CCol xs={8} md={6} lg={5}>
           <div className="d-flex align-items-center gap-2">
@@ -32,9 +33,9 @@ export const JournalMainForm = ({
             <ComboBox
               style={{ height: height-5, width: '100%', fontSize: 12 }}
               value={{ value: currentAccount?.id || '', label: currentAccount ? `${currentAccount.id} ${currentAccount.name}` : '' }}
-              onChange={(value) => setCurrent({ ...current, account: value })}
+              onChange={(value:any) => setCurrent({ ...current, account: value })}
               values={accounts?.slice().sort(sortById).map(toOption)}
-              height ={height-5}
+              height ={height}
             />
           </div>
         </CCol>
@@ -47,6 +48,7 @@ export const JournalMainForm = ({
             current={current}
             value={current.fromPeriod}
             setCurrent={setCurrent}
+            height ={height}
             t={t}
             style={{height, width: '90%', textAlign:'center'}} labelStyle={{ minWidth: 80 }}/>
         </CCol>
@@ -59,11 +61,11 @@ export const JournalMainForm = ({
             current={current}
             value={current.toPeriod}
             setCurrent={setCurrent}
+            height ={height}
             t={t}
-            style={{height, width: '90%', textAlign:'center'}} labelStyle={{ minWidth: 80 }} />
+            style={{height:height, width: '90%', textAlign:'center'}} labelStyle={{ minWidth: 80 }} />
         </CCol>
       </CRow>
-    </CInputGroup>
   )
 }
 

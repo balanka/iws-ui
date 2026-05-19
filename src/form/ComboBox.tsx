@@ -51,7 +51,7 @@ const ComboBox = <T extends Base>({
         border: '1px solid gray',
         outline: state.isFocused ? "none" : undefined,
         minHeight: '28px',
-        height: height,
+        // height: '28px',
         display: 'flex',
         alignItems: 'center',
       }
