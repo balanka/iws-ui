@@ -141,23 +141,49 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
       setAdded(true)
     }
   }
-  const submitEdit = (event: any) => {
+  const submitEdit = async (event: any) => {
     event.preventDefault()
-    if (edited) {
-      const updated= Edit(modifyUrl, token, {...current}, setCurrent)
-      const index = rowData.findIndex((obj:T) => obj && (obj.id === updated.id))
-      if (index>=0) {
-        rowData[index] = updated
-        setRowData([...rowData])
+    try {
+      if (edited) {
+        const updated = await Edit(modifyUrl, token, current, setCurrent);
+        // Update the local list optimistically with the server response
+        const index = rowData.findIndex((obj) => obj && obj.id === updated.id);
+        if (index >= 0) {
+          const newList = [...rowData];
+          newList[index] = updated;
+          setRowData(newList);
+        }
+      }else if (!edited && !disable) {
+        const created = await Add(modifyUrl, token, {...current}, rowData, setRowData, setCurrent);
+        console.log('created', created);
       }
-      setCurrent(updated)
-    } else if (!edited && !disable) {
-      Add(modifyUrl, token, {...current}, rowData, setRowData, setCurrent)
+
+    } catch (error) {
+      console.error('Edit failed', error);
+      // Show user notification
     }
     setDisable(true)
     setEdited(false)
     setAdded(true)
-  }
+  };
+
+  // const submitEdit = (event: any) => {
+  //   event.preventDefault()
+  //   if (edited) {
+  //     const updated= Edit(modifyUrl, token, {...current}, setCurrent)
+  //     const index = rowData.findIndex((obj:T) => obj && (obj.id === updated.id))
+  //     if (index>=0) {
+  //       rowData[index] = updated
+  //       setRowData([...rowData])
+  //     }
+  //     setCurrent(updated)
+  //   } else if (!edited && !disable) {
+  //     Add(modifyUrl, token, {...current}, rowData, setRowData, setCurrent)
+  //   }
+  //   setDisable(true)
+  //   setEdited(false)
+  //   setAdded(true)
+  // }
   const cancelEdit = () => {
     if (edited) {
       setEdited(false)
@@ -213,15 +239,21 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
       setCurrent(record)
     }
 
-  const onDeleteBankAccount = (event: any) => {
+  const onDeleteBankAccount = async (event: any) => {
     onRemoveSelectedLine(event, current, setCurrent);
-    const updated =Edit(modifyUrl, token, current, setCurrent)
+    try {
+    const updated = await Edit(modifyUrl, token, current, setCurrent)
     const index = rowData.findIndex((obj:T) => obj && (obj.id === updated.id))
     if (index>=0) {
-      rowData[index] = updated
-      setRowData([...rowData])
+      const newList = [...rowData];
+      newList[index] = updated
+      setRowData([...newList])
     }
-    setCurrent(updated)
+    //setCurrent(updated)
+    } catch (error) {
+      console.error('Edit failed', error);
+      // Show user notification
+    }
   }
   const onRowSelected = (event: RowSelectedEvent) => {
     const selected: T = event.data

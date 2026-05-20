@@ -59,15 +59,32 @@ const BankStatementForm = () => {
   const cancelEdit = () => {
     setCurrent(current_)
   }
-  const submitEdit = () => {
-    const updated = Edit(modifyUrl, token, current, setCurrent)
-    const index = rowData.findIndex((obj:IBankStatement) => obj && (obj.id === updated.id))
-    if (index>=0) {
-      rowData[index] = updated
-      setRowData([...rowData])
+  const submitEdit = async () => {
+    try {
+      const updated = await Edit(modifyUrl, token, current, setCurrent);
+      // Update the local list optimistically with the server response
+      const index = rowData.findIndex((obj) => obj && obj.id === updated.id);
+      if (index >= 0) {
+        const newList = [...rowData];
+        newList[index] = updated;
+        setRowData(newList);
+      }
+      // setCurrent already called inside Edit, but you can also do:
+      // setCurrent(updated); // optional, already done
+    } catch (error) {
+      console.error('Edit failed', error);
+      // Show user notification
     }
-    setCurrent(updated)
-  }
+  };
+  // const submitEdit = () => {
+  //   const updated = Edit(modifyUrl, token, current, setCurrent)
+  //   const index = rowData.findIndex((obj:IBankStatement) => obj && (obj.id === updated.id))
+  //   if (index>=0) {
+  //     rowData[index] = updated
+  //     setRowData([...rowData])
+  //   }
+  //   setCurrent(updated)
+  // }
 
   const reload = () => {
     iwsStore.deleteByModelId(current.modelid)

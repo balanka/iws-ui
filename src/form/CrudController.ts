@@ -1,407 +1,420 @@
-import {MASTERFILE, MENU} from './Menu'
-import iwsStore from '../utils/Store.jsx'
-import {formEnum} from '../utils/FormEnum.tsx'
-import {groupBy} from '../utils/Utils'
-import {HttpMethod, ILoggingContext, IProfile, IUser, IUserRight, IWSModel} from '../Models.ts'
-import {NavigateFunction} from "react-router-dom";
-import {TFunction} from "i18next";
-import {Dispatch, SetStateAction} from "react";
-//import {getEnvVariable} from "../utils/FormUtils.tsx";
-// @ts-ignore
-//const SERVER_IP:string = 'REACT_APP_HOST_IP_ADDRESS'
-const WEB_SERVER_IP:string = 'REACT_WEB_HOST_IP_ADDRESS'
-// @ts-ignore
-const SERVER_PORT:string  = 'REACT_APP_PORT'
-// @ts-ignore
+import { MASTERFILE, MENU } from './Menu';
+import iwsStore from '../utils/Store.jsx';
+import { formEnum } from '../utils/FormEnum.tsx';
+import { groupBy } from '../utils/Utils';
+import { HttpMethod, ILoggingContext, IProfile, IUser, IUserRight, IWSModel } from '../Models.ts';
+import { NavigateFunction } from 'react-router-dom';
+import { TFunction } from 'i18next';
+import { Dispatch, SetStateAction } from 'react';
 
-const apiBase = window?._env_?.REACT_APP_API_BASE??"/api"
-//const apiUrl = window?._env_?.API_URL?? "localhost"
-const apiUrl = window?._env_?.REACT_WEB_HOST_IP_ADDRESS?? "localhost:8080"
-  const apiPort = window?._env_?.API_PORT??"8080"; // "192.168.64.1"
-const scheme = window?._env_?.SCHEME??"https"
-//const API_BASE= getEnvVariable('REACT_APP_API_BASE', '/api1');
-//const SERVER_IP= getEnvVariable('API_URL', 'API_URL');
-//const SERVER_URL = `http://${apiUrl}${apiBase}` //'http://192.168.64.1/api'
-const SERVER_URL = `${scheme}://${apiUrl}${apiBase}`
-//const SERVER_URL = 'http://localhost:8080'
-//const SERVER_URL = `http://${SERVER_IP}:${SERVER_PORT}` //'http://192.168.1.139:8091'
-//const SERVER_URL = `http://${WEB_SERVER_IP}:${SERVER_PORT}`
-//const apiUrl = getEnvVariable('API_URL', 'http://localhost:8080');
-//const apiBase = getEnvVariable('REACT_APP_API_BASE', '/api');
-console.log(' WEB_SERVER_IP', WEB_SERVER_IP)
-console.log(' API_BASE', apiBase)
-console.log(' apiPort', apiPort)
-console.log(' scheme', scheme)
-console.log(' apiUrl', apiUrl);
-console.log(' SERVER_URL', SERVER_URL)
-//console.log(' SERVER_IP', SERVER_IP)
-console.log(' WEB_SERVER_IP', WEB_SERVER_IP)
-const fetchFn00 = (url: string,  record:any) =>
-   fetch(url,  {body: JSON.stringify(record), method: 'POST'}).then((response: any) => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+// ==================== Configuration ====================
+const getEnv = (key: string, defaultValue: string): string =>
+  (window as any)._env_?.[key] ?? defaultValue;
+
+const config = {
+  apiBase: getEnv('REACT_APP_API_BASE', '/api'),
+  apiUrl: getEnv('REACT_WEB_HOST_IP_ADDRESS', 'localhost:8080'),
+  apiPort: getEnv('API_PORT', '8080'),
+  scheme: getEnv('SCHEME', 'https'),
+};
+
+const SERVER_URL = `${config.scheme}://${config.apiUrl}${config.apiBase}`;
+console.log('SERVER_URL:', SERVER_URL);
+
+// ==================== Core API Client ====================
+async function apiRequest<T>(
+  url: string,
+  method: HttpMethod,
+  token?: string,
+  body?: unknown
+): Promise<T> {
+  const headers: HeadersInit = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const response = await fetch(url, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
+  }
+
+  if (response.status === 204) return {} as T;
+  return response.json();
+}
+
+const buildUrl = (ctx: string) => `${SERVER_URL}${ctx}`;
+
+// ==================== Helper Functions ====================
+async function fetchWithAuth<T>(url: string, token: string): Promise<T> {
+  return apiRequest<T>(url, 'GET', token);
+}
+
+async function fetchUserModulesAndMenu(
+  companyURL: string,
+  token: string,
+  moduleURL: string,
+  result: Map<number, any>,
+  company: string,
+  userRights: { key: number; value: string }[],
+  t: TFunction,
+  profile: IProfile,
+  setProfile: (p: IProfile) => void,
+  setMenu: (menu: any) => void,
+  setModule: (mod: any) => void,
+  setRoutes: (routes: any) => void,
+  navigate: NavigateFunction
+): Promise<void> {
+  try {
+    const companyData = await fetchWithAuth<any>(companyURL, token);
+    const {
+      locale = '',
+      currency = '',
+      incomeStmtAcc = '',
+      account: stockAcc = '',
+      oaccount: expenseAcc = '',
+      salesClearingAcc: revenueAcc = '',
+      vatCode: vat = '',
+    } = companyData;
+
+    const modules = await fetchWithAuth<any[]>(moduleURL, token);
+    iwsStore.put(formEnum.MODULE, modules);
+
+    const moduleIds = modules.filter((m) => result.has(parseInt(m.id)));
+    const menuPaths = moduleIds.map((m) => m.path).filter((p: string) => p !== '/');
+
+    const menuMap = MENU(t);
+    const newMenu = new Map([...menuMap].filter(([key]) => menuPaths.includes(key)));
+
+    const routesList = modules
+      .filter((m) => menuPaths.includes(m.path))
+      .map((m) => ({ ...m, component: m.description, element: m.description }));
+
+    const updatedProfile: IProfile = {
+      ...profile,
+      token,
+      company,
+      modules: moduleIds.map((m) => parseInt(m.id)),
+      rights: userRights,
+      locale,
+      currency,
+      incomeStmtAcc,
+      stockAcc,
+      expenseAcc,
+      revenueAcc,
+      vat,
+    };
+
+    setProfile(updatedProfile);
+    setModule(modules);
+    setMenu(newMenu);
+    setRoutes(routesList);
+  } catch (error) {
+    console.error('Failed to fetch user modules/menu', error);
+    if (JSON.stringify(error).includes('40') || JSON.stringify(error).includes('50')) {
+      navigate('/login');
     }
-    return response.json();
-  })
+  }
+}
 
-const fetchFnPost0 = (url: string,  record:any) => {
-  console.log(' url…', url)
-  console.log(' record…', record)
-  return fetch(url, {body: JSON.stringify(record), method: 'POST',
-    headers: { Accept: "application/json", "Content-Type": "application/json",}
-  }).then((response: any) => {
-    console.log(' response', response)
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+// ==================== Login Flow ====================
+async function loginRequest(
+  ctx: string,
+  credentials: ILoggingContext,
+  profile: IProfile,
+  setProfile: (p: IProfile) => void,
+  companyURL: string,
+  moduleURL: string,
+  company: string,
+  t: TFunction,
+  setMenu: (menu: any) => void,
+  setModule: (mod: any) => void,
+  setRoutes: (routes: any) => void,
+  navigate: NavigateFunction
+): Promise<IProfile> {
+  const url = buildUrl(ctx);
+  try {
+    const userData = await apiRequest<IUser>(url, 'POST', undefined, credentials);
+    const newProfile: IProfile = {
+      ...profile,
+      token: userData.hash,
+      company: userData.company,
+      rights: userData.rights,
+      locale: userData.locale,
+    };
+    setProfile(newProfile);
+
+    const rights = userData.rights ?? [];
+    const grouped = groupBy(rights, ({ moduleid }) => moduleid);
+    const userRights = Array.from(grouped, ([key, values]) => ({
+      key,
+      value: values.map((e: IUserRight) => e.short).reduce((a, b) => a + b, ''),
+    }));
+
+    await fetchUserModulesAndMenu(
+      companyURL,
+      userData.hash,
+      moduleURL,
+      grouped,
+      company,
+      userRights,
+      t,
+      newProfile,
+      setProfile,
+      setMenu,
+      setModule,
+      setRoutes,
+      navigate
+    );
+    return newProfile;
+  } catch (error) {
+    const err = error as Error;
+    console.error('Login failed', err);
+    setProfile({ ...profile, error: err.message });
+    if (err.message.includes('40') || err.message.includes('50')) {
+      navigate('/login');
     }
-    const payload = response.json()
-    console.log(' payload', payload)
-    return payload;
-   })//.catch(function (error: any) {
-  //   console.log(' error', error)
-  // })
+    throw err;
+  }
 }
 
-const fetchFn = (url: string, method_:HttpMethod, token:string, record:any) => {
-  console.log( 'method',method_ )
-  console.log( 'record', record)
-  console.log( 'url', url)
-  return fetch(url, {
-    body: JSON.stringify(record),
-    method: method_,
-    headers: {Authorization: `Bearer ${token}`, Accept: "application/json", "Content-Type": "application/json",}
-  }).then((response: any) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.statusText}`);
-      }
-      return response.json();
-    })
- }
-
-//type ApiRoute = `/api/${string}`;
-// type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
-//
-// async function api<T>(method: Method, route: ApiRoute): Promise<T> {
-//   const res = await fetch(route, { method });
-//   return res.json();
-// }
-// api('GET', '/api/users');     // ✓ works
-// api('GET', '/users');         // ✗ error: must start with /api/
-// api('PATCH', '/api/users');   // ✗ error: PATCH not allowed
-
-
-
-/* Helper function for fetching data from api using the url and the token */
-const getFn = (url:string, token:string) =>fetchFn(url, 'GET', token, undefined )
-
-/* Helper function for fetching  and setting  user menu, profile, etc... */
-const getFn1 = (url: string, token: string, profile: IProfile, setProfile: (argo: IProfile) => void) =>
-          fetchFn00(url, token).then((data:any) => {
-            //console.log(' data ', data)
-            const resp:any = JSON.parse(JSON.stringify(data))
-            const profile_ = {...profile, locale: resp.locale, currency: resp.currency, incomeStmtAcc: resp.incomeStmtAcc}
-            setProfile(profile_)
-        }).catch(function (error: any) {
-            setProfile({...profile, error: error})
-        })
-
-/* After successfully login get user's menu and set user's profile, etc... */
-const getOtherUserData = (companyURL: string, token: string, moduleURL: string
-    , result: Map<number, any>, company: string, userRights: { key: number, value: any }[]
-    , t: any
-    , profile: IProfile
-    , setProfile: (argo: IProfile) => void
-    , setMenu: (argo: any) => void
-    , setModule: (argo: any) => void
-    , setRoutes: (argo: any) => void
-    , navigate:NavigateFunction): void => {
-   /* 1- Fetch company data from  api */
-    getFn(companyURL, token)
-        .then((response) => {
-            const locale: string = response.locale
-            const currency: string = response.currency
-            const incomeStmtAcc: string = response.incomeStmtAcc
-            const stockAcc = response.account??''
-            const expenseAcc= response.oaccount??''
-            const revenueAcc= response.salesClearingAcc??''
-            const vat= response.vatCode
-            //console.log('response>>>', response)
-          /* Fetch Module data from  api and use to build user menu on UI */
-            getFn(moduleURL, token)
-                .then((response) => {
-                    const module_ = response
-                    iwsStore.put(formEnum.MODULE, module_)
-                    const moduleIds = module_.filter((e: any) => result.has(parseInt(e.id)))
-                    const userMenu = moduleIds.map((m: any) => parseInt(m.id))
-                    const menu = moduleIds.map((m: any) => m.path).filter((p: string) => p !== '/')
-                    const menu_t = MENU(t)
-                    const routes_t = module_.map((e: any) => {
-                        return {...e,
-                            component: e.description, element: e.description, //? importFn(e.description) : undefined,
-                        }
-                    })
-
-                    const newMenu = new Map([...menu_t].filter(([k, _]) => menu.includes(k)))
-                    const newRoutes = routes_t.filter((r: any) => menu.includes(r.path))
-                    profile.token = token
-                    const profilex: IProfile = {
-                        ...profile,
-                        token: token,
-                        company: company,
-                        modules: userMenu,
-                        rights: userRights,
-                        locale: locale,
-                        currency: currency,
-                        incomeStmtAcc: incomeStmtAcc,
-                        stockAcc: stockAcc,
-                        expenseAcc: expenseAcc,
-                        revenueAcc: revenueAcc,
-                        vat:vat
-                    }
-                    const profile_ :IProfile = JSON.parse(JSON.stringify(profilex))
-                    setProfile(profile_)
-                    setModule(module_)
-                    setMenu(newMenu)
-                    setRoutes(newRoutes)
-                })
-                .catch(function (error) {
-                    console.log('Error', error)
-                    const errorText = JSON.stringify(error)
-                    if (errorText.includes('40') || errorText.includes('50')) {
-                        console.log('error', errorText)
-                        navigate('/login')
-                    }
-                    console.log('error', error)
-                })
-            // navigate('/dashboard')
-        })
-        .catch(function (error) {
-            console.log('errorXXX', error)
-            navigate('/login')
-        })
-}
-
-/* Helper function for login */
-const loginFunction = (companyURL: string, token:string, moduleURL: string
-    , result: Map<number, any>, company:string, profile:IProfile, setProfile:(p: IProfile) =>void
-                        , userRights: { key: number; value: any}[]
-    , t: TFunction<'translation', undefined>
-    , setMenu: (argo: any) => void
-    , setModule: (argo: any) => void
-    , setRoutes: (argo: any) => void
-    , navigate:NavigateFunction) => {
-    /* Get and set user menu, profile, etc... */
-    getFn1(companyURL, token, profile, setProfile)
-    /* Get and set user menu, profile, etc... */
-    getOtherUserData(companyURL, token, moduleURL, result, company, userRights, t, profile, setProfile
-        , setMenu, setModule, setRoutes, navigate )
-}
-
-/* Login using the user provided credentials and get the user data and set the profile */
-const post1Fn = <A>(ctx: string, record: A,
-                    profile: IProfile, setProfile: (p: IProfile) => void
-    , companyURL: string, moduleURL: string, company: string
-    , t: TFunction<'translation', undefined>
-    , setMenu: (argo: any) => void
-    , setModule: (argo: any) => void
-    , setRoutes: (argo: any) => void
-    , navigate: NavigateFunction
-):IProfile => {
-  console.log('companyURL', companyURL)
-  console.log('moduleURL', moduleURL)
-   /* Login using the user provided credentials and get the user data and set the profile */
-  fetchFnPost0(ctx, record).then((data:IUser) =>  {
-       console.log(' response', data)
-        profile.token=data.hash
-        profile.company=data.company
-        profile.rights=data.rights
-        profile.locale=data.locale
-        setProfile({...profile, token:data.hash, company:data.company
-            //, roles:data.roles
-            , rights:data.rights})
-        const token = profile.token
-        const rights:IUserRight[] = profile.rights??[]
-        const allRights =  [...rights]
-        const result:Map<number, any> = groupBy(allRights, ({ moduleid }) => moduleid)
-        const userRights = Array.from(result, (entry:[number, IUserRight]) => ({
-            // @ts-ignore
-            key: entry[0],
-            // @ts-ignore
-            value: entry[1].map((e:IUserRight) => e.short).reduce((a:string, b:string) => `${a}${b}`),
-        }))
-        /* Get and set user menu, profile, etc... */
-        loginFunction(companyURL, token, moduleURL, result, company, profile, setProfile, userRights
-            , t, setMenu, setModule, setRoutes,  navigate)
-
-    }).catch(function (error: any) {
-        console.log('ErrorXXX', error)
-        setProfile({...profile, error: error.message})
-        if (error.message.includes('40') || error.message.includes('50') ) {
-                navigate('/login')
-        }
-        console.log('error', error.message)
-    })
-    console.log('profile', profile)
-    return profile
-}
-
-const Edit = <A extends IWSModel>(ctx:string, token:string, record:A
-                 , setCurrent:Dispatch<SetStateAction<A>>):A=> {
-  console.log('Edit called>>>')
-  //console.log('data>>>', data)
-    console.log('record>>>', record)
-    let result = record
-    const url = `${SERVER_URL}${ctx}`
-    fetchFn(url, 'PUT', token, record )
-        .then((response: any ) => {
-          const newCurrent = {
-            ...response,
-            // Force React to detect change
-            __version: Date.now()
-          } as A;
-            //const newCurrent = JSON.parse(JSON.stringify(response))
-            console.log('response', response)
-
-            result = newCurrent
-            setCurrent({...newCurrent})
-            //setRowData([...data])
-        })
-        .catch(function (error: any) {
-            console.log('error', error)
-        })
-    return result
-}
-const Add = <A>(ctx:string, token:string, record:A, data:A[]
-  , setRowData:Dispatch<SetStateAction<A[]>>, setCurrent:Dispatch<SetStateAction<A>> ) => {
-  console.log('Adding ctx/record', ctx)
-  console.log('Adding record', record)
-  const url = `${SERVER_URL}${ctx}`
-  console.log('Adding url', url)
-  fetchFn(url, 'POST', token, record )
-    .then((response) => {
-      const resp = response as A
-      console.log('response', resp)
-      setCurrent(resp)
-      setRowData([...data, resp])
-    })
-    .catch(function (error: any) {
-      console.log('error', error)
-    })
-}
-const COPY = <A>(ctx:string, token:string,  data:A[]
-                , setRowData:Dispatch<SetStateAction<A[]>>, setCurrent:Dispatch<SetStateAction<A>> ) => {
-    console.log('Copying ctx/record', ctx)
-     console.log('Copying record')
-    const url = `${SERVER_URL}${ctx}`
-    console.log('Copying url', url)
-    getFn(url,  token )
-      .then((response) => {
-            const resp = response as A
-            console.log('response', resp)
-            setCurrent(resp)
-           setRowData([...data, resp])
-        })
-        .catch(function (error: any) {
-            console.log('error', error)
-        })
-}
-
-const Login = (
-  navigate:NavigateFunction,
-  ctx:string,
-  loggingContext: ILoggingContext,
-  setProfile:(argo:IProfile)=>void,
-  t: TFunction<'translation', undefined>,
-  setMenu:(argo:any)=>void,
-  setModule:(argo:any)=>void,
-  setRoutes:(argo:any)=>void,
-  profile:IProfile,
-):void => {
-    const url = `${SERVER_URL}${ctx}`
-    const company = loggingContext.company
-    const moduleURL: string = `${SERVER_URL}${MASTERFILE.module}/${formEnum.MODULE}/${company}`
-    const companyURL: string = `${SERVER_URL}${MASTERFILE.comp}/${company}/${formEnum.COMPANY}`
-    /* Login using the user provided credentials */
-    post1Fn(url, loggingContext, profile, setProfile, companyURL, moduleURL, company
-        , t, setMenu, setModule, setRoutes, navigate)
-}
-
-const  Get3 = <A>(ctx:string, token:string, modelid: number
-                  , current_ :A, setRowData: (arg0:A[]) => void, setCurrent:Dispatch<SetStateAction<A>>): void => {
-  const url = `${SERVER_URL}${ctx}`
-  console.log('urlx', url)
-    getFn(url, token ).then((data: A[]) => {
-      if (Array.isArray(data) && data?.length>0) {
-        iwsStore.put(modelid, data as IWSModel[])
-        setRowData(data as A[])
-        setCurrent(data[0])
-      } else {
-        setRowData([])
-        setCurrent(current_)
-      }
-    }).catch(function (error) {
-    console.log('Error', error)
+// ==================== CRUD Operations ====================
+/**
+ * Fetch list – updates iwsStore and React state.
+ */
+async function fetchList<T>(
+  ctx: string,
+  token: string,
+  modelId: number,
+  setRowData: Dispatch<SetStateAction<T[]>>
+): Promise<void> {
+  const url = buildUrl(ctx);
+  try {
+    const data = await fetchWithAuth<T[]>(url, token);
+    if (Array.isArray(data)) {
+      iwsStore.put(modelId, data as IWSModel[]);
+      setRowData(data);
+    } else {
+      console.warn(`Expected array for modelId ${modelId}, got`, data);
+    }
+  } catch (error) {
+    console.error(`Failed to fetch ${ctx}`, error);
     if (JSON.stringify(error).includes('401')) {
-      console.log('error', 'Session expired!!!!! Login again!!!!')
-      // history('/login')
+      console.warn('Session expired – redirect to login');
     }
-  })
+  }
 }
-const  Get = <A>(ctx:string, token:string, modelid: number, setRowData: Dispatch<SetStateAction<A[]>>): void => {
-    const url = `${SERVER_URL}${ctx}`
-    console.log('url', url)
-     getFn(url,  token ).then((data: A[]) => {
-            if (Array.isArray(data)) {
-                iwsStore.put(modelid, data as IWSModel[])
-                setRowData(data as A[])
-            } else{
-                console.log('key>>>>', modelid)
-                console.log('data>>>>', data)
-            }
-        }).catch(function (error) {
-        console.log('Error', error)
-        if (JSON.stringify(error).includes('401')) {
-            console.log('error', 'Session expired!!!!! Login again!!!!')
-        }
-    })
+
+/**
+ * Fetch single record or first item of an array.
+ */
+async function fetchSingle<T>(
+  ctx: string,
+  token: string,
+  setCurrent: Dispatch<SetStateAction<T>>
+): Promise<void> {
+  const url = buildUrl(ctx);
+  try {
+    const response = await fetchWithAuth<T>(url, token);
+    if (Array.isArray(response) && response.length > 0) {
+      setCurrent(response[0]);
+    } else {
+      setCurrent(response);
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
-const  Gets = <A>(ctx:string, token:string, modelids: number [], setRowData: Dispatch<SetStateAction<A[]>>): void => {
-  const url = `${SERVER_URL}${ctx}`
-  console.log('url', url)
-  modelids.forEach((modelid) => {
-    getFn(url, token).then((data: A[]) => {
-      if (Array.isArray(data)) {
-        iwsStore.put(modelid, data as IWSModel[])
-        setRowData(data as A[])
+
+/**
+ * Fetch list and set current to first item.
+ */
+async function fetchListAndSetCurrent<T>(
+  ctx: string,
+  token: string,
+  modelId: number,
+  current: T,
+  setRowData: (data: T[]) => void,
+  setCurrent: Dispatch<SetStateAction<T>>
+): Promise<void> {
+  const url = buildUrl(ctx);
+  try {
+    const data = await fetchWithAuth<T[]>(url, token);
+    if (Array.isArray(data) && data.length > 0) {
+      iwsStore.put(modelId, data as IWSModel[]);
+      setRowData(data);
+      setCurrent(data[0]);
+    } else {
+      setRowData([]);
+      setCurrent(current);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * Create a new record – returns the created record, updates React state and cache.
+ */
+async function createRecord<T extends IWSModel>(
+  ctx: string,
+  token: string,
+  record: T,
+  existingData: T[],
+  setRowData: Dispatch<SetStateAction<T[]>>,
+  setCurrent: Dispatch<SetStateAction<T>>
+): Promise<T> {
+  const url = buildUrl(ctx);
+  try {
+    const created = await apiRequest<T>(url, 'POST', token, record);
+    // Update React state
+    setCurrent(created);
+    const newList = [...existingData, created];
+    setRowData(newList);
+
+    // Update local cache
+    const modelId = (created as any).modelid;
+    if (modelId !== undefined) {
+      const existingStore = iwsStore.getByModelId(modelId);
+      if (Array.isArray(existingStore)) {
+        iwsStore.put(modelId, [...existingStore, created] as IWSModel[]);
       } else {
-        console.log('key>>>>', modelid)
-        console.log('data>>>>', data)
+        iwsStore.put(modelId, [created] as IWSModel[]);
       }
-    }).catch(function (error) {
-      console.log('Error', error)
-      if (JSON.stringify(error).includes('401')) {
-        console.log('error', 'Session expired!!!!! Login again!!!!')
-      }
-    })
-  })
+    }
+    return created;
+  } catch (error) {
+    console.error('Create failed', error);
+    throw error;
+  }
 }
 
-const Get2 = <A>(ctx:string, token:string, setCurrent:Dispatch<SetStateAction<A>> ) => {
-    const url = `${SERVER_URL}${ctx}`
-    console.log('url', url)
-    getFn(url, token).then((response) => {
-            const resp = response
-            console.log('responseRRRRRR2', resp)
-            iwsStore.update(resp.modelid, resp.id, {...resp})
-            Array.isArray(resp) && resp.length > 0 ? setCurrent(resp[0]) : void (0)
-            setCurrent(resp)
-        })
-        .catch(function (error) {
-            console.log('error', error)
-        })
+/**
+ * Update an existing record – returns the updated record, updates React state and cache.
+ */
+async function updateRecord<T extends IWSModel>(
+  ctx: string,
+  token: string,
+  record: T,
+  setCurrent: Dispatch<SetStateAction<T>>
+): Promise<T> {
+  const url = buildUrl(ctx);
+  try {
+    const updated = await apiRequest<T>(url, 'PUT', token, record);
+    const versioned = { ...updated, __version: Date.now() } as T;
+    // Update React state
+    setCurrent(versioned);
+
+    // Update local cache
+    const modelId = (record as any).modelid ?? (updated as any).modelid;
+    if (modelId !== undefined) {
+      const storeData = iwsStore.getByModelId(modelId);
+      if (Array.isArray(storeData)) {
+        const updatedList = storeData.map((item: any) =>
+          item.id === updated.id ? versioned : item
+        );
+        iwsStore.put(modelId, updatedList as IWSModel[]);
+      } else if (storeData) {
+        iwsStore.put(modelId, [versioned] as IWSModel[]);
+      }
+    }
+    return versioned;
+  } catch (error) {
+    console.error('Update failed', error);
+    throw error;
+  }
 }
 
-const EditRow = <A>(edited:A, isNew:boolean, setCurrent :Dispatch<SetStateAction<A>>) =>
-    setCurrent({ ...edited, editing: !isNew })
+/**
+ * Copy (duplicate) a record – returns the copied record, updates React state and cache.
+ */
+async function copyRecord<T extends IWSModel>(
+  ctx: string,
+  token: string,
+  existingData: T[],
+  setRowData: Dispatch<SetStateAction<T[]>>,
+  setCurrent: Dispatch<SetStateAction<T>>
+): Promise<T> {
+  const url = buildUrl(ctx);
+  try {
+    const copied = await fetchWithAuth<T>(url, token);
+    setCurrent(copied);
+    const newList = [...existingData, copied];
+    setRowData(newList);
 
-export { COPY, Get, Gets, Get2, Get3,  Login, Add, Edit, EditRow }
+    const modelId = (copied as any).modelid;
+    if (modelId !== undefined) {
+      const existingStore = iwsStore.getByModelId(modelId);
+      if (Array.isArray(existingStore)) {
+        iwsStore.put(modelId, [...existingStore, copied] as IWSModel[]);
+      } else {
+        iwsStore.put(modelId, [copied] as IWSModel[]);
+      }
+    }
+    return copied;
+  } catch (error) {
+    console.error('Copy failed', error);
+    throw error;
+  }
+}
+
+/**
+ * Helper to toggle edit mode on a row.
+ */
+function editRow<T>(edited: T, isNew: boolean, setCurrent: Dispatch<SetStateAction<T>>): void {
+  setCurrent({ ...edited, editing: !isNew });
+}
+
+// ==================== Exported API ====================
+export const Get = fetchList;
+export const Gets = async <T>(
+  ctx: string,
+  token: string,
+  modelIds: number[],
+  setRowData: Dispatch<SetStateAction<T[]>>
+): Promise<void> => {
+  for (const modelId of modelIds) {
+    await fetchList(ctx, token, modelId, setRowData);
+  }
+};
+export const Get2 = fetchSingle;
+export const Get3 = fetchListAndSetCurrent;
+export const Login = async (
+  navigate: NavigateFunction,
+  ctx: string,
+  loggingContext: ILoggingContext,
+  setProfile: (p: IProfile) => void,
+  t: TFunction,
+  setMenu: (m: any) => void,
+  setModule: (m: any) => void,
+  setRoutes: (r: any) => void,
+  profile: IProfile
+): Promise<void> => {
+  const company = loggingContext.company;
+  const moduleURL = buildUrl(`${MASTERFILE.module}/${formEnum.MODULE}/${company}`);
+  const companyURL = buildUrl(`${MASTERFILE.comp}/${company}/${formEnum.COMPANY}`);
+  await loginRequest(
+    ctx,
+    loggingContext,
+    profile,
+    setProfile,
+    companyURL,
+    moduleURL,
+    company,
+    t,
+    setMenu,
+    setModule,
+    setRoutes,
+    navigate
+  );
+};
+export const Add = createRecord;
+export const Edit = updateRecord;
+export const EditRow = editRow;
+export const COPY = copyRecord;

@@ -52,9 +52,6 @@ const UseArticleAccountForm = <T>(): [UseArticleAccountResult<T>] => {
   const [module, setModule] = useState<IModule[]>([])
 
   useEffect(() => {
-    // const subscription = iwsStore.subscribe(() => {
-    //   const freshData = iwsStore.getByModelId(modelid) as T[];
-    //   setRowData(freshData);
     Get(art_ctx, token, art_modelid, setArticleData)
     Get(store_ctx, token, store_modelid, setStoreData)
     Get(module_ctx, token, module_modelid, setModule)

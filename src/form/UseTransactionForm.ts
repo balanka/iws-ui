@@ -142,49 +142,63 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
    const templateName:()=>string = () =>
      templateFileName ? templateFileName: (fmodule.find((m:IFmodule) => Number(m?.id) === current?.modelid) ?? initfModule[0]).description
 
-  const callSubmitEdit = (event:any, modifyUrl:string, token:string, current:T
+  const callSubmitEdit = async (event:any, modifyUrl:string, token:string, current:T
       , setCurrent:Dispatch<SetStateAction<T>>, data:T[], submitAdd: (arg:any)=>void) => {
       event.preventDefault();
+      try {
       console.log(' newly added or edited current', current )
-      if(BigInt(current?.id) > 0){
-       const updated= Edit(modifyUrl, token, current,  setCurrent)
-        const index = data.findIndex((obj: T) => obj?.id === updated?.id)
-        if (index >= 0) {
-          data[index] = updated
-          setRowData(data)
-        }
-        setCurrent(updated)
-        event.preventDefault();
-      } else {
-        submitAdd(event)
-        event.preventDefault();
-      }
-      //gridApi!.applyTransaction({update: [current]})
+         if(BigInt(current?.id) > 0){
+           const updated= await Edit(modifyUrl, token, current,  setCurrent)
+           const index = data.findIndex((obj: T) => obj?.id === updated?.id)
+           if (index >= 0) {
+              const newList = [...data]
+              newList[index] = updated
+             setRowData(newList)
+           }
+        //setCurrent(updated)
+        } else {
+         submitAdd(event)
+       }
+     } catch (error) {
+      console.error('Edit failed', error);
+    // Show user notification
+     }
   }
   const submitCancel = (event:any) =>  callSubmitCancel(event, ctx, token, current, setCurrent, rowData )
-  const callSubmitCancel = (event:any, _ctx:string, token:string, current:T
+  const callSubmitCancel = async (event:any, _ctx:string, token:string, current:T
       , setCurrent:Dispatch<SetStateAction<T>>, data:T[],) => {
-    event.preventDefault()
-    const url_ = _ctx.replace('ltr', 'cancelnLtr')
-    const updated=BigInt(current.id )> 0 ? Edit(url_, token, current,  setCurrent) : current
-    const index = data.findIndex((obj: T) => obj?.id === updated?.id)
-    if (index >= 0) {
-      data[index] = updated
-      setRowData(data)
+      event.preventDefault()
+      const url_ = _ctx.replace('ltr', 'cancelnLtr')
+      let updated;
+      if (BigInt(current.id) > 0) {
+        updated = await Edit(url_, token, current,  setCurrent)
+      } else {
+        updated = current;
+      }
+      const index = data.findIndex((obj: T) => obj?.id === updated?.id)
+     if (index >= 0) {
+      const newList = [...data]
+      newList[index] = updated
+      setRowData(newList)
     }
-    setCurrent(updated)
     return updated
   }
   const onNewLine = () => addLine (initialLine,  setCurrent)
-  const onDeleteLine = (event:any) => {
+  const onDeleteLine = async (event:any) => {
       onRemoveSelectedLine (event, current,  setCurrent);
-      const updated= (BigInt(current.id) > 0) ? Edit(modifyUrl, token, current, setCurrent):current
-    const index = rowData.findIndex((obj: T) => obj?.id === updated?.id)
-    if (index >= 0) {
-      rowData[index] = updated
-      setRowData(rowData)
-    }
-    setCurrent(updated)
+      let updated;
+      if (BigInt(current.id) > 0) {
+        updated = await Edit(modifyUrl, token, current, setCurrent);
+      } else {
+        updated = current;
+      }
+      const index = rowData.findIndex((obj: T) => obj?.id === updated?.id)
+      if (index >= 0) {
+        const newList = [...rowData]
+        newList[index] = updated
+        setRowData(newList)
+      }
+    //setCurrent(updated)
   }
   const submitEdit = (event:any) =>
       callSubmitEdit(event, modifyUrl, token, current, setCurrent, rowData, submitAdd)
@@ -206,13 +220,9 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   const copyCall = (id:BigInt, event:any) => {
     setDisable(false)
     const  eventx: string[]= event.toString().split(' ')
-    // console.log('eventx', eventx)
     const  modelidFrom= parseInt(eventx[1])
-    // console.log('modelidFrom', modelidFrom)
-    // console.log('model', model)
-    // console.log('current', current)
     const company= current.company
-    const url = `/copyFromFTr/${id}/${modelidFrom}/${model}/${company}`
+    const url = `${modifyUrl}x/${id}/${modelidFrom}/${model}/${company}`
     console.log('url', url)
     COPY(url, token, rowData, setRowData, setCurrent)
   }
@@ -267,7 +277,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
         type: "fitGridWidth",
       },
       // @ts-ignore
-      columnDefs: columnDefs (t), //transactionColumnDefs(t),
+      columnDefs: columnDefs (t),
       // @ts-ignore
       detailCellRendererParams: {
         detailGridOptions: {
@@ -276,7 +286,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
               return {background: '#fff9e6'}
             }
           },
-          columnDefs: lineColumnDefs(t), //lineTransactionColumnDefs(t),
+          columnDefs: lineColumnDefs(t),
           defaultColDef: {
             flex: 1,
           },
@@ -285,17 +295,6 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
           params.successCallback(params.data.lines);
         },
       } as IDetailCellRendererParams<T, L>,
-
-      // detailCellRendererParams: {
-      //     detailGridOptions: {
-      //         columnDefs:lineTransactionColumnDefs(t),
-      //         defaultColDef: {
-      //             flex: 1,
-      //         },
-      //     },
-      //     getDetailRowData: (params:any) => params.successCallback(params.data.lines)
-      // } as IDetailCellRendererParams<ITransaction, ILineTransaction>,
-      //onFirstDataRendered: onFirstDataRendered,
     }
   }
 

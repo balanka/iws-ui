@@ -128,7 +128,6 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
   const [rowData, setRowData] = useState<ITransaction[]>([])
   const  [{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
     , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setModel
-     //, setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setAccData, setFmodule1, setModel
      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching, setIsFetching }] =
      useTransactionForm(current_??initLtr [0], initialLine, currentLine, setCurrentLine, rowData, setRowData)
 
@@ -232,7 +231,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
      const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
      Gets(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
      submitQuery( ctx, partnerCtx, parseInt(mx?.account))
-     const currentx = rowData.filter(m=>m.modelid===current_.modelid)?.length>0?rowData[0]:current_
+     const currentx = rowData?.filter(m=>m.modelid===current_.modelid)?.length>0?rowData[0]:current_
      setCurrent(currentx)
    }
 
