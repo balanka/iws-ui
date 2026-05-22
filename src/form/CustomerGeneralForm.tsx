@@ -1,12 +1,14 @@
-// CustomerGeneralForm.tsx - Super Compact
 import { JSX } from 'react';
 import { CCol, CInputGroup } from '@coreui/react'
-import { DatePickerField, InputField, TextareaField, FieldLabel } from './common'
+import {DatePickerField, InputField, TextareaField,  MasterfileXComboBox} from './common'
 import { styles } from './FormsProps'
 import { CustomerGeneralFormProps } from '../Props'
+import {initCurrency} from "./Menu.tsx";
+import { IBusinespartner, IMasterfile} from "../Models.ts";
 
 export const CustomerGeneralForm = ({
                                       collapse = true,
+                                      ccyData,
                                       current,
                                       setCurrent,
                                       disable,
@@ -18,12 +20,21 @@ export const CustomerGeneralForm = ({
   const inputStyle = { height: height - 3, width: '100%', fontSize: '0.875rem' };
   const textareaStyle = { width: '100%', minHeight: 60, fontSize: '0.875rem' };
   const rowMargin = { marginBottom: '6px' };
+  const Label = ({ children, w = 100 }: { children: React.ReactNode; w?: number }) =>
+    <div style={{ minWidth: w }}>{children}</div>
 
+  const accComboBox = (data:IMasterfile[], initData:IMasterfile, height:number, fieldName: keyof IBusinespartner,)=> {
+    const initAccx = { id: String(initData.id), name: initData.name };
+    const acc_data = data.map((m: IMasterfile) => ({id: `${m.id}`, name: m.name}));
+    return MasterfileXComboBox<IBusinespartner, { id: string, name: string }>({
+      current, setCurrent, data: acc_data, fieldName: fieldName, defaultValue:initAccx, height:height,  zIndex: 10, styles:inputStyle, disable
+    })
+  }
   return (
     <CInputGroup  style={{...styles.outer, padding:5, paddingTop: 20 }} >
       {/* Row 1: ID + Enter Date */}
       <CInputGroup style={{ height, ...rowMargin }}>
-        <CCol sm="2"><FieldLabel title={t('common.id')} /></CCol>
+        <CCol sm={2}><Label>{t('common.id')}</Label></CCol>
         <CCol sm="4">
           <InputField
             fieldName="id"
@@ -34,7 +45,7 @@ export const CustomerGeneralForm = ({
             style={inputStyle}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('common.enterdate')} /></CCol>
+        <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('common.enterdate')}</Label></CCol>
         <CCol sm="4">
           <DatePickerField
             fieldName="enterdate"
@@ -49,7 +60,7 @@ export const CustomerGeneralForm = ({
 
       {/* Row 2: Name + Change Date */}
       <CInputGroup style={{ height, ...rowMargin }}>
-        <CCol sm="2"><FieldLabel title={t('common.name')} /></CCol>
+        <CCol sm={2}><Label>{t('common.name')}</Label></CCol>
         <CCol sm="4">
           <InputField
             fieldName="name"
@@ -60,7 +71,7 @@ export const CustomerGeneralForm = ({
             style={inputStyle}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('common.changedate')} /></CCol>
+        <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('common.changedate')}</Label></CCol>
         <CCol sm="4">
           <DatePickerField
             fieldName="changedate"
@@ -75,7 +86,7 @@ export const CustomerGeneralForm = ({
 
       {/* Row 3: Tax Code + Posting Date */}
       <CInputGroup style={{ height, ...rowMargin }}>
-        <CCol sm="2"><FieldLabel title={t('common.taxCode')} /></CCol>
+        <CCol sm={2}><Label>{t('common.taxCode')}</Label></CCol>
         <CCol sm="4">
           <InputField
             fieldName="taxCode"
@@ -86,7 +97,7 @@ export const CustomerGeneralForm = ({
             style={inputStyle}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('common.postingdate')} /></CCol>
+        <CCol sm={2} style={{ paddingLeft: 10 }}><Label>{t('common.postingdate')}</Label></CCol>
         <CCol sm="4">
           <DatePickerField
             fieldName="postingdate"
@@ -100,9 +111,10 @@ export const CustomerGeneralForm = ({
       </CInputGroup>
 
       {/* Row 4: Description (Full Width) */}
+      {/*<CInputGroup style={{ height, ...rowMargin }}>*/}
       <CInputGroup style={{ height: 'auto', minHeight: height }}>
-        <CCol md="2"><FieldLabel title={t('common.description')} /></CCol>
-        <CCol xs="12" md="10">
+        <CCol sm={2}><Label>{t('common.description')}</Label></CCol>
+        <CCol sm={4}>
           <TextareaField
             fieldName="description"
             placeholder={t('common.description')}
@@ -113,6 +125,8 @@ export const CustomerGeneralForm = ({
             style={textareaStyle}
           />
         </CCol>
+        <CCol sm={2} style={{ paddingLeft: 10, paddingRight: 40 }}><Label>{t('common.currency')}</Label></CCol>
+        <CCol  md="2" style={{paddingLeft: 45 }}>{accComboBox(ccyData, initCurrency[0], height-8, "currency")}</CCol>
       </CInputGroup>
     </CInputGroup>
   )

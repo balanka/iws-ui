@@ -241,6 +241,7 @@ interface MasterfileComboboxProps<T extends Record<string, any>, U extends { id:
   fieldName: keyof T;
   defaultValue: U;
   zIndex?: number;
+  height?:number;
   styles?: React.CSSProperties;
   disable?: boolean;
 }
@@ -261,6 +262,7 @@ export const MasterfileXComboBox = <T extends Record<string, any>, U extends { i
                                                                                                              fieldName,
                                                                                                              defaultValue,
                                                                                                              zIndex = 10,
+                                                                                                             height,
                                                                                                              styles = {},
                                                                                                              disable = false
                                                                                                            }: MasterfileComboboxProps<T, U>): React.JSX.Element => {
@@ -278,6 +280,7 @@ export const MasterfileXComboBox = <T extends Record<string, any>, U extends { i
       onChange={(value: string) => setCurrent({ ...current, [fieldName]: value })}
       values={data?.slice().sort(sortById).map(toOption)}
       zIndex={zIndex}
+      height ={height}
     />
   );
 };

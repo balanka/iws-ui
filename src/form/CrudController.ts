@@ -53,6 +53,7 @@ const buildUrl = (ctx: string) => `${SERVER_URL}${ctx}`;
 
 // ==================== Helper Functions ====================
 async function fetchWithAuth<T>(url: string, token: string): Promise<T> {
+  console.log(`Fetching ${url}`);
   return apiRequest<T>(url, 'GET', token);
 }
 
@@ -383,8 +384,7 @@ export const Gets = async <T>(
     await fetchList(ctx, token, modelId, setRowData);
   }
 };
-export const Get2 = fetchSingle;
-export const Get3 = fetchListAndSetCurrent;
+
 export const Login = async (
   navigate: NavigateFunction,
   ctx: string,
@@ -414,6 +414,8 @@ export const Login = async (
     navigate
   );
 };
+export const Get2 = fetchSingle;
+export const Get3 = fetchListAndSetCurrent;
 export const Add = createRecord;
 export const Edit = updateRecord;
 export const EditRow = editRow;

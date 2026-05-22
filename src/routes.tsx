@@ -46,6 +46,7 @@ const routes = ():{path:string, name?:string, element?: ()=>Promise<any>}[] => [
   {
     path: MASTERFILE.createDepreciationTransaction,
     name: 'Generate depreciation transaction',
+    //element: SmartTableExternalDataExample,
     element: masterfileForm,
   },
   { path: MASTERFILE.article, name: 'Article', element: articleForm},

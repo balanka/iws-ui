@@ -21,7 +21,7 @@ import {useNavigate} from "react-router-dom";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
-export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: ColDef[]): [UseCustomerFormResult<T>] => {
+export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: ColDef[], reload?:()=>void): [UseCustomerFormResult<T>] => {
   const [{profile, menu, selected, visible, t, title, language, state, toggle, toggleTable, handleLanguageChange, modelid
     , company}] = useForm()
   const {token, currency} = profile
@@ -30,16 +30,8 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
   let body: React.JSX.Element | null = (module_ === '11111' || module_ === 11111) ? Login() : null
   const [disable, setDisable] = useState(true)
   const [gridApi, setGridApi] = useState<GridApi>()
-  // const acc_modelid = formEnum.ACCOUNT
-  // const bank_modelid = formEnum.BANK
-  // const ccy_modelid = formEnum.CURRENCY
-  // const vat_modelid = formEnum.VAT
   const ctx = `${selected}/${modelid}/${company}`
   const modifyUrl = selected
-  // const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
-  // const bank_ctx = `${MASTERFILE.masterfile}/${bank_modelid}/${company}`
-  // const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
-  // const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
 
   //let body =(module_ === '11111' || module_ === 11111)?Login ():null
   const dispatch = useDispatch()
@@ -47,12 +39,7 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
   const [current, setCurrent] = useState<T>(current_)
   const [edited, setEdited] = useState<boolean | undefined>(false)
   const [added, setAdded] = useState<boolean | undefined>(undefined)
-  //const [, setIwsState] = useState(iwsStore.initialState)
-  // const [accData, setAccData] = useState<IAccount[]>([])
   const [rowData, setRowData] = useState<T[]>([])
-  // const [vatData, setVatData] = useState<IVat[]>([])
-  // const [bankData, setBankData] = useState<IMasterfile[]>([])
-  // const [ccyData, setCcyData] = useState<IMasterfile[]>([])
   const [currentBankAccount, setCurrentBankAccount] = useState<IBankAccount>(initBankAccount)
 
   // Subscribe to store changes (when other components modify the same modelid)
@@ -102,26 +89,13 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
     }
   }, []);
 
-  // useEffect(() => {
-  //   iwsStore.subscribe(setIwsState)
-  //   Get(acc_ctx, token, acc_modelid, setAccData)
-  //   Get(bank_ctx, token, bank_modelid, setBankData)
-  //   Get(ccy_ctx, token, ccy_modelid, setCcyData)
-  //   Get(vat_ctx, token, vat_modelid, setVatData)
-  //   setCurrent(current_)
-  //   setRowData([])
-  //   // attach the event listener
-  //   document.onkeydown = handleKeyPress
-  //   document.addEventListener('onKeyDown', handleKeyPress)
-  // }, [selected])
-
   const handleKeyPress = useCallback((event:any) => {
     switch (event.keyCode) {
       case 112:
         submitEdit(event)
         return
       case 114:
-        reload()
+        reload?reload():reloadx()
         return
       default:
         return
@@ -200,7 +174,7 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
     setDisable(false)
   }
 
-  const reload = () => {
+  const reloadx = () => {
     iwsStore.deleteByModelId(current.modelid)
     Get(ctx, token, current.modelid, setRowData)
     setCurrent(current_)
@@ -277,7 +251,7 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
     , cancelEdit: cancelEdit
     , submitEdit: submitEdit
     , submitQuery: submitQuery
-    , reload: reload
+    , reload: reload??reloadx
     , toggle: toggle
     , toggleTable: toggleTable
     , logout: logout
@@ -309,7 +283,6 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
     // ccyData: ccyData,
     setRowData,
     state:state
-
   }]
 }
 

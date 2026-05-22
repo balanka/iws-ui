@@ -471,9 +471,6 @@ export interface UseCustomerFormResult<T extends IBusinespartner> {
   , setGridApi:Dispatch<SetStateAction<GridApi<any>|undefined>>
 }
 
-//language, fmodule, setFmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction, setCopyFromTransaction
-//      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex,  handleLanguageChange, setModel
-//      , saveProps, modelid, isFetching, setIsFetching
 export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends  IWSLine> {
     language:string
   //, accData?:IAccount[]

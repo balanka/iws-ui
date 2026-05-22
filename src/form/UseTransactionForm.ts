@@ -217,14 +217,16 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
     //setCurrent(current_)
   }
   // copyFromFTr/id/modelidFrom/modelidTo/company
-  const copyCall = (id:BigInt, event:any) => {
+  const copyCall = async (id:BigInt, event:any) => {
     setDisable(false)
     const  eventx: string[]= event.toString().split(' ')
     const  modelidFrom= parseInt(eventx[1])
     const company= current.company
     const url = `${modifyUrl}x/${id}/${modelidFrom}/${model}/${company}`
     console.log('url', url)
-    COPY(url, token, rowData, setRowData, setCurrent)
+    const record = await COPY(url, token, rowData, setRowData, setCurrent)
+    console.log('record', record)
+    setCurrent(record)
   }
 
   const onRowSelected = (event: RowSelectedEvent) => {
