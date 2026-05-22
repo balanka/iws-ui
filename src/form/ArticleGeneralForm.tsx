@@ -1,9 +1,12 @@
 import { JSX } from 'react'
 import { CCol, CInputGroup } from '@coreui/react'
-import { DatePickerField, InputField, TextareaField, FieldLabel, FormMasterfileXComboBox } from './common'
+import { DatePickerField, InputField, TextareaField, FormMasterfileXComboBox } from './common'
 import {  styles } from './FormsProps.tsx'
 import { ArticleGeneralFormProps } from '../Props'
 import { initArticleGroup, initCurrency, initQuantity } from './Menu'
+
+const Label = ({ children, w = 100 }: { children: React.ReactNode; w?: number }) =>
+  <div style={{ minWidth: w }}>{children}</div>
 
 export const ArticleGeneralForm = ({
                                      collapse = true,
@@ -26,7 +29,7 @@ export const ArticleGeneralForm = ({
     <div style={{ ...styles.outer, paddingBottom: 10, display: !collapse ? 'none' : '' }}>
       {/* Row 1: ID + Enter Date */}
       <CInputGroup style={{ height }}>
-        <CCol sm="2"><FieldLabel title={t('common.id')} /></CCol>
+        <CCol sm="2"><Label>{t('common.id')}</Label></CCol>
         <CCol sm="4">
           <InputField
             fieldName="id"
@@ -37,7 +40,7 @@ export const ArticleGeneralForm = ({
             style={inputStyle}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('common.enterdate')} /></CCol>
+        <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('common.enterdate')}</Label></CCol>
         <CCol sm="4">
           <DatePickerField
             fieldName="enterdate"
@@ -52,7 +55,7 @@ export const ArticleGeneralForm = ({
 
       {/* Row 2: Name + Change Date */}
       <CInputGroup style={{ height }}>
-        <CCol sm="2"><FieldLabel title={t('common.name')} /></CCol>
+        <CCol sm="2"><Label>{t('common.name')}</Label></CCol>
         <CCol sm="4">
           <InputField
             fieldName="name"
@@ -63,7 +66,7 @@ export const ArticleGeneralForm = ({
             style={inputStyle}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('common.changedate')} /></CCol>
+        <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('common.changedate')}</Label></CCol>
         <CCol sm="4">
           <DatePickerField
             fieldName="changedate"
@@ -78,7 +81,7 @@ export const ArticleGeneralForm = ({
 
       {/* Row 3: Quantity Unit + Posting Date */}
       <CInputGroup style={{ height }}>
-        <CCol sm="2"><FieldLabel title={t('article.quantityUnit')} /></CCol>
+        <CCol sm="2"><Label>{t('article.quantityUnit')}</Label></CCol>
         <CCol sm="4">
           <FormMasterfileXComboBox
             fieldName="quantityUnit"
@@ -92,7 +95,7 @@ export const ArticleGeneralForm = ({
             fontSize={12}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('common.postingdate')} /></CCol>
+        <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('common.postingdate')}</Label></CCol>
         <CCol sm="4">
           <DatePickerField
             fieldName="postingdate"
@@ -107,7 +110,7 @@ export const ArticleGeneralForm = ({
 
       {/* Row 4: Pack Unit + Purchase Price */}
       <CInputGroup style={{ height }}>
-        <CCol sm="2"><FieldLabel title={t('article.packUnit')} /></CCol>
+        <CCol sm="2"><Label>{t('article.packUnit')}</Label></CCol>
         <CCol sm="4">
           <FormMasterfileXComboBox
             fieldName="packUnit"
@@ -121,9 +124,9 @@ export const ArticleGeneralForm = ({
             fontSize={12}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('article.pprice')} /></CCol>
-        <CCol sm="4">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('article.pprice')}</Label></CCol>
+        <CCol sm="3">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 , paddingLeft:40 }}>
             <InputField
               fieldName="pprice"
               current={current}
@@ -139,7 +142,7 @@ export const ArticleGeneralForm = ({
 
       {/* Row 5: Group + Sales Price */}
       <CInputGroup style={{ height }}>
-        <CCol sm="2"><FieldLabel title={t('article.group')} /></CCol>
+        <CCol sm="2"><Label>{t('article.group')}</Label></CCol>
         <CCol sm="4">
           <FormMasterfileXComboBox
             fieldName="parent"
@@ -153,9 +156,9 @@ export const ArticleGeneralForm = ({
             fontSize={12}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('article.sprice')} /></CCol>
-        <CCol sm="4">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('article.sprice')}</Label></CCol>
+        <CCol sm="3">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 , paddingLeft:40 }}>
             <InputField
               fieldName="sprice"
               current={current}
@@ -171,7 +174,7 @@ export const ArticleGeneralForm = ({
 
       {/* Row 6: Currency + Average Price */}
       <CInputGroup style={{ height }}>
-        <CCol sm="2"><FieldLabel title={t('common.currency')} /></CCol>
+        <CCol sm="2"><Label>{t('common.currency')}</Label></CCol>
         <CCol sm="4">
           <FormMasterfileXComboBox
             fieldName="currency"
@@ -185,9 +188,9 @@ export const ArticleGeneralForm = ({
             fontSize={12}
           />
         </CCol>
-        <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('article.avgPrice')} /></CCol>
-        <CCol sm="4">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('article.avgPrice')}</Label></CCol>
+        <CCol sm="3">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft:40 }}>
             <InputField
               fieldName="avgPrice"
               current={current}
@@ -203,7 +206,7 @@ export const ArticleGeneralForm = ({
 
       {/* Row 7: Description (Full Width) */}
       <CInputGroup style={{ height: 'auto', minHeight: height }}>
-        <CCol md="2"><FieldLabel title={t('common.description')} /></CCol>
+        <CCol md="2"><Label>{t('common.description')}</Label></CCol>
         <CCol xs="12" md="10">
           <TextareaField
             fieldName="description"
