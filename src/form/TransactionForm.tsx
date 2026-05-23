@@ -32,7 +32,7 @@ import {
 } from '../Models.ts'
 import {TransactionGrid} from '../IWSGrid.tsx'
 import {lineTransactionColumnDefs, transactionColumnDefs} from '../ColumnsDefs.ts'
-import {logout} from '../utils/FormUtils.tsx'
+import {isLoaded, logout} from '../utils/FormUtils.tsx'
 import Login from './Login.tsx'
 import {CSpinner} from "@coreui/react";
 import {TransactionDetailsTabs} from './TransactionDetailsTabs.tsx'
@@ -138,20 +138,16 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
    const store_modelid = formEnum.STORE
    const sup_modelid = formEnum.SUPPLIER
    const cust_modelid = formEnum.CUSTOMER
-   //const fmodule_modelid = formEnum.FMODULE
    const art_ctx = `${MASTERFILE.article}/${art_modelid}/${company}`
-   //const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
    const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
    const store_ctx = `${MASTERFILE.store}/${store_modelid}/${company}`
    const sup_ctx = `${MASTERFILE.sup}/${sup_modelid}/${company}`
    const cust_ctx = `${MASTERFILE.cust}/${cust_modelid}/${company}`
-   //const fmodule_ctx = `${MASTERFILE.fmodule}/${fmodule_modelid}/${company}`
    const [storeData, setStoreData] = useState<IStore[]>([])
    const [articleData, setArticleData] = useState<IArticle[]>([])
    const [vatData, setVatData] = useState<IVat[]>([])
    const [, setCustomerData] = useState<ICustomer[]>([])
    const [, setSupplier] = useState<ISupplier[]>([])
-    //const [accData, setAccData] = useState<IAccount[]>([])
    const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
    const [partnerId, setPartnerId] = useState<number>(-1)
    const [accFilter, setAccFilter] = useState<string[]>([])
@@ -159,11 +155,18 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
    const [title, setTitle] = useState(title_)
 
    useEffect(() => {
-     Get(art_ctx, token, art_modelid, setArticleData)
-     Get(store_ctx, token, store_modelid, setStoreData)
-     Get(vat_ctx, token, vat_modelid, setVatData)
-     Get(cust_ctx, token, cust_modelid, setCustomerData)
-     Get(sup_ctx, token, sup_modelid, setSupplier)
+     Promise.all([
+       !isLoaded(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData),
+       !isLoaded(store_modelid)&& Get(store_ctx, token, store_modelid, setStoreData),
+       !isLoaded(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData),
+       !isLoaded(cust_modelid)&&Get(cust_ctx, token, cust_modelid, setCustomerData),
+       !isLoaded(sup_modelid)&&Get(sup_ctx, token, sup_modelid, setSupplier),
+     ]).then(() => {
+       console.log('All data fetched successfully');
+       // additional logic after all requests complete
+     }).catch(error => {
+       console.error('Error fetching data', error);
+     });
    },[selected])
 
 
@@ -202,14 +205,18 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
    }
    const submitQuery = (ctx:string, partnerCtx:string, partnerModelid:number) => {
      setIsFetching(true)
-     //!iwsState.get(fmodule_modelid)&&Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
-     //!iwsState.get(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData)
-     !iwsStore.getByModelId(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData)
-     !iwsStore.getByModelId(store_modelid)&&Get(store_ctx, token, store_modelid, setStoreData)
-     !iwsStore.getByModelId(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData)
-     !iwsStore.getByModelId(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
-     !iwsStore.getByModelId(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData)
-     Get3(ctx, token, modelid, current_, setRowData, setCurrent)
+     Promise.all([
+       !isLoaded(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData),
+       !isLoaded(store_modelid)&& Get(store_ctx, token, store_modelid, setStoreData),
+       !isLoaded(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData),
+       !isLoaded(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData),
+       !isLoaded(modelid)&&Get3(ctx, token, modelid, current_, setRowData, setCurrent),
+     ]).then(() => {
+       console.log('All data fetched successfully');
+       // additional logic after all requests complete
+     }).catch(error => {
+       console.error('Error fetching data', error);
+     });
      setIsFetching(false)
    }
 

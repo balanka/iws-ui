@@ -32,54 +32,41 @@ const CompanyForm = () => {
   const bank_modelid = formEnum.BANK
   const ccy_modelid = formEnum.CURRENCY
   const vat_modelid = formEnum.VAT
-  //const company_modelid = formEnum.COMPANY
-
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const bank_ctx = `${MASTERFILE.masterfile}/${bank_modelid}/${company}`
   const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
   const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
-  //const ctx =  `${MASTERFILE.comp}/${formEnum.COMPANY}/${company}`
   const ctx =  `${MASTERFILE.comp}/${formEnum.COMPANY}`
-
   const [accData, setAccData] = useState<IAccount[]>([])
   const [vatData, setVatData] = useState<IVat[]>([])
   const [bankData, setBankData] = useState<IMasterfile[]>([])
   const [ccyData, setCcyData] = useState<IMasterfile[]>([])
-//  ctx: string,
-//   token: string,
-//   modelId: number,
-//   current: T,
-//   setRowData: (data: T[]) => void,
-//   setCurrent: Dispatch<SetStateAction<T>>
 
   const reload = () => {
-    console.log(` rowDatar1>>> ctx: ${ctx} `, rowData)
     iwsStore.deleteByModelId(formEnum.COMPANY)
      Get3(ctx, token,  formEnum.COMPANY, current, setRowData, setCurrent)
-    console.log(` rowDatr2a>>> ctx: ${ctx} `, rowData)
-    console.log(` current:  `, current)
     const rowData_ = rowData?.filter(x => x.id === company)
-    console.log(` rowData_>>>  `, rowData_)
-    setRowData([...rowData_ ])
     const currentx = rowData_.length > 0 ? rowData_[0] : current_
-    console.log(` currentx:  `, currentx)
+    setRowData([...rowData_ ])
     setCurrent(currentx)
   }
   const [{header, body, table, disable,  state, visible, rowData,  setRowData, current, setCurrent, currentBankAccount
     , setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t), reload)
-
+  const isLoaded = (modelid:number)=> iwsStore.getByModelId(modelid)&& iwsStore.getByModelId(modelid).length>0
   useEffect(() => {
-    Get(acc_ctx, token, acc_modelid, setAccData)
-    Get(bank_ctx, token, bank_modelid, setBankData)
-    Get(ccy_ctx, token, ccy_modelid, setCcyData)
-    Get(vat_ctx, token, vat_modelid, setVatData)
-    console.log(` rowData>>> ctx1: ${ctx} `, rowData)
-    // if (rowData?.length === 0 || rowData[0]?.id.toString().length ===0) {
-    //   console.log(` rowData>>> ctx2: ${ctx} `, rowData)
-    //   Get2(ctx, token,  setRowData)
-    // }
-
-  }, [])
+    Promise.all([
+      !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData),
+      !isLoaded(bank_modelid)&&Get(bank_ctx, token, bank_modelid, setBankData),
+      !isLoaded(ccy_modelid)&&Get(ccy_ctx, token, ccy_modelid, setCcyData),
+      !isLoaded(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData)])
+      .then(() => {
+        console.log('All data fetched successfully');
+        // additional logic after all requests complete
+      })
+      .catch(error => {
+        console.error('Error fetching data', error);
+      });
+  }, []);
 
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   const mainForm = CompanyTabs({ collapse: state.collapse, current:current, setCurrent:setCurrent

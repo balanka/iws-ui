@@ -41,22 +41,6 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
   const [added, setAdded] = useState<boolean | undefined>(undefined)
   const [rowData, setRowData] = useState<T[]>([])
   const [currentBankAccount, setCurrentBankAccount] = useState<IBankAccount>(initBankAccount)
-
-  // Subscribe to store changes (when other components modify the same modelid)
-  // useEffect(() => {
-  //   const subscription = iwsStore.subscribe(() => {
-  //     const freshData = iwsStore.getByModelId(modelid) as T[];
-  //     setRowData(freshData);
-  //     Get(acc_ctx, token, acc_modelid, setAccData)
-  //     Get(bank_ctx, token, bank_modelid, setBankData)
-  //     Get(ccy_ctx, token, ccy_modelid, setCcyData)
-  //     Get(vat_ctx, token, vat_modelid, setVatData)
-  //     document.onkeydown = handleKeyPress
-  //     document.addEventListener('onKeyDown', handleKeyPress)
-  //   });
-  //   return () => subscription.unsubscribe();
-  // }, [modelid]);
-
   useEffect(() => {
     const subscription = iwsStore.subscribe(() => {
       const freshData = iwsStore.getByModelId(modelid) as T[];

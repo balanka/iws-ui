@@ -24,6 +24,7 @@ import {CInputGroup} from "@coreui/react";
 import Login from "./Login.tsx";
 import React, {useEffect, useState} from "react";
 import {Get} from "./CrudController.ts";
+import iwsStore from "../utils/Store.tsx";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
@@ -42,8 +43,6 @@ const CustomerForm = () => {
   const bank_modelid = formEnum.BANK
   const ccy_modelid = formEnum.CURRENCY
   const vat_modelid = formEnum.VAT
-
-
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const bank_ctx = `${MASTERFILE.masterfile}/${bank_modelid}/${company}`
   const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
@@ -56,17 +55,24 @@ const CustomerForm = () => {
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   const [{header, body, table, disable,  state, visible, rowData, current , setCurrent, currentBankAccount
     , setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t))
-
+   const isLoaded = (modelid:number)=> iwsStore.getByModelId(modelid)&& iwsStore.getByModelId(modelid).length>0
   useEffect(() => {
-    Get(acc_ctx, token, acc_modelid, setAccData)
-    Get(bank_ctx, token, bank_modelid, setBankData)
-    Get(ccy_ctx, token, ccy_modelid, setCcyData)
-    Get(vat_ctx, token, vat_modelid, setVatData)
-    setCurrent(current_)
+    //Promise.all([
+      !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData),
+      !isLoaded(bank_modelid)&&Get(bank_ctx, token, bank_modelid, setBankData),
+      !isLoaded(ccy_modelid)&&Get(ccy_ctx, token, ccy_modelid, setCcyData),
+      !isLoaded(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData)
+  //])
+  //     .then(() => {
+  //       console.log('All data fetched successfully');
+  //       // additional logic after all requests complete
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching data', error);
+  //     });
+  }, []);
 
-  }, [])
   const safeBody = React.isValidElement(body) ? body : null;
-
   const mainForm = CustomerTabs({ collapse:state.collapse, current:current, setCurrent:setCurrent
                              , currentBankAccount:currentBankAccount
                              , setCurrentBankAccount:setCurrentBankAccount

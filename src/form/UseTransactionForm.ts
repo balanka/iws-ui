@@ -35,16 +35,13 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
    let templateFileName =''
   const [, setDisable] = useState(true)
   const [current, setCurrent] = useState<T>(current_)
-  //const acc_modelid = formEnum.ACCOUNT
   const module_modelid = formEnum.MODULE
   const fmodule_modelid = formEnum.FMODULE
   const modifyUrl = selected
   let ctx = `${module_.ctx}/${modelid}/${company}`
- //const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
   const fmodule_ctx = `${MASTERFILE.fmodule}/${fmodule_modelid}/${company}`
   const [rows, ] = useState<bigint[]>([])
-  // const [accData, setAccData] = useState<IAccount[]>([])
   const [, setModule] = useState<IModule[]>([])
   const [copyFromTransaction, setCopyFromTransaction] = useState<T[]>([])
   const [fmodule, setFmodule] = useState<IFmodule[]>([])
@@ -76,8 +73,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
         init.current = true
         setRowData(store.get(current_.modelid) as unknown as T[]);
         Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
-        //Get(acc_ctx, token, acc_modelid, setAccData)
-        Get(module_ctx, token, fmodule_modelid, setModule)
+        Get(module_ctx, token, module_modelid, setModule)
         // attach the event listener
       }
     })

@@ -18,7 +18,7 @@ import {formEnum} from '../utils/FormEnum.tsx'
 import {IAccount, IFinancials, IFmodule, ILineFinancials, IMasterfile, ITransaction,} from '../Models.ts'
 import {LineTFinancialsGrid, TransactionGrid} from '../IWSGrid.tsx'
 import {financialsColumnDefs, LinesFinancialsColumns} from '../ColumnsDefs.ts'
-import {logout} from '../utils/FormUtils.tsx'
+import {isLoaded, logout} from '../utils/FormUtils.tsx'
 import Login from './Login'
 import {CSpinner} from '@coreui/react'
 import {useNavigate} from "react-router-dom";
@@ -47,8 +47,6 @@ const FinancialsForm = () => {
     , setCopyFromTransaction, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex
     , handleLanguageChange, setModel, saveProps, modelid, isFetching, setIsFetching, gridOptions }] =
     useTransactionForm(current_, initialLine, currentLine, setCurrentLine, rowData, setRowData)
-
-
   const [title, setTitle] = useState(title_)
   const acc_modelid = formEnum.ACCOUNT
   const cc_modelid = formEnum.COSTCENTER
@@ -84,26 +82,38 @@ const FinancialsForm = () => {
 
   }
   useEffect(() => {
-      Get(acc_ctx, token, acc_modelid, setAccData)
-      Get(cc_ctx, token, cc_modelid, setCcData)
+    Promise.all([
+      !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData),
+      !isLoaded(cc_modelid)&& Get(cc_ctx, token, cc_modelid, setCcData)
+    ]).then(() => {
+      console.log('All data fetched successfully');
+      // additional logic after all requests complete
+    }).catch(error => {
+        console.error('Error fetching data', error);
+      });
   },[selected])
 
-
-  console.log('AccData>>>>>>', accData)
   const submitQuery = (ctx:string, event?:any) => {
     event?.preventDefault()
     setIsFetching(true)
-    !accData&&Get(acc_ctx,  token, acc_modelid, setAccData)
-    !ccData&&Get(cc_ctx, token, cc_modelid, setCcData)
-    Get3(ctx, token, modelid, current_, setRowData, setCurrent)
+    Promise.all([
+      !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData),
+      !isLoaded(cc_modelid)&& Get(cc_ctx, token, cc_modelid, setCcData),
+      !isLoaded(modelid)&& Get3(ctx, token, modelid, current_, setRowData, setCurrent)
+    ]).then(() => {
+      console.log('All data fetched successfully');
+      // additional logic after all requests complete
+    }).catch(error => {
+        console.error('Error fetching data', error);
+      });
+
     setIsFetching(false)
   }
   const onRowSelectedL = (event: RowSelectedEvent) => {
      console.log('event.data', event)
     let line:ILineFinancials= isArrayAndNotEmpty(event.data) ?event.data[0]:event.data
     const  linex:ILineFinancials=line??initialLine
-    //!current.hasOwnProperty('lines')?[{...currentLine, transid:current?.id}]:current.lines
-    setCurrentLine(linex)
+    setCurrentLine({...linex})
 
 
   }
@@ -134,7 +144,7 @@ const FinancialsForm = () => {
       , lines: current.lines.map(formatLines)
     }
   }
-  console.log('current #E9EFEC #e9ecef #cfdce5 #cfdce5  #F3F0F3 #E3DAF6 #FDF8FD #BDBABD  #D5D3D5 #F1ECFA', current)
+  //console.log('current #E9EFEC #e9ecef #cfdce5 #cfdce5  #F3F0F3 #E3DAF6 #FDF8FD #BDBABD  #D5D3D5 #F1ECFA', current)
   return isFetching?<CSpinner color="primary" />:(<>
     <FinancialsFormHead
       title={title}
@@ -165,7 +175,6 @@ const FinancialsForm = () => {
     <div
       //@ts-ignore
       style={{ ...styles.outer,   width:'100%', height: 400,  display: !state.collapse ? 'none' : ''}}>
-      {/*style={{...stylesx.outer, backgroundColor: 'transparent', height:650, boxShadow: '0 20px 50px #BBF', padding: 1, paddingBottom:2}} >*/}
       <FinancialsMainForm collapse ={state.collapse}
                           current={current??current_}
                           setCurrent={setCurrent}

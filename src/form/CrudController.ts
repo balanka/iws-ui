@@ -152,7 +152,7 @@ async function loginRequest(
     setProfile(newProfile);
 
     const rights = userData.rights ?? [];
-    const grouped = groupBy(rights, ({ moduleid }) => moduleid);
+    const grouped = groupBy(rights, ({ moduleid }:IUserRight) => moduleid);
     const userRights = Array.from(grouped, ([key, values]) => ({
       key,
       value: values.map((e: IUserRight) => e.short).reduce((a, b) => a + b, ''),
