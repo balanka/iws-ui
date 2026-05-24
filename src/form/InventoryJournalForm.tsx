@@ -24,24 +24,11 @@ ModuleRegistry.registerModules([
 
 const InventoryJournalForm = () => {
   const [{ t, title, language, handleLanguageChange, company, module_}] = useForm()
-  //const { token} = profile
   const  [{ rowData, current_, current, setCurrent, submitQuery, onRowSelected, articleData, storeData
     , templateName, styles}] = useArticleAccountForm<InventoryJournal>()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const dispatch = useDispatch()
-  // const [articleData, setArticleData] = useState<IArticle[]>([])
-  // const [storeData, setStoreData] = useState<IStore[]>([])
   const height = 20
-  // const art_ctx = `${MASTERFILE.article}/${formEnum.ARTICLE}/${company}`
-  // const store_ctx = `${MASTERFILE.store}/${formEnum.STORE}/${company}`
-
-  // useEffect(() => {
-  //     Get(art_ctx, token, formEnum.ARTICLE, setArticleData)
-  //     Get(store_ctx, token, formEnum.STORE, setStoreData)
-  //     //setCurrent(current_)
-  //
-  // }, [])
-
 
   console.log('current_', current_)
   const getData = () => {

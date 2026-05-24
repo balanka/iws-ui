@@ -14,6 +14,7 @@ import {IAccount, IAsset, IMasterfile} from '../Models.ts'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
 import useForm from './UseForm.ts'
 import Login from "./Login.tsx";
+import {isLoaded} from "../utils/FormUtils.tsx";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -37,9 +38,16 @@ const AssetForm = () => {
   const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm<IAsset>(current_,  colDef, MASTERFILE.asset)
 
   useEffect(() => {
-    Get(acc_ctx, token, acc_modelid, setAccData)
-    Get(ccy_ctx, token, acc_modelid, setCcyData)
-    setCurrent(current_)
+    Promise.all([
+      !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData),
+      !isLoaded(ccy_modelid)&&Get(ccy_ctx, token, ccy_modelid, setCcyData)
+    ]).then(() => {
+      console.log('All data fetched successfully')
+      // additional logic after all requests complete
+    }).catch(error => {
+      console.error('Error fetching data', error)
+    })
+    setCurrent(current??current_)
   }, [])
 
 

@@ -8,7 +8,7 @@ import {
 import { TreeDataModule } from "ag-grid-enterprise"
 import {MASTERFILE, PACB_JOURNAL_QUERY_PARM } from './Menu.tsx'
 import Login from './Login'
-import {logout} from '../utils/FormUtils.tsx'
+import {isLoaded, logout} from '../utils/FormUtils.tsx'
 import {AgGridReact} from 'ag-grid-react'
 import {JournalProps} from '../Props.ts'
 import { IAccount, IAccount2 } from '../Models'
@@ -134,7 +134,7 @@ export const Main = () => {
       Get(buildUrl0(), token, modelid, setRowData)
     }
     useEffect(() => {
-      acc_ctx && Get(acc_ctx, token, acc_modelid, setAccData)
+      !isLoaded(acc_modelid) && Get(acc_ctx, token, acc_modelid, setAccData)
       setCurrent(current_)
     }, [selected])
 

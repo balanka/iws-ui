@@ -21,32 +21,70 @@ const config = {
 const SERVER_URL = `${config.scheme}://${config.apiUrl}${config.apiBase}`;
 console.log('SERVER_URL:', SERVER_URL);
 
+// ==================== Typed API Response ====================
+export interface ApiResponse<T> {
+  data: T;
+  error: string | null;
+  status: number;
+}
+
 // ==================== Core API Client ====================
-async function apiRequest<T>(
-  url: string,
-  method: HttpMethod,
-  token?: string,
-  body?: unknown
-): Promise<T> {
+async function apiFetch<T>(url: string, method: HttpMethod, token?: string, body?: unknown
+): Promise<ApiResponse<T>> {
   const headers: HeadersInit = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   };
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const response = await fetch(url, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  try {
+    const response = await fetch(url, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+    });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
+    let data: T;
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      const json = await response.json();
+      data = json.data ?? json; // support both { data: T } and direct T
+    } else {
+      // handle 204 No Content or plain text responses
+      data = (response.status === 204 ? {} : await response.text()) as T;
+    }
+
+    if (!response.ok) {
+      return {
+        data,
+        error: `HTTP ${response.status}: ${response.statusText}`,
+        status: response.status,
+      };
+    }
+
+    return {
+      data,
+      error: null,
+      status: response.status,
+    };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return {
+      data: {} as T,
+      error: message,
+      status: 0,
+    };
   }
+}
 
-  if (response.status === 204) return {} as T;
-  return response.json();
+// Helper to throw on error (for backward compatibility with existing error handling)
+async function apiRequest<T>(url: string, method: HttpMethod, token?: string, body?: unknown
+): Promise<T> {
+  const result = await apiFetch<T>(url, method, token, body);
+  if (result.error) {
+    throw new Error(result.error);
+  }
+  return result.data;
 }
 
 const buildUrl = (ctx: string) => `${SERVER_URL}${ctx}`;
@@ -89,10 +127,8 @@ async function fetchUserModulesAndMenu(
 
     const moduleIds = modules.filter((m) => result.has(parseInt(m.id)));
     const menuPaths = moduleIds.map((m) => m.path).filter((p: string) => p !== '/');
-
     const menuMap = MENU(t);
     const newMenu = new Map([...menuMap].filter(([key]) => menuPaths.includes(key)));
-
     const routesList = modules
       .filter((m) => menuPaths.includes(m.path))
       .map((m) => ({ ...m, component: m.description, element: m.description }));
@@ -152,7 +188,7 @@ async function loginRequest(
     setProfile(newProfile);
 
     const rights = userData.rights ?? [];
-    const grouped = groupBy(rights, ({ moduleid }:IUserRight) => moduleid);
+    const grouped = groupBy(rights, ({ moduleid }: IUserRight) => moduleid);
     const userRights = Array.from(grouped, ([key, values]) => ({
       key,
       value: values.map((e: IUserRight) => e.short).reduce((a, b) => a + b, ''),
@@ -189,11 +225,8 @@ async function loginRequest(
 /**
  * Fetch list – updates iwsStore and React state.
  */
-async function fetchList<T>(
-  ctx: string,
-  token: string,
-  modelId: number,
-  setRowData: Dispatch<SetStateAction<T[]>>
+async function fetchList<T>(ctx: string, token: string, modelId: number
+                            , setRowData: Dispatch<SetStateAction<T[]>>
 ): Promise<void> {
   const url = buildUrl(ctx);
   try {
@@ -215,9 +248,7 @@ async function fetchList<T>(
 /**
  * Fetch single record or first item of an array.
  */
-async function fetchSingle<T>(
-  ctx: string,
-  token: string,
+async function fetchSingle<T>(ctx: string, token: string,
   setCurrent: Dispatch<SetStateAction<T>>
 ): Promise<void> {
   const url = buildUrl(ctx);
@@ -274,12 +305,10 @@ async function createRecord<T extends IWSModel>(
   const url = buildUrl(ctx);
   try {
     const created = await apiRequest<T>(url, 'POST', token, record);
-    // Update React state
     setCurrent(created);
     const newList = [...existingData, created];
     setRowData(newList);
 
-    // Update local cache
     const modelId = (created as any).modelid;
     if (modelId !== undefined) {
       const existingStore = iwsStore.getByModelId(modelId);
@@ -309,10 +338,7 @@ async function updateRecord<T extends IWSModel>(
   try {
     const updated = await apiRequest<T>(url, 'PUT', token, record);
     const versioned = { ...updated, __version: Date.now() } as T;
-    // Update React state
     setCurrent(versioned);
-
-    // Update local cache
     const modelId = (record as any).modelid ?? (updated as any).modelid;
     if (modelId !== undefined) {
       const storeData = iwsStore.getByModelId(modelId);
@@ -348,7 +374,6 @@ async function copyRecord<T extends IWSModel>(
     setCurrent(copied);
     const newList = [...existingData, copied];
     setRowData(newList);
-
     const modelId = (copied as any).modelid;
     if (modelId !== undefined) {
       const existingStore = iwsStore.getByModelId(modelId);

@@ -16,6 +16,7 @@ import {styles} from './BasicTreeTableProps.tsx'
 import {CInputGroup} from "@coreui/react";
 import {MasterfileFormWithChildren} from './MasterfileFormWithChildren'
 import Login from "./Login.tsx";
+import {isLoaded} from "../utils/FormUtils.tsx";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
@@ -38,10 +39,9 @@ const MasterfileForm = () => {
   const {header, body, table, disable, visible, state, current, setCurrent} =  UseMasterfileForm(current_,coldef, MASTERFILE.masterfile)
   const safeBody = React.isValidElement(body) ? body : null
   useEffect(() => {
-    Get(ctx, token, module_.modelid, setAccData)
+    !isLoaded(module_.modelid) &&Get(ctx, token, module_.modelid, setAccData)
     setCurrent(current_)
   }, [])
-   console.log('body', body)
   return (
     <>
       {header}

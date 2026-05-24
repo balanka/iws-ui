@@ -243,7 +243,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
    }
 
    const accData:ICustomer[]|ISupplier[] = iwsStore.getByModelId(partnerId) as ICustomer[] | ISupplier[] ?? [initCust]//.filter(m=>!m.id.toString().includes('*'))
-   const stData = storeData.filter(m=>!m.id.toString().includes('*'))
+   const stData = storeData?.filter(m=>!m.id.toString().includes('*'))
     return isFetching?<CSpinner color="primary" />:(<>
             <FinancialsFormHead
                 title={title}

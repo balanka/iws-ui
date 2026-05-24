@@ -16,6 +16,7 @@ import UseMasterfileForm from './UseMasterfileForm.tsx'
 import {styles} from "./BasicTreeTableProps.tsx";
 import {CInputGroup} from "@coreui/react";
 import Login from "./Login.tsx";
+import {isLoaded} from "../utils/FormUtils.tsx";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -35,8 +36,15 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const colDef=fmoduleColumnDefs(t)
    const {header, body, table, disable, visible, state, rowData, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.fmodule)
    useEffect(() => {
-     Get(parent_ctx, token, module_.modelid, setAccData)
-     Get(acc_ctx, token, formEnum.ACCOUNT, setAccountData)
+     Promise.all([
+       !isLoaded(module_.modelid)&&Get(parent_ctx, token, module_.modelid, setAccData),
+      !isLoaded(formEnum.ACCOUNT)&&Get(acc_ctx, token, formEnum.ACCOUNT, setAccountData)
+     ]).then(() => {
+         console.log('All data fetched successfully')
+         // additional logic after all requests complete
+       }).catch(error => {
+       console.error('Error fetching data', error)
+     })
      setCurrent(current_)
    }, [])
 

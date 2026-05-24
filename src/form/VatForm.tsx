@@ -15,6 +15,7 @@ import useForm from './UseForm.ts'
 import {styles} from './BasicTreeTableProps.tsx'
 import {VatMainForm} from "./VatMainForm.tsx";
 import {CInputGroup} from "@coreui/react";
+import {isLoaded} from "../utils/FormUtils.tsx";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const VatForm = () => {
@@ -31,7 +32,7 @@ const VatForm = () => {
   const colDef:ColDef[] = vatColumnDefs(t)
   const {header, body, table, disable, visible, state, current, setCurrent, zIndex} =  UseMasterfileForm(current_,  colDef, selected)
   useEffect(() => {
-    Get(acc_ctx, token, acc_modelid, setAccData)
+    !isLoaded(acc_modelid) && Get(acc_ctx, token, acc_modelid, setAccData)
     setCurrent(current_)
   }, [])
 

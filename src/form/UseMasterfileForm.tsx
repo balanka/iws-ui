@@ -156,7 +156,7 @@ export default function useMasterfileForm<T extends IWSModel>(
       default:
         break;
     }
-  }, [submitEdit, reload]);
+  }, []);
 
   // Subscribe to store changes (when other components modify the same modelid)
   useEffect(() => {
