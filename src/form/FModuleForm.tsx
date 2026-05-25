@@ -26,7 +26,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      if (module_ === '11111' || module_ === 11111) return <Login/>
      const parent_ctx = `${module_?.state3}/${company}`
      const acc_ctx = `${module_?.state2}/${company}`
-     const current_: IFmodule =  module_.state[0]
+     const current_: IFmodule =  module_.state
 
      const [accData, setAccData] = useState<IMasterfile2[]>([])
      const [accountData, setAccountData] = useState<IMasterfile2[]>([])

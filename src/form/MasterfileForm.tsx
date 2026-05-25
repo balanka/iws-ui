@@ -28,7 +28,7 @@ const MasterfileForm = () => {
   const url = MASTERFILE.masterfile
   const ctx =  `${url}/${modelid}/${company}`
   console.log('module_', module_)
-  const current_: IMasterfile =  module_.state[0]
+  const current_: IMasterfile =  module_.state
   console.log('module_xxx', module_)
 
   const [accData, setAccData] = useState<IMasterfile2[]>([])
