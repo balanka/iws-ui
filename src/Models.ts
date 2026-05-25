@@ -167,16 +167,6 @@ export type MenuItem<T =any> = {
 };
 
 export type MenuRecord = Record<string, MenuItem>;
-
-export type MDataType = {
-  id: string,
-  name: string,
-  title: string,
-  ctx: string,
-  state?: IWSModel[],
-  parent?: number,
-  modelid: number,
-};
 export interface ICompany  extends IBusinespartner {
     bankAcc: string,
     purchasingClearingAcc?: string,
@@ -186,9 +176,6 @@ export interface ICompany  extends IBusinespartner {
     balanceSheetAcc: string,
     incomeStmtAcc: string,
     cashAcc:string,
-    //stockAcc:string
-    //expenseAcc:string
-    //revenueAcc:string
     currency: string,
     pageHeaderText: string,
     pageFooterText: string,

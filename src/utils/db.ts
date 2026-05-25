@@ -1,8 +1,8 @@
 import Dexie, { Table } from 'dexie';
-import {CompanyType, ICompany, IAccount, MDataType} from '../Models';
+import {CompanyType, ICompany, IAccount, MenuItem} from '../Models';
 
 export class AppDatabase extends Dexie {
-  menu!:Table<MDataType, string>;
+  menu!:Table<MenuItem, string>;
   companies!: Table<CompanyType, string>;
   accounts!: Table<IAccount, string>;
   company!: Table<ICompany, string>;
@@ -18,7 +18,6 @@ export class AppDatabase extends Dexie {
 }
 
 export const db = new AppDatabase();
-
 // Initialize default data only once
 async function initDefaultData() {
   // Check if companies table is empty
