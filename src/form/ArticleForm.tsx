@@ -28,7 +28,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const qttyUnit_modelid = formEnum.QUANTITYUNIT
      const group_modelid = formEnum.ARTICLE_GROUP
      const ccy_modelid = formEnum.CURRENCY
-     const initialState:IArticle = {...initArticle[0], account:stockAcc??'',  oaccount:expenseAcc??''
+     const initialState:IArticle = {...initArticle, account:stockAcc??'',  oaccount:expenseAcc??''
        , revenueAccount:revenueAcc??'', vatCode:vat??'',  currency:currency??'', stocks:[]}
      const current_: IArticle = initialState
        //const modelid: number = module_ ? module_.modelid : 1111

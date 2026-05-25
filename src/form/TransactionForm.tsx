@@ -121,7 +121,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
   let navigate = useNavigate()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   let title_ = `${company}/${t(module_.title)}`
-  const initialState:ITransaction = initLtr [0]
+  const initialState:ITransaction = initLtr
   const initialLine:ILineTransaction = {...initLineTransaction, currency:currency??''}
   const current_:ITransaction = initialState
   const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
@@ -129,7 +129,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
   const  [{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
     , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setModel
      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching, setIsFetching }] =
-     useTransactionForm(current_??initLtr [0], initialLine, currentLine, setCurrentLine, rowData, setRowData)
+     useTransactionForm(current_??initLtr, initialLine, currentLine, setCurrentLine, rowData, setRowData)
 
    const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
    //const acc_modelid = formEnum.ACCOUNT
@@ -148,7 +148,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
    const [vatData, setVatData] = useState<IVat[]>([])
    const [, setCustomerData] = useState<ICustomer[]>([])
    const [, setSupplier] = useState<ISupplier[]>([])
-   const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>(initCust)
+   const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>([initCust])
    const [partnerId, setPartnerId] = useState<number>(-1)
    const [accFilter, setAccFilter] = useState<string[]>([])
    const [oaccFilter, setOAccFilter] = useState<string[]>([])
@@ -222,7 +222,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
 
    const handleModuleChange = (value:any) => {
      setModel(value)
-     const mx:IFmodule = fmodule.find((m:IFmodule) => m?.id === value) ?? initfModule[0]
+     const mx:IFmodule = fmodule.find((m:IFmodule) => m?.id === value) ?? initfModule
       title_ = mx?.name ? mx?.name : title_
      const copyFromIds = (mx? mx.copyFrom.split(','):[]).map( (modelid) => parseInt(modelid))
      const titlex = `${company}/${title_}`

@@ -24,7 +24,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    const height = 33
    const minHeight = 350
    const maxHeight = 700
-   const current_: IAccount = initAcc[0]
+   const current_: IAccount = initAcc
    const colDef = accountColumnDefs(t)
    const {header, body, table, disable, visible, state, rowData, current, setCurrent} =  UseMasterfileForm(current_,  colDef, selected)
    const safeBody = React.isValidElement(body) ? body : null;

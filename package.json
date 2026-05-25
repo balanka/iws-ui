@@ -41,6 +41,7 @@
     "autocannon": "^8.0.0",
     "classnames": "^2.5.1",
     "core-js": "^3.44.0",
+    "dexie": "^4.4.2",
     "docxtemplater": "^3.68.7",
     "easy-template-x": "^7.2.4",
     "file-saver": "^2.0.5",

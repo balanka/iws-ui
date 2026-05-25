@@ -76,7 +76,7 @@ export const FinancialsMainForm = ({
   currentLine = (currentx?.lines?.length===1)?currentLine:currentLineFinancials
   console.log('currentLine', currentLine)
   const modelid = currentx?.modelid ?? 0;
-  const currentModule = modules.find((m: IFmodule) => m.id === BigInt(modelid)) ?? initfModule[0];
+  const currentModule = modules.find((m: IFmodule) => m.id === BigInt(modelid)) ?? initfModule;
   const total = currentx?.lines?.reduce((prev, cur) => prev + (cur?.amount || 0), 0) ?? 0;
   const inputStyle = { height: height - 5, width: '100%', fontSize: '0.875rem' };
   const currencyStyle = { height: height - 5, padding:4, textAlign: 'right' as const, width: '100%' };
@@ -136,7 +136,7 @@ export const FinancialsMainForm = ({
             current={currentx}
             setCurrent={setCurrent}
             data={storeData}
-            defaultValue={initCc[0]}
+            defaultValue={initCc}
             zIndex={zIndex}
             disable={currentx.posted} styles={inputStyle} fontSize={12} height ={height-10}/>
         </CCol>

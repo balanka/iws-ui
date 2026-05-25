@@ -20,7 +20,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const [{ t, module_}]  = useForm()
      if (module_ === '11111' || module_ === 11111) return <Login/>
      const height = 33
-     const current_: IRole =  module_.state[0]
+     const current_: IRole =  module_.state
      const minHeight = 400
      const maxHeight = 700
      const coldef:ColDef[]= masterfileColumnDefs(t)

@@ -21,7 +21,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const [{profile,  t,  company, module_}] = useForm()
      const { token, locale, stockAcc, expenseAcc } = profile
      if (module_ === '11111' || module_ === 11111) return <Login/>
-     const current_: IStore = {...initStore[0], account:stockAcc??'', oaccount:expenseAcc??'' , stocks:[], company:company}
+     const current_: IStore = {...initStore, account:stockAcc??'', oaccount:expenseAcc??'' , stocks:[], company:company}
      const [ccData, setCcData] = useState<IMasterfile[]>([])
      const [accData, setAccData] = useState<IAccount[]>([])
      const acc_modelid = formEnum.ACCOUNT

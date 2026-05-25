@@ -78,7 +78,7 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
    const onRowSelected = (event: RowSelectedEvent) =>
          setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
    const templateName = () =>
-        (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule[0]).description
+        (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule).description
 
   return [{ profile, menu, selected, t, accData, rowData, setRowData, current_, current, setCurrent
     , submitQuery, submitQuery2, onRowSelected, templateName, title:title, styles:styles}]

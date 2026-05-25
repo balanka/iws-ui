@@ -36,14 +36,10 @@ const BankStatementForm = () => {
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const title = t(module_.title)
   const ctx = `${module_.ctx}/${modelid}/${company}`
-  const current_: IBankStatement = initBS[0]
+  const current_: IBankStatement = initBS
   const [current, setCurrent] = useState<IBankStatement>(current_)
   const [rows, setRows] = useState<string[]|bigint[]>([])
-  //const [, setIwsState] = useState(iwsStore.initialState)
   const [rowData, setRowData] = useState<IBankStatement[]>([])
-
-  // const {header, body, table, disable, visible, state, setRowData, current, setCurrent,
-  //   handleKeyPress} = UseMasterfileForm(current_, coldef, MASTERFILE.perm)
 
   useEffect(() => {
     const subscription = iwsStore.subscribe((store) => {

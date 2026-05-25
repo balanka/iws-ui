@@ -53,8 +53,8 @@ export const TransactionDetailsForm = ({
                                          height
                                        }: TransactionDetailsFormProps<ITransaction, ILineTransaction>): React.JSX.Element => {
   // Find current article and vat
-  const currentArticle = articleData?.find((acc: { id: any }) => acc.id === currentLineTransaction.article) ?? initArticle[0]
-  const currentVat = vatData?.find((vat: { id: any }) => vat.id === currentLineTransaction.vatCode) ?? initVat[0]
+  const currentArticle = articleData?.find((acc: { id: any }) => acc.id === currentLineTransaction.article) ?? initArticle
+  const currentVat = vatData?.find((vat: { id: any }) => vat.id === currentLineTransaction.vatCode) ?? initVat
 
   return (
     <CContainer fluid className="p-0">
@@ -68,8 +68,8 @@ export const TransactionDetailsForm = ({
             key={`article-${currentLineTransaction?.article || 'empty'}`}
             value={{ value: currentArticle?.id || '', label: currentArticle ? `${currentArticle.id} ${currentArticle.name}` : '' }}
             onChange={(value: any) => {
-              const article = articleData?.find((acc: { id: any }) => acc.id === value) ?? initArticle[0]
-              const vat = vatData?.find((vat: { id: any }) => vat.id === article?.vatCode) ?? initVat[0]
+              const article = articleData?.find((acc: { id: any }) => acc.id === value) ?? initArticle
+              const vat = vatData?.find((vat: { id: any }) => vat.id === article?.vatCode) ?? initVat
               const percent = vat?.percent ?? 0.0
               const vatAmount = percent * currentLineTransaction.quantity * currentLineTransaction.price
               const vatCode = vat?.id || ''
@@ -129,7 +129,7 @@ export const TransactionDetailsForm = ({
             key={`vat-${currentLineTransaction?.vatCode || 'empty'}`}
             value={{ value: currentVat?.id || '', label: currentVat ? `${currentVat.id} ${currentVat.name}` : '' }}
             onChange={(value: any) => {
-              const vat = vatData?.find((vat: { id: any }) => vat.id === value) ?? initVat[0]
+              const vat = vatData?.find((vat: { id: any }) => vat.id === value) ?? initVat
               const netAmount =  currentLineTransaction.quantity * currentLineTransaction.price
               const vatAmount = (vat?.percent ?? 0.0) * netAmount
               const currentx = { ...currentLineTransaction, vatCode: value, vat: vatAmount, net:netAmount

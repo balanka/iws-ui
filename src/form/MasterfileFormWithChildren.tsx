@@ -42,15 +42,7 @@ export const MasterfileFormWithChildren = ({
 
   // Props to pass to the child render function
   const childProps = {
-    fieldName,
-    propertyName,
-    current,
-    setCurrent,
-    data: accData,
-    defaultValue: initAcc[0],
-    disable,
-    styles: s
-  };
+    fieldName, propertyName, current, setCurrent, data: accData, defaultValue: initAcc, disable, styles: s};
 
   // Render the combobox field - if children provided as function, call it, otherwise render default
   const renderComboBoxField = () => {
@@ -63,7 +55,7 @@ export const MasterfileFormWithChildren = ({
         current={current}
         setCurrent={setCurrent}
         data={accData}
-        defaultValue={initAcc[0]}
+        defaultValue={initAcc}
         zIndex={11}
         disable={disable}
         styles={s}

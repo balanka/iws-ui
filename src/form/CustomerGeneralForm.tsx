@@ -126,7 +126,7 @@ export const CustomerGeneralForm = ({
           />
         </CCol>
         <CCol sm={2} style={{ paddingLeft: 10, paddingRight: 40 }}><Label>{t('common.currency')}</Label></CCol>
-        <CCol  md="2" style={{paddingLeft: 45 }}>{accComboBox(ccyData, initCurrency[0], height-8, "currency")}</CCol>
+        <CCol  md="2" style={{paddingLeft: 45 }}>{accComboBox(ccyData, initCurrency, height-8, "currency")}</CCol>
       </CInputGroup>
     </CInputGroup>
   )

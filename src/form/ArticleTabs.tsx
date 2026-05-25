@@ -24,11 +24,11 @@ export  const ArticleTabs = ({collapse, current, setCurrent,  accData, vatData
       <StockGrid
           // @ts-ignore
           theme="legacy" columnDefs ={stockColumnDefs(t)}
-                       onRowSelected={onRowSelected} rowData ={current?.stocks?current?.stocks:initArticle[0].stocks}/>
+                       onRowSelected={onRowSelected} rowData ={current?.stocks?current?.stocks:initArticle.stocks}/>
       </div>
 
   const tabContent:TabItem[] = [
-      { title: t('common.general'), id: 1, form: <ArticleGeneralForm collapse={collapse}  current={current??initArticle[0]} setCurrent={setCurrent}
+      { title: t('common.general'), id: 1, form: <ArticleGeneralForm collapse={collapse}  current={current??initArticle} setCurrent={setCurrent}
                t={t}  quantityUnitData={quantityUnitData} groupData={groupData}  ccyData={ccyData} disable={disable} height={height}/>},
       { title: t('common.accounts'), id: 2, form: ArticleAccountForm({ current:current, setCurrent:setCurrent
           ,  accData:accData, vatData:vatData, t:t,  disable:disable, height:height})},

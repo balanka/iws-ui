@@ -127,8 +127,10 @@ async function fetchUserModulesAndMenu(
 
     const moduleIds = modules.filter((m) => result.has(parseInt(m.id)));
     const menuPaths = moduleIds.map((m) => m.path).filter((p: string) => p !== '/');
-    const menuMap = MENU(t);
-    const newMenu = new Map([...menuMap].filter(([key]) => menuPaths.includes(key)));
+    const menuMap = MENU(t);                       // now a Record
+    const newMenu = new Map(Object.entries(menuMap).filter(([key]) => menuPaths.includes(key)));
+    // const menuMap = MENU(t);
+    // const newMenu = new Map([...menuMap].filter(([key]) => menuPaths.includes(key)));
     const routesList = modules
       .filter((m) => menuPaths.includes(m.path))
       .map((m) => ({ ...m, component: m.description, element: m.description }));

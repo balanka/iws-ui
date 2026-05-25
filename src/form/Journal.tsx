@@ -42,7 +42,7 @@ const Journal = () => {
 
   const formatter = new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const toBalance2 = (m:IJournal) => {
-    const currentAcc= accData.find(acc=>acc.id === m.account)??initAcc[0]
+    const currentAcc= accData.find(acc=>acc.id === m.account)??initAcc
     const x= m?.bdebit??0.0
     const y= m?.bcredit??0.0
     const balance = currentAcc.isDebit ? x-y :y-x

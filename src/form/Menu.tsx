@@ -7,7 +7,7 @@ import {
   IFmodule, ILineFinancials, ILineTransaction, ILoggingContext, IMasterfile, IMasterfile2, IPartner,
   IProfile, IRealEstate, IRoom, IStore,
   ISTORE_Return,
-  ISupplier, ITransaction
+  ISupplier, ITransaction, MenuRecord
 } from '../Models'
 import {IJournalProps} from "../Props.ts";
 
@@ -20,16 +20,57 @@ export const getCurrentMonth = (date:Date) => {
 export const date = new Date().toISOString()
 export const getPeriod = (date:Date) => parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))
 
-export const loginInit:ILoggingContext[] = [
-  {
+export const loginInit:ILoggingContext = {
     userName: '',
     password: '',
     company: '',
     language: 'fr',
-  },
-]
-export const initAcc:IAccount[] = [
-  {
+  }
+
+export const MASTERFILE = {
+  acc: '/acc',
+  asset: '/asset',
+  article: '/art',
+  articleGroup: '/articleGroup',
+  bank: '/bank',
+  cc: '/cc',
+  module: '/module',
+  fmodule: '/fmodule',
+  login: '/login',
+  role: '/role',
+  perm: '/perm',
+  vat: '/vat',
+  store: '/store',
+  qty: '/qty',
+  cust: '/cust',
+  emp: '/emp',
+  sup: '/sup',
+  partner: '/partner',
+  comp: '/comp',
+  ftr: '/ftr',
+  ltr: '/ltr',
+  bs: '/bs',
+  pac: '/pac',
+  currency: '/ccy',
+  journal: '/journal',
+  ijournal: '/ijournal',
+  balancesheet: '/balance',
+  user: '/user',
+  salaryItem: '/s_item',
+  payrollTaxRange: '/payrollTax',
+  masterfile: '/mf',
+  dashboard: '/dashboard',
+  apartment:'/apt',
+  room: '/room',
+  floor: '/floor',
+  realEstate: '/real',
+  accountClass: '/class',
+  accountGroup: '/group',
+  closeAccountPeriod: '/close',
+  createPayrollTransaction: '/ptr',
+  createDepreciationTransaction: '/dtr',
+}
+export const initAcc:IAccount = {
     id: '9',
     name: '',
     description: '',
@@ -47,11 +88,10 @@ export const initAcc:IAccount[] = [
     debit: 0.0,
     credit: 0.0,
     subAccounts:[]
-  },
-]
+  }
 
-export const initArticle:IArticle[] = [
-  {
+
+export const initArticle:IArticle = {
     id: '*',
     name: '*',
     description: '',
@@ -84,10 +124,9 @@ export const initArticle:IArticle[] = [
         charge: '',
       },
     ],
-  },
-]
-export const initAsset:IAsset[] = [
-  {
+  }
+
+export const initAsset:IAsset = {
     id: '',
     name: '',
     description: '',
@@ -105,11 +144,9 @@ export const initAsset:IAsset[] = [
     rate: 0.0,
     frequency: 1,
     currency: '',
-  },
-]
+  }
 
-export const initBank = [
-  {
+export const initBank = {
     id: '',
     name: '',
     description: '',
@@ -119,10 +156,9 @@ export const initBank = [
     modelid: 11,
     parent: '-1',
     company: '',
-  },
-]
-export const initCurrency:IMasterfile2[] = [
-  {
+  }
+
+export const initCurrency:IMasterfile2 = {
     id: '',
     name: '',
     description: '',
@@ -132,10 +168,9 @@ export const initCurrency:IMasterfile2[] = [
     modelid: 99,
     parent: '-1',
     company: '',
-  },
-]
-export const initQuantity:IMasterfile[] = [
-  {
+  }
+
+export const initQuantity:IMasterfile ={
     id: '',
     name: '',
     description: '',
@@ -144,10 +179,8 @@ export const initQuantity:IMasterfile[] = [
     changedate: new Date(),
     modelid: 15,
     company: '',
-  },
-]
-export const initStore:IStore[] = [
-  {
+  }
+export const initStore:IStore = {
     id: '*',
     name: '*',
     description: '',
@@ -170,31 +203,26 @@ export const initStore:IStore[] = [
         charge: '',
       },
     ],
-  },
-]
-export const initCloseAccPeriod = [
-  {
+  }
+export const initCloseAccPeriod = {
     id: '38',
     account: '',
     accountName: '',
     period: '',
     company: '',
-  },
-]
-export const initCreatePayrollTransaction = [
-  {
+  }
+
+export const initCreatePayrollTransaction = {
     id: '39',
     company: '',
-  },
-]
-export const initCreateDepreciationTransaction = [
-  {
+  }
+
+export const initCreateDepreciationTransaction = {
     period: '',
     company: '',
-  },
-]
-export const initModule = [
-  {
+  }
+
+export const initModule = {
     id: '400',
     name: '',
     description: '',
@@ -205,10 +233,9 @@ export const initModule = [
     changedate: date,
     modelid: 400,
     company: '',
-  },
-]
-export const initAccountClass = [
-  {
+  }
+
+export const initAccountClass = {
     id: '',
     name: '',
     description: '',
@@ -218,10 +245,9 @@ export const initAccountClass = [
     changedate: date,
     company: '',
     modelid: 36,
-  },
-]
-export const initAccountGroup = [
-  {
+  }
+
+export const initAccountGroup = {
     id: '',
     name: '',
     description: '',
@@ -231,10 +257,9 @@ export const initAccountGroup = [
     changedate: date,
     company: '',
     modelid: 37,
-  },
-]
-export const initArticleGroup:IMasterfile2 []  = [
-  {
+  }
+
+export const initArticleGroup:IMasterfile2  = {
     id: '',
     name: '',
     description: '',
@@ -244,10 +269,9 @@ export const initArticleGroup:IMasterfile2 []  = [
     changedate: new Date(),
     company: '',
     modelid: 13,
-  },
-]
-export const initCc:IMasterfile2 [] = [
-  {
+  }
+
+export const initCc:IMasterfile2 = {
     id: '6',
     name: '',
     description: '',
@@ -257,11 +281,10 @@ export const initCc:IMasterfile2 [] = [
     modelid: 6,
     parent: '-1',
     company: '',
-  },
-]
+  }
+
 export const initBankAccount:IBankAccount = { id: '', bic: '', owner: '', modelid: -1, company: ''}
-export const initComp:ICompany[] = [
-  {
+export const initComp:ICompany= {
     id: '',
     name: '',
     description: '',
@@ -301,10 +324,9 @@ export const initComp:ICompany[] = [
     account:'',
     oaccount:'',
     bankaccounts: [initBankAccount],
-  },
-]
-export const initVat = [
-  {
+  }
+
+export const initVat = {
     id: '',
     name: '',
     description: '',
@@ -316,10 +338,9 @@ export const initVat = [
     changedate: new Date(),
     company: '',
     modelid: 14,
-  },
-]
-export const initPartner:IPartner[] = [
-  {
+  }
+
+export const initPartner:IPartner = {
     id: '',
     name: '',
     description: '',
@@ -335,10 +356,9 @@ export const initPartner:IPartner[] = [
     postingdate: new Date(),
     changedate: new Date(),
     company: '',
-  },
-]
-export const initCust:ICustomer[] = [
-  {
+  }
+
+export const initCust:ICustomer = {
     id: '',
     name: '',
     description: '',
@@ -360,10 +380,9 @@ export const initCust:ICustomer[] = [
     postingdate: new Date(),
     changedate: new Date(),
     bankaccounts: [initBankAccount],
-  },
-]
-export const initSalaryItem = [
-  {
+  }
+
+export const initSalaryItem = {
     id: '-1',
     name: '',
     description: '',
@@ -375,10 +394,9 @@ export const initSalaryItem = [
     changedate: date,
     modelid: 171,
     company: '',
-  },
-]
-export const initPayrollTaxRange = [
-  {
+  }
+
+export const initPayrollTaxRange = {
     id: '-1',
     fromAmount: 0,
     toAmount: 0,
@@ -386,10 +404,9 @@ export const initPayrollTaxRange = [
     taxClass: '',
     modelid: 172,
     company: '',
-  },
-]
-export const initEmp:IEmployee[] = [
-      {
+  }
+
+export const initEmp:IEmployee = {
         id: '',
         name: '',
         description: '',
@@ -421,10 +438,9 @@ export const initEmp:IEmployee[] = [
     //     company: '',
     //   },
     // ],
-  },
-]
-export const initSup:ISupplier[] = [
-  {
+  }
+
+export const initSup:ISupplier = {
     id: '',
     name: '',
     description: '',
@@ -449,11 +465,9 @@ export const initSup:ISupplier[] = [
     postingdate: new Date(),
     changedate: new Date(),
     bankaccounts: [initBankAccount],
-  },
-]
+  }
 
-export const initBS:IBankStatement[] = [
-  {
+export const initBS:IBankStatement = {
     id: BigInt(-1),
     depositor: '',
     postingdate: new Date(),
@@ -475,8 +489,8 @@ export const initBS:IBankStatement[] = [
     header: '',
     char: '',
     extension: ''
-  },
-]
+  }
+
 export const initLineFinancials:ILineFinancials = {
   id: BigInt(-1),
   transid: BigInt(-1),
@@ -491,8 +505,7 @@ export const initLineFinancials:ILineFinancials = {
   currency: '',
   company: '',
 }
-export const initFtr:IFinancials[] = [
-  {
+export const initFtr:IFinancials = {
     id: BigInt(-1),
     oid: BigInt(-1),
     id1: BigInt(-1),
@@ -510,10 +523,9 @@ export const initFtr:IFinancials[] = [
     typeJournal: 0,
     fileContent: 0,
     lines: [initLineFinancials]
-  },
-]
-export const initLineTransaction:ILineTransaction =
-    {
+  }
+
+export const initLineTransaction:ILineTransaction = {
       id: BigInt(-1),
       transid: BigInt(-1),
       article: '',
@@ -531,8 +543,7 @@ export const initLineTransaction:ILineTransaction =
       text: '',
       company: '',
     }
-export const initLtr:ITransaction[] = [
-  {
+export const initLtr:ITransaction = {
     id: BigInt(-1),
     oid: BigInt(0),
     id1: BigInt(-1),
@@ -551,8 +562,8 @@ export const initLtr:ITransaction[] = [
     vat:0.0,
     net:0.0,
     total:0.0,
-  },
-]
+  }
+
 export const PACB_JOURNAL_QUERY_PARM ={
   account: '',
   account2: '',
@@ -568,8 +579,7 @@ export const ARTICLE_ACCOUNT_QUERY_PARM:IJournalProps = {
   modelid:-1,
   currency:''
 }
-export const initPac  = [
-  {
+export const initPac  = {
     id: '',
     name: '',
     period: '',
@@ -589,11 +599,9 @@ export const initPac  = [
     //   fromPeriod: '',
     //   toPeriod: '',
     // },
-  },
-]
+  }
 
-export const initRole = [
-  {
+export const initRole = {
     id: '121',
     name: '',
     description: '',
@@ -611,10 +619,9 @@ export const initRole = [
         modelid: 151,
       },
     ],
-  },
-]
-export const initUser = [
-  {
+  }
+
+export const initUser = {
     userName: '',
     firstName: '',
     lastName: '',
@@ -628,10 +635,9 @@ export const initUser = [
     menu: '',
     locale:'fr-FR',
     rights: [[]],
-  },
-]
-export const initPermission = [
-  {
+  }
+
+export const initPermission = {
     id: '141',
     name: '',
     description: '',
@@ -641,10 +647,9 @@ export const initPermission = [
     modelid: 141,
     account: '-1',
     company: '',
-  },
-]
-export const initfModule:IFmodule[] = [
-  {
+  }
+
+export const initfModule:IFmodule = {
     id: '151',
     name: '',
     description: '',
@@ -659,10 +664,9 @@ export const initfModule:IFmodule[] = [
     company: '',
     accFilter:'',
     oaccFilter:'',
-  },
-]
-export const initRoom:IRoom[] = [
-  {
+  }
+
+export const initRoom:IRoom = {
     id: '152',
     name: '',
     description: '',
@@ -674,10 +678,9 @@ export const initRoom:IRoom[] = [
     company: '',
     kind: 0,
     modelid: 152
-  },
-]
-export const initApartment:IApartment[] = [
-  {
+  }
+
+export const initApartment:IApartment= {
     id: '153',
     name: '',
     description: '',
@@ -688,10 +691,9 @@ export const initApartment:IApartment[] = [
     rooms:[],
     company: '',
     modelid: 153
-  },
-]
-export const initFloor:IFloor[] = [
-  {
+  }
+
+export const initFloor:IFloor = {
     id: '155',
     name: '',
     description: '',
@@ -701,10 +703,9 @@ export const initFloor:IFloor[] = [
     company: '',
     modelid: 155,
     apartments:[]
-  },
-]
-export const initRealEstate:IRealEstate[] = [
-  {
+  }
+
+export const initRealEstate:IRealEstate = {
     id: '154',
     name: '',
     description: '',
@@ -715,50 +716,8 @@ export const initRealEstate:IRealEstate[] = [
     modelid: 154,
     apartments:[],
     floors:[],
-  },
-]
-export const MASTERFILE = {
-  acc: '/acc',
-  asset: '/asset',
-  article: '/art',
-  articleGroup: '/articleGroup',
-  bank: '/bank',
-  cc: '/cc',
-  module: '/module',
-  fmodule: '/fmodule',
-  login: '/login',
-  role: '/role',
-  perm: '/perm',
-  vat: '/vat',
-  store: '/store',
-  qty: '/qty',
-  cust: '/cust',
-  emp: '/emp',
-  sup: '/sup',
-  partner: '/partner',
-  comp: '/comp',
-  ftr: '/ftr',
-  ltr: '/ltr',
-  bs: '/bs',
-  pac: '/pac',
-  currency: '/ccy',
-  journal: '/journal',
-  ijournal: '/ijournal',
-  balancesheet: '/balance',
-  user: '/user',
-  salaryItem: '/s_item',
-  payrollTaxRange: '/payrollTax',
-  masterfile: '/mf',
-  apartment:'/apt',
-  room: '/room',
-  floor: '/floor',
-  realEstate: '/real',
-  accountClass: '/class',
-  accountGroup: '/group',
-  closeAccountPeriod: '/close',
-  createPayrollTransaction: '/ptr',
-  createDepreciationTransaction: '/dtr',
-}
+  }
+
 export const LOGIN = (t: (arg0: string) => any) => ({
   id: '11111',
   name: 'Login',
@@ -798,16 +757,15 @@ export const ARTICLE ={
   title: 'article.title',
   ctx: MASTERFILE.article,
   state: initArticle,
-  state2: '',
   modelid: formEnum.ARTICLE,
 }
+
 export const STORE = {
   id: '35',
   name: 'store',
   title: 'store.title',
   ctx: MASTERFILE.masterfile,
   state: initStore,
-  state3: '/store',
   parent:formEnum.COSTCENTER,
   modelid: formEnum.STORE
 }
@@ -826,8 +784,6 @@ export const COSTCENTER ={
   ctx: MASTERFILE.masterfile,
   state: initCc,
   parent:formEnum.ACCOUNT,
-  state2: '',
-  state3: `${MASTERFILE.masterfile}/${formEnum.COSTCENTER}`,
   modelid: formEnum.COSTCENTER,
 }
 const COMPANY = {
@@ -835,6 +791,7 @@ const COMPANY = {
   name: 'Company',
   title: 'company.title',
   ctx: MASTERFILE.comp,
+  state:[],
   parent:-1,
   modelid: formEnum.COMPANY,
 }
@@ -844,7 +801,6 @@ export const ASSET = {
   title: 'asset.title',
   ctx: MASTERFILE.asset,
   state: initAsset,
-  state2: '',
   parent:-1,
   modelid: formEnum.ASSET
 }
@@ -890,7 +846,6 @@ export const SALARY_ITEM = {
   title: 'salary.item.title',
   ctx: MASTERFILE.salaryItem,
   state: initSalaryItem,
-  state3: '/s_item',
   modelid: formEnum.SALARY_ITEM,
 }
 export const MODULE = {
@@ -899,7 +854,6 @@ export const MODULE = {
   title: 'module.title',
   ctx: MASTERFILE.module,
   state: initModule,
-  state3: '/module/400',
   parent:formEnum.MODULE,
   modelid: formEnum.MODULE,
 }
@@ -909,7 +863,6 @@ export const ACCOUNT_CLASS = {
   title: 'accountClass.title',
   ctx: MASTERFILE.masterfile,
   state: initAccountClass,
-  state3: `${MASTERFILE.masterfile}/${formEnum.ACCOUNT_CLASS}`,
   parent:-1,
   modelid: formEnum.ACCOUNT_CLASS,
 }
@@ -919,8 +872,6 @@ export const ACCOUNT_GROUP = {
   title: 'accountGroup.title',
   ctx: MASTERFILE.masterfile,
   state: initAccountGroup,
-  state2: '',
-  state3:  `${MASTERFILE.masterfile}/${formEnum.ACCOUNT_GROUP}`,
   parent:formEnum.ACCOUNT_CLASS,
   modelid: formEnum.ACCOUNT_GROUP
 }
@@ -930,8 +881,6 @@ export const ARTICLE_GROUP = {
   title: 'articleGroupe.title',
   ctx: MASTERFILE.masterfile,
   state: initArticleGroup,
-  state2: '',
-  state3: MASTERFILE.masterfile,
   parent:formEnum.ARTICLE_GROUP,
   modelid: formEnum.ARTICLE_GROUP,
 }
@@ -940,7 +889,7 @@ export const CLOSE_ACCOUNT_PERIOD = {
   name: 'Close Account period',
   title: 'closeAccountingPeriod.title',
   ctx: MASTERFILE.closeAccountPeriod,
-  state3: MASTERFILE.closeAccountPeriod,
+  state:[],
   modelid: formEnum.CLOSE_ACCOUNT_PERIOD,
 }
 export const CREATE_PAYROLL_TRANSACTION = {
@@ -948,7 +897,7 @@ export const CREATE_PAYROLL_TRANSACTION = {
   name: 'Create Payroll transaction',
   title: 'createPayrollTransaction.title',
   ctx: MASTERFILE.createPayrollTransaction,
-  state3: MASTERFILE.createPayrollTransaction,
+  state:[],
   modelid: formEnum.CREATE_PAYROLL_TRANSACTION,
 }
 export const CREATE_DEPRECIATION_TRANSACTION ={
@@ -956,7 +905,7 @@ export const CREATE_DEPRECIATION_TRANSACTION ={
   name: 'Create depreciation transaction',
   title: 'createDepreciationTransaction.title',
   ctx: MASTERFILE.createDepreciationTransaction,
-  state3: MASTERFILE.createDepreciationTransaction,
+  state:[],
   modelid: formEnum.CREATE_DEPRECIATION_TRANSACTION,
 }
 export const VAT = {
@@ -965,7 +914,6 @@ export const VAT = {
   title: 'vat.title',
   ctx: MASTERFILE.vat,
   state: initVat,
-  state3: MASTERFILE.vat,
   parent:-1,
   modelid: formEnum.VAT,
 }
@@ -975,7 +923,6 @@ export const PAYROLL_TAX_RANGE = {
   title: 'payroll.tax.range.title',
   ctx: MASTERFILE.payrollTaxRange,
   state: initPayrollTaxRange,
-  state3: MASTERFILE.payrollTaxRange.concat("/").concat(formEnum.PAYROLL_TAX_RANGE.toString()),
   modelid: formEnum.PAYROLL_TAX_RANGE,
 }
 const BS ={
@@ -984,7 +931,6 @@ const BS ={
   title: 'bankstatement.title',
   ctx: MASTERFILE.bs,
   state: initBS,
-  state3: MASTERFILE.bs,
   modelid: formEnum.BANKSTATEMENT,
   period: -1,
 }
@@ -993,6 +939,7 @@ const PACB = {
   name: 'PAC',
   title: 'pac.title',
   ctx: MASTERFILE.pac,
+  state:[],
   modelid: formEnum.PACB,
 }
 const USER = {
@@ -1008,6 +955,7 @@ const JOURNAL = {
   name: 'Journal',
   title: 'journal.title',
   ctx: MASTERFILE.journal,
+  state:[],
   modelid: formEnum.JOURNAL,
 }
 const IJOURNAL = {
@@ -1015,6 +963,7 @@ const IJOURNAL = {
   name: 'IJournal',
   title: 'ijournal.title',
   ctx: MASTERFILE.ijournal,
+  state:[],
   modelid: formEnum.IJOURNAL,
 }
 export const FINANCIALS = {
@@ -1022,12 +971,14 @@ export const FINANCIALS = {
   name: 'Financials',
   title: 'financials.title',
   ctx: MASTERFILE.ftr,
+  state:[],
   modelid: formEnum.FINANCIALS
 }
 export const TRANSACTION = {
   id: '1301',
   name: 'Transaction',
   title: 'transaction.title',
+  state:[],
   ctx: MASTERFILE.ltr,
   modelid: formEnum.TRANSACTION,
 }
@@ -1036,13 +987,12 @@ const BALANCESHEET = {
   name: 'Balancesheet',
   title: 'balancesheet.title',
   ctx: MASTERFILE.balancesheet,
-  state: {
+  state: [{
     account: '',
     account2: '',
     fromPeriod: '',
     toPeriod: '',
-  },
-  state1:initAcc,
+  }],
   modelid: formEnum.BALANCESHEET,
 }
 export const ROLE = {
@@ -1051,7 +1001,6 @@ export const ROLE = {
   title: 'role.title',
   ctx: MASTERFILE.role,
   state: initRole,
-  state2: '',
   modelid: formEnum.ROLE,
 }
 export const PERMISSION ={
@@ -1060,7 +1009,6 @@ export const PERMISSION ={
   title: 'permission.title',
   ctx: MASTERFILE.perm,
   state: initPermission,
-  state2: '',
   modelid: formEnum.PERMISSION,
 }
 
@@ -1070,8 +1018,6 @@ export const FMODULE = {
   title: 'fmodule.title',
   ctx: MASTERFILE.fmodule,
   state: initfModule,
-  state2: `${MASTERFILE.acc}/${formEnum.ACCOUNT}`,
-  state3: `${MASTERFILE.module}/${formEnum.MODULE}`,
   parent:formEnum.MODULE,
   modelid: formEnum.FMODULE,
 }
@@ -1081,19 +1027,15 @@ export const ROOM ={
   title: 'room.title',
   ctx: MASTERFILE.room,
   state: initRoom,
-  state2: '',
-  state3: MASTERFILE.room,
   parent:formEnum.APARTMENT,
   modelid: formEnum.ROOM,
 }
-export const APARTMENT ={
+export const APARTMENT = {
   id: '153',
   name: 'Apartment',
   title: 'apartment.title',
   ctx: MASTERFILE.apartment,
   state: initApartment,
-  state2: '',
-  state3: MASTERFILE.apartment,
   parent:formEnum.FLOOR,
   modelid: formEnum.APARTMENT,
 }
@@ -1103,8 +1045,6 @@ export const FLOOR ={
   title: 'floor.title',
   ctx: MASTERFILE.floor,
   state: initFloor,
-  state2: '',
-  state3: MASTERFILE.floor,
   parent:formEnum.REALESTATE,
   modelid: formEnum.FLOOR,
 }
@@ -1114,60 +1054,100 @@ export const REAL_ESTATE ={
   title: 'realEstate.title',
   ctx: MASTERFILE.realEstate,
   state: initRealEstate,
-  state2: '',
-  state3: MASTERFILE.realEstate,
   parent:-1,
   modelid: formEnum.REALESTATE,
 }
-export const LOGIN_MENU = (t: (arg0: string) => any) => [LOGIN(t)]
+export const LOGIN_MENU = (t: (arg0: string) => any) => LOGIN(t)
+export const MENU = (t: (key: string) => any): MenuRecord => ({
+   [MASTERFILE.login]: LOGIN(t),
+   [MASTERFILE.dashboard]: LOGIN(t),
+   [MASTERFILE.article]: ARTICLE,
+   [MASTERFILE.articleGroup]: ARTICLE_GROUP,
+   [MASTERFILE.asset]: ASSET,
+   [MASTERFILE.journal]: JOURNAL,
+   [MASTERFILE.ijournal]: IJOURNAL,
+   [MASTERFILE.pac]: PACB,
+   [MASTERFILE.currency]: CURRENCY,
+   [MASTERFILE.bank]: BANK,
+   [MASTERFILE.partner]: PARTNER,
+   [MASTERFILE.qty]: QUANTITYUNIT,
+   [MASTERFILE.acc]: ACCOUNT,
+   [MASTERFILE.cc]: COSTCENTER,
+   [MASTERFILE.cust]: CUSTOMER,
+   [MASTERFILE.sup]: SUPPLIER,
+   [MASTERFILE.store]: STORE,
+   [MASTERFILE.accountClass]: ACCOUNT_CLASS,
+   [MASTERFILE.accountGroup]: ACCOUNT_GROUP,
+   [MASTERFILE.salaryItem]: SALARY_ITEM,
+   [MASTERFILE.payrollTaxRange]: PAYROLL_TAX_RANGE,
+   [MASTERFILE.vat]: VAT,
+   [MASTERFILE.user]: USER,
+   [MASTERFILE.role]: ROLE,
+   [MASTERFILE.perm]: PERMISSION,
+   [MASTERFILE.room]: ROOM,
+   [MASTERFILE.apartment]: APARTMENT,
+   [MASTERFILE.realEstate]: REAL_ESTATE,
+   [MASTERFILE.floor]: FLOOR,
+   [MASTERFILE.comp]: COMPANY,
+   [MASTERFILE.bs]: BS,
+   [MASTERFILE.ftr]: FINANCIALS,
+   [MASTERFILE.ltr]: TRANSACTION,
+   [MASTERFILE.module]: MODULE,
+   [MASTERFILE.fmodule]: FMODULE,
+   [MASTERFILE.emp]: EMPLOYEE,
+   [MASTERFILE.balancesheet]: BALANCESHEET,
+   [MASTERFILE.closeAccountPeriod]: CLOSE_ACCOUNT_PERIOD,
+   [MASTERFILE.createPayrollTransaction]: CREATE_PAYROLL_TRANSACTION,
+   [MASTERFILE.createDepreciationTransaction]: CREATE_DEPRECIATION_TRANSACTION,
+}) //satisfies Record<string, MenuItem<IWSModel>>;
 
-export const MENU = (t: { (arg0: string): any; (arg0: string): any; }) =>
-  new Map([
-    [MASTERFILE.article, ARTICLE],
-    [MASTERFILE.articleGroup, ARTICLE_GROUP],
-    [MASTERFILE.asset, ASSET],
-    [MASTERFILE.journal, JOURNAL],
-    [MASTERFILE.ijournal, IJOURNAL],
-    [MASTERFILE.pac, PACB],
-    [MASTERFILE.currency, CURRENCY],
-    [MASTERFILE.bank, BANK],
-    [MASTERFILE.partner, PARTNER],
-    [MASTERFILE.qty, QUANTITYUNIT],
-    [MASTERFILE.acc, ACCOUNT],
-    [MASTERFILE.cc, COSTCENTER],
-    [MASTERFILE.cust, CUSTOMER],
-    [MASTERFILE.sup, SUPPLIER],
-    [MASTERFILE.sup, SUPPLIER],
-    [MASTERFILE.store, STORE],
-    [MASTERFILE.accountClass, ACCOUNT_CLASS],
-    [MASTERFILE.accountGroup, ACCOUNT_GROUP],
-    [MASTERFILE.salaryItem, SALARY_ITEM],
-    [MASTERFILE.payrollTaxRange, PAYROLL_TAX_RANGE],
-    [MASTERFILE.vat, VAT],
-    [MASTERFILE.user, USER],
-    [MASTERFILE.role, ROLE],
-    [MASTERFILE.perm, PERMISSION],
-    [MASTERFILE.room, ROOM],
-    [MASTERFILE.apartment, APARTMENT],
-    [MASTERFILE.realEstate, REAL_ESTATE],
-    [MASTERFILE.floor, FLOOR],
-    [MASTERFILE.login, LOGIN(t)],
-    ['/dashboard', LOGIN(t)],
-    [MASTERFILE.comp, COMPANY],
-    [MASTERFILE.bs, BS],
-    ['/ftr', FINANCIALS],
-    ['/ltr', TRANSACTION],
-    [MASTERFILE.module, MODULE],
-    [MASTERFILE.fmodule, FMODULE],
-    [MASTERFILE.emp, EMPLOYEE],
-    [MASTERFILE.balancesheet, BALANCESHEET],
-    [MASTERFILE.closeAccountPeriod, CLOSE_ACCOUNT_PERIOD],
-    [MASTERFILE.createPayrollTransaction, CREATE_PAYROLL_TRANSACTION],
-    [
-      MASTERFILE.createDepreciationTransaction,
-      CREATE_DEPRECIATION_TRANSACTION,
-    ],
-  ])
+// export const MENU1 = (t: { (arg0: string): any; (arg0: string): any; }) =>
+//   new Map([
+//     [MASTERFILE.article, ARTICLE],
+//     [MASTERFILE.articleGroup, ARTICLE_GROUP],
+//     [MASTERFILE.asset, ASSET],
+//     [MASTERFILE.journal, JOURNAL],
+//     [MASTERFILE.ijournal, IJOURNAL],
+//     [MASTERFILE.pac, PACB],
+//     [MASTERFILE.currency, CURRENCY],
+//     [MASTERFILE.bank, BANK],
+//     [MASTERFILE.partner, PARTNER],
+//     [MASTERFILE.qty, QUANTITYUNIT],
+//     [MASTERFILE.acc, ACCOUNT],
+//     [MASTERFILE.cc, COSTCENTER],
+//     [MASTERFILE.cust, CUSTOMER],
+//     [MASTERFILE.sup, SUPPLIER],
+//     [MASTERFILE.sup, SUPPLIER],
+//     [MASTERFILE.store, STORE],
+//     [MASTERFILE.accountClass, ACCOUNT_CLASS],
+//     [MASTERFILE.accountGroup, ACCOUNT_GROUP],
+//     [MASTERFILE.salaryItem, SALARY_ITEM],
+//     [MASTERFILE.payrollTaxRange, PAYROLL_TAX_RANGE],
+//     [MASTERFILE.vat, VAT],
+//     [MASTERFILE.user, USER],
+//     [MASTERFILE.role, ROLE],
+//     [MASTERFILE.perm, PERMISSION],
+//     [MASTERFILE.room, ROOM],
+//     [MASTERFILE.apartment, APARTMENT],
+//     [MASTERFILE.realEstate, REAL_ESTATE],
+//     [MASTERFILE.floor, FLOOR],
+//     [MASTERFILE.login, LOGIN(t)],
+//     [MASTERFILE.dashboard, LOGIN(t)],
+//     [MASTERFILE.comp, COMPANY],
+//     [MASTERFILE.bs, BS],
+//     [MASTERFILE.ftr, FINANCIALS],
+//     [MASTERFILE.ltr, TRANSACTION],
+//     [MASTERFILE.module, MODULE],
+//     [MASTERFILE.fmodule, FMODULE],
+//     [MASTERFILE.emp, EMPLOYEE],
+//     [MASTERFILE.balancesheet, BALANCESHEET],
+//     [MASTERFILE.closeAccountPeriod, CLOSE_ACCOUNT_PERIOD],
+//     [MASTERFILE.createPayrollTransaction, CREATE_PAYROLL_TRANSACTION],
+//     [
+//       MASTERFILE.createDepreciationTransaction,
+//       CREATE_DEPRECIATION_TRANSACTION,
+//     ],
+//   ])
 
 export const useStore = create<ISTORE_Return>((set) => ({
   profile: {

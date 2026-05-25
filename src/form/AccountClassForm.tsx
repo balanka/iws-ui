@@ -22,8 +22,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    const [{profile, t, modelid, company, module_ }] = useForm()
      const {token} = profile
      if (module_ === '11111' || module_ === 11111) return <Login/>
-     const current_: IMasterfile2 =  module_.state[0]
-     const [accData, setAccData] = useState<IAccount[]>(initAcc)
+     const current_: IMasterfile2 =  module_.state
+     const [accData, setAccData] = useState<IAccount[]>([initAcc])
      const acc_modelid  = formEnum.ACCOUNT
      const acc_ctx = `${modelid === formEnum.COSTCENTER ?  MASTERFILE.acc:-1}/${acc_modelid}/${company}`
      const minHeight = 400

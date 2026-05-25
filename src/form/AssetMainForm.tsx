@@ -50,17 +50,17 @@ export const AssetMainForm = ({ collapse, current, setCurrent, t, accData, ccyDa
         </FormRow>
         <FormRow>
           <CCol sm={6} className="d-flex gap-2"><Label>{t('common.account')}</Label>
-             {accComboBox(accData, initAcc[0],"account")}
+             {accComboBox(accData, initAcc,"account")}
           </CCol>
           <CCol sm={6} className="d-flex gap-2"><Label>{t('common.postingdate')}</Label><DatePickerField fieldName="postingdate" label={t('common.postingdate')} selected={current.postingdate} current={current} setCurrent={setCurrent} disabled={true} /></CCol>
         </FormRow>
         <FormRow>
           <CCol sm={6} className="d-flex gap-2"><Label>{t('common.oaccount')}</Label>
-            {accComboBox(accData, initAcc[0],"oaccount")}
+            {accComboBox(accData, initAcc,"oaccount")}
           </CCol>
           <CCol sm={2} className="d-flex gap-2"/>
           <CCol sm={4} className="d-flex gap-1"><Label>{t('common.currency')}</Label>
-            {accComboBox(ccyData, initCurrency[0],"currency")}
+            {accComboBox(ccyData, initCurrency,"currency")}
           </CCol>
         </FormRow>
         <FormRow>

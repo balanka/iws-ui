@@ -154,6 +154,29 @@ export interface IEmployee extends IBusinespartner {
   salary:number
 }
 
+export type CompanyType = { id: string, name: string };
+
+export type MenuItem<T =any> = {
+  id: string;
+  name: string;
+  title: string;
+  ctx: string;
+  state: T;
+  parent?: number;
+  modelid: number;
+};
+
+export type MenuRecord = Record<string, MenuItem>;
+
+export type MDataType = {
+  id: string,
+  name: string,
+  title: string,
+  ctx: string,
+  state?: IWSModel[],
+  parent?: number,
+  modelid: number,
+};
 export interface ICompany  extends IBusinespartner {
     bankAcc: string,
     purchasingClearingAcc?: string,

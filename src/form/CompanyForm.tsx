@@ -24,7 +24,7 @@ const CompanyForm = () => {
   const { token, locale } = profile
   if (module_ === '11111' || module_ === 11111) return <Login/>
 
-  const current_ : ICompany= initComp[0]
+  const current_ : ICompany= initComp
   const height = 25
   const minHeight = 450
   const maxHeight = 700

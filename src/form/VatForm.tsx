@@ -22,7 +22,7 @@ const VatForm = () => {
   const [{ profile, selected, t,  company, module_ }] = useForm()
   const { token} = profile
   if (module_ === '11111' || module_ === 11111) return <Login/>
-  const current_ :IVat = initVat[0]
+  const current_ :IVat = initVat
   const acc_modelid = formEnum.ACCOUNT
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const [accData, setAccData] = useState([])

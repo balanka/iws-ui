@@ -27,7 +27,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
     const [accData, setAccData] = useState<IMasterfile2[]>([])
      const height = 33
-     const current_ =  module_.state[0]
+     const current_ =  module_.state
      const minHeight = 450
      const maxHeight = 700
      const colDef:ColDef[]= masterfileColumnDefs(t)

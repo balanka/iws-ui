@@ -39,14 +39,14 @@ export const VatMainForm = ({
 
       <CInputGroup style={{ height, ...rm }}>
         <CCol sm="2"><FieldLabel title={t('vat.input.account')} /></CCol>
-        <CCol sm="4"><FormMasterfileXComboBox fieldName="inputVatAccount" current={current} setCurrent={setCurrent} data={accData} defaultValue={initAcc[0]} zIndex={zIndex} disable={disable} styles={s} fontSize={12} /></CCol>
+        <CCol sm="4"><FormMasterfileXComboBox fieldName="inputVatAccount" current={current} setCurrent={setCurrent} data={accData} defaultValue={initAcc} zIndex={zIndex} disable={disable} styles={s} fontSize={12} /></CCol>
         <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('common.postingdate')} /></CCol>
         <CCol sm="4"><DatePickerField fieldName="postingdate" label={t('common.postingdate')} selected={current.postingdate} current={current} setCurrent={setCurrent} disabled={true}/></CCol>
       </CInputGroup>
 
       <CInputGroup style={{ height, ...rm }}>
         <CCol sm="2"><FieldLabel title={t('vat.output.account')} /></CCol>
-        <CCol sm="4"><FormMasterfileXComboBox fieldName="outputVatAccount" current={current} setCurrent={setCurrent} data={accData} defaultValue={initAcc[0]} zIndex={zIndex} disable={disable} styles={s} fontSize={12} /></CCol>
+        <CCol sm="4"><FormMasterfileXComboBox fieldName="outputVatAccount" current={current} setCurrent={setCurrent} data={accData} defaultValue={initAcc} zIndex={zIndex} disable={disable} styles={s} fontSize={12} /></CCol>
         <CCol sm="2" style={{ paddingLeft: 10 }}><FieldLabel title={t('vat.percent')} /></CCol>
         <CCol sm="4"><InputField fieldName="percent" current={current} setCurrent={setCurrent} value={current.percent} disabled={disable} style={{ ...s, width: '50%', textAlign: 'right' }} /></CCol>
       </CInputGroup>

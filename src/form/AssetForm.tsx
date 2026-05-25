@@ -28,7 +28,7 @@ const AssetForm = () => {
   const ccy_modelid = formEnum.CURRENCY
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const ccy_ctx = `${MASTERFILE.masterfile}/${ccy_modelid}/${company}`
-  const current_: IAsset = initAsset[0]
+  const current_: IAsset = initAsset
   const [accData, setAccData] = useState<IAccount[]>([])
   const [ccyData, setCcyData] = useState<IMasterfile[]>([])
   const minHeight = 350

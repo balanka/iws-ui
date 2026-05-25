@@ -86,7 +86,7 @@ const JForm = () => {
     const debit = rowData.reduce((acc, currentData: IPeriodicAccountBalance) => acc + currentData.debit, 0.0)
     const credit = rowData.reduce((acc, currentData: IPeriodicAccountBalance) => acc + currentData.credit, 0.0)
     const currencyx = rowData.reduce((_, currentData: IPeriodicAccountBalance) => currentData?.currency, '')
-    const currentAcc = accData.find(acc => acc.id === current.account) ?? initAcc[0]
+    const currentAcc = accData.find(acc => acc.id === current.account) ?? initAcc
     const balance = currentAcc.isDebit ? (idebit+debit - credit-credit) : (icredit+credit - idebit+debit)
 
     return {

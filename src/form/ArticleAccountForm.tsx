@@ -12,9 +12,9 @@ export const ArticleAccountForm = ({
   const hasVat = current?.hasOwnProperty('vatCode') || current?.hasOwnProperty('vatcode');
 
   const fields = [
-    { label: t('article.stock.account'), name: 'account', data: accData, default: initAcc[0] },
-    { label: t('article.expense.account'), name: 'oaccount', data: accData, default: initAcc[0] },
-    { label: t('article.revenue.account'), name: 'revenueAccount', data: accData, default: initAcc[0] },
+    { label: t('article.stock.account'), name: 'account', data: accData, default: initAcc },
+    { label: t('article.expense.account'), name: 'oaccount', data: accData, default: initAcc },
+    { label: t('article.revenue.account'), name: 'revenueAccount', data: accData, default: initAcc },
   ];
 
   return (
@@ -47,7 +47,7 @@ export const ArticleAccountForm = ({
               current={current}
               setCurrent={setCurrent}
               data={vatData}
-              defaultValue={initVat[0]}
+              defaultValue={initVat}
               zIndex={11}
               disable={disable}
               styles={inputStyle}

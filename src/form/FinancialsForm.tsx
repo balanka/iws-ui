@@ -39,7 +39,7 @@ const FinancialsForm = () => {
   const dispatch = useDispatch()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   let title_ = `${company} /${t(module_.title)}`
-  const current_: IFinancials = {...initFtr [0], company:company}
+  const current_: IFinancials = {...initFtr, company:company}
   const initialLine:ILineFinancials = {...initLineFinancials, currency:currency??'', company:`-${company}`}
   const [currentLine, setCurrentLine] = useState<ILineFinancials>(initialLine)
   const [rowData, setRowData] = useState<IFinancials[]>([])
@@ -53,14 +53,14 @@ const FinancialsForm = () => {
   let ctx = `${module_.ctx}/${modelid}/${company}`
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const cc_ctx = `${MASTERFILE.masterfile}/${cc_modelid}/${company}`
-  const [accData, setAccData] = useState<IAccount[]>(initAcc)
+  const [accData, setAccData] = useState<IAccount[]>([initAcc])
   const [ccData, setCcData] = useState<IMasterfile[]>([])
   const [accFilter, setAccFilter] = useState<string[]>([])
   const [oaccFilter, setOAccFilter] = useState<string[]>([])
 
   const handleModuleChange = (value:any) => {
     setModel(value)
-    const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule[0]
+    const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule
     title_ = mx?.name ? mx.name : title_
     title_ = `${company}/${title_}`
     const copyFromIds = (mx? mx.copyFrom:'-1').split(',')

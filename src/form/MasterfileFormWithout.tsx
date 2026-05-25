@@ -37,7 +37,7 @@ export const MasterfileFormWithout = ({
         <CCol sm="2"><FieldLabel title={hasProp ? fieldName : t('common.group')} /></CCol>
         <CCol sm="4">
           {hasProp ? (
-            <FormMasterfileXComboBox fieldName={propertyName} current={current} setCurrent={setCurrent} data={accData} defaultValue={initAcc[0]} zIndex={11} disable={disable} styles={s} fontSize={12} />
+            <FormMasterfileXComboBox fieldName={propertyName} current={current} setCurrent={setCurrent} data={accData} defaultValue={initAcc} zIndex={11} disable={disable} styles={s} fontSize={12} />
           ) : (
             <TextareaField fieldName="description" placeholder={t('common.description')} disabled={disable} value={current.description} current={current} setCurrent={setCurrent} style={ta} />
           )}

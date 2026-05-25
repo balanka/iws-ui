@@ -136,7 +136,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
              setCurrent(dx)
      }, [currentLine]);
    const templateName:()=>string = () =>
-     templateFileName ? templateFileName: (fmodule.find((m:IFmodule) => Number(m?.id) === current?.modelid) ?? initfModule[0]).description
+     templateFileName ? templateFileName: (fmodule.find((m:IFmodule) => Number(m?.id) === current?.modelid) ?? initfModule).description
 
   const callSubmitEdit = async (event:any, modifyUrl:string, token:string, current:T
       , setCurrent:Dispatch<SetStateAction<T>>, data:T[], submitAdd: (arg:any)=>void) => {

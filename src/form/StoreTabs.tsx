@@ -30,7 +30,7 @@ export  const StoreTabs =(
           <StockGrid
               // @ts-ignore
               theme="legacy" columnDefs ={stockColumnDefs(t)}
-                       onRowSelected={()=>{}} rowData ={current?.stocks??initStore[0].stocks} />
+                       onRowSelected={()=>{}} rowData ={current?.stocks??initStore.stocks} />
       </div>
 
     const tabContent =

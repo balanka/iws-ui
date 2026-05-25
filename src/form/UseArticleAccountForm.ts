@@ -74,7 +74,7 @@ const UseArticleAccountForm = <T>(): [UseArticleAccountResult<T>] => {
    const onRowSelected = (event: RowSelectedEvent) =>
          setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
    const templateName = () =>
-        (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule[0]).description
+        (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule).description
 
   return [{ profile, menu, selected, t, articleData, storeData, rowData, setRowData, current_, current, setCurrent
     , submitQuery, onRowSelected, templateName, title:title, styles:styles}]

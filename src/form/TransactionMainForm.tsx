@@ -54,7 +54,7 @@ export const TransactionMainForm = ({
       <FormRow height={height}>
         <CCol sm={8} className="d-flex gap-2 align-items-center" style={{height: height, paddingTop:2}}>
           <Label>{t('transaction.store')}</Label>
-          <MasterfileComboBox current={current} setCurrent={setCurrent} data={storeData} fieldName="store" defaultValue={initStore[0]} zIndex={zIndex} styles={inputStyle}  height ={height-5}/>
+          <MasterfileComboBox current={current} setCurrent={setCurrent} data={storeData} fieldName="store" defaultValue={initStore} zIndex={zIndex} styles={inputStyle}  height ={height-5}/>
         </CCol>
         <CCol sm={4} className="d-flex gap-2 align-items-center">
           <Label>{t('transaction.transdate')}</Label>
@@ -66,7 +66,7 @@ export const TransactionMainForm = ({
       <FormRow height={height}>
         <CCol sm={8} className="d-flex gap-2 align-items-center" style={{height: height, paddingTop:2}}>
           <Label>{t('transaction.account')}</Label>
-          <MasterfileComboBox current={current} setCurrent={setCurrent} data={accData} fieldName="account" defaultValue={initCust[0]} zIndex={zIndex} styles={inputStyle} />
+          <MasterfileComboBox current={current} setCurrent={setCurrent} data={accData} fieldName="account" defaultValue={initCust} zIndex={zIndex} styles={inputStyle} />
         </CCol>
         <CCol sm={3} className="d-flex gap-2 align-items-center">
           <Label bold>{t('common.total')}</Label>

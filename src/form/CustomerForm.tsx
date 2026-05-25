@@ -33,7 +33,7 @@ const CustomerForm = () => {
   const [{ profile, t,  modelid, module_, company }] = useForm()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const { token, locale, stockAcc, expenseAcc, vat, currency } = profile
-  const initial = modelid ===formEnum.CUSTOMER?initCust[0]:(modelid ===formEnum.SUPPLIER)?initSup[0]:initEmp[0]
+  const initial = modelid ===formEnum.CUSTOMER?initCust:(modelid ===formEnum.SUPPLIER)?initSup:initEmp
   const current_ : IBusinespartner= {...initial, account:stockAcc??'', oaccount:expenseAcc??'', vatCode:vat??'', currency:currency??''}
   const height = 28
   const minHeight = 350
