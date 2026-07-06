@@ -13,15 +13,18 @@ class IwsStore {
     return this.subject.subscribe(callback);
   }
 
-  // Get all objects of a given modelid (as IWSModel[])
-  getByModelId(modelId: ModelId): IWSModel[] {
+  /**
+   * Get all objects of a given modelid, typed as T[].
+   * Usage: const accounts = iwsStore.getByModelId<IAccount>(formEnum.ACCOUNT);
+   */
+  getByModelId<T extends IWSModel = IWSModel>(modelId: ModelId): T[] {
     const innerMap = this.store.get(modelId);
-    return innerMap ? Array.from(innerMap.values()) : [];
+    return innerMap ? (Array.from(innerMap.values()) as T[]) : [];
   }
 
-  // Get a single object
-  getOne(modelId: ModelId, id: EntityId): IWSModel | undefined {
-    return this.store.get(modelId)?.get(id);
+  // Get a single object, typed as T | undefined
+  getOne<T extends IWSModel = IWSModel>(modelId: ModelId, id: EntityId): T | undefined {
+    return this.store.get(modelId)?.get(id) as T | undefined;
   }
 
   // Insert or replace a single item
@@ -43,8 +46,7 @@ class IwsStore {
 
   /**
    * PUT – replace all items for a given modelid.
-   * @param modelId The modelid (e.g., 42 for articles)
-   * @param items Array of items (must have `id` and `modelid` matching the modelId)
+   * Now accepts a generic type T extends IWSModel.
    */
   put<T extends IWSModel>(modelId: ModelId, items: T[]): void {
     const newInnerMap = new Map<EntityId, IWSModel>();
@@ -100,7 +102,7 @@ class IwsStore {
     this.emit();
   }
 
-  // Raw map access
+  // Raw map access (use sparingly)
   getRawMap(): Map<ModelId, Map<EntityId, IWSModel>> {
     return this.store;
   }
