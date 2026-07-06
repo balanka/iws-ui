@@ -1,0 +1,543 @@
+{
+  "muitable": {
+    "emptyDataSourceMessage": "No data",
+    "addTooltip": "Add",
+    "deleteTooltip": "Delete",
+    "editTooltip": "Edit",
+    "deleteText": "Do you really want to delete this record?",
+    "cancelTooltip": "Cancel",
+    "saveTooltip": "Save",
+    "placeholder": "Drag column ...",
+    "groupedBy": "Group by :",
+    "actions": "Actions",
+    "labelDisplayedRows": "{from}-{to} of {count}",
+    "labelRowsSelect": "Rows",
+    "labelRowsPerPage": "Rows per page:",
+    "firstAriaLabel": "First page",
+    "firstTooltip": "First page",
+    "previousAriaLabel": "Previous page",
+    "previousTooltip": "Previous page",
+    "nextAriaLabel": "next page",
+    "nextTooltip": "Next page",
+    "lastAriaLabel": "Last page",
+    "lastTooltip": "Last page",
+    "addRemoveColumns": "Add or remove columns",
+    "nRowsSelected": "{0} record selected",
+    "showColumnsTitle": "Show Columns",
+    "showColumnsAriaLabel": "Show Columns",
+    "exportTitle": "Export",
+    "exportAriaLabel": "Export",
+    "exportName": "Export  CSV",
+    "searchTooltip": "search Tooltip",
+    "searchPlaceholder": "search Placeholder"
+  },
+"toolTip": {
+  "common": {
+    "add": "Add new entry",
+    "edit": "Swich to edit/lock mode",
+    "addBankAccount": "Add bank account",
+    "removeBankAccount": "Remove bank account",
+    "save": "Save new entry/ or changes",
+    "canceln": "Cancels new entry/ or changes",
+    "print": "Print the transaction/ entry",
+    "export": "Export the transaction/ entry to Excel",
+    "load": "Load the data from the data store",
+    "import": "Import data",
+    "table": "Display  or hides the table",
+    "form": "Display  or hides the form",
+    "exit": "Exit the application",
+    "run": "run",
+    "runAll": "run all"
+  },
+  "transaction": {
+    "addLine": "Add mew line",
+    "removeLine": "Remove the selected line",
+    "post": "Post the journal/transaction"
+  }
+},
+  "common": {
+    "print": "Prints",
+    "dashboard": "Dashboard",
+    "id": "Id",
+    "title": "Title",
+    "name": "Name",
+    "description": "Description",
+    "surname": "Surname",
+    "sex": "Sex",
+    "type": "Type",
+    "birthYear": "B. year",
+    "birthCity": "B. City",
+    "account":      "Account",
+    "oaccount"    : "Op. acc",
+    "currency"    : "Currency",
+    "from"       :  "From",
+    "to"        :  "To",
+    "total"     : "Total",
+    "prenom": "First name",
+    "company":      "Company",
+    "parent": "Parent",
+    "modelid"     : "ModelId",
+    "idebit": "Init Debit",
+    "debit": "Debit",
+    "icredit": "Init credit",
+    "credit": "Credit",
+    "report": "Balance N-1",
+    "balance": "Balance",
+    "transactions": "Transactions",
+    "quantity":  "Qtty",
+    "charge": "Charge",
+    "costcenter":   "C.coûts",
+    "amount"      : "Amount",
+    "street"      : "Street",
+    "period"      : "Period",
+    "zip"        : "Zip",
+    "city"       : "City",
+    "country"       : "Country",
+    "state"        : "State",
+    "phone"       : "Tel",
+    "fax"       : "Fax",
+    "email"       : "Email",
+    "enterdate"  : "Created",
+    "postingdate": "Posted",
+    "changedate": "Modified",
+    "bankAcc": "Bank Acc",
+    "cashAcc": "Cash Acc",
+    "balanceSheetAcc":"Balance sheet acc",
+    "incomeStmtAcc": "Inc. Stmt Acc",
+    "purchasingClearingAcc": "Purch. cl. Acc",
+    "salesClearingAcc":"Sales cl. Acc",
+    "paymentClearingAcc":"Payment cl Acc.",
+    "settlementClearingAcc": "Settlement cl. Acc.",
+    "taxCode":"Tax code",
+    "vatCode": "VAT",
+    "vat": "VAT",
+    "general": "General info",
+    "address": "Address",
+    "accounts": "Accounts",
+    "edited":{
+      "bankaccount":"Edit bank account"
+    },
+    "bankaccounts":"Bank accounts",
+    "iban":"IBAN",
+    "bic": "BIC",
+    "bank":"Bank",
+    "owner":"Owner",
+    "exportCSV": "Export CSV",
+    "exportPDF": "Export PDF",
+    "run": "run",
+    "runAll": "run 4 all",
+    "permission": "Permission",
+    "copyFrom": "Copy from",
+    "image_QR_code": "Image/QR Code",
+    "export": "Exporter"
+  },
+  "address": {
+    "street"      : "Street",
+    "period"      : "Period",
+    "zip"        : "Zip",
+    "city"       : "City",
+    "country"       : "Country",
+    "state"        : "State",
+    "phone"       : "Tel",
+    "fax"       : "Fax",
+    "email"       : "Email"
+  },
+  "asset": {
+    "title":      "Asset",
+    "name":       "Name",
+    "description": "Description",
+    "enterdate"  : "Enterdate",
+    "postingdate": "Posting date",
+    "changedate":  "Change date.",
+    "account": "Account",
+    "oaccount": "O. Acc",
+    "amount": "Init. value",
+    "rate":     "rate",
+    "scrapValue": "Scrap value",
+    "lifeSpan":   "Life span",
+    "frequency":   "Frequency",
+    "depreciation":   "Method"
+  },
+  "account": {
+    "title":      "Account",
+    "name":       "Name",
+    "description": "Description",
+    "account"    : "Account",
+    "enterdate"  : "Enterdate",
+    "postingdate": "Posted on",
+    "changedate":  "Modified ",
+    "debit_credit": "D/C",
+    "idebit"       : "AB Soll",
+    "debit"        : "SOLL",
+    "icredit"       : "AB Haben",
+    "credit"        : "Credit",
+    "balancesheet": "Balance sheet?",
+    "company":      "Company"
+  },
+  "bank": {
+    "title":      "Bank",
+    "name":       "Name",
+    "description": "Description",
+    "enterdate"  : "Created",
+    "postingdate": "Posted",
+    "changedate": "Modified",
+    "company":      "Company"
+  },
+  "bankstatement": {
+    "title":      "Bank statement",
+    "depositor":  "Depositor",
+    "postingdate": "Posted on",
+    "valuedate"  : "Value date",
+    "postingtext": "Text",
+    "purpose":     "Purpose",
+    "beneficiary":  "Beneficiary",
+    "accountno"    : "IBAN",
+    "bankCode"    : "BIC",
+    "amount"      : "Amount",
+    "info"       : "Info",
+    "companyIban" : "IBAN comp.",
+    "posted"      : "Posted?",
+    "period"      : "Period",
+    "path"        :  "Path",
+    "parameter"   : "Parameter",
+    "header"      : "Header",
+    "char"        : "Char",
+    "extension"   : "Extension"
+  },
+  "company": {
+    "title":      "Company",
+    "name":       "Name",
+    "locale":      "Locale",
+    "description": "Description",
+    "bankAccount": "Bank Acc.",
+    "cashAccount": "Cash Acc.",
+    "balanceSheetAcc":"Balance sheet Acc",
+    "incomeStmtAcc": "IncomeStmtAcc",
+    "purchasingClearingAcc": "PurchasingClearingAcc",
+    "salesClearingAcc":"SalesClearingAcc.",
+    "paymentClearingAcc":"PaymentClearingAcc",
+    "settlementClearingAcc": "SetlmtClearingAcc.",
+    "companyIban" : "IBAN comp."
+  },
+  "customer": {
+    "title":    "Customer",
+    "account":  "Receivable",
+    "oaccount": "Revenue acc."
+  },
+  "employee": {
+    "title": "Employee",
+    "account":  "Payable",
+    "oaccount": "charge acc.",
+    "salary": " Gross salary"
+  },
+  "supplier": {
+    "title": "Supplier",
+    "account":  "Payable",
+    "oaccount": "charge acc."
+  },
+  "costcenter": {
+    "title":      "Cost Center",
+    "name":       "Name",
+    "description": "Description",
+    "enterdate"  : "Created",
+    "postingdate": "Posted",
+    "changedate": "Modified",
+    "account"    : "Account",
+    "company"    : "Company"
+  },
+  "module": {
+    "title":"Module",
+    "name":"Name",
+    "description":"Description",
+    "enterdate"  : "Created",
+    "postingdate": "Posted",
+    "changedate": "Modified",
+    "account"    : "Account",
+    "company"    : "Company",
+    "parent":"Gruppe",
+    "path": "Path"
+  },
+  "payroll": {
+    "tax": {
+      "range": {
+        "title": "Payroll tax table",
+        "from": "From ",
+        "to": "To",
+        "tax": "Tax",
+        "class": "Tax class"
+      }
+    }
+  },
+  "salary": {
+    "item": {
+      "title": "Salary items",
+      "amount" : "Amount",
+      "percentage": "Percentage"
+    }
+  },
+  "article": {
+    "title": "Article",
+    "price": "Price",
+    "sprice": "Sales price",
+    "pprice": "Purchase price",
+    "avgPrice": "Average price",
+    "quantityUnit": "QtyUnit",
+    "packUnit": "PackUnit",
+    "stocked": "Stocked ?",
+    "vat": "Vat code",
+    "group": "Group",
+    "stock": {
+      "account": "stock acc."
+    },
+    "expense": {
+      "account": "Exp. acc."
+    },
+    "revenue": {
+      "account": "Sales acc."
+    },
+    "wholeStock": "Wh.stock"
+  },
+  "partner": {"title": "Contact"},
+  "store": {"title": "Store"},
+  "stock": {"title":      "Stock"},
+  "vat": {
+    "title":      "VAT",
+    "name":       "Name",
+    "description": "Description",
+    "enterdate"  : "Enter date",
+    "postingdate": "Posted on ",
+    "changedate":  "Modified on",
+    "input":{
+      "account" : "Input Account"
+     },
+    "output":{
+      "account" : "Output Account"
+     },
+    "percent":     "Percent",
+    "company"    : "Company"
+  },
+  "pac": {
+    "title":      "P.Account Balance",
+    "period":      "Period"
+  },
+  "role": {
+    "title":      "Role",
+    "rights":      "Rights"
+  },
+  "permission": {
+    "title":      "Permission"
+  },
+  "fmodule":{
+    "title": "Transactions",
+    "parent": "Parent",
+    "accountFilter": "Debit filter ",
+    "oaccountFilter": "Crebit filter"
+  },
+  "financials": {
+    "title":      "Financials",
+    "id":        "Id",
+    "oid":        "O.Id",
+    "period":       "Period",
+    "enterdate"  : "Created",
+    "postingdate": "Posted",
+    "transdate":   "Transdate",
+    "account": "Account",
+    "costcenter":   "Cost center",
+    "text" :       "Text",
+    "type":         "Type",
+    "file":         "File",
+    "file_content":  "Content",
+    "posted":     "Posted?",
+    "line": {
+      "title": "Lines/Details",
+      "id": "Nr",
+      "account": "Acc.",
+      "accountName": "Acc. Name",
+      "oaccount": "O.Acc.",
+      "oaccountName": "OAcc. Name",
+      "amount": "Amount",
+      "side": "D/C?",
+      "duedate": "Due date",
+      "text": "Text"
+    }
+  },
+  "transaction": {
+    "title":      "Transaction",
+    "id":        "Id",
+    "oid":        "O.Id",
+    "period":       "Periode",
+    "enterdate"  : "Created",
+    "postingdate": "Posted",
+    "transdate":   "Transdate",
+    "store": "Store",
+    "account" :   "Cust./Sup.",
+    "text" :       "Text",
+    "footText":     "Footnote",
+    "posted":     "Validée",
+    "line": {
+      "title": "Lines/Details",
+      "id": "Nr",
+      "article": "Item",
+      "articleName": "Name",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "price": "Price",
+      "duedate": "Due date",
+      "text": "Text"
+    }
+  },
+  "journal": {
+    "title":      "Journal",
+    "transid":    "TransId",
+    "oid":        "Oid",
+    "account":      "Account",
+    "oaccount":      "o.Acc",
+    "enterdate"  : "Enter date",
+    "postingdate": "Posting date",
+    "transdate":  "Transdate",
+    "period":       "Period",
+    "amount":       "Amount",
+    "side" :       "D/C?",
+    "text" :       "Text",
+    "month":        "Mth.",
+    "year":        "Year",
+    "type":         "Typ",
+    "file":         "File",
+    "modelid"     : "Model"
+  },
+  "ijournal": {
+    "title": "Article journal"
+  },
+  "balancesheet": {
+    "title":      "Balance sheet",
+    "id":          "Nr.",
+    "name":         "Name",
+    "account":     "Account",
+    "period":      "Period",
+    "from"       :  "From",
+    "to"        :  "To"
+  },
+  "login": {
+    "title"  :"Login",
+    "signIn":"Sign In to your account",
+    "username": "User name",
+    "password": "Password",
+    "forgotpwd": "Forgot password?",
+    "signUp": "Sign up",
+    "signUpNow": "Register now"
+  },
+  "firstname": "First name",
+  "firstname_constraint": "First name has to be at least 2 characters",
+  "lastname": "Last name",
+  "lastname_constraint": "Last name has to be at least 2 characters",
+  "title": "Welcome to react using react-i18next",
+  "description": {
+    "firstname": "First name",
+    "firstname_constraint": "First name has to be at least 2 characters",
+    "name":"Name",
+    "description":"Description",
+    "role":"Role",
+    "status":"Status" ,
+    "show_details":"show details",
+    "to": "to",
+    "part1": "To get started, edit <1>src/App.js</1> and save to reload.",
+    "part2": "Switch language between english and german using buttons above."
+  },
+  "user": {
+    "title": "User",
+    "userName": "User Name",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "role": "Role",
+    "menu": "Menu",
+    "email": "Email"
+   },
+  "toolBar":{
+    "reload":"Reload all transaction",
+    "duplicate":"Duplicate transaction",
+    "add":"Add new transaction",
+    "addLine":"Add new line transaction",
+    "cancel":"Cancel adding or editing",
+    "void":"void a transaction",
+    "save":"Save transaction",
+    "post":"validate or post a transaction"
+  },
+  "menu": {
+    "purchasing": "Purchasing",
+    "sales": "Sales",
+    "inventory": "Inventory",
+    "favoris": "Favoris",
+    "payroll": "Payroll",
+    "transactions": "Transactions",
+    "salary":{
+      "item": "Salary items"
+    },
+    "admin": "Administration",
+    "article": "Article",
+    "articleGroup": "Group",
+    "asset": "Asset",
+    "dashboard": "Dashboard",
+    "accounting": "Accounting",
+    "journal": "Journal",
+    "ijournal": "Article journal",
+    "pacb": "Account balance",
+    "account": "Accounts",
+    "accountGroup": "Account group",
+    "accountClass": "Account class",
+    "bank": "Bank",
+    "partner": "Contact",
+    "quantityUnit": "Quantity unit",
+    "module": "Module",
+    "costcenter": "Cost center",
+    "customer": "Customer",
+    "employee": "Employee",
+    "supplier": "Supplier",
+    "store": "Store",
+    "vat": "T.V.A",
+    "login"  :"Login",
+    "company": "Company",
+    "user": "Users",
+    "role": "Role",
+    "permission": "Permission",
+    "fmodule":"Transactions",
+    "currency": "Currency",
+    "bankstatement": "Bank statement",
+    "masterfiles": "Master files",
+    "balancesheet": "Balance sheet",
+    "financials": "Payable/Receivable",
+    "transaction": "Transaction",
+    "financials_stmt": "Financials statements",
+    "payroll.tax.range": "Pay roll tax table",
+    "room": "Room",
+    "apartment": "Apartment",
+    "realEstate": "Real estate",
+    "closeAccountingPeriod": "Close accounting period",
+    "createPayrollTransaction": "Generate payroll transaction",
+    "createDepreciationTransaction": "Generate depr. transaction"
+  },
+  "accountClass": {
+    "title":      "Account class"
+  },
+  "accountGroup": {
+    "title":      "Account group"
+  },
+  "quantityUnit": {
+    "title": "Quantity unit"
+  },
+  "closeAccountingPeriod": {
+    "title": "Close accounting period",
+    "account": "Account",
+    "close": "Close"
+  },
+  "createPayrollTransaction": {
+    "title": "Generate payroll transaction",
+    "generate": "Generate"
+  },
+  "createDepreciationTransaction": {
+    "title": "Generate depr. transaction",
+    "generate": "Generate"
+  },
+  "ccy": {
+  "title": "Currency"
+   }
+}

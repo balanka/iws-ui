@@ -1,0 +1,18 @@
+/* Target the element that AppContent renders */
+/*.no-padding-wrapper > * {*/
+/*  padding-left: 5px !important;*/
+/*  padding-right: 5px !important;*/
+/*}*/
+
+/* If AppContent renders a specific class like .c-main or .app-content,
+   use a more specific selector */
+/*.no-padding-wrapper .c-main,*/
+/*.no-padding-wrapper .app-content {*/
+/*  padding-left: 5px !important;*/
+/*  padding-right: 5px !important;*/
+/*}*/
+
+.wrapper {
+  padding-left: 25px !important;
+  padding-right: 5px !important;
+}

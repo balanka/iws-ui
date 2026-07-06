@@ -1,0 +1,521 @@
+{
+  "muitable": {
+  "emptyDataSourceMessage": "Keine Einträge",
+  "addTooltip": "Hinzufügen",
+  "deleteTooltip": "Löschen",
+  "editTooltip": "Bearbeiten",
+  "deleteText": "Diese Zeile wirklich löschen?",
+  "cancelTooltip": "Abbrechen",
+  "saveTooltip": "Speichern",
+  "placeholder": "Spalten ziehen ...",
+  "groupedBy": "Gruppiert nach:",
+  "actions": "Aktionen",
+  "labelDisplayedRows": "{from}-{to} von {count}",
+  "labelRowsSelect": "Zeilen",
+  "labelRowsPerPage": "Zeilen pro Seite:",
+  "firstAriaLabel": "Erste Seite",
+  "firstTooltip": "Erste Seite",
+  "previousAriaLabel": "Vorherige Seite",
+  "previousTooltip": "Vorherige Seite",
+  "nextAriaLabel": "Nächste Seite",
+  "nextTooltip": "Nächste Seite",
+  "lastAriaLabel": "Letzte Seite",
+  "lastTooltip": "Letzte Seite",
+  "addRemoveColumns": "Spalten hinzufügen oder löschen",
+  "nRowsSelected": "{0} Zeile(n) ausgewählt",
+  "showColumnsTitle": "Zeige Spalten",
+  "showColumnsAriaLabel": "Zeige Spalten",
+  "exportTitle": "Export",
+  "exportAriaLabel": "Export",
+  "exportName": "Export als CSV",
+  "searchTooltip": "Suche",
+  "searchPlaceholder": "Suche"
+},
+  "toolTip": {
+    "common": {
+      "add": "Crée un nouvel enregistrement",
+      "edit": "Permet ou block l'édition/modification",
+      "addBankAccount": "Crée un nouveau compte bancaire",
+      "removeBankAccount": "Supprime un compte bancaire",
+      "save": "Enrgistre la/les modidifications/ajouts",
+      "canceln": "Annule la/les modidifications/ajouts",
+      "print": "Affice la transaction/l'enregistrement en mode impression",
+      "export": "Export la transaction/l'enregistrement format Excel",
+      "load": "Alle Datensätze laden",
+      "import": "Daten importieren",
+      "table": "Daten in Tabellenansicht anzeigen",
+      "form": "Datensatz anzeigen",
+      "exit": "Anwendung verlassen",
+      "run": "Ausführen",
+      "runAll": "Ausführen für alle"
+    },
+    "transaction": {
+      "addLine": "Neue Zeile hinzufügen",
+      "removeLine": "Position loeschen",
+      "post": "Beleg buchen"
+    }
+  },
+  "common": {
+    "print": "Drucken",
+    "dashboard": "Dashboard",
+    "id":"Nr.",
+    "title": "Ansprache",
+    "name": "Name",
+    "description": "Beschreibung",
+    "surname": "Familienname",
+    "sex": "Sex",
+    "type": "Typ",
+    "birthYear": "Jahrgang",
+    "birthCity": "Geburtsort",
+    "account":      "Konto",
+    "oaccount"    : "G.Konto",
+    "currency"    : "Währung",
+    "from"       :  "Von",
+    "to"        :  "Bis",
+    "total"     : "Total",
+    "company"   : "Mandant",
+    "parent": "Ueberg.",
+    "modelid"     : "Model",
+    "idebit": "AB Soll",
+    "debit": "Soll",
+    "icredit": "AB Haben",
+    "credit": "Haben",
+    "balance": "Saldo",
+    "report": "Salden N-1",
+    "transactions": "Bewegungen",
+    "amount"      : "Betrag",
+    "quantity":  "Menge",
+    "charge": "Charge",
+    "costcenter":   "C.coûts",
+    "street"      : "Strasse",
+    "period"      : "B.periode",
+    "zip"         : "PLZ",
+    "city"       : "Stadt",
+    "country"       : "Bundesland",
+    "state"        : "Land",
+    "phone"       : "Tel",
+    "fax"       : "Fax",
+    "email"       : "Email",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Gebucht am",
+    "changedate":  "Geaendert",
+    "bankAcc": "Bankkonto",
+    "cashAcc": "Kassenkonto",
+    "balanceSheetAcc":"Bilanzkonto",
+    "incomeStmtAcc": "G.u.V. Konto",
+    "purchasingClearingAcc": "WERE Konto",
+    "salesClearingAcc":"WARA-Konto.",
+    "paymentClearingAcc":"ZE Clearing",
+    "settlementClearingAcc": "ZA Clearing.",
+    "taxCode":"Steuernummer",
+    "vatCode": "Mwst.",
+    "vat": "Mwst.",
+    "general": "Allg. Info",
+    "address": "Addresse",
+    "accounts": "Konten",
+    "edited":{
+      "bankaccount":"Bankverb. bearbeiten"
+    },
+    "bankaccounts":"Bankverbingungen",
+    "iban":"IBAN",
+    "bic": "BIC",
+    "bank":"Bank",
+    "owner":"Inhaber",
+    "exportCSV": "Exportieren CSV",
+    "exportPDF": "Exportieren PDF",
+    "run": "Ausführen",
+    "runAll": "Ausführen alle",
+    "permission": "Berechtigung",
+    "copyFrom": "Kopieren von",
+    "image_QR_code": "Image/QR Code",
+    "export": "Exportieren"
+  },
+  "address": {
+    "street"      : "Strasse",
+    "zip"         : "PLZ",
+    "city"       : "Stadt",
+    "country"       : "Bundesland",
+    "state"        : "Land",
+    "phone"       : "Tel",
+    "fax"       : "Fax",
+    "email"       : "Email"
+  },
+  "asset": {
+    "title":  "Anlage",
+    "name":       "Name",
+    "description": "Beschreibung",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Gebucht am",
+    "changedate":  "Geändert am",
+    "account":  "Konto",
+    "oaccount": "G. Konto",
+    "amount": "Anschaffungskosten",
+    "rate":     "Satz",
+    "scrapValue": "Restwert",
+    "lifeSpan":   "Laufzeit",
+    "frequency":   "Frequenz",
+    "depreciation":   "Methode"
+  },
+  "account": {
+    "title":"Konto",
+    "name":"Name",
+    "description":"Beschreibung",
+    "account"    : "Konto",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Gebucht am",
+    "changedate":  "Geaendert",
+    "debit_credit": "S/H",
+    "idebit"       : "AB Soll",
+    "debit"        : "Soll",
+    "icredit"       : "AB Haben",
+    "credit"        : "Haben",
+    "balancesheet": "Bilanz?"
+  },
+  "bank": {
+    "title":      "Bank"
+  },
+  "bankstatement": {
+    "title":      "Bankauszug",
+    "depositor":  "Auftrag.",
+    "postingdate": "Gebucht",
+    "valuedate"  : "Valuta",
+    "postingtext": "Text",
+    "purpose":     "Zweck",
+    "beneficiary":  "Begünst.",
+    "accountno"    : "IBAN",
+    "bankCode"    : "BIC",
+    "amount"      : "Betrag",
+    "info"       : "Info",
+    "companyIban" : "IBAN Mandant",
+    "posted"      : "Gebucht?",
+    "period"      : "Periode",
+    "path"        :  "Pfad",
+    "parameter"   : "Parameter",
+    "header"      : "Header",
+    "char"        : "Char",
+    "extension"   : "Extension"
+  },
+  "company": {
+    "title":      "Mandant",
+    "name":       "Name",
+    "description": "Bescreibung",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Gebucht",
+    "changedate": "Geander",
+    "companyIban" : "IBAN"
+
+  },
+  "customer": {
+    "title":    "Kunde",
+    "account":  "Debitor",
+    "oaccount": "Erlös"
+  },
+  "employee": {
+    "title": "Mitarbeiter",
+    "account":  "Konto Mit.",
+    "oaccount": "Konto Geh.",
+    "salary": " Bruttogehalt"
+  },
+  "supplier": {
+    "title":    "Lieferant",
+    "account":  "Kreditor",
+    "oaccount": "Aufwand"
+  },
+  "module": {
+    "title":"Module",
+    "name":"Name",
+    "description":"Beschreibung",
+    "enterdate":"Enterdate",
+    "postingdate":"Gebucht am",
+    "changedate":"Geaendert am",
+    "parent":"Gruppe",
+    "path": "Path"
+  },
+  "payroll": {
+    "tax" : {
+      "range": {
+        "title": "Lohnsteuertabelle",
+        "from": "Von",
+        "to": "Bis",
+        "tax": "Betrag",
+        "class": "Steuerklasse"
+      }
+    }
+  },
+  "salary": {
+    "item": {
+      "title": "Komponenten des Gehalts",
+        "amount" : "Betrag",
+       "percentage": "Prozentsatz"
+    }
+  },
+  "article": {
+    "title": "Artikel",
+    "price": "Preis",
+    "sprice": "Verkaufspreis",
+    "pprice": "Einkaufspreis",
+    "avgPrice": "G.D.P",
+    "quantityUnit": "M.E.",
+    "packUnit": "V.E.",
+    "stocked": "Bestand ?",
+    "vat": "Mwst.",
+    "group": "W.gruppe",
+    "wholeStock": "Gesamtbestand",
+    "stock": {
+      "account": "Bestand"
+    },
+    "expense": {
+      "account": "Verbrauch"
+    },
+    "revenue": {
+      "account": "Verkauf"
+    }
+  },
+  "partner": {"title": "Kontakt"},
+  "store": {
+    "title":      "Lager"
+  },
+  "stock": {
+    "title":  "Bestand"
+  },
+  "vat": {
+    "title":      "MwSt.",
+    "name":       "Name",
+    "description": "Beschreibung",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Gebucht am",
+    "changedate":  "Geaendert am",
+    "input":{
+      "account" : "Vorsteuerkonto"
+    },
+    "output":{
+      "account" : "Umsatsteuerkonto"
+    },
+    "percent":     "Prozent"
+  },
+  "pac": {
+    "title":      "Salden",
+    "period":      "Periode"
+  },
+  "role": {
+    "title":      "Rolle",
+    "rights":      "Berechtigungen"
+  },
+  "permission": {
+    "title": "Berechtigung"
+  },
+  "fmodule":{
+    "title": "Belegart",
+    "parent": "Parent",
+    "accountFilter": "Debit filter ",
+    "oaccountFilter": "Crebit filter"
+  },
+  "financials": {
+    "title":      "Beleg",
+    "id":        "Nr.",
+    "oid":        "O.BelegNr",
+    "period":       "Periode",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Buchungsdatum",
+    "transdate":   "Belegdatum",
+    "account":      "Deb./Kred.",
+    "costcenter":   "Kostenstelle",
+    "text" :       "Text",
+    "type":         "B.Art",
+    "file":         "Datei",
+    "file_content":  "Inhalt",
+    "posted":     "Gebucht",
+    "line": {
+      "title": "Position(en)",
+      "id": "Nr.",
+      "account": "Konto",
+      "accountName": "Kontenname",
+      "oaccount": "G.Konto",
+      "oaccountName": "Name G.",
+      "amount": "Betrag",
+      "side": "S/H?",
+      "duedate": "Faellig am",
+      "text": "Text"
+    }
+  },
+  "transaction": {
+    "title":      "Beleg",
+    "id":        "Nr.",
+    "oid":        "O.BelegNr",
+    "period":       "Periode",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Buchungsdatum",
+    "transdate":   "Belegdatum",
+    "account":      "Deb./Kred.",
+    "store":   "Lager",
+    "text" :       "Text",
+    "footText":     "Fußnote",
+    "type":         "B.Art",
+    "posted":     "Gebucht",
+    "line": {
+      "title": "Positione(n)",
+      "id": "LineNr.",
+      "article": "Artikel",
+      "articleName": "Name",
+      "quantity": "Menge",
+      "unit": "M.E.",
+      "price": "Preis",
+      "duedate": "Fällig am",
+      "text": "Text"
+    }
+  },
+  "journal": {
+    "title":      "Journal",
+    "transid":    "BelegNr",
+    "oid":        "Ref.",
+    "account":      "Konto",
+    "oaccount":      "G. Konto",
+    "enterdate"  : "Eingabedatum",
+    "postingdate": "Gebucht am",
+    "transdate":  "Belegdatum",
+    "period":       "Periode",
+    "amount":       "Betrag",
+    "side" :       "S/H",
+    "text" :       "Text",
+    "month":        "Monat",
+    "year":        "Jahr",
+    "type":         "Typ",
+    "file":         "Datei",
+    "modelid"     : "Model"
+  },
+  "ijournal": {
+    "title": "Artikelkonto"
+  },
+  "balancesheet": {
+    "title":      "Bilanz",
+    "name":         "Bilanz",
+    "account":     "Konto",
+    "period":      "Periode",
+    "currency"    : "Währung",
+    "from"       :  "Von",
+    "to"        :  "Bis"
+  },
+
+  "login": {
+    "title"  :"Login",
+    "signIn":"Amnelden",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "forgotpwd": "Passwort vergessen?",
+    "signUp": "Bitte registrieren "
+  },
+  "firstname": "Vorname",
+  "firstname_constraint": "Der Vorname muss mindestens  2 Zeichen lang sein",
+  "lastname": "Nachname",
+  "lastname_constraint": "Der Namchname muss mindestens  2 Zeichen lang sein",
+
+  "title": "Willkommen zu react und react-i18next",
+  "description": {
+    "name":"Name",
+    "description":"Beschreibung",
+    "role":"Role",
+    "status":"Status" ,
+    "show_details":"Details anzeigen",
+    "to": "bis",
+    "part1": "Um loszulegen, ändere <1>src/App(DE).js</1> speicheren und neuladen.",
+    "part2": "Ändere die Sprachen zwischen deutsch und englisch mit Hilfe der beiden Schalter."
+  },
+  "user": {
+    "title": "Benutzer",
+    "userName": "Benutzername",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "role": "Role",
+    "menu": "Menü",
+    "email": "Email"
+  },
+  "toolBar":{
+    "reload":"Neuladen aller Belege ",
+    "duplicate":"Beleg kopieren",
+    "add":"Anlegen",
+    "addLine":"Neue Zeile anlegen",
+    "cancel":"Anlegen bzw. Aenderung abbrechen",
+    "void":"Beleg stornieren",
+    "save":"Beleg speichern",
+    "post":"Beleg buchen "
+  },
+  "menu": {
+    "purchasing": "Einkauf",
+    "sales": "Vertrieb",
+    "inventory": "Bestandsführung",
+    "favoris": "Favorit",
+    "payroll": "Gehaltsabrechnung",
+    "transactions": "Belege",
+    "salary":{
+      "item": "Komponenten des Gehalts"
+    },
+    "admin": "Verwaltung",
+    "article": "Artikel",
+    "articleGroup": "Artikelgruppe",
+    "asset": "Anlage",
+    "dashboard": "Dashboard",
+    "accounting": "Buchhaltung",
+    "journal": "Journal",
+    "ijournal": "Artikelkonto",
+    "pacb": "Salden",
+    "partner":  "Kontact",
+    "account": "Konten",
+    "accountGroup": "Kontengruppen ",
+    "accountClass": "Kontenklassen",
+    "bank": "Bank",
+    "quantityUnit": "Mengeneinheit",
+    "module": "Module",
+    "costcenter": "Kostenstelle",
+    "customer": "Kunden",
+    "employee": "MitarbeiterIn",
+    "supplier": "Lieferanten",
+    "store": "Lager",
+    "vat": "Mehrwertsteuer",
+    "login"  :"Login",
+    "company": "Mandant",
+    "user": "Benutzer",
+    "permission": "Berechtigung",
+    "fmodule": "Belegart",
+    "currency": "Währung",
+    "role": "Role",
+    "bankstatement": "Bankauszug",
+    "masterfiles": "Stammdaten",
+    "balancesheet": "Jahresabschluss",
+    "financials": "Belege",
+    "transaction": "Logistik",
+    "financials_stmt": "Jahresabschluss/GuV",
+    "payroll.tax.range": "Lohnsteuertabelle",
+    "room": "Zimmer",
+    "apartment": "Wohnung",
+    "realEstate": "Haus",
+    "closeAccountingPeriod": "Buchungsperiode abschliessen",
+    "createPayrollTransaction": "Gehaltsliste generieren",
+    "createDepreciationTransaction": "Abschreibungsbelege generieren"
+  },
+  "accountClass": {
+    "title":      "Kontenklassen"
+  },
+  "accountGroup": {
+    "title":      "Kontengruppen"
+  },
+  "quantityUnit": {
+    "title": "Mengeneinheit"
+  },
+  "closeAccountingPeriod": {
+    "title": "Buchungsperiode abschliessen",
+    "account": "Konto",
+    "close": "Close"
+  },
+  "createPayrollTransaction": {
+    "title": "Gehaltsliste generieren",
+    "generate": "Generieren"
+  },
+  "createDepreciationTransaction": {
+    "title": "Abschreibungsbelege generieren",
+    "generate": "Generieren"
+  },
+  "ccy": {
+    "title": "Währung"
+  }
+
+}

@@ -1,0 +1,32 @@
+.react-datepicker-wrapper {
+  width: 100% !important;
+  display: block !important;
+}
+
+.react-datepicker__input-container {
+  width: 80% !important;
+  display: block !important;
+}
+
+/* Optional: Also right-align the placeholder */
+.react-datepicker__input-container input::placeholder {
+  text-align: right;
+}
+
+/* Make datepicker input respect height */
+.react-datepicker__input-container input {
+  width: 80% !important;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  text-align: right !important;
+  height: var(--datepicker-height, 25px) !important;  /* ✅ Use CSS variable */
+}
+
+/* Optional: Adjust padding based on height */
+.react-datepicker__input-container input[style*="height: 25px"] {
+  padding: 2px 8px;
+}
+
+
