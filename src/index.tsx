@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import 'core-js'
 import App from './App'
 import store from './store'
+import {db, initDefaultData} from "./utils/db.ts";
 
 //console.log('env-config.js loaded?', window._env_);
 BigInt.prototype.toJSON = function () {
@@ -10,8 +11,12 @@ BigInt.prototype.toJSON = function () {
 };
 const rootElement = document.getElementById("app");
 if (!rootElement) throw new Error("Failed to find element with id 'app'");
-ReactDOM.createRoot(rootElement).render(
-  <Provider store={store}>
-    <App />
-  </Provider>
-)
+db.open().then(() => initDefaultData()).then(() => {
+  ReactDOM.createRoot(rootElement).render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  )
+})
+
+

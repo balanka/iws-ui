@@ -38,14 +38,15 @@ export default defineConfig({
     https: true,
     proxy: {
       '/api': {
-        target: 'https://192.168.178.102', // your Docker Nginx (HTTPS)
+        //target: 'https://192.168.178.102', // your Docker Nginx (HTTPS)
+        target: 'https://127.0.0.1', // your Docker Nginx (HTTPS)
         changeOrigin: true,
         secure: false,                    // accept self‑signed certificate
         rewrite: (path) => path.replace(/^\/api/, '/api'),
       },
     },
     hmr: {
-      host: 'localhost',
+      host: '127.0.0.1',
       allowedHosts:'mac',
     }
   },

@@ -1,6 +1,7 @@
 import { MASTERFILE } from './form/Menu'
 import './i18n'
 
+
 const dashboard = () =>import('./components/dashboard/Dashboard.tsx')
 const accountForm = ()  =>   import('./form/AccountForm.tsx')
 const companyForm = ()  =>   import('./form/CompanyForm.tsx')
@@ -28,7 +29,9 @@ const basicTreeTable = () => import('./form/Main')
 //const BasicTreeTable = () => import('./form/BasicTreeData')
 //const ImageEditorExample = () => import('./form/ImageEditorExample')
 //const weatherComponent = () => import('./form/WeatherComponent')
-//const SmartTableExternalDataExample = () => import('./form/SmartTableExternalDataExample')
+//const userTable = () => import('./form/UserTable')
+const smartTableColumnAndRowsGroupsExample = () => import('./form/SmartTableColumnAndRowsGroupsExample')
+//const mySmartTable =()=> import('./form/MySmartTable')
 
 
 const Login = ()   => import('./form/Login')
@@ -46,8 +49,8 @@ const routes = ():{path:string, name?:string, element?: ()=>Promise<any>}[] => [
   {
     path: MASTERFILE.createDepreciationTransaction,
     name: 'Generate depreciation transaction',
-    //element: SmartTableExternalDataExample,
-    element: masterfileForm,
+    element: smartTableColumnAndRowsGroupsExample,
+    //element: masterfileForm,
   },
   { path: MASTERFILE.article, name: 'Article', element: articleForm},
   { path: MASTERFILE.articleGroup, name: 'Article group', element: masterfileForm },
@@ -59,7 +62,7 @@ const routes = ():{path:string, name?:string, element?: ()=>Promise<any>}[] => [
   { path: MASTERFILE.user, name: 'Users', element: userForm },
   { path: MASTERFILE.vat, name: 'VAT', element: vatForm },
   { path: MASTERFILE.bank, name: 'Bank', element: masterfileForm },
-  { path: MASTERFILE.partner, name: 'Partner', element: partnerForm },
+  { path: MASTERFILE.contact, name: 'Contact', element: partnerForm },
   { path: MASTERFILE.currency, name: 'Currency', element: masterfileForm },
   { path: MASTERFILE.qty, name: 'Quantity unit', element: masterfileForm},
   { path: MASTERFILE.accountClass, name: 'Account class', element: masterfileForm},

@@ -12,14 +12,14 @@ export class AppDatabase extends Dexie {
       menu: 'ctx, id, name, title, state, modelid',
       companies: 'id, name',
       accounts: 'id, name, account, company, modelid',
-      company: 'id, modelid, company, name, description, enterdate, changedate, postingdate, street, zip, city, state, country, phone, email, taxCode, vatCode, currency, bankAcc, purchasingClearingAcc, salesClearingAcc, paymentClearingAcc, settlementClearingAcc, balanceSheetAcc, incomeStmtAcc, cashAcc, account, oaccount, accountName, oaccountName, pageHeaderText, headerText, pageFooterText, footerText, logoContent, logoName, contentType, partner, locale, fax'
+      company: 'id, modelid, company, name, description, enterdate, changedate, postingdate, street, zip, city, state, country, phone, email, taxCode, vatCode, currency, bankAcc, purchasingClearingAcc, salesClearingAcc, paymentClearingAcc, settlementClearingAcc, balanceSheetAcc, incomeStmtAcc, cashAcc, account, oaccount, accountName, oaccountName, pageHeaderText, headerText, pageFooterText, footerText, logoContent, logoName, contentType, contact, locale, fax'
     });
   }
 }
 
 export const db = new AppDatabase();
 // Initialize default data only once
-async function initDefaultData() {
+export async function initDefaultData() {
   // Check if companies table is empty
   const count = await db.companies.count();
   if (count === 0) {
@@ -75,7 +75,7 @@ async function initDefaultData() {
       logoContent: '',
       logoName: '',
       contentType: '',
-      partner: '',
+      contact: '',
       locale: '',
       fax: '',
       company: '',

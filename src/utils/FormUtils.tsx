@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {IFinancials, ITransaction} from "../Models.ts";
 import {NavigateFunction} from "react-router-dom";
 import iwsStore from "./Store.tsx";
-import {CRow} from "@coreui/react";
+import {CRow} from "@coreui/react-pro";
 
 
 export const getEnvVariable = (key:any, defaultValue = '') => {
@@ -14,12 +14,8 @@ export const getFiltered = <T extends { id: string | number | bigint }>(
   data: T[],
   filter: string[] = []
 ): T[] => {
-  if (!filter?.length) return data;
-
-  return data.filter(item => {
-    const idString = String(item.id);
-    return filter.some(filterValue => idString.startsWith(filterValue));
-  });
+  if (filter?.length===0) return data;
+  return data.filter(item =>  filter.some(filterValue => String(item.id).startsWith(filterValue)))
 };
 
 export const AgGridCheckbox =
@@ -39,9 +35,9 @@ export const AgGridCheckbox =
 }
 export const isLoaded = (modelid:number)=> iwsStore.getByModelId(modelid)&& iwsStore.getByModelId(modelid).length>0
 export const  checkIfStringStartsWith= (str:string, substrs:string[])=> {
-  const x = substrs ?? [].some(substr => str.startsWith(substr))
-  console.log('x', x)
-  return x//substrs ?? [].some(substr => str.startsWith(substr))
+  //const x = substrs ?? [].some(substr => str.startsWith(substr))
+ // console.log('x', x)
+  return substrs ?? [].some(substr => str.startsWith(substr))
 }
 // export function checkIfStringStartsWith(str:string, substrs:string[]) {
 //   return substrs??[].some(substr => str.startsWith(substr))
