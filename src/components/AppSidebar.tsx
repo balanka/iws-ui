@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { CSidebar, CSidebarBrand, CSidebarHeader, CSidebarNav } from '@coreui/react'
+import { CSidebar, CSidebarBrand, CSidebarHeader, CSidebarNav } from '@coreui/react-pro'
 import { AppSidebarNav } from './AppSidebarNav'
 import SimpleBar from 'simplebar-react'
 import Navigation from './Navigation'

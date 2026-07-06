@@ -1,5 +1,5 @@
 import { JSX, ReactNode } from 'react';
-import { CCol, CInputGroup } from '@coreui/react';
+import { CCol, CInputGroup } from '@coreui/react-pro';
 
 interface CoreUIFormRowProps {
   readonly label: ReactNode;

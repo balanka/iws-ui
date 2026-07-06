@@ -19,7 +19,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const height = 33
      const current_ =  module_.state
      const minHeight = 450
-     const maxHeight = 700
+     const maxHeight = 550
      const colDef:ColDef[]= masterfileColumnDefs(t)
    const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.realEstate)
      const safeBody = React.isValidElement(body) ? body : null;

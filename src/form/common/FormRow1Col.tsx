@@ -1,5 +1,5 @@
 import React, {JSX} from 'react'
-import {CCol, CInputGroup} from '@coreui/react'
+import {CCol, CInputGroup} from '@coreui/react-pro'
 import {FieldLabel, } from '../common'
 
 interface FormRow1ColProps {

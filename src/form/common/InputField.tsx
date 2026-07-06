@@ -1,5 +1,5 @@
 import {CSSProperties} from "react"
-import {CFormInput} from "@coreui/react"
+import {CFormInput} from "@coreui/react-pro"
 
 export const InputField = ({ fieldName, type, current, setCurrent, value, disabled, style, onChange, placeholder }:
                            { fieldName:string, type?:'text', current:any, setCurrent:(arg:any)=>void, value:any

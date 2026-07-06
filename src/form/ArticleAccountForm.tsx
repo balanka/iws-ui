@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import { CCol, CInputGroup } from '@coreui/react';
+import { CCol, CInputGroup } from '@coreui/react-pro';
 import { FieldLabel, FormMasterfileXComboBox } from './common';
 import { styles } from './FormsProps';
 import { ArticleAcccountProps } from '../Props';

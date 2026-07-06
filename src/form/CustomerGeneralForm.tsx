@@ -1,14 +1,15 @@
-import { JSX } from 'react';
-import { CCol, CInputGroup } from '@coreui/react'
+import React, { JSX } from 'react';
+import { CCol, CInputGroup } from '@coreui/react-pro'
 import {DatePickerField, InputField, TextareaField,  MasterfileXComboBox} from './common'
 import { styles } from './FormsProps'
 import { CustomerGeneralFormProps } from '../Props'
-import {initCurrency} from "./Menu.tsx";
+import {initContact, initCurrency} from "./Menu.tsx";
 import { IBusinespartner, IMasterfile} from "../Models.ts";
 
 export const CustomerGeneralForm = ({
                                       collapse = true,
                                       ccyData,
+                                      contactData,
                                       current,
                                       setCurrent,
                                       disable,
@@ -16,18 +17,19 @@ export const CustomerGeneralForm = ({
                                       height = 28
                                     }: CustomerGeneralFormProps & { collapse?: boolean; height?: number }): JSX.Element | null => {
   if (!collapse) return null;
-
+  //console.log('contactData', contactData)
   const inputStyle = { height: height - 3, width: '100%', fontSize: '0.875rem' };
   const textareaStyle = { width: '100%', minHeight: 60, fontSize: '0.875rem' };
   const rowMargin = { marginBottom: '6px' };
   const Label = ({ children, w = 100 }: { children: React.ReactNode; w?: number }) =>
     <div style={{ minWidth: w }}>{children}</div>
 
-  const accComboBox = (data:IMasterfile[], initData:IMasterfile, height:number, fieldName: keyof IBusinespartner,)=> {
+  const accComboBox = (data:IMasterfile[], initData:IMasterfile, height:number
+                       , fieldName: keyof IBusinespartner, styles?: React.CSSProperties)=> {
     const initAccx = { id: String(initData.id), name: initData.name };
     const acc_data = data.map((m: IMasterfile) => ({id: `${m.id}`, name: m.name}));
     return MasterfileXComboBox<IBusinespartner, { id: string, name: string }>({
-      current, setCurrent, data: acc_data, fieldName: fieldName, defaultValue:initAccx, height:height,  zIndex: 10, styles:inputStyle, disable
+      current, setCurrent, data: acc_data, fieldName: fieldName, defaultValue:initAccx, height:height,  zIndex: 10, styles:styles, disable
     })
   }
   return (
@@ -126,7 +128,10 @@ export const CustomerGeneralForm = ({
           />
         </CCol>
         <CCol sm={2} style={{ paddingLeft: 10, paddingRight: 40 }}><Label>{t('common.currency')}</Label></CCol>
-        <CCol  md="2" style={{paddingLeft: 45 }}>{accComboBox(ccyData, initCurrency, height-8, "currency")}</CCol>
+        <CCol  md="2" style={{paddingLeft: 45}}>
+          {accComboBox(ccyData, initCurrency, height-8, "currency", inputStyle)}
+          {accComboBox(contactData, initContact, height-8, "contact", inputStyle)}
+        </CCol>
       </CInputGroup>
     </CInputGroup>
   )

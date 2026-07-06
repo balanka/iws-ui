@@ -2,7 +2,7 @@ import React, { CSSProperties, Dispatch } from "react";
 import { TFunction } from "i18next";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { CBadge, CHeaderToggler, CInputGroup } from "@coreui/react";
+import { CBadge, CHeaderToggler, CInputGroup } from "@coreui/react-pro";
 import { IoMdMenu } from "react-icons/io";
 import { FormButton } from './common'
 

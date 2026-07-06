@@ -5,18 +5,16 @@ import {
   ICustomer,
   IEmployee, IFinancials, IFmodule, ILineFinancials, ILineTransaction, ILoggingContext,
   IMasterfile,
-  IMasterfile2, IPartner, IProfile, IRole,
+  IMasterfile2, IContact, IProfile, IRole,
   IStore,
   ISupplier, ITransaction, IUser,
   IVat, IWSLine, IWSModel, IWSTransaction
 } from "./Models.ts";
 import {type i18n, TFunction} from "i18next";
 import React, {CSSProperties, Dispatch, ReactNode, SetStateAction} from "react";
-import {ColDef, GridApi, GridReadyEvent} from "ag-grid-community";
+import {ColDef, GridApi, GridOptions, GridReadyEvent} from "ag-grid-community";
 // @ts-ignore
 import type {RowSelectedEvent} from "ag-grid-community/dist/types/src/events";
-
-import {AgGridReact} from "ag-grid-react";
 import {NavigateFunction} from "react-router-dom";
 import './i18n.tsx'
 import I18n from "./i18n.tsx";
@@ -56,6 +54,7 @@ export interface CustomerTabProps {
     , bankData:IMasterfile[]
     , vatData: IVat[]
     , ccyData: IMasterfile[]
+    , contactData: IContact[]
     , height: number
     , disable: boolean
     , zIndex:number
@@ -76,6 +75,7 @@ export interface CompanyTabProps {
     , bankData:IMasterfile[]
     , vatData: IVat[]
     , ccyData: IMasterfile[]
+   , contactData: IContact[]
     , height: number
     , disable: boolean
     , zIndex:number
@@ -215,7 +215,7 @@ export interface MasterfileProps<A extends IMasterfile> {
   disable: boolean,
   height: number
 }
-export interface PartnerProps<A extends IPartner> extends MasterfileProps<A> {
+export interface PartnerProps<A extends IContact> extends MasterfileProps<A> {
   collapse: boolean,
   current: A,
   setCurrent: (arg: any) => void,
@@ -274,39 +274,40 @@ export interface CustomerGeneralFormProps {
     collapse:boolean,
     current: IBusinespartner,
     setCurrent: (arg: IBusinespartner) => void,
-    ccyData:IMasterfile[]
+    ccyData:IMasterfile[],
+    contactData:IContact[],
     disable: boolean,
     t: TFunction<'transalation', undefined>,
      height:number
 }
 export type ILine = ILineTransaction|ILineFinancials
-export interface FinancialsDetailsTabProps<T extends IFinancials, L extends  ILine> {
-    transaction: T,
-    setTransaction:(arg:T)=>void
-    currentLineFinancials:L,
-    setCurrentLineFinancials:Dispatch<SetStateAction<L>>,
-    accData: IAccount[],
-    accountFilter:string[],
-    oaccountFilter:string[],
-    t: TFunction<'transalation', undefined>,
-    zIndex:number,
-    onGridReady:(params: GridReadyEvent)=>void,
-    gridRef?:React.RefObject<AgGridReact>
-}
-
-export interface FinancialsDetailsFormProps<T extends IWSTransaction<L>, L extends  ILineFinancials> {
-    transaction: T,
-    setTransaction:(arg:T)=>void
-    currentLineFinancials:L,
-    setCurrentLineFinancials:Dispatch<SetStateAction<L>>,
-    accData: IAccount[],
-    accountFilter:string[],
-    oaccountFilter:string[],
-    t: TFunction<'transalation', undefined>,
-    disable: boolean,
-    height?: number,
-    zIndex:number,
-}
+// export interface FinancialsDetailsTabProps<T extends IFinancials, L extends  ILine> {
+//     transaction: T,
+//     setTransaction:(arg:T)=>void
+//     currentLineFinancials:L,
+//     setCurrentLineFinancials:Dispatch<SetStateAction<L>>,
+//     accData: IAccount[],
+//     accountFilter:string[],
+//     oaccountFilter:string[],
+//     t: TFunction<'transalation', undefined>,
+//     zIndex:number,
+//     onGridReady:(params: GridReadyEvent)=>void,
+//     gridRef?:React.RefObject<AgGridReact>
+// }
+//
+// export interface FinancialsDetailsFormProps<T extends IWSTransaction<L>, L extends  ILineFinancials> {
+//     transaction: T,
+//     setTransaction:(arg:T)=>void
+//     currentLineFinancials:L,
+//     setCurrentLineFinancials:Dispatch<SetStateAction<L>>,
+//     accData: IAccount[],
+//     accountFilter:string[],
+//     oaccountFilter:string[],
+//     t: TFunction<'transalation', undefined>,
+//     disable: boolean,
+//     height?: number,
+//     zIndex:number,
+// }
 
 export interface TransactionDetailsTabProps <T extends ITransaction, L extends ILineTransaction> {
     transaction: T,
@@ -370,9 +371,10 @@ export interface UserFormProps { collapse: boolean, current:IUser, setCurrent:(a
 export  interface TransactionToolBarProps<A extends IWSTransaction<L>, L extends  IWSLine>{
   title:string, templateName: ()=> string
   , saveProps:SaveProps, collapse:boolean
-  ,  initAdd:()=>void, onNewLine:()=>void, onDeleteLine:(arg:any)=>void
+  , initAdd:()=>void, onNewLine:()=>void, onDeleteLine:(arg:any)=>void
   , submitCancel:(e:any)=>void, submitEdit: (arg:any)=>void
   , getData:()=>any
+  , getData2 :()=> Promise<any>
   , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
   , toggle:()=>void, toggleTable:()=>void, submitPost:(arg:any)=>void,  reload:()=>void
   , handleLanguageChange: (arg:any)=>void
@@ -473,8 +475,6 @@ export interface UseCustomerFormResult<T extends IBusinespartner> {
 
 export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends  IWSLine> {
     language:string
-  //, accData?:IAccount[]
-  //, setAccData:Dispatch<SetStateAction<IAccount[]>>
   , fmodule:IFmodule[]
   , setFmodule:Dispatch<SetStateAction<IFmodule[]>>
   , current:T
@@ -499,9 +499,9 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , modelid:number
   , isFetching:boolean
   , setIsFetching:Dispatch<SetStateAction<boolean>>
-  , gridOptions:(columnDefs:        (t:TFunction<'transalation', undefined>) =>ColDef[]
+  , gridOptions:(columnDefs:(t:TFunction<'transalation', undefined>) =>ColDef[]
                   , lineColumnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[]
-                  , t:TFunction<'transalation', undefined>) =>ColDef[]
+                  , t:TFunction<'transalation', undefined>) =>GridOptions<T>
 }
 export interface UseJFormResult<T> {
   profile: IProfile

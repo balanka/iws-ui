@@ -1,5 +1,5 @@
 import { JSX } from 'react'
-import { CRow, CCol, CContainer } from '@coreui/react'
+import { CRow, CCol, CContainer } from '@coreui/react-pro'
 import { DatePickerField, InputField, TextareaField,  BooleanField, FormMasterfileXComboBox } from './common'
 import { styles } from './FormsProps'
 import { AccountMainProps } from '../Props'

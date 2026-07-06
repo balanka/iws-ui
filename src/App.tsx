@@ -1,7 +1,7 @@
 import React, {Suspense, useEffect} from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import '../public/scss/style.scss'
-import {CSpinner} from "@coreui/react";
+import {CSpinner} from "@coreui/react-pro";
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./components/DefaultLayout'))

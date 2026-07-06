@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { CCallout, CLink } from '@coreui/react'
+import { CCallout, CLink } from '@coreui/react-pro'
 const DocsCallout = ( {content, href, name}:
                       { content: string, href: string, name: string}) => {
   const plural = name.slice(-1) === 's'

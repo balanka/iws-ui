@@ -1,5 +1,5 @@
 import React from 'react';
-import { CRow, CCol, CFormLabel } from '@coreui/react'
+import { CRow, CCol, CFormLabel } from '@coreui/react-pro'
 import { TFunction } from 'i18next'
 import ComboBox from './ComboBox.tsx'
 import { FromPeriod } from './common'

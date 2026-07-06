@@ -2,7 +2,7 @@ import { JSX } from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import { useSelector } from 'react-redux';
-import {CBadge, CFormSelect, CHeaderToggler, CInputGroup, CTooltip} from '@coreui/react';
+import {CBadge, CFormSelect, CHeaderToggler, CInputGroup, CTooltip} from '@coreui/react-pro';
 import { IoMdMenu } from 'react-icons/io';
 import { languages } from './languages';
 
@@ -20,6 +20,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import PrintOutlined from '@mui/icons-material/PrintOutlined';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import LocalPrintshopSharpIcon from '@mui/icons-material/LocalPrintshopSharp';
 import {TransactionToolBarProps} from "../Props.ts";
 import {IFinancials, ILineFinancials, ILineTransaction, ITransaction} from "../Models.ts";
 
@@ -34,7 +35,7 @@ const ToolbarButton = ({ tooltip, onClick, disabled, icon, zIndex }: any) => (
 export const FinancialsFormHead = ({
                                      title, collapse, templateName, initAdd, onNewLine, onDeleteLine, submitCancel, submitEdit,
                                      toggle, toggleTable, submitPost, reload, handleLanguageChange, navigate, language,
-                                     dispatch, logout, current, t, submitPrintPreview, getData, zIndex
+                                     dispatch, logout, current, t, submitPrintPreview, getData,  getData2, zIndex
                                    }: TransactionToolBarProps<ITransaction|IFinancials, ILineTransaction|ILineFinancials>): JSX.Element => {
   const UpDownIcon = collapse ? <KeyboardDoubleArrowUpIcon fontSize="small" /> : <KeyboardDoubleArrowDownIcon fontSize="small" />;
   const sidebarShow = useSelector((state: any) => state.sidebarShow);
@@ -54,13 +55,14 @@ export const FinancialsFormHead = ({
         </CHeaderToggler>
         <ToolbarButton tooltip={t('toolTip.transaction.removeLine')} onClick={onDeleteLine} disabled={current?.posted} icon={<RemoveCircleOutlineIcon fontSize="small" />} zIndex={zIndex} />
         <ToolbarButton tooltip={t('toolTip.transaction.addLine')} onClick={onNewLine} disabled={current?.posted} icon={<AddCircleOutlineIcon fontSize="small" />} zIndex={zIndex} />
-        <ToolbarButton tooltip={t('toolTip.common.add')} onClick={initAdd} icon={<AddBoxIcon fontSize="small" />}   zIndex={zIndex}/>
+        <ToolbarButton tooltip={t('toolTip.common.add')} onClick={initAdd} icon={<AddBoxIcon fontSize="small" />}  disabled={false} zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.save')} onClick={submitEdit} disabled={current?.posted} icon={<SaveIcon fontSize="small" />}  zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.canceln')} onClick={submitCancel} disabled={current?.posted} icon={<CancelIcon fontSize="small" />}  zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.transaction.post')} onClick={submitPost} disabled={current?.posted} icon={<CheckCircleOutlineIcon fontSize="small" />}  zIndex={zIndex} />
-        <ToolbarButton tooltip={t('toolTip.common.print')} onClick={()=>submitPrintPreview(current, templateName, getData)} icon={<PrintOutlined fontSize="small" />}  zIndex={zIndex}/>
+        <ToolbarButton tooltip={t('toolTip.common.print')} onClick={()=>submitPrintPreview(current, templateName, getData)} icon={<PrintOutlined fontSize="small" />} disabled={false} zIndex={zIndex}/>
+        <ToolbarButton tooltip={t('toolTip.common.print')} onClick={()=>submitPrintPreview(current, templateName, getData2)} icon={<LocalPrintshopSharpIcon fontSize="small" />} disabled={false} zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.export')} onClick={() => {}} icon={<ArrowCircleDownIcon fontSize="small" />}  zIndex={zIndex}/>
-        <ToolbarButton tooltip={t('toolTip.common.load')} onClick={reload} icon={<FilterListIcon fontSize="small" />}  zIndex={zIndex}/>
+        <ToolbarButton tooltip={t('toolTip.common.load')} onClick={reload} icon={<FilterListIcon fontSize="small" />}   zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.table')} onClick={toggleTable} icon={<ListIcon fontSize="small" />}  zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.form')} onClick={toggle} icon={UpDownIcon} />
         <ToolbarButton tooltip={t('toolTip.common.exit')} onClick={() => logout(navigate)} icon={<ExitToAppIcon fontSize="small" />}  zIndex={zIndex}/>

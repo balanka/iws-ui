@@ -9,6 +9,7 @@ export interface IAccount  extends IMasterfile{
   currency: string,
   subAccounts: IAccount[]
 }
+export type ReminderBalance ={ id:string, period: number, balance:number, modelid:number }
 
 export type IAccount2 = Omit<IAccount, "subAccounts">;
 export interface  IWSModel {
@@ -17,14 +18,16 @@ export interface  IWSModel {
   company:string
 }
 export interface  IWSTransaction <L extends IWSLine>extends IWSModel {
-  id1:string|bigint,
+  contact:string,
+  oid:bigint,
+  account: string,
   transdate: Date,
   postingdate:Date,
   enterdate:Date,
   period: number,
   posted: boolean,
   text: string,
-  footText: string,
+  footText?: string,
   lines: L []
 }
 export interface IMasterfile  extends IWSModel {
@@ -100,14 +103,14 @@ export interface IJournal {
   month: number,
   year: number,
   company: string,
-  typeJournal:number,
+  //typeJournal:number,
   file_content: string,
   modelid: number,
 }
 
 export interface InventoryJournal {
     id:bigint,
-    id1:bigint,
+    contact:String,
     transid:bigint,
     oid:string,
     store: string,
@@ -140,9 +143,10 @@ export interface IAddress {
   phone:string,
   email:string,
   }
-export interface IPartner  extends IMasterfile, IAddress {}
+export interface IContact extends IMasterfile, IAddress {}
 
-export interface IBusinespartner  extends IPartner, IStockAccount {
+export interface IBusinespartner  extends IContact, IStockAccount {
+  contact:string,
   taxCode: string,
   vatCode:string,
   currency?:string,
@@ -184,7 +188,6 @@ export interface ICompany  extends IBusinespartner {
     logoContent: string,
     logoName: string,
     contentType:string,
-    partner: string,
     fax: string,
     locale: string,
 }
@@ -219,6 +222,7 @@ export interface  IWSLine  {
   duedate: Date,
   text: string,
   company: string
+  modelid: number,
 }
 export interface ILineTransaction extends IWSLine {
   article: string,
@@ -232,10 +236,8 @@ export interface ILineTransaction extends IWSLine {
   total:  number,
 }
 export interface ITransaction extends IWSTransaction<ILineTransaction> {
-  oid: bigint,
-  id1: bigint,
   store: string,
-  account: string,
+  //account: string,
   lines: ILineTransaction[],
   vat:number,
   net:number,
@@ -261,11 +263,9 @@ export interface ILineFinancials extends IWSLine {
   amount: number,
 }
 export interface IFinancials extends  IWSTransaction<ILineFinancials> {
-  oid:bigint,
-  id1:bigint,
   costcenter: string,
-  account: string,
-  typeJournal?: number,
+  //account: string,
+  //typeJournal?: number,
   fileContent?: number,
   lines: ILineFinancials [],
   //total ():number

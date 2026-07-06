@@ -1,7 +1,7 @@
 import { IJournalProps } from '../Props.ts'
 import { TFunction } from "i18next";
 import { IArticle, IStore } from '../Models.ts'
-import {CRow, CCol, CInputGroup, CInputGroupText} from '@coreui/react';
+import {CRow, CCol, CInputGroup, CInputGroupText} from '@coreui/react-pro';
 import ComboBox from './ComboBox.tsx'
 import { initArticle, initStore } from './Menu.tsx'
 import { sortById } from '../utils/Utils.ts'

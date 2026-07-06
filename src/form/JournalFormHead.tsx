@@ -1,5 +1,5 @@
 import React, {CSSProperties, MouseEventHandler} from 'react';
-import {CHeaderToggler, CBadge, CInputGroup, CTooltip, CButton, CFormSelect} from '@coreui/react';
+import {CHeaderToggler, CBadge, CInputGroup, CTooltip, CButton, CFormSelect} from '@coreui/react-pro';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { IoMdMenu } from 'react-icons/io';

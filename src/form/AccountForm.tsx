@@ -10,7 +10,7 @@ import {accountColumnDefs} from '../ColumnsDefs.ts'
 import {IAccount} from '../Models.ts'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
 import useForm from './UseForm.ts'
-import {CInputGroup} from "@coreui/react";
+import {CInputGroup} from "@coreui/react-pro";
 import Login from "./Login.tsx";
 import React from "react";
 

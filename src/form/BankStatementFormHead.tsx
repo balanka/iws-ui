@@ -1,4 +1,4 @@
-import { CHeaderToggler, CBadge, CFormSelect, CTooltip, CInputGroup } from '@coreui/react'
+import { CHeaderToggler, CBadge, CFormSelect, CTooltip, CInputGroup } from '@coreui/react-pro'
 import { useSelector } from 'react-redux'
 import IconButton from '@mui/material/IconButton'
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp'

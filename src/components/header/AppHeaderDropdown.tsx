@@ -7,7 +7,7 @@ import {
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
-} from '@coreui/react'
+} from '@coreui/react-pro'
 import {
   cilBell,
   cilCreditCard,

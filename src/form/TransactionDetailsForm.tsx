@@ -1,5 +1,5 @@
 import React from 'react'
-import { CRow, CCol, CContainer } from '@coreui/react'
+import { CRow, CCol, CContainer } from '@coreui/react-pro'
 import ComboBox from './ComboBox'
 import { InputField, TextareaField, DatePickerField } from './common'
 import { ILineTransaction, IArticle, ITransaction } from '../Models'
@@ -26,7 +26,6 @@ const setTransactionR = (
     transaction.lines[idx] = {...line, transid:line.id >BigInt(0)?BigInt(-1):line.transid}
   }
   setCurrent({...line})
-  // console.log('transactionX', transaction)
   setTransaction({ ...transaction })
 
 }
@@ -55,7 +54,8 @@ export const TransactionDetailsForm = ({
   // Find current article and vat
   const currentArticle = articleData?.find((acc: { id: any }) => acc.id === currentLineTransaction.article) ?? initArticle
   const currentVat = vatData?.find((vat: { id: any }) => vat.id === currentLineTransaction.vatCode) ?? initVat
-
+  console.log(' currentArticle ', currentArticle)
+  console.log(' vat ', currentVat)
   return (
     <CContainer fluid className="p-0">
       {/* Row 1: Article & Quantity */}
@@ -126,14 +126,17 @@ export const TransactionDetailsForm = ({
           <ComboBox
             style={styles}
             disable={disable}
-            key={`vat-${currentLineTransaction?.vatCode || 'empty'}`}
+            key = 'vatCode'
+            //key={`vat-${currentLineTransaction?.vatCode || 'empty'}`}
             value={{ value: currentVat?.id || '', label: currentVat ? `${currentVat.id} ${currentVat.name}` : '' }}
             onChange={(value: any) => {
               const vat = vatData?.find((vat: { id: any }) => vat.id === value) ?? initVat
+              console.log(' vat-', vat)
               const netAmount =  currentLineTransaction.quantity * currentLineTransaction.price
               const vatAmount = (vat?.percent ?? 0.0) * netAmount
               const currentx = { ...currentLineTransaction, vatCode: value, vat: vatAmount, net:netAmount
                 , total:netAmount+vatAmount, company:transaction.company }
+              console.log(' currentx', currentx)
               setCurrentLineTransaction(currentx)
               setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
             }}

@@ -12,7 +12,7 @@ import {PartnerColumnDefs} from '../ColumnsDefs.ts'
 import useForm from './UseForm.ts'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
 import {styles} from './BasicTreeTableProps.tsx'
-import {CInputGroup} from "@coreui/react";
+import {CInputGroup} from "@coreui/react-pro";
 import React from "react";
 import Login from "./Login.tsx";
 
@@ -24,9 +24,9 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const height = 28
      const current_ =  module_.state
      const minHeight = 450
-     const maxHeight = 700
+     const maxHeight = 550
      const colDef:ColDef[]= PartnerColumnDefs(t)
-     const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm(current_,  colDef, MASTERFILE.partner)
+     const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm(current_,  colDef, MASTERFILE.contact)
     const safeBody = React.isValidElement(body) ? body : null
     const mainForm = PartnerMainForm ({collapse:state.collapse,  current:current, setCurrent:setCurrent
      , disable:disable, t:t, height:height})

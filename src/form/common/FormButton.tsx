@@ -1,5 +1,5 @@
 import { CSSProperties,  MouseEventHandler } from "react";
-import { CButton, CTooltip} from "@coreui/react";
+import { CButton, CTooltip} from "@coreui/react-pro";
 import IconButton from "@mui/material/IconButton";
 
 

@@ -1,7 +1,7 @@
 import {
-    AllCommunityModule, CellValueChangedEvent,
-    ClientSideRowModelModule, ColDef, GetRowIdParams, GridReadyEvent,
-    ModuleRegistry, RowApiModule, themeQuartz,
+  AllCommunityModule, CellValueChangedEvent,
+  ClientSideRowModelModule, ColDef, GetRowIdParams, GridReadyEvent,
+  ModuleRegistry, RowApiModule, SelectionChangedEvent, themeQuartz,
 } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
@@ -169,11 +169,12 @@ interface Props <A>  {
     columnDefs: ColDef[],
     defaultColDef?:ColDef,
     onRowSelected: (event: RowSelectedEvent<A, any>) => void,
+    onSelectionChanged?: (event: SelectionChangedEvent<A, any> ) => void,
     onCellValueChanged?: (event: CellValueChangedEvent<A, any>) => void,
     gridOptions?: GridOptions<A>,
     onGridReady?:(params: GridReadyEvent)=>void,
     rowData: A[],
-    gridRef?:React.RefObject<AgGridReact>,
+    gridRef?:React.RefObject<AgGridReact<any>|null>,
     pagination?:boolean
     autoGroupColumnDef?:any,
     getRowId?: (params:GetRowIdParams<any, any>)=>string|null
@@ -272,13 +273,16 @@ export const RightGrid: FC<Props<IUserRight>> = ({ columnDefs, defaultColDef, on
         animateRows={false}
     />
  export const PeriodicAccountBalanceGrid: FC<Props<IPeriodicAccountBalance2>> = ({ columnDefs, defaultColDef
-                         , onRowSelected, gridOptions, rowData }:Props<IPeriodicAccountBalance2>) => {
+                         , onRowSelected, onSelectionChanged, gridOptions, gridRef, rowData }:Props<IPeriodicAccountBalance2>) => {
    // @ts-ignore
    const gridOptions_ = {...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
      , paginationPageSize: 20, paginationPageSizeSelector: [20, 50, 80]}
    return (< AgGridReact
    theme = {pacTheme}
+   ref = {gridRef}
    onRowSelected = {onRowSelected}
+   rowSelection="multiple"
+   onSelectionChanged={onSelectionChanged}
    // @ts-ignore
    gridOptions = {gridOptions_}
    rowData = {rowData}

@@ -14,12 +14,13 @@ import {styles} from "./BasicTreeTableProps.tsx";
 
 const CustomerTabs  = ({ collapse, current, setCurrent
                            , currentBankAccount, setCurrentBankAccount, token, modifyUrl, t
-                           , locale, data, accData, bankData, vatData, ccyData, height, disable, zIndex
+                           , locale, data, accData, bankData, vatData, ccyData, contactData, height, disable, zIndex
                            , onGridReady
                        }: CustomerTabProps) => {
     const props: CustomerTabProps = {collapse,
         current, setCurrent, currentBankAccount, setCurrentBankAccount
-        , token, modifyUrl, t, locale, data, bankData, accData, vatData, ccyData, height, disable, zIndex, onGridReady
+        , token, modifyUrl, t, locale, data, bankData, accData, vatData, ccyData, contactData, height, disable
+      , zIndex, onGridReady
     }
 
     const addressProps: AddressProps = {current, setCurrent, t, disable, height: height}

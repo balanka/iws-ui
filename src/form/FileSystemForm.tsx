@@ -1,5 +1,5 @@
 import React from 'react'
-import { CRow, CCol, CContainer } from '@coreui/react'
+import { CRow, CCol, CContainer } from '@coreui/react-pro'
 import { InputField } from './common'
 import { TFunction } from 'i18next'
 

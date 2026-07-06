@@ -1,12 +1,12 @@
 import  {JSX, Dispatch, SetStateAction} from 'react'
-import {CCol, CContainer, CInputGroup} from '@coreui/react'
+import {CCol, CContainer, CInputGroup} from '@coreui/react-pro'
 import { BooleanField, InputField, DatePickerField, TextareaField, FormMasterfileXComboBox, CurrencyField,
   FromTransactionComboBox, FormMasterfileComboBox2,
 } from './common'
 import {  styles } from './FormsProps'
 import {IFinancials, IMasterfile, IAccount, IFmodule, ILineFinancials } from '../Models'
 import { TFunction } from 'i18next'
-import {initCc, initfModule } from './Menu'
+import {initCc, initContact, initfModule} from './Menu'
 import {FormRow, Label, toOption} from '../utils/FormUtils'
 import {isArrayAndNotEmpty, sortById} from '../utils/Utils'
 import ComboBox from './ComboBox'
@@ -18,6 +18,7 @@ interface FinancialsMainFormProps {
   readonly t: TFunction<'translation', undefined>;
   readonly storeData: IMasterfile[];
   readonly accData: IAccount[];
+  readonly contactData?: IMasterfile[];
   readonly modules: IFmodule[];
   readonly copyFromTransaction: IFinancials[];
   readonly handleModuleChange: (value: any) => void;
@@ -38,7 +39,6 @@ const setTransactionF = (transaction: IFinancials
   if (idx !== undefined && idx !== -1) {
     const updatedLines = [...transaction.lines]
     updatedLines[idx] = { ...line, transid:line.id >BigInt(0)?BigInt(-1):line.transid }
-    console.log('updatedLines', updatedLines)
     setTransaction({ ...transaction, lines: updatedLines })
   } else {
     // Add new line
@@ -54,6 +54,7 @@ export const FinancialsMainForm = ({
                                      t,
                                      storeData,
                                      accData,
+                                     contactData,
                                      modules,
                                      copyFromTransaction,
                                      handleModuleChange,
@@ -68,10 +69,11 @@ export const FinancialsMainForm = ({
                                      currency
                                    }: FinancialsMainFormProps): JSX.Element | null => {
   if (!collapse) return null;
-  console.log('storeData', storeData)
-  console.log('AccData', accData)
+  //console.log('storeData', storeData)
+  //console.log('AccData', accData)
+  console.log('contactData', contactData)
   console.log('currentLineFinancials', currentLineFinancials)
-  const currentx: IFinancials =  current?? current
+  const currentx: IFinancials =   current
   let currentLine = isArrayAndNotEmpty(currentx?.lines)? currentx?.lines[0]:currentLineFinancials
   currentLine = (currentx?.lines?.length===1)?currentLine:currentLineFinancials
   console.log('currentLine', currentLine)
@@ -94,6 +96,17 @@ export const FinancialsMainForm = ({
            ${currentModule?.name ?? ''}` }} onChange={handleModuleChange} values={modules.slice().sort(sortById).map(toOption)}
                     key="moduleComboBox" height ={height-5}
                     zIndex={99999} />
+        </CCol>
+        <CCol sm={4} className="d-flex gap-2 ">
+          <Label>{t('common.contact')}</Label>
+          <FormMasterfileXComboBox key="contactComboBox"
+                                   fieldName="contact"
+                                   current={currentx}
+                                   setCurrent={setCurrent}
+                                   data={contactData??[]}
+                                   defaultValue={initContact}
+                                   zIndex={zIndex}
+                                   disable={currentx.posted} styles={inputStyle} fontSize={10} height ={height-10}/>
         </CCol>
       </FormRow>
       <FormRow height={height}>
@@ -138,7 +151,7 @@ export const FinancialsMainForm = ({
             data={storeData}
             defaultValue={initCc}
             zIndex={zIndex}
-            disable={currentx.posted} styles={inputStyle} fontSize={12} height ={height-10}/>
+            disable={currentx.posted} styles={inputStyle} fontSize={10} height ={height-10}/>
         </CCol>
         <CCol sm={4} className="d-flex gap-2">
           <Label>{t('financials.line.duedate')}</Label>
@@ -215,7 +228,6 @@ export const FinancialsMainForm = ({
         </CCol>
         <CCol sm={4} className="d-flex gap-2">
           <Label>{t('financials.line.amount')}</Label>
-          <div style={{ minWidth:'60%',  width:'80%'}}>
           <CurrencyField
             value={currentLine?.amount}
             locale={locale}
@@ -231,8 +243,7 @@ export const FinancialsMainForm = ({
               setTransactionF(currentx, setCurrent, currentLine, setCurrentLineFinancials)
             }}
             disabled={currentx.posted}
-            style={{...currencyStyle, fontSize: 12, width: '65%'}}/>
-          </div>
+            style={{...currencyStyle, paddingLeft:5, fontSize: 12, fontWeight: 'bold', width: '65%'}}/>
         </CCol>
       </FormRow>
 

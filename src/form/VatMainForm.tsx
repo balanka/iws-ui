@@ -1,5 +1,5 @@
 import {JSX } from 'react';
-import { CCol, CInputGroup } from '@coreui/react';
+import { CCol, CInputGroup } from '@coreui/react-pro';
 import { FormMasterfileXComboBox, DatePickerField, InputField, TextareaField, FieldLabel } from './common';
 import { styles } from './FormsProps';
 import { initAcc } from './Menu';
@@ -20,7 +20,8 @@ export const VatMainForm = ({
                             }: VatMainFormProps): JSX.Element => {
   const s = { height: height - 3, width: '100%', fontSize: '0.875rem' };
   const rm = { marginBottom: '6px' };
-
+console.log('accData', accData);
+  console.log('accDatap[0]', accData[0]);
   return (
     <div style={{ ...styles.outer, paddingBottom: 10, width:'100%' }}>
       <CInputGroup style={{ height, ...rm }}>

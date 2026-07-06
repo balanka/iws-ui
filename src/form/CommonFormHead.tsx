@@ -1,5 +1,5 @@
 import { JSX } from 'react'
-import {CHeaderToggler, CBadge, CFormSelect, CTooltip, CInputGroup} from '@coreui/react'
+import {CHeaderToggler, CBadge, CFormSelect, CTooltip, CInputGroup} from '@coreui/react-pro'
 import { TFunction } from 'i18next'
 import { NavigateFunction } from 'react-router-dom'
 import { Dispatch } from 'redux'

@@ -10,7 +10,7 @@ import {
   CWidgetStatsC,
   CWidgetStatsE,
   CWidgetStatsF,
-} from '@coreui/react'
+} from '@coreui/react-pro'
 import { getStyle } from '@coreui/utils'
 import CIcon from '@coreui/icons-react'
 import {
@@ -27,11 +27,11 @@ import {
   cilUser,
   cilUserFollow,
 } from '@coreui/icons'
-import { CChartBar, CChartLine } from '@coreui/react-chartjs'
 import { DocsExample } from '../DocsExample'
 
 import WidgetsBrand from './WidgetsBrand'
 import WidgetsDropdown from './WidgetsDropdown'
+import {CChartBar, CChartLine} from "@coreui/react-chartjs"
 
 const Widgets = () => {
   const random = (min:number, max:number) => Math.floor(Math.random() * (max - min + 1) + min)

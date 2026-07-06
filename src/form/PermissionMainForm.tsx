@@ -1,5 +1,5 @@
 import React from 'react'
-import { CRow, CCol } from '@coreui/react'
+import { CRow, CCol } from '@coreui/react-pro'
 import { FieldLabel, InputField } from './common'
 import { MasterfileProps } from '../Props'
 import { IPermission } from '../Models'

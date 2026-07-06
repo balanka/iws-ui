@@ -3,7 +3,7 @@ import { initAcc, initVat, initCc } from './Menu';
 import {FormRow1Col } from './common';
 import {FormMasterfileXComboBox} from "./common";
 import {styles} from "./FormsProps.tsx";
-import { CInputGroup } from "@coreui/react";
+import { CInputGroup } from "@coreui/react-pro";
 import {CustomerAccountMainFormProps} from "../Props.ts";
 
 

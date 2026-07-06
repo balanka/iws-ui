@@ -1,7 +1,29 @@
-FROM node:20-alpine
+FROM node:24.3.0-slim AS builder
 WORKDIR /app
-COPY ./package*.json .
+COPY package.json package-lock.json* ./
+COPY src/ ./src
+COPY public/ ./public
+COPY index.html .
+COPY vite.config.js .
+
+ARG VITE_APP_BACKEND_ADDRESS
+ENV VITE_APP_BACKEND_ADDRESS=$VITE_APP_BACKEND_ADDRESS
+ARG REACT_APP_HOST_IP_ADDRESS
+ARG REACT_APP_PORT
+ARG REACT_WEB_HOST_IP_ADDRESS
+ARG REACT_WEB_PORT
+ENV REACT_APP_HOST_IP_ADDRESS=$REACT_APP_HOST_IP_ADDRESS
+ENV REACT_APP_PORT=$REACT_APP_PORT
+ENV REACT_WEB_HOST_IP_ADDRESS=$REACT_WEB_HOST_IP_ADDRESS
+ENV REACT_WEB_PORT=$REACT_WEB_PORT
+
 RUN npm install
-COPY . .
-EXPOSE 3000
-CMD ["npm", "run","dev"]
+#RUN npm run build
+FROM nginx:1.29-alpine-slim AS prod
+COPY --chown=nginx:nginx --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist/locales /usr/share/nginx/html
+COPY nginx.conf.template  /etc/nginx/conf.d
+COPY env.sh /docker-entrypoint.d/env.sh
+RUN chmod +x /docker-entrypoint.d/env.sh
+#EXPOSE 3000
+CMD ["nginx", "-g", "daemon off;"]

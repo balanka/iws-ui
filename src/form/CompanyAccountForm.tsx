@@ -5,7 +5,7 @@ import { IAccount, ICompany, IVat } from '../Models'
 import { TFunction } from 'i18next'
 import { initAcc, initVat } from './Menu'
 import {styles} from "./FormsProps.tsx";
-import {CInputGroup} from "@coreui/react";
+import {CInputGroup} from "@coreui/react-pro";
 
 interface CompanyAccountFormProps {
   readonly current: ICompany

@@ -1,5 +1,5 @@
 import { JSX } from 'react'
-import { CCol, CInputGroup } from '@coreui/react'
+import { CCol, CInputGroup } from '@coreui/react-pro'
 import { DatePickerField, InputField, TextareaField, FormMasterfileXComboBox } from './common'
 import {  styles } from './FormsProps.tsx'
 import { ArticleGeneralFormProps } from '../Props'

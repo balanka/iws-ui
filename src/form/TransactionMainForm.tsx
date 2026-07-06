@@ -1,5 +1,5 @@
 import React from 'react'
-import { CCol } from '@coreui/react'
+import { CCol } from '@coreui/react-pro'
 import ComboBox from "./ComboBox.tsx"
 import { MasterfileComboBox } from './common'
 import { BooleanField, DatePickerField, InputField, TextareaField } from './common'
@@ -19,6 +19,7 @@ export const TransactionMainForm = ({
   const currentModule = modules.find((m: any) => m.id === BigInt(current?.modelid ?? 0))
   const copyFromModule = modules.find((m: any) => m.id === BigInt(currentModule?.copyFrom ?? 0))
   const total:number = current?.lines?.reduce((prev: number, line: any) => prev + line?.quantity * line?.price + line?.vat, 0) ?? 0
+  console.log('storeData', storeData)
   return (
     <div
       //@ts-ignore

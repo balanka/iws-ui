@@ -1,4 +1,10 @@
-import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule} from 'ag-grid-community'
+import {
+  AllCommunityModule,
+  ClientSideRowModelModule,
+  ModuleRegistry,
+  PinnedRowModule,
+  SelectionChangedEvent
+} from 'ag-grid-community'
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
@@ -18,6 +24,8 @@ import {logout} from '../utils/FormUtils.tsx'
 import {generateDocx} from '../utils/XlsUtils.ts'
 import useJForm from './UseJForm.ts'
 import useForm from './UseForm.ts'
+import {useRef, useState} from "react";
+import {AgGridReact} from "ag-grid-react";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -32,11 +40,13 @@ const JForm = () => {
   const  [{ accData, rowData, setRowData,  current, setCurrent, submitQuery, submitQuery2
     , onRowSelected, templateName, styles}] = useJForm<IPeriodicAccountBalance>()
 
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  const gridRef = useRef<AgGridReact>(null);
+
   const {currency, company} = profile
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const dispatch = useDispatch()
   const height = 20
-
 
   const format = (d: IPeriodicAccountBalance) => {
     const  totalx_debit= d.idebit + d.debit
@@ -125,7 +135,18 @@ const JForm = () => {
         , data: rowData.map(toBalance2)
       }
     }
-
+  // const getSelectedRows = () => {
+  //   if (gridRef.current) {
+  //     const selectedData = gridRef.current.api.getSelectedRows();
+  //     console.log('Button clicked! Selected rows:', selectedData);
+  //     // Process the selected data here, e.g., send it to an API
+  //   }
+  // };
+    const onSelectionChanged = (event: SelectionChangedEvent) => {
+      const selectedData = event.api.getSelectedRows();
+      setSelectedRows(selectedData);
+      console.log('Selected rows updated:', selectedData);
+    };
     const buildTotal = (data:IPeriodicAccountBalance[]):void =>{
       let d= [...data]
       if (current.toPeriod == undefined || current.toPeriod == -1) {
@@ -143,6 +164,7 @@ const JForm = () => {
 
   buildTotal(rowData)
 
+  console.log('Selected rows:', selectedRows);
 
   return (
         <div  style={{...styles.inner}}>
@@ -155,8 +177,10 @@ const JForm = () => {
                 // @ts-ignore
                              stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
             <div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: '100%'}}>
+              {/*<PacTable items={rowData.map(format)} key ='packTable'/>*/}
+              {/*<PacTable2 items={rowData.map(format)} key ='packTable'/>*/}
                 <PeriodicAccountBalanceGrid columnDefs ={pacColumnsDefs(t)} defaultColDef ={defaultColDefX}
-                      onRowSelected={onRowSelected} rowData={ rowData.map(format)}/>
+                      onRowSelected={onRowSelected} onSelectionChanged ={onSelectionChanged}  gridRef={gridRef} rowData={ rowData.map(format)}/>
             </div>
         </div>
     )

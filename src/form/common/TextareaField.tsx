@@ -1,5 +1,5 @@
 import {CSSProperties} from "react"
-import {CFormTextarea} from "@coreui/react"
+import {CFormTextarea} from "@coreui/react-pro"
 
 export const TextareaField = ({ fieldName, value, current, setCurrent, rows, disabled, style
                                 , placeholder,  onChange}:

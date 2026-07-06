@@ -18,8 +18,8 @@ export const CurrencyField = ({
   //intlConfig?:{locale:string, currency:string}
   groupSeparator?: "."
   decimalSeparator?:","
-  decimalsLimit?:2
-  decimalScale?:2
+  decimalsLimit?:undefined
+  decimalScale?:undefined
   onValueChange?: (value: string | undefined) => void;
   disabled?: boolean;
   locale: string;
@@ -32,8 +32,8 @@ export const CurrencyField = ({
       intlConfig={{ locale, currency }}
       groupSeparator="."
       decimalSeparator=","
-      decimalsLimit={2}
-      decimalScale={2}
+      decimalsLimit={undefined}
+      decimalScale={undefined}
       onValueChange={onValueChange}
       disabled={disabled}
       className="react-currency-input-field"  //  Add this class

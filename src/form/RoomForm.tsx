@@ -29,7 +29,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const height = 33
      const current_ =  module_.state
      const minHeight = 450
-     const maxHeight = 700
+     const maxHeight = 550
      const colDef:ColDef[]= masterfileColumnDefs(t)
      console.log('ctx')
      const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.room)

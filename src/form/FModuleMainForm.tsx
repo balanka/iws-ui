@@ -1,5 +1,5 @@
 import React from 'react'
-import { CRow, CCol } from '@coreui/react'
+import { CRow, CCol } from '@coreui/react-pro'
 import { MasterfileFormWithout } from './MasterfileFormWithout.tsx'
 import { MasterfileXComboBox, FieldLabel, InputField  } from './common'
 import { FModuleProps2 } from '../Props.ts'

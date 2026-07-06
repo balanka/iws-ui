@@ -1,5 +1,5 @@
 import { JSX, ReactNode } from 'react';
-import { CCol, CInputGroup } from '@coreui/react';
+import { CCol, CInputGroup } from '@coreui/react-pro';
 import { DatePickerField, InputField, TextareaField, FieldLabel, FormMasterfileXComboBox } from './common';
 import { styles } from './FormsProps';
 import { MasterfileProps2 } from '../Props';

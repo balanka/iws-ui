@@ -1,5 +1,5 @@
 import React from 'react'
-import { CRow, CCol, CContainer } from '@coreui/react'
+import { CRow, CCol, CContainer } from '@coreui/react-pro'
 import CurrencyInput from 'react-currency-input-field'
 import { DatePickerField, InputField, TextareaField } from './common'
 import { BankStatementProps } from "../Props.ts"

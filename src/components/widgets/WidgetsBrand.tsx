@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
-import { CWidgetStatsD, CRow, CCol } from '@coreui/react'
+import { CWidgetStatsD, CRow, CCol } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
 import { cibFacebook, cibLinkedin, cibTwitter, cilCalendar } from '@coreui/icons'
-import { CChart } from '@coreui/react-chartjs'
+import {CChart} from "@coreui/react-chartjs";
 
 const WidgetsBrand = ( {className, withCharts}:{className?:string, withCharts?:boolean}) => {
   const chartOptions = {

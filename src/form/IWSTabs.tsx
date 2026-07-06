@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { CTab, CTabContent, CTabPanel, CTabs, CTabList } from "@coreui/react";
+import { CTab, CTabContent, CTabPanel, CTabs, CTabList } from "@coreui/react-pro";
 import { isArrayAndNotEmpty } from '../utils/Utils'
 
 export interface TabItem {

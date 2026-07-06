@@ -1,5 +1,5 @@
 import { JSX, ReactNode } from 'react';
-import { CInputGroup } from '@coreui/react';
+import { CInputGroup } from '@coreui/react-pro';
 
 interface FormRowProps {
   readonly children: ReactNode;

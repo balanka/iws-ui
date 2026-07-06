@@ -28,22 +28,23 @@ import {
   IStore,
   ISupplier,
   ITransaction,
-  IVat,
+  IVat, ReminderBalance,
 } from '../Models.ts'
 import {TransactionGrid} from '../IWSGrid.tsx'
 import {lineTransactionColumnDefs, transactionColumnDefs} from '../ColumnsDefs.ts'
 import {isLoaded, logout} from '../utils/FormUtils.tsx'
 import Login from './Login.tsx'
-import {CSpinner} from "@coreui/react";
+import {CSpinner} from "@coreui/react-pro";
 import {TransactionDetailsTabs} from './TransactionDetailsTabs.tsx'
 import {useNavigate} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
-import {generateDocx} from './../utils/XlsUtils.ts'
+import {capitalizeFirst, generateDocx} from './../utils/XlsUtils.ts'
 import useTransactionForm from './UseTransactionForm.ts'
 import useForm from './UseForm.ts'
 import {formEnum} from '../utils/FormEnum.tsx'
-import {Get, Get3, Gets} from './CrudController.ts'
+import {Get, Get3, GetListData, Gets} from './CrudController.ts'
 import {TFunction} from "i18next";
+import {toCardinal} from "n2words/fr-FR";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
@@ -153,7 +154,9 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
    const [accFilter, setAccFilter] = useState<string[]>([])
    const [oaccFilter, setOAccFilter] = useState<string[]>([])
    const [title, setTitle] = useState(title_)
-
+    //const [forceUpdate, setForceUpdate] = useState(false)
+   const [reminderBalance, setReminderBalance] = useState<ReminderBalance[]>([])
+   console.log('current', current)
    useEffect(() => {
      Promise.all([
        !isLoaded(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData),
@@ -168,6 +171,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
        console.error('Error fetching data', error);
      });
    },[selected])
+   //},[selected, forceUpdate])
 
 
      const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
@@ -179,13 +183,13 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
      return {
        ...line
        // @ts-ignore
-       , quantity: Number(line.quantity).toFixed(2)
+       , quantity: line.quantity.toLocaleString(locale)
        // @ts-ignore
-       , price: Number(line.price).toFixed(2)
+       , price: line.price.toLocaleString(locale,  { style: "currency", currency: currency })
        // @ts-ignore
-       , vat: Number(line.vat).toFixed(2)
+       , vat: line.vat.toLocaleString(locale,  { style: "currency", currency: currency })
        // @ts-ignore
-       , net: Number((line.quantity * line.price) + line.vat).toFixed(2)
+       , net: (line.quantity * line.price + line.vat).toLocaleString(locale,  { style: "currency", currency: currency })
      }
    }
    const buildTotal = (current: ITransaction|IFinancials) =>{
@@ -194,41 +198,56 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
      return  trans?.lines?.reduce((acc: number, line: ILineTransaction) => acc + line.quantity * line.price + line.vat, 0.0)
    }
    const getData: ()=>any = ()=>  {
+    const total = buildTotal(current)
      return {
        id:current.id
-       , transdate: current.transdate
-       , total: Number(buildTotal(current)).toFixed(2)
+       , date: new Date().toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
+       , transdate: current.transdate.toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
+       , total:   total.toLocaleString(locale,  { style: "currency", currency: currency })
+       , totalText:toCardinal(total).split(" ").map(capitalizeFirst).join(" ")
        , lines: current.lines.map(formatLines)
        , text:current.text
        , footText:current.footText
      }
    }
-   const submitQuery = (ctx:string, partnerCtx:string, partnerModelid:number) => {
-     setIsFetching(true)
-     Promise.all([
-       !isLoaded(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData),
-       !isLoaded(store_modelid)&& Get(store_ctx, token, store_modelid, setStoreData),
-       !isLoaded(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData),
-       !isLoaded(partnerModelid)&&Get(partnerCtx, token, partnerModelid, setPartnerData),
-       !isLoaded(modelid)&&Get3(ctx, token, modelid, current_, setRowData, setCurrent),
-     ]).then(() => {
-       console.log('All data fetched successfully');
-       // additional logic after all requests complete
-     }).catch(error => {
-       console.error('Error fetching data', error);
-     });
-     setIsFetching(false)
-   }
+    const getData2 =  async (): Promise<ReminderBalance[]>=> {
+      const ctx = `${module_.ctx}/${current.account}/${company}`;
+      const data  =  await GetListData<ReminderBalance>(ctx, token, formEnum.REMINDER_BALANCE);
+      setReminderBalance(data);
+      console.log('reminderBalance', reminderBalance)
+      console.log('fresh reminderBalance', data)
+      return data;
+    };
 
-   const handleModuleChange = (value:any) => {
+    const submitQuery = async (ctx:string, partnerCtx:string, partnerModelid:number) => {
+      setIsFetching(true)
+      try {
+        await Promise.all([
+          !isLoaded(art_modelid) && Get(art_ctx, token, art_modelid, setArticleData),
+          !isLoaded(store_modelid) && Get(store_ctx, token, store_modelid, setStoreData),
+          !isLoaded(vat_modelid) && Get(vat_ctx, token, vat_modelid, setVatData),
+          !isLoaded(partnerModelid) && Get(partnerCtx, token, partnerModelid, setPartnerData),
+          Get3(ctx, token, modelid, current_, setRowData, setCurrent),
+        ]);
+        console.log('All data fetched successfully');
+        // Now rowData has been updated (assuming Get3 calls setRowData)
+      } catch (error) {
+        console.error('Error fetching data', error);
+      } finally {
+        setIsFetching(false);
+      }
+    };
+
+   const handleModuleChange = async (value:any) => {
      setModel(value)
      const mx:IFmodule = fmodule.find((m:IFmodule) => m?.id === value) ?? initfModule
       title_ = mx?.name ? mx?.name : title_
-     const copyFromIds = (mx? mx.copyFrom.split(','):[]).map( (modelid) => parseInt(modelid))
+     const copyFromIds = (mx? mx.copyFrom.split(','):[])?.map( (modelid) => parseInt(modelid))
      const titlex = `${company}/${title_}`
      setTitle(titlex)
      setPartnerId(parseInt(mx?.account))
-     setCurrent(current_)
+     console.log('currentZXX', current);
+     //setCurrent(current_)
      setAccFilter(mx.accFilter?.replace(/\s/g,'').split(','))
      setOAccFilter(mx.oaccFilter?.replace(/\s/g,'').split(','))
      const ctx = `${module_.ctx}/${mx.id}/${company}`
@@ -236,14 +255,17 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
      const _partnerCtx:string = parseInt(mx?.account)===formEnum.CUSTOMER?MASTERFILE.cust:
        (parseInt(mx?.account)==formEnum.SUPPLIER)?MASTERFILE.sup:''
      const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
-     Gets(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
-     submitQuery( ctx, partnerCtx, parseInt(mx?.account))
-     const currentx = rowData?.filter(m=>m.modelid===current_.modelid)?.length>0?rowData[0]:current_
-     setCurrent(currentx)
+     if(copyFromIds.length==0) {console.log('No transaction to copy from available!!!', copyFromIds)}
+     else {
+       await Gets(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
+     }
+     await submitQuery(ctx, partnerCtx, parseInt(mx?.account));
    }
 
    const accData:ICustomer[]|ISupplier[] = iwsStore.getByModelId(partnerId) as ICustomer[] | ISupplier[] ?? [initCust]//.filter(m=>!m.id.toString().includes('*'))
    const stData = storeData?.filter(m=>!m.id.toString().includes('*'))
+    console.log('storeData', storeData)
+    console.log('stData>>>>', stData)
     return isFetching?<CSpinner color="primary" />:(<>
             <FinancialsFormHead
                 title={title}
@@ -257,6 +279,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
                 submitPost={submitPost}
                 templateName={templateName}
                 getData={getData}
+                getData2={getData2}
                 submitPrintPreview={generateDocx}
                 reload={reload}
                 logout={logout}
@@ -272,7 +295,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
         />
        <div
        //@ts-ignore
-         style={{ ...styles.outer,   width:'100%', height: 400,  display: !state.collapse ? 'none' : ''}}>
+         style={{ ...styles.outer,   width:'100%', height: 380,  display: !state.collapse ? 'none' : ''}}>
           <TransactionMainForm collapse={state.collapse} current={current??current_} setCurrent={setCurrent}
                                t={t} accData={accData}
                                storeData={stData} modules={fmoduleData}

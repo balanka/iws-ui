@@ -223,6 +223,17 @@ async function loginRequest(
   }
 }
 
+export async function GetListData<T>(ctx: string, token: string, modelId: number): Promise<T[]> {
+  const url = buildUrl(ctx);
+  console.log(' GetListData with url', url);
+  const data = await fetchWithAuth<T[]>(url, token);
+  if (Array.isArray(data)) {
+    iwsStore.put(modelId, data as IWSModel[]);
+    return [...data] as T[];
+  }
+  console.warn(`Expected array for modelId ${modelId}, got`, data);
+  return [];
+}
 // ==================== CRUD Operations ====================
 /**
  * Fetch list – updates iwsStore and React state.
@@ -407,9 +418,9 @@ export const Gets = async <T>(
   modelIds: number[],
   setRowData: Dispatch<SetStateAction<T[]>>
 ): Promise<void> => {
-  for (const modelId of modelIds) {
-    await fetchList(ctx, token, modelId, setRowData);
-  }
+  await Promise.all(
+    modelIds.map(modelId => fetchList(ctx, token, modelId, setRowData))
+  );
 };
 
 export const Login = async (

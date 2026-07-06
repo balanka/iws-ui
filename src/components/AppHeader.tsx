@@ -15,7 +15,7 @@ import {
   CDropdownMenu,
   CDropdownItem,
   useColorModes,
-} from '@coreui/react'
+} from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
 import {
   cilBell,

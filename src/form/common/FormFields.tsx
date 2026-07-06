@@ -1,6 +1,6 @@
 import { InputField} from '../common'
 import {TFunction} from "i18next";
-import { CFormLabel} from "@coreui/react";
+import { CFormLabel} from "@coreui/react-pro";
 
 export const BooleanField = ({ fieldName, current, setCurrent, label, disabled, checked, style }: any) => (
   <div style={{ display: 'flex', alignItems: 'center', ...style }}>

@@ -10,14 +10,7 @@ import FileOutput from './FileOutput.tsx'
 import { ILineTransaction, ITransaction} from '../Models.ts'
 import {isArrayAndNotEmpty} from "../utils/Utils.ts";
 
-// const styles = {
-//     outer: {
-//         backgroundColor: blue,
-//         borderRadius: 5,
-//         boxShadow: '0 10px 30px #BBB',
-//         padding: 0,
-//     }
-// }
+
 const TransactionDetailsTabs = ({
                                       transaction, setTransaction
                                     , currentLineTransaction, setCurrentLineTransaction
@@ -46,7 +39,7 @@ const TransactionDetailsTabs = ({
         return (
             <div
                 // @ts-ignore
-                  style={{ width: '100%', height: 130, paddingTop:1, zIndex:zIndex-2}}>
+                  style={{ width: '100%', height: 120, paddingTop:1, zIndex:zIndex-2}}>
                   {/*style={{...styles.outer, width: '100%', height: 130, paddingTop:1, zIndex:zIndex-2}}>*/}
                 <LineTransactionGrid columnDefs={lineTransactionColumnDefs(t)} onRowSelected={onRowSelected}
                    rowData={!transaction?.lines?.length?[ {...currentLineTransaction, transid:transaction?.id}]:transaction?.lines}

@@ -20,10 +20,14 @@ cypress/
 cypress/screenshots/
 cypress/videos/
 reports/
+iws-template/
+*.iml
+fix-template.js
 
 # Ignore environment and config files (sensitive data)
 *.env*
 *.log
+**/*.docx
 
 # Ignore TypeScript build artifacts (if using TypeScript)
 *.tsbuildinfo

@@ -2,8 +2,8 @@ import {Dispatch, SetStateAction, useCallback, useEffect, useRef, useState} from
 import {
   AllCommunityModule,
   ClientSideRowModelModule, ColDef,
-  GridApi, IDetailCellRendererParams,
-  ModuleRegistry,
+  GridApi, GridOptions, IDetailCellRendererParams,
+  ModuleRegistry, RowClassParams,
 } from 'ag-grid-community'
 
 import 'ag-grid-community/styles/ag-grid.css'
@@ -106,9 +106,11 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   }
   const addLine = useCallback(
     (line: L, setCurrent: Dispatch<SetStateAction<T>>) => {
-      console.log('addLine called - THIS SHOULD NOT HAPPEN ON EVERY KEYSTROKE', new Date().toLocaleTimeString())
+      console.log('addLine called - THIS SHOULD NOT HAPPEN ON EVERY KEYSTROKE', new Date().toLocaleTimeString() +current)
+
       setCurrent((prevCurrent: T) => {
-        const newLine: L = {...line, id: BigInt(-1), transid: prevCurrent?.id, company: company}
+        const newLine: L = {...line, id: BigInt(-1), transid: prevCurrent?.id, company: company, modelid:current.modelid}
+        console.log('addLine newLine', newLine)
         const dx: T = {...prevCurrent}
         if (dx.hasOwnProperty('lines')) {
           dx.lines.push(newLine)
@@ -119,6 +121,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
           gridApi.applyTransactionAsync({add: [newLine]})
         }
         setCurrentLine({...newLine})
+        console.log('dxdxdxdxdx', dx)
         return dx
       })
     },
@@ -145,13 +148,15 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
       console.log(' newly added or edited current', current )
          if(BigInt(current?.id) > 0){
            const updated= await Edit(modifyUrl, token, current,  setCurrent)
+           console.log(' updated', updated )
            const index = data.findIndex((obj: T) => obj?.id === updated?.id)
            if (index >= 0) {
               const newList = [...data]
               newList[index] = updated
              setRowData(newList)
+             console.log(' newList', newList )
            }
-        //setCurrent(updated)
+        setCurrent(updated)
         } else {
          submitAdd(event)
        }
@@ -201,10 +206,12 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
 
   const initAdd = () => {
     setDisable(false)
-    const currentN = {...current_, modelid:model, lines:[{...initialLine}]}
-    const newRow:T = {...currentN, company: company, currency: currency, editing: false}
+    const newLine = {...initialLine, modelid:model, company:company}
+    const currentN = {...current_, modelid:model, lines:[newLine]}
+    //const newRow:T = {...currentN, company: company, currency: currency, editing: false}
+    const newRow:T = {...currentN, company: company, currency: currency}
     console.log('newRow',  newRow)
-    setCurrentLine(initialLine)
+    setCurrentLine(newLine)
     EditRow(newRow, true, setCurrent)
   }
   const reload = () => {
@@ -217,7 +224,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
     setDisable(false)
     const  eventx: string[]= event.toString().split(' ')
     const  modelidFrom= parseInt(eventx[1])
-    const company= current.company
+    //const company= current.company
     const url = `${modifyUrl}x/${id}/${modelidFrom}/${model}/${company}`
     console.log('url', url)
     const record = await COPY(url, token, rowData, setRowData, setCurrent)
@@ -241,67 +248,64 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   }
    const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current?.lines??[] }
 
-  const gridOptions =  (columnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[],
-                       lineColumnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[], t:TFunction<'transalation', undefined>)=> {
+  const gridOptions = (
+    columnDefs: (t: TFunction<'transalation', undefined>) => ColDef[],
+    lineColumnDefs: (t: TFunction<'transalation', undefined>) => ColDef[],
+    t: TFunction<'transalation', undefined>
+  ): GridOptions<T> => {
     return {
-      rowStyle: {background: 'lightBlue'},
-      // @ts-ignore
-      getRowStyle: (params: { node: { rowIndex: number } }): { background: string } => {
-        if (params.node.rowIndex % 2 === 0) {
-          return {background: '#fff9e6'}
+      rowStyle: { background: 'lightBlue' },
+
+      // ✅ Correctly typed getRowStyle
+      getRowStyle: (params: RowClassParams<T>) => {
+        if (params.node.rowIndex !== null && params.node.rowIndex % 2 === 0) {
+          return { background: '#fff9e6' };
         }
+        return undefined; // explicit return for odd rows
       },
+
       defaultColDef: {
         resizable: true,
-        editable: false, //!current.posted,
+        editable: false,
         flex: 1,
         filter: true,
-        //floatingFilter: true,
-        //filter: "agTextColumnFilter",
       },
       rowHeight: 20,
-      copySelectedRows: true,
       rowSelection: {
         mode: "multiRow",
         checkboxes: true,
+        copySelectedRows: true,
       },
-      //onRowSelected: onRowSelected,
       paginationPageSizeSelector: [5, 10, 20, 50],
       pagination: true,
       paginationPageSize: 10,
-      //masterDetail: true,
       detailRowAutoHeight: true,
       autoSizeStrategy: {
-        type: "fitGridWidth",
+        type: 'fitGridWidth' as const,   // ✅ literal type
       },
-      // @ts-ignore
-      columnDefs: columnDefs (t),
-      // @ts-ignore
+      columnDefs: columnDefs(t),
       detailCellRendererParams: {
         detailGridOptions: {
-          getRowStyle: (params: { node: { rowIndex: number } }) => {
-            if (params.node.rowIndex % 2 === 0) {
-              return {background: '#fff9e6'}
+          getRowStyle: (params: RowClassParams<any>) => {
+            if (params.node.rowIndex !== null && params.node.rowIndex % 2 === 0) {
+              return { background: '#fff9e6' };
             }
+            return undefined;
           },
           columnDefs: lineColumnDefs(t),
-          defaultColDef: {
-            flex: 1,
-          },
+          defaultColDef: { flex: 1 },
         },
         getDetailRowData: (params: any) => {
           params.successCallback(params.data.lines);
         },
       } as IDetailCellRendererParams<T, L>,
-    }
-  }
+    };
+  };
 
    return [{ language, fmodule, setFmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction, setCopyFromTransaction
      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex,  handleLanguageChange, setModel
      , saveProps, modelid, isFetching, setIsFetching
-     //@ts-ignore
      , gridOptions }]
-    // , accData, setAccData, setFmodule
 
 }
 export default UseTransactionForm

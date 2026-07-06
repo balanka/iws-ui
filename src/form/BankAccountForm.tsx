@@ -1,5 +1,5 @@
 import { JSX } from 'react'
-import { CCol, CInputGroup } from '@coreui/react'
+import { CCol, CInputGroup } from '@coreui/react-pro'
 import { InputField, FieldLabel } from './common'
 import { styles } from './FormsProps'
 import ComboBox from './ComboBox'

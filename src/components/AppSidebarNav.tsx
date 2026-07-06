@@ -1,6 +1,6 @@
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {CBadge, CNavLink, CSidebarNav} from '@coreui/react'
+import {CBadge, CNavLink, CSidebarNav} from '@coreui/react-pro'
 import { useStore } from '../form/Menu'
 import SimpleBar from "simplebar-react";
 

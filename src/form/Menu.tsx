@@ -4,10 +4,10 @@ import {
   IAccount, IApartment, IArticle, IAsset, IBankAccount, IBankStatement, ICompany,
   ICustomer,
   IEmployee, IFinancials, IFloor,
-  IFmodule, ILineFinancials, ILineTransaction, ILoggingContext, IMasterfile, IMasterfile2, IPartner,
+  IFmodule, ILineFinancials, ILineTransaction, ILoggingContext, IMasterfile, IMasterfile2, IContact,
   IProfile, IRealEstate, IRoom, IStore,
   ISTORE_Return,
-  ISupplier, ITransaction, MenuRecord
+  ISupplier, ITransaction, MenuRecord, ReminderBalance
 } from '../Models'
 import {IJournalProps} from "../Props.ts";
 
@@ -45,7 +45,7 @@ export const MASTERFILE = {
   cust: '/cust',
   emp: '/emp',
   sup: '/sup',
-  partner: '/partner',
+  contact: '/partner',
   comp: '/comp',
   ftr: '/ftr',
   ltr: '/ltr',
@@ -70,6 +70,13 @@ export const MASTERFILE = {
   createPayrollTransaction: '/ptr',
   createDepreciationTransaction: '/dtr',
 }
+export const initReminderBalance:ReminderBalance = {
+  id: '-1',
+  period: -1,
+  balance:0.0,
+  modelid:formEnum.REMINDER_BALANCE
+}
+
 export const initAcc:IAccount = {
     id: '9',
     name: '',
@@ -103,12 +110,12 @@ export const initArticle:IArticle = {
     stocked: true,
     quantityUnit: '',
     packUnit: '',
-    account: '31110000',
-    oaccount: '60110000',
-    revenueAccount:'70110000',
+    account: '',
+    oaccount: '',
+    revenueAccount:'',
     vatCode: 'v0GN',
     company: '',
-    modelid: 34,
+    modelid: formEnum.ARTICLE,
     enterdate: new Date(),
     changedate: new Date(),
     postingdate: new Date(),
@@ -315,7 +322,7 @@ export const initComp:ICompany= {
     logoContent: '',
     logoName: '',
     contentType: '',
-    partner: '',
+    contact: '',
     phone: '',
     fax: '',
     email: '',
@@ -340,7 +347,7 @@ export const initVat = {
     modelid: 14,
   }
 
-export const initPartner:IPartner = {
+export const initContact:IContact = {
     id: '',
     name: '',
     description: '',
@@ -351,7 +358,7 @@ export const initPartner:IPartner = {
     country: '',
     phone: '',
     email: '',
-    modelid:formEnum.PARTNER,
+    modelid:formEnum.CONTACT,
     enterdate: new Date(),
     postingdate: new Date(),
     changedate: new Date(),
@@ -374,6 +381,7 @@ export const initCust:ICustomer = {
     taxCode: '-1',
     vatCode: '-1',
     currency: '',
+    contact:'',
     company: '',
     modelid: 3,
     enterdate: new Date(),
@@ -421,6 +429,8 @@ export const initEmp:IEmployee = {
         oaccount: '-1',
         taxCode: '-1',
         vatCode: '-1',
+        currency:'',
+        contact:'',
         company: '',
         salary: 0.0,
         modelid: 33,
@@ -459,6 +469,7 @@ export const initSup:ISupplier = {
     vatCode: '-1',
     //vatName: '',
     currency: '',
+    contact:'',
     company: '',
     modelid: 1,
     enterdate: new Date(),
@@ -504,11 +515,12 @@ export const initLineFinancials:ILineFinancials = {
   text: '',
   currency: '',
   company: '',
+  modelid: -1,
 }
 export const initFtr:IFinancials = {
     id: BigInt(-1),
     oid: BigInt(-1),
-    id1: BigInt(-1),
+    contact: "",
     costcenter: '',
     account: '',
     transdate: new Date(),
@@ -520,7 +532,6 @@ export const initFtr:IFinancials = {
     company: '',
     text: '',
     footText: '',
-    typeJournal: 0,
     fileContent: 0,
     lines: [initLineFinancials]
   }
@@ -542,11 +553,12 @@ export const initLineTransaction:ILineTransaction = {
       duedate: new Date(),
       text: '',
       company: '',
+      modelid: -1,
     }
 export const initLtr:ITransaction = {
     id: BigInt(-1),
     oid: BigInt(0),
-    id1: BigInt(-1),
+    contact: "",
     store: '',
     account: '',
     transdate: new Date(),
@@ -831,14 +843,14 @@ export const QUANTITYUNIT = {
   parent:-1,
   modelid: formEnum.QUANTITYUNIT,
 }
-export const PARTNER = {
-  id: formEnum.PARTNER.toString(),
-  name: 'Partner',
+export const CONTACT = {
+  id: formEnum.CONTACT.toString(),
+  name: 'Contact',
   title: 'partner.title',
-  ctx: MASTERFILE.partner,
-  state: initPartner,
+  ctx: MASTERFILE.contact,
+  state: initContact,
   parent:-1,
-  modelid: formEnum.PARTNER,
+  modelid: formEnum.CONTACT,
 }
 export const SALARY_ITEM = {
   id:  formEnum.SALARY_ITEM.toString(),
@@ -1069,7 +1081,7 @@ export const MENU = (t: (key: string) => any): MenuRecord => ({
    [MASTERFILE.pac]: PACB,
    [MASTERFILE.currency]: CURRENCY,
    [MASTERFILE.bank]: BANK,
-   [MASTERFILE.partner]: PARTNER,
+   [MASTERFILE.contact]: CONTACT,
    [MASTERFILE.qty]: QUANTITYUNIT,
    [MASTERFILE.acc]: ACCOUNT,
    [MASTERFILE.cc]: COSTCENTER,

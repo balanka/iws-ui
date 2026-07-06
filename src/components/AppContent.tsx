@@ -1,12 +1,12 @@
 import React, {Suspense} from 'react'
 import { Navigate,  Route, Routes } from 'react-router-dom'
-import {CSpinner } from '@coreui/react'
+import {CSpinner } from '@coreui/react-pro'
 import routes from '../routes'
 
 const createLazy = (importCompnent:any)=> {
     const Content = React.lazy(importCompnent)
     const spinner = <CSpinner color="primary" />
-    return (props: any) => <Suspense fallback={spinner}><Content {...props}  style={{ paddingLeft: 0, paddingRight: 0 }}/></Suspense>
+    return (props: any) => <Suspense fallback={spinner}><Content {...props}  style={{ paddingLeft: 5, paddingRight:5 }}/></Suspense>
 }
 const AppContent = () => {
   return (

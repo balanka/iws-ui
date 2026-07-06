@@ -10,7 +10,7 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow
-} from "@coreui/react";
+} from "@coreui/react-pro";
 import {Link} from "react-router-dom";
 import {LoginProps} from "../Props.ts";
 import {setDefaultLocale} from "react-datepicker";

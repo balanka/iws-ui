@@ -5,6 +5,7 @@ import { formEnum } from '../../utils/FormEnum.tsx'
 import { getFiltered } from '../../utils/FormUtils.tsx'
 import {FinancialsCBoxProps2, FinancialsCBoxProps3} from "../../Props.ts"
 import {IFinancials, ILineFinancials, IMasterfile, ITransaction} from "../../Models.ts"
+//import {CMultiSelect} from "@coreui/react-pro";
 
 // Base props for all combo boxes
 interface BaseComboBoxProps {
@@ -39,7 +40,7 @@ export const FormMasterfileXComboBox = ({
                                                                         zIndex = 1000,
                                                                         styles = {},
                                                                         disable = false,
-                                                                        fontSize = 12,
+                                                                        fontSize = 11,
                                                                         height
                                                                       }:MasterfileXComboBoxProps) => {
   const currentAcc = (data ?? [defaultValue]).find((acc) => acc.id === current[fieldName]) ?? defaultValue;
@@ -149,7 +150,6 @@ export const FormMasterfileComboBox2 = ({
                                                 setTransaction,
                                               }:FormMasterfileComboBox2Props) => {
   const filtered = getFiltered(data, accFilter);
-  //console.log('filtered', filtered)
   let currentLinex: any = { ...currentLine };
   let currentLinex1: { [index: string]: any } = { ...currentLinex };
   return (
@@ -160,7 +160,7 @@ export const FormMasterfileComboBox2 = ({
       onChange={(value:any,  _event:any) => {
         const currentAccountx = filtered?.find((acc: { id: any }) => acc.id ===value)
         const currentLinex = {...currentLine, [id]: currentAccountx?currentAccountx.id:'', [name]: currentAccountx ?currentAccountx.name:''}
-        setCurrentLine({...currentLinex})
+        //setCurrentLine({...currentLinex})
         setTransaction(current, setCurrent, currentLinex, setCurrentLine)
       }}
 
@@ -215,6 +215,53 @@ export const FromTransactionComboBox: FC<FromTransactionComboBoxProps> = ({
     />
   )
 }
+// Option type from CoreUI (you can import it if available, or define it)
+//type Option = { value: string | number; label: string }
+
+// export const MasterfileComboBox: FC<FinancialsCBoxProps2<IFinancials | ITransaction, IMasterfile>> = ({
+//                                                                                                         current,
+//                                                                                                         setCurrent,
+//                                                                                                         data,
+//                                                                                                         fieldName,
+//                                                                                                         //defaultValue,
+//                                                                                                         accFilter = [],
+//                                                                                                         //zIndex,
+//                                                                                                         styles,
+//                                                                                                         height,
+//                                                                                                       }) => {
+//   // 1. Safely access the selected IDs array using type assertion (since fieldName is dynamic)
+//   const selectedIds = (current as Record<string, any>)[fieldName] ?? []
+//
+//   // 2. Filter data if needed
+//   const filtered = current.modelid === formEnum.ACCOUNT ? getFiltered(data, accFilter) : data
+//
+//   // 3. Build options list (Option[])
+//   const options: Option[] = filtered.slice().sort(sortById)?.map((item) => ({
+//     value: String(item.id),   // convert to string for uniformity
+//     label: `${item.id} ${item.name}`,
+//   }))
+//
+//   // 4. Handle change – receives selected Option[] (objects)
+//   const handleChange = (selectedOptions: Option[]) => {
+//     // Extract just the values (primitive array)
+//     const values = selectedOptions?.map((opt) => opt.value)
+//     setCurrent({ ...current, [fieldName]: values })
+//   }
+//
+//   return (
+//     <CMultiSelect
+//       style={{ ...styles, height, minWidth: 100, width: '100%', color: '#6b7280', fontSize: 12 }}
+//       disabled={current.posted}
+//       value={selectedIds.map(String)}   // value expects array of primitives (strings/numbers)
+//       options={options}
+//       onChange={handleChange}
+//       placeholder="Select..."
+//       selectionType="tags"   // or "pill"
+//       multiple={false}
+//      // zIndex={zIndex}
+//     />
+//   )
+// }
 export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction, IMasterfile>> =({current, setCurrent, data
                                                                , fieldName, defaultValue,  accFilter = [], zIndex, styles, height })=>{
   // @ts-ignore
@@ -223,6 +270,8 @@ export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction
   const filtered= (current.modelid===formEnum.ACCOUNT)?getFiltered(data, accFilter):data
 
   return (
+    // <ComboBox style={inputStyle} value={{ value: BigInt(copyFromModule?.id ?? 0), label: `${BigInt(copyFromModule?.id ?? 0)} ${copyFromModule?.name ?? ''}` }}
+    //           onChange={submitCopy} values={copyFromTransaction.slice().sort(sortById).map(transactionToOption)} zIndex={99999} height ={height-5}/>
     <ComboBox<{value:string|bigint,  label:string}>
       style={{...styles, height:height, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
       disable={current.posted}

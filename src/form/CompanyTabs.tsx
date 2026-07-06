@@ -13,10 +13,11 @@ import {AddressForm} from "./AddressForm.tsx";
 
 const CompanyTabs  = ({collapse, current, setCurrent
                            , currentBankAccount, setCurrentBankAccount, token, modifyUrl, t
-                  , locale, data, accData, bankData, vatData, ccyData, height, disable
+                  , locale, data, accData, bankData, vatData, ccyData, contactData, height, disable
                   , zIndex, onGridReady }:CompanyTabProps) => {
   const  props:CompanyTabProps = { collapse, current, setCurrent, currentBankAccount, setCurrentBankAccount
-      , token, modifyUrl, t, locale, data, accData, bankData, vatData, ccyData, height, disable, zIndex, onGridReady }
+      , token, modifyUrl, t, locale, data, accData, bankData, vatData, ccyData, contactData, height, disable
+      , zIndex, onGridReady }
 
   const  addressProps:AddressProps = { current, setCurrent,  t, disable, height:height }
   const businessPartner = current

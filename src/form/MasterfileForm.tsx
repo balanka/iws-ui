@@ -13,7 +13,7 @@ import {IMasterfile, IMasterfile2} from '../Models.ts'
 import useForm from './UseForm.ts'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
 import {styles} from './BasicTreeTableProps.tsx'
-import {CInputGroup} from "@coreui/react";
+import {CInputGroup} from "@coreui/react-pro";
 import {MasterfileFormWithChildren} from './MasterfileFormWithChildren'
 import Login from "./Login.tsx";
 import {isLoaded} from "../utils/FormUtils.tsx";

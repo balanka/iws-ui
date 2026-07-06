@@ -44,7 +44,6 @@ export default function useMasterfileForm<T extends IWSModel>(
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [edited, setEdited] = useState(false);
   const [added, setAdded] = useState(false);
   const [disable, setDisable] = useState(true);
