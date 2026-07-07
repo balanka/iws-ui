@@ -19,6 +19,7 @@ import {initCust, initfModule, initLineTransaction, initLtr, MASTERFILE, TRANSAC
 import iwsStore from '../utils/Store.tsx'
 
 import {
+  IAccount,
   IArticle,
   ICustomer,
   IFinancials,
@@ -127,10 +128,11 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
   const current_:ITransaction = initialState
   const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
   const [rowData, setRowData] = useState<ITransaction[]>([])
+  const [model, setModel] = useState<number>(-1)
   const  [{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
-    , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange, setModel
+    , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange
      , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching, setIsFetching }] =
-     useTransactionForm(current_??initLtr, initialLine, currentLine, setCurrentLine, rowData, setRowData)
+     useTransactionForm(current_??initLtr, initialLine, currentLine, setCurrentLine, rowData, setRowData, model)
 
    const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
    //const acc_modelid = formEnum.ACCOUNT
@@ -139,11 +141,14 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
    const store_modelid = formEnum.STORE
    const sup_modelid = formEnum.SUPPLIER
    const cust_modelid = formEnum.CUSTOMER
+   const acc_modelid = formEnum.ACCOUNT
+   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
    const art_ctx = `${MASTERFILE.article}/${art_modelid}/${company}`
    const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
    const store_ctx = `${MASTERFILE.store}/${store_modelid}/${company}`
    const sup_ctx = `${MASTERFILE.sup}/${sup_modelid}/${company}`
    const cust_ctx = `${MASTERFILE.cust}/${cust_modelid}/${company}`
+   const [accData, setAccData] = useState<IAccount[]>([])
    const [storeData, setStoreData] = useState<IStore[]>([])
    const [articleData, setArticleData] = useState<IArticle[]>([])
    const [vatData, setVatData] = useState<IVat[]>([])
@@ -164,6 +169,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
        !isLoaded(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData),
        !isLoaded(cust_modelid)&&Get(cust_ctx, token, cust_modelid, setCustomerData),
        !isLoaded(sup_modelid)&&Get(sup_ctx, token, sup_modelid, setSupplier),
+       !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData)
      ]).then(() => {
        console.log('All data fetched successfully');
        // additional logic after all requests complete
@@ -226,7 +232,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
           !isLoaded(art_modelid) && Get(art_ctx, token, art_modelid, setArticleData),
           !isLoaded(store_modelid) && Get(store_ctx, token, store_modelid, setStoreData),
           !isLoaded(vat_modelid) && Get(vat_ctx, token, vat_modelid, setVatData),
-          !isLoaded(partnerModelid) && Get(partnerCtx, token, partnerModelid, setPartnerData),
+          partnerModelid&&!isLoaded(partnerModelid) && Get(partnerCtx, token, partnerModelid, setPartnerData),
           Get3(ctx, token, modelid, current_, setRowData, setCurrent),
         ]);
         console.log('All data fetched successfully');
@@ -246,27 +252,31 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
      const titlex = `${company}/${title_}`
      setTitle(titlex)
      setPartnerId(parseInt(mx?.account))
-     console.log('currentZXX', current);
+     console.log('mx', mx);
      //setCurrent(current_)
      setAccFilter(mx.accFilter?.replace(/\s/g,'').split(','))
      setOAccFilter(mx.oaccFilter?.replace(/\s/g,'').split(','))
-     const ctx = `${module_.ctx}/${mx.id}/${company}`
+    const ctx = `${module_.ctx}/${mx.id}/${company}`
      const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
      const _partnerCtx:string = parseInt(mx?.account)===formEnum.CUSTOMER?MASTERFILE.cust:
-       (parseInt(mx?.account)==formEnum.SUPPLIER)?MASTERFILE.sup:''
+       (parseInt(mx?.account)==formEnum.SUPPLIER)?MASTERFILE.sup:
+         (parseInt(mx?.account)==formEnum.ACCOUNT)?MASTERFILE.acc:
+           (parseInt(mx?.account)==formEnum.STORE)?MASTERFILE.store: ''
+     console.log('_partnerCtx', _partnerCtx)
      const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
-     if(copyFromIds.length==0) {console.log('No transaction to copy from available!!!', copyFromIds)}
+     if(copyFromIds.length==0) {console.log(`No transaction to copy from available!!! ${submitQuery}`, copyFromIds)}
      else {
        await Gets(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
      }
-     await submitQuery(ctx, partnerCtx, parseInt(mx?.account));
+      _partnerCtx.length>0&& (await submitQuery(ctx, partnerCtx, parseInt(mx?.account)))
    }
 
-   const accData:ICustomer[]|ISupplier[] = iwsStore.getByModelId(partnerId) as ICustomer[] | ISupplier[] ?? [initCust]//.filter(m=>!m.id.toString().includes('*'))
-   const stData = storeData?.filter(m=>!m.id.toString().includes('*'))
-    console.log('storeData', storeData)
-    console.log('stData>>>>', stData)
-    return isFetching?<CSpinner color="primary" />:(<>
+    const accData1:ICustomer[]|ISupplier[] = iwsStore.getByModelId(partnerId) as ICustomer[] | ISupplier[] ?? [initCust]//.filter(m=>!m.id.toString().includes('*'))
+    const accDatax:ICustomer[]|ISupplier[]|IAccount[]= (model ===formEnum.ACCOUNT)? accData:accData1
+    const stData = storeData?.filter(m=>!m.id.toString().includes('*'))
+   // console.log('storeData', storeData)
+    //console.log('stData>>>>', stData)
+    return isFetching?<CSpinner color="primary" />:<>
             <FinancialsFormHead
                 title={title}
                 saveProps={saveProps}
@@ -297,7 +307,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
        //@ts-ignore
          style={{ ...styles.outer,   width:'100%', height: 380,  display: !state.collapse ? 'none' : ''}}>
           <TransactionMainForm collapse={state.collapse} current={current??current_} setCurrent={setCurrent}
-                               t={t} accData={accData}
+                               t={t} accData={accDatax}
                                storeData={stData} modules={fmoduleData}
                                copyFromTransaction={copyFromTransaction}
                                handleModuleChange={handleModuleChange}
@@ -323,6 +333,6 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
            gridOptions ={gridOptions (transactionColumnDefs, lineTransactionColumnDefs, t)}  columnDefs={transactionColumnDefs(t)}
                              onRowSelected={onRowSelected} rowData={rowData}/>
        </div>
-    </>)
+    </>
 }
 export default TransactionForm

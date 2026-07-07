@@ -44,11 +44,7 @@ const VatForm = () => {
     }
     loadData();
   }, [token, company]);
-  // useEffect(() => {
-  //   const acc = isLoaded(acc_modelid)?iwsStore.getByModelId(acc_modelid) : Get(acc_ctx, token, acc_modelid, setAccData)
-  //   console.log("accData:", acc);
-  //   setCurrent(current_)
-  // }, [token, company])
+
 
   const safeBody = React.isValidElement(body) ? body : null;
   return (

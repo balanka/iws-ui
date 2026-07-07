@@ -19,7 +19,8 @@ export const TransactionMainForm = ({
   const currentModule = modules.find((m: any) => m.id === BigInt(current?.modelid ?? 0))
   const copyFromModule = modules.find((m: any) => m.id === BigInt(currentModule?.copyFrom ?? 0))
   const total:number = current?.lines?.reduce((prev: number, line: any) => prev + line?.quantity * line?.price + line?.vat, 0) ?? 0
-  console.log('storeData', storeData)
+  //console.log('storeData', storeData)
+  //console.log('accData', accData)
   return (
     <div
       //@ts-ignore

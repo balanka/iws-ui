@@ -267,7 +267,8 @@ export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction
   // @ts-ignore
   const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === current[fieldName])??defaultValue
   // @ts-ignore
-  const filtered= (current.modelid===formEnum.ACCOUNT)?getFiltered(data, accFilter):data
+  //const filtered= (current.modelid===formEnum.ACCOUNT) && accFilter.length>0?getFiltered(data, accFilter):data
+  const filtered=  accFilter.length>0?getFiltered(data, accFilter):data
 
   return (
     // <ComboBox style={inputStyle} value={{ value: BigInt(copyFromModule?.id ?? 0), label: `${BigInt(copyFromModule?.id ?? 0)} ${copyFromModule?.name ?? ''}` }}

@@ -14,8 +14,12 @@ export const getFiltered = <T extends { id: string | number | bigint }>(
   data: T[],
   filter: string[] = []
 ): T[] => {
-  if (filter?.length===0) return data;
-  return data.filter(item =>  filter.some(filterValue => String(item.id).startsWith(filterValue)))
+  console.log(` filter ${filter}`)
+  console.log('data>>>',   data)
+  if (filter?.length===0) return data
+  const result = data.filter(item =>  filter.some(filterValue => String(item.id).startsWith(filterValue)))
+  console.log('result', result)
+  return result
 };
 
 export const AgGridCheckbox =

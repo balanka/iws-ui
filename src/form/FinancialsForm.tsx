@@ -59,10 +59,11 @@ const FinancialsForm = () => {
   const initialLine:ILineFinancials = {...initLineFinancials, currency:currency??'', company:`-${company}`}
   const [currentLine, setCurrentLine] = useState<ILineFinancials>(initialLine)
   const [rowData, setRowData] = useState<IFinancials[]>([])
+  const [model, setModel] = useState<number>(-1)
   const  [{  language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction
     , setCopyFromTransaction, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex
-    , handleLanguageChange, setModel, saveProps, modelid, isFetching, setIsFetching, gridOptions }] =
-    useTransactionForm(current_, initialLine, currentLine, setCurrentLine, rowData, setRowData)
+    , handleLanguageChange, saveProps, modelid, isFetching, setIsFetching, gridOptions }] =
+    useTransactionForm(current_, initialLine, currentLine, setCurrentLine, rowData, setRowData, model)
   const [title, setTitle] = useState(title_)
   const acc_modelid = formEnum.ACCOUNT
   const cc_modelid = formEnum.COSTCENTER
@@ -89,8 +90,8 @@ const FinancialsForm = () => {
     setCurrent(current_)
     setAccFilter(mx.accFilter?.replace(/\s/g,'').split(','))
     setOAccFilter(mx.oaccFilter?.replace(/\s/g,'').split(','))
-    const modelidx = parseInt(mx.id.toString()??0)
-    setModel(modelidx)
+    const modelidx = parseInt(value) //parseInt(mx.id.toString()??0)
+    //setModel(modelidx)
     ctx = `${module_.ctx}/${modelidx}/${company}`
     const ctx_copyFrom = `${module_.ctx}/n/${company}/${copyFromIds}`
     const idx= copyFromIds.map((i)=>

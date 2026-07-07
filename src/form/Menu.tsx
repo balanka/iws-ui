@@ -566,7 +566,7 @@ export const initLtr:ITransaction = {
     postingdate: new Date(),
     period: getPeriod(new Date()),
     posted: false,
-    modelid: 1600,
+    modelid: -1,
     company: '',
     text: '',
     footText: '',

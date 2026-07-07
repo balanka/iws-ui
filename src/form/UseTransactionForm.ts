@@ -29,7 +29,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const UseTransactionForm = <T extends IWSTransaction<L>,
               L extends ILine>(current_ :T, initialLine :L, currentLine:L, setCurrentLine:Dispatch<SetStateAction<L>>
-           , rowData:T[], setRowData:Dispatch<SetStateAction<T[]>>): [UseTransactionFormResult<T, ILine>]  => {
+           , rowData:T[], setRowData:Dispatch<SetStateAction<T[]>>, model:number): [UseTransactionFormResult<T, ILine>]  => {
    const [{ profile,  selected, language, handleLanguageChange, modelid, module_}] = useForm()
    const { token, company, currency } = profile
    let templateFileName =''
@@ -45,7 +45,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   const [, setModule] = useState<IModule[]>([])
   const [copyFromTransaction, setCopyFromTransaction] = useState<T[]>([])
   const [fmodule, setFmodule] = useState<IFmodule[]>([])
-  const [model, setModel] = useState<number>(-1)
+  //const [modelx, setModel] = useState<number>(-1)
   const [isFetching, setIsFetching] = useState(false)
   const [gridApi,   setGridApi] = useState<GridApi>()
   const zIndex:number = 99999
@@ -56,7 +56,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
     console.log('event.functionKey', event.functionKey)
     switch (event.keyCode) {
       case 112:
-        submitEdit(event); return
+         submitEdit(event).then( _=> void(0)); return
       case 113:
         onNewLine();return
       case 114:
@@ -303,7 +303,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   };
 
    return [{ language, fmodule, setFmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction, setCopyFromTransaction
-     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex,  handleLanguageChange, setModel
+     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex,  handleLanguageChange
      , saveProps, modelid, isFetching, setIsFetching
      , gridOptions }]
 

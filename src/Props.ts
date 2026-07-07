@@ -494,7 +494,7 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , templateName:()=>string
   , zIndex:number
   , handleLanguageChange:(event:any) =>void
-  , setModel:Dispatch<SetStateAction<number>>
+  //, setModel:Dispatch<SetStateAction<number>>
   , saveProps:SaveProps
   , modelid:number
   , isFetching:boolean
