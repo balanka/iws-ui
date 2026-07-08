@@ -406,25 +406,25 @@
     "modelid"     : "Model"
   },
   "ijournal": {
-    "title": "Article journal"
+    "title": "Journal des mouvements"
   },
   "balancesheet": {
-    "title":      "Balance sheet",
+    "title":      "Bilan",
     "id":          "Nr.",
-    "name":         "Name",
-    "account":     "Account",
-    "period":      "Period",
-    "from"       :  "From",
-    "to"        :  "To"
+    "name":         "Nom",
+    "account":     "Compte",
+    "period":      "Periode",
+    "from"       :  "De",
+    "to"        :  "A"
   },
   "login": {
     "title"  :"Login",
     "signIn":"Sign In to your account",
     "username": "User name",
-    "password": "Password",
-    "forgotpwd": "Forgot password?",
+    "password": "Mot de passe",
+    "forgotpwd": "Oubliez mot de passe?",
     "signUp": "Sign up",
-    "signUpNow": "Register now"
+    "signUpNow": "Enregistrez maintenant"
   },
   "firstname": "First name",
   "firstname_constraint": "First name has to be at least 2 characters",
@@ -444,8 +444,8 @@
     "part2": "Switch language between english and german using buttons above."
   },
   "user": {
-    "title": "User",
-    "userName": "User Name",
+    "title": "utilisateur",
+    "userName": "Nom d'utilisateur",
     "firstName": "First name",
     "lastName": "Last name",
     "role": "Role",

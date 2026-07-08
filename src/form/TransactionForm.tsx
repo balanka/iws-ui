@@ -268,12 +268,17 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
      else {
        await Gets(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
      }
-      _partnerCtx.length>0&& (await submitQuery(ctx, partnerCtx, parseInt(mx?.account)))
+      _partnerCtx.length>0&& (submitQuery(ctx, partnerCtx, parseInt(mx?.account)))
    }
 
     const accData1:ICustomer[]|ISupplier[] = iwsStore.getByModelId(partnerId) as ICustomer[] | ISupplier[] ?? [initCust]//.filter(m=>!m.id.toString().includes('*'))
     const accDatax:ICustomer[]|ISupplier[]|IAccount[]= (model ===formEnum.ACCOUNT)? accData:accData1
     const stData = storeData?.filter(m=>!m.id.toString().includes('*'))
+    console.log('model', model)
+    console.log('partnerId', partnerId)
+    console.log('accData', accData)
+    console.log('accData1', accData1)
+    console.log('accDatax', accDatax)
    // console.log('storeData', storeData)
     //console.log('stData>>>>', stData)
     return isFetching?<CSpinner color="primary" />:<>

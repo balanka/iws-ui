@@ -23,86 +23,101 @@ const ComboBox = <T extends Base>({
                                     fontSize,
                                     height
                                   }: GenericSelectProps<T>) => {
-  const zindex = zIndex ?? 99999
+  //const zindex = zIndex ?? 99999
 
   const customStyles = {
-    menu: (base: any) => ({
-      ...base, ...style, height:height,
-      zIndex: zindex,
-    }),
-    select: (base: any) => ({
-      ...base, ...style,
-      borderColor: '#6b7280',
-    }),
+    // Only apply user styles to the outermost container (safe)
     container: (base: any) => ({
-      ...base, ...style,
+      ...base,
+      ...style, // This is the only place where ...style is relatively safe
     }),
 
-    control: (base: any, state: any): any => {
-      return {
-        ...base, ...style,
-        borderColor: state.isFocused ? '#2684FF' : '#ced4da',
-        boxShadow: state.isFocused ? '0 0 0 1px #2684FF' : 'none',
-        '&:hover': {
-          borderColor: state.isFocused ? '#2684FF' : '#a1a7ae'
-        },
-        opacity: state.isDisabled ? .8 : 1.0,
-        borderRadius: 2,
-        border: '1px solid gray',
-        outline: state.isFocused ? "none" : undefined,
-        minHeight: '28px',
-        // height: '28px',
-        display: 'flex',
-        alignItems: 'center',
-      }
-    },
-
-    input: (base: any, state: any): any => ({
-      ...base, ...style,  height:height,
-      margin: '0px',
+    // Control: DO NOT spread ...style here
+    control: (base: any, state: any): any => ({
+      ...base,
+      borderColor: state.isFocused ? '#2684FF' : '#ced4da',
+      boxShadow: state.isFocused ? '0 0 0 1px #2684FF' : 'none',
+      '&:hover': {
+        borderColor: state.isFocused ? '#2684FF' : '#a1a7ae'
+      },
+      opacity: state.isDisabled ? 0.8 : 1.0,
+      borderRadius: 2,
+      border: '1px solid gray',
       outline: state.isFocused ? "none" : undefined,
-      fontSize: fontSize ?? 12,
-      opacity: state.isDisabled ? .4 : 1.0,
-      padding: '0px',
-      lineHeight: '18px',
+      minHeight: height || 28,
+      display: 'flex',
+      alignItems: 'center',
+      backgroundColor: '#fff', // Set a safe default
     }),
 
+    // ValueContainer: DO NOT spread ...style
     valueContainer: (base: any) => ({
       ...base,
       padding: '0px 0px 0px 8px',
       display: 'flex',
       alignItems: 'center',
-      height: '28px',
+      height: height || 28,
       flex: '1 1 auto',
+      position: 'relative', // Essential for singleValue absolute positioning
     }),
 
+    // singleValue: RESTORE absolute positioning
     singleValue: (base: any) => ({
       ...base,
       margin: '0px',
       padding: '0px',
-      lineHeight: '28px',
-      position: 'relative',
-      top: 'auto',
-      transform: 'none',
+      lineHeight: `${height || 28}px`,
+      // CRITICAL: Keep absolute positioning over the input
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      left: '8px', // Aligns with the padding of valueContainer
+      right: '28px', // Prevents overlapping the dropdown indicator
+      color: '#333', // Strong, visible color
+      backgroundColor: 'transparent',
+      pointerEvents: 'none', // Allows clicks to pass through to the input
     }),
 
+    // input: MUST be transparent
+    input: (base: any, state: any): any => ({
+      ...base, // Keep react-select's base
+      margin: '0px',
+      padding: '0px',
+      fontSize: fontSize ?? 12,
+      opacity: state.isDisabled ? 0.4 : 1.0,
+      lineHeight: `${height || 28}px`,
+      // CRITICAL: Transparent background so the label is visible behind it
+      background: 'transparent',
+      color: '#333', // Text you type will be this color
+      outline: 'none',
+      // Make the input take available space without breaking flex
+      flex: '1 1 auto',
+      minWidth: '50px',
+    }),
+
+    // Placeholder: Keep absolute positioning too
     placeholder: (base: any) => ({
       ...base,
-      lineHeight: '28px',
-      position: 'relative',
-      top: 'auto',
-      transform: 'none',
+      lineHeight: `${height || 28}px`,
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      left: '8px',
+      pointerEvents: 'none',
+      color: '#999',
     }),
 
+    // Dropdown indicator: DO NOT spread ...style
     dropdownIndicator: (base: any): any => ({
       ...base,
       padding: '0px 8px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      height: '28px',
-      width: '28px',
+      height: height || 28,
+      width: 28,
       boxSizing: 'border-box',
+      color: '#6b7280',
     }),
 
     indicatorSeparator: (base: any): any => ({
@@ -110,24 +125,31 @@ const ComboBox = <T extends Base>({
       display: 'none',
     }),
 
-    // Fixed option styling with centered text
-    option: (base: any, { data, isDisabled }: { data: any, isDisabled: boolean }): any => {
-      return {
-        ...base, ...style,
-        border: '1px solid lightGray',
-        backgroundColor: data.color,
-        cursor: isDisabled ? 'not-allowed' : 'default',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '8px 12px',
-        lineHeight: '1.2',
-      }
-    },
-  }
+    // Menu: keep zIndex, but DO NOT spread ...style
+    menu: (base: any) => ({
+      ...base,
+      height: height,
+      zIndex: zIndex ?? 99999,
+      backgroundColor: '#fff',
+    }),
+
+    // Option: DO NOT spread ...style
+    option: (base: any, { data, isDisabled }: { data: any, isDisabled: boolean }): any => ({
+      ...base,
+      border: '1px solid lightGray',
+      backgroundColor: data.color || '#fff',
+      cursor: isDisabled ? 'not-allowed' : 'default',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '8px 12px',
+      lineHeight: '1.2',
+      color: '#000', // Ensure text is readable
+    }),
+  };
+
 
   const onSelectChange = (e: any) => {
     const val = values.find((m) => m.value === e?.value)
-    console.log('value ZZZZZZZZZZZ$e', val)
     if (val) {
       onChange(val.value, val.label)
     }

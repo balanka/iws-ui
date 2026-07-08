@@ -41,7 +41,7 @@ export const FormMasterfileXComboBox = ({
                                                                         styles = {},
                                                                         disable = false,
                                                                         fontSize = 11,
-                                                                        height
+                                                                        height=20
                                                                       }:MasterfileXComboBoxProps) => {
   const currentAcc = (data ?? [defaultValue]).find((acc) => acc.id === current[fieldName]) ?? defaultValue;
 
@@ -49,8 +49,8 @@ export const FormMasterfileXComboBox = ({
     <ComboBox<{ value: string | bigint; label: string }>
       style={{
         // minHeight: 20,
-        height:height,
-        minWidth: 100,
+        height:height-6,
+        //minWidth: 100,
         width: '100%',
         color: '#6b7280',
         ...styles
@@ -274,7 +274,7 @@ export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction
     // <ComboBox style={inputStyle} value={{ value: BigInt(copyFromModule?.id ?? 0), label: `${BigInt(copyFromModule?.id ?? 0)} ${copyFromModule?.name ?? ''}` }}
     //           onChange={submitCopy} values={copyFromTransaction.slice().sort(sortById).map(transactionToOption)} zIndex={99999} height ={height-5}/>
     <ComboBox<{value:string|bigint,  label:string}>
-      style={{...styles, height:height, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+      style={{...styles, height:height,  width:'100%', color: '#6b7280', fontSize:12}}
       disable={current.posted}
       value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
       onChange={(value:any, _event:any) => setCurrent({...current, [fieldName]: value })}
