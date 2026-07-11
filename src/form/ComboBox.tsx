@@ -4,8 +4,9 @@ import Select from 'react-select'
 type Base = { value: string|bigint, label: string, }
 type GenericSelectProps<T> = {
   style?: React.CSSProperties,
-  value: T,
+  value: T | T[],
   disable?: boolean,
+  isMulti?: boolean,
   zIndex?: number,
   values: T[],
   onChange: (value: any, event:any) => void,
@@ -21,10 +22,11 @@ const ComboBox = <T extends Base>({
                                     values,
                                     onChange,
                                     fontSize,
-                                    height
+                                    height,
+                                    isMulti
                                   }: GenericSelectProps<T>) => {
   //const zindex = zIndex ?? 99999
-
+  const minHeight = 24
   const customStyles = {
     // Only apply user styles to the outermost container (safe)
     container: (base: any) => ({
@@ -44,7 +46,7 @@ const ComboBox = <T extends Base>({
       borderRadius: 2,
       border: '1px solid gray',
       outline: state.isFocused ? "none" : undefined,
-      minHeight: height || 28,
+      minHeight: height || minHeight,
       display: 'flex',
       alignItems: 'center',
       backgroundColor: '#fff', // Set a safe default
@@ -56,9 +58,12 @@ const ComboBox = <T extends Base>({
       padding: '0px 0px 0px 8px',
       display: 'flex',
       alignItems: 'center',
-      height: height || 28,
+      flexWrap: 'wrap', // CRITICAL: Allows tags to wrap to the next line
+      height: isMulti ? 'auto' : (height || minHeight), // Auto height for multi
+      minHeight: height || minHeight, // Minimum height for both modes
       flex: '1 1 auto',
-      position: 'relative', // Essential for singleValue absolute positioning
+      position: 'relative',
+      gap: '2px', // Nice spacing between tags
     }),
 
     // singleValue: RESTORE absolute positioning
@@ -66,7 +71,7 @@ const ComboBox = <T extends Base>({
       ...base,
       margin: '0px',
       padding: '0px',
-      lineHeight: `${height || 28}px`,
+      lineHeight: `${height || minHeight}px`,
       // CRITICAL: Keep absolute positioning over the input
       position: 'absolute',
       top: '50%',
@@ -83,9 +88,9 @@ const ComboBox = <T extends Base>({
       ...base, // Keep react-select's base
       margin: '0px',
       padding: '0px',
-      fontSize: fontSize ?? 12,
+      fontSize: fontSize ?? 11,
       opacity: state.isDisabled ? 0.4 : 1.0,
-      lineHeight: `${height || 28}px`,
+      lineHeight: `${height || minHeight}px`,
       // CRITICAL: Transparent background so the label is visible behind it
       background: 'transparent',
       color: '#333', // Text you type will be this color
@@ -98,7 +103,7 @@ const ComboBox = <T extends Base>({
     // Placeholder: Keep absolute positioning too
     placeholder: (base: any) => ({
       ...base,
-      lineHeight: `${height || 28}px`,
+      lineHeight: `${height || minHeight}px`,
       position: 'absolute',
       top: '50%',
       transform: 'translateY(-50%)',
@@ -114,7 +119,7 @@ const ComboBox = <T extends Base>({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      height: height || 28,
+      height: height || minHeight,
       width: 28,
       boxSizing: 'border-box',
       color: '#6b7280',
@@ -141,7 +146,7 @@ const ComboBox = <T extends Base>({
       cursor: isDisabled ? 'not-allowed' : 'default',
       display: 'flex',
       alignItems: 'center',
-      padding: '8px 12px',
+      padding: '4px 4px',
       lineHeight: '1.2',
       color: '#000', // Ensure text is readable
     }),
@@ -149,22 +154,31 @@ const ComboBox = <T extends Base>({
 
 
   const onSelectChange = (e: any) => {
-    const val = values.find((m) => m.value === e?.value)
+    if (isMulti) {
+      // e is an array of selected option objects
+      // Pass the entire array to the parent's onChange
+      // Parent must store this array in its state
+      onChange(e, null);
+      return;
+    }
+
+    // Single-select logic (unchanged)
+    const val = values.find((m) => m.value === e?.value);
     if (val) {
-      onChange(val.value, val.label)
+      onChange(val.value, val.label);
     }
   }
   return (
     <Select
       styles={customStyles}
-      defaultValue={value}
       value={value}
       onChange={onSelectChange}
       options={values?.map((m, index: number) => {
         return { ...m, color: (index % 2 === 0) ? '#87CEFA' : '#E0FFFF' }
       })}
       isDisabled={disable}
-      isClearable={false}
+      isClearable={true}
+      isMulti={isMulti?? false}
       isSearchable={true}
       components={{
         IndicatorSeparator: () => null,

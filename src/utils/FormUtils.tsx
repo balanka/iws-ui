@@ -60,10 +60,15 @@ interface ShowProps<T> {
 export const transactionToOption = (m: ITransaction|IFinancials) => {
     return {value: m.id, label:`${m.id} ${m.modelid}`}
 }
-//export const toOption = (m: {id:string|bigint, name:string}):{ value:string|bigint, label:string } => {
-export const toOption = (m: {id:string|bigint, name:string}) => {
-    return {value:m?.id, label:`${m?.id} ${m?.name}`}
-}
+
+// export const toOption = (m: {id:string|bigint, name:string}) => {
+//     return {value:m?.id, label:`${m?.id} ${m?.name}`}
+// }
+
+export const toOption = (item: { id: string|bigint; name: string }) => ({
+  value: String(item.id),   // force string
+  label: `${item.id} ${item.name}`
+});
 
 export function Show <T>({ when, fallback = null, children }:ShowProps<T>) {
     return when ? children : fallback;

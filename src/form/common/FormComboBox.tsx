@@ -294,6 +294,7 @@ interface MasterfileComboboxProps<T extends Record<string, any>, U extends { id:
   height?:number;
   styles?: React.CSSProperties;
   disable?: boolean;
+  isMulti?: boolean;
 }
 
 const defaultStyles: React.CSSProperties = {
@@ -314,23 +315,93 @@ export const MasterfileXComboBox = <T extends Record<string, any>, U extends { i
                                                                                                              zIndex = 10,
                                                                                                              height,
                                                                                                              styles = {},
-                                                                                                             disable = false
+                                                                                                             disable = false,
+                                                                                                             isMulti=false
                                                                                                            }: MasterfileComboboxProps<T, U>): React.JSX.Element => {
   const items = [defaultValue, ...data];
-  const currentAcc = items.find((acc) => acc?.id === current[fieldName]) ?? defaultValue;
 
+// Determine the selected value(s) based on isMulti
+  console.log('🔍 current[fieldName]:', current[fieldName]);
+  console.log('🔍 typeof:', typeof current[fieldName]);
+  console.log('🔍 isMulti:', isMulti);
+
+  const selectedValue = isMulti
+    ? (() => {
+      const raw = current[fieldName];
+      if (Array.isArray(raw)) {
+        return raw
+          .map((id: string) => {
+            const item = items.find(acc => String(acc?.id) === String(id));
+            return item ? { value: String(item.id), label: `${item.id} ${item.name}` } : null;
+          })
+          .filter(Boolean);
+      }
+      if (typeof raw === 'string' && raw.trim()) {
+        const ids = raw.split(/\s+/).filter((id:string) => id.length > 0);
+        return ids
+          .map((id: string) => {
+            const item = items.find(acc => String(acc?.id) === String(id));
+            return item ? { value: String(item.id), label: `${item.id} ${item.name}` } : null;
+          })
+          .filter(Boolean);
+      }
+      return [];
+    })()
+    : // single mode
+    (() => {
+      const found = items.find(acc => String(acc?.id) === String(current[fieldName]));
+      return found
+        ? { value: String(found.id), label: `${found.id} ${found.name}` }
+        : { value: '', label: '' };
+    })();
+
+  const onChange = (value: {value: string, label: string}[]) => {
+    console.log('Raw onChange value:', value);
+    const ids = value.filter(v => v && v.value).map(v => v.value);
+    console.log('Extracted IDs (array):', ids);
+    // Store as space-separated string
+    const joined = ids.join(' ');
+    console.log('Stored string:', joined);
+    setCurrent({ ...current, [fieldName]: joined });
+  };
+
+//   const selectedValue = isMulti
+//     ? // If current[fieldName] is an array of IDs
+//     (Array.isArray(current[fieldName])
+//       ? current[fieldName]
+//         .map((id: string) => {
+//           const item = items.find(acc => acc?.id === id);
+//           return item ? { value: item.id, label: `${item.id} ${item.name}` } : null;
+//         })
+//         .filter(Boolean) // remove nulls
+//       : []) // fallback to empty array
+//     : // Single mode: find the single selected item
+//     (() => {
+//       const found = items.find(acc => acc?.id === current[fieldName]);
+//       return found ? { value: found.id, label: `${found.id} ${found.name}` } : { value: '', label: '' };
+//     })();
+
+  // const onChange = (value: {value:string, label:String} []) => {
+  //   console.log('value', value)
+  //   const valuex = value.filter(v=>v.value)
+  //   console.log('valuex', valuex)
+  //   const v = //value.filter(m=>m?.value?.length>0)
+  //     valuex.map( (v:{value:string, label:String})=>v.value)//.filter(v=>v.length>0)
+  //   console.log('vvalue', v)
+  //   setCurrent({ ...current, [fieldName]: v.join(' ') })
+  // }
+
+// Now pass selectedValue to ComboBox
   return (
     <ComboBox
       style={{ ...defaultStyles, ...styles }}
       disable={disable}
-      value={{
-        value: currentAcc?.id || '',
-        label: currentAcc ? `${currentAcc.id} ${currentAcc.name}` : ''
-      }}
-      onChange={(value: string) => setCurrent({ ...current, [fieldName]: value })}
+      isMulti={isMulti}
+      value={selectedValue}   // ✅ Array when multi, object when single
+      onChange={onChange}
       values={data?.slice().sort(sortById).map(toOption)}
       zIndex={zIndex}
-      height ={height}
+      height={height}
     />
   );
 };

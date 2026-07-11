@@ -92,7 +92,7 @@ export const FinancialsMainForm = ({
           <Label>{t('common.id')}</Label>
           <InputField fieldName="id" current={currentx} setCurrent={setCurrent} value={currentx.id} disabled={currentx.posted} style={{ ...inputStyle, width: '50%', textAlign: 'right' }} />
           <Label>{t('fmodule.title')}</Label>
-          <ComboBox style={inputStyle} value={{ value: BigInt(currentModule?.id ?? 0), label: `${BigInt(currentModule?.id ?? 0)}
+          <ComboBox style={inputStyle} value={{ value: `${BigInt(currentModule?.id ?? 0)}`, label: `${BigInt(currentModule?.id ?? 0)}
            ${currentModule?.name ?? ''}` }} onChange={handleModuleChange} values={modules.slice().sort(sortById).map(toOption)}
                     key="moduleComboBox" height ={height-5}
                     zIndex={99999} />

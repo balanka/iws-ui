@@ -79,29 +79,38 @@ const FinancialsForm = () => {
   const [oaccFilter, setOAccFilter] = useState<string[]>([])
   const [reminderBalance, setReminderBalance] = useState<ReminderBalance[]>([initReminderBalance])
 
-  const handleModuleChange = (value:any) => {
-    setModel(value)
-    const mx:IFmodule = fmodule.find((m:IFmodule) => m.id === value) ?? initfModule
-    title_ = mx?.name ? mx.name : title_
-    title_ = `${company}/${title_}`
-    const copyFromIds = (mx? mx.copyFrom:'-1').replace(/\s/g,'').split(',')
-    console.log('copyFromIds', copyFromIds)
-    setTitle(title_)
-    setCurrent(current_)
-    setAccFilter(mx.accFilter?.replace(/\s/g,'').split(','))
-    setOAccFilter(mx.oaccFilter?.replace(/\s/g,'').split(','))
-    const modelidx = parseInt(value) //parseInt(mx.id.toString()??0)
-    //setModel(modelidx)
-    ctx = `${module_.ctx}/${modelidx}/${company}`
-    const ctx_copyFrom = `${module_.ctx}/n/${company}/${copyFromIds}`
-    const idx= copyFromIds.map((i)=>
-      parseInt(i)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)
-    console.log('idx>>>>', idx)
-    Get(ctx_copyFrom, token, idx, setCopyFromTransaction)
-    submitQuery(ctx)
-    const currentx = rowData?.filter(m=>m.modelid===current_.modelid).length>0?rowData[0]:current_
-    setCurrent( {...currentx, modelid:modelidx})
-  }
+  const handleModuleChange = (selected: any) => {
+    // If selected is an object with a 'value' property, extract it
+    const id = selected?.value !== undefined ? String(selected.value) : String(selected);
+    const numericId = parseInt(id, 10);   // <-- always specify radix 10
+    setModel(numericId);
+    setModel(parseInt(id));
+    const mx: IFmodule = fmodule.find((m: IFmodule) => String(m.id) === id) ?? initfModule;
+    const moduleName = mx?.name ?? 'Not found';
+    title_ = `${company}/${moduleName}`;
+
+    const copyFromIds = (mx?.copyFrom ?? '-1').replace(/\s/g, '').split(',');
+    console.log('copyFromIds', copyFromIds);
+
+    setTitle(title_);
+    setCurrent(current_);
+    setAccFilter(mx.accFilter?.replace(/\s/g, '').split(','));
+    setOAccFilter(mx.oaccFilter?.replace(/\s/g, '').split(','));
+
+    const modelidx = parseInt(id, 10);
+    setModel(modelidx);
+
+    ctx = `${module_.ctx}/${modelidx}/${company}`;
+    const ctx_copyFrom = `${module_.ctx}/n/${company}/${copyFromIds}`;
+    const idx = copyFromIds.map(i => parseInt(i, 10)).reduce((acc, curr) => acc + curr, 0);
+    //console.log('idx>>>>', idx);
+    Get(ctx_copyFrom, token, idx, setCopyFromTransaction);
+    submitQuery(ctx);
+
+    const currentx = rowData?.filter(m => m.modelid === current_.modelid).length > 0 ? rowData[0] : current_;
+    setCurrent({ ...currentx, modelid: modelidx });
+  };
+
   useEffect(() => {
     Promise.all([
       !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData),

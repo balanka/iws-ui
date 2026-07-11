@@ -112,6 +112,7 @@ export default function useMasterfileForm<T extends IWSModel>(
     if (edited) {
       // Update existing record
       const updatedRecord = await Edit(modifyUrl, token, { ...current }, setCurrent);
+      console.log('updatedRecord', updatedRecord);
       if (updatedRecord) {
         const index = rowData.findIndex(obj => obj?.id === updatedRecord.id);
         if (index !== -1) {

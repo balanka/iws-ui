@@ -61,6 +61,7 @@ export const FModuleMainForm = ({
         <CCol sm={4}>
           <MasterfileXComboBox
             fieldName="copyFrom" current={current} setCurrent={setCurrent}
+            isMulti={true}
             //@ts-ignore
             data={rowData} defaultValue={initAcc[0]} disable={disable} styles={comboStyles}
           />
