@@ -23,7 +23,8 @@ ModuleRegistry.registerModules([
 ])
 
 const InventoryJournalForm = () => {
-  const [{ t, title, language, handleLanguageChange, company, module_}] = useForm()
+  const [{ t, title, language, profile,  handleLanguageChange, module_}] = useForm()
+  const {currency, locale, company} = profile
   const  [{ rowData, current_, current, setCurrent, submitQuery, onRowSelected, articleData, storeData
     , templateName, styles}] = useArticleAccountForm<InventoryJournal>()
   if (module_ === '11111' || module_ === 11111) return <Login/>
@@ -47,7 +48,7 @@ const InventoryJournalForm = () => {
         // @ts-ignore
                        stylesx={{height: 950, paddingBottom: 5}} />
       <div  style={{paddingLeft: 1, paddingRight: 1, paddingTop: 10, height: 560, width: "100%"}}>
-        <InventoryJournalGrid columnDefs ={inventoryJournalColumnsDefs(t)} defaultColDef ={{...defaultColDefX, filter:true}}
+        <InventoryJournalGrid columnDefs ={inventoryJournalColumnsDefs(t, locale??'fr-FR', currency??'EUR')} defaultColDef ={{...defaultColDefX, filter:true}}
                      onRowSelected={onRowSelected} rowData={rowData}/>
       </div>
     </div>

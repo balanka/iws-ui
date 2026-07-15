@@ -15,7 +15,7 @@ const TransactionDetailsTabs = ({
                                       transaction, setTransaction
                                     , currentLineTransaction, setCurrentLineTransaction
                                    ,  accountFilter, oaccountFilter
-                                  , articleData, vatData, t, onGridReady,  zIndex
+                                  , articleData, vatData, t, onGridReady,  zIndex, locale, currency
                                 }: TransactionDetailsTabProps<ITransaction, ILineTransaction>) => {
 
     const height = 20
@@ -41,7 +41,7 @@ const TransactionDetailsTabs = ({
                 // @ts-ignore
                   style={{ width: '100%', height: 120, paddingTop:1, zIndex:zIndex-2}}>
                   {/*style={{...styles.outer, width: '100%', height: 130, paddingTop:1, zIndex:zIndex-2}}>*/}
-                <LineTransactionGrid columnDefs={lineTransactionColumnDefs(t)} onRowSelected={onRowSelected}
+                <LineTransactionGrid columnDefs={lineTransactionColumnDefs(t, locale, currency)} onRowSelected={onRowSelected}
                    rowData={!transaction?.lines?.length?[ {...currentLineTransaction, transid:transaction?.id}]:transaction?.lines}
                    onGridReady={onGridReady}  pagination={false}/>
             </div>

@@ -14,7 +14,9 @@ export const CustomerAccountMainForm = ({
   const s = { height: height - 3, width: '100%', fontSize: '0.875rem' };
   const s2 = { height: 25, width: '100%', fontSize: '0.875rem' };
   const cw = { labelWidth: '20%', fieldWidth: '80%' };
-
+ console.log('accData>>>', accData)
+  console.log('ccData>>>', ccData)
+  console.log('vatData>>>', vatData)
   const hasVat = current?.hasOwnProperty('vatCode') || current?.hasOwnProperty('vatcode');
   const hasCostCenter = current?.hasOwnProperty('costcenter');
 

@@ -36,14 +36,12 @@ ModuleRegistry.registerModules([
 
 const JForm = () => {
   const [{ profile,  t, title, language, handleLanguageChange, module_}] = useForm()
-
   const  [{ accData, rowData, setRowData,  current, setCurrent, submitQuery, submitQuery2
     , onRowSelected, templateName, styles}] = useJForm<IPeriodicAccountBalance>()
 
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const gridRef = useRef<AgGridReact>(null);
-
-  const {currency, company} = profile
+  const {currency, locale, company} = profile
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const dispatch = useDispatch()
   const height = 20
@@ -179,7 +177,7 @@ const JForm = () => {
             <div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: '100%'}}>
               {/*<PacTable items={rowData.map(format)} key ='packTable'/>*/}
               {/*<PacTable2 items={rowData.map(format)} key ='packTable'/>*/}
-                <PeriodicAccountBalanceGrid columnDefs ={pacColumnsDefs(t)} defaultColDef ={defaultColDefX}
+                <PeriodicAccountBalanceGrid columnDefs ={pacColumnsDefs(t, locale??'fr-FR', currency??'EUR')} defaultColDef ={defaultColDefX}
                       onRowSelected={onRowSelected} onSelectionChanged ={onSelectionChanged}  gridRef={gridRef} rowData={ rowData.map(format)}/>
             </div>
         </div>

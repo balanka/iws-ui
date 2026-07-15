@@ -62,7 +62,7 @@ export const FormMasterfileXComboBox = ({
         label: currentAcc ? `${currentAcc.id} ${currentAcc.name}` : ''
       }}
       onChange={(value: any, _event: any) => setCurrent({ ...current, [fieldName]: value })}
-      values={data.slice().sort(sortById).map(toOption)}
+      values={data.length ? data.slice().sort(sortById).map(toOption) : [toOption(defaultValue)]}
       zIndex={zIndex}
     />
   );
@@ -267,12 +267,15 @@ export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction
   // @ts-ignore
   const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === current[fieldName])??defaultValue
   // @ts-ignore
-  //const filtered= (current.modelid===formEnum.ACCOUNT) && accFilter.length>0?getFiltered(data, accFilter):data
-  const filtered=  accFilter.length>0?getFiltered(data, accFilter):data
-
+  const filtered= (defaultValue.modelid===formEnum.ACCOUNT) && accFilter.length>0?getFiltered(data, accFilter):data
+  //const filtered=  accFilter.length>0?getFiltered(data, accFilter):data
+  console.log('📊 Raw data:', data);
+  console.log('📊 Data length:', data?.length);
+  console.log('📊 accFilter:', accFilter);
+  console.log('📊 Filtered data:', filtered);
+  console.log('📊 Filtered length:', filtered?.length);
+  console.log('📊 Mapped options:', filtered?.slice()?.sort(sortById)?.map(toOption));
   return (
-    // <ComboBox style={inputStyle} value={{ value: BigInt(copyFromModule?.id ?? 0), label: `${BigInt(copyFromModule?.id ?? 0)} ${copyFromModule?.name ?? ''}` }}
-    //           onChange={submitCopy} values={copyFromTransaction.slice().sort(sortById).map(transactionToOption)} zIndex={99999} height ={height-5}/>
     <ComboBox<{value:string|bigint,  label:string}>
       style={{...styles, height:height,  width:'100%', color: '#6b7280', fontSize:12}}
       disable={current.posted}

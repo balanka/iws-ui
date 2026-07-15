@@ -84,7 +84,7 @@ const FinancialsForm = () => {
     const id = selected?.value !== undefined ? String(selected.value) : String(selected);
     const numericId = parseInt(id, 10);   // <-- always specify radix 10
     setModel(numericId);
-    setModel(parseInt(id));
+    //setModel(parseInt(id));
     const mx: IFmodule = fmodule.find((m: IFmodule) => String(m.id) === id) ?? initfModule;
     const moduleName = mx?.name ?? 'Not found';
     title_ = `${company}/${moduleName}`;
@@ -262,7 +262,7 @@ const FinancialsForm = () => {
               , padding: 2, paddingTop: 3, zIndex:4}}>
         <LineTFinancialsGrid
           // @ts-ignore
-          theme="legacy" columnDefs={LinesFinancialsColumns(t)} onRowSelected={onRowSelectedL}
+          theme="legacy" columnDefs={LinesFinancialsColumns(t, locale, currency)} onRowSelected={onRowSelectedL}
           onGridReady={onGridReady}  rowData={!current.hasOwnProperty('lines')?[{...currentLine
           , transid:current?.id}]:current.lines} pagination={false} />
       </div>
@@ -275,7 +275,7 @@ const FinancialsForm = () => {
             maximize direction="column">
         <TransactionGrid
           // @ts-ignore
-          gridOptions ={gridOptions (financialsColumnDefs, LinesFinancialsColumns, t)}
+          gridOptions ={gridOptions (financialsColumnDefs, locale, currency, LinesFinancialsColumns, t, locale, currency)}
           onRowSelected={onRowSelected} rowData={rowData}/>
     </div>
   </>)

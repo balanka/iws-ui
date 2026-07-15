@@ -10,7 +10,7 @@ import {CustomerAccountMainFormProps, StoreGeneralFormProps, StoreProps} from '.
 import {initStore} from "./Menu.tsx";
 
 export  const StoreTabs =(
-    { collapse, current, setCurrent, ccData, accData, locale,  t,  disable, height, zIndex, minMaxHieght }:StoreProps) => {
+    { collapse, current, setCurrent, ccData, accData, locale, currency, t,  disable, height, zIndex, minMaxHieght }:StoreProps) => {
     const  props:CustomerAccountMainFormProps = {current, setCurrent, ccData, accData, vatData:[],  t,  disable, height, zIndex}
     const  props2:StoreGeneralFormProps = {collapse, current, setCurrent, accData, locale,  t,  disable, height }
 
@@ -29,7 +29,7 @@ export  const StoreTabs =(
       <div  style={{...styles.outer0, paddingTop:15, height:minMaxHieght,  minWidth:"100%"}}>
           <StockGrid
               // @ts-ignore
-              theme="legacy" columnDefs ={stockColumnDefs(t)}
+              theme="legacy" columnDefs ={stockColumnDefs(t, locale, currency)}
                        onRowSelected={()=>{}} rowData ={current?.stocks??initStore.stocks} />
       </div>
 

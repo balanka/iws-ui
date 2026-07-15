@@ -249,9 +249,9 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
    const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current?.lines??[] }
 
   const gridOptions = (
-    columnDefs: (t: TFunction<'transalation', undefined>) => ColDef[],
-    lineColumnDefs: (t: TFunction<'transalation', undefined>) => ColDef[],
-    t: TFunction<'transalation', undefined>
+    columnDefs: (t: TFunction<'transalation', undefined>, locale:string, currency:string ) => ColDef[], locale:string, currency:string
+    , lineColumnDefs: (t: TFunction<'transalation', undefined>, locale:string, currency:string) => ColDef[]
+    , t: TFunction<'transalation', undefined>
   ): GridOptions<T> => {
     return {
       rowStyle: { background: 'lightBlue' },
@@ -283,7 +283,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
       autoSizeStrategy: {
         type: 'fitGridWidth' as const,   // ✅ literal type
       },
-      columnDefs: columnDefs(t),
+      columnDefs: columnDefs(t, locale, currency),
       detailCellRendererParams: {
         detailGridOptions: {
           getRowStyle: (params: RowClassParams<any>) => {
@@ -292,7 +292,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
             }
             return undefined;
           },
-          columnDefs: lineColumnDefs(t),
+          columnDefs: lineColumnDefs(t, locale, currency),
           defaultColDef: { flex: 1 },
         },
         getDetailRowData: (params: any) => {

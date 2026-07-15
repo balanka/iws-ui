@@ -6,15 +6,16 @@ import {
   IAsset,
   IBankStatement,
   IFinancials, IJournal, ILineFinancials,
-  ILineTransaction, InventoryJournal,
+  ILineTransaction, InventoryJournal, IPeriodicAccountBalance, IStock,
   IStore,
   ITransaction,
   IUser
 } from "./Models.ts";
 import {TFunction} from "i18next";
-import {AgGridCheckbox} from "./utils/FormUtils.tsx";
+import {AgGridCheckbox, amountFormatter} from "./utils/FormUtils.tsx";
 import {dateRenderer, getDateFromString} from './utils/Utils'
 import {ColDef, ValueFormatterParams} from "ag-grid-community";
+import {initLineFinancials, initLineTransaction} from "./form/Menu.tsx";
 
 export const accountColumnDefs=  (t: (arg0: string) => any):ColDef<IAccount>[] => [
   {
@@ -217,7 +218,7 @@ export const fmoduleColumnDefs=  (t: (arg0: string) => any) => {
     },
   ]
 }
-export const pacColumnsDefs = (t: (arg0: string) => any) =>  [
+export const pacColumnsDefs = (t: (arg0: string) => any, locale:string, currency:string) =>  [
   {
     field: 'account',
     headerName: t('account.account'),
@@ -248,14 +249,16 @@ export const pacColumnsDefs = (t: (arg0: string) => any) =>  [
         headerName: t('common.debit'),
         cellStyle: {textAlign: 'right'},
         minWidth: 10,
-        valueFormatter: (params: { data: { idebit: number } }) => Number(params.data?.idebit).toFixed(2),
+        valueFormatter: (params:ValueFormatterParams<IPeriodicAccountBalance, number>) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.idebit, params.data, locale, currency),
       },
       {
         field: 'icredit', //aggFunc: "sum",
         headerName: t('common.credit'),
         minWidth: 10,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params: { data: { icredit: number }}) => Number(params.data?.icredit).toFixed(2),
+        valueFormatter: (params:ValueFormatterParams<IPeriodicAccountBalance, number>) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.icredit, params.data, locale, currency),
       },
     ]
   },
@@ -270,14 +273,16 @@ export const pacColumnsDefs = (t: (arg0: string) => any) =>  [
         headerName: t('common.debit'),
         cellStyle: {textAlign: 'right'},
         minWidth: 10,
-        valueFormatter: (params: { data: { debit: number } }) => Number(params.data?.debit).toFixed(2),
+        valueFormatter: (params:ValueFormatterParams<IPeriodicAccountBalance, number>) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.debit, params.data, locale, currency),
       },
       {
         field: 'credit', //aggFunc: "sum",
         headerName: t('common.credit'),
         minWidth: 10,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params: { data: { credit: number } }) => Number(params.data?.credit).toFixed(2),
+        valueFormatter: (params:ValueFormatterParams<IPeriodicAccountBalance, number>) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.credit, params.data, locale, currency),
       },
     ],
   },
@@ -292,14 +297,16 @@ export const pacColumnsDefs = (t: (arg0: string) => any) =>  [
         headerName: t('common.debit'),
         cellStyle: {textAlign: 'right'},
         minWidth: 10,
-        valueFormatter: (params: { data: { bdebit: number } }) =>Number(params.data?.bdebit).toFixed(2),
+        valueFormatter: (params:ValueFormatterParams<IPeriodicAccountBalance, number>) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.bdebit, params.data, locale, currency),
       },
       {
         field: 'bcredit',
         headerName: t('common.credit'),
         minWidth: 10,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params: { data: { bcredit: number } }) =>Number(params.data?.bcredit).toFixed(2),
+        valueFormatter: (params:ValueFormatterParams<IPeriodicAccountBalance, number>) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.bcredit, params.data, locale, currency),
       },
     ],
   },
@@ -446,7 +453,7 @@ export const bankAccountColumnDefs = (t: (arg0: string) => any) => [
     width: 20,
   }
 ]
-export const articleColumnDefs = (t: (arg0: string) => any):ColDef<IArticle>[] => [
+export const articleColumnDefs = (t: (arg0: string) => any, locale:string, currency:string):ColDef<IArticle>[] => [
   {
     field: 'id',
     headerName: t('common.id'),
@@ -513,30 +520,24 @@ export const articleColumnDefs = (t: (arg0: string) => any):ColDef<IArticle>[] =
   {
     field: 'pprice',
     headerName: t('article.pprice'),
-    valueFormatter: (params: ValueFormatterParams<IArticle, number>) =>{
-      const pprice = params.data?.pprice??0.0
-      return  pprice.toFixed(2)
-    },
+    valueFormatter: (params:ValueFormatterParams<IArticle, number>) =>
+      (!params.data)?'':amountFormatter((p:IArticle)=>p.pprice, params.data, locale, currency),
     minWidth: 40,
     filter: "agNumberColumnFilter",
   },
   {
     field: 'avgPrice',
     headerName: t('article.avgPrice'),
-    valueFormatter: (params:ValueFormatterParams<IArticle, number>)  =>   {
-      const avgPrice = params.data?.avgPrice??0.0
-      return  avgPrice.toFixed(2)
-    },
+    valueFormatter: (params:ValueFormatterParams<IArticle, number>) =>
+      (!params.data)?'':amountFormatter((p:IArticle)=>p.avgPrice, params.data, locale, currency),
     minWidth: 40,
     filter: "agNumberColumnFilter",
   },
   {
     field: 'sprice',
     headerName: t('article.sprice'),
-    valueFormatter: (params:ValueFormatterParams<IArticle, number>)  => {
-      const sprice = params.data?.sprice??0.0
-    return  sprice.toFixed(2)
-    },
+    valueFormatter: (params:ValueFormatterParams<IArticle, number>) =>
+      (!params.data)?'':amountFormatter((p:IArticle)=>p.sprice, params.data, locale, currency),
     minWidth: 40,
     filter: "agNumberColumnFilter",
   },
@@ -559,7 +560,7 @@ export const articleColumnDefs = (t: (arg0: string) => any):ColDef<IArticle>[] =
     cellRenderer: dateRenderer
   },
 ]
-export const assetColumnDefs = (t: (arg0: string) => any) :ColDef<IAsset>[] => [
+export const assetColumnDefs = (t: (arg0: string) => any, locale:string, currency:string) :ColDef<IAsset>[] => [
   {
     field: 'id',
     headerName: t('common.id'),
@@ -588,14 +589,16 @@ export const assetColumnDefs = (t: (arg0: string) => any) :ColDef<IAsset>[] => [
   {
     field: 'amount',
     headerName: t('asset.amount'),
-    valueFormatter: (params: ValueFormatterParams<IAsset, number>) => (params.data?.amount??0.0).toFixed(2),
+    valueFormatter: (params:ValueFormatterParams<IAsset, number>) =>
+      (!params.data)?'':amountFormatter((p:IAsset)=>p.amount, params.data, locale, currency),
     minWidth: 40,
     filter: "agNumberColumnFilter",
   },
   {
     field: 'scrapValue',
     headerName: t('asset.scrapValue'),
-    valueFormatter: (params: ValueFormatterParams<IAsset, number>) => (params.data?.scrapValue??0.0).toFixed(2),
+    valueFormatter: (params:ValueFormatterParams<IAsset, number>) =>
+      (!params.data)?'':amountFormatter((p:IAsset)=>p.scrapValue, params.data, locale, currency),
     minWidth: 40,
     filter: "agNumberColumnFilter",
   },
@@ -657,7 +660,7 @@ export const assetColumnDefs = (t: (arg0: string) => any) :ColDef<IAsset>[] => [
     cellRenderer: dateRenderer
   },
 ]
-export const LinesFinancialsColumns = ( t: (arg0: string) => any) => {
+export const LinesFinancialsColumns = ( t: (arg0: string) => any, locale:string, currency:string) => {
 
   return  [
     {
@@ -698,36 +701,25 @@ export const LinesFinancialsColumns = ( t: (arg0: string) => any) => {
       minWidth: 20,
       cellStyle: {textAlign: 'right'},
       filter: 'agDateColumnFilter',
-     //  valueFormatter: (params: ValueFormatterParams<any, Date>) => {
-     //    if (!params.value) {
-     //      return ""
-     //    }
-     //    console.log('params', params)
-     //    const date = new Date(params.value)
-     //    const month = date.getMonth() + 1
-     //    const day = date.getDate()
-     //    return `${date.getFullYear()}.${month < 10 ? "0" + month : month}.${day < 10 ? "0" + day : day}`;
-     //  },
-     //  //cellEditor: "agDateStringCellEditor",
-     //  cellEditor: "agDateCellEditor",
-     // // cellEditor: IWSDatepicker,
-     //  editable: true,
      cellRenderer: dateRenderer
     },
     {
       field: 'amount',
       headerName: t('financials.line.amount'),
-      valueFormatter: (params: { data: { amount: number } }) => params.data?.amount?.toFixed(2),
+      valueFormatter: (params:ValueFormatterParams<ILineFinancials, number>) => {
+        const calculateTotal = (line:ILineFinancials) => line.amount
+        return  amountFormatter(calculateTotal, params?.data??initLineFinancials, locale, currency)
+      },
       minWidth: 30,
       cellStyle: {textAlign: 'right'},
       filter: "agNumberColumnFilter",
     },
-    {
-      field: 'currency',
-      headerName: t('common.currency'),
-      minWidth: 10,
-      filter: "agTextColumnFilter",
-    },
+    // {
+    //   field: 'currency',
+    //   headerName: t('common.currency'),
+    //   minWidth: 10,
+    //   filter: "agTextColumnFilter",
+    // },
     {
       field: 'text',
       headerName: t('financials.line.text'),
@@ -736,7 +728,7 @@ export const LinesFinancialsColumns = ( t: (arg0: string) => any) => {
     },
   ]}
 
-export const bankStatementColumnDefs = (t: (arg0: string) => any):ColDef<IBankStatement>[] =>
+export const bankStatementColumnDefs = (t: (arg0: string) => any, locale:string, currency:string) =>
    [
     {
       field: 'id',
@@ -796,6 +788,8 @@ export const bankStatementColumnDefs = (t: (arg0: string) => any):ColDef<IBankSt
       minWidth: 20,
       cellStyle: {textAlign: 'right'},
       filter: "agNumberColumnFilter",
+      valueFormatter: (params:{ data:IBankStatement}) =>
+       !params?.data?'':amountFormatter((p: IBankStatement) => p.amount, params.data, locale, currency)
     },
     {
       field: 'currency',
@@ -842,7 +836,7 @@ export const bankStatementColumnDefs = (t: (arg0: string) => any):ColDef<IBankSt
     },
   ]
 
-export const financialsColumnDefs = (t: (arg0: string) => any) => {
+export const financialsColumnDefs = (t: (arg0: string) => any, locale:string, currency:string)=> {
   return [
     {
       field: 'id',
@@ -860,14 +854,6 @@ export const financialsColumnDefs = (t: (arg0: string) => any) => {
       minWidth: 6,
 
     },
-    // {
-    //   field: 'id1',
-    //   headerName: t('financials.id'),
-    //   cellStyle: {textAlign: 'right'},
-    //   //filter: "agTextColumnFilter",
-    //   minWidth: 6,
-    //
-    // },
     {
       field: 'account',
       headerName: t('financials.account'),
@@ -887,9 +873,11 @@ export const financialsColumnDefs = (t: (arg0: string) => any) => {
       field: 'total',
       headerName: t('common.total'),
       valueFormatter: (params:{data:IFinancials}) => {
-        return Number(params.data?.lines?.reduce((acc:number, line:ILineFinancials) =>
-          acc + line.amount, 0.0)??0.0).toFixed(2)},
-      //type: 'currency',
+        if (!params.data) return '';
+        const calculateTotal = (t:IFinancials) =>
+                      t.lines?.reduce((acc:number, line:ILineFinancials) => acc + line.amount, 0.0)??0.0
+        return  amountFormatter(calculateTotal, params.data, locale, currency)
+      },
       minWidth: 25,
       filter: "agNumberColumnFilter",
       cellStyle: {textAlign: 'right'},
@@ -927,6 +915,14 @@ export const financialsColumnDefs = (t: (arg0: string) => any) => {
       pivot: true
     },
     {
+      field: 'contact',
+      headerName: t('common.contact'),
+      cellStyle: {textAlign: 'right'},
+      //filter: "agTextColumnFilter",
+      minWidth: 6,
+
+    },
+    {
       field: 'posted',
       headerName: t('financials.posted'),
       cellRendererFramework: AgGridCheckbox,
@@ -955,9 +951,8 @@ export const financialsColumnDefs = (t: (arg0: string) => any) => {
     },
   ]
 }
-//    (accumulator, currentValue) => accumulator + currentValue.x, 0
-//   0,
-export const transactionColumnDefs = ( t: TFunction<"translation", undefined>) => {
+
+export const transactionColumnDefs = ( t: TFunction<"translation", undefined>, locale:string, currency:string) => {
 
   return [
     {
@@ -985,12 +980,12 @@ export const transactionColumnDefs = ( t: TFunction<"translation", undefined>) =
       filter: "agTextColumnFilter",
       minWidth: 10,
     },
-    {
-      field: 'enterdate',
-      headerName: t('transaction.enterdate'),
-      filter: 'agDateColumnFilter',
-      minWidth: 20,
-    },
+    // {
+    //   field: 'enterdate',
+    //   headerName: t('transaction.enterdate'),
+    //   filter: 'agDateColumnFilter',
+    //   minWidth: 20,
+    // },
     // {
     //   field: 'postingdate',
     //   headerName: t('transaction.postingdate'),
@@ -1009,21 +1004,25 @@ export const transactionColumnDefs = ( t: TFunction<"translation", undefined>) =
       minWidth: 5,
       filter: "agNumberColumnFilter"
     },
-    {
-      field: 'posted',
-      headerName: t('transaction.posted'),
-      //cellRendererFramework: AgGridCheckbox,
-      width: 8,
-      minWidth: 7,
-      cellStyle: {textAlign: 'left'},
-    },
+
     {
       field: 'total',
       headerName: t('common.total'),
       valueFormatter: (params:{data:ITransaction}) => {
-        return Number(params.data?.lines?.reduce((acc:number, line:ILineTransaction) =>
-          acc + line.quantity * line.price +line.vat, 0.0)??0.0).toFixed(2)},
-      //type: 'currency',
+        const calculateTotal = (t:ITransaction) =>t.lines?.reduce((acc:number, line:ILineTransaction) =>
+          acc + line.quantity * line.price +line.vat, 0.0)??0.0
+       return  amountFormatter(calculateTotal, params.data, locale, currency)
+      },
+      // valueFormatter: (params:{data:ITransaction}) => {
+      //
+      //   const formattedNumber =  new Intl.NumberFormat(locale, {
+      //     minimumFractionDigits: 0,
+      //     maximumFractionDigits: 0,
+      //     useGrouping: true,
+      //   }).format(amount).replace(/\s/g, '.')
+      //    return `${formattedNumber} ${currency}`;
+     // },
+       //}).format(amount).replace(/,/g, '.')},
       minWidth: 25,
       //filter: "agNumberColumnFilter",
       cellStyle: {textAlign: 'right'},
@@ -1033,6 +1032,14 @@ export const transactionColumnDefs = ( t: TFunction<"translation", undefined>) =
       headerName: t('transaction.text'),
       filter: "agTextColumnFilter",
       minWidth: 50,
+    },
+    {
+      field: 'posted',
+      headerName: t('transaction.posted'),
+      //cellRendererFramework: AgGridCheckbox,
+      width: 8,
+      minWidth: 7,
+      cellStyle: {textAlign: 'left'},
     },
     {
       field: 'modelid',
@@ -1047,7 +1054,8 @@ export const transactionColumnDefs = ( t: TFunction<"translation", undefined>) =
     },
   ]
 }
-export const lineTransactionColumnDefs =  (t: (arg0: string) => any):ColDef<ILineTransaction>[]  =>  [
+export const lineTransactionColumnDefs =  (t: (arg0: string) => any,  locale:string
+                                           , currency:string):ColDef<ILineTransaction>[]  =>  [
   {
     field: 'article',
     headerName: t('transaction.line.article'),
@@ -1090,19 +1098,22 @@ export const lineTransactionColumnDefs =  (t: (arg0: string) => any):ColDef<ILin
     field: 'total',
     headerName: t('common.total'),
     cellStyle: {textAlign: 'right'},
-    valueFormatter: (params:ValueFormatterParams<ILineTransaction, number>)  => {
-       const quantity = params.data?.quantity??0.0
-      const price = params.data?.price??0.0
-      const vat = params.data?.vat??0.0
-      return Number(quantity * price + vat).toFixed(2)
+    valueFormatter: (params:ValueFormatterParams<ILineTransaction, number>) => {
+      const calculateTotal = (line:ILineTransaction) => {
+        const quantity = line?.quantity ?? 0.0
+        const price = line?.price ?? 0.0
+        const vat = line?.vat ?? 0.0
+        return Number(quantity * price + vat)
+      }
+      return  amountFormatter(calculateTotal, params?.data??initLineTransaction, locale, currency)
     },
     minWidth: 70,
   },
-  {
-    field: 'currency',
-    headerName: t('common.currency'),
-    minWidth: 20,
-  },
+  // {
+  //   field: 'currency',
+  //   headerName: t('common.currency'),
+  //   minWidth: 20,
+  // },
   {
     field: 'vatCode',
     headerName: t('common.vatCode'),
@@ -1136,7 +1147,7 @@ export const lineTransactionColumnDefs =  (t: (arg0: string) => any):ColDef<ILin
     minWidth: 50,
   },
 ]
-export const journalColumnsDefs = (t: (arg0: string) => any) => [
+export const journalColumnsDefs = (t: (arg0: string) => any, locale:string, currency:string) => [
   {
     field: 'id',
     headerName: t('common.id'),
@@ -1182,33 +1193,40 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
     field: 'amount',
     headerName: t('common.amount'),
     cellStyle: { textAlign: 'right'},
-    valueFormatter: (params:{data:IJournal}) => {
-      return (params.data?.amount??0.0).toFixed(2)
-    },
+    valueFormatter: (params:{data:IJournal}) =>
+      (!params.data)?'':amountFormatter((p:IJournal)=>p.amount, params.data, locale, currency),
     minWidth: 10,
   },
   {
     field: 'idebit',
     headerName: t('common.idebit'),
     cellStyle: {textAlign: 'right'},
+    valueFormatter: (params:{data:IJournal}) =>
+      (!params.data)?'':amountFormatter((p:IJournal)=>p.idebit, params.data, locale, currency),
     minWidth: 8,
   },
   {
     field: 'debit',
     headerName: t('common.debit'),
     cellStyle: {textAlign: 'right'},
+    valueFormatter: (params:{data:IJournal}) =>
+      (!params.data)?'':amountFormatter((p:IJournal)=>p.debit, params.data, locale, currency),
     minWidth: 8,
   },
   {
     field: 'icredit',
     headerName: t('common.icredit'),
     cellStyle: {textAlign: 'right'},
+    valueFormatter: (params:{data:IJournal}) =>
+      (!params.data)?'':amountFormatter((p:IJournal)=>p.icredit, params.data, locale, currency),
     minWidth: 8,
   },
   {
     field: 'credit',
     headerName: t('common.credit'),
     cellStyle: {textAlign: 'right'},
+    valueFormatter: (params:{data:IJournal}) =>
+      (!params.data)?'':amountFormatter((p:IJournal)=>p.credit, params.data, locale, currency),
     minWidth: 8,
   },
   {
@@ -1247,7 +1265,7 @@ export const journalColumnsDefs = (t: (arg0: string) => any) => [
     minWidth: 1,
   },
 ]
-export const inventoryJournalColumnsDefs = (t: (arg0: string) => any) => [
+export const inventoryJournalColumnsDefs = (t: (arg0: string) => any, locale:string, currency:string) => [
   {
     field: 'id',
     headerName: t('common.id'),
@@ -1300,12 +1318,16 @@ export const inventoryJournalColumnsDefs = (t: (arg0: string) => any) => [
     field: 'price',
     headerName: t('article.price'),
     cellStyle: {textAlign: 'right'},
+    valueFormatter: (params:{data:InventoryJournal}) =>
+      (!params.data)?'':amountFormatter((p:InventoryJournal)=>p.price, params.data, locale, currency),
     minWidth: 8,
   },
   {
     field: 'avgPrice',
     headerName: t('article.avgPrice'),
     cellStyle: {textAlign: 'right'},
+    valueFormatter: (params:{data:InventoryJournal}) =>
+      (!params.data)?'':amountFormatter((p:InventoryJournal)=>p.avgPrice, params.data, locale, currency),
     minWidth: 8,
   },
   {
@@ -1429,7 +1451,7 @@ export const storeColumnDefs = (t:TFunction<'transalation', undefined>):ColDef<I
     minWidth: 10,
   }
 ]
-export const stockColumnDefs =  ( t: (arg0: string) => any,) => {
+export const stockColumnDefs =  ( t: (arg0: string) => any, locale:string, currency:string) => {
   return  [
     {
       field: 'article',
@@ -1452,7 +1474,8 @@ export const stockColumnDefs =  ( t: (arg0: string) => any,) => {
       field: 'price',
       headerName: t('article.avgPrice'),
       cellStyle: {textAlign: 'right'},
-      valueFormatter: (params: { data: { price: number; }; }) => params.data?.price?.toFixed(2),
+      valueFormatter: (params:{data:IStock}) =>
+        (!params.data)?'':amountFormatter((p:IStock)=>p.price, params.data, locale, currency),
       minWidth: 10,
     },
     {
@@ -1631,7 +1654,7 @@ export const vatColumnDefs = ( t: (arg0: string) => any) => [
 ]
 
 
-export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>):any=>[
+export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>, locale:string, currency:string):any=>[
   {
     field: 'init Balance',
     headerName: t('common.report'),
@@ -1643,7 +1666,8 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>):any=
         field: "idebit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        cellRenderer: (params:any) => (params.data.idebit ?? 0).toFixed(2)
+        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.idebit, params.data, locale, currency),
       },
       {
         headerName: t('common.icredit'),
@@ -1651,7 +1675,8 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>):any=
         field: "icredit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        cellRenderer: (params:any) => params.data.icredit.toFixed(2)
+        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.icredit, params.data, locale, currency),
       },
     ],
   },
@@ -1666,7 +1691,8 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>):any=
         field: "debit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        cellRenderer: (params:any) =>params.data.debit.toFixed(2)
+        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.debit, params.data, locale, currency),
       },
       {
         headerName: t('common.credit'),
@@ -1674,7 +1700,8 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>):any=
         field: "credit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        cellRenderer: (params:any) => params.data.credit.toFixed(2)
+        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.credit, params.data, locale, currency),
       },
     ],
   },
@@ -1689,7 +1716,8 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>):any=
         field: "bdebit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        cellRenderer: (params:any) => params.data.bdebit.toFixed(2)
+        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.bdebit, params.data, locale, currency),
       },
       {
         headerName: t('common.credit'),
@@ -1697,7 +1725,8 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>):any=
         field: "bcredit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        cellRenderer: (params:any) =>params.data.bcredit.toFixed(2)
+        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.bcredit, params.data, locale, currency),
       },
       {
         headerName: t('common.balance'),
@@ -1705,9 +1734,8 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>):any=
         field: "balance",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        //valueFormatter: currencyFormatter,
-        //valueParser: currencyParser,
-        cellRenderer: (params:any) => params.data.balance.toFixed(2)
+        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
+          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.balance, params.data, locale, currency),
       },
     ],
   },

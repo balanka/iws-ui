@@ -23,7 +23,7 @@ import {CInputGroup} from "@coreui/react-pro";
 import Login from "./Login.tsx";
 import React, {useEffect, useState} from "react";
 import {Get} from "./CrudController.ts";
-import iwsStore from "../utils/Store.tsx";
+
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
@@ -57,14 +57,14 @@ const CustomerForm = () => {
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   const [{header, body, table, disable,  state, visible, rowData, current , setCurrent, currentBankAccount
     , setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t))
-   const isLoaded = (modelid:number)=> iwsStore.getByModelId(modelid)&& iwsStore.getByModelId(modelid).length>0
+   //const isLoaded = (modelid:number)=> iwsStore.getByModelId(modelid)&& iwsStore.getByModelId(modelid).length>0
   useEffect(() => {
     Promise.all([
-      !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData),
-      !isLoaded(bank_modelid)&&Get(bank_ctx, token, bank_modelid, setBankData),
-      !isLoaded(ccy_modelid)&&Get(ccy_ctx, token, ccy_modelid, setCcyData),
-      !isLoaded(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData),
-      !isLoaded(contact_modelid)&&Get(contact_ctx, token, contact_modelid, setContactData)
+      Get(acc_ctx, token, acc_modelid, setAccData),
+      Get(bank_ctx, token, bank_modelid, setBankData),
+      Get(ccy_ctx, token, ccy_modelid, setCcyData),
+      Get(vat_ctx, token, vat_modelid, setVatData),
+      Get(contact_ctx, token, contact_modelid, setContactData)
     ])
       .then(() => {
          console.log('All data fetched successfully');
@@ -74,6 +74,7 @@ const CustomerForm = () => {
          console.error('Error fetching data', error);
        });
   }, []);
+
 
   const safeBody = React.isValidElement(body) ? body : null;
   const mainForm = CustomerTabs({ collapse:state.collapse, current:current, setCurrent:setCurrent

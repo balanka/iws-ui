@@ -34,7 +34,7 @@ const AssetForm = () => {
   const minHeight = 350
   const maxHeight = 700
   const height = 30
-  const colDef:ColDef[]= assetColumnDefs(t)
+  const colDef:ColDef[]= assetColumnDefs(t, locale??'fr-FR', currency??'EUR')
   const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm<IAsset>(current_,  colDef, MASTERFILE.asset)
 
   useEffect(() => {

@@ -260,14 +260,15 @@ export interface StoreProps {
       collapse: boolean
     , current: IStore
     , setCurrent: (art: any | IStore) => void
-   , ccData: IMasterfile[]
+    , ccData: IMasterfile[]
     , accData: IAccount[]
     , locale: string
+    , currency: string
     , t: TFunction<'transalation', undefined>
     , zIndex:number
     , disable: boolean
     , height: number
-   , minMaxHieght:number
+    , minMaxHieght:number
 }
 
 export interface CustomerGeneralFormProps {
@@ -323,6 +324,8 @@ export interface TransactionDetailsTabProps <T extends ITransaction, L extends I
     //gridApi:GridApi,
     //gridRef?:React.RefObject<AgGridReact>,
     zIndex:number,
+   locale:string,
+   currency:string
 }
 
 export interface TransactionDetailsFormProps<T extends IWSTransaction<L>, L extends  ILine> {
@@ -499,7 +502,7 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , modelid:number
   , isFetching:boolean
   , setIsFetching:Dispatch<SetStateAction<boolean>>
-  , gridOptions:(columnDefs:(t:TFunction<'transalation', undefined>) =>ColDef[]
+  , gridOptions:(columnDefs:(t:TFunction<'transalation', undefined>) =>ColDef[], locale:string, currency:string
                   , lineColumnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[]
                   , t:TFunction<'transalation', undefined>) =>GridOptions<T>
 }

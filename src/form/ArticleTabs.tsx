@@ -13,7 +13,7 @@ import {initArticle} from "./Menu.tsx";
 
 
 export  const ArticleTabs = ({collapse, current, setCurrent,  accData, vatData
-                               , quantityUnitData, groupData, ccyData,  t,  disable, height}:ArticleProps) => {
+                               , quantityUnitData, groupData, ccyData,  t, locale, currency,  disable, height}:ArticleProps) => {
 
   const onRowSelected = (event: RowSelectedEvent<IStock[],any>) =>
                                               setCurrent((event.data instanceof Array)?event.data[0]:event.data)
@@ -23,7 +23,7 @@ export  const ArticleTabs = ({collapse, current, setCurrent,  accData, vatData
         style={{...styles.outer, height:180, display: !collapse?'none':''}} >
       <StockGrid
           // @ts-ignore
-          theme="legacy" columnDefs ={stockColumnDefs(t)}
+          theme="legacy" columnDefs ={stockColumnDefs(t, locale, currency)}
                        onRowSelected={onRowSelected} rowData ={current?.stocks?current?.stocks:initArticle.stocks}/>
       </div>
 

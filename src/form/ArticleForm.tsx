@@ -46,7 +46,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const height = 33
      const minHeight = 350
      const maxHeight = 700
-      const colDef:ColDef[]= articleColumnDefs(t)
+      const colDef:ColDef[]= articleColumnDefs(t, locale??'fr-FR', currency??'EUR')
       const {header, body, table, disable, visible, state, rowData, current, setCurrent, zIndex} =
         UseMasterfileForm<IArticle>(current_,  colDef, MASTERFILE.article)
 

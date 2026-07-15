@@ -54,8 +54,9 @@ export const TransactionDetailsForm = ({
   // Find current article and vat
   const currentArticle = articleData?.find((acc: { id: any }) => acc.id === currentLineTransaction.article) ?? initArticle
   const currentVat = vatData?.find((vat: { id: any }) => vat.id === currentLineTransaction.vatCode) ?? initVat
-  console.log(' currentArticle ', currentArticle)
-  console.log(' vat ', currentVat)
+ console.log(' currentArticle ', currentArticle)
+ console.log(' vat ', currentVat)
+  console.log(' articleData ', articleData)
   return (
     <CContainer fluid className="p-0">
       {/* Row 1: Article & Quantity */}
@@ -87,7 +88,7 @@ export const TransactionDetailsForm = ({
               setCurrentLineTransaction(currentx)
               setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
             }}
-            values={articleData?.slice().sort(sortById).map(toOption)}
+            values={articleData.length>0?articleData?.slice().sort(sortById).map(toOption):[toOption(initArticle)]}
           />
         </CCol>
         <CCol sm={4} className="d-flex gap-2">
@@ -140,7 +141,7 @@ export const TransactionDetailsForm = ({
               setCurrentLineTransaction(currentx)
               setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
             }}
-            values={vatData?.slice().sort(sortById).map(toOption)}
+            values={vatData.length>0?vatData?.slice().sort(sortById).map(toOption):[toOption(initVat)]}
           />
         </CCol>
         <CCol sm={4} className="d-flex gap-2">

@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react'
 import {
   AllCommunityModule,
-  ClientSideRowModelModule, ColDef,
+  ClientSideRowModelModule, //ColDef,
   //GridOptions,
   GridReadyEvent,
-  IDetailCellRendererParams,
+ // IDetailCellRendererParams,
   ModuleRegistry,
 } from 'ag-grid-community'
 
@@ -44,94 +44,31 @@ import useTransactionForm from './UseTransactionForm.ts'
 import useForm from './UseForm.ts'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {Get, Get3, GetListData, Gets} from './CrudController.ts'
-import {TFunction} from "i18next";
+//import {TFunction} from "i18next";
 import {toCardinal} from "n2words/fr-FR";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
-const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[],
-                      lineColumnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[], t:TFunction<'transalation', undefined>)=> {
-  return {
-    rowStyle: {background: 'lightBlue'},
-    // @ts-ignore
-    getRowStyle: (params: { node: { rowIndex: number } }): { background: string } => {
-      if (params.node.rowIndex % 2 === 0) {
-        return {background: '#fff9e6'}
-      }
-    },
-    defaultColDef: {
-      resizable: true,
-      editable: false, //!current.posted,
-      flex: 1,
-      filter: true,
-      //floatingFilter: true,
-      //filter: "agTextColumnFilter",
-    },
-    rowHeight: 20,
-    copySelectedRows: true,
-    rowSelection: {
-      mode: "multiRow",
-      checkboxes: true,
-    },
-    //onRowSelected: onRowSelected,
-    paginationPageSizeSelector: [5, 10, 20, 50],
-    pagination: true,
-    paginationPageSize: 10,
-    //masterDetail: true,
-    detailRowAutoHeight: true,
-    autoSizeStrategy: {
-      type: "fitGridWidth",
-    },
-    // @ts-ignore
-    columnDefs: columnDefs (t), //transactionColumnDefs(t),
-    // @ts-ignore
-    detailCellRendererParams: {
-      detailGridOptions: {
-        getRowStyle: (params: { node: { rowIndex: number } }) => {
-          if (params.node.rowIndex % 2 === 0) {
-            return {background: '#fff9e6'}
-          }
-        },
-        columnDefs: lineColumnDefs(t), //lineTransactionColumnDefs(t),
-        defaultColDef: {
-          flex: 1,
-        },
-      },
-      getDetailRowData: (params: any) => {
-        params.successCallback(params.data.lines);
-      },
-    } as IDetailCellRendererParams<ITransaction, ILineTransaction>,
-
-    // detailCellRendererParams: {
-    //     detailGridOptions: {
-    //         columnDefs:lineTransactionColumnDefs(t),
-    //         defaultColDef: {
-    //             flex: 1,
-    //         },
-    //     },
-    //     getDetailRowData: (params:any) => params.successCallback(params.data.lines)
-    // } as IDetailCellRendererParams<ITransaction, ILineTransaction>,
-    //onFirstDataRendered: onFirstDataRendered,
-  }
-}
-
   const TransactionForm = () => {
   const [{profile, selected, t, toggle, toggleTable, state, visible, module_, modelid }] = useForm()
   const { token, currency, locale, company } = profile
+  const localex = locale??'fr-FR'
+  const currencyx = currency??'EUR'
   const dispatch = useDispatch()
   let navigate = useNavigate()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   let title_ = `${company}/${t(module_.title)}`
   const initialState:ITransaction = initLtr
-  const initialLine:ILineTransaction = {...initLineTransaction, currency:currency??''}
+  const initialLine:ILineTransaction = {...initLineTransaction, currency:currency??localex}
   const current_:ITransaction = initialState
   const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
   const [rowData, setRowData] = useState<ITransaction[]>([])
   const [model, setModel] = useState<number>(-1)
   const  [{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
     , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange
-     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching, setIsFetching }] =
+     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching
+    , setIsFetching, gridOptions }] =
      useTransactionForm(current_??initLtr, initialLine, currentLine, setCurrentLine, rowData, setRowData, model)
 
    const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
@@ -244,41 +181,70 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
       }
     };
 
-   const handleModuleChange = async (value:any) => {
-     setModel(value)
-     const mx:IFmodule = fmodule.find((m:IFmodule) => m?.id === value) ?? initfModule
-      title_ = mx?.name ? mx?.name : title_
-     const copyFromIds = (mx? mx.copyFrom.split(','):[])?.map( (modelid) => parseInt(modelid))
-     const titlex = `${company}/${title_}`
-     setTitle(titlex)
-     setPartnerId(parseInt(mx?.account))
-     console.log('mx', mx);
-     //setCurrent(current_)
-     setAccFilter(mx.accFilter?.replace(/\s/g,'').split(','))
-     setOAccFilter(mx.oaccFilter?.replace(/\s/g,'').split(','))
-    const ctx = `${module_.ctx}/${mx.id}/${company}`
-     const ctx_copyFrom = `${module_.ctx}/${copyFromIds}/${company}`
-     const _partnerCtx:string = parseInt(mx?.account)===formEnum.CUSTOMER?MASTERFILE.cust:
-       (parseInt(mx?.account)==formEnum.SUPPLIER)?MASTERFILE.sup:
-         (parseInt(mx?.account)==formEnum.ACCOUNT)?MASTERFILE.acc:
-           (parseInt(mx?.account)==formEnum.STORE)?MASTERFILE.store: ''
-     console.log('_partnerCtx', _partnerCtx)
-     const partnerCtx = `${_partnerCtx}/${parseInt(mx.account)}/${company}`
-     if(copyFromIds.length==0) {console.log(`No transaction to copy from available!!! ${submitQuery}`, copyFromIds)}
-     else {
-       await Gets(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
-     }
-      _partnerCtx.length>0&& (submitQuery(ctx, partnerCtx, parseInt(mx?.account)))
-   }
+    const handleModuleChange = async (selected: any) => {
+      // 1. Extract the ID from the selected option (object or primitive)
+      const id = selected?.value !== undefined ? String(selected.value) : String(selected);
+      const numericId = parseInt(id, 10);
+      // 2. Update the model state with the numeric ID
+      setModel(numericId);
+
+      // 3. Find the module using the numeric ID
+      const mx: IFmodule = fmodule.find((m: IFmodule) => parseInt(`${m?.id}`, 10) === numericId) ?? initfModule;
+
+      // 4. Update title
+      title_ = mx?.name ? mx.name : title_;
+
+      // 5. CopyFrom IDs – safely handle undefined
+      const copyFromIds = mx?.copyFrom
+        ? mx.copyFrom.split(',').map((modelid: string) => parseInt(modelid, 10))
+        : [];
+
+      // 6. Update UI state
+      const titlex = `${company}/${title_}`;
+      setTitle(titlex);
+      setPartnerId(parseInt(mx?.account, 10));
+      console.log('mx', mx);
+
+      // 7. Filter arrays – guard against undefined
+      setAccFilter(mx?.accFilter?.replace(/\s/g, '').split(',') ?? []);
+      setOAccFilter(mx?.oaccFilter?.replace(/\s/g, '').split(',') ?? []);
+
+      // 8. Build contexts
+      const ctx = `${module_.ctx}/${mx.id}/${company}`;
+      const ctx_copyFrom = `${module_.ctx}/${copyFromIds.join(',')}/${company}`; // join with commas
+
+      const partnerType = parseInt(mx?.account, 10);
+      const _partnerCtx =
+        partnerType === formEnum.CUSTOMER ? MASTERFILE.cust :
+          partnerType === formEnum.SUPPLIER ? MASTERFILE.sup :
+            partnerType === formEnum.ACCOUNT ? MASTERFILE.acc :
+              partnerType === formEnum.STORE ? MASTERFILE.store :
+                '';
+      console.log('_partnerCtx', _partnerCtx);
+
+      const partnerCtx = `${_partnerCtx}/${partnerType}/${company}`;
+
+      // 9. Fetch copyFrom transactions if any
+      if (copyFromIds.length === 0) {
+        console.log('No transaction to copy from available!!!', copyFromIds);
+      } else {
+        await Gets(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction);
+      }
+
+      // 10. Submit main query if partner context exists
+      if (_partnerCtx.length > 0) {
+        submitQuery(ctx, partnerCtx, partnerType);
+      }
+    };
 
     const accData1:ICustomer[]|ISupplier[] = iwsStore.getByModelId(partnerId) as ICustomer[] | ISupplier[] ?? [initCust]//.filter(m=>!m.id.toString().includes('*'))
     const accDatax:ICustomer[]|ISupplier[]|IAccount[]= (model ===formEnum.ACCOUNT)? accData:accData1
     const stData = storeData?.filter(m=>!m.id.toString().includes('*'))
-    console.log('model', model)
-    console.log('partnerId', partnerId)
-    console.log('accData', accData)
-    console.log('accData1', accData1)
-    console.log('accDatax', accDatax)
+    // console.log('model', model)
+    // console.log('partnerId', partnerId)
+    // console.log('accData', accData)
+    // console.log('accData1', accData1)
+    // console.log('accDatax', accDatax)
    // console.log('storeData', storeData)
     //console.log('stData>>>>', stData)
     return isFetching?<CSpinner color="primary" />:<>
@@ -326,7 +292,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
                                         setCurrentLineTransaction={setCurrentLine}
                                         accountFilter={accFilter} oaccountFilter={oaccFilter}
                                         articleData={articleData??[]} vatData={vatData??[]}  t={t}
-                                        onGridReady={onGridReady}  zIndex={2}/>
+                                        onGridReady={onGridReady}  zIndex={2} locale={locale??localex} currency={currency??currencyx}/>
           </div>
        </div>
        <div
@@ -335,7 +301,7 @@ const gridOptions = (columnDefs: (t:TFunction<'transalation', undefined>) =>ColD
                   , zIndex:1, display:visible?'':'none'}}>
          <TransactionGrid
            //@ts-ignore
-           gridOptions ={gridOptions (transactionColumnDefs, lineTransactionColumnDefs, t)}  columnDefs={transactionColumnDefs(t)}
+           gridOptions ={gridOptions (transactionColumnDefs, locale, currency, lineTransactionColumnDefs, t)}  columnDefs={transactionColumnDefs(t,locale, currency)}
                              onRowSelected={onRowSelected} rowData={rowData}/>
        </div>
     </>

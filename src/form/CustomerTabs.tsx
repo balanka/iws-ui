@@ -17,6 +17,7 @@ const CustomerTabs  = ({ collapse, current, setCurrent
                            , locale, data, accData, bankData, vatData, ccyData, contactData, height, disable, zIndex
                            , onGridReady
                        }: CustomerTabProps) => {
+     console.log('accData>>>', accData)
     const props: CustomerTabProps = {collapse,
         current, setCurrent, currentBankAccount, setCurrentBankAccount
         , token, modifyUrl, t, locale, data, bankData, accData, vatData, ccyData, contactData, height, disable
