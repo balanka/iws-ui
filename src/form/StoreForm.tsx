@@ -19,7 +19,7 @@ import useForm from './UseForm.ts'
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const StoreForm= () => {
      const [{profile,  t,  company, module_}] = useForm()
-     const { token, locale, stockAcc, expenseAcc } = profile
+     const { token, locale, currency, stockAcc, expenseAcc } = profile
      if (module_ === '11111' || module_ === 11111) return <Login/>
      const current_: IStore = {...initStore, account:stockAcc??'', oaccount:expenseAcc??'' , stocks:[], company:company}
      const [ccData, setCcData] = useState<IMasterfile[]>([])
@@ -32,10 +32,11 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const maxHeight = 600
      const height = 33
      const colDef:ColDef[] = storeColumnDefs(t)
-   const {header, body, table, disable, visible, state, current, setCurrent, zIndex} =  UseMasterfileForm(current_, colDef, MASTERFILE.store)
+     const {header, body, table, disable, visible, state, current, setCurrent, zIndex} =  UseMasterfileForm(current_, colDef, MASTERFILE.store)
      const safeBody = React.isValidElement(body) ? body : null;
-     const mainForm = StoreTabs({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t
-     , zIndex:zIndex-1, ccData:ccData, accData:accData, locale:locale??'fr-FR', height:height, minMaxHieght:state.collapse?minHeight:maxHeight })
+     const mainForm = StoreTabs({collapse:state.collapse, current:current, setCurrent:setCurrent
+       , disable:disable, currency:currency??'EUR', t:t, zIndex:zIndex-1, ccData:ccData, accData:accData
+      , locale:locale??'fr-FR', height:height, minMaxHieght:state.collapse?minHeight:maxHeight })
    useEffect(() => {
      Get(cc_ctx, token, cc_modelid, setCcData)
      Get(acc_ctx, token, acc_modelid, setAccData)

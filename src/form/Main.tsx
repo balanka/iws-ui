@@ -24,7 +24,8 @@ import {TFunction} from "i18next";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule, TreeDataModule]);
 
-const gridOptions = (t:TFunction<'transalation', undefined>)  => useMemo(()=> ({
+const gridOptions = (t:TFunction<'transalation', undefined>
+                     , currency:string, locale:string)  => useMemo(()=> ({
 
   rowStyle: {background: 'lightBlue'},
   getRowStyle: (params:any)=> (params.node.rowIndex % 2 === 0)? {
@@ -42,7 +43,7 @@ const gridOptions = (t:TFunction<'transalation', undefined>)  => useMemo(()=> ({
       fontsize: 10,
       //backgroundColor:'#fff9e6'
     },
-  columnDefs: BalanceSheetColDef(t),
+  columnDefs: BalanceSheetColDef(t, currency, locale),
 
   defaultColDef: {
     flex: 1,
@@ -113,7 +114,7 @@ const STYLES = {
 }
 export const Main = () => {
   const [{profile, selected, t, module_}] = useForm()
-  const {token, currency, company} = profile
+  const {token, currency, locale, company} = profile
   //const init = useRef(false)
 
   if (module_ === '11111' || module_ === 11111) return <Login />
@@ -176,7 +177,7 @@ export const Main = () => {
         <AgGridReact theme={myTheme}
                      treeData={true}
                       //@ts-ignore
-                     gridOptions={gridOptions(t)} rowData={v}/>
+                     gridOptions={gridOptions(t, currency, locale)} rowData={v}/>
       </div>
     </div>
     )

@@ -25,21 +25,13 @@ ModuleRegistry.registerModules([
 ])
 
 const Journal = () => {
-  const [{  t, title, language, handleLanguageChange, company, module_}] = useForm()
+  const [{  t, title, language, profile, handleLanguageChange, company, module_}] = useForm()
+  const {currency, locale} = profile
   const  [{ accData, rowData, current, setCurrent, submitQuery, submitQuery2, onRowSelected
     , templateName, styles}] = useJForm<IJournal>()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const dispatch = useDispatch()
   const height = 20
-
-  // useEffect(() => {
-  //   const subscription = iwsStore.subscribe((store) => {
-  //     setRowData(store.get(current_.modelid) as unknown as IJournal[]);
-  //     setCurrent(current_)
-  //   });
-  //   return () => subscription.unsubscribe();
-  // }, [current_, selected])
-
   const formatter = new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const toBalance2 = (m:IJournal) => {
     const currentAcc= accData.find(acc=>acc.id === m.account)??initAcc
@@ -86,7 +78,7 @@ const Journal = () => {
                        stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
       <div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: '100%'}}>
       {/*<div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 5, height: 560, width: '100%'}}>*/}
-        <JournalGrid columnDefs ={journalColumnsDefs(t)} defaultColDef ={{...defaultColDefX, filter:true}}
+        <JournalGrid columnDefs ={journalColumnsDefs(t, locale??'fr-FR', currency??'EUR')} defaultColDef ={{...defaultColDefX, filter:true}}
                      onRowSelected={onRowSelected} rowData={rowData}/>
       </div>
     </div>
