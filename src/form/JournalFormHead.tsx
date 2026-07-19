@@ -36,8 +36,8 @@ const FormButton = ({ title, type, color, style, size, height, onClick, classNam
 
 export const JournalFormHead = <T,>({
                                       style, title, submitQuery, submitQuery2, balancesheet,
-                                      t, dispatch, logout, templateName, current, getData, submitPrintPreview
-                                      , language, handleLanguageChange
+                                      t, dispatch, logout, current, getData, submitPrintPreview
+                                      , language, handleLanguageChange, template1EnumId, fmodule
                                     }: JournalToolBarProps<T>): React.JSX.Element => {
 
   const sidebarShow = useSelector((state: any) => state.sidebarShow);
@@ -69,7 +69,7 @@ export const JournalFormHead = <T,>({
         <ToolbarButton
           tooltip={t('toolTip.common.print')}
           //@ts-ignore
-          onClick={() => submitPrintPreview(current, templateName, getData)}
+          onClick={() => submitPrintPreview(current, getData, fmodule, template1EnumId)}
           icon={<PrintOutlined fontSize="small" />}
         />
 

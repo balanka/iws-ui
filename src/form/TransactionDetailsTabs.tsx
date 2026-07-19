@@ -9,6 +9,7 @@ import { TransactionDetailsForm} from './TransactionDetailsForm.tsx'
 import FileOutput from './FileOutput.tsx'
 import { ILineTransaction, ITransaction} from '../Models.ts'
 import {isArrayAndNotEmpty} from "../utils/Utils.ts";
+import FileInput from "./FileInput.tsx";
 
 
 const TransactionDetailsTabs = ({
@@ -52,6 +53,7 @@ const TransactionDetailsTabs = ({
         {title: t('transaction.line.title'), id: 1, form: table()},
         {title: t('common.general'), id: 2, form: TransactionDetailsForm(props)},
         {title: t('common.export'), id: 3, form: FileOutput()},
+        {title: t('common.import'), id: 4, form: FileInput(transaction.company)},
     ]
     return <IWSTabs tabList={tabContent}/>
 }

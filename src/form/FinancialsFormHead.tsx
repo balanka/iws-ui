@@ -33,13 +33,14 @@ const ToolbarButton = ({ tooltip, onClick, disabled, icon, zIndex }: any) => (
 )
 
 export const FinancialsFormHead = ({
-                                     title, collapse, templateName, initAdd, onNewLine, onDeleteLine, submitCancel, submitEdit,
+                                     title, collapse, initAdd, onNewLine, onDeleteLine, submitCancel, submitEdit,
                                      toggle, toggleTable, submitPost, reload, handleLanguageChange, navigate, language,
-                                     dispatch, logout, current, t, submitPrintPreview, getData,  getData2, zIndex
+                                     dispatch, logout, current, t, submitPrintPreview, getData,  getData2, fmodule, zIndex
+                                     , template1EnumId,  template2EnumId
                                    }: TransactionToolBarProps<ITransaction|IFinancials, ILineTransaction|ILineFinancials>): JSX.Element => {
   const UpDownIcon = collapse ? <KeyboardDoubleArrowUpIcon fontSize="small" /> : <KeyboardDoubleArrowDownIcon fontSize="small" />;
   const sidebarShow = useSelector((state: any) => state.sidebarShow);
-
+  console.log('current', current)
   return (
     <CInputGroup style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',  backgroundColor: '#f5f5f5'
       , borderBottom: '1px solid #ddd', minHeight: 28, flexWrap: 'wrap', gap: 0.2, zIndex:zIndex}}>
@@ -59,8 +60,8 @@ export const FinancialsFormHead = ({
         <ToolbarButton tooltip={t('toolTip.common.save')} onClick={submitEdit} disabled={current?.posted} icon={<SaveIcon fontSize="small" />}  zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.canceln')} onClick={submitCancel} disabled={current?.posted} icon={<CancelIcon fontSize="small" />}  zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.transaction.post')} onClick={submitPost} disabled={current?.posted} icon={<CheckCircleOutlineIcon fontSize="small" />}  zIndex={zIndex} />
-        <ToolbarButton tooltip={t('toolTip.common.print')} onClick={()=>submitPrintPreview(current, templateName, getData)} icon={<PrintOutlined fontSize="small" />} disabled={false} zIndex={zIndex}/>
-        <ToolbarButton tooltip={t('toolTip.common.print')} onClick={()=>submitPrintPreview(current, templateName, getData2)} icon={<LocalPrintshopSharpIcon fontSize="small" />} disabled={false} zIndex={zIndex}/>
+        <ToolbarButton tooltip={t('toolTip.common.print')} onClick={()=>submitPrintPreview(current, getData, fmodule, template2EnumId)} icon={<PrintOutlined fontSize="small" />} disabled={false} zIndex={zIndex}/>
+        <ToolbarButton tooltip={t('toolTip.common.print')} onClick={()=>submitPrintPreview(current, getData2, fmodule, template1EnumId)} icon={<LocalPrintshopSharpIcon fontSize="small" />} disabled={false} zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.export')} onClick={() => {}} icon={<ArrowCircleDownIcon fontSize="small" />}  zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.load')} onClick={reload} icon={<FilterListIcon fontSize="small" />}   zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.table')} onClick={toggleTable} icon={<ListIcon fontSize="small" />}  zIndex={zIndex}/>

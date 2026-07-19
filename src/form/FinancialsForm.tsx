@@ -39,12 +39,13 @@ import Login from './Login'
 import {CSpinner} from '@coreui/react-pro'
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import { capitalizeFirst, generateDocx} from '../utils/XlsUtils.ts'
+import {capitalizeFirst, generateDocx} from '../utils/XlsUtils.ts'
 import useTransactionForm from './UseTransactionForm.ts'
 import useForm from './UseForm.ts'
 import {Get, Get3, GetListData} from './CrudController.ts'
-import {isArrayAndNotEmpty} from "../utils/Utils.ts";
+import {getLocalizedOrdinal, getMonthName, isArrayAndNotEmpty} from "../utils/Utils.ts";
 import {toCardinal} from "n2words/fr-FR";
+import {TEMPLATE_ENUM} from "../Props.ts";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, SelectEditorModule,])
 
@@ -61,7 +62,7 @@ const FinancialsForm = () => {
   const [rowData, setRowData] = useState<IFinancials[]>([])
   const [model, setModel] = useState<number>(-1)
   const  [{  language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction
-    , setCopyFromTransaction, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex
+    , setCopyFromTransaction, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, zIndex
     , handleLanguageChange, saveProps, modelid, isFetching, setIsFetching, gridOptions }] =
     useTransactionForm(current_, initialLine, currentLine, setCurrentLine, rowData, setRowData, model)
   const [title, setTitle] = useState(title_)
@@ -165,13 +166,29 @@ const FinancialsForm = () => {
   }
 
   const getData:()=>any = ()=>  {
-    return {
+    const total_ = buildTotal(current)
+    const contact = contactData.find(m=>m.id===current.contact)??initContact
+    const appartmentId= current.account.substring(current.account.length - 2, current.account.length )
+    const year = Number(`${current.period}`.substring(0, 4))
+    const month = Number(`${current.period}`.substring(5, 6))
+    const monthName= getMonthName(month, locale??'fr-FR')
+    const dayAsOrdinal= getLocalizedOrdinal(1, locale??'fr-FR')
+    const result = {
       ...current
       , date: new Date().toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
+      , appartmentId: appartmentId
+      , year: year
+      , month: month
+      , from: `${dayAsOrdinal} ${monthName} ${year}`
+      , to: `${dayAsOrdinal} ${monthName} ${year}`
       , transdate: current.transdate
-      , total: buildTotal(current).toLocaleString(locale,  { style: "currency", currency: currency })
+      , name:contact.name
+      , total: total_?.toLocaleString('de-DE',  { style: "currency", currency: currency|| 'EUR', useGrouping:true,}) // or 'symbol')
+      , totalText:toCardinal(total_).split(" ").map(capitalizeFirst).join(".")
       , lines: current.lines.map(formatLines)
     }
+    console.log('getData result', result)
+    return result;
   }
    const getMonth =(d:ReminderBalance) => {
      const month = new Date(Number(d.period.toString().substring(0, 4))
@@ -193,7 +210,7 @@ const FinancialsForm = () => {
         month: getMonth(data[data.length - 1]),
         year: Number(`${data[data.length - 1].period}`.substring(0, 4)),
         total:total.toLocaleString(locale,  { style: "currency", currency: currency }),
-        totalText:toCardinal(total).split(" ").map(capitalizeFirst).join(" "),
+        totalText:toCardinal(total).split(" ").map(capitalizeFirst).join("."),
         lines: data.map((d: ReminderBalance) => ({
           id: d.id,
           month: getMonth(d),
@@ -214,10 +231,12 @@ const FinancialsForm = () => {
       collapse={state.collapse}
       initAdd={initAdd}
       submitEdit={submitEdit}
-      templateName={templateName}
+      fmodule={fmodule}
       getData={getData}
       getData2={getData2}
       submitPrintPreview={generateDocx}
+      template1EnumId={TEMPLATE_ENUM.FIRST}
+      template2EnumId={TEMPLATE_ENUM.SECOND}
       submitCancel={submitCancel}
       onNewLine={onNewLine}
       onDeleteLine={onDeleteLine}

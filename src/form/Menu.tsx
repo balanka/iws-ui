@@ -18,7 +18,7 @@ export const getCurrentMonth = (date:Date) => {
 }
 
 export const date = new Date().toISOString()
-export const getPeriod = (date:Date) => parseInt(date.getUTCFullYear().toString().concat(getCurrentMonth(date)))
+export const getPeriod = (date:Date) => parseInt(`${date.getUTCFullYear()}${getCurrentMonth(date)}`)
 
 export const loginInit:ILoggingContext = {
     userName: '',
@@ -676,6 +676,8 @@ export const initfModule:IFmodule = {
     company: '',
     accFilter:'',
     oaccFilter:'',
+    template1:'',
+    template2:'',
   }
 
 export const initRoom:IRoom = {

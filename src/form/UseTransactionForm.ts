@@ -11,7 +11,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {Add, COPY, Edit, EditRow, Get, Get2} from './CrudController.ts'
-import {initfModule, MASTERFILE} from './Menu.tsx'
+import {MASTERFILE} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import {formEnum} from '../utils/FormEnum.tsx'
 import {
@@ -24,6 +24,7 @@ import {ILine, SaveProps, UseTransactionFormResult} from '../Props.ts'
 import useForm from './UseForm.ts'
 import {isArrayAndNotEmpty} from "../utils/Utils.ts";
 import {TFunction} from "i18next";
+import {templateNames} from "../utils/XlsUtils.ts";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -32,7 +33,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
            , rowData:T[], setRowData:Dispatch<SetStateAction<T[]>>, model:number): [UseTransactionFormResult<T, ILine>]  => {
    const [{ profile,  selected, language, handleLanguageChange, modelid, module_}] = useForm()
    const { token, company, currency } = profile
-   let templateFileName =''
+   //let templateFileName =''
   const [, setDisable] = useState(true)
   const [current, setCurrent] = useState<T>(current_)
   const module_modelid = formEnum.MODULE
@@ -113,7 +114,8 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
         console.log('addLine newLine', newLine)
         const dx: T = {...prevCurrent}
         if (dx.hasOwnProperty('lines')) {
-          dx.lines.push(newLine)
+          dx.lines = [...dx.lines, newLine]
+          //dx.lines.push(newLine)
         } else {
           dx['lines'] = [{...newLine}]
         }
@@ -138,8 +140,6 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
              gridApi!.applyTransaction({remove: [currentLine]})
              setCurrent(dx)
      }, [currentLine]);
-   const templateName:()=>string = () =>
-     templateFileName ? templateFileName: (fmodule.find((m:IFmodule) => Number(m?.id) === current?.modelid) ?? initfModule).description
 
   const callSubmitEdit = async (event:any, modifyUrl:string, token:string, current:T
       , setCurrent:Dispatch<SetStateAction<T>>, data:T[], submitAdd: (arg:any)=>void) => {
@@ -243,10 +243,14 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
 
   const sheetName ="Sheet1"
   const exportFileName =()=> {
-     const filename = templateName().split('.')[0]
-    return `${filename}.${EXPORT_FILE_EXTENSION}`
+     const filenames_ = templateNames(current, fmodule)//.split('.')[0]
+    const filename1 = filenames_[0].split('.')[0]
+    const filename2 = filenames_[1].split('.')[0]
+    const names:[string, string] =[`${filename1}.${EXPORT_FILE_EXTENSION}`, `${filename2}.${EXPORT_FILE_EXTENSION}`]
+    return names
   }
-   const saveProps:SaveProps = { 'fileName': exportFileName(), 'sheetName':sheetName, 'data':current?.lines??[] }
+    //const templateName = templateNames
+   const saveProps:SaveProps = { fileNames: exportFileName(), sheetName:sheetName, data:current?.lines??[] }
 
   const gridOptions = (
     columnDefs: (t: TFunction<'transalation', undefined>, locale:string, currency:string ) => ColDef[], locale:string, currency:string
@@ -303,7 +307,7 @@ const UseTransactionForm = <T extends IWSTransaction<L>,
   };
 
    return [{ language, fmodule, setFmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction, setCopyFromTransaction
-     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex,  handleLanguageChange
+     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName:templateNames, zIndex,  handleLanguageChange
      , saveProps, modelid, isFetching, setIsFetching
      , gridOptions }]
 

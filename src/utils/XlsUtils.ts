@@ -1,18 +1,20 @@
 import * as XLSX from 'xlsx'
 import {printDocProps, SaveProps} from '../Props.ts'
 import {TemplateHandler} from 'easy-template-x'
-import {IWSModel} from '../Models.ts'
+import {IFmodule, IWSModel} from '../Models.ts'
 //import JSZip from 'jszip';
 import PizZip from "pizzip";
 import Docxtemplater from 'docxtemplater'
 import {saveAs} from 'file-saver'
+import {initfModule} from "../form/Menu.tsx";
 //import pdf2md from '@opendocsg/pdf2md'
 
 
-export const  saveXlsx =  ({fileName, sheetName, data }:SaveProps):void => {
+export const  saveXlsx =  ({fileNames, sheetName, data }:SaveProps):void => {
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+    const fileName = fileNames[0]
     XLSX.writeFile(workbook, fileName);
 }
 
@@ -41,11 +43,13 @@ export const showFile = async ({e, templateFileName, data}:printDocProps) => {
 
 export const generateDocx = async <A extends IWSModel>(
   current: A,
-  templateName: () => string,
-  getData: () => any
+  getData: () => any,
+  fmodule:IFmodule[],
+  enumId:number
 ): Promise<void> => {
-  const templateFileName = `template/${templateName()}`
+  const templateFileName = `template/${templateNames(current, fmodule)[enumId]}`
   console.log('templateName', templateFileName)
+  console.log('current', current)
   try {
     const response = await fetch(templateFileName)
     const blob = await response.blob()
@@ -71,7 +75,8 @@ export const generateDocx = async <A extends IWSModel>(
     const fileNamesAndExtension = templateFileName.split('.')
     const outFileName_ = fileNamesAndExtension[0] ?? 'NoFileName'
     const outFileExtension = fileNamesAndExtension[1] ?? 'docx'
-    const outFileName = `${outFileName_}${current.id}.${outFileExtension}`
+    const id = current?.id??new Date().getMilliseconds()
+    const outFileName = `${outFileName_}${id}.${outFileExtension}`
     console.log('outFileName==>', outFileName)
     saveAs(out, outFileName)
   } catch (err) {
@@ -81,6 +86,11 @@ export const generateDocx = async <A extends IWSModel>(
 export const  capitalizeFirst = (str:string)=> {
   if (!str) return str;
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function templateNames <T extends IWSModel>(current:T, fmodule:IFmodule[]):[string, string] {
+  const fmodule_ : IFmodule = fmodule.find((m:IFmodule) => Number(m?.id) === current?.modelid) ?? initfModule
+  return [fmodule_.template1, fmodule_.template2]
 }
 // export const getAsArrayBuffer = async (templateFileName:String) : Promise<ArrayBuffer|undefined> => {
 //   try {

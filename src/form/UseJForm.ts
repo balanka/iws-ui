@@ -5,12 +5,13 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {Get} from './CrudController'
-import {initModule, MASTERFILE, PACB_JOURNAL_QUERY_PARM} from './Menu'
+import { MASTERFILE, PACB_JOURNAL_QUERY_PARM} from './Menu'
 import {formEnum} from '../utils/FormEnum'
 import {JournalProps} from '../Props.ts'
-import {IAccount, IModule} from '../Models.ts'
+import {IAccount, IFmodule, IModule} from '../Models.ts'
 import {UseJFormResult} from '../Props.ts'
 import useForm from './UseForm.ts'
+//import {templateNames} from "../utils/XlsUtils.ts";
 
 ModuleRegistry.registerModules([
   AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,
@@ -40,19 +41,24 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
   const {token, currency, company} = profile
   const acc_modelid = formEnum.ACCOUNT
   const module_modelid = formEnum.MODULE
+  const fmodule_modelid = formEnum.FMODULE
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
+  const fmodule_ctx = `${MASTERFILE.fmodule}/${fmodule_modelid}/${company}`
   const current_ = {...PACB_JOURNAL_QUERY_PARM, modelid: modelid, currency:currency??''}
   const [current, setCurrent] = useState<JournalProps>(current_)
   const [accData, setAccData] = useState<IAccount[]>([])
   const [rowData, setRowData] = useState<T[]>([])
-  const [module, setModule] = useState<IModule[]>([])
+  const [_, setModule] = useState<IModule[]>([])
+  const [fmodule, setFmodule] = useState<IFmodule[]>([])
   useEffect(() => {
     //const subscription = iwsStore.subscribe(() => {
       //const freshData = iwsStore.getByModelId(modelid) as T[];
       //setRowData(freshData);
       Get(acc_ctx, token, acc_modelid, setAccData)
       Get(module_ctx, token, module_modelid, setModule)
+      Get(module_ctx, token, module_modelid, setModule)
+      Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
       setCurrent(current_)
    // return () => subscription.unsubscribe();
   }, [selected]);
@@ -77,10 +83,9 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
 
    const onRowSelected = (event: RowSelectedEvent) =>
          setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
-   const templateName = () =>
-        (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule).description
+
 
   return [{ profile, menu, selected, t, accData, rowData, setRowData, current_, current, setCurrent
-    , submitQuery, submitQuery2, onRowSelected, templateName, title:title, styles:styles}]
+    , fmodule, submitQuery, submitQuery2, onRowSelected,  title:title, styles:styles}]
 }
 export default UseJForm

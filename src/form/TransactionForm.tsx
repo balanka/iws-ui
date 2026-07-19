@@ -46,6 +46,7 @@ import {formEnum} from '../utils/FormEnum.tsx'
 import {Get, Get3, GetListData, Gets} from './CrudController.ts'
 //import {TFunction} from "i18next";
 import {toCardinal} from "n2words/fr-FR";
+import {TEMPLATE_ENUM} from "../Props.ts";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
@@ -67,7 +68,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
   const [model, setModel] = useState<number>(-1)
   const  [{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
     , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange
-     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, templateName, zIndex, saveProps, isFetching
+     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, zIndex, saveProps, isFetching
     , setIsFetching, gridOptions }] =
      useTransactionForm(current_??initLtr, initialLine, currentLine, setCurrentLine, rowData, setRowData, model)
 
@@ -101,12 +102,12 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    console.log('current', current)
    useEffect(() => {
      Promise.all([
-       !isLoaded(art_modelid)&&Get(art_ctx, token, art_modelid, setArticleData),
-       !isLoaded(store_modelid)&& Get(store_ctx, token, store_modelid, setStoreData),
-       !isLoaded(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData),
-       !isLoaded(cust_modelid)&&Get(cust_ctx, token, cust_modelid, setCustomerData),
-       !isLoaded(sup_modelid)&&Get(sup_ctx, token, sup_modelid, setSupplier),
-       !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData)
+        Get(art_ctx, token, art_modelid, setArticleData),
+        Get(store_ctx, token, store_modelid, setStoreData),
+        Get(vat_ctx, token, vat_modelid, setVatData),
+        Get(cust_ctx, token, cust_modelid, setCustomerData),
+        Get(sup_ctx, token, sup_modelid, setSupplier),
+        Get(acc_ctx, token, acc_modelid, setAccData)
      ]).then(() => {
        console.log('All data fetched successfully');
        // additional logic after all requests complete
@@ -115,7 +116,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      });
    },[selected])
    //},[selected, forceUpdate])
-
+    useEffect(() => {
+    },[current])
 
      const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
      const minHeight=220
@@ -145,8 +147,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      return {
        id:current.id
        , date: new Date().toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
-       , transdate: current.transdate.toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
-       , total:   total.toLocaleString(locale,  { style: "currency", currency: currency })
+       , transdate: new Date(current?.transdate).toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
+       , total:   total?.toLocaleString(locale,  { style: "currency", currency: currency })
        , totalText:toCardinal(total).split(" ").map(capitalizeFirst).join(" ")
        , lines: current.lines.map(formatLines)
        , text:current.text
@@ -258,10 +260,12 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                 onNewLine={onNewLine}
                 onDeleteLine={onDeleteLine}
                 submitPost={submitPost}
-                templateName={templateName}
                 getData={getData}
                 getData2={getData2}
+                fmodule={fmodule}
                 submitPrintPreview={generateDocx}
+                template1EnumId={TEMPLATE_ENUM.FIRST}
+                template2EnumId={TEMPLATE_ENUM.SECOND}
                 reload={reload}
                 logout={logout}
                 navigate={navigate}

@@ -26,6 +26,7 @@ import useJForm from './UseJForm.ts'
 import useForm from './UseForm.ts'
 import {useRef, useState} from "react";
 import {AgGridReact} from "ag-grid-react";
+import {TEMPLATE_ENUM} from "../Props.ts";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -37,7 +38,7 @@ ModuleRegistry.registerModules([
 const JForm = () => {
   const [{ profile,  t, title, language, handleLanguageChange, module_}] = useForm()
   const  [{ accData, rowData, setRowData,  current, setCurrent, submitQuery, submitQuery2
-    , onRowSelected, templateName, styles}] = useJForm<IPeriodicAccountBalance>()
+    , onRowSelected, fmodule, styles}] = useJForm<IPeriodicAccountBalance>()
 
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const gridRef = useRef<AgGridReact>(null);
@@ -168,7 +169,7 @@ const JForm = () => {
         <div  style={{...styles.inner}}>
             <JournalFormHead style={{...styles.inner2}} title={title} submitQuery={submitQuery} dispatch={dispatch}
                              logout={logout} submitQuery2={submitQuery2} balancesheet={true} t={t}
-                             templateName ={templateName} getData={getData} current ={{...current, currency:currency, company:company}}
+                             fmodule ={fmodule} getData={getData} enumId={TEMPLATE_ENUM.FIRST} current ={{...current, currency:currency, company:company}}
                              // @ts-ignore
                              submitPrintPreview = {generateDocx} language={language} handleLanguageChange={handleLanguageChange}/>
             <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}

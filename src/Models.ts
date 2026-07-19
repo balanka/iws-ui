@@ -53,6 +53,8 @@ export interface IFmodule  extends IMasterfile2  {
   copyFrom:string,
   accFilter:string,
   oaccFilter:string
+  template1:string,
+  template2:string
 }
 export interface IAsset  extends IMasterfile  {
   account: string,

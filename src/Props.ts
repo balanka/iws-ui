@@ -26,7 +26,7 @@ export interface AddressProps {
     disable: boolean,
     height: number
 }
-export interface SaveProps {fileName:string, sheetName:string, data: any}
+export interface SaveProps {fileNames:[string, string], sheetName:string, data: any}
 export interface printDocProps  { e:any, templateFileName:string, data:any}
 export interface BankAccountFormProps {
      currentBankAccount: IBankAccount
@@ -372,13 +372,15 @@ export interface UserFormProps { collapse: boolean, current:IUser, setCurrent:(a
     , t:TFunction<'translation', undefined>, disable:boolean, height:number
 }
 export  interface TransactionToolBarProps<A extends IWSTransaction<L>, L extends  IWSLine>{
-  title:string, templateName: ()=> string
+  title:string
   , saveProps:SaveProps, collapse:boolean
   , initAdd:()=>void, onNewLine:()=>void, onDeleteLine:(arg:any)=>void
   , submitCancel:(e:any)=>void, submitEdit: (arg:any)=>void
   , getData:()=>any
   , getData2 :()=> Promise<any>
-  , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
+  , fmodule:IFmodule[]
+  , submitPrintPreview:(current:A, getData:()=>any,  fmodule:IFmodule[], enumId:number) =>Promise<void>
+  , template1EnumId:number,  template2EnumId:number
   , toggle:()=>void, toggleTable:()=>void, submitPost:(arg:any)=>void,  reload:()=>void
   , handleLanguageChange: (arg:any)=>void
   , navigate:NavigateFunction, language:string, dispatch:Dispatch<any>
@@ -402,9 +404,11 @@ export  interface JournalToolBarProps<A> {
   , dispatch:Dispatch<any>
   , logout:(navigate:NavigateFunction) =>void
   , current: IJournalIF<A>|A
-  , templateName: ()=>string
+  , fmodule:IFmodule[]
+  , template1EnumId:number
+  //, template2EnumId:number
   , getData: ()=>any
-  , submitPrintPreview:(arg:A, templateName: () =>string, getData:()=>any) =>Promise<void>
+  , submitPrintPreview:(current:A,  getData:()=>any, fmodule:IFmodule[], template1EnumId:number) =>Promise<void>
   , language:string
   , handleLanguageChange:(language:any)=>void
    }
@@ -494,7 +498,7 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , submitPost:(event:any)=>void
   , copyCall:(arg:BigInt, modelid:number)=>void
   , setGridApi:Dispatch<SetStateAction<GridApi<any>|undefined>>
-  , templateName:()=>string
+  , templateName:(current:T, fmodule:IFmodule[])=>[string, string]
   , zIndex:number
   , handleLanguageChange:(event:any) =>void
   //, setModel:Dispatch<SetStateAction<number>>
@@ -513,6 +517,7 @@ export interface UseJFormResult<T> {
   , t:TFunction<'translation', undefined>
   , accData:IAccount[]
   , rowData:T[]
+  , fmodule:IFmodule[]
   , setRowData:Dispatch<SetStateAction<T[]>>
   , current_:JournalProps
   , current:JournalProps
@@ -520,7 +525,7 @@ export interface UseJFormResult<T> {
   , submitQuery: (event: any, current: JournalProps) => void
   , submitQuery2: (event: any, current: JournalProps) => void
   , onRowSelected: (event: RowSelectedEvent) => void
-  , templateName: ()=>string
+  //, templateName: ()=>[string, string]
   , title:string
   , styles:any
 }
@@ -532,13 +537,13 @@ export interface UseArticleAccountResult<T> {
   , articleData:IArticle[]
   , storeData:IStore[]
   , rowData:T[]
+  , fmodule:IFmodule[]
   , setRowData:Dispatch<SetStateAction<T[]>>
   , current_:IJournalProps
   , current:IJournalProps
   , setCurrent:Dispatch<SetStateAction<IJournalProps>>
   , submitQuery: (event: any, current: IJournalProps) => void
   , onRowSelected: (event: RowSelectedEvent) => void
-  , templateName: ()=>string
   , title:string
   , styles:any
 }
@@ -578,5 +583,8 @@ export interface LoginProps {
   , submit:(event: any) =>void
   , handleEvent:(event:any, value: ILoggingContext) =>void
 }
-
+export enum TEMPLATE_ENUM {
+  FIRST = 0,
+  SECOND = 1,
+}
 

@@ -321,7 +321,9 @@
     "title": "Journal",
     "parent": "Parent",
     "accountFilter": "Filtre débit",
-    "oaccountFilter": "Filtre crébit"
+    "oaccountFilter": "Filtre crébit",
+    "template1": "Template1",
+    "template2": "Template2"
   },
   "financials": {
     "title":      "Pièce comptable",

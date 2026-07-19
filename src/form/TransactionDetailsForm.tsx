@@ -2,7 +2,7 @@ import React from 'react'
 import { CRow, CCol, CContainer } from '@coreui/react-pro'
 import ComboBox from './ComboBox'
 import { InputField, TextareaField, DatePickerField } from './common'
-import { ILineTransaction, IArticle, ITransaction } from '../Models'
+import {ILineTransaction, IArticle, ITransaction, IVat} from '../Models'
 import { sortById } from '../utils/Utils'
 import { toOption } from '../utils/FormUtils'
 import { initArticle, initVat } from './Menu'
@@ -38,7 +38,29 @@ const getPrice = (transaction:ITransaction, article: IArticle) => {
       transaction.modelid === formEnum.SUPPLIER_INVOICE ||
       transaction.modelid === formEnum.GOODRECEIVING)
       ? article.pprice
-      : 0.0
+      :(transaction.modelid === formEnum.STOCK_TRANSFER ||
+        transaction.modelid === formEnum.CONSUMPTION||formEnum.STOCK_TAKE)
+        ? article.avgPrice
+        :0.0
+}
+
+const getVat = (line: ILineTransaction, value:string, articleData: IArticle []
+                , vatData: IVat []): [string, number] => {
+  const article = articleData?.find((acc: { id: any }) => acc.id === value) ?? initArticle
+  const vat = vatData?.find((vat: { id: any }) => vat.id === article?.vatCode) ?? initVat
+  const percent = vat?.percent ?? 0.0
+  const vatAmount_  = percent * line.quantity * line.price
+  const vatCode_ = `${vat?.id}` || '-1'
+  const [vatCode, vatAmount] =(line.modelid === formEnum.SALES_ORDER ||
+    line.modelid === formEnum.CUSTOMER_INVOICE ||
+    line.modelid === formEnum.DELIVERY||
+    line.modelid === formEnum.PURCHASE_ORDER ||
+    line.modelid === formEnum.SUPPLIER_INVOICE ||
+    line.modelid === formEnum.GOODRECEIVING)
+    ? [vatCode_, vatAmount_]: [vatCode_, 0.0]
+//[string, number]
+  return [vatCode, vatAmount]
+
 }
 export const TransactionDetailsForm = ({
                                          transaction,
@@ -69,11 +91,12 @@ export const TransactionDetailsForm = ({
             key={`article-${currentLineTransaction?.article || 'empty'}`}
             value={{ value: currentArticle?.id || '', label: currentArticle ? `${currentArticle.id} ${currentArticle.name}` : '' }}
             onChange={(value: any) => {
+              const [vatCode, vatAmount] = getVat(currentLineTransaction, value, articleData, vatData)
               const article = articleData?.find((acc: { id: any }) => acc.id === value) ?? initArticle
-              const vat = vatData?.find((vat: { id: any }) => vat.id === article?.vatCode) ?? initVat
-              const percent = vat?.percent ?? 0.0
-              const vatAmount = percent * currentLineTransaction.quantity * currentLineTransaction.price
-              const vatCode = vat?.id || ''
+              //const vat = vatData?.find((vat: { id: any }) => vat.id === article?.vatCode) ?? initVat
+              //const percent = vat?.percent ?? 0.0
+              // const vatAmount = percent * currentLineTransaction.quantity * currentLineTransaction.price
+              // const vatCode = vat?.id || ''
               const currentx: ILineTransaction = {
                 ...currentLineTransaction,
                 article: value,
@@ -83,6 +106,7 @@ export const TransactionDetailsForm = ({
                 vatCode: vatCode.toString(),
                 vat: vatAmount,
                 currency: article?.currency || '',
+                //modelid: transaction.modelid,
                 company: transaction.company
               }
               setCurrentLineTransaction(currentx)

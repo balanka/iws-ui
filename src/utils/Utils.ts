@@ -146,6 +146,42 @@ function currencyAmountFormatDE(num:any, symbol:any):string {
 const dateRenderer = (date: { value: string | number | Date; }) => {
     return date.value ? (new Date(date.value)).toLocaleDateString('de-DE', {timeZone: 'UTC'}) : '';
 }
+function getMonthName(monthNumber: number, locale: string = 'fr-FR'): string {
+  // Create a date object (Year and Day can be anything)
+  // monthNumber is 0-indexed (0 = Jan, 1 = Feb, etc.)
+  const date = new Date(2000, monthNumber, 1);
+  return new Intl.DateTimeFormat(locale, { month: 'long' }).format(date);
+}
+function ordinalSuffix(n: number): string {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+function formatDateWithOrdinal(date: Date, locale: string = 'fr-FR'): string {
+  const month = date.toLocaleString(locale, { month: 'long' });
+  const day = date.getDate();
+  return `${ordinalSuffix(day)} ${month}`;
+}
+function getLocalizedOrdinal(day: number, locale: string): string {
+  // 1. Get the plural category for this number in this locale
+  const pluralRules = new Intl.PluralRules(locale, { type: 'ordinal' });
+  const category = pluralRules.select(day); // 'one', 'two', 'few', 'other', etc.
+
+  // 2. Map category → suffix (locale‑specific)
+  const suffixMap: Record<string, Record<string, string>> = {
+    en: { one: 'st', two: 'nd', few: 'rd', other: 'th' },
+    fr: { one: 'er', other: 'e' }, // 1er, 2e, 3e...
+    de: { one: '.', other: '.' },  // 1., 2., 3.
+    es: { one: '.º', other: '.º' }, // 1.º, 2.º, 3.º
+    // add more as needed
+  };
+
+  const localeSuffixes = suffixMap[locale.split('-')[0]] || suffixMap.en;
+  const suffix = localeSuffixes[category] || localeSuffixes.other || '';
+
+  return `${day}${suffix}`;
+}
+
 export {
   //dateFormat,
   dateRenderer,
@@ -156,6 +192,10 @@ export {
   sortById,
   sortByName,
   groupBy,
+  getMonthName,
+  ordinalSuffix,
+  formatDateWithOrdinal,
+  getLocalizedOrdinal
 }
 
 

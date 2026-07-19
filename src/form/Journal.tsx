@@ -17,6 +17,7 @@ import {logout} from '../utils/FormUtils.tsx'
 import {generateDocx} from '../utils/XlsUtils.ts'
 import useJForm from './UseJForm.ts'
 import useForm from './UseForm.ts'
+import {TEMPLATE_ENUM} from "../Props.ts";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -25,10 +26,9 @@ ModuleRegistry.registerModules([
 ])
 
 const Journal = () => {
-  const [{  t, title, language, profile, handleLanguageChange, company, module_}] = useForm()
+  const [{  t, title, language, profile, handleLanguageChange, company,  module_}] = useForm()
   const {currency, locale} = profile
-  const  [{ accData, rowData, current, setCurrent, submitQuery, submitQuery2, onRowSelected
-    , templateName, styles}] = useJForm<IJournal>()
+  const  [{ accData, rowData, current, setCurrent, fmodule, submitQuery, submitQuery2, onRowSelected, styles}] = useJForm<IJournal>()
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const dispatch = useDispatch()
   const height = 20
@@ -69,9 +69,9 @@ const Journal = () => {
     <div style={{...styles.inner}} >
       <JournalFormHead style={{...styles.inner2}} title={title} submitQuery={submitQuery} dispatch={dispatch}
                        logout ={logout} submitQuery2={submitQuery2} balancesheet={false} t={t}
-                       templateName={templateName}
+                       template1EnumId={TEMPLATE_ENUM.FIRST} fmodule ={fmodule}
                        current={ { ...current, id: `${current.fromPeriod}${current.toPeriod}`, modelid:current.modelid, company:company}}
-                       getData={getData} submitPrintPreview = {generateDocx} language={language} handleLanguageChange={handleLanguageChange}
+                       getData={getData} submitPrintPreview = {generateDocx}  language={language} handleLanguageChange={handleLanguageChange}
       />
       <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
         // @ts-ignore

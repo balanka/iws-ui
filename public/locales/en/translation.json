@@ -331,7 +331,9 @@
     "title": "Transactions",
     "parent": "Parent",
     "accountFilter": "Debit filter ",
-    "oaccountFilter": "Crebit filter"
+    "oaccountFilter": "Crebit filter",
+    "template1": "Template1",
+    "template2": "Template2"
   },
   "financials": {
     "title":      "Financials",

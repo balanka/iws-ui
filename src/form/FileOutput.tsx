@@ -24,7 +24,7 @@ function FileOutput() {
         }
         reader.readAsBinaryString(file)
     };
-    const saveProps:SaveProps= { 'fileName':"MYSavedData.xlsx", 'sheetName':"Sheet1", data:data }
+    const saveProps:SaveProps= { 'fileNames':["MYSavedData.xlsx", "MYSavedData.xlsx"], 'sheetName':"Sheet1", data:data }
     const onClick = () => saveXlsx(saveProps)
     return (
         <div>

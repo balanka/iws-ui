@@ -73,6 +73,20 @@ export const FModuleMainForm = ({
           />
         </CCol>
       </FormRow>
+      <FormRow style={{ height }}>
+        <CCol sm={2}><FieldLabel title={t('common.copyFrom')} /></CCol>
+        <CCol sm={4}>
+          <InputField fieldName="template1" current={current} setCurrent={setCurrent}
+                      value={current.template1} disabled={disable} style={{ height }}
+          />
+        </CCol>
+        <CCol sm={2}><FieldLabel title={t('fmodule.oaccountFilter')} /></CCol>
+        <CCol sm={4}>
+          <InputField fieldName="template2" current={current} setCurrent={setCurrent}
+                      value={current.template2} disabled={disable} style={{ height }}
+          />
+        </CCol>
+      </FormRow>
     </div>
   )
 }

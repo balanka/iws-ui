@@ -5,11 +5,12 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {Get} from './CrudController'
-import {ARTICLE_ACCOUNT_QUERY_PARM, initModule, MASTERFILE} from './Menu'
+import {ARTICLE_ACCOUNT_QUERY_PARM, MASTERFILE} from './Menu'
 import {formEnum} from '../utils/FormEnum'
 import {IJournalProps, UseArticleAccountResult} from '../Props.ts'
-import {IArticle, IModule, IStore} from '../Models.ts'
+import {IArticle, IFmodule, IModule, IStore} from '../Models.ts'
 import useForm from './UseForm.ts'
+
 
 ModuleRegistry.registerModules([
   AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,
@@ -40,21 +41,25 @@ const UseArticleAccountForm = <T>(): [UseArticleAccountResult<T>] => {
   const art_modelid = formEnum.ARTICLE
   const store_modelid = formEnum.STORE
   const module_modelid = formEnum.MODULE
+  const fmodule_modelid = formEnum.FMODULE
   const art_ctx = `${MASTERFILE.article}/${art_modelid}/${company}`
   const store_ctx = `${MASTERFILE.store}/${store_modelid}/${company}`
   const module_ctx = `${MASTERFILE.module}/${module_modelid}/${company}`
+  const fmodule_ctx = `${MASTERFILE.fmodule}/${fmodule_modelid}/${company}`
   const current_:IJournalProps = {...ARTICLE_ACCOUNT_QUERY_PARM, modelid: modelid, currency:currency??''}
   const [current, setCurrent] = useState<IJournalProps>(current_)
 
   const [articleData, setArticleData] = useState<IArticle[]>([])
   const [storeData, setStoreData] = useState<IStore[]>([])
   const [rowData, setRowData] = useState<T[]>([])
-  const [module, setModule] = useState<IModule[]>([])
+  const [, setModule] = useState<IModule[]>([])
+  const [fmodule, setFModule] = useState<IFmodule[]>([])
 
   useEffect(() => {
     Get(art_ctx, token, art_modelid, setArticleData)
     Get(store_ctx, token, store_modelid, setStoreData)
     Get(module_ctx, token, module_modelid, setModule)
+    Get(fmodule_ctx, token, fmodule_modelid, setFModule)
     //setCurrent(current_)
     // });
     // return () => subscription.unsubscribe();
@@ -73,10 +78,9 @@ const UseArticleAccountForm = <T>(): [UseArticleAccountResult<T>] => {
 
    const onRowSelected = (event: RowSelectedEvent) =>
          setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
-   const templateName = () =>
-        (module.find((m:IModule) => Number(m.id) === current.modelid) ?? initModule).description
+
 
   return [{ profile, menu, selected, t, articleData, storeData, rowData, setRowData, current_, current, setCurrent
-    , submitQuery, onRowSelected, templateName, title:title, styles:styles}]
+    , fmodule, submitQuery, onRowSelected,  title:title, styles:styles}]
 }
 export default UseArticleAccountForm
