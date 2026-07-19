@@ -34,7 +34,7 @@ import {
 } from '../Models.ts'
 import {LineTFinancialsGrid, TransactionGrid} from '../IWSGrid.tsx'
 import {financialsColumnDefs, LinesFinancialsColumns} from '../ColumnsDefs.ts'
-import {isLoaded, logout} from '../utils/FormUtils.tsx'
+import {logout} from '../utils/FormUtils.tsx'
 import Login from './Login'
 import {CSpinner} from '@coreui/react-pro'
 import {useNavigate} from "react-router-dom";
@@ -114,9 +114,9 @@ const FinancialsForm = () => {
 
   useEffect(() => {
     Promise.all([
-      !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData),
-      !isLoaded(cc_modelid)&& Get(cc_ctx, token, cc_modelid, setCcData),
-      !isLoaded(contact_modelid)&& Get(contact_ctx, token, contact_modelid, setContactData)
+      Get(acc_ctx, token, acc_modelid, setAccData),
+      Get(cc_ctx, token, cc_modelid, setCcData),
+      Get(contact_ctx, token, contact_modelid, setContactData)
     ]).then(() => {
       console.log('All data fetched successfully');
       // additional logic after all requests complete
@@ -129,9 +129,9 @@ const FinancialsForm = () => {
     event?.preventDefault()
     setIsFetching(true)
     Promise.all([
-      !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData),
-      !isLoaded(cc_modelid)&& Get(cc_ctx, token, cc_modelid, setCcData),
-      !isLoaded(modelid)&& Get3(ctx, token, modelid, current_, setRowData, setCurrent)
+      Get(acc_ctx, token, acc_modelid, setAccData),
+      Get(cc_ctx, token, cc_modelid, setCcData),
+      Get3(ctx, token, modelid, current_, setRowData, setCurrent)
     ]).then(() => {
       console.log('All data fetched successfully');
       // additional logic after all requests complete
@@ -171,16 +171,22 @@ const FinancialsForm = () => {
     const appartmentId= current.account.substring(current.account.length - 2, current.account.length )
     const year = Number(`${current.period}`.substring(0, 4))
     const month = Number(`${current.period}`.substring(5, 6))
-    const monthName= getMonthName(month, locale??'fr-FR')
-    const dayAsOrdinal= getLocalizedOrdinal(1, locale??'fr-FR')
+    const monthName= getMonthName(month-1, locale??'fr-FR')
+    const date = new Date(year, month, 0)
+    const lastDay = new Date(date.getFullYear(), date.getMonth() , 0).getDate()
+
+    const startDay1AsOrdinal= getLocalizedOrdinal(1, locale??'fr-FR')
+    //const lastDayAsOrdinal= getLocalizedOrdinal(lastDay, locale??'fr-FR')
+     //toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
+
     const result = {
       ...current
       , date: new Date().toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
       , appartmentId: appartmentId
       , year: year
       , month: month
-      , from: `${dayAsOrdinal} ${monthName} ${year}`
-      , to: `${dayAsOrdinal} ${monthName} ${year}`
+      , from: `${startDay1AsOrdinal} ${monthName} ${year}`
+      , to: `${lastDay} ${monthName} ${year}`
       , transdate: current.transdate
       , name:contact.name
       , total: total_?.toLocaleString('de-DE',  { style: "currency", currency: currency|| 'EUR', useGrouping:true,}) // or 'symbol')

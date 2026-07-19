@@ -55,14 +55,13 @@ const CompanyForm = () => {
   }
   const [{header, body, table, disable,  state, visible, rowData,  setRowData, current, setCurrent, currentBankAccount
     , setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t), reload)
-  const isLoaded = (modelid:number)=> iwsStore.getByModelId(modelid)&& iwsStore.getByModelId(modelid).length>0
   useEffect(() => {
     Promise.all([
-      !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData),
-      !isLoaded(bank_modelid)&&Get(bank_ctx, token, bank_modelid, setBankData),
-      !isLoaded(ccy_modelid)&&Get(ccy_ctx, token, ccy_modelid, setCcyData),
-      !isLoaded(vat_modelid)&&Get(vat_ctx, token, vat_modelid, setVatData),
-      !isLoaded(contact_modelid)&&Get(contact_ctx, token, contact_modelid, setContactData)])
+      Get(acc_ctx, token, acc_modelid, setAccData),
+      Get(bank_ctx, token, bank_modelid, setBankData),
+      Get(ccy_ctx, token, ccy_modelid, setCcyData),
+      Get(vat_ctx, token, vat_modelid, setVatData),
+      Get(contact_ctx, token, contact_modelid, setContactData)])
       .then(() => {
         console.log('All data fetched successfully');
         // additional logic after all requests complete

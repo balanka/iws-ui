@@ -14,7 +14,6 @@ import {IAccount, IAsset, IMasterfile} from '../Models.ts'
 import UseMasterfileForm from './UseMasterfileForm.tsx'
 import useForm from './UseForm.ts'
 import Login from "./Login.tsx";
-import {isLoaded} from "../utils/FormUtils.tsx";
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
@@ -39,8 +38,8 @@ const AssetForm = () => {
 
   useEffect(() => {
     Promise.all([
-      !isLoaded(acc_modelid)&&Get(acc_ctx, token, acc_modelid, setAccData),
-      !isLoaded(ccy_modelid)&&Get(ccy_ctx, token, ccy_modelid, setCcyData)
+      Get(acc_ctx, token, acc_modelid, setAccData),
+      Get(ccy_ctx, token, ccy_modelid, setCcyData)
     ]).then(() => {
       console.log('All data fetched successfully')
       // additional logic after all requests complete

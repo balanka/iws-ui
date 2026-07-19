@@ -5,7 +5,6 @@ import { formEnum } from '../../utils/FormEnum.tsx'
 import { getFiltered } from '../../utils/FormUtils.tsx'
 import {FinancialsCBoxProps2, FinancialsCBoxProps3} from "../../Props.ts"
 import {IFinancials, ILineFinancials, IMasterfile, ITransaction} from "../../Models.ts"
-//import {CMultiSelect} from "@coreui/react-pro";
 
 // Base props for all combo boxes
 interface BaseComboBoxProps {
@@ -41,10 +40,11 @@ export const FormMasterfileXComboBox = ({
                                                                         styles = {},
                                                                         disable = false,
                                                                         fontSize = 11,
-                                                                        height=20
+                                                                        height = 20
                                                                       }:MasterfileXComboBoxProps) => {
   const currentAcc = (data ?? [defaultValue]).find((acc) => acc.id === current[fieldName]) ?? defaultValue;
-
+  console.log('currentAcc', currentAcc)
+  console.log('current[fieldName]', current[fieldName])
   return (
     <ComboBox<{ value: string | bigint; label: string }>
       style={{
@@ -62,7 +62,7 @@ export const FormMasterfileXComboBox = ({
         label: currentAcc ? `${currentAcc.id} ${currentAcc.name}` : ''
       }}
       onChange={(value: any, _event: any) => setCurrent({ ...current, [fieldName]: value })}
-      values={data.length ? data.slice().sort(sortById).map(toOption) : [toOption(defaultValue)]}
+      values={data.length>0 ? data.slice().sort(sortById).map(toOption) : [toOption(defaultValue)]}
       zIndex={zIndex}
     />
   );

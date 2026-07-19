@@ -11,7 +11,6 @@ import {JournalProps} from '../Props.ts'
 import {IAccount, IFmodule, IModule} from '../Models.ts'
 import {UseJFormResult} from '../Props.ts'
 import useForm from './UseForm.ts'
-//import {templateNames} from "../utils/XlsUtils.ts";
 
 ModuleRegistry.registerModules([
   AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,
@@ -52,15 +51,11 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
   const [_, setModule] = useState<IModule[]>([])
   const [fmodule, setFmodule] = useState<IFmodule[]>([])
   useEffect(() => {
-    //const subscription = iwsStore.subscribe(() => {
-      //const freshData = iwsStore.getByModelId(modelid) as T[];
-      //setRowData(freshData);
       Get(acc_ctx, token, acc_modelid, setAccData)
       Get(module_ctx, token, module_modelid, setModule)
       Get(module_ctx, token, module_modelid, setModule)
       Get(fmodule_ctx, token, fmodule_modelid, setFmodule)
       setCurrent(current_)
-   // return () => subscription.unsubscribe();
   }, [selected]);
 
  const fromPeriod = current.fromPeriod ===-1 ? `${current.toPeriod.toString().substring(0,4)}00`
@@ -83,7 +78,6 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
 
    const onRowSelected = (event: RowSelectedEvent) =>
          setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
-
 
   return [{ profile, menu, selected, t, accData, rowData, setRowData, current_, current, setCurrent
     , fmodule, submitQuery, submitQuery2, onRowSelected,  title:title, styles:styles}]
