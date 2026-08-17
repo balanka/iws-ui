@@ -1,60 +1,113 @@
-import { LineTransactionGrid} from "../IWSGrid"
-import { lineTransactionColumnDefs} from "../ColumnsDefs"
-import IWSTabs from './IWSTabs.tsx'
-import {TransactionDetailsFormProps, TransactionDetailsTabProps} from '../Props'
+import {Dispatch, SetStateAction, useEffect, useRef} from 'react';
+import { LineTransactionGrid } from '../IWSGrid';
+import { lineTransactionColumnDefs } from '../ColumnsDefs';
+import IWSTabs from './IWSTabs';
+import { TransactionDetailsForm } from './TransactionDetailsForm';
+import FileOutput from './FileOutput';
+import { ILineTransaction, ITransaction } from '../Models';
+import { isArrayAndNotEmpty } from '../utils/Utils';
 // @ts-ignore
-import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import { TransactionDetailsForm} from './TransactionDetailsForm.tsx'
-//import {blue} from '@mui/material/colors'
-import FileOutput from './FileOutput.tsx'
-import { ILineTransaction, ITransaction} from '../Models.ts'
-import {isArrayAndNotEmpty} from "../utils/Utils.ts";
-import FileInput from "./FileInput.tsx";
+import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events';
+import {TransactionDetailsTabProps} from "../Props.ts";
+import {TFunction} from "i18next";
+
+export const TransactionDetailsTabs = <T extends ITransaction, L extends ILineTransaction>({
+                                                                                             collapseTable,
+                                                                                             transaction,
+                                                                                             setTransaction,
+                                                                                             currentLineTransaction,
+                                                                                             setCurrentLineTransaction,
+                                                                                             accountFilter,
+                                                                                             oaccountFilter,
+                                                                                             articleData,
+                                                                                             vatData,
+                                                                                             t,
+                                                                                             onGridReady,
+                                                                                             zIndex = 2,
+                                                                                             locale,
+                                                                                             currency,
+                                                                                           }: TransactionDetailsTabProps<T, L>) => {
+  const height = 20;
+  const detailsMinHeight = 120;
+  const detailsMaxHeight = 290;
+  const disable = transaction?.posted;
+  const gridApiRef = useRef<any>(null);
+console.log('collapseTable',collapseTable)
+  // Determine current line (first line or prop)
+  let currentLine: ILineTransaction = isArrayAndNotEmpty(transaction?.lines)
+    ? transaction.lines[0]
+    : currentLineTransaction;
 
 
-const TransactionDetailsTabs = ({
-                                      transaction, setTransaction
-                                    , currentLineTransaction, setCurrentLineTransaction
-                                   ,  accountFilter, oaccountFilter
-                                  , articleData, vatData, t, onGridReady,  zIndex, locale, currency
-                                }: TransactionDetailsTabProps<ITransaction, ILineTransaction>) => {
+  // Build lines array for grid
+  const linesx = !transaction?.lines?.length
+    ? [{ ...currentLine, transid: transaction?.id }]
+    : transaction.lines;
 
-    const height = 20
-    const disable = transaction?.posted
-  let currentLine:ILineTransaction = isArrayAndNotEmpty(transaction?.lines)? transaction?.lines[0]:currentLineTransaction
-  currentLine = (transaction?.lines?.length===1)?currentLine:currentLineTransaction
-    const linesx = !transaction?.lines?.length ? [{
-    ...currentLine, transid: transaction?.id}] : transaction?.lines
-  if(transaction?.hasOwnProperty('lines')) {
-    transaction.lines = linesx
-  }else {
-    transaction["lines"] = linesx
-  }
-    const props: TransactionDetailsFormProps<ITransaction, ILineTransaction> = { transaction, setTransaction
-      , currentLineTransaction:currentLine
-      , setCurrentLineTransaction, accountFilter, oaccountFilter, articleData, vatData, t, disable, height
+  const  setTr = setTransaction as Dispatch<SetStateAction<ITransaction>>
+  const  setLine  = setCurrentLineTransaction as  Dispatch<SetStateAction<ILineTransaction>>
+  const tx = t as TFunction<'transalation', undefined>
+  const props = {
+    transaction,
+    setTransaction:setTr,
+    currentLineTransaction,
+    setCurrentLineTransaction:setLine,
+    accountFilter,
+    oaccountFilter,
+    articleData,
+    vatData,
+    t:tx,
+    disable,
+    height,
+    locale,
+    currency,
+  };
+
+  const onRowSelected = (event: RowSelectedEvent) => {
+    setCurrentLineTransaction(event.data);
+  };
+
+  // Store grid API when ready
+  const handleGridReady = (params: any) => {
+    gridApiRef.current = params.api;
+    if (onGridReady) onGridReady(params);
+  };
+
+  // Force grid resize when collapseTable changes
+  useEffect(() => {
+    if (gridApiRef.current) {
+      // Force the grid to recalculate its dimensions
+      gridApiRef.current.resetRowHeights();
+      gridApiRef.current.sizeColumnsToFit();
     }
-    const onRowSelected = (event: RowSelectedEvent) => setCurrentLineTransaction(event.data)
+  }, [collapseTable]);
 
-    const table = () => {
-        return (
-            <div
-                // @ts-ignore
-                  style={{ width: '100%', height: 120, paddingTop:1, zIndex:zIndex-2}}>
-                  {/*style={{...styles.outer, width: '100%', height: 130, paddingTop:1, zIndex:zIndex-2}}>*/}
-                <LineTransactionGrid columnDefs={lineTransactionColumnDefs(t, locale, currency)} onRowSelected={onRowSelected}
-                   rowData={!transaction?.lines?.length?[ {...currentLineTransaction, transid:transaction?.id}]:transaction?.lines}
-                   onGridReady={onGridReady}  pagination={false}/>
-            </div>
-        )
-    }
+  const table = () => (
+    <div
+      style={{
+        width: '100%',
+        height: collapseTable ? detailsMinHeight : detailsMaxHeight,
+        paddingTop: 1,
+        zIndex: zIndex - 2,
+      }}
+    >
+      <LineTransactionGrid
+        columnDefs={lineTransactionColumnDefs(t, locale, currency)}
+        onRowSelected={onRowSelected}
+        rowData={linesx}
+        onGridReady={handleGridReady}
+        pagination={false}
+      />
+    </div>
+  );
 
-    const tabContent = [
-        {title: t('transaction.line.title'), id: 1, form: table()},
-        {title: t('common.general'), id: 2, form: TransactionDetailsForm(props)},
-        {title: t('common.export'), id: 3, form: FileOutput()},
-        {title: t('common.import'), id: 4, form: FileInput(transaction.company)},
-    ]
-    return <IWSTabs tabList={tabContent}/>
-}
-export {TransactionDetailsTabs}
+  const tabContent = [
+    { title: t('transaction.line.title'), id: 1, form: table() },
+    { title: t('common.general'), id: 2, form: TransactionDetailsForm(props) },
+    { title: t('common.export'), id: 3, form: FileOutput() },
+  ];
+
+  return <IWSTabs tabList={tabContent} />;
+};
+
+export default TransactionDetailsTabs;

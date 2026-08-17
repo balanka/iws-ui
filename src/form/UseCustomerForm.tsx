@@ -22,7 +22,7 @@ import {useNavigate} from "react-router-dom";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: ColDef[], reload?:()=>void): [UseCustomerFormResult<T>] => {
-  const [{profile, menu, selected, visible, t, title, language, state, toggle, toggleTable, handleLanguageChange, modelid
+  const [{profile, menu, selected, t, title, language, state, toggle, toggleTable, handleLanguageChange, modelid
     , company}] = useForm()
   const {token, currency} = profile
   let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
@@ -223,7 +223,7 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
 
   const header: ReactNode = CommonFormHead({
     title: title
-    , collapse: state.collapse
+    , collapse: state.collapseForm
     , initAdd: initAdd
     , edited: edited ?? false
     , added: added ?? added === undefined
@@ -254,7 +254,7 @@ export const UseCustomerForm = <T extends IBusinespartner>(current_: T, colDef: 
     body: body,
     table,
     disable,
-    visible,
+    visible:state.collapseTable,
     rowData,
     current,
     setCurrent,
