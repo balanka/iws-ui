@@ -32,11 +32,11 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const maxHeight = 600
      const height = 33
      const colDef:ColDef[] = storeColumnDefs(t)
-     const {header, body, table, disable, visible, state, current, setCurrent, zIndex} =  UseMasterfileForm(current_, colDef, MASTERFILE.store)
+     const {header, body, table, disable, state, current, setCurrent, zIndex} =  UseMasterfileForm(current_, colDef, MASTERFILE.store)
      const safeBody = React.isValidElement(body) ? body : null;
-     const mainForm = StoreTabs({collapse:state.collapse, current:current, setCurrent:setCurrent
+     const mainForm = StoreTabs({collapse:state.collapseForm, current:current, setCurrent:setCurrent
        , disable:disable, currency:currency??'EUR', t:t, zIndex:zIndex-1, ccData:ccData, accData:accData
-      , locale:locale??'fr-FR', height:height, minMaxHieght:state.collapse?minHeight:maxHeight })
+      , locale:locale??'fr-FR', height:height, minMaxHieght:state.collapseForm?minHeight:maxHeight })
    useEffect(() => {
      Get(cc_ctx, token, cc_modelid, setCcData)
      Get(acc_ctx, token, acc_modelid, setAccData)
@@ -47,7 +47,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      <>
          {header}
          {safeBody??mainForm}
-       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
+       <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%"
+         , display:state.collapseTable?'':'none'}}>
          {table}
        </div>
      </>

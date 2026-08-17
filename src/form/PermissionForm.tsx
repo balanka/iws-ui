@@ -22,15 +22,16 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const minHeight = 400
      const maxHeight = 700
      const coldef:ColDef[]= permissionColumnDefs(t)
-     const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm(current_, coldef, MASTERFILE.perm)
+     const {header, body, table, disable, state, current, setCurrent} = UseMasterfileForm(current_, coldef, MASTERFILE.perm)
      const safeBody = React.isValidElement(body) ? body : null
-     const mainForm = PermissionMainForm ({collapse:state.collapse,  current:current, setCurrent:setCurrent
+     const mainForm = PermissionMainForm ({collapse:state.collapseForm,  current:current, setCurrent:setCurrent
      , disable:disable, t:t, height:height})
    return (
       <>
         {header}
         {safeBody??mainForm}
-         <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+         <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight
+           , display:state.collapseTable?'':'none'}}>
           {table}
         </div>
       </>

@@ -53,7 +53,7 @@ const CompanyForm = () => {
     setRowData([...rowData_ ])
     setCurrent(currentx)
   }
-  const [{header, body, table, disable,  state, visible, rowData,  setRowData, current, setCurrent, currentBankAccount
+  const [{header, body, table, disable,  state, rowData,  setRowData, current, setCurrent, currentBankAccount
     , setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t), reload)
   useEffect(() => {
     Promise.all([
@@ -72,7 +72,7 @@ const CompanyForm = () => {
   }, []);
 
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
-  const mainForm = CompanyTabs({ collapse: state.collapse, current:current, setCurrent:setCurrent
+  const mainForm = CompanyTabs({ collapse: state.collapseForm, current:current, setCurrent:setCurrent
     , currentBankAccount:currentBankAccount
     , setCurrentBankAccount:setCurrentBankAccount
     , disable:disable, t:t, locale:locale?? 'fr-FR'
@@ -80,7 +80,7 @@ const CompanyForm = () => {
     , vatData:vatData, height:height, ccyData:ccyData, contactData:contactData
     , onGridReady:onGridReady
     // @ts-ignore
-    ,  stylesx:{...styles, height:state.collapse?minHeight:maxHeight, padding: 5, paddingLeft: 10, paddingBottom: 5}})
+    ,  stylesx:{...styles, height:state.collapseForm?minHeight:maxHeight, padding: 5, paddingLeft: 10, paddingBottom: 5}})
   const safeBody = React.isValidElement(body) ? body : null;
 
   return (
@@ -88,10 +88,11 @@ const CompanyForm = () => {
       {header}
       <CInputGroup
         //@ts-ignore
-        style={{...styles.outer , display: !state.collapse?'none':''}} >
+        style={{...styles.outer , display: !state.collapseForm?'none':''}} >
         {safeBody??mainForm}
       </CInputGroup>
-      <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
+      <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%"
+        , display:state.collapseTable?'':'none'}}>
         {table}
       </div>
     </>

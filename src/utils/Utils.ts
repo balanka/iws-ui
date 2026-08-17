@@ -115,7 +115,7 @@ const  groupBy = <A, K>(list:A[], keyGetter:(arg: A) =>K):Map<K, A[]> => {
     })
     return map;
 }
-const capitalize = (s:any):string => {
+const capitalize1rst = (s:any):string => {
   if (typeof s !== 'string') return ''
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
@@ -185,7 +185,7 @@ function getLocalizedOrdinal(day: number, locale: string): string {
 export {
   //dateFormat,
   dateRenderer,
-  capitalize,
+  capitalize1rst,
   currencyFormatDE,
   currencyAmountFormatDE,
   currencyFormatUS,

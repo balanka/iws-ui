@@ -47,7 +47,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const minHeight = 350
      const maxHeight = 700
       const colDef:ColDef[]= articleColumnDefs(t, locale??'fr-FR', currency??'EUR')
-      const {header, body, table, disable, visible, state, rowData, current, setCurrent, zIndex} =
+      const {header, body, table, disable, state, rowData, current, setCurrent, zIndex} =
         UseMasterfileForm<IArticle>(current_,  colDef, MASTERFILE.article)
 
        useEffect(() => {
@@ -59,7 +59,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          setCurrent(current_)
        }, [])
       const safeBody = React.isValidElement(body) ? body : null;
-       const mainForm = ArticleTabs ({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t
+       const mainForm = ArticleTabs ({collapse:state.collapseForm, current:current, setCurrent:setCurrent, disable:disable, t:t
                              , data:rowData, accData:accData, quantityUnitData:quantityUnitData,  locale:`${locale}`, currency:`${currency}`
                               , vatData:vatData, groupData:groupData, ccyData:ccyData, height:height, zIndex:zIndex-1})
       return (
@@ -68,7 +68,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
           <CInputGroup>
             {safeBody ? safeBody :mainForm}
           </CInputGroup>
-          <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
+          <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%"
+            , display:state.collapseTable?'':'none'}}>
             {table}
           </div>
         </>

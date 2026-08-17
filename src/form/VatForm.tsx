@@ -29,7 +29,7 @@ const VatForm = () => {
   const maxHeight = 600
   const height = 28
   const colDef:ColDef[] = vatColumnDefs(t)
-  const {header, body, table, disable, visible, state, current, setCurrent, zIndex} =  UseMasterfileForm(current_,  colDef, selected)
+  const {header, body, table, disable, state, current, setCurrent, zIndex} =  UseMasterfileForm(current_,  colDef, selected)
   useEffect(() => {
     async function loadData() {
       if (isLoaded(acc_modelid)) {
@@ -52,10 +52,11 @@ const VatForm = () => {
       {header}
       <CInputGroup
         //@ts-ignore
-        style={{...styles.outer , display: !state.collapse?'none':''}} >
+        style={{...styles.outer , display: !state.collapseForm?'none':''}} >
         {safeBody??VatMainForm({current, setCurrent, accData, t, disable, height, zIndex})}
       </CInputGroup>
-      <div  style={{...styles.outer0, paddingTop:2, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+      <div  style={{...styles.outer0, paddingTop:2, height: state.collapseForm?minHeight:maxHeight
+        , display:state.collapseTable?'':'none'}}>
         {table}
       </div>
     </>

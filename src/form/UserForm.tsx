@@ -26,14 +26,15 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    const minHeight = 400
    const maxHeight = 700
    const colDef:ColDef[] = userColumnDefs(t)
-   const {header, body, table, disable, state, visible, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.user)
-   const mainForm = UserTabs({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t, height:33})
+   const {header, body, table, disable, state, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.user)
+   const mainForm = UserTabs({collapse:state.collapseForm, current:current, setCurrent:setCurrent, disable:disable, t:t, height:33})
    const safeBody = React.isValidElement(body) ? body : null;
    return (
      <>
        {header}
          {safeBody??mainForm}
-       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
+       <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%"
+         , display:state.collapseTable?'':'none'}}>
          {table}
        </div>
      </>

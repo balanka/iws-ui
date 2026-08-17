@@ -21,9 +21,9 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const minHeight = 450
      const maxHeight = 550
      const colDef:ColDef[]= masterfileColumnDefs(t)
-   const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.realEstate)
+   const {header, body, table, disable, state, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.realEstate)
      const safeBody = React.isValidElement(body) ? body : null;
-     const mainForm = MasterfileFormWithout({collapse:state.collapse,  current:current??current_, setCurrent:setCurrent
+     const mainForm = MasterfileFormWithout({collapse:state.collapseForm,  current:current??current_, setCurrent:setCurrent
      , disable:disable, height:height, accData:[], t:t, fieldName:t('common.parent'), propertyName:'parent'})
     return (
       <>
@@ -33,7 +33,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
           style={{...styles.outer, height:180, padding:5, paddingTop: 20 }} >
         {safeBody??mainForm}
        </div>
-       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+       <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight
+         , display:state.collapseTable?'':'none'}}>
          {table}
        </div>
      </>

@@ -36,7 +36,7 @@ const MasterfileForm = () => {
   const minHeight = 350
   const maxHeight = 700
   const height = 28
-  const {header, body, table, disable, visible, state, current, setCurrent} =  UseMasterfileForm(current_,coldef, MASTERFILE.masterfile)
+  const {header, body, table, disable, state, current, setCurrent} =  UseMasterfileForm(current_,coldef, MASTERFILE.masterfile)
   const safeBody = React.isValidElement(body) ? body : null
   useEffect(() => {
     !isLoaded(module_.modelid) &&Get(ctx, token, module_.modelid, setAccData)
@@ -47,7 +47,7 @@ const MasterfileForm = () => {
       {header}
       <CInputGroup
         //@ts-ignore
-          style={{...styles.outer,  width:'100%', display: !state.collapse?'none':''}} >
+          style={{...styles.outer,  width:'100%', display: !state.collapseForm?'none':''}} >
           {safeBody??
             <MasterfileFormWithChildren
               //@ts-ignore
@@ -62,7 +62,8 @@ const MasterfileForm = () => {
             />
           }
       </CInputGroup>
-      <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
+      <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%"
+        , display:state.collapseTable?'':'none'}}>
         {table}
       </div>
     </>

@@ -26,19 +26,20 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const minHeight = 450
      const maxHeight = 550
      const colDef:ColDef[]= PartnerColumnDefs(t)
-     const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm(current_,  colDef, MASTERFILE.contact)
+     const {header, body, table, disable, state, current, setCurrent} = UseMasterfileForm(current_,  colDef, MASTERFILE.contact)
     const safeBody = React.isValidElement(body) ? body : null
-    const mainForm = PartnerMainForm ({collapse:state.collapse,  current:current, setCurrent:setCurrent
+    const mainForm = PartnerMainForm ({collapse:state.collapseForm,  current:current, setCurrent:setCurrent
      , disable:disable, t:t, height:height})
     return (
       <>
        {header}
         <CInputGroup
           //@ts-ignore
-          style={{...styles.outer , display: !state.collapse?'none':''}} >
+          style={{...styles.outer , display: !state.collapseForm?'none':''}} >
           { safeBody??mainForm }
         </CInputGroup>
-        <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, display:visible?'':'none'}}>
+        <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight
+          , display:state.collapseTable?'':'none'}}>
          {table}
        </div>
      </>

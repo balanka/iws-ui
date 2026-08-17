@@ -42,15 +42,16 @@ import {useDispatch} from "react-redux";
 import {capitalizeFirst, generateDocx} from '../utils/XlsUtils.ts'
 import useTransactionForm from './UseTransactionForm.ts'
 import useForm from './UseForm.ts'
-import {Get, Get3, GetListData} from './CrudController.ts'
+import {AddList, Get, Get3, GET4, GetListData} from './CrudController.ts'
 import {getLocalizedOrdinal, getMonthName, isArrayAndNotEmpty} from "../utils/Utils.ts";
 import {toCardinal} from "n2words/fr-FR";
 import {TEMPLATE_ENUM} from "../Props.ts";
 
+
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, SelectEditorModule,])
 
 const FinancialsForm = () => {
-  const [{ profile, selected, t, toggle, toggleTable, state, visible, module_ }] = useForm()
+  const [{ profile, selected, t, toggle, toggleTable, state, module_ }] = useForm()
   const { token, currency, company, locale} = profile
   let navigate = useNavigate()
   const dispatch = useDispatch()
@@ -165,22 +166,28 @@ const FinancialsForm = () => {
     }
   }
 
-  const getData:()=>any = ()=>  {
+  const getData:()=>any = async (): Promise<any>=>  {
+    const ftr_ctx = `${module_.ctx}/${current.oid}/${formEnum.CUSTOMER_INVOICE}/${company}`;
     const total_ = buildTotal(current)
     const contact = contactData.find(m=>m.id===current.contact)??initContact
-    const appartmentId= current.account.substring(current.account.length - 2, current.account.length )
-    const year = Number(`${current.period}`.substring(0, 4))
-    const month = Number(`${current.period}`.substring(5, 6))
+    const appartmentId= current.costcenter.substring(current.costcenter.length - 2, current.costcenter.length )
+    const year = Number(`${current?.period}`.substring(0, 4))
+    const month = Number(`${current?.period}`.substring(5, 6))
     const monthName= getMonthName(month-1, locale??'fr-FR')
     const date = new Date(year, month, 0)
+    const invoiceData  =  await GET4<IFinancials>(ftr_ctx, token)??initFtr;
+    console.log('invoiceData', invoiceData)
+    const rent = (invoiceData.lines?.at(0)??initLineFinancials).amount
+    console.log('rent', rent)
     const lastDay = new Date(date.getFullYear(), date.getMonth() , 0).getDate()
 
     const startDay1AsOrdinal= getLocalizedOrdinal(1, locale??'fr-FR')
     //const lastDayAsOrdinal= getLocalizedOrdinal(lastDay, locale??'fr-FR')
      //toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
-
+    const rentx= rent??1
     const result = {
       ...current
+
       , date: new Date().toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
       , appartmentId: appartmentId
       , year: year
@@ -189,6 +196,8 @@ const FinancialsForm = () => {
       , to: `${lastDay} ${monthName} ${year}`
       , transdate: current.transdate
       , name:contact.name
+      , rent:(rent??0).toLocaleString('de-DE',  { style: "currency", currency: currency|| 'EUR', useGrouping:true})
+      , numberOfMonth: total_ / rentx
       , total: total_?.toLocaleString('de-DE',  { style: "currency", currency: currency|| 'EUR', useGrouping:true,}) // or 'symbol')
       , totalText:toCardinal(total_).split(" ").map(capitalizeFirst).join(".")
       , lines: current.lines.map(formatLines)
@@ -197,44 +206,59 @@ const FinancialsForm = () => {
     return result;
   }
    const getMonth =(d:ReminderBalance) => {
-     const month = new Date(Number(d.period.toString().substring(0, 4))
-       , Number(d.period.toString().substring(4, 6))-1
+     const month = new Date(Number(d?.period.toString().substring(0, 4))
+       , Number(d?.period.toString().substring(4, 6))-1
        , 5, 0, 0, 0, 0).toLocaleDateString(locale, {month: 'long'})
      return capitalizeFirst (month)
    }
-
+//"ftr" / long("id") ?? Doc.p(idDoc) / int("modelid")
     const getData2 =  async (): Promise<{"id": string, "lines":any[]}>=> {
       const ctx = `${module_.ctx}/balance/${current.account}/${company}`;
-      const data  =  await GetListData<any>(ctx, token, formEnum.REMINDER_BALANCE);
+      const appartmentId= current.costcenter.substring(current.costcenter.length - 2, current.costcenter.length )
+      const data  =  await GetListData<ReminderBalance>(ctx, token, formEnum.REMINDER_BALANCE);
       const contact = contactData.find(m=>m.id===current.contact)??initContact
-      const total =Number(data.reduce((acc: number, line: ReminderBalance) => acc + line.balance, 0.0))
+      const total = Number(data.reduce((acc: number, line: ReminderBalance) => acc + line.balance, 0.0))
       setReminderBalance(data);
       const result = {
-        id: data[data.length - 1].id,
+        id: current.id.toString(), //data[data.length - 1].id,
+        appartmentId:appartmentId,
         name:contact.name,
         date: new Date().toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"}),
         month: getMonth(data[data.length - 1]),
-        year: Number(`${data[data.length - 1].period}`.substring(0, 4)),
-        total:total.toLocaleString(locale,  { style: "currency", currency: currency }),
+        year: Number(`${data[data.length - 1]?.period}`.substring(0, 4)),
+        total:total.toLocaleString('de-DE',  { style: "currency", currency: currency, useGrouping:true }),
         totalText:toCardinal(total).split(" ").map(capitalizeFirst).join("."),
         lines: data.map((d: ReminderBalance) => ({
           id: d.id,
           month: getMonth(d),
           year: Number(`${d.period}`.substring(0, 4)),
-          balance: Number(d.balance).toLocaleString(locale,  { style: "currency", currency: currency })
+          balance: Number(d.balance).toLocaleString('de-DE',  { style: "currency", currency: currency|| 'EUR'
+                                                                      , useGrouping:true})
         }))
       }
       console.log('reminderBalance', reminderBalance)
       console.log('fresh reminderBalance', result)
       return result
     };
+  const chunkSize = 20;
+  const processImport = (dataToImport:IFinancials[]) =>{
+    console.log('processImport', processImport)
+    const ctx = '/ftrL'
+    let arr = []
+    for (let i = 0; i < dataToImport.length; i += chunkSize) {
+      const chunk = dataToImport.slice(i, i + chunkSize);
+      arr.push(AddList(ctx, token, chunk, rowData, setRowData))
+    }
+    Promise.all(arr).then(importedData =>console.log('importedData', importedData))
+
+  }
 
   //console.log('current #E9EFEC #e9ecef #cfdce5 #cfdce5  #F3F0F3 #E3DAF6 #FDF8FD #BDBABD  #D5D3D5 #F1ECFA', current)
   return isFetching?<CSpinner color="primary" />:(<>
     <FinancialsFormHead
       title={title}
       saveProps={saveProps}
-      collapse={state.collapse}
+      collapse={state.collapseForm}
       initAdd={initAdd}
       submitEdit={submitEdit}
       fmodule={fmodule}
@@ -258,12 +282,15 @@ const FinancialsForm = () => {
       current={current}
       t={t}
       zIndex={zIndex-1}
+      fileInputProps ={{company:company, currency:currency??'EUR'
+        ,  masterfiles:accData, onImportComplete: processImport}
+      }
     />
     {/*<div  style={{...stylesx.outer, height:650, boxShadow: '0 20px 50px #BBF', padding: 1, paddingBottom:2, backgroundColor: '#E3F1C5'}} >*/}
     <div
       //@ts-ignore
-      style={{ ...styles.outer,   width:'100%', height: 365,  display: !state.collapse ? 'none' : ''}}>
-      <FinancialsMainForm collapse ={state.collapse}
+      style={{ ...styles.outer,   width:'100%', height: 365,  display: !state.collapseForm ? 'none' : ''}}>
+      <FinancialsMainForm collapse ={state.collapseForm}
                           current={current??current_}
                           setCurrent={setCurrent}
                           accData={accData}
@@ -283,7 +310,7 @@ const FinancialsForm = () => {
                           currency={currency??'GNF'}/>
       <div
         // @ts-ignore
-            style={{...stylesx.outer, display: !state.collapse?'none':'', width: '100%', height: 160
+            style={{...stylesx.outer, display: !state.collapseForm?'none':'', width: '100%', height: 160
               , padding: 2, paddingTop: 3, zIndex:4}}>
         <LineTFinancialsGrid
           // @ts-ignore
@@ -294,9 +321,9 @@ const FinancialsForm = () => {
     </div>
     <div
         // @ts-ignore
-            style={{...stylesx.outer, height:state.collapse?minHeight:maxHeight, padding: 2
+            style={{...stylesx.outer, height:state.collapseForm?minHeight:maxHeight, padding: 2
               //, paddingTop:state.collapse?minPadding:maxPadding
-              , width: '100%', zIndex: 1, display:visible?'':'none'}}
+              , width: '100%', zIndex: 1, display:state.collapseTable?'':'none'}}
             maximize direction="column">
         <TransactionGrid
           // @ts-ignore

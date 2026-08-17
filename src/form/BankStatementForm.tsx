@@ -27,7 +27,7 @@ import BankStatementFormHead from "./BankStatementFormHead.tsx";
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
 const BankStatementForm = () => {
-  const [{profile, t,  selected, visible, language, toggle, toggleTable, handleLanguageChange, state, modelid, company,  module_ }] = useForm()
+  const [{profile, t,  selected, language, toggle, toggleTable, handleLanguageChange, state, modelid, company,  module_ }] = useForm()
   const { token, locale, currency } = profile
   const currencyx = currency ??'EUR'
   const dispatch = useDispatch()
@@ -115,7 +115,7 @@ const BankStatementForm = () => {
         <>
           <BankStatementFormHead
               title={title}
-              collapse={state.collapse}
+              collapse={state.collapseForm}
               cancelEdit={cancelEdit}
               submitEdit={submitEdit}
               importData={importData}
@@ -133,13 +133,13 @@ const BankStatementForm = () => {
           />
           <div
             //@ts-ignore
-            style={{...styles.outer, paddingTop:1, paddingBottom:10, display: !state.collapse?'none':''}}>
-            <BankStatementTabs collapse ={state.collapse} current={current} setCurrent={setCurrent}  t={t}  height={height}
-              currency={currencyx}  locale={locale ??'fr-FR'}/>
+            style={{...styles.outer, paddingTop:1, paddingBottom:10, display: !state.collapseForm?'none':''}}>
+            <BankStatementTabs collapse ={state.collapseForm} current={current} setCurrent={setCurrent} t={t} height={height}
+                               currency={currencyx} locale={locale ??'fr-FR'}/>
           </div>
           <div
             //@ts-ignore
-            style={{...styles.outer, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
+            style={{...styles.outer, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
               <BankStatementGrid
                    columnDefs ={bankStatementColumnDefs(t, locale??'fr-FR', currency??'EUR')}  onRowSelected={onRowSelected} rowData ={rowData}/>
             </div>

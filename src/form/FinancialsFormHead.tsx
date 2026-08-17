@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import {JSX, useCallback, useRef} from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import { useSelector } from 'react-redux';
@@ -20,10 +20,11 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import PrintOutlined from '@mui/icons-material/PrintOutlined';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import LocalPrintshopSharpIcon from '@mui/icons-material/LocalPrintshopSharp';
 import {TransactionToolBarProps} from "../Props.ts";
 import {IFinancials, ILineFinancials, ILineTransaction, ITransaction} from "../Models.ts";
-
+import { parseExcelToFinancials } from '../utils/FileImport';
 const ToolbarButton = ({ tooltip, onClick, disabled, icon, zIndex }: any) => (
   <CTooltip content={tooltip} placement="top" style={{zIndex: zIndex??99999 }}>
     <IconButton size="small" sx={{ height: 22, width: 18}} onClick={onClick} disabled={disabled}>
@@ -36,10 +37,26 @@ export const FinancialsFormHead = ({
                                      title, collapse, initAdd, onNewLine, onDeleteLine, submitCancel, submitEdit,
                                      toggle, toggleTable, submitPost, reload, handleLanguageChange, navigate, language,
                                      dispatch, logout, current, t, submitPrintPreview, getData,  getData2, fmodule, zIndex
-                                     , template1EnumId,  template2EnumId
+                                     , template1EnumId,  template2EnumId, fileInputProps
                                    }: TransactionToolBarProps<ITransaction|IFinancials, ILineTransaction|ILineFinancials>): JSX.Element => {
   const UpDownIcon = collapse ? <KeyboardDoubleArrowUpIcon fontSize="small" /> : <KeyboardDoubleArrowDownIcon fontSize="small" />;
   const sidebarShow = useSelector((state: any) => state.sidebarShow);
+  const { onImportComplete} = fileInputProps
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('🔵 handleFileChange called');
+    const file = e.target.files?.[0];
+    if (!file) return;
+    parseExcelToFinancials(file, fileInputProps)
+      .then((result) => {
+         if (onImportComplete) onImportComplete(result);
+      }).catch((error) => console.error('Import failed:', error));
+      e.target.value = '';
+    }, []);
+
+
+
   console.log('current', current)
   return (
     <CInputGroup style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',  backgroundColor: '#f5f5f5'
@@ -62,12 +79,25 @@ export const FinancialsFormHead = ({
         <ToolbarButton tooltip={t('toolTip.transaction.post')} onClick={submitPost} disabled={current?.posted} icon={<CheckCircleOutlineIcon fontSize="small" />}  zIndex={zIndex} />
         <ToolbarButton tooltip={t('toolTip.common.print')} onClick={()=>submitPrintPreview(current, getData, fmodule, template2EnumId)} icon={<PrintOutlined fontSize="small" />} disabled={false} zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.print')} onClick={()=>submitPrintPreview(current, getData2, fmodule, template1EnumId)} icon={<LocalPrintshopSharpIcon fontSize="small" />} disabled={false} zIndex={zIndex}/>
+        <ToolbarButton tooltip={t('toolTip.common.export')} onClick={() => {
+          console.log('🟢 Button clicked, ref:', fileInputRef.current);
+          fileInputRef.current?.click()}} icon={<ArrowCircleUpIcon fontSize="small" />}  zIndex={zIndex}/>
+        {/*<ToolbarButton tooltip={t('toolTip.common.export')} onClick={() => setShowImport(true)} icon={<ArrowCircleUpIcon fontSize="small" />}  zIndex={zIndex}/>*/}
         <ToolbarButton tooltip={t('toolTip.common.export')} onClick={() => {}} icon={<ArrowCircleDownIcon fontSize="small" />}  zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.load')} onClick={reload} icon={<FilterListIcon fontSize="small" />}   zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.table')} onClick={toggleTable} icon={<ListIcon fontSize="small" />}  zIndex={zIndex}/>
         <ToolbarButton tooltip={t('toolTip.common.form')} onClick={toggle} icon={UpDownIcon} />
         <ToolbarButton tooltip={t('toolTip.common.exit')} onClick={() => logout(navigate)} icon={<ExitToAppIcon fontSize="small" />}  zIndex={zIndex}/>
       </Box>
+      {/* ✅ Hidden file input – must be inside the returned JSX */}
+      <input
+        key="file-import-input"
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+        accept=".xlsx,.xls,.csv"
+      />
     </CInputGroup>
   );
 };

@@ -34,7 +34,7 @@ const AssetForm = () => {
   const maxHeight = 700
   const height = 30
   const colDef:ColDef[]= assetColumnDefs(t, locale??'fr-FR', currency??'EUR')
-  const {header, body, table, disable, visible, state, current, setCurrent} = UseMasterfileForm<IAsset>(current_,  colDef, MASTERFILE.asset)
+  const {header, body, table, disable, state, current, setCurrent} = UseMasterfileForm<IAsset>(current_,  colDef, MASTERFILE.asset)
 
   useEffect(() => {
     Promise.all([
@@ -50,13 +50,14 @@ const AssetForm = () => {
   }, [])
 
 
-  const mainForm = AssetMainForm ({collapse:state.collapse, current:current, setCurrent:setCurrent, disable:disable, t:t, accData:accData
+  const mainForm = AssetMainForm ({collapse:state.collapseForm, current:current, setCurrent:setCurrent, disable:disable, t:t, accData:accData
     , ccyData:ccyData, height:height, locale:locale ??'fr-FR', currency:currencyx, zIndex:9999})
   return (
     <>
       {header}
          {body??mainForm}
-      <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
+      <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%"
+        , display:state.collapseTable?'':'none'}}>
         {table}
       </div>
     </>

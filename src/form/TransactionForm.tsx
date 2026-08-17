@@ -47,12 +47,13 @@ import {Get, Get3, GetListData, Gets} from './CrudController.ts'
 //import {TFunction} from "i18next";
 import {toCardinal} from "n2words/fr-FR";
 import {TEMPLATE_ENUM} from "../Props.ts";
+import {capitalize1rst, getMonthName} from "../utils/Utils.ts";
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
   const TransactionForm = () => {
-  const [{profile, selected, t, toggle, toggleTable, state, visible, module_, modelid }] = useForm()
+  const [{profile, selected, t, toggle, toggleTable, state, module_, modelid }] = useForm()
   const { token, currency, locale, company } = profile
   const localex = locale??'fr-FR'
   const currencyx = currency??'EUR'
@@ -90,7 +91,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    const [storeData, setStoreData] = useState<IStore[]>([])
    const [articleData, setArticleData] = useState<IArticle[]>([])
    const [vatData, setVatData] = useState<IVat[]>([])
-   const [, setCustomerData] = useState<ICustomer[]>([])
+   const [customerData, setCustomerData] = useState<ICustomer[]>([])
    const [, setSupplier] = useState<ISupplier[]>([])
    const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>([initCust])
    const [partnerId, setPartnerId] = useState<number>(-1)
@@ -128,32 +129,50 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      return {
        ...line
        // @ts-ignore
-       , quantity: line.quantity.toLocaleString(locale)
+       , quantity: line.quantity.toLocaleString('de-DE')//<- DO NOT CHANGE THIS or you loose the decimal point
        // @ts-ignore
-       , price: line.price.toLocaleString(locale,  { style: "currency", currency: currency })
+       , price: line.price.toLocaleString('de-DE')//<- DO NOT CHANGE THIS or you loose the decimal point
        // @ts-ignore
-       , vat: line.vat.toLocaleString(locale,  { style: "currency", currency: currency })
+       , vat: line.vat.toLocaleString('de-DE')//<- DO NOT CHANGE THIS or you loose the decimal point
        // @ts-ignore
-       , net: (line.quantity * line.price + line.vat).toLocaleString(locale,  { style: "currency", currency: currency })
+       , net: (line.quantity * line.price + line.vat).toLocaleString('de-DE') //<- DO NOT CHANGE THIS or you loose the decimal point
      }
    }
+    const buildVatTotal = (current: ITransaction|IFinancials) =>{
+      //@ts-ignore
+      return  current?.lines?.reduce((acc: number, line: ILineTransaction) => acc + line.vat, 0.0)
+    }
    const buildTotal = (current: ITransaction|IFinancials) =>{
      //@ts-ignore
      const trans:ITransaction  = current
      return  trans?.lines?.reduce((acc: number, line: ILineTransaction) => acc + line.quantity * line.price + line.vat, 0.0)
    }
-   const getData: ()=>any = ()=>  {
-    const total = buildTotal(current)
-     return {
+      const getData: ()=>any = ()=>  {
+      const total = buildTotal(current)
+      const customer = customerData.find(m=>m.id===current.account)??initCust
+      const  address = `${customer.street} ${customer.city} ${customer.country}`
+      const year = Number(`${current.period}`.substring(0, 4))
+      const month = Number(`${current.period}`.substring(5, 6))
+      const monthName= capitalize1rst(getMonthName(month-1, locale??'fr-FR'))
+     const result = {
        id:current.id
+       , oid:current.oid
+       , customerId:current.account
+       , name:customer.name
+       , phone:customer.phone
+       , address:address
        , date: new Date().toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
        , transdate: new Date(current?.transdate).toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
+       , period: `${monthName} ${year}`
        , total:   total?.toLocaleString(locale,  { style: "currency", currency: currency })
+       , vatTotal: buildVatTotal(current)
        , totalText:toCardinal(total).split(" ").map(capitalizeFirst).join(" ")
        , lines: current.lines.map(formatLines)
        , text:current.text
        , footText:current.footText
      }
+        console.log('result', result)
+        return result
    }
     const getData2 =  async (): Promise<ReminderBalance[]>=> {
       const ctx = `${module_.ctx}/${current.account}/${company}`;
@@ -183,6 +202,9 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
       }
     };
 
+    const processIport = (data2Import:ITransaction[]) =>{
+      console.log('data2Import', data2Import)
+    }
     const handleModuleChange = async (selected: any) => {
       // 1. Extract the ID from the selected option (object or primitive)
       const id = selected?.value !== undefined ? String(selected.value) : String(selected);
@@ -242,18 +264,11 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
     const accData1:ICustomer[]|ISupplier[] = iwsStore.getByModelId(partnerId) as ICustomer[] | ISupplier[] ?? [initCust]//.filter(m=>!m.id.toString().includes('*'))
     const accDatax:ICustomer[]|ISupplier[]|IAccount[]= (model ===formEnum.ACCOUNT)? accData:accData1
     const stData = storeData?.filter(m=>!m.id.toString().includes('*'))
-    // console.log('model', model)
-    // console.log('partnerId', partnerId)
-    // console.log('accData', accData)
-    // console.log('accData1', accData1)
-    // console.log('accDatax', accDatax)
-   // console.log('storeData', storeData)
-    //console.log('stData>>>>', stData)
     return isFetching?<CSpinner color="primary" />:<>
             <FinancialsFormHead
                 title={title}
                 saveProps={saveProps}
-                collapse={state.collapse}
+                collapse={state.collapseForm}
                 initAdd={initAdd}
                 submitCancel={submitCancel}
                 submitEdit={submitEdit}
@@ -277,11 +292,13 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                 current={current}
                 t={t}
                 zIndex={zIndex??99999}
+                fileInputProps ={{company:company, currency:currency??'EUR'
+                  , masterfiles:accData, onImportComplete: processIport}}
         />
        <div
        //@ts-ignore
-         style={{ ...styles.outer,   width:'100%', height: 380,  display: !state.collapse ? 'none' : ''}}>
-          <TransactionMainForm collapse={state.collapse} current={current??current_} setCurrent={setCurrent}
+         style={{ ...styles.outer,   width:'100%', height: 380,  display: !state.collapseForm ? 'none' : ''}}>
+          <TransactionMainForm collapse={state.collapseForm} current={current??current_} setCurrent={setCurrent}
                                t={t} accData={accDatax}
                                storeData={stData} modules={fmoduleData}
                                copyFromTransaction={copyFromTransaction}
@@ -290,8 +307,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
                                height={height} zIndex={zIndex-2} locale = {locale} currency ={currency}/>
           <div
             // @ts-ignore
-            style={{ backgroundColor: 'transparent',  padding:1, display: !state.collapse?'none':'', width: '100%', height: 40}}>
-              <TransactionDetailsTabs   transaction={current}  setTransaction={setCurrent}
+            style={{ backgroundColor: 'transparent',  padding:1, display: !state.collapseForm?'none':'', width: '100%'}}>
+              <TransactionDetailsTabs   collapseTable ={state.collapseTable} transaction={current}  setTransaction={setCurrent}
                                         currentLineTransaction ={currentLine}
                                         setCurrentLineTransaction={setCurrentLine}
                                         accountFilter={accFilter} oaccountFilter={oaccFilter}
@@ -301,8 +318,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
        </div>
        <div
            // @ts-ignore
-            style={{...styles.outer,  height:state.collapse?minHeight:maxHeight, width: '100%'
-                  , zIndex:1, display:visible?'':'none'}}>
+            style={{...styles.outer,  height:state.collapseForm?minHeight:maxHeight, width: '100%'
+                  , zIndex:1, display:state.collapseTable?'':'none'}}>
          <TransactionGrid
            //@ts-ignore
            gridOptions ={gridOptions (transactionColumnDefs, locale, currency, lineTransactionColumnDefs, t)}  columnDefs={transactionColumnDefs(t,locale, currency)}

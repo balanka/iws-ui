@@ -1,9 +1,10 @@
-import { JSX } from 'react'
+import React, { JSX } from 'react'
 import { CCol, CInputGroup } from '@coreui/react-pro'
-import { DatePickerField, InputField, TextareaField, FormMasterfileXComboBox } from './common'
+import {DatePickerField, InputField, TextareaField, FormMasterfileXComboBox, BooleanField} from './common'
 import {  styles } from './FormsProps.tsx'
 import { ArticleGeneralFormProps } from '../Props'
 import { initArticleGroup, initCurrency, initQuantity } from './Menu'
+import CurrencyInput from "react-currency-input-field";
 
 const Label = ({ children, w = 100 }: { children: React.ReactNode; w?: number }) =>
   <div style={{ minWidth: w }}>{children}</div>
@@ -17,7 +18,9 @@ export const ArticleGeneralForm = ({
                                      groupData,
                                      ccyData,
                                      disable,
-                                     height = 28
+                                     height = 28,
+                                     currency,
+                                     locale
                                    }: ArticleGeneralFormProps & { height?: number }): JSX.Element | null => {
   if (!collapse) return null;
 
@@ -127,15 +130,23 @@ export const ArticleGeneralForm = ({
         <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('article.pprice')}</Label></CCol>
         <CCol sm="3">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 , paddingLeft:40 }}>
-            <InputField
-              fieldName="pprice"
-              current={current}
-              setCurrent={setCurrent}
-              value={Number(current?.pprice).toFixed(2)}
+            <CurrencyInput
+              value={current.pprice}
+              intlConfig={{ locale, currency }}
+              groupSeparator="."
+              decimalSeparator=","
+              decimalsLimit={2}
+              decimalScale={2}
+              onValueChange={(value) => {
+                let cleanValue = value || '0';
+                cleanValue = cleanValue.replace(/\./g, ''); // Remove thousands separators
+                cleanValue = cleanValue.replace(/,/g, '.'); // Convert decimal comma to dot
+                const numberValue = parseFloat(cleanValue);
+                const finalValue = isNaN(numberValue) ? 0 : numberValue;
+                setCurrent({...current, pprice: finalValue})}}
               disabled={disable}
               style={numberStyle}
             />
-            <span style={{ fontSize: '0.875rem' }}>{current.currency}</span>
           </div>
         </CCol>
       </CInputGroup>
@@ -159,15 +170,23 @@ export const ArticleGeneralForm = ({
         <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('article.sprice')}</Label></CCol>
         <CCol sm="3">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 , paddingLeft:40 }}>
-            <InputField
-              fieldName="sprice"
-              current={current}
-              setCurrent={setCurrent}
-              value={Number(current?.sprice).toFixed(2)}
+            <CurrencyInput
+              value={current.sprice}
+              intlConfig={{ locale, currency }}
+              groupSeparator="."
+              decimalSeparator=","
+              decimalsLimit={2}
+              decimalScale={2}
+              onValueChange={(value) => {
+                let cleanValue = value || '0';
+                cleanValue = cleanValue.replace(/\./g, ''); // Remove thousands separators
+                cleanValue = cleanValue.replace(/,/g, '.'); // Convert decimal comma to dot
+                const numberValue = parseFloat(cleanValue);
+                const finalValue = isNaN(numberValue) ? 0 : numberValue;
+                setCurrent({...current, sprice: finalValue})}}
               disabled={disable}
               style={numberStyle}
             />
-            <span style={{ fontSize: '0.875rem' }}>{current.currency}</span>
           </div>
         </CCol>
       </CInputGroup>
@@ -191,23 +210,39 @@ export const ArticleGeneralForm = ({
         <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('article.avgPrice')}</Label></CCol>
         <CCol sm="3">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft:40 }}>
-            <InputField
-              fieldName="avgPrice"
-              current={current}
-              setCurrent={setCurrent}
-              value={Number(current?.avgPrice).toFixed(2)}
+            <CurrencyInput
+              value={current.avgPrice}
+              intlConfig={{ locale, currency }}
+              groupSeparator="."
+              decimalSeparator=","
+              decimalsLimit={2}
+              decimalScale={2}
               disabled={disable}
               style={numberStyle}
             />
-            <span style={{ fontSize: '0.875rem' }}>{current.currency}</span>
           </div>
         </CCol>
       </CInputGroup>
+      {/* Row 7: stocked (Full Width) */}
+      <CInputGroup style={{ height: 'auto', minHeight: height }}>
+        <CCol md="2"><Label>{t('article.stocked')}</Label></CCol>
+        <CCol xs="10" md="10">
+          <BooleanField
+            fieldName="stocked"
+            current={current}
+            setCurrent={setCurrent}
+            label=""
+            disabled={disable}
+            checked={current.stocked}
+            style={{ height: 20, paddingLeft: 5, align: 'right' }}
+          />
+        </CCol>
+      </CInputGroup>
 
-      {/* Row 7: Description (Full Width) */}
+      {/* Row 8: Description (Full Width) */}
       <CInputGroup style={{ height: 'auto', minHeight: height }}>
         <CCol md="2"><Label>{t('common.description')}</Label></CCol>
-        <CCol xs="12" md="10">
+        <CCol xs="10" md="10">
           <TextareaField
             fieldName="description"
             placeholder={t('common.description')}

@@ -22,7 +22,6 @@ export default function useMasterfileForm<T extends IWSModel>(
   body: (() => JSX.Element) | null;
   table: React.ReactNode;
   disable: boolean;
-  visible: boolean;
   state: State;
   rowData: T[];
   setRowData: React.Dispatch<React.SetStateAction<T[]>>;
@@ -33,7 +32,7 @@ export default function useMasterfileForm<T extends IWSModel>(
 } {
   const [{
     profile, menu, selected, t, title,
-    language, visible, state, toggle, toggleTable,
+    language, state, toggle, toggleTable,
     handleLanguageChange, modelid
   }] = useForm();
 
@@ -181,7 +180,7 @@ export default function useMasterfileForm<T extends IWSModel>(
   const header = (
     <CommonFormHead
       title={title}
-      collapse={state.collapse}
+      collapse={state.collapseForm}
       initAdd={initAdd}
       edited={edited}
       added={added}
@@ -215,7 +214,6 @@ export default function useMasterfileForm<T extends IWSModel>(
     body,
     table,
     disable,
-    visible,
     state,
     rowData,
     setRowData,

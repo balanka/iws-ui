@@ -223,12 +223,14 @@ async function loginRequest(
   }
 }
 
-export async function GetListData<T>(ctx: string, token: string, modelId: number): Promise<T[]> {
+export async function GetListData<T>(ctx: string, token: string, modelId: number, save:boolean =false): Promise<T[]> {
   const url = buildUrl(ctx);
   console.log(' GetListData with url', url);
   const data = await fetchWithAuth<T[]>(url, token);
   if (Array.isArray(data)) {
-    iwsStore.put(modelId, data as IWSModel[]);
+    if (save) {
+       iwsStore.put(modelId, data as IWSModel[])
+     }
     return [...data] as T[];
   }
   console.warn(`Expected array for modelId ${modelId}, got`, data);
@@ -258,6 +260,20 @@ async function fetchList<T>(ctx: string, token: string, modelId: number
   }
 }
 
+/**
+ * Fetch single record or first item of an array.
+ */
+async function getSingle<T>(ctx: string, token: string): Promise<T|undefined> {
+  const url = buildUrl(ctx);
+  try {
+    const response = await fetchWithAuth<T>(url, token);
+    console.log('response', response);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+  return undefined;
+}
 /**
  * Fetch single record or first item of an array.
  */
@@ -301,6 +317,42 @@ async function fetchListAndSetCurrent<T>(
     }
   } catch (error) {
     console.error(error);
+  }
+}
+
+/**
+ * Create a new records – returns the created records, updates React state and cache.
+ */
+async function createRecords<T extends IWSModel>(
+  ctx: string,
+  token: string,
+  records: T[],
+  existingData: T[],
+  setRowData: Dispatch<SetStateAction<T[]>>
+): Promise<T[]> {
+  const url = buildUrl(ctx);
+
+  function createHelper<T>(created: T) {
+    const modelId = (created as any).modelid;
+    if (modelId !== undefined) {
+      const existingStore = iwsStore.getByModelId(modelId);
+      if (Array.isArray(existingStore)) {
+        iwsStore.put(modelId, [...existingStore, created] as IWSModel[]);
+      } else {
+        iwsStore.put(modelId, [created] as IWSModel[]);
+      }
+    }
+    return created;
+  }
+
+  try {
+    const created = await apiRequest<T>(url, 'POST', token, records);
+    const newList = [...existingData, ...[created]];
+    setRowData(newList);
+    return newList.map(createHelper);
+  } catch (error) {
+    console.error('Create failed', error);
+    throw error;
   }
 }
 
@@ -455,6 +507,8 @@ export const Login = async (
 export const Get2 = fetchSingle;
 export const Get3 = fetchListAndSetCurrent;
 export const Add = createRecord;
+export const AddList = createRecords
 export const Edit = updateRecord;
 export const EditRow = editRow;
 export const COPY = copyRecord;
+export const GET4 = getSingle;

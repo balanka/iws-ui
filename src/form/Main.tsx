@@ -8,7 +8,7 @@ import {
 import { TreeDataModule } from "ag-grid-enterprise"
 import {MASTERFILE, PACB_JOURNAL_QUERY_PARM } from './Menu.tsx'
 import Login from './Login'
-import {isLoaded, logout} from '../utils/FormUtils.tsx'
+import { logout} from '../utils/FormUtils.tsx'
 import {AgGridReact} from 'ag-grid-react'
 import {JournalProps} from '../Props.ts'
 import { IAccount, IAccount2 } from '../Models'
@@ -24,8 +24,7 @@ import {TFunction} from "i18next";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule, TreeDataModule]);
 
-const gridOptions = (t:TFunction<'transalation', undefined>
-                     , currency:string, locale:string)  => useMemo(()=> ({
+const gridOptions = (t:TFunction<'transalation', undefined>)  => useMemo(()=> ({
 
   rowStyle: {background: 'lightBlue'},
   getRowStyle: (params:any)=> (params.node.rowIndex % 2 === 0)? {
@@ -43,7 +42,7 @@ const gridOptions = (t:TFunction<'transalation', undefined>
       fontsize: 10,
       //backgroundColor:'#fff9e6'
     },
-  columnDefs: BalanceSheetColDef(t, currency, locale),
+  columnDefs: BalanceSheetColDef(t),
 
   defaultColDef: {
     flex: 1,
@@ -114,9 +113,7 @@ const STYLES = {
 }
 export const Main = () => {
   const [{profile, selected, t, module_}] = useForm()
-  const {token, currency, locale, company} = profile
-  //const init = useRef(false)
-
+  const {token, currency, company} = profile
   if (module_ === '11111' || module_ === 11111) return <Login />
     const height = 25
     const modelid :number = module_? module_.modelid:1111
@@ -135,7 +132,7 @@ export const Main = () => {
       Get(buildUrl0(), token, modelid, setRowData)
     }
     useEffect(() => {
-      !isLoaded(acc_modelid) && Get(acc_ctx, token, acc_modelid, setAccData)
+      Get(acc_ctx, token, acc_modelid, setAccData)
       setCurrent(current_)
     }, [selected])
 
@@ -177,7 +174,7 @@ export const Main = () => {
         <AgGridReact theme={myTheme}
                      treeData={true}
                       //@ts-ignore
-                     gridOptions={gridOptions(t, currency, locale)} rowData={v}/>
+                     gridOptions={gridOptions(t)} rowData={v}/>
       </div>
     </div>
     )

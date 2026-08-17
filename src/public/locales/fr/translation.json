@@ -288,7 +288,7 @@
     },
     "wholeStock": "Stock tot."
   },
-  "partner": {"title": "Contacte"},
+  "partner": {"title": "Contact"},
   "store": {"title": "Magasin"},
   "stock": {"title": "Stock"},
   "vat": {
@@ -320,6 +320,8 @@
   "fmodule":{
     "title": "Journal",
     "parent": "Parent",
+    "template1": "Template1",
+    "template2": "Template2",
     "accountFilter": "Filtre débit",
     "oaccountFilter": "Filtre crébit"
   },

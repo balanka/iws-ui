@@ -8,6 +8,7 @@ import { toOption } from '../utils/FormUtils'
 import { initArticle, initVat } from './Menu'
 import { formEnum } from '../utils/FormEnum'
 import { TransactionDetailsFormProps } from "../Props.ts"
+import CurrencyInput from "react-currency-input-field";
 
 const styles = { minHeight: 25, height: 25, width: '100%', color: '#6b7280', fontSize: 12 }
 const FormRow = ({ children }: any) => <CRow className="g-2 align-items-center mb-2">{children}</CRow>
@@ -27,11 +28,10 @@ const setTransactionR = (
   }
   setCurrent({...line})
   setTransaction({ ...transaction })
-
 }
 const getPrice = (transaction:ITransaction, article: IArticle) => {
   return (transaction.modelid === formEnum.SALES_ORDER ||
-    transaction.modelid === formEnum.CUSTOMER_INVOICE ||
+    transaction.modelid === formEnum.CUSTOMER_INVOICE_LOGISTIC ||
     transaction.modelid === formEnum.DELIVERY)
     ? article.sprice
     : (transaction.modelid === formEnum.PURCHASE_ORDER ||
@@ -58,7 +58,6 @@ const getVat = (line: ILineTransaction, value:string, articleData: IArticle []
     line.modelid === formEnum.SUPPLIER_INVOICE ||
     line.modelid === formEnum.GOODRECEIVING)
     ? [vatCode_, vatAmount_]: [vatCode_, 0.0]
-//[string, number]
   return [vatCode, vatAmount]
 
 }
@@ -71,14 +70,13 @@ export const TransactionDetailsForm = ({
                                          vatData,
                                          t,
                                          disable,
-                                         height
+                                         height,
+                                         locale,
+                                         currency
                                        }: TransactionDetailsFormProps<ITransaction, ILineTransaction>): React.JSX.Element => {
   // Find current article and vat
   const currentArticle = articleData?.find((acc: { id: any }) => acc.id === currentLineTransaction.article) ?? initArticle
   const currentVat = vatData?.find((vat: { id: any }) => vat.id === currentLineTransaction.vatCode) ?? initVat
- console.log(' currentArticle ', currentArticle)
- console.log(' vat ', currentVat)
-  console.log(' articleData ', articleData)
   return (
     <CContainer fluid className="p-0">
       {/* Row 1: Article & Quantity */}
@@ -93,10 +91,6 @@ export const TransactionDetailsForm = ({
             onChange={(value: any) => {
               const [vatCode, vatAmount] = getVat(currentLineTransaction, value, articleData, vatData)
               const article = articleData?.find((acc: { id: any }) => acc.id === value) ?? initArticle
-              //const vat = vatData?.find((vat: { id: any }) => vat.id === article?.vatCode) ?? initVat
-              //const percent = vat?.percent ?? 0.0
-              // const vatAmount = percent * currentLineTransaction.quantity * currentLineTransaction.price
-              // const vatCode = vat?.id || ''
               const currentx: ILineTransaction = {
                 ...currentLineTransaction,
                 article: value,
@@ -106,7 +100,6 @@ export const TransactionDetailsForm = ({
                 vatCode: vatCode.toString(),
                 vat: vatAmount,
                 currency: article?.currency || '',
-                //modelid: transaction.modelid,
                 company: transaction.company
               }
               setCurrentLineTransaction(currentx)
@@ -123,8 +116,8 @@ export const TransactionDetailsForm = ({
             setCurrent={setCurrentLineTransaction}
             value={Number(currentLineTransaction.quantity)}
             onChange={(event: any) => {
+              const [, vatAmount] = getVat(currentLineTransaction, currentLineTransaction.article, articleData, vatData)
               const netAmount =  event.target.value * currentLineTransaction.price
-              const vatAmount = (currentVat?.percent ?? 0.0) * netAmount
               const currentx = { ...currentLineTransaction, quantity: Number(event.target.value)
                 , vat: vatAmount, net:netAmount, total:netAmount+vatAmount, company:transaction.company }
               setCurrentLineTransaction(currentx)
@@ -155,10 +148,8 @@ export const TransactionDetailsForm = ({
             //key={`vat-${currentLineTransaction?.vatCode || 'empty'}`}
             value={{ value: currentVat?.id || '', label: currentVat ? `${currentVat.id} ${currentVat.name}` : '' }}
             onChange={(value: any) => {
-              const vat = vatData?.find((vat: { id: any }) => vat.id === value) ?? initVat
-              console.log(' vat-', vat)
+              const [, vatAmount] = getVat(currentLineTransaction, currentLineTransaction.article, articleData, vatData)
               const netAmount =  currentLineTransaction.quantity * currentLineTransaction.price
-              const vatAmount = (vat?.percent ?? 0.0) * netAmount
               const currentx = { ...currentLineTransaction, vatCode: value, vat: vatAmount, net:netAmount
                 , total:netAmount+vatAmount, company:transaction.company }
               console.log(' currentx', currentx)
@@ -170,29 +161,28 @@ export const TransactionDetailsForm = ({
         </CCol>
         <CCol sm={4} className="d-flex gap-2">
           <Label>{t('transaction.line.price')}</Label>
-          <InputField
-            fieldName="price"
-            current={currentLineTransaction}
-            setCurrent={setCurrentLineTransaction}
-            value={Number(currentLineTransaction.price)}
-            onChange={(event: any) => {
-              const netAmount =  currentLineTransaction.quantity * event.target.value
-              const vatAmount = (currentVat?.percent ?? 0.0) * netAmount
-              const currentx = { ...currentLineTransaction, price: Number(event.target.value), vat: vatAmount,  net:netAmount
+          <CurrencyInput
+            value={currentLineTransaction.price}
+            intlConfig={{ locale, currency }}
+            groupSeparator="."
+            decimalSeparator=","
+            decimalsLimit={2}
+            decimalScale={2}
+            onValueChange={(value) => {
+              let cleanValue = value || '0';
+              cleanValue = cleanValue.replace(/\./g, ''); // Remove thousands separators
+              cleanValue = cleanValue.replace(/,/g, '.'); // Convert decimal comma to dot
+              const numberValue = parseFloat(cleanValue);
+              const finalValue = isNaN(numberValue) ? 0 : numberValue;
+              const [, vatAmount] = getVat(currentLineTransaction, currentLineTransaction.article, articleData, vatData)
+              const netAmount =  currentLineTransaction.quantity * finalValue
+              const currentx = { ...currentLineTransaction, price: Number(finalValue), vat: vatAmount,  net:netAmount
                 , total:netAmount+vatAmount, company: transaction.company }
               setCurrentLineTransaction(currentx)
               setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
-            }}
+              }}
             disabled={disable}
-            style={{ height: height, textAlign: 'right' }}
-          />
-          <InputField
-            fieldName="currency"
-            current={currentLineTransaction}
-            setCurrent={setCurrentLineTransaction}
-            value={currentLineTransaction.currency}
-            disabled={true}
-            style={{ height: height, textAlign: 'left' }}
+            style={{ height: height??32-20, textAlign: 'right' }}
           />
         </CCol>
       </FormRow>
@@ -209,10 +199,7 @@ export const TransactionDetailsForm = ({
             current={currentLineTransaction}
             setCurrent={setCurrentLineTransaction}
             onChange={(event: any) => {
-              const netAmount =  currentLineTransaction.quantity * currentLineTransaction.price
-              const vatAmount = (currentVat?.percent ?? 0.0) * netAmount
-              const currentx = { ...currentLineTransaction, text: event.target.value, vat: vatAmount,  net:netAmount
-                , total:netAmount+vatAmount, company: transaction.company }
+              const currentx = { ...currentLineTransaction, text: event.target.value}
               setCurrentLineTransaction(currentx)
               setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
             }}
@@ -228,10 +215,7 @@ export const TransactionDetailsForm = ({
             current={currentLineTransaction}
             setCurrent={setCurrentLineTransaction}
             onChange={(date: any) => {
-              const netAmount =  currentLineTransaction.quantity * currentLineTransaction.price
-              const vatAmount = (currentVat?.percent ?? 0.0) * netAmount
-              const currentx = { ...currentLineTransaction, duedate: date, vat: vatAmount,  net:netAmount
-                , total:netAmount+vatAmount, company: transaction.company }
+              const currentx = { ...currentLineTransaction, duedate: date }
               setCurrentLineTransaction(currentx)
               setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
             }}

@@ -55,7 +55,7 @@ const CustomerForm = () => {
   const [contactData, setContactData] = useState<IContact[]>([])
 
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
-  const [{header, body, table, disable,  state, visible, rowData, current , setCurrent, currentBankAccount
+  const [{header, body, table, disable,  state, rowData, current , setCurrent, currentBankAccount
     , setCurrentBankAccount, setGridApi}] = UseCustomerForm(current_, customerColumnDefs(t))
    //const isLoaded = (modelid:number)=> iwsStore.getByModelId(modelid)&& iwsStore.getByModelId(modelid).length>0
   useEffect(() => {
@@ -77,7 +77,7 @@ const CustomerForm = () => {
 
 
   const safeBody = React.isValidElement(body) ? body : null;
-  const mainForm = CustomerTabs({ collapse:state.collapse, current:current, setCurrent:setCurrent
+  const mainForm = CustomerTabs({ collapse:state.collapseForm, current:current, setCurrent:setCurrent
                              , currentBankAccount:currentBankAccount
                              , setCurrentBankAccount:setCurrentBankAccount
                              , disable:disable, t:t, locale:locale?? 'fr-FR'
@@ -86,17 +86,18 @@ const CustomerForm = () => {
                              , zIndex:zIndex-1
                              , onGridReady:onGridReady
                              // @ts-ignore
-                             ,  stylesx:{...styles, height:state.collapse?minHeight:maxHeight, padding: 5, paddingLeft: 10, paddingBottom: 5}})
+                             ,  stylesx:{...styles, height:state.collapseForm?minHeight:maxHeight, padding: 5, paddingLeft: 10, paddingBottom: 5}})
 
   return (
     <>
       {header}
       <CInputGroup
         //@ts-ignore
-          style={{...styles.outer , display: !state.collapse?'none':''}} >
+          style={{...styles.outer , display: !state.collapseForm?'none':''}} >
          {safeBody??mainForm}
        </CInputGroup>
-      <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
+      <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%"
+        , display:state.collapseTable?'':'none'}}>
         {table}
       </div>
     </>

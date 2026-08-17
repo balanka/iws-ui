@@ -1654,7 +1654,7 @@ export const vatColumnDefs = ( t: (arg0: string) => any) => [
 ]
 
 
-export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>, locale:string, currency:string):any=>[
+export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>):any=>[
   {
     field: 'init Balance',
     headerName: t('common.report'),
@@ -1666,8 +1666,7 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>, loca
         field: "idebit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
-          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.idebit, params.data, locale, currency),
+        cellRenderer: (params:any) => (params.data.idebit ?? 0).toFixed(2)
       },
       {
         headerName: t('common.icredit'),
@@ -1675,8 +1674,7 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>, loca
         field: "icredit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
-          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.icredit, params.data, locale, currency),
+        cellRenderer: (params:any) => params.data.icredit.toFixed(2)
       },
     ],
   },
@@ -1691,8 +1689,7 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>, loca
         field: "debit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
-          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.debit, params.data, locale, currency),
+        cellRenderer: (params:any) =>params.data.debit.toFixed(2)
       },
       {
         headerName: t('common.credit'),
@@ -1700,8 +1697,7 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>, loca
         field: "credit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
-          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.credit, params.data, locale, currency),
+        cellRenderer: (params:any) => params.data.credit.toFixed(2)
       },
     ],
   },
@@ -1716,8 +1712,7 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>, loca
         field: "bdebit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
-          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.bdebit, params.data, locale, currency),
+        cellRenderer: (params:any) => params.data.bdebit.toFixed(2)
       },
       {
         headerName: t('common.credit'),
@@ -1725,8 +1720,7 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>, loca
         field: "bcredit",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
-          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.bcredit, params.data, locale, currency),
+        cellRenderer: (params:any) =>params.data.bcredit.toFixed(2)
       },
       {
         headerName: t('common.balance'),
@@ -1734,8 +1728,9 @@ export  const BalanceSheetColDef = (t:TFunction<'transalation', undefined>, loca
         field: "balance",
         flex: 1,
         cellStyle: {textAlign: 'right'},
-        valueFormatter: (params:{data:IPeriodicAccountBalance}) =>
-          (!params.data)?'':amountFormatter((p:IPeriodicAccountBalance)=>p.balance, params.data, locale, currency),
+        //valueFormatter: currencyFormatter,
+        //valueParser: currencyParser,
+        cellRenderer: (params:any) => params.data.balance.toFixed(2)
       },
     ],
   },

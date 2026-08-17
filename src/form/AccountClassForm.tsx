@@ -35,15 +35,16 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      setCurrent(current_)
    }, [])
 
-   const {header, body, table, disable, visible, state, current, setCurrent}  = UseMasterfileForm(current_,  colDef, MASTERFILE.accountClass)
+   const {header, body, table, disable, state, current, setCurrent}  = UseMasterfileForm(current_,  colDef, MASTERFILE.accountClass)
    const safeBody = React.isValidElement(body) ? body : null;
-   const mainForm = MasterfileFormWithout({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
+   const mainForm = MasterfileFormWithout({collapse:state.collapseForm, current:current??current_, setCurrent:setCurrent
       , height:height, accData:accData, t:t, disable:disable, fieldName:t('common.account'), propertyName:'account' })
    return (
      <>
        {header}
        {safeBody ? safeBody :mainForm}
-       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
+       <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%"
+         , display:state.collapseTable?'':'none'}}>
          {table}
        </div>
      </>

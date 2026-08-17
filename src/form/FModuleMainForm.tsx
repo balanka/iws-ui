@@ -51,11 +51,31 @@ export const FModuleMainForm = ({
         <CCol sm={2}><FieldLabel title={t('fmodule.accountFilter')} /></CCol>
         <CCol sm={4}>
           <InputField fieldName="accFilter" current={current} setCurrent={setCurrent}
-                      value={current.accFilter} disabled={disable} style={{ height }}
-          />
+                      value={current.accFilter} disabled={disable}/>
         </CCol>
       </FormRow>
 
+      <FormRow style={{ height }}>
+        {/*<CCol sm={2}><FieldLabel title={t('common.copyFrom')} /></CCol>*/}
+        <CCol sm={2}><FieldLabel title={t('fmodule.template1')} /></CCol>
+        <CCol sm={4}>
+          <InputField fieldName="template1" current={current} setCurrent={setCurrent}
+                      value={current.template1} disabled={disable}/>
+        </CCol>
+        {/*<CCol sm={4}>*/}
+        {/*  <MasterfileXComboBox*/}
+        {/*    fieldName="copyFrom" current={current} setCurrent={setCurrent}*/}
+        {/*    isMulti={true}*/}
+        {/*    //@ts-ignore*/}
+        {/*    data={rowData} defaultValue={initAcc[0]} disable={disable} styles={comboStyles}*/}
+        {/*  />*/}
+        {/*</CCol>*/}
+        <CCol sm={2}><FieldLabel title={t('fmodule.oaccountFilter')} /></CCol>
+        <CCol sm={4}>
+          <InputField fieldName="oaccFilter" current={current} setCurrent={setCurrent}
+                      value={current.oaccFilter} disabled={disable}/>
+        </CCol>
+      </FormRow>
       <FormRow style={{ height }}>
         <CCol sm={2}><FieldLabel title={t('common.copyFrom')} /></CCol>
         <CCol sm={4}>
@@ -66,25 +86,14 @@ export const FModuleMainForm = ({
             data={rowData} defaultValue={initAcc[0]} disable={disable} styles={comboStyles}
           />
         </CCol>
-        <CCol sm={2}><FieldLabel title={t('fmodule.oaccountFilter')} /></CCol>
-        <CCol sm={4}>
-          <InputField fieldName="oaccFilter" current={current} setCurrent={setCurrent}
-                      value={current.oaccFilter} disabled={disable} style={{ height }}
-          />
-        </CCol>
-      </FormRow>
-      <FormRow style={{ height }}>
-        <CCol sm={2}><FieldLabel title={t('common.copyFrom')} /></CCol>
-        <CCol sm={4}>
-          <InputField fieldName="template1" current={current} setCurrent={setCurrent}
-                      value={current.template1} disabled={disable} style={{ height }}
-          />
-        </CCol>
-        <CCol sm={2}><FieldLabel title={t('fmodule.oaccountFilter')} /></CCol>
+        {/*<CCol sm={4}>*/}
+        {/*  <InputField fieldName="template1" current={current} setCurrent={setCurrent}*/}
+        {/*              value={current.template1} disabled={disable}/>*/}
+        {/*</CCol>*/}
+        <CCol sm={2}><FieldLabel title={t('fmodule.template2')} /></CCol>
         <CCol sm={4}>
           <InputField fieldName="template2" current={current} setCurrent={setCurrent}
-                      value={current.template2} disabled={disable} style={{ height }}
-          />
+                      value={current.template2} disabled={disable}/>
         </CCol>
       </FormRow>
     </div>

@@ -330,6 +330,8 @@
   "fmodule":{
     "title": "Transactions",
     "parent": "Parent",
+    "template1": "Template1",
+    "template2": "Template2",
     "accountFilter": "Debit filter ",
     "oaccountFilter": "Crebit filter"
   },

@@ -26,19 +26,20 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    const maxHeight = 700
    const current_: IAccount = initAcc
    const colDef = accountColumnDefs(t)
-   const {header, body, table, disable, visible, state, rowData, current, setCurrent} =  UseMasterfileForm(current_,  colDef, selected)
+   const {header, body, table, disable, state, rowData, current, setCurrent} =  UseMasterfileForm(current_,  colDef, selected)
    const safeBody = React.isValidElement(body) ? body : null;
-   const mainForm = AccountMainForm({collapse:state.collapse, current:current??current_, setCurrent:setCurrent
+   const mainForm = AccountMainForm({collapse:state.collapseForm, current:current??current_, setCurrent:setCurrent
      ,  disable:disable, t:t, locale:`${locale}`, accData:rowData, height:height})
    return (
      <>
        {header}
        <CInputGroup
        //@ts-ignore
-         style={{...styles.outer, display: !state.collapse?'none':''}}>
+         style={{...styles.outer, display: !state.collapseForm?'none':''}}>
           {safeBody??mainForm}
        </CInputGroup>
-       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
+       <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%"
+         , display:state.collapseTable?'':'none'}}>
          {table}
        </div>
      </>

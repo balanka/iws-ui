@@ -33,7 +33,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const minHeight = 400
      const maxHeight = 700
      const colDef=fmoduleColumnDefs(t)
-   const {header, body, table, disable, visible, state, rowData, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.fmodule)
+   const {header, body, table, disable, state, rowData, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.fmodule)
    useEffect(() => {
      Promise.all([
        Get(parent_ctx, token, module_.modelid, setAccData),
@@ -49,7 +49,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
 
    console.log('accDataX', accData);
    console.log('accountDataX', accountData);
-    const mainForm = FModuleMainForm ({collapse: state.collapse, current:current, setCurrent:setCurrent, accData:accData.filter(m=>
+    const mainForm = FModuleMainForm ({collapse: state.collapseForm, current:current, setCurrent:setCurrent, accData:accData.filter(m=>
                    (parseInt(m.id.toString())===formEnum.FINANCIALS|| parseInt(m.id.toString())===formEnum.TRANSACTION))
                    , accountData:accountData, rowData:rowData, disable:disable, height:height,  t:t})
    const safeBody = React.isValidElement(body) ? body : null;
@@ -58,10 +58,11 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
        {header}
        <CInputGroup
          //@ts-ignore
-         style={{...styles.outer, display: !state.collapse?'none':'', width:"100%"}} >
+         style={{...styles.outer, display: !state.collapseForm?'none':'', width:"100%"}} >
          {safeBody ? safeBody :mainForm}
        </CInputGroup>
-       <div  style={{...styles.outer0, paddingTop:15, height: state.collapse?minHeight:maxHeight, width:"100%", display:visible?'':'none'}}>
+       <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight, width:"100%"
+         , display:state.collapseTable?'':'none'}}>
          {table}
        </div>
      </>

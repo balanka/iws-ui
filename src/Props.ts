@@ -123,6 +123,10 @@ export interface ArticleGeneralFormProps {
     , t: TFunction<'transalation', undefined>
     , disable: boolean
     , height:number
+    , currency:string
+    , locale:string
+
+
 }
 export interface CustomerAccountMainFormProps {
   readonly current: IArticle | ICustomer | ISupplier | IEmployee | ICompany|IStore
@@ -310,23 +314,41 @@ export type ILine = ILineTransaction|ILineFinancials
 //     zIndex:number,
 // }
 
-export interface TransactionDetailsTabProps <T extends ITransaction, L extends ILineTransaction> {
-    transaction: T,
-    setTransaction:Dispatch<SetStateAction<T>>,
-    currentLineTransaction:L,
-    setCurrentLineTransaction:Dispatch<SetStateAction<L>>,
-    accountFilter:string[],
-    oaccountFilter:string[],
-    articleData: IArticle[],
-    vatData: IVat[],
-    t: TFunction<'transalation', undefined>,
-    onGridReady:(params: GridReadyEvent)=>void,
-    //gridApi:GridApi,
-    //gridRef?:React.RefObject<AgGridReact>,
-    zIndex:number,
-   locale:string,
-   currency:string
+export interface TransactionDetailsTabProps<T extends ITransaction, L extends ILineTransaction> {
+  collapseTable: boolean;
+  transaction: T;
+  setTransaction: Dispatch<SetStateAction<T>>;
+  currentLineTransaction: L;
+  setCurrentLineTransaction: Dispatch<SetStateAction<L>>;
+  accountFilter: string[];
+  oaccountFilter: string[];
+  articleData: any[];
+  vatData: any[];
+  t: (key: string) => string;
+  onGridReady?: (params: GridReadyEvent) => void;
+  zIndex?: number;
+  locale: string;
+  currency: string;
 }
+// interface TransactionDetailsTabProps<T extends ITransaction, L extends ILineTransaction> {
+//   state: {
+//     collapseTable: boolean;
+//     // ... other state properties if needed
+//   };
+//   transaction: T;
+//   setTransaction: (t: T) => void;
+//   currentLineTransaction: L;
+//   setCurrentLineTransaction: (l: L) => void;
+//   accountFilter: string[];
+//   oaccountFilter: string[];
+//   articleData: any[];
+//   vatData: any[];
+//   t: (key: string) => string;
+//   onGridReady?: (params: any) => void;
+//   zIndex?: number;
+//   locale: string;
+//   currency: string;
+// }
 
 export interface TransactionDetailsFormProps<T extends IWSTransaction<L>, L extends  ILine> {
     transaction: T,
@@ -339,7 +361,9 @@ export interface TransactionDetailsFormProps<T extends IWSTransaction<L>, L exte
     vatData: IVat[],
     t: TFunction<'transalation', undefined>,
     disable: boolean,
-    height?: number
+    height?: number,
+    locale:string,
+     currency:string
 }
 
 export interface FinancialsCBoxProps3<A, B, L> {
@@ -388,6 +412,7 @@ export  interface TransactionToolBarProps<A extends IWSTransaction<L>, L extends
   , current:IFinancials|ITransaction
   , t:TFunction<'translation', undefined>
   , zIndex:number
+  , fileInputProps:FileInputProps<any>
 }
 export interface IJournalIF<A>  extends IWSModel  {
     fromPeriod:number
@@ -427,39 +452,39 @@ export interface UseFormResult {
   , setLanguage:Dispatch<SetStateAction<string>>
   , handleLanguageChange:(language:any)=>void
   , state:State
-  , visible:boolean
+  //, visible:boolean
   , toggle:() =>void
   , toggleTable:()=>void
   , modelid : number
   , company:string
   , module_:any
 }
-export interface State {collapse: boolean, fadeIn: boolean, timeout:  300}
-export interface UseMasterfileFormResult<T> {
-  profile: IProfile
-  , menu: Map<any, any>
-  , selected: string
-  , t:TFunction<'translation', undefined>
-  , i18n: i18n
-  , language:string
-  , modelid : number
-  , initAdd:()=>void
-  , added:boolean
-  , disable:boolean
-  , edit:()=>void
-  , edited:boolean
-  , submitEdit:(event:any) =>void
-  , cancelEdit:()=>void
-  , reload: ()=>void
-  , handleLanguageChange:(event:any) =>void
-  , title:string
-  , zIndex:number
-  , rowData:T[]
-  , setRowData:Dispatch<SetStateAction<T[]>>
-  , current:T
-  , setCurrent:Dispatch<SetStateAction<T>>
-  , onRowSelected:(event: RowSelectedEvent)=>void
-}
+export interface State {collapseForm: boolean, collapseTable:boolean,  fadeIn: boolean, timeout:  300}
+// export interface UseMasterfileFormResult<T> {
+//   profile: IProfile
+//   , menu: Map<any, any>
+//   , selected: string
+//   , t:TFunction<'translation', undefined>
+//   , i18n: i18n
+//   , language:string
+//   , modelid : number
+//   , initAdd:()=>void
+//   , added:boolean
+//   , disable:boolean
+//   , edit:()=>void
+//   , edited:boolean
+//   , submitEdit:(event:any) =>void
+//   , cancelEdit:()=>void
+//   , reload: ()=>void
+//   , handleLanguageChange:(event:any) =>void
+//   , title:string
+//   , zIndex:number
+//   , rowData:T[]
+//   , setRowData:Dispatch<SetStateAction<T[]>>
+//   , current:T
+//   , setCurrent:Dispatch<SetStateAction<T>>
+//   , onRowSelected:(event: RowSelectedEvent)=>void
+// }
 export interface UseCustomerFormResult<T extends IBusinespartner> {
   header: ReactNode
   , body:React.JSX.Element|null
@@ -587,4 +612,9 @@ export enum TEMPLATE_ENUM {
   FIRST = 0,
   SECOND = 1,
 }
-
+export interface FileInputProps<T extends (IAccount|ICustomer|ISupplier)> {
+  company: string;
+  currency: string;
+  masterfiles: T[];
+  onImportComplete?: (data: any[]) => void; // optional callback
+}

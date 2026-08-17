@@ -10,7 +10,7 @@
     import {useState} from "react";
     ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,])
 
-    const UseForm = (): [UseFormResult] => {
+    const   UseForm = (): [UseFormResult] => {
       const {profile, setProfile, menu, setMenu, setModule, setRoutes, selected} = useStore()
       const { company} = profile
       const {t, i18n} = useTranslation()
@@ -21,10 +21,10 @@
       const modelid: number = module_ ? module_.modelid : 1111
       const title =  `${company}/${t(module_.title)}`
       const [language, setLanguage] = useState('en-US')
-      const [state, setState] = useState <State>({collapse: true, fadeIn: true, timeout: 300})
-      const [visible, setVisible] = useState <boolean>( true)
-      const toggle = () => setState({...state, collapse: !state.collapse})
-      const toggleTable = () => setVisible(!visible)
+      const [state, setState] = useState <State>({collapseForm: true, collapseTable: true, fadeIn: true, timeout: 300})
+      //const [visible, setVisible] = useState <boolean>( true)
+      const toggle = () => setState({...state, collapseForm: !state.collapseForm})
+      const toggleTable = () =>  setState({...state, collapseTable: !state.collapseTable}) //setVisible(!visible)
       const handleLanguageChange = (event:any) => {
         event.preventDefault()
         const value = event.target.value
@@ -33,6 +33,6 @@
       }
 
       return [{ profile, setProfile, menu, setMenu, setModule, setRoutes, selected, t, i18n, title:title
-        , language, setLanguage, handleLanguageChange, toggle, toggleTable, state, visible, modelid, company, module_}]
+        , language, setLanguage, handleLanguageChange, toggle, toggleTable, state, modelid, company, module_}]
     }
     export default UseForm
