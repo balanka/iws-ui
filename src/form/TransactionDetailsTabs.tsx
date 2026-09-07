@@ -29,10 +29,9 @@ export const TransactionDetailsTabs = <T extends ITransaction, L extends ILineTr
                                                                                            }: TransactionDetailsTabProps<T, L>) => {
   const height = 20;
   const detailsMinHeight = 120;
-  const detailsMaxHeight = 290;
+  const detailsMaxHeight = 300;
   const disable = transaction?.posted;
   const gridApiRef = useRef<any>(null);
-console.log('collapseTable',collapseTable)
   // Determine current line (first line or prop)
   let currentLine: ILineTransaction = isArrayAndNotEmpty(transaction?.lines)
     ? transaction.lines[0]

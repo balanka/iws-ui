@@ -244,8 +244,10 @@ async function fetchList<T>(ctx: string, token: string, modelId: number
                             , setRowData: Dispatch<SetStateAction<T[]>>
 ): Promise<void> {
   const url = buildUrl(ctx);
+  console.warn(`Fetching!!!!!!`, url);
   try {
     const data = await fetchWithAuth<T[]>(url, token);
+    console.warn(`Expected array for modelId ${modelId}, got`, data);
     if (Array.isArray(data)) {
       iwsStore.put(modelId, data as IWSModel[]);
       setRowData(data);

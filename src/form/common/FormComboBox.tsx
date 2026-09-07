@@ -15,6 +15,7 @@ interface BaseComboBoxProps {
   defaultValue?: any;
   zIndex?: number;
   disable?: boolean;
+  isMulti?: boolean;
   styles?: React.CSSProperties;
   fontSize?: number;
   height?: number;
@@ -36,15 +37,17 @@ export const FormMasterfileXComboBox = ({
                                                                         data,
                                                                         fieldName,
                                                                         defaultValue,
+                                                                        isMulti,
                                                                         zIndex = 1000,
                                                                         styles = {},
                                                                         disable = false,
                                                                         fontSize = 11,
                                                                         height = 20
-                                                                      }:MasterfileXComboBoxProps) => {
-  const currentAcc = (data ?? [defaultValue]).find((acc) => acc.id === current[fieldName]) ?? defaultValue;
-  console.log('currentAcc', currentAcc)
-  console.log('current[fieldName]', current[fieldName])
+
+                                        }:MasterfileXComboBoxProps) => {
+  const currentAcc = (data ?? [...defaultValue]).find((acc) => acc.id === current[fieldName]) ?? defaultValue;
+  // console.log('currentAcc', currentAcc)
+  // console.log('current[fieldName]', current[fieldName])
   return (
     <ComboBox<{ value: string | bigint; label: string }>
       style={{
@@ -64,6 +67,7 @@ export const FormMasterfileXComboBox = ({
       onChange={(value: any, _event: any) => setCurrent({ ...current, [fieldName]: value })}
       values={data.length>0 ? data.slice().sort(sortById).map(toOption) : [toOption(defaultValue)]}
       zIndex={zIndex}
+      isMulti={isMulti}
     />
   );
 };
@@ -335,7 +339,7 @@ export const MasterfileXComboBox = <T extends Record<string, any>, U extends { i
         return raw
           .map((id: string) => {
             const item = items.find(acc => String(acc?.id) === String(id));
-            return item ? { value: String(item.id), label: `${item.id} ${item.name}` } : null;
+            return item ? { value: String(item?.id), label: `${item?.id} ${item?.name}` } : null;
           })
           .filter(Boolean);
       }
@@ -344,7 +348,7 @@ export const MasterfileXComboBox = <T extends Record<string, any>, U extends { i
         return ids
           .map((id: string) => {
             const item = items.find(acc => String(acc?.id) === String(id));
-            return item ? { value: String(item.id), label: `${item.id} ${item.name}` } : null;
+            return item ? { value: String(item?.id), label: `${item?.id} ${item?.name}` } : null;
           })
           .filter(Boolean);
       }
@@ -354,7 +358,7 @@ export const MasterfileXComboBox = <T extends Record<string, any>, U extends { i
     (() => {
       const found = items.find(acc => String(acc?.id) === String(current[fieldName]));
       return found
-        ? { value: String(found.id), label: `${found.id} ${found.name}` }
+        ? { value: String(found?.id), label: `${found?.id} ${found?.name}` }
         : { value: '', label: '' };
     })();
 

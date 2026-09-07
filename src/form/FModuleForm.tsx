@@ -22,9 +22,13 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
  const FModuleForm = () => {
      const [{ profile,  t, module_, company}]  = useForm()
      const {token} = profile
+   console.log('module_', module_)
      if (module_ === '11111' || module_ === 11111) return <Login/>
      const parent_ctx = `${module_?.state3}/${company}`
-     const acc_ctx = `${module_?.state2}/${company}`
+     //const acc_ctx = `${module_?.state2}/${company}`
+     const acc_ctx = `${MASTERFILE.acc}/${formEnum.ACCOUNT}/${company}`
+     console.log('parent_ctx', parent_ctx)
+     console.log('acc_ctx', acc_ctx)
      const current_: IFmodule =  module_.state
 
      const [accData, setAccData] = useState<IMasterfile2[]>([])
@@ -36,8 +40,8 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
    const {header, body, table, disable, state, rowData, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.fmodule)
    useEffect(() => {
      Promise.all([
-       Get(parent_ctx, token, module_.modelid, setAccData),
-      Get(acc_ctx, token, formEnum.ACCOUNT, setAccountData)
+       Get(acc_ctx, token, formEnum.ACCOUNT, setAccountData),
+       Get(parent_ctx, token, module_.modelid, setAccData)//,
      ]).then(() => {
          console.log('All data fetched successfully')
          // additional logic after all requests complete
@@ -45,7 +49,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
        console.error('Error fetching data', error)
      })
      setCurrent(current_)
-   }, [])
+   }, [current_])
 
    console.log('accDataX', accData);
    console.log('accountDataX', accountData);

@@ -299,10 +299,10 @@
     "postingdate": "Validation",
     "changedate":  "Modif.",
     "input":{
-      "account" : "TVA perc."
+      "account" : "TVA recuperable."
     },
     "output":{
-      "account" : "TVA rec."
+      "account" : "TVA percue."
     },
     "percent":     "Pourcent"
      },
