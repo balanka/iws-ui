@@ -80,15 +80,21 @@ export const FModuleMainForm = ({
         </CCol>
         <CCol sm={1}><FieldLabel title={t('common.copyFrom')} /></CCol>
         <CCol sm={5}>
-          {/*<FormMasterfileXComboBox fieldName="copyFrom" current={current} setCurrent={setCurrent}*/}
-          {/*                         data={rowData} defaultValue={initfModule} isMulti={true}*/}
-          {/*                         zIndex={zIndex} disable={disable} styles={comboStyles} fontSize={12}/>*/}
           <MasterfileXComboBox fieldName="copyFrom" current={current} setCurrent={setCurrent}
             isMulti={true} zIndex={zIndex}
             //@ts-ignore
             data={rowData} defaultValue={initfModule} disable={disable} styles={comboStyles}
           />
         </CCol>
+      </FormRow>
+      <FormRow style={{ marginBottom: 8, height }}>
+        <CCol sm={2}><FieldLabel title={t('common.parent')} /></CCol>
+        <CCol sm="4">
+          <FormMasterfileXComboBox fieldName="parent" current={current} setCurrent={setCurrent}
+                                   data={[{id:'1300', name:"1300 Compta"}, {id:'1301', name:"1300 Logistique"}]}
+              defaultValue={{id:'1300', name:"1300 Compta"}} zIndex={zIndex} disable={disable} styles={s} fontSize={12}/>
+        </CCol>
+
       </FormRow>
     </div>
   )
