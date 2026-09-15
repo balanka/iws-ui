@@ -139,7 +139,8 @@ const BankStatementForm = () => {
           </div>
           <div
             //@ts-ignore
-            style={{...styles.outer, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%", display:visible?'':'none'}}>
+
+            style={{...styles.outer, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%", display:state.collapseTable?'':'none'}}>
               <BankStatementGrid
                    columnDefs ={bankStatementColumnDefs(t, locale??'fr-FR', currency??'EUR')}  onRowSelected={onRowSelected} rowData ={rowData}/>
             </div>

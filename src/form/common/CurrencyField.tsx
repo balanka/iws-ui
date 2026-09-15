@@ -1,6 +1,6 @@
 // CurrencyField.tsx
 import CurrencyInput from 'react-currency-input-field';
-import '../../../public/css/CurrencyInput.css';  // Import the CSS
+import '../../public/css/currencyInput.css'// Import the CSS
 
 export const CurrencyField = ({
                                 value,

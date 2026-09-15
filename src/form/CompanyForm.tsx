@@ -70,7 +70,7 @@ const CompanyForm = () => {
         console.error('Error fetching data', error);
       });
   }, []);
-
+  console.log('current', current);
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   const mainForm = CompanyTabs({ collapse: state.collapseForm, current:current, setCurrent:setCurrent
     , currentBankAccount:currentBankAccount
