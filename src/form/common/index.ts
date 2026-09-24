@@ -10,7 +10,7 @@ export { FieldLabel } from './FieldLabel'
 export { BooleanField, InputNumberField, FromPeriod } from './FormFields'
 export { DatePickerField } from './DatePickerField'
 export { InputField } from './InputField'
-export { CurrencyField } from './CurrencyField'
+//export { CurrencyField } from './CurrencyField'
 export { TextareaField } from './TextareaField'
 export {
   MasterfileComboBox2,
