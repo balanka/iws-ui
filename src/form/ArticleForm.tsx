@@ -31,8 +31,6 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
      const initialState:IArticle = {...initArticle, account:stockAcc??'',  oaccount:expenseAcc??''
        , revenueAccount:revenueAcc??'', vatCode:vat??'',  currency:currency??'', stocks:[]}
      const current_: IArticle = initialState
-       //const modelid: number = module_ ? module_.modelid : 1111
-     //const [, setIwsState] = useState(iwsStore.getByModelId(modelid))
      const [accData, setAccData] = useState<IAccount[]>([])
      const [groupData, setGroupData] = useState<IMasterfile[]>([])
      const [quantityUnitData, setQuantityUnitData] = useState<IMasterfile[]>([])
@@ -56,12 +54,19 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
          Get(qttyUnit_ctx, token??'noToken', qttyUnit_modelid, setQuantityUnitData)
          Get(vat_ctx, token??'noToken', vat_modelid, setVatData)
          Get(ccy_ctx, token??'noToken', ccy_modelid, setCcyData)
-         setCurrent(current_)
+         //setCurrent(current_)
        }, [])
       const safeBody = React.isValidElement(body) ? body : null;
-       const mainForm = ArticleTabs ({collapse:state.collapseForm, current:current, setCurrent:setCurrent, disable:disable, t:t
-                             , data:rowData, accData:accData, quantityUnitData:quantityUnitData,  locale:`${locale}`, currency:`${currency}`
-                              , vatData:vatData, groupData:groupData, ccyData:ccyData, height:height, zIndex:zIndex-1})
+       const mainForm = <ArticleTabs collapse={state.collapseForm} current={current}
+                                     setCurrent={setCurrent} disable={disable} t={t} data={rowData}
+                                     accData={accData} quantityUnitData={quantityUnitData}
+                                     locale={`${locale}`} currency={`${currency}`}
+                                     vatData={vatData} groupData={groupData} ccyData={ccyData}
+                                     height={height} zIndex={zIndex - 1} />
+
+       // const mainForm = ArticleTabs ({collapse:state.collapseForm, current:current, setCurrent:setCurrent, disable:disable, t:t
+       //                       , data:rowData, accData:accData, quantityUnitData:quantityUnitData,  locale:`${locale}`, currency:`${currency}`
+       //                        , vatData:vatData, groupData:groupData, ccyData:ccyData, height:height, zIndex:zIndex-1})
       return (
         <>
           {header}

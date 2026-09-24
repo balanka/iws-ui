@@ -1,66 +1,67 @@
-import React, {useState, useEffect} from 'react'
-import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-quartz.css'
-import {Get} from './CrudController.ts'
-import {initVat, MASTERFILE} from './Menu.tsx'
-import { formEnum } from '../utils/FormEnum.tsx'
-import {IAccount, IVat} from '../Models.ts'
-import {vatColumnDefs} from '../ColumnsDefs'
-import Login from './Login'
-import UseMasterfileForm from './UseMasterfileForm.tsx'
-import useForm from './UseForm.ts'
-import {styles} from './BasicTreeTableProps.tsx'
 import {VatMainForm} from "./VatMainForm.tsx";
+import Login from "./Login.tsx";
 import {CInputGroup} from "@coreui/react-pro";
-import {isLoaded} from "../utils/FormUtils.tsx";
 import iwsStore from "../utils/Store.tsx";
-ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
+import {IAccount, IVat} from "../Models.ts";
+import {Get} from "./CrudController.ts";
+import {isLoaded} from "../utils/FormUtils.tsx";
+import React, {useEffect, useState} from "react";
+import {vatColumnDefs} from "../ColumnsDefs.ts";
+import {ColDef} from "ag-grid-community";
+import useForm from "./UseForm.ts";
+import {initVat, MASTERFILE} from "./Menu.tsx";
+import {formEnum} from "../utils/FormEnum.tsx";
+import {styles} from './BasicTreeTableProps.tsx'
+import UseMasterfileForm from './UseMasterfileForm.tsx'
 
 const VatForm = () => {
-  const [{ profile, selected, t,  company, module_ }] = useForm()
-  const { token} = profile
-  if (module_ === '11111' || module_ === 11111) return <Login/>
-  const current_ :IVat = initVat
+  const [{ profile, selected, t, company, module_ }] = useForm()
+  const { token } = profile
+
+  const current_: IVat = initVat
   const acc_modelid = formEnum.ACCOUNT
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const [accData, setAccData] = useState<IAccount[]>([])
   const minHeight = 300
   const maxHeight = 600
   const height = 28
-  const colDef:ColDef[] = vatColumnDefs(t)
-  const {header, body, table, disable, state, current, setCurrent, zIndex} =  UseMasterfileForm(current_,  colDef, selected)
+  const colDef: ColDef[] = vatColumnDefs(t)
+  const { header, body, table, disable, state, current, setCurrent, zIndex } = UseMasterfileForm(current_, colDef, selected)
+
   useEffect(() => {
     async function loadData() {
       if (isLoaded(acc_modelid)) {
-        // Cache hit → update state immediately
-        const cached:IAccount[] = iwsStore.getByModelId(acc_modelid);
-        setAccData(cached);
+        const cached: IAccount[] = iwsStore.getByModelId(acc_modelid)
+        setAccData(cached)
       } else {
-        // Cache miss → fetch and let Get update state via callback
-        await Get(acc_ctx, token, acc_modelid, setAccData);
+        await Get(acc_ctx, token, acc_modelid, setAccData)
       }
-      setCurrent(current_);
+      // remove this line — see below
+      // setCurrent(current_)
     }
-    loadData();
-  }, [token, company]);
+    loadData()
+  }, [token, company])
 
+  // NOW the early return, after all hooks:
+  if (module_ === '11111' || module_ === 11111) return <Login />
 
-  const safeBody = React.isValidElement(body) ? body : null;
+  const safeBody = React.isValidElement(body) ? body : null
   return (
     <>
       {header}
       <CInputGroup
         //@ts-ignore
-        style={{...styles.outer , display: !state.collapseForm?'none':''}} >
-        {safeBody??VatMainForm({current, setCurrent, accData, t, disable, height, zIndex})}
+        style={{ ...styles.outer, display: !state.collapseForm ? 'none' : '' }}>
+        {safeBody ?? <VatMainForm current={current} setCurrent={setCurrent}
+                                  accData={accData} t={t} disable={disable}
+                                  height={height} zIndex={zIndex} />}
       </CInputGroup>
-      <div  style={{...styles.outer0, paddingTop:2, height: state.collapseForm?minHeight:maxHeight
-        , display:state.collapseTable?'':'none'}}>
+      <div style={{ ...styles.outer0, paddingTop: 2,
+        height: state.collapseForm ? minHeight : maxHeight,
+        display: state.collapseTable ? '' : 'none' }}>
         {table}
       </div>
     </>
   )
-
 }
 export default VatForm

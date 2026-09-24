@@ -7,8 +7,8 @@ import { styles} from "./FormsProps.tsx"
 import { sortById } from "../utils/Utils.ts"
 import { toOption, transactionToOption } from "../utils/FormUtils.tsx"
 import { initCust, initStore } from "./Menu.tsx"
-import CurrencyInput from "react-currency-input-field";
 import  { FormRow, Label} from '../utils/FormUtils'
+import {AmountField} from './common/AmountField.tsx'
 
 export const TransactionMainForm = ({
                                       collapse, current, setCurrent, t, handleModuleChange, storeData, accData,
@@ -72,14 +72,12 @@ export const TransactionMainForm = ({
         </CCol>
         <CCol sm={3} className="d-flex gap-2 align-items-center">
           <Label bold>{t('common.total')}</Label>
-          <CurrencyInput
-            value={total}
-            intlConfig={{ locale, currency }}
-            groupSeparator="."
-            decimalSeparator=","
-            decimalsLimit={2}
-            decimalScale={2}
-            disabled={true}
+          <AmountField
+            amount={total ?? 0}
+            locale={locale}
+            currency={currency}
+            disabled
+            onCommit={() => {}}
             style={{...currencyStyle, fontSize:14, fontWeight:'bold'}}
           />
         </CCol>

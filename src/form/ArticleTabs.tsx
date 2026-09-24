@@ -31,8 +31,9 @@ export  const ArticleTabs = ({collapse, current, setCurrent,  accData, vatData
       { title: t('common.general'), id: 1, form: <ArticleGeneralForm collapse={collapse}  current={current??initArticle} setCurrent={setCurrent}
                t={t}  quantityUnitData={quantityUnitData} groupData={groupData}  ccyData={ccyData} disable={disable}
                       locale={locale}  currency={currency} height={height}/>},
-      { title: t('common.accounts'), id: 2, form: ArticleAccountForm({ current:current, setCurrent:setCurrent
-          ,  accData:accData, vatData:vatData, t:t,  disable:disable, height:height})},
+      { title: t('common.accounts'), id: 2, form: <ArticleAccountForm current={current} setCurrent={setCurrent}
+                                                                      accData={accData} vatData={vatData} t={t}
+                                                                      disable={disable} height={height} /> },
       { title: t('stock.title'), id: 4, form: getTable() },
       { title: t('common.image_QR_code'), id: 5, form: <ArticleQRForm  current={current} t={t}/> },
     ]

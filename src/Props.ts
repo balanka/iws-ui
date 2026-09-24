@@ -521,7 +521,7 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , onDeleteLine:(arg:any) =>void
   , submitCancel:(event:any) =>void
   , submitPost:(event:any)=>void
-  , copyCall:(arg:BigInt, modelid:number)=>void
+  , copyCall:(arg:BigInt, modelid:any)=>Promise<void>
   , setGridApi:Dispatch<SetStateAction<GridApi<any>|undefined>>
   , templateName:(current:T, fmodule:IFmodule[])=>[string, string]
   , zIndex:number

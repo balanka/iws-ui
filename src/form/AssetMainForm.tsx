@@ -4,8 +4,9 @@ import { MasterfileXComboBox, DatePickerField, InputField, TextareaField } from 
 import { styles } from './FormsProps';
 import { AssetProps } from '../Props';
 import { initAcc, initCurrency } from './Menu';
-import CurrencyInput from "react-currency-input-field";
+//import CurrencyInput from "react-currency-input-field";
 import { IAsset, IMasterfile} from "../Models.ts";
+import {AmountField} from "./common/AmountField.tsx";
 
 const FormRow = ({ children }: { children: React.ReactNode }) =>
   <CRow className="g-2 align-items-center mb-2">{children}</CRow>
@@ -18,15 +19,15 @@ export const AssetMainForm = ({ collapse, current, setCurrent, t, accData, ccyDa
 
   const inputStyle = {height: height - 3, width: '100%', fontSize: '0.875rem'};
   const inputRight = {...inputStyle, textAlign: 'right' as const, padding: 2};
-  const handleCurrencyChange = (field: string) => (value: string | undefined) => {
-    // Remove thousands separators and convert decimal comma to dot
-    let cleanValue = value || '0';
-    cleanValue = cleanValue.replace(/\./g, ''); // Remove thousands separators
-    cleanValue = cleanValue.replace(/,/g, '.'); // Convert decimal comma to dot
-    const numberValue = parseFloat(cleanValue);
-    const finalValue = isNaN(numberValue) ? 0 : numberValue;
-  setCurrent({...current, [field]: finalValue});
-}
+//   const handleCurrencyChange = (field: string) => (value: string | undefined) => {
+//     // Remove thousands separators and convert decimal comma to dot
+//     let cleanValue = value || '0';
+//     cleanValue = cleanValue.replace(/\./g, ''); // Remove thousands separators
+//     cleanValue = cleanValue.replace(/,/g, '.'); // Convert decimal comma to dot
+//     const numberValue = parseFloat(cleanValue);
+//     const finalValue = isNaN(numberValue) ? 0 : numberValue;
+//   setCurrent({...current, [field]: finalValue});
+// }
 
   const accComboBox = (data:IMasterfile[], initData:IMasterfile, fieldName:string,)=> {
     const initAccx = {id: initData.id, name: initData.name}
@@ -64,12 +65,38 @@ export const AssetMainForm = ({ collapse, current, setCurrent, t, accData, ccyDa
           </CCol>
         </FormRow>
         <FormRow>
-          <CCol sm={4} className="d-flex gap-2"><Label w={80}>{t('asset.amount')}</Label><CurrencyInput value={current?.amount??0.0} intlConfig={{ locale, currency }} groupSeparator="." decimalSeparator="," decimalsLimit={2} decimalScale={2} onValueChange={handleCurrencyChange('amount')} disabled={disable} style={inputRight} /></CCol>
+          <CCol sm={4} className="d-flex gap-2"><Label w={80}>{t('asset.amount')}</Label>
+            <AmountField
+              amount={current?.amount??0.0}
+              locale={locale}
+              currency={currency}
+              disabled={disable}
+              style={inputRight}
+              onCommit={(amount) => {
+                //const next = { ...current, amount}
+                setCurrent({...current, amount:amount});
+              }}
+            />
+            {/*<CurrencyInput value={current?.amount??0.0} intlConfig={{ locale, currency }} */}
+            {/*               groupSeparator="." decimalSeparator="," decimalsLimit={2} decimalScale={2} onValueChange={handleCurrencyChange('amount')} */}
+            {/*               disabled={disable} style={inputRight} />*/}
+          </CCol>
           <CCol sm={4} className="d-flex gap-2"><Label w={100}>{t('asset.depreciation')}</Label><InputField fieldName="depMethod" current={current} setCurrent={setCurrent} value={current.depMethod} onChange={(e) => setCurrent({ ...current, depMethod: Number(e.target.value) })} disabled={disable} style={inputRight} /></CCol>
           <CCol sm={4} className="d-flex gap-2"><Label w={80}>{t('asset.lifeSpan')}</Label><InputField fieldName="lifeSpan" current={current} setCurrent={setCurrent} value={current.lifeSpan} onChange={(e) => setCurrent({ ...current, lifeSpan: Number(e.target.value) })} disabled={disable} style={inputRight} /></CCol>
         </FormRow>
         <FormRow>
-          <CCol sm={4} className="d-flex gap-2"><Label w={80}>{t('asset.scrapValue')}</Label><CurrencyInput value={current?.scrapValue??0.0} intlConfig={{ locale, currency }} groupSeparator="." decimalSeparator="," decimalsLimit={2} decimalScale={2} onValueChange={handleCurrencyChange('scrapValue')} disabled={disable} style={inputRight} /></CCol>
+          <CCol sm={4} className="d-flex gap-2"><Label w={80}>{t('asset.scrapValue')}</Label>
+            {/*<CurrencyInput value={current?.scrapValue??0.0} intlConfig={{ locale, currency }} groupSeparator="." decimalSeparator="," decimalsLimit={2} decimalScale={2} */}
+            {/*               onValueChange={handleCurrencyChange('scrapValue')} disabled={disable} style={inputRight} />*/}
+            <AmountField
+              amount={current?.scrapValue??0.0}
+              locale={locale}
+              currency={currency}
+              disabled={disable}
+              style={inputRight}
+              onCommit={(amount) => setCurrent({...current, scrapValue:amount})}
+            />
+          </CCol>
           <CCol sm={4} className="d-flex gap-2"><Label w={100}>{t('asset.frequency')}</Label><InputField fieldName="frequency" current={current} setCurrent={setCurrent} value={current.frequency} onChange={(e) => setCurrent({ ...current, frequency: Number(e.target.value) })} disabled={disable} style={inputRight} /></CCol>
           <CCol sm={4} className="d-flex gap-2"><Label w={80}>{t('asset.rate')}</Label><InputField fieldName="rate" current={current} setCurrent={setCurrent} value={Number(current.rate)} onChange={(e) => setCurrent({ ...current, rate: Number(e.target.value) })} disabled={disable} style={inputRight} /></CCol>
         </FormRow>

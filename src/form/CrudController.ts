@@ -399,13 +399,13 @@ async function updateRecord<T extends IWSModel>(
   ctx: string,
   token: string,
   record: T,
-  setCurrent: Dispatch<SetStateAction<T>>
+ // setCurrent: Dispatch<SetStateAction<T>>
 ): Promise<T> {
   const url = buildUrl(ctx);
   try {
     const updated = await apiRequest<T>(url, 'PUT', token, record);
     const versioned = { ...updated, __version: Date.now() } as T;
-    setCurrent(versioned);
+   // setCurrent(versioned);
     const modelId = (record as any).modelid ?? (updated as any).modelid;
     if (modelId !== undefined) {
       const storeData = iwsStore.getByModelId(modelId);

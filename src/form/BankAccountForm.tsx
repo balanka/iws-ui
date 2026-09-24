@@ -23,7 +23,8 @@ export const BankAccountForm = ({
   const currentBank = bankData?.find((acc: any) => acc.id === current.bic);
   const inputStyle = { height: height - 2, width: '100%', fontSize: '0.75rem' };
   const comboStyle = { minHeight: height, height: height, width: '100%', fontSize: 12 };
-
+ console.log('currentBank', currentBank);
+  console.log('bankData', bankData);
   const handleIban = (e: any) => {
     const x = { ...current, id: e.target.value, company: `-${current.company}` };
     setCurrent(x);

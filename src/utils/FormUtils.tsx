@@ -42,10 +42,6 @@ export const  checkIfStringStartsWith= (str:string, substrs:string[])=> {
  // console.log('x', x)
   return substrs ?? [].some(substr => str.startsWith(substr))
 }
-// export function checkIfStringStartsWith(str:string, substrs:string[]) {
-//   return substrs??[].some(substr => str.startsWith(substr))
-//   //return [...substrs].some(substr => str.toLowerCase().startsWith(substr.toLowerCase()))
-// }
 
 export function uniq <A>(a:A[]):A[] {
   return Array.from(new Set(a));
@@ -59,10 +55,6 @@ interface ShowProps<T> {
 export const transactionToOption = (m: ITransaction|IFinancials) => {
     return {value: m.id, label:`${m.id} ${m.modelid}`}
 }
-
-// export const toOption = (m: {id:string|bigint, name:string}) => {
-//     return {value:m?.id, label:`${m?.id} ${m?.name}`}
-// }
 
 export const toOption = (item: { id: string|bigint; name: string }) => ({
   value: String(item.id),   // force string
@@ -85,21 +77,11 @@ export  const FormRow = ({ children, height }: { children: React.ReactNode, heig
 export const Label = ({ children, width = 80, bold = false }: any) =>
   <div style={{ minWidth: width, fontWeight: bold ? 'bold' : 'normal', paddingLeft: 10 }}>{children}</div>
 
-// export const valueFormatter=  (params:any, language:string, currency:string) => {
-//   if (params.value == null || isNaN(params.value)) return params.value;
-//   return new Intl.NumberFormat(language, {
-//     style: 'currency',
-//     currency: currency,    // or 'USD', 'GBP', etc.
-//     useGrouping: false,
-//   }).format(params.value);
-// }
-
-
 export function amountFormatter<A> (fn:(p:A)=>number, param:A, locale:string, currency:string) {
   const amount = fn(param)
   const formattedNumber = new Intl.NumberFormat(locale, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: (currency =='GNF' || currency =='XOF' )?0:2,
+    maximumFractionDigits: (currency =='GNF' || currency =='XOF' )?0:2,
     useGrouping: true,
   }).format(amount).replace(/\s/g, '.')
   return `${formattedNumber} ${currency}`

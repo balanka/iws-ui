@@ -55,3 +55,12 @@ docker-compose.override.yml
 
 # Ignore build-specific cache files
 *.lock
+
+node_modules
+.git
+dist
+build
+*.log
+.env*
+Dockerfile*
+docker-compose*

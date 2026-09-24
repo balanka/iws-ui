@@ -6,15 +6,8 @@ import {
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import {RowSelectedEvent, GridOptions} from "ag-grid-community";
-// import {
-//     //GridOptions,
-//     // MasterDetailModule,
-//     // ExcelExportModule,
-//     // MultiFilterModule,
-//     // SetFilterModule,
-// } from 'ag-grid-enterprise'
 import { AgGridReact } from 'ag-grid-react'
-import React, { FC } from 'react'
+import React, {FC} from 'react'
 import {
   IAccount, IArticle, IAsset,
   IBankAccount, IBankStatement,
@@ -37,14 +30,7 @@ ModuleRegistry.registerModules([
   // MasterDetailModule,
 ]);
 
-//const myTheme = themeQuartz.withParams({
-//   backgroundColor: "rgb(249, 245, 227)",
-//   foregroundColor: "rgb(126, 46, 132)",
-//   headerTextColor: "rgb(204, 245, 172)",
-//   headerBackgroundColor: "rgb(209, 64, 129)",
-//   oddRowBackgroundColor: "rgb(0, 0, 0, 0.03)",
-//   headerColumnResizeHandleColor: "rgb(126, 46, 132)",
-// });
+
 export const pacTheme = themeQuartz.withParams({
     /* Low spacing = very compact */
     spacing: 2,
@@ -180,6 +166,8 @@ interface Props <A>  {
     getRowId?: (params:GetRowIdParams<any, any>)=>string|null
     onClick?:(e:any)=>void
 }
+//const getRowId = (params: { data: IMasterfile }) => String(params.data.id)
+
 export const AccountGrid: FC<Props<IAccount>> = ({ columnDefs, defaultColDef, onRowSelected, rowData, onClick }:Props<IAccount>)=>
     <AgGridReact
         theme = {myTheme} //{theme ?? "legacy"}
@@ -242,16 +230,29 @@ export const AssetGrid: FC<Props<IAsset>> = ({ columnDefs, defaultColDef, onRowS
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
     />
-export const MasterfileGrid: FC<Props<IMasterfile>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<IMasterfile>)=>
-    <AgGridReact
-        theme = {myTheme} //{theme ?? "legacy"}
-        onRowSelected = {onRowSelected}
-        // @ts-ignore
-        gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
-        rowData ={rowData}
-        resetRowDataOnUpdate ={true}
-        animateRows={false}
-    />
+export const MasterfileGrid = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }: Props<IMasterfile>) => (
+  <AgGridReact
+    columnDefs={columnDefs}
+    rowData={rowData}
+    onRowSelected={onRowSelected}
+    getRowId={(params) => String(params.data.id)}
+    // @ts-ignore
+    gridOptions={gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected)}
+    animateRows={false}
+  />
+)
+// export const MasterfileGrid: FC<Props<IMasterfile>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<IMasterfile>)=>
+    // <AgGridReact
+    //     theme = {myTheme} //{theme ?? "legacy"}
+    //    // onRowClicked={onRowSelected, setCurrent}
+    //     getRowId={getRowId}
+    //     onRowSelected = {onRowSelected}
+    //     // @ts-ignore
+    //     gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
+    //     rowData ={rowData}
+    //     resetRowDataOnUpdate ={true}
+    //     animateRows={false}
+    // />
 export const RoleGrid: FC<Props<IRole>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<IRole>)=>
     <AgGridReact
         theme = {myTheme} //{theme ?? "legacy"}
@@ -336,15 +337,18 @@ export const UserGrid: FC<Props<IUser>> = ({ columnDefs, defaultColDef, onRowSel
         resetRowDataOnUpdate ={true}
         animateRows={false}
     />
-export const BankStatementGrid: FC<Props<IBankStatement>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<IBankStatement>)=>
-    <AgGridReact
-        theme = {myTheme} //{theme ?? "legacy"}
-        onRowSelected = {onRowSelected}
-        // @ts-ignore
-        gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
-        rowData ={rowData}
-        resetRowDataOnUpdate ={true}
-    />
+export const BankStatementGrid: FC<Props<IBankStatement>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }: Props<IBankStatement>) => (
+  <AgGridReact
+    theme={myTheme}
+    columnDefs={columnDefs}
+    rowData={rowData}
+    onRowSelected={onRowSelected}
+    getRowId={(params) => String(params.data.id)}
+    // @ts-ignore
+    gridOptions={gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected)}
+    animateRows={false}
+  />
+)
 
 export const TransactionGrid: FC<Props<ITransaction|IFinancials>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<ITransaction|IFinancials>)=>
     <AgGridReact

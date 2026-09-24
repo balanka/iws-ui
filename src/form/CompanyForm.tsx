@@ -71,6 +71,7 @@ const CompanyForm = () => {
       });
   }, []);
   console.log('current', current);
+  console.log('bankData', bankData);
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
   const mainForm = CompanyTabs({ collapse: state.collapseForm, current:current, setCurrent:setCurrent
     , currentBankAccount:currentBankAccount

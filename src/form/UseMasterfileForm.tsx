@@ -7,7 +7,7 @@ import iwsStore from '../utils/Store';
 import useForm from './UseForm.ts';
 import { CommonFormHead } from './CommonFormHead';
 import { MasterfileGrid } from '../IWSGrid.tsx';
-import { Add, Edit, Get } from './CrudController.ts';
+import {Add, Edit, Get} from './CrudController.ts';
 import { logout } from '../utils/FormUtils.tsx';
 import Login from './Login.tsx';
 import { formEnum } from '../utils/FormEnum.tsx';
@@ -107,28 +107,50 @@ export default function useMasterfileForm<T extends IWSModel>(
 
   // Submit edit or new record
   const submitEdit = async (event: any) => {
-    event.preventDefault();
+    event.preventDefault()
     if (edited) {
-      // Update existing record
-      const updatedRecord = await Edit(modifyUrl, token, { ...current }, setCurrent);
-      console.log('updatedRecord', updatedRecord);
+      const updatedRecord = await Edit(modifyUrl, token, { ...current })
       if (updatedRecord) {
-        const index = rowData.findIndex(obj => obj?.id === updatedRecord.id);
+        const index = rowData.findIndex(obj => String(obj?.id) === String(updatedRecord.id))
         if (index !== -1) {
-          const newRowData = [...rowData];
-          newRowData[index] = updatedRecord as T;
-          setRowDataAndStore(newRowData);
-          setCurrent(updatedRecord as T);
+          const newRowData = [...rowData]
+          newRowData[index] = updatedRecord as T
+          setRowDataAndStore(newRowData)
         }
+        setCurrent(updatedRecord as T)   // form gets the fresh value last
       }
     } else if (!edited && !disable) {
-      // Add new record
-      await Add(modifyUrl, token, { ...current }, rowData, setRowDataAndStore, setCurrent);
+      await Add(modifyUrl, token, { ...current }, rowData, setRowDataAndStore, setCurrent)
     }
-    setDisable(true);
-    setEdited(false);
-    setAdded(true);
-  };
+    setDisable(true)
+    setEdited(false)
+    setAdded(true)
+  }
+  // const submitEdit = async (event: any) => {
+  //   console.log('submitEdit current', current)
+  //   event.preventDefault();
+  //   if (edited) {
+  //     // Update existing record
+  //     const updatedRecord = await Edit(modifyUrl, token, { ...current }, setCurrent);
+  //     console.log('updatedRecord', updatedRecord);
+  //     if (updatedRecord) {
+  //       const index = rowData.findIndex(obj => String(obj?.id) === String(updatedRecord.id));
+  //       //const index = rowData.findIndex(obj => obj?.id === updatedRecord.id);
+  //       if (index !== -1) {
+  //         const newRowData = [...rowData];
+  //         newRowData[index] = updatedRecord as T;
+  //         setRowDataAndStore(newRowData);
+  //         setCurrent(updatedRecord as T);
+  //       }
+  //     }
+  //   } else if (!edited && !disable) {
+  //     // Add new record
+  //     await Add(modifyUrl, token, { ...current }, rowData, setRowDataAndStore, setCurrent);
+  //   }
+  //   setDisable(true);
+  //   setEdited(false);
+  //   setAdded(true);
+  // };
 
   const initAdd = () => {
     const newRow = { ...currentTemplate, company: `${company}` };
@@ -139,23 +161,33 @@ export default function useMasterfileForm<T extends IWSModel>(
   };
 
   const onRowSelected = (event: RowSelectedEvent) => {
-    if (event?.data) {
-      setCurrent(event.data instanceof Array ? event.data[0] : event.data);
-    }
-  };
-
+    if (!event?.data) return
+    const row = event.data instanceof Array ? event.data[0] : event.data
+    setCurrent(prev => {
+      // Same row — do not let the grid overwrite a value the user just saved.
+      if (String(prev?.id) === String(row?.id)) return prev
+      return row
+    })
+  }
   const handleKeyPress = useCallback((event: any) => {
     switch (event.keyCode) {
-      case 112: // F1
-        submitEdit(event);
-        break;
-      case 114: // F3
-        reload();
-        break;
-      default:
-        break;
+      case 112: submitEdit(event); break // F1
+      case 114: reload(); break // F3
     }
-  }, []);
+  }, [submitEdit, reload])
+
+  // const handleKeyPress = useCallback((event: any) => {
+  //   switch (event.keyCode) {
+  //     case 112: // F1
+  //       submitEdit(event);
+  //       break;
+  //     case 114: // F3
+  //       reload();
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }, []);
 
   // Subscribe to store changes (when other components modify the same modelid)
   useEffect(() => {
@@ -201,13 +233,13 @@ export default function useMasterfileForm<T extends IWSModel>(
     />
   );
 
-  const table = (
+  const table =
     <MasterfileGrid
       columnDefs={columnDefs}
       onRowSelected={onRowSelected}
       rowData={rowData as unknown as IMasterfile[]} /* cast if MasterfileGrid expects IMasterfile[] */
     />
-  );
+
 
   return {
     header,

@@ -1,6 +1,6 @@
-import  {JSX, Dispatch, SetStateAction} from 'react'
+import {JSX, Dispatch, SetStateAction} from 'react'
 import {CCol, CContainer, CInputGroup} from '@coreui/react-pro'
-import { BooleanField, InputField, DatePickerField, TextareaField, FormMasterfileXComboBox, CurrencyField,
+import { BooleanField, InputField, DatePickerField, TextareaField, FormMasterfileXComboBox,
   FromTransactionComboBox, FormMasterfileComboBox2,
 } from './common'
 import {  styles } from './FormsProps'
@@ -10,6 +10,8 @@ import {initCc, initContact, initfModule} from './Menu'
 import {FormRow, Label, toOption} from '../utils/FormUtils'
 import {isArrayAndNotEmpty, sortById} from '../utils/Utils'
 import ComboBox from './ComboBox'
+import {AmountField} from "./common/AmountField.tsx";
+
 
 interface FinancialsMainFormProps {
   readonly collapse: boolean;
@@ -69,20 +71,15 @@ export const FinancialsMainForm = ({
                                      currency
                                    }: FinancialsMainFormProps): JSX.Element | null => {
   if (!collapse) return null;
-  //console.log('storeData', storeData)
-  //console.log('AccData', accData)
-  console.log('contactData', contactData)
-  console.log('currentLineFinancials', currentLineFinancials)
   const currentx: IFinancials =   current
   let currentLine = isArrayAndNotEmpty(currentx?.lines)? currentx?.lines[0]:currentLineFinancials
   currentLine = (currentx?.lines?.length===1)?currentLine:currentLineFinancials
-  console.log('currentLine', currentLine)
   const modelid = currentx?.modelid ?? 0;
   const currentModule = modules.find((m: IFmodule) => m.id === BigInt(modelid)) ?? initfModule;
   const total = currentx?.lines?.reduce((prev, cur) => prev + (cur?.amount || 0), 0) ?? 0;
   const inputStyle = { height: height - 5, width: '100%', fontSize: '0.875rem' };
   const currencyStyle = { height: height - 5, padding:4, textAlign: 'right' as const, width: '100%' };
-
+  const amountStyle = { ...currencyStyle, paddingLeft: 5, paddingRight: 5, fontSize: 12, fontWeight: 'bold', width: '65%' };
   return (
   <div style={{ ...styles.outer, height:200, display: !collapse ? 'none' : '' }}>
     <CContainer fluid className="p-0">
@@ -228,22 +225,18 @@ export const FinancialsMainForm = ({
         </CCol>
         <CCol sm={4} className="d-flex gap-2">
           <Label>{t('financials.line.amount')}</Label>
-          <CurrencyField
-            value={currentLine?.amount}
+          <AmountField
+            amount={currentLine?.amount ?? 0}
             locale={locale}
             currency={currency}
-            onValueChange={(value) => {
-              let cleanValue = value || '0'
-              cleanValue = cleanValue.replace(/\./g, '') // Remove thousands separators
-              cleanValue = cleanValue.replace(/,/g, '.') // Convert decimal comma to dot
-              const numberValue = parseFloat(cleanValue)
-              const finalValue = isNaN(numberValue) ? 0 : numberValue
-              currentLine = {...currentLine, amount: finalValue, company: current?.company}
-              setCurrentLineFinancials({...currentLine})
-              setTransactionF(currentx, setCurrent, currentLine, setCurrentLineFinancials)
-            }}
             disabled={currentx.posted}
-            style={{...currencyStyle, paddingLeft:5, fontSize: 12, fontWeight: 'bold', width: '65%'}}/>
+            style={amountStyle}
+            onCommit={(amount) => {
+              const next = { ...currentLine, amount, company: current?.company }
+              setCurrentLineFinancials(next)
+              setTransactionF(currentx, setCurrent, next, setCurrentLineFinancials)
+            }}
+          />
         </CCol>
       </FormRow>
 
@@ -270,12 +263,14 @@ export const FinancialsMainForm = ({
         </CCol>
         <CCol sm={4} className="d-flex gap-2">
           <Label bold>{t('common.total')}</Label>
-          <CurrencyField
-            value={total}
+          <AmountField
+            amount={total ?? 0}
             locale={locale}
             currency={currency}
-            disabled={true}
-            style={{...currencyStyle, paddingLeft:5, fontSize: 12, fontWeight: 'bold', width: '65%'}}/>
+            disabled
+            onCommit={() => {}}
+            style={amountStyle}
+          />
         </CCol>
       </FormRow>
      </CContainer>

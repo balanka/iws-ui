@@ -21,7 +21,8 @@ export DOCKER_BUILDKIT=1
 
 # ---- Type-check + local build (fast fail) ----
 echo "▶ Running tsc..."
-tsc --noEmit
+#tsc --noEmit
+./node_modules/.bin/tsc --noEmit
 
 echo "▶ Running vite build..."
 npx vite build

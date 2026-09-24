@@ -54,7 +54,6 @@
     "prop-types": "^15.8.1",
     "qrcode.react": "^4.2.0",
     "react": "19.2.8",
-    "react-currency-input-field": "^4.0.5",
     "react-datepicker": "^9.1.0",
     "react-dom": "19.2.8",
     "react-i18next": "^17.0.9",

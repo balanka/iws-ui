@@ -1,8 +1,8 @@
 import React from 'react'
 import { CRow, CCol, CContainer } from '@coreui/react-pro'
-import CurrencyInput from 'react-currency-input-field'
 import { DatePickerField, InputField, TextareaField } from './common'
 import { BankStatementProps } from "../Props.ts"
+import {AmountField} from './common/AmountField.tsx'
 
 const FormRow = ({ children }: any) => <CRow className="g-2 align-items-center mb-2">{children}</CRow>
 const Label = ({ children }: any) => <div style={{ minWidth: 80 }}>{children}</div>
@@ -10,6 +10,7 @@ const Label = ({ children }: any) => <div style={{ minWidth: 80 }}>{children}</d
 export const BankStatementMainForm = ({ current, setCurrent, t, locale, currency, height }: BankStatementProps): React.JSX.Element => {
   const inputStyle = { height: height - 3, flex: 1 }
   const currencyStyle = { height: height - 3, flex: 1, textAlign: 'right' as const }
+  console.log('current', current)
 
   return (
     <CContainer fluid className="p-0">
@@ -31,23 +32,16 @@ export const BankStatementMainForm = ({ current, setCurrent, t, locale, currency
       <FormRow>
         <CCol sm={6} className="d-flex gap-2"><Label>{t('bankstatement.postingtext')}</Label><InputField fieldName="postingtext" current={current} setCurrent={setCurrent} value={current.postingtext} disabled={current.posted} style={inputStyle} /></CCol>
         <CCol sm={6} className="d-flex gap-2"><Label>{t('bankstatement.amount')}</Label>
-          <CurrencyInput
-            value={current.amount}
-            intlConfig={{ locale, currency }}
-            groupSeparator="."
-            decimalSeparator=","
-            decimalsLimit={2}
-            decimalScale={2}
-            onValueChange={(value) => {
-              let cleanValue = value || '0';
-              cleanValue = cleanValue.replace(/\./g, ''); // Remove thousands separators
-              cleanValue = cleanValue.replace(/,/g, '.'); // Convert decimal comma to dot
-              const numberValue = parseFloat(cleanValue);
-              const finalValue = isNaN(numberValue) ? 0 : numberValue;
-              setCurrent({...current, amount: finalValue})}}
-            disabled={current.posted}
-            style={{ ...currencyStyle}}
+          <AmountField
+            key={current.id}
+            amount={current.amount ?? 0}
+            locale={locale}
+            currency={currency}
+            disabled={true}
+            style={{ ...currencyStyle }}
+            onCommit={(amount) => setCurrent({ ...current, amount, company: current?.company })}
           />
+
         </CCol>
       </FormRow>
 
