@@ -111,7 +111,7 @@ const BankStatementForm = () => {
     console.log('url_', url_)
     url_ && Get(url_, token, current.modelid, setRowData)
   }
-  
+
   return (
     <>
       <BankStatementFormHead
