@@ -75,6 +75,7 @@
     "total"     : "Total",
     "prenom": "First name",
     "company":      "Company",
+    "contact": "Contact",
     "parent": "Parent",
     "modelid"     : "ModelId",
     "idebit": "Init Debit",

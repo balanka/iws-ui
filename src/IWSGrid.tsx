@@ -349,17 +349,34 @@ export const BankStatementGrid: FC<Props<IBankStatement>> = ({ columnDefs, defau
     animateRows={false}
   />
 )
-
-export const TransactionGrid: FC<Props<ITransaction|IFinancials>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<ITransaction|IFinancials>)=>
-    <AgGridReact
-        theme = {myTheme}
-        onRowSelected = {onRowSelected}
-        // @ts-ignore
-        gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
-        rowData ={rowData}
-        resetRowDataOnUpdate ={true}
-        //rowSelection="multiple"
-    />
+export const TransactionGrid: FC<Props<ITransaction | IFinancials>> = ({
+                                                                         columnDefs, defaultColDef, onRowSelected, gridOptions, rowData,
+                                                                       }: Props<ITransaction | IFinancials>) => (
+  <AgGridReact
+    theme={myTheme}
+    columnDefs={columnDefs}
+    rowData={rowData}
+    onRowSelected={onRowSelected}
+    getRowId={(params) => String(params.data.id)}
+    // @ts-ignore
+    gridOptions={gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected)}
+    animateRows={false}
+  />
+)
+// export const TransactionGrid: FC<Props<ITransaction | IFinancials>> = ({
+//                                                                          columnDefs, defaultColDef, onRowSelected, gridOptions, rowData,
+//                                                                        }: Props<ITransaction | IFinancials>) => (
+//   <AgGridReact
+//     theme={myTheme}
+//     columnDefs={columnDefs}
+//     rowData={rowData}
+//     onRowSelected={onRowSelected}
+//     getRowId={(params) => String(params.data.id)}
+//     // @ts-ignore
+//     gridOptions={gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected)}
+//     animateRows={false}
+//   />
+// )
 export const LineTFinancialsGrid: FC<Props<ILineFinancials>> = ({ columnDefs, defaultColDef, onRowSelected, onCellValueChanged, gridOptions
                                                              , rowData, onGridReady, pagination}:Props<ILineFinancials>)=>{
 

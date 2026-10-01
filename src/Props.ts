@@ -109,10 +109,6 @@ export interface ArticleProps {
   , zIndex:number
 }
 
-export interface ArticleQRFormProps {
-  current: IArticle
-  , t: TFunction<'transalation', undefined>
-}
 export interface ArticleGeneralFormProps {
      collapse:boolean
     , current: IArticle
@@ -163,12 +159,6 @@ export interface BankStatementProps {
     height: number
 }
 
-// export interface BankStatementParamProps {
-//     current: IBankStatementParam,
-//     setCurrent: (arg: IBankStatementParam) => void,
-//     t: TFunction<'transalation', undefined>,
-//     height: number
-// }
 export interface AccountMainProps {
   collapse:boolean,
   current: IAccount,
@@ -179,8 +169,7 @@ export interface AccountMainProps {
   disable: boolean,
   height: number
 }
-export interface IAddressProps {
-  current:IAddress, setCurrent:(arg:IAddress)=>void, disable:boolean, t:TFunction<'transation', undefined>, height:number }
+
 export interface MasterfileProps2<A extends IMasterfile|IMasterfile2|IStore>{
     collapse:boolean,
     current: A,
@@ -203,14 +192,7 @@ export interface FModuleProps2<A extends IMasterfile2>{
   disable: boolean,
   height: number
 }
-export interface MasterfileBaseProps<A extends IMasterfile> {
-  //collapse: boolean,
-  current: A,
-  setCurrent: (arg: any) => void,
-  t: TFunction<'translation', undefined>,
-  disable: boolean,
-  height: number
-}
+
 export interface MasterfileProps<A extends IMasterfile> {
   collapse: boolean,
   current: A,
@@ -218,27 +200,6 @@ export interface MasterfileProps<A extends IMasterfile> {
   t: TFunction<'translation', undefined>,
   disable: boolean,
   height: number
-}
-export interface PartnerProps<A extends IContact> extends MasterfileProps<A> {
-  collapse: boolean,
-  current: A,
-  setCurrent: (arg: any) => void,
-  //setAddress: (arg: IAddress) => void,
-  t: TFunction<'translation', undefined>,
-  disable: boolean,
-  height: number
-}
-
-export interface MasterfileComboboxProps<A extends IMasterfile, B extends IMasterfile> {
-    current: A,
-    data: B[]
-    setCurrent: (arg: any) => void,
-    fieldName:string,
-    defaultValue:B,
-    disable: boolean,
-    zIndex:number,
-    styles:CSSProperties,
-    height?: number
 }
 
 export interface RoleProps {
@@ -286,33 +247,7 @@ export interface CustomerGeneralFormProps {
      height:number
 }
 export type ILine = ILineTransaction|ILineFinancials
-// export interface FinancialsDetailsTabProps<T extends IFinancials, L extends  ILine> {
-//     transaction: T,
-//     setTransaction:(arg:T)=>void
-//     currentLineFinancials:L,
-//     setCurrentLineFinancials:Dispatch<SetStateAction<L>>,
-//     accData: IAccount[],
-//     accountFilter:string[],
-//     oaccountFilter:string[],
-//     t: TFunction<'transalation', undefined>,
-//     zIndex:number,
-//     onGridReady:(params: GridReadyEvent)=>void,
-//     gridRef?:React.RefObject<AgGridReact>
-// }
-//
-// export interface FinancialsDetailsFormProps<T extends IWSTransaction<L>, L extends  ILineFinancials> {
-//     transaction: T,
-//     setTransaction:(arg:T)=>void
-//     currentLineFinancials:L,
-//     setCurrentLineFinancials:Dispatch<SetStateAction<L>>,
-//     accData: IAccount[],
-//     accountFilter:string[],
-//     oaccountFilter:string[],
-//     t: TFunction<'transalation', undefined>,
-//     disable: boolean,
-//     height?: number,
-//     zIndex:number,
-// }
+
 
 export interface TransactionDetailsTabProps<T extends ITransaction, L extends ILineTransaction> {
   collapseTable: boolean;
@@ -330,25 +265,7 @@ export interface TransactionDetailsTabProps<T extends ITransaction, L extends IL
   locale: string;
   currency: string;
 }
-// interface TransactionDetailsTabProps<T extends ITransaction, L extends ILineTransaction> {
-//   state: {
-//     collapseTable: boolean;
-//     // ... other state properties if needed
-//   };
-//   transaction: T;
-//   setTransaction: (t: T) => void;
-//   currentLineTransaction: L;
-//   setCurrentLineTransaction: (l: L) => void;
-//   accountFilter: string[];
-//   oaccountFilter: string[];
-//   articleData: any[];
-//   vatData: any[];
-//   t: (key: string) => string;
-//   onGridReady?: (params: any) => void;
-//   zIndex?: number;
-//   locale: string;
-//   currency: string;
-// }
+
 
 export interface TransactionDetailsFormProps<T extends IWSTransaction<L>, L extends  ILine> {
     transaction: T,
@@ -452,7 +369,6 @@ export interface UseFormResult {
   , setLanguage:Dispatch<SetStateAction<string>>
   , handleLanguageChange:(language:any)=>void
   , state:State
-  //, visible:boolean
   , toggle:() =>void
   , toggleTable:()=>void
   , modelid : number
@@ -460,31 +376,7 @@ export interface UseFormResult {
   , module_:any
 }
 export interface State {collapseForm: boolean, collapseTable:boolean,  fadeIn: boolean, timeout:  300}
-// export interface UseMasterfileFormResult<T> {
-//   profile: IProfile
-//   , menu: Map<any, any>
-//   , selected: string
-//   , t:TFunction<'translation', undefined>
-//   , i18n: i18n
-//   , language:string
-//   , modelid : number
-//   , initAdd:()=>void
-//   , added:boolean
-//   , disable:boolean
-//   , edit:()=>void
-//   , edited:boolean
-//   , submitEdit:(event:any) =>void
-//   , cancelEdit:()=>void
-//   , reload: ()=>void
-//   , handleLanguageChange:(event:any) =>void
-//   , title:string
-//   , zIndex:number
-//   , rowData:T[]
-//   , setRowData:Dispatch<SetStateAction<T[]>>
-//   , current:T
-//   , setCurrent:Dispatch<SetStateAction<T>>
-//   , onRowSelected:(event: RowSelectedEvent)=>void
-// }
+
 export interface UseCustomerFormResult<T extends IBusinespartner> {
   header: ReactNode
   , body:React.JSX.Element|null
@@ -494,10 +386,6 @@ export interface UseCustomerFormResult<T extends IBusinespartner> {
   , state:State
   ,  rowData:T[]
   , setRowData:Dispatch<SetStateAction<T[]>>
-  // , accData:IAccount[]
-  // , bankData:IMasterfile[]
-  // , vatData:IVat[]
-  // , ccyData:IMasterfile[]
   , current:T
   , setCurrent:Dispatch<SetStateAction<T>>
   , currentBankAccount:IBankAccount
@@ -526,14 +414,17 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , templateName:(current:T, fmodule:IFmodule[])=>[string, string]
   , zIndex:number
   , handleLanguageChange:(event:any) =>void
-  //, setModel:Dispatch<SetStateAction<number>>
   , saveProps:SaveProps
   , modelid:number
   , isFetching:boolean
   , setIsFetching:Dispatch<SetStateAction<boolean>>
-  , gridOptions:(columnDefs:(t:TFunction<'transalation', undefined>) =>ColDef[], locale:string, currency:string
-                  , lineColumnDefs: (t:TFunction<'transalation', undefined>) =>ColDef[]
-                  , t:TFunction<'transalation', undefined>) =>GridOptions<T>
+  , gridOptions:(
+    columnDefs: (t: TFunction<'transalation', undefined>, locale: string, currency: string) => ColDef[]
+    , locale: string
+    , currency: string
+    , lineColumnDefs: (t: TFunction<'transalation', undefined>, locale: string, currency: string) => ColDef[]
+    , t: TFunction<'transalation', undefined>
+  ) => GridOptions<T>
 }
 export interface UseJFormResult<T> {
   profile: IProfile
@@ -572,14 +463,7 @@ export interface UseArticleAccountResult<T> {
   , title:string
   , styles:any
 }
-export interface IMenu <T> {
-  id: string,
-  name:string,
-  title: string,
-  ctx:  string,
-  modelid: number,
-  state: T [],
-}
+
 export  interface JournalProps {
   account: string,
   account2:string,

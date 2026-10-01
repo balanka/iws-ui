@@ -21,14 +21,14 @@ const config = {
 const SERVER_URL = `${config.scheme}://${config.apiUrl}${config.apiBase}`;
 console.log('SERVER_URL:', SERVER_URL);
 
-// ==================== Typed API Response ====================
+
 export interface ApiResponse<T> {
   data: T;
   error: string | null;
   status: number;
 }
 
-// ==================== Core API Client ====================
+
 async function apiFetch<T>(url: string, method: HttpMethod, token?: string, body?: unknown
 ): Promise<ApiResponse<T>> {
   const headers: HeadersInit = {
@@ -89,7 +89,6 @@ async function apiRequest<T>(url: string, method: HttpMethod, token?: string, bo
 
 const buildUrl = (ctx: string) => `${SERVER_URL}${ctx}`;
 
-// ==================== Helper Functions ====================
 async function fetchWithAuth<T>(url: string, token: string): Promise<T> {
   console.log(`Fetching ${url}`);
   return apiRequest<T>(url, 'GET', token);
@@ -425,6 +424,36 @@ async function updateRecord<T extends IWSModel>(
   }
 }
 
+// async function updateRecordT<T extends IWSModel>(
+//   ctx: string,
+//   token: string,
+//   record: T,
+//    setCurrent: Dispatch<SetStateAction<T>>
+// ): Promise<T> {
+//   const url = buildUrl(ctx);
+//   try {
+//     const updated = await apiRequest<T>(url, 'PUT', token, record);
+//     const versioned = { ...updated, __version: Date.now() } as T;
+//      setCurrent(versioned);
+//     const modelId = (record as any).modelid ?? (updated as any).modelid;
+//     if (modelId !== undefined) {
+//       const storeData = iwsStore.getByModelId(modelId);
+//       if (Array.isArray(storeData)) {
+//         const updatedList = storeData.map((item: any) =>
+//           item.id === updated.id ? versioned : item
+//         );
+//         iwsStore.put(modelId, updatedList as IWSModel[]);
+//       } else if (storeData) {
+//         iwsStore.put(modelId, [versioned] as IWSModel[]);
+//       }
+//     }
+//     return versioned;
+//   } catch (error) {
+//     console.error('Update failed', error);
+//     throw error;
+//   }
+// }
+
 /**
  * Copy (duplicate) a record – returns the copied record, updates React state and cache.
  */
@@ -511,6 +540,7 @@ export const Get3 = fetchListAndSetCurrent;
 export const Add = createRecord;
 export const AddList = createRecords
 export const Edit = updateRecord;
+//export const EditT = updateRecordT;
 export const EditRow = editRow;
 export const COPY = copyRecord;
 export const GET4 = getSingle;

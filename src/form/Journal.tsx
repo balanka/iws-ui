@@ -18,6 +18,7 @@ import {generateDocx} from '../utils/XlsUtils.ts'
 import useJForm from './UseJForm.ts'
 import useForm from './UseForm.ts'
 import {TEMPLATE_ENUM} from "../Props.ts";
+import {useEffect} from "react";
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -32,6 +33,12 @@ const Journal = () => {
   if (module_ === '11111' || module_ === 11111) return <Login/>
   const dispatch = useDispatch()
   const height = 20
+
+  useEffect(() => {
+    submitQuery(null, current)
+    setCurrent(current)
+  }, [])
+
   const formatter = new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const toBalance2 = (m:IJournal) => {
     const currentAcc= accData.find(acc=>acc.id === m.account)??initAcc

@@ -66,7 +66,7 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
          `${module_.ctx}/${company}/${fromPeriod}/${current.toPeriod}`
 
   const submitQuery = (event: any, current:JournalProps ) => {
-    event.preventDefault()
+    event?.preventDefault()
     accData?.length < 2 && Get(acc_ctx, token, acc_modelid, setAccData)
     Get(buildUrl(current), token, modelid, setRowData)
   }

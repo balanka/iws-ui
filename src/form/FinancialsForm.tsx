@@ -1,4 +1,4 @@
-import { useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -8,23 +8,25 @@ import {
 } from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import {styles, styles as stylesx} from './BasicTreeTableProps.tsx'
+import { styles, styles as stylesx } from './BasicTreeTableProps.tsx'
 // @ts-ignore
-import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
+import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { FinancialsMainForm } from './FinancialsMainForm'
-import {FinancialsFormHead} from './FinancialsFormHead.tsx'
+import { FinancialsFormHead } from './FinancialsFormHead.tsx'
 import {
   FINANCIALS,
-  initAcc, initContact,
+  initAcc,
+  initContact,
   initfModule,
   initFtr,
   initLineFinancials,
   initReminderBalance,
-  MASTERFILE
+  MASTERFILE,
 } from './Menu.tsx'
-import {formEnum} from '../utils/FormEnum.tsx'
+import { formEnum } from '../utils/FormEnum.tsx'
 import {
-  IAccount, IContact,
+  IAccount,
+  IContact,
   IFinancials,
   IFmodule,
   ILineFinancials,
@@ -32,48 +34,66 @@ import {
   ITransaction,
   ReminderBalance,
 } from '../Models.ts'
-import {LineTFinancialsGrid, TransactionGrid} from '../IWSGrid.tsx'
-import {financialsColumnDefs, LinesFinancialsColumns} from '../ColumnsDefs.ts'
-import {logout} from '../utils/FormUtils.tsx'
+import { LineTFinancialsGrid, TransactionGrid } from '../IWSGrid.tsx'
+import { financialsColumnDefs, LinesFinancialsColumns } from '../ColumnsDefs.ts'
+import { logout } from '../utils/FormUtils.tsx'
 import Login from './Login'
-import {CSpinner} from '@coreui/react-pro'
-import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {capitalizeFirst, generateDocx} from '../utils/XlsUtils.ts'
+import { CSpinner } from '@coreui/react-pro'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { capitalizeFirst, generateDocx } from '../utils/XlsUtils.ts'
 import useTransactionForm from './UseTransactionForm.ts'
 import useForm from './UseForm.ts'
-import {AddList, Get, Get3, GET4, GetListData} from './CrudController.ts'
-import {getLocalizedOrdinal, getMonthName, isArrayAndNotEmpty} from "../utils/Utils.ts";
-import {toCardinal} from "n2words/fr-FR";
-import {TEMPLATE_ENUM} from "../Props.ts";
+import { AddList, Get, Get3, GET4, GetListData } from './CrudController.ts'
+import { getLocalizedOrdinal, getMonthName, isArrayAndNotEmpty } from '../utils/Utils.ts'
+import { toCardinal } from 'n2words/fr-FR'
+import { TEMPLATE_ENUM } from '../Props.ts'
 
-
-ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, SelectEditorModule,])
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, SelectEditorModule])
 
 const FinancialsForm = () => {
+  // ── All hooks FIRST, unconditionally ────────────────────────────────────
   const [{ profile, selected, t, toggle, toggleTable, state, module_ }] = useForm()
-  const { token, currency, company, locale} = profile
-  let navigate = useNavigate()
+  const { token, currency, company, locale } = profile
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  if (module_ === '11111' || module_ === 11111) return <Login/>
-  let title_ = `${company} /${t(module_.title)}`
-  const current_: IFinancials = {...initFtr, company:company}
-  const initialLine:ILineFinancials = {...initLineFinancials, currency:currency??'', company:`-${company}`}
+
+  const current_: IFinancials = { ...initFtr, company }
+  const initialLine: ILineFinancials = {
+    ...initLineFinancials,
+    currency: currency ?? '',
+    company: `-${company}`,
+  }
+
   const [currentLine, setCurrentLine] = useState<ILineFinancials>(initialLine)
   const [rowData, setRowData] = useState<IFinancials[]>([])
   const [model, setModel] = useState<number>(-1)
-  const  [{  language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected, onNewLine, copyFromTransaction
-    , setCopyFromTransaction, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, zIndex
-    , handleLanguageChange, saveProps, modelid, isFetching, setIsFetching, gridOptions }] =
-    useTransactionForm(current_, initialLine, currentLine, setCurrentLine, rowData, setRowData, model)
-  const [title, setTitle] = useState(title_)
+
+  const [{
+    language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected,
+    onNewLine, copyFromTransaction, setCopyFromTransaction, onDeleteLine, submitCancel,
+    submitPost, copyCall, setGridApi, zIndex, handleLanguageChange, saveProps, modelid,
+    isFetching, setIsFetching, gridOptions,
+  }] = useTransactionForm(
+    current_,
+    initialLine,
+    currentLine,
+    setCurrentLine,
+    rowData,
+    setRowData,
+    model
+  )
+
+  const [title, setTitle] = useState(`${company} /${t(module_.title)}`)
+
   const acc_modelid = formEnum.ACCOUNT
   const cc_modelid = formEnum.COSTCENTER
   const contact_modelid = formEnum.CONTACT
-  let ctx = `${module_.ctx}/${modelid}/${company}`
+
   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
   const cc_ctx = `${MASTERFILE.masterfile}/${cc_modelid}/${company}`
   const contact_ctx = `${MASTERFILE.contact}/${contact_modelid}/${company}`
+
   const [accData, setAccData] = useState<IAccount[]>([initAcc])
   const [ccData, setCcData] = useState<IMasterfile[]>([])
   const [contactData, setContactData] = useState<IContact[]>([])
@@ -81,255 +101,346 @@ const FinancialsForm = () => {
   const [oaccFilter, setOAccFilter] = useState<string[]>([])
   const [reminderBalance, setReminderBalance] = useState<ReminderBalance[]>([initReminderBalance])
 
-  const handleModuleChange = (selected: any) => {
-    // If selected is an object with a 'value' property, extract it
-    const id = selected?.value !== undefined ? String(selected.value) : String(selected);
-    const numericId = parseInt(id, 10);   // <-- always specify radix 10
-    setModel(numericId);
-    //setModel(parseInt(id));
-    const mx: IFmodule = fmodule.find((m: IFmodule) => String(m.id) === id) ?? initfModule;
-    const moduleName = mx?.name ?? 'Not found';
-    title_ = `${company}/${moduleName}`;
-
-    const copyFromIds = (mx?.copyFrom ?? '-1').replace(/\s/g, '').split(',');
-    console.log('copyFromIds', copyFromIds);
-
-    setTitle(title_);
-    setCurrent(current_);
-    setAccFilter(mx.accFilter?.replace(/\s/g, '').split(','));
-    setOAccFilter(mx.oaccFilter?.replace(/\s/g, '').split(','));
-
-    const modelidx = parseInt(id, 10);
-    setModel(modelidx);
-
-    ctx = `${module_.ctx}/${modelidx}/${company}`;
-    const ctx_copyFrom = `${module_.ctx}/n/${company}/${copyFromIds}`;
-    const idx = copyFromIds.map(i => parseInt(i, 10)).reduce((acc, curr) => acc + curr, 0);
-    //console.log('idx>>>>', idx);
-    Get(ctx_copyFrom, token, idx, setCopyFromTransaction);
-    submitQuery(ctx);
-
-    const currentx = rowData?.filter(m => m.modelid === current_.modelid).length > 0 ? rowData[0] : current_;
-    setCurrent({ ...currentx, modelid: modelidx });
-  };
-
+  // ── Effects ─────────────────────────────────────────────────────────────
   useEffect(() => {
     Promise.all([
       Get(acc_ctx, token, acc_modelid, setAccData),
       Get(cc_ctx, token, cc_modelid, setCcData),
-      Get(contact_ctx, token, contact_modelid, setContactData)
-    ]).then(() => {
-      console.log('All data fetched successfully');
-      // additional logic after all requests complete
-    }).catch(error => {
-        console.error('Error fetching data', error);
-      });
-  },[selected])
+      Get(contact_ctx, token, contact_modelid, setContactData),
+    ])
+      .then(() => {
+        console.log('All data fetched successfully')
+      })
+      .catch((error) => {
+        console.error('Error fetching data', error)
+      })
+  }, [selected, current.id])
 
-  const submitQuery = (ctx:string, event?:any) => {
+  // ── Early return AFTER all hooks ────────────────────────────────────────
+  if (module_ === '11111' || module_ === 11111) return <Login />
+
+  // ── Handlers ────────────────────────────────────────────────────────────
+  const submitQuery = (ctx: string, event?: any) => {
     event?.preventDefault()
     setIsFetching(true)
     Promise.all([
       Get(acc_ctx, token, acc_modelid, setAccData),
       Get(cc_ctx, token, cc_modelid, setCcData),
-      Get3(ctx, token, modelid, current_, setRowData, setCurrent)
-    ]).then(() => {
-      console.log('All data fetched successfully');
-      // additional logic after all requests complete
-    }).catch(error => {
-        console.error('Error fetching data', error);
-      });
+      Get3(ctx, token, modelid, current_, setRowData, setCurrent),
+    ])
+      .then(() => {
+        console.log('All data fetched successfully')
+      })
+      .catch((error) => {
+        console.error('Error fetching data', error)
+      })
 
     setIsFetching(false)
   }
+
+  const handleModuleChange = (selected: any) => {
+    const id = selected?.value !== undefined ? String(selected.value) : String(selected)
+    const numericId = parseInt(id, 10)
+    setModel(numericId)
+
+    const mx: IFmodule = fmodule.find((m: IFmodule) => String(m.id) === id) ?? initfModule
+    const moduleName = mx?.name ?? 'Not found'
+    const title_ = `${company}/${moduleName}`
+
+    const copyFromIds = (mx?.copyFrom ?? '-1').replace(/\s/g, '').split(',')
+    console.log('copyFromIds', copyFromIds)
+
+    setTitle(title_)
+    setCurrent(current_)
+    setAccFilter(mx.accFilter?.replace(/\s/g, '').split(','))
+    setOAccFilter(mx.oaccFilter?.replace(/\s/g, '').split(','))
+
+    const modelidx = parseInt(id, 10)
+    setModel(modelidx)
+
+    const ctx_ = `${module_.ctx}/${modelidx}/${company}`
+    const ctx_copyFrom = `${module_.ctx}/n/${company}/${copyFromIds}`
+    const idx = copyFromIds.map((i) => parseInt(i, 10)).reduce((acc, curr) => acc + curr, 0)
+
+    Get(ctx_copyFrom, token, idx, setCopyFromTransaction)
+    submitQuery(ctx_)
+
+    const currentx =
+      rowData?.filter((m) => m.modelid === current_.modelid).length > 0
+        ? rowData[0]
+        : current_
+    setCurrent({ ...currentx, modelid: modelidx })
+  }
+
   const onRowSelectedL = (event: RowSelectedEvent) => {
-     console.log('event.data', event)
-    let line:ILineFinancials= isArrayAndNotEmpty(event.data) ?event.data[0]:event.data
-    const  linex:ILineFinancials=line??initialLine
-    setCurrentLine({...linex})
+    if (!event?.data) return
+    const line: ILineFinancials = isArrayAndNotEmpty(event.data) ? event.data[0] : event.data
+    if (!line) return
+
+    // Ignore re-emits for the same line — AG Grid re-fires onRowSelected after
+    // rowData changes and would otherwise overwrite a just-committed amount.
+    if (String(currentLine?.id) === String(line.id)) return
+
+    setCurrentLine({ ...line })
   }
 
   const fmoduleData = (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id)
-  const minHeight=300
-  const maxHeight =650
-  //const minPadding=0
-  //const maxPadding=2
+  const minHeight = 300
+  const maxHeight = 650
   const height = 30
+
   const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
-  const buildTotal =(current:ITransaction|IFinancials) => {
-    //@ts-ignore
-    const trans:IFinancials  = current
-    return trans?.lines?.reduce((acc: number, line: ILineFinancials) => acc + line.amount, 0.0)
+
+  const buildTotal = (current: ITransaction | IFinancials) => {
+    // @ts-ignore
+    const trans: IFinancials = current
+    return trans?.lines?.reduce(
+      (acc: number, line: ILineFinancials) => acc + line.amount,
+      0.0
+    )
   }
-  const formatLines = (line:ILineFinancials) =>  {
-    return  { ...line, amount:line.amount.toLocaleString(locale,  { style: "currency", currency: currency })
+
+  const formatLines = (line: ILineFinancials) => {
+    return {
+      ...line,
+      amount: line.amount.toLocaleString(locale, { style: 'currency', currency }),
     }
   }
 
-  const getData:()=>any = async (): Promise<any>=>  {
-    const ftr_ctx = `${module_.ctx}/${current.oid}/${formEnum.CUSTOMER_INVOICE}/${company}`;
+  const getData: () => any = async (): Promise<any> => {
+    const ftr_ctx = `${module_.ctx}/${current.oid}/${formEnum.CUSTOMER_INVOICE}/${company}`
     const total_ = buildTotal(current)
-    const contact = contactData.find(m=>m.id===current.contact)??initContact
-    const appartmentId= current.costcenter.substring(current.costcenter.length - 2, current.costcenter.length )
+    const contact = contactData.find((m) => m.id === current.contact) ?? initContact
+    const appartmentId = current.costcenter.substring(
+      current.costcenter.length - 2,
+      current.costcenter.length
+    )
     const year = Number(`${current?.period}`.substring(0, 4))
     const month = Number(`${current?.period}`.substring(5, 6))
-    const monthName= getMonthName(month-1, locale??'fr-FR')
+    const monthName = getMonthName(month - 1, locale ?? 'fr-FR')
     const date = new Date(year, month, 0)
-    const invoiceData  =  await GET4<IFinancials>(ftr_ctx, token)??initFtr;
+    const invoiceData = (await GET4<IFinancials>(ftr_ctx, token)) ?? initFtr
     console.log('invoiceData', invoiceData)
-    const rent = (invoiceData.lines?.at(0)??initLineFinancials).amount
+    const rent = (invoiceData.lines?.at(0) ?? initLineFinancials).amount
     console.log('rent', rent)
-    const lastDay = new Date(date.getFullYear(), date.getMonth() , 0).getDate()
+    const lastDay = new Date(date.getFullYear(), date.getMonth(), 0).getDate()
 
-    const startDay1AsOrdinal= getLocalizedOrdinal(1, locale??'fr-FR')
-    //const lastDayAsOrdinal= getLocalizedOrdinal(lastDay, locale??'fr-FR')
-     //toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
-    const rentx= rent??1
+    const startDay1AsOrdinal = getLocalizedOrdinal(1, locale ?? 'fr-FR')
+    const rentx = rent ?? 1
     const result = {
-      ...current
-
-      , date: new Date().toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
-      , appartmentId: appartmentId
-      , year: year
-      , month: month
-      , from: `${startDay1AsOrdinal} ${monthName} ${year}`
-      , to: `${lastDay} ${monthName} ${year}`
-      , transdate: current.transdate
-      , name:contact.name
-      , rent:(rent??0).toLocaleString('de-DE',  { style: "currency", currency: currency|| 'EUR', useGrouping:true})
-      , numberOfMonth: total_ / rentx
-      , total: total_?.toLocaleString('de-DE',  { style: "currency", currency: currency|| 'EUR', useGrouping:true,}) // or 'symbol')
-      , totalText:toCardinal(total_).split(" ").map(capitalizeFirst).join(".")
-      , lines: current.lines.map(formatLines)
+      ...current,
+      date: new Date().toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }),
+      appartmentId,
+      year,
+      month,
+      from: `${startDay1AsOrdinal} ${monthName} ${year}`,
+      to: `${lastDay} ${monthName} ${year}`,
+      transdate: current.transdate,
+      name: contact.name,
+      rent: (rent ?? 0).toLocaleString('de-DE', {
+        style: 'currency',
+        currency: currency || 'EUR',
+        useGrouping: true,
+      }),
+      numberOfMonth: total_ / rentx,
+      total: total_?.toLocaleString('de-DE', {
+        style: 'currency',
+        currency: currency || 'EUR',
+        useGrouping: true,
+      }),
+      totalText: toCardinal(total_).split(' ').map(capitalizeFirst).join('.'),
+      lines: current.lines.map(formatLines),
     }
     console.log('getData result', result)
-    return result;
+    return result
   }
-   const getMonth =(d:ReminderBalance) => {
-     const month = new Date(Number(d?.period.toString().substring(0, 4))
-       , Number(d?.period.toString().substring(4, 6))-1
-       , 5, 0, 0, 0, 0).toLocaleDateString(locale, {month: 'long'})
-     return capitalizeFirst (month)
-   }
-//"ftr" / long("id") ?? Doc.p(idDoc) / int("modelid")
-    const getData2 =  async (): Promise<{"id": string, "lines":any[]}>=> {
-      const ctx = `${module_.ctx}/balance/${current.account}/${company}`;
-      const appartmentId= current.costcenter.substring(current.costcenter.length - 2, current.costcenter.length )
-      const data  =  await GetListData<ReminderBalance>(ctx, token, formEnum.REMINDER_BALANCE);
-      const contact = contactData.find(m=>m.id===current.contact)??initContact
-      const total = Number(data.reduce((acc: number, line: ReminderBalance) => acc + line.balance, 0.0))
-      setReminderBalance(data);
-      const result = {
-        id: current.id.toString(), //data[data.length - 1].id,
-        appartmentId:appartmentId,
-        name:contact.name,
-        date: new Date().toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"}),
-        month: getMonth(data[data.length - 1]),
-        year: Number(`${data[data.length - 1]?.period}`.substring(0, 4)),
-        total:total.toLocaleString('de-DE',  { style: "currency", currency: currency, useGrouping:true }),
-        totalText:toCardinal(total).split(" ").map(capitalizeFirst).join("."),
-        lines: data.map((d: ReminderBalance) => ({
-          id: d.id,
-          month: getMonth(d),
-          year: Number(`${d.period}`.substring(0, 4)),
-          balance: Number(d.balance).toLocaleString('de-DE',  { style: "currency", currency: currency|| 'EUR'
-                                                                      , useGrouping:true})
-        }))
-      }
-      console.log('reminderBalance', reminderBalance)
-      console.log('fresh reminderBalance', result)
-      return result
-    };
-  const chunkSize = 20;
-  const processImport = (dataToImport:IFinancials[]) =>{
-    console.log('processImport', processImport)
-    const ctx = '/ftrL'
-    let arr = []
-    for (let i = 0; i < dataToImport.length; i += chunkSize) {
-      const chunk = dataToImport.slice(i, i + chunkSize);
-      arr.push(AddList(ctx, token, chunk, rowData, setRowData))
+
+  const getMonth = (d: ReminderBalance) => {
+    const month = new Date(
+      Number(d?.period.toString().substring(0, 4)),
+      Number(d?.period.toString().substring(4, 6)) - 1,
+      5, 0, 0, 0, 0
+    ).toLocaleDateString(locale, { month: 'long' })
+    return capitalizeFirst(month)
+  }
+
+  const getData2 = async (): Promise<{ id: string; lines: any[] }> => {
+    const ctx_ = `${module_.ctx}/balance/${current.account}/${company}`
+    const appartmentId = current.costcenter.substring(
+      current.costcenter.length - 2,
+      current.costcenter.length
+    )
+    const data = await GetListData<ReminderBalance>(ctx_, token, formEnum.REMINDER_BALANCE)
+    const contact = contactData.find((m) => m.id === current.contact) ?? initContact
+    const total = Number(data.reduce((acc: number, line: ReminderBalance) => acc + line.balance, 0.0))
+    setReminderBalance(data)
+    const result = {
+      id: current.id.toString(),
+      appartmentId,
+      name: contact.name,
+      date: new Date().toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }),
+      month: getMonth(data[data.length - 1]),
+      year: Number(`${data[data.length - 1]?.period}`.substring(0, 4)),
+      total: total.toLocaleString('de-DE', {
+        style: 'currency',
+        currency,
+        useGrouping: true,
+      }),
+      totalText: toCardinal(total).split(' ').map(capitalizeFirst).join('.'),
+      lines: data.map((d: ReminderBalance) => ({
+        id: d.id,
+        month: getMonth(d),
+        year: Number(`${d.period}`.substring(0, 4)),
+        balance: Number(d.balance).toLocaleString('de-DE', {
+          style: 'currency',
+          currency: currency || 'EUR',
+          useGrouping: true,
+        }),
+      })),
     }
-    Promise.all(arr).then(importedData =>console.log('importedData', importedData))
-
+    console.log('reminderBalance', reminderBalance)
+    console.log('fresh reminderBalance', result)
+    return result
   }
 
-  //console.log('current #E9EFEC #e9ecef #cfdce5 #cfdce5  #F3F0F3 #E3DAF6 #FDF8FD #BDBABD  #D5D3D5 #F1ECFA', current)
-  return isFetching?<CSpinner color="primary" />:(<>
-    <FinancialsFormHead
-      title={title}
-      saveProps={saveProps}
-      collapse={state.collapseForm}
-      initAdd={initAdd}
-      submitEdit={submitEdit}
-      fmodule={fmodule}
-      getData={getData}
-      getData2={getData2}
-      submitPrintPreview={generateDocx}
-      template1EnumId={TEMPLATE_ENUM.FIRST}
-      template2EnumId={TEMPLATE_ENUM.SECOND}
-      submitCancel={submitCancel}
-      onNewLine={onNewLine}
-      onDeleteLine={onDeleteLine}
-      submitPost={submitPost}
-      reload={reload}
-      logout={logout}
-      navigate={navigate}
-      language={language}
-      handleLanguageChange={handleLanguageChange}
-      dispatch={dispatch}
-      toggle={toggle}
-      toggleTable={toggleTable}
-      current={current}
-      t={t}
-      zIndex={zIndex-1}
-      fileInputProps ={{company:company, currency:currency??'EUR'
-        ,  masterfiles:accData, onImportComplete: processImport}
-      }
-    />
-    {/*<div  style={{...stylesx.outer, height:650, boxShadow: '0 20px 50px #BBF', padding: 1, paddingBottom:2, backgroundColor: '#E3F1C5'}} >*/}
-    <div
-      //@ts-ignore
-      style={{ ...styles.outer,   width:'100%', height: 365,  display: !state.collapseForm ? 'none' : ''}}>
-      <FinancialsMainForm collapse ={state.collapseForm}
-                          current={current??current_}
-                          setCurrent={setCurrent}
-                          accData={accData}
-                          storeData={ccData}
-                          contactData={contactData}
-                          modules={fmoduleData}
-                          copyFromTransaction={copyFromTransaction}
-                          handleModuleChange={handleModuleChange}
-                          submitCopy={copyCall}
-                          accountFilter={accFilter}
-                          oaccountFilter={oaccFilter}
-                          currentLineFinancials ={currentLine??initialLine}
-                          setCurrentLineFinancials={setCurrentLine}
-                          t={t} height ={height}
-                          zIndex={zIndex-2}
-                          locale={locale??'fr-GN'}
-                          currency={currency??'GNF'}/>
+  const chunkSize = 20
+  const processImport = (dataToImport: IFinancials[]) => {
+    const ctx_ = '/ftrL'
+    const arr = []
+    for (let i = 0; i < dataToImport.length; i += chunkSize) {
+      const chunk = dataToImport.slice(i, i + chunkSize)
+      arr.push(AddList(ctx_, token, chunk, rowData, setRowData))
+    }
+    Promise.all(arr).then((importedData) => console.log('importedData', importedData))
+  }
+
+  // ── Render ──────────────────────────────────────────────────────────────
+  return isFetching ? (
+    <CSpinner color="primary" />
+  ) : (
+    <>
+      <FinancialsFormHead
+        title={title}
+        saveProps={saveProps}
+        collapse={state.collapseForm}
+        initAdd={initAdd}
+        submitEdit={submitEdit}
+        fmodule={fmodule}
+        getData={getData}
+        getData2={getData2}
+        submitPrintPreview={generateDocx}
+        template1EnumId={TEMPLATE_ENUM.FIRST}
+        template2EnumId={TEMPLATE_ENUM.SECOND}
+        submitCancel={submitCancel}
+        onNewLine={onNewLine}
+        onDeleteLine={onDeleteLine}
+        submitPost={submitPost}
+        reload={reload}
+        logout={logout}
+        navigate={navigate}
+        language={language}
+        handleLanguageChange={handleLanguageChange}
+        dispatch={dispatch}
+        toggle={toggle}
+        toggleTable={toggleTable}
+        current={current}
+        t={t}
+        zIndex={zIndex - 1}
+        fileInputProps={{
+          company,
+          currency: currency ?? 'EUR',
+          masterfiles: accData,
+          onImportComplete: processImport,
+        }}
+      />
+
       <div
         // @ts-ignore
-            style={{...stylesx.outer, display: !state.collapseForm?'none':'', width: '100%', height: 160
-              , padding: 2, paddingTop: 3, zIndex:4}}>
-        <LineTFinancialsGrid
+        style={{
+          ...styles.outer,
+          width: '100%',
+          height: 365,
+          display: !state.collapseForm ? 'none' : '',
+        }}
+      >
+        <FinancialsMainForm
+          collapse={state.collapseForm}
+          current={current ?? current_}
+          setCurrent={setCurrent}
+          accData={accData}
+          storeData={ccData}
+          contactData={contactData}
+          modules={fmoduleData}
+          copyFromTransaction={copyFromTransaction}
+          handleModuleChange={handleModuleChange}
+          submitCopy={copyCall}
+          accountFilter={accFilter}
+          oaccountFilter={oaccFilter}
+          currentLineFinancials={currentLine ?? initialLine}
+          setCurrentLineFinancials={setCurrentLine}
+          t={t}
+          height={height}
+          zIndex={zIndex - 2}
+          locale={locale ?? 'fr-GN'}
+          currency={currency ?? 'GNF'}
+        />
+
+        <div
           // @ts-ignore
-          theme="legacy" columnDefs={LinesFinancialsColumns(t, locale, currency)} onRowSelected={onRowSelectedL}
-          onGridReady={onGridReady}  rowData={!current.hasOwnProperty('lines')?[{...currentLine
-          , transid:current?.id}]:current.lines} pagination={false} />
+          style={{
+            ...stylesx.outer,
+            display: !state.collapseForm ? 'none' : '',
+            width: '100%',
+            height: 160,
+            padding: 2,
+            paddingTop: 3,
+            zIndex: 4,
+          }}
+        >
+          <LineTFinancialsGrid
+            // @ts-ignore
+            theme="legacy"
+            columnDefs={LinesFinancialsColumns(t, locale ?? 'fr-GN', currency ?? 'GNF')}
+            onRowSelected={onRowSelectedL}
+            onGridReady={onGridReady}
+            rowData={
+              !current.hasOwnProperty('lines')
+                ? [{ ...currentLine, transid: current?.id }]
+                : current.lines
+            }
+            pagination={false}
+          />
+        </div>
       </div>
-    </div>
-    <div
+
+      <div
         // @ts-ignore
-            style={{...stylesx.outer, height:state.collapseForm?minHeight:maxHeight, padding: 2
-              //, paddingTop:state.collapse?minPadding:maxPadding
-              , width: '100%', zIndex: 1, display:state.collapseTable?'':'none'}}
-            maximize direction="column">
+        style={{
+          ...stylesx.outer,
+          height: state.collapseForm ? minHeight : maxHeight,
+          padding: 2,
+          width: '100%',
+          zIndex: 1,
+          display: state.collapseTable ? '' : 'none',
+        }}
+        maximize
+        direction="column"
+      >
         <TransactionGrid
           // @ts-ignore
-          gridOptions ={gridOptions (financialsColumnDefs, locale, currency, LinesFinancialsColumns, t, locale, currency)}
-          onRowSelected={onRowSelected} rowData={rowData}/>
-    </div>
-  </>)
+          gridOptions={gridOptions(
+            (t: any) => financialsColumnDefs(t, locale ?? 'fr-GN', currency ?? 'GNF'),
+            locale ?? 'fr-GN',
+            currency ?? 'GNF',
+            (t: any) => LinesFinancialsColumns(t, locale ?? 'fr-GN', currency ?? 'GNF'),
+            t
+          )}
+          onRowSelected={onRowSelected}
+          rowData={rowData}
+        />
+      </div>
+    </>
+  )
 }
+
 export default FinancialsForm

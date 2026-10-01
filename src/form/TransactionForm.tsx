@@ -1,21 +1,26 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import {
   AllCommunityModule,
-  ClientSideRowModelModule, //ColDef,
-  //GridOptions,
+  ClientSideRowModelModule,
   GridReadyEvent,
- // IDetailCellRendererParams,
   ModuleRegistry,
 } from 'ag-grid-community'
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-import {styles} from './BasicTreeTableProps.tsx'
+import { styles } from './BasicTreeTableProps.tsx'
 // @ts-ignore
-import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {FinancialsFormHead} from './FinancialsFormHead.tsx'
-import {TransactionMainForm} from './TransactionMainForm.tsx'
-import {initCust, initfModule, initLineTransaction, initLtr, MASTERFILE, TRANSACTION} from './Menu.tsx'
+import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
+import { FinancialsFormHead } from './FinancialsFormHead.tsx'
+import { TransactionMainForm } from './TransactionMainForm.tsx'
+import {
+  initCust,
+  initfModule,
+  initLineTransaction,
+  initLtr,
+  MASTERFILE,
+  TRANSACTION,
+} from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 
 import {
@@ -29,302 +34,390 @@ import {
   IStore,
   ISupplier,
   ITransaction,
-  IVat, ReminderBalance,
+  IVat,
+  ReminderBalance,
 } from '../Models.ts'
-import {TransactionGrid} from '../IWSGrid.tsx'
-import {lineTransactionColumnDefs, transactionColumnDefs} from '../ColumnsDefs.ts'
-import {isLoaded, logout} from '../utils/FormUtils.tsx'
+import { TransactionGrid } from '../IWSGrid.tsx'
+import {
+  lineTransactionColumnDefs,
+  transactionColumnDefs
+} from '../ColumnsDefs.ts'
+import { isLoaded, logout } from '../utils/FormUtils.tsx'
 import Login from './Login.tsx'
-import {CSpinner} from "@coreui/react-pro";
-import {TransactionDetailsTabs} from './TransactionDetailsTabs.tsx'
-import {useNavigate} from 'react-router-dom'
-import {useDispatch} from 'react-redux'
-import {capitalizeFirst, generateDocx} from './../utils/XlsUtils.ts'
+import { CSpinner } from '@coreui/react-pro'
+import { TransactionDetailsTabs } from './TransactionDetailsTabs.tsx'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { capitalizeFirst, generateDocx } from './../utils/XlsUtils.ts'
 import useTransactionForm from './UseTransactionForm.ts'
 import useForm from './UseForm.ts'
-import {formEnum} from '../utils/FormEnum.tsx'
-import {Get, Get3, GetListData, Gets} from './CrudController.ts'
-//import {TFunction} from "i18next";
-import {toCardinal} from "n2words/fr-FR";
-import {TEMPLATE_ENUM} from "../Props.ts";
-import {capitalize1rst, getMonthName} from "../utils/Utils.ts";
+import { formEnum } from '../utils/FormEnum.tsx'
+import { Get, Get3, GetListData, Gets } from './CrudController.ts'
+import { toCardinal } from 'n2words/fr-FR'
+import { TEMPLATE_ENUM } from '../Props.ts'
+import { capitalize1rst, getMonthName } from '../utils/Utils.ts'
 
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule])
 
-ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
-
-  const TransactionForm = () => {
-  const [{profile, selected, t, toggle, toggleTable, state, module_, modelid }] = useForm()
+const TransactionForm = () => {
+  // ── 1. All hooks first, unconditional ───────────────────────────────────
+  const [{ profile, selected, t, toggle, toggleTable, state, module_, modelid }] = useForm()
   const { token, currency, locale, company } = profile
-  const localex = locale??'fr-FR'
-  const currencyx = currency??'EUR'
+  const localex = locale ?? 'fr-FR'
+  const currencyx = currency ?? 'EUR'
   const dispatch = useDispatch()
-  let navigate = useNavigate()
-  if (module_ === '11111' || module_ === 11111) return <Login/>
-  let title_ = `${company}/${t(module_.title)}`
-  const initialState:ITransaction = initLtr
-  const initialLine:ILineTransaction = {...initLineTransaction, currency:currency??localex}
-  const current_:ITransaction = initialState
+  const navigate = useNavigate()
+
+  const isLogin = module_ === '11111' || module_ === 11111
+
+  // Guard module_.title access — when isLogin is true, module_ is a sentinel
+  const titleText = isLogin ? company : `${company}/${t((module_ as any)?.title)}`
+
+  const initialState: ITransaction = initLtr
+  const initialLine: ILineTransaction = {
+    ...initLineTransaction,
+    currency: currency ?? localex,
+  }
+  const current_: ITransaction = initialState
+
   const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
   const [rowData, setRowData] = useState<ITransaction[]>([])
   const [model, setModel] = useState<number>(-1)
-  const  [{  language,  fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction
-    , setCopyFromTransaction, onRowSelected, onNewLine, handleLanguageChange
-     , onDeleteLine, submitCancel, submitPost, copyCall, setGridApi, zIndex, saveProps, isFetching
-    , setIsFetching, gridOptions }] =
-     useTransactionForm(current_??initLtr, initialLine, currentLine, setCurrentLine, rowData, setRowData, model)
 
-   const fmoduleData= (fmodule ??[]).filter((m: IFmodule) => m.parent === TRANSACTION.id)
-   //const acc_modelid = formEnum.ACCOUNT
-   const art_modelid = formEnum.ARTICLE
-   const vat_modelid = formEnum.VAT
-   const store_modelid = formEnum.STORE
-   const sup_modelid = formEnum.SUPPLIER
-   const cust_modelid = formEnum.CUSTOMER
-   const acc_modelid = formEnum.ACCOUNT
-   const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
-   const art_ctx = `${MASTERFILE.article}/${art_modelid}/${company}`
-   const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
-   const store_ctx = `${MASTERFILE.store}/${store_modelid}/${company}`
-   const sup_ctx = `${MASTERFILE.sup}/${sup_modelid}/${company}`
-   const cust_ctx = `${MASTERFILE.cust}/${cust_modelid}/${company}`
-   const [accData, setAccData] = useState<IAccount[]>([])
-   const [storeData, setStoreData] = useState<IStore[]>([])
-   const [articleData, setArticleData] = useState<IArticle[]>([])
-   const [vatData, setVatData] = useState<IVat[]>([])
-   const [customerData, setCustomerData] = useState<ICustomer[]>([])
-   const [, setSupplier] = useState<ISupplier[]>([])
-   const [, setPartnerData] = useState<ICustomer[]|ISupplier[]>([initCust])
-   const [partnerId, setPartnerId] = useState<number>(-1)
-   const [accFilter, setAccFilter] = useState<string[]>([])
-   const [oaccFilter, setOAccFilter] = useState<string[]>([])
-   const [title, setTitle] = useState(title_)
-    //const [forceUpdate, setForceUpdate] = useState(false)
-   const [reminderBalance, setReminderBalance] = useState<ReminderBalance[]>([])
-   console.log('current', current)
-   useEffect(() => {
-     Promise.all([
-        Get(art_ctx, token, art_modelid, setArticleData),
-        Get(store_ctx, token, store_modelid, setStoreData),
-        Get(vat_ctx, token, vat_modelid, setVatData),
-        Get(cust_ctx, token, cust_modelid, setCustomerData),
-        Get(sup_ctx, token, sup_modelid, setSupplier),
-        Get(acc_ctx, token, acc_modelid, setAccData)
-     ]).then(() => {
-       console.log('All data fetched successfully');
-       // additional logic after all requests complete
-     }).catch(error => {
-       console.error('Error fetching data', error);
-     });
-   },[selected])
-   //},[selected, forceUpdate])
-    useEffect(() => {
-    },[current])
+  const [{language, fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction, setCopyFromTransaction,
+    onRowSelected, onNewLine, handleLanguageChange, onDeleteLine, submitCancel, submitPost, copyCall, setGridApi,
+    zIndex, saveProps, isFetching, setIsFetching, gridOptions,
+  }] = useTransactionForm(current_ ?? initLtr, initialLine, currentLine, setCurrentLine, rowData, setRowData, model)
 
-     const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
-     const minHeight=220
-     const maxHeight = 800
-     const height = 35
-     const formatLines = (line:ILineTransaction|ILineFinancials):ILineTransaction|ILineFinancials =>  {
-     // @ts-ignore
-     return {
-       ...line
-       // @ts-ignore
-       , quantity: line.quantity.toLocaleString('de-DE')//<- DO NOT CHANGE THIS or you loose the decimal point
-       // @ts-ignore
-       , price: line.price.toLocaleString('de-DE')//<- DO NOT CHANGE THIS or you loose the decimal point
-       // @ts-ignore
-       , vat: line.vat.toLocaleString('de-DE')//<- DO NOT CHANGE THIS or you loose the decimal point
-       // @ts-ignore
-       , net: (line.quantity * line.price + line.vat).toLocaleString('de-DE') //<- DO NOT CHANGE THIS or you loose the decimal point
-     }
-   }
-    const buildVatTotal = (current: ITransaction|IFinancials) =>{
-      //@ts-ignore
-      return  current?.lines?.reduce((acc: number, line: ILineTransaction) => acc + line.vat, 0.0)
+  const fmoduleData = (fmodule ?? []).filter((m: IFmodule) => m.parent === TRANSACTION.id)
+
+  // modelid constants
+  const art_modelid = formEnum.ARTICLE
+  const vat_modelid = formEnum.VAT
+  const store_modelid = formEnum.STORE
+  const sup_modelid = formEnum.SUPPLIER
+  const cust_modelid = formEnum.CUSTOMER
+  const acc_modelid = formEnum.ACCOUNT
+
+  // contexts
+  const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
+  const art_ctx = `${MASTERFILE.article}/${art_modelid}/${company}`
+  const vat_ctx = `${MASTERFILE.vat}/${vat_modelid}/${company}`
+  const store_ctx = `${MASTERFILE.store}/${store_modelid}/${company}`
+  const sup_ctx = `${MASTERFILE.sup}/${sup_modelid}/${company}`
+  const cust_ctx = `${MASTERFILE.cust}/${cust_modelid}/${company}`
+
+  // data states
+  const [accData, setAccData] = useState<IAccount[]>([])
+  const [storeData, setStoreData] = useState<IStore[]>([])
+  const [articleData, setArticleData] = useState<IArticle[]>([])
+  const [vatData, setVatData] = useState<IVat[]>([])
+  const [customerData, setCustomerData] = useState<ICustomer[]>([])
+  const [, setSupplier] = useState<ISupplier[]>([])
+  const [, setPartnerData] = useState<ICustomer[] | ISupplier[]>([initCust])
+  const [partnerId, setPartnerId] = useState<number>(-1)
+  const [accFilter, setAccFilter] = useState<string[]>([])
+  const [oaccFilter, setOAccFilter] = useState<string[]>([])
+  const [title, setTitle] = useState(titleText)
+  const [reminderBalance, setReminderBalance] = useState<ReminderBalance[]>([])
+
+  useEffect(() => {
+    Promise.all([
+      Get(art_ctx, token, art_modelid, setArticleData),
+      Get(store_ctx, token, store_modelid, setStoreData),
+      Get(vat_ctx, token, vat_modelid, setVatData),
+      Get(cust_ctx, token, cust_modelid, setCustomerData),
+      Get(sup_ctx, token, sup_modelid, setSupplier),
+      Get(acc_ctx, token, acc_modelid, setAccData),
+    ])
+      .then(() => {
+        console.log('All data fetched successfully')
+      })
+      .catch((error) => {
+        console.error('Error fetching data', error)
+      })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected])
+
+
+  if (isLogin) return <Login />
+
+  const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
+
+  const minHeight = 220
+  const maxHeight = 800
+  const height = 35
+
+  const formatLines = (
+    line: ILineTransaction | ILineFinancials
+  ): ILineTransaction | ILineFinancials => {
+    // @ts-ignore
+    return {
+      ...line,
+      // @ts-ignore
+      quantity: line.quantity.toLocaleString('de-DE'),
+      // @ts-ignore
+      price: line.price.toLocaleString('de-DE'),
+      // @ts-ignore
+      vat: line.vat.toLocaleString('de-DE'),
+      // @ts-ignore
+      net: (line.quantity * line.price + line.vat).toLocaleString('de-DE'),
     }
-   const buildTotal = (current: ITransaction|IFinancials) =>{
-     //@ts-ignore
-     const trans:ITransaction  = current
-     return  trans?.lines?.reduce((acc: number, line: ILineTransaction) => acc + line.quantity * line.price + line.vat, 0.0)
-   }
-      const getData: ()=>any = ()=>  {
-      const total = buildTotal(current)
-      const customer = customerData.find(m=>m.id===current.account)??initCust
-      const  address = `${customer.street} ${customer.city} ${customer.country}`
-      const year = Number(`${current.period}`.substring(0, 4))
-      const month = Number(`${current.period}`.substring(5, 6))
-      const monthName= capitalize1rst(getMonthName(month-1, locale??'fr-FR'))
-     const result = {
-       id:current.id
-       , oid:current.oid
-       , customerId:current.account
-       , name:customer.name
-       , phone:customer.phone
-       , address:address
-       , date: new Date().toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
-       , transdate: new Date(current?.transdate).toLocaleDateString(locale, {day:"numeric", month: "long", year: "numeric"})
-       , period: `${monthName} ${year}`
-       , total:   total?.toLocaleString(locale,  { style: "currency", currency: currency })
-       , vatTotal: buildVatTotal(current)
-       , totalText:toCardinal(total).split(" ").map(capitalizeFirst).join(" ")
-       , lines: current.lines.map(formatLines)
-       , text:current.text
-       , footText:current.footText
-     }
-        console.log('result', result)
-        return result
-   }
-    const getData2 =  async (): Promise<ReminderBalance[]>=> {
-      const ctx = `${module_.ctx}/${current.account}/${company}`;
-      const data  =  await GetListData<ReminderBalance>(ctx, token, formEnum.REMINDER_BALANCE);
-      setReminderBalance(data);
-      console.log('reminderBalance', reminderBalance)
-      console.log('fresh reminderBalance', data)
-      return data;
-    };
+  }
 
-    const submitQuery = async (ctx:string, partnerCtx:string, partnerModelid:number) => {
-      setIsFetching(true)
-      try {
-        await Promise.all([
-          !isLoaded(art_modelid) && Get(art_ctx, token, art_modelid, setArticleData),
-          !isLoaded(store_modelid) && Get(store_ctx, token, store_modelid, setStoreData),
-          !isLoaded(vat_modelid) && Get(vat_ctx, token, vat_modelid, setVatData),
-          partnerModelid&&!isLoaded(partnerModelid) && Get(partnerCtx, token, partnerModelid, setPartnerData),
-          Get3(ctx, token, modelid, current_, setRowData, setCurrent),
-        ]);
-        console.log('All data fetched successfully');
-        // Now rowData has been updated (assuming Get3 calls setRowData)
-      } catch (error) {
-        console.error('Error fetching data', error);
-      } finally {
-        setIsFetching(false);
-      }
-    };
+  const buildVatTotal = (current: ITransaction | IFinancials) =>
+     ((current?.lines ?? []) as ILineTransaction[]).reduce((acc, line) =>
+              acc + line.vat, 0.0)
 
-    const processIport = (data2Import:ITransaction[]) =>{
-      console.log('data2Import', data2Import)
+  const buildTotal = (current: ITransaction | IFinancials) =>
+     (current as ITransaction)?.lines?.reduce((acc: number, line: ILineTransaction) =>
+        acc + line.quantity * line.price + line.vat, 0.0)
+
+  const getData: () => any = () => {
+    const total = buildTotal(current)
+    const customer = customerData.find((m) => m.id === current.account) ?? initCust
+    const address = `${customer.street} ${customer.city} ${customer.country}`
+    const year = Number(`${current.period}`.substring(0, 4))
+    const month = Number(`${current.period}`.substring(5, 6))
+    const monthName = capitalize1rst(getMonthName(month - 1, locale ?? 'fr-FR'))
+    const result = {
+      id: current.id,
+      oid: current.oid,
+      customerId: current.account,
+      name: customer.name,
+      phone: customer.phone,
+      address,
+      date: new Date().toLocaleDateString(locale, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }),
+      transdate: new Date(current?.transdate).toLocaleDateString(locale, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }),
+      period: `${monthName} ${year}`,
+      total: total?.toLocaleString(locale, { style: 'currency', currency }),
+      vatTotal: buildVatTotal(current),
+      totalText: toCardinal(total).split(' ').map(capitalizeFirst).join(' '),
+      lines: current.lines.map(formatLines),
+      text: current.text,
+      footText: current.footText,
     }
-    const handleModuleChange = async (selected: any) => {
-      // 1. Extract the ID from the selected option (object or primitive)
-      const id = selected?.value !== undefined ? String(selected.value) : String(selected);
-      const numericId = parseInt(id, 10);
-      // 2. Update the model state with the numeric ID
-      setModel(numericId);
+    console.log('result', result)
+    return result
+  }
 
-      // 3. Find the module using the numeric ID
-      const mx: IFmodule = fmodule.find((m: IFmodule) => parseInt(`${m?.id}`, 10) === numericId) ?? initfModule;
+  const getData2 = async (): Promise<ReminderBalance[]> => {
+    const ctx = `${module_.ctx}/${current.account}/${company}`
+    const data = await GetListData<ReminderBalance>(ctx, token, formEnum.REMINDER_BALANCE)
+    setReminderBalance(data)
+    console.log('reminderBalance', reminderBalance)
+    console.log('fresh reminderBalance', data)
+    return data
+  }
 
-      // 4. Update title
-      title_ = mx?.name ? mx.name : title_;
+  const submitQuery = async (
+    ctx: string,
+    partnerCtx: string,
+    partnerModelid: number
+  ) => {
+    setIsFetching(true)
+    try {
+      await Promise.all([
+        !isLoaded(art_modelid) && Get(art_ctx, token, art_modelid, setArticleData),
+        !isLoaded(store_modelid) && Get(store_ctx, token, store_modelid, setStoreData),
+        !isLoaded(vat_modelid) && Get(vat_ctx, token, vat_modelid, setVatData),
+        partnerModelid &&
+        !isLoaded(partnerModelid) &&
+        Get(partnerCtx, token, partnerModelid, setPartnerData),
+        Get3(ctx, token, modelid, current_, setRowData, setCurrent),
+      ])
+      console.log('All data fetched successfully')
+    } catch (error) {
+      console.error('Error fetching data', error)
+    } finally {
+      setIsFetching(false)
+    }
+  }
 
-      // 5. CopyFrom IDs – safely handle undefined
-      const copyFromIds = mx?.copyFrom
-        ? mx.copyFrom.split(',').map((modelid: string) => parseInt(modelid, 10))
-        : [];
+  const processIport = (data2Import: ITransaction[]) => {
+    console.log('data2Import', data2Import)
+  }
 
-      // 6. Update UI state
-      const titlex = `${company}/${title_}`;
-      setTitle(titlex);
-      setPartnerId(parseInt(mx?.account, 10));
-      console.log('mx', mx);
+  const handleModuleChange = async (selected: any) => {
+    const id = selected?.value !== undefined ? String(selected.value) : String(selected)
+    const numericId = parseInt(id, 10)
+    setModel(numericId)
 
-      // 7. Filter arrays – guard against undefined
-      setAccFilter(mx?.accFilter?.replace(/\s/g, '').split(',') ?? []);
-      setOAccFilter(mx?.oaccFilter?.replace(/\s/g, '').split(',') ?? []);
+    const mx: IFmodule =
+      fmodule.find((m: IFmodule) => parseInt(`${m?.id}`, 10) === numericId) ?? initfModule
 
-      // 8. Build contexts
-      const ctx = `${module_.ctx}/${mx.id}/${company}`;
-      const ctx_copyFrom = `${module_.ctx}/${copyFromIds.join(',')}/${company}`; // join with commas
+    // Build title from module name (no mutation of outer scope)
+    const moduleName = mx?.name ?? titleText
+    const titlex = `${company}/${moduleName}`
+    setTitle(titlex)
 
-      const partnerType = parseInt(mx?.account, 10);
-      const _partnerCtx =
-        partnerType === formEnum.CUSTOMER ? MASTERFILE.cust :
-          partnerType === formEnum.SUPPLIER ? MASTERFILE.sup :
-            partnerType === formEnum.ACCOUNT ? MASTERFILE.acc :
-              partnerType === formEnum.STORE ? MASTERFILE.store :
-                '';
-      console.log('_partnerCtx', _partnerCtx);
+    const copyFromIds = mx?.copyFrom
+      ? mx.copyFrom.split(',').map((modelid: string) => parseInt(modelid, 10)) : []
 
-      const partnerCtx = `${_partnerCtx}/${partnerType}/${company}`;
+    setPartnerId(parseInt(mx?.account, 10))
+    console.log('mx', mx)
 
-      // 9. Fetch copyFrom transactions if any
-      if (copyFromIds.length === 0) {
-        console.log('No transaction to copy from available!!!', copyFromIds);
-      } else {
-        await Gets(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction);
-      }
+    setAccFilter(mx?.accFilter?.replace(/\s/g, '').split(',') ?? [])
+    setOAccFilter(mx?.oaccFilter?.replace(/\s/g, '').split(',') ?? [])
 
-      // 10. Submit main query if partner context exists
-      if (_partnerCtx.length > 0) {
-        submitQuery(ctx, partnerCtx, partnerType);
-      }
-    };
+    const ctx = `${module_.ctx}/${mx.id}/${company}`
+    const ctx_copyFrom = `${module_.ctx}/${copyFromIds.join(',')}/${company}`
 
-    const accData1:ICustomer[]|ISupplier[] = iwsStore.getByModelId(partnerId) as ICustomer[] | ISupplier[] ?? [initCust]//.filter(m=>!m.id.toString().includes('*'))
-    const accDatax:ICustomer[]|ISupplier[]|IAccount[]= (model ===formEnum.ACCOUNT)? accData:accData1
-    const stData = storeData?.filter(m=>!m.id.toString().includes('*'))
-    return isFetching?<CSpinner color="primary" />:<>
-            <FinancialsFormHead
-                title={title}
-                saveProps={saveProps}
-                collapse={state.collapseForm}
-                initAdd={initAdd}
-                submitCancel={submitCancel}
-                submitEdit={submitEdit}
-                onNewLine={onNewLine}
-                onDeleteLine={onDeleteLine}
-                submitPost={submitPost}
-                getData={getData}
-                getData2={getData2}
-                fmodule={fmodule}
-                submitPrintPreview={generateDocx}
-                template1EnumId={TEMPLATE_ENUM.FIRST}
-                template2EnumId={TEMPLATE_ENUM.SECOND}
-                reload={reload}
-                logout={logout}
-                navigate={navigate}
-                language={language}
-                handleLanguageChange={handleLanguageChange}
-                dispatch={dispatch}
-                toggle={toggle}
-                toggleTable={toggleTable}
-                current={current}
-                t={t}
-                zIndex={zIndex??99999}
-                fileInputProps ={{company:company, currency:currency??'EUR'
-                  , masterfiles:accData, onImportComplete: processIport}}
+    const partnerType = parseInt(mx?.account, 10)
+    const _partnerCtx =
+      partnerType === formEnum.CUSTOMER
+        ? MASTERFILE.cust
+        : partnerType === formEnum.SUPPLIER
+          ? MASTERFILE.sup
+          : partnerType === formEnum.ACCOUNT
+            ? MASTERFILE.acc
+            : partnerType === formEnum.STORE
+              ? MASTERFILE.store
+              : ''
+    console.log('_partnerCtx', _partnerCtx)
+    const partnerCtx = `${_partnerCtx}/${partnerType}/${company}`
+
+    if (copyFromIds.length === 0) {
+      console.log('No transaction to copy from available!!!', copyFromIds)
+    } else {
+      await Gets(ctx_copyFrom, token, copyFromIds, setCopyFromTransaction)
+    }
+
+    if (_partnerCtx.length > 0) {
+      submitQuery(ctx, partnerCtx, partnerType)
+    }
+  }
+
+  const accData1: ICustomer[] | ISupplier[] = (iwsStore.getByModelId(partnerId) as ICustomer[] | ISupplier[]) ?? [initCust]
+  const accDatax: ICustomer[] | ISupplier[] | IAccount[] = model === formEnum.ACCOUNT ? accData : accData1
+  const stData = storeData?.filter((m) => !m.id.toString().includes('*'))
+
+  return isFetching ? (
+    <CSpinner color="primary" />
+  ) : (
+    <>
+      <FinancialsFormHead
+        title={title}
+        saveProps={saveProps}
+        collapse={state.collapseForm}
+        initAdd={initAdd}
+        submitCancel={submitCancel}
+        submitEdit={submitEdit}
+        onNewLine={onNewLine}
+        onDeleteLine={onDeleteLine}
+        submitPost={submitPost}
+        getData={getData}
+        getData2={getData2}
+        fmodule={fmodule}
+        submitPrintPreview={generateDocx}
+        template1EnumId={TEMPLATE_ENUM.FIRST}
+        template2EnumId={TEMPLATE_ENUM.SECOND}
+        reload={reload}
+        logout={logout}
+        navigate={navigate}
+        language={language}
+        handleLanguageChange={handleLanguageChange}
+        dispatch={dispatch}
+        toggle={toggle}
+        toggleTable={toggleTable}
+        current={current}
+        t={t}
+        zIndex={zIndex ?? 99999}
+        fileInputProps={{
+          company,
+          currency: currency ?? 'EUR',
+          masterfiles: accData,
+          onImportComplete: processIport,
+        }}
+      />
+
+      <div
+        // @ts-ignore
+        style={{
+          ...styles.outer,
+          width: '100%',
+          height: 380,
+          display: !state.collapseForm ? 'none' : '',
+        }}
+      >
+        <TransactionMainForm
+          collapse={state.collapseForm}
+          current={current ?? current_}
+          setCurrent={setCurrent}
+          t={t}
+          accData={accDatax}
+          storeData={stData}
+          modules={fmoduleData}
+          copyFromTransaction={copyFromTransaction}
+          handleModuleChange={handleModuleChange}
+          submitCopy={copyCall}
+          height={height}
+          zIndex={zIndex - 2}
+          locale={locale ?? localex}
+          currency={currency ?? currencyx}
         />
-       <div
-       //@ts-ignore
-         style={{ ...styles.outer,   width:'100%', height: 380,  display: !state.collapseForm ? 'none' : ''}}>
-          <TransactionMainForm collapse={state.collapseForm} current={current??current_} setCurrent={setCurrent}
-                               t={t} accData={accDatax}
-                               storeData={stData} modules={fmoduleData}
-                               copyFromTransaction={copyFromTransaction}
-                               handleModuleChange={handleModuleChange}
-                               submitCopy={copyCall}
-                               height={height} zIndex={zIndex-2} locale = {locale} currency ={currency}/>
-          <div
-            // @ts-ignore
-            style={{ backgroundColor: 'transparent',  padding:1, display: !state.collapseForm?'none':'', width: '100%'}}>
-              <TransactionDetailsTabs   collapseTable ={state.collapseTable} transaction={current}  setTransaction={setCurrent}
-                                        currentLineTransaction ={currentLine}
-                                        setCurrentLineTransaction={setCurrentLine}
-                                        accountFilter={accFilter} oaccountFilter={oaccFilter}
-                                        articleData={articleData??[]} vatData={vatData??[]}  t={t}
-                                        onGridReady={onGridReady}  zIndex={2} locale={locale??localex} currency={currency??currencyx}/>
-          </div>
-       </div>
-       <div
-           // @ts-ignore
-            style={{...styles.outer,  height:state.collapseForm?minHeight:maxHeight, width: '100%'
-                  , zIndex:1, display:state.collapseTable?'':'none'}}>
-         <TransactionGrid
-           //@ts-ignore
-           gridOptions ={gridOptions (transactionColumnDefs, locale, currency, lineTransactionColumnDefs, t)}  columnDefs={transactionColumnDefs(t,locale, currency)}
-                             onRowSelected={onRowSelected} rowData={rowData}/>
-       </div>
+
+        <div
+          // @ts-ignore
+          style={{
+            backgroundColor: 'transparent',
+            padding: 1,
+            display: !state.collapseForm ? 'none' : '',
+            width: '100%',
+          }}
+        >
+          <TransactionDetailsTabs
+            collapseTable={state.collapseTable}
+            transaction={current}
+            setTransaction={setCurrent}
+            currentLineTransaction={currentLine}
+            setCurrentLineTransaction={setCurrentLine}
+            accountFilter={accFilter}
+            oaccountFilter={oaccFilter}
+            articleData={articleData ?? []}
+            vatData={vatData ?? []}
+            t={t}
+            onGridReady={onGridReady}
+            zIndex={2}
+            locale={locale ?? localex}
+            currency={currency ?? currencyx}
+          />
+        </div>
+      </div>
+
+      <div
+        // @ts-ignore
+        style={{
+          ...styles.outer,
+          height: state.collapseForm ? minHeight : maxHeight,
+          width: '100%',
+          zIndex: 1,
+          display: state.collapseTable ? '' : 'none',
+        }}
+      >
+        <TransactionGrid
+          // @ts-ignore
+          gridOptions={gridOptions(
+            (t: any) => transactionColumnDefs(t, locale ?? 'fr-GN', currency ?? 'GNF'),
+            locale ?? 'fr-GN',
+            currency ?? 'GNF',
+            (t: any) => lineTransactionColumnDefs(t, locale ?? 'fr-GN', currency ?? 'GNF'),
+            t
+          )}
+          onRowSelected={onRowSelected}
+          rowData={rowData}
+        />
+      </div>
     </>
+  )
 }
+
 export default TransactionForm

@@ -742,6 +742,15 @@ export const bankStatementColumnDefs = (t: (arg0: string) => any, locale:string,
       minWidth: 20,
       filter: "agTextColumnFilter",
     },
+     {
+       field: 'amount',
+       headerName: t('common.amount'),
+       minWidth: 20,
+       cellStyle: {textAlign: 'right'},
+       filter: "agNumberColumnFilter",
+       valueFormatter: (params:{ data:IBankStatement}) =>
+         !params?.data?'':amountFormatter((p: IBankStatement) => p.amount, params.data, locale, currency)
+     },
     {
       field: 'purpose',
       headerName: t('bankstatement.purpose'),
@@ -781,15 +790,6 @@ export const bankStatementColumnDefs = (t: (arg0: string) => any, locale:string,
       headerName: t('bankstatement.bankCode'),
       minWidth: 20,
       filter: "agTextColumnFilter",
-    },
-    {
-      field: 'amount',
-      headerName: t('common.amount'),
-      minWidth: 20,
-      cellStyle: {textAlign: 'right'},
-      filter: "agNumberColumnFilter",
-      valueFormatter: (params:{ data:IBankStatement}) =>
-       !params?.data?'':amountFormatter((p: IBankStatement) => p.amount, params.data, locale, currency)
     },
     {
       field: 'currency',

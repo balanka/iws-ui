@@ -8,8 +8,8 @@ import {
   GridApi,
   GridOptions,
   IDetailCellRendererParams,
-  ModuleRegistry,
-  RowClassParams,
+  ModuleRegistry, RowClassParams,
+  //RowClassParams,
 } from 'ag-grid-community'
 
 import 'ag-grid-community/styles/ag-grid.css'
@@ -318,56 +318,62 @@ const UseTransactionForm = <
     data: current?.lines ?? [],
   }
 
-  const gridOptions = (
-    columnDefs: (t: TFunction<'transalation', undefined>, locale: string, currency: string) => ColDef[],
-    locale: string,
-    currency: string,
-    lineColumnDefs: (t: TFunction<'transalation', undefined>, locale: string, currency: string) => ColDef[],
-    t: TFunction<'transalation', undefined>
-  ): GridOptions<T> => ({
-    rowStyle: { background: 'lightBlue' },
-    getRowStyle: (params: RowClassParams<T>) => {
-      if (params.node.rowIndex !== null && params.node.rowIndex % 2 === 0) {
-        return { background: '#fff9e6' }
-      }
-      return undefined
-    },
-    defaultColDef: {
-      resizable: true,
-      editable: false,
-      flex: 1,
-      filter: true,
-    },
-    rowHeight: 20,
-    rowSelection: {
-      mode: 'multiRow',
-      checkboxes: true,
-      copySelectedRows: true,
-    },
-    paginationPageSizeSelector: [5, 10, 20, 50],
-    pagination: true,
-    paginationPageSize: 10,
-    detailRowAutoHeight: true,
-    autoSizeStrategy: { type: 'fitGridWidth' as const },
-    columnDefs: columnDefs(t, locale, currency),
-    detailCellRendererParams: {
-      detailGridOptions: {
-        getRowStyle: (params: RowClassParams<any>) => {
-          if (params.node.rowIndex !== null && params.node.rowIndex % 2 === 0) {
-            return { background: '#fff9e6' }
-          }
-          return undefined
-        },
-        columnDefs: lineColumnDefs(t, locale, currency),
-        defaultColDef: { flex: 1 },
-      },
-      getDetailRowData: (params: any) => {
-        params.successCallback(params.data.lines)
-      },
-    } as IDetailCellRendererParams<T, L>,
-  })
 
-  // ── 7. Return ───────────────────────────────────────────────────────────
+  const gridOptions = (
+    columnDefs: (t: TFunction<'transalation', undefined>, locale:string, currency:string ) => ColDef[], locale:string, currency:string
+    , lineColumnDefs: (t: TFunction<'transalation', undefined>, locale:string, currency:string) => ColDef[]
+    , t: TFunction<'transalation', undefined>
+  ): GridOptions<T> => {
+    return {
+      rowStyle: { background: 'lightBlue' },
+
+      // ✅ Correctly typed getRowStyle
+      getRowStyle: (params: RowClassParams<T>) => {
+        if (params.node.rowIndex !== null && params.node.rowIndex % 2 === 0) {
+          return { background: '#fff9e6' };
+        }
+        return undefined; // explicit return for odd rows
+      },
+
+      defaultColDef: {
+        resizable: true,
+        editable: false,
+        flex: 1,
+        filter: true,
+      },
+      rowHeight: 20,
+      rowSelection: {
+        mode: "multiRow",
+        checkboxes: true,
+        copySelectedRows: true,
+      },
+      paginationPageSizeSelector: [5, 10, 20, 50],
+      pagination: true,
+      paginationPageSize: 10,
+      detailRowAutoHeight: true,
+      autoSizeStrategy: {
+        type: 'fitGridWidth' as const,   // ✅ literal type
+      },
+      columnDefs: columnDefs(t, locale, currency),
+      detailCellRendererParams: {
+        detailGridOptions: {
+          getRowStyle: (params: RowClassParams<any>) => {
+            if (params.node.rowIndex !== null && params.node.rowIndex % 2 === 0) {
+              return { background: '#fff9e6' };
+            }
+            return undefined;
+          },
+          columnDefs: lineColumnDefs(t, locale, currency),
+          defaultColDef: { flex: 1 },
+        },
+        getDetailRowData: (params: any) => {
+          params.successCallback(params.data.lines);
+        },
+      } as IDetailCellRendererParams<T, L>,
+    };
+  };
+
+
   return [{
     language,
     fmodule,
