@@ -8,7 +8,7 @@ import '../i18n.tsx';
 import useForm from './UseForm.ts'
 import {LoginForm} from './LoginForm.tsx'
 import {languages} from './languages.ts'
-import {db} from '../utils/db.ts'
+import {db, DEFAULT_COMPANIES} from '../utils/db.ts'
 
 
 
@@ -22,11 +22,19 @@ const Login = () => {
   const [current, setCurrent] = useState(current_)
   const [companyList, setCompanyList] = useState<CompanyType[]>([]);
 
-
   useEffect(() => {
-    db.companies.toArray().then(setCompanyList)
-      .catch(err => console.error('Failed to load companies:', err))
-  }, [])
+    db.companies
+      .toArray()
+      .then(setCompanyList)
+      .catch((err) => {
+        console.warn('Local DB unavailable — using defaults:', err.message);
+        setCompanyList(DEFAULT_COMPANIES);
+      });
+  }, []);
+  // useEffect(() => {
+  //   db.companies.toArray().then(setCompanyList)
+  //     .catch(err => console.error('Failed to load companies:', err))
+  // }, [])
 
   const submit = (event: any) => {
     event.preventDefault()
