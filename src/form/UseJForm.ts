@@ -10,7 +10,7 @@ import {formEnum} from '../utils/FormEnum'
 import {JournalProps} from '../Props.ts'
 import {IAccount, IFmodule, IModule} from '../Models.ts'
 import {UseJFormResult} from '../Props.ts'
-import useForm from './UseForm.ts'
+import useForm from './useForm.ts'
 
 ModuleRegistry.registerModules([
   AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,
@@ -35,7 +35,7 @@ export const  styles = {
   },
 }
 
-const UseJForm = <T>(): [UseJFormResult<T>] => {
+const useJForm = <T>(): [UseJFormResult<T>] => {
   const [{ profile, menu, selected, t, title, modelid, module_}] = useForm()
   const {token, currency, company} = profile
   const acc_modelid = formEnum.ACCOUNT
@@ -82,4 +82,4 @@ const UseJForm = <T>(): [UseJFormResult<T>] => {
   return [{ profile, menu, selected, t, accData, rowData, setRowData, current_, current, setCurrent
     , fmodule, submitQuery, submitQuery2, onRowSelected,  title:title, styles:styles}]
 }
-export default UseJForm
+export default useJForm

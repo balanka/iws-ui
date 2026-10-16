@@ -10,7 +10,7 @@
     import {useState} from "react";
     ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, PinnedRowModule,])
 
-    const   UseForm = (): [UseFormResult] => {
+    const   useForm = (): [UseFormResult] => {
       const {profile, setProfile, menu, setMenu, setModule, setRoutes, selected} = useStore()
       const { company} = profile
       const {t, i18n} = useTranslation()
@@ -35,4 +35,5 @@
       return [{ profile, setProfile, menu, setMenu, setModule, setRoutes, selected, t, i18n, title:title
         , language, setLanguage, handleLanguageChange, toggle, toggleTable, state, modelid, company, module_}]
     }
-    export default UseForm
+    export default useForm
+

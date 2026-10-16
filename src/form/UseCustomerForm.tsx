@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { ReactNode, MutableRefObject, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -17,7 +17,7 @@ import iwsStore from '../utils/Store.tsx'
 import { formEnum } from '../utils/FormEnum.tsx'
 import { IBankAccount, IBusinespartner } from '../Models.ts'
 import { UseCustomerFormResult } from '../Props.ts'
-import useForm from './UseForm.ts'
+import useForm from './useForm.ts'
 import { CustomerGrid } from '../IWSGrid.tsx'
 import { CommonFormHead } from './CommonFormHead'
 import { logout } from '../utils/FormUtils.tsx'
@@ -27,10 +27,10 @@ import { useNavigate } from 'react-router-dom'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule])
 
-export const UseCustomerForm = <T extends IBusinespartner>(
+export const useCustomerForm = <T extends IBusinespartner>(
   current_: T,
   colDef: ColDef[],
-  reload?: () => void
+  reload?: (() => void) | MutableRefObject<() => void>
 ): [UseCustomerFormResult<T>] => {
   const [{
     profile, menu, selected, t, title, language, state,
@@ -43,55 +43,60 @@ export const UseCustomerForm = <T extends IBusinespartner>(
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
-  // ── All hooks first, in stable order ────────────────────────────────────
   const [disable, setDisable] = useState(true)
   const [gridApi, setGridApi] = useState<GridApi>()
   const [current, setCurrent] = useState<T>(current_)
   const [edited, setEdited] = useState<boolean | undefined>(false)
   const [added, setAdded] = useState<boolean | undefined>(undefined)
-  const [rowData, setRowData] = useState<T[]>([])
   const [currentBankAccount, setCurrentBankAccount] = useState<IBankAccount>(initBankAccount)
 
   const ctx = `${selected}/${modelid}/${company}`
   const modifyUrl = selected
 
-  // ── Store subscription: only sync the grid list ─────────────────────────
-  useEffect(() => {
-    const subscription = iwsStore.subscribe(() => {
-      setRowData(iwsStore.getByModelId(modelid) as T[])
-    })
-    return () => subscription.unsubscribe()
-  }, [modelid])
+  // ── Reactive store read via useSyncExternalStore ────────────────────────
+  const snapshot = useSyncExternalStore(
+    iwsStore.subscribeSimple,
+    iwsStore.getRawMap,
+    iwsStore.getRawMap
+  )
 
-  // ── Initial load ────────────────────────────────────────────────────────
-  useEffect(() => {
-    if (rowData.length === 0) {
-      Get(ctx, token, modelid, setRowDataAndStore)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const rowData = useMemo<T[]>(() => {
+    const inner = snapshot.get(modelid)
+    return inner ? (Array.from(inner.values()) as T[]) : []
+  }, [snapshot, modelid])
 
-  // ── Stable callbacks declared BEFORE anything that uses them ───────────
+  // Write-through to the store. React re-renders via the subscription above.
   const setRowDataAndStore = useCallback(
     (value: React.SetStateAction<T[]>) => {
       if (typeof value === 'function') {
-        setRowData(prev => {
-          const newData = value(prev)
-          newData.forEach(item => iwsStore.set(item))
-          return newData
-        })
+        const inner = iwsStore.getRawMap().get(modelid)
+        const base = inner ? (Array.from(inner.values()) as T[]) : []
+        const next = (value as (p: T[]) => T[])(base)
+        next.forEach(item => iwsStore.set(item))
       } else {
-        setRowData(value)
         value.forEach(item => iwsStore.set(item))
       }
     },
-    []
+    [modelid]
   )
+
+  // Public setRowData — kept as API surface; forwards to store
+  const setRowData = setRowDataAndStore
+
+  // Initial load if store is empty
+  useEffect(() => {
+    const inner = iwsStore.getRawMap().get(modelid)
+    const cached = inner ? Array.from(inner.values()) : []
+    if (cached.length === 0) {
+      Get(ctx, token, modelid, setRowDataAndStore)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modelid])
 
   const submitEdit = useCallback(
     async (event: any) => {
       event?.preventDefault?.()
+      console.log(` modifyUrl:${modifyUrl} -> current ${current}`)
       try {
         if (edited) {
           const updated = await Edit(modifyUrl, token, current)
@@ -102,13 +107,14 @@ export const UseCustomerForm = <T extends IBusinespartner>(
           )
           if (index >= 0) {
             const newList = [...rowData]
-            newList[index] = updated
+            newList[index] = updated as T
             setRowDataAndStore(newList)
           }
-          // If Edit does not call setCurrent internally, uncomment:
-          // setCurrent(updated)
         } else if (!edited && !disable) {
-          const created = await Add(modifyUrl, token, { ...current }, rowData, setRowDataAndStore, setCurrent)
+          const created = await Add(
+            modifyUrl, token, { ...current }, rowData,
+            setRowDataAndStore, setCurrent
+          )
           console.log('created', created)
         }
       } catch (error) {
@@ -123,9 +129,18 @@ export const UseCustomerForm = <T extends IBusinespartner>(
 
   const reloadx = useCallback(() => {
     iwsStore.deleteByModelId(current.modelid)
-    Get(ctx, token, current.modelid, setRowData)
+    Get(ctx, token, current.modelid, setRowDataAndStore)
     setCurrent(current_)
-  }, [ctx, token, current.modelid, current_])
+  }, [ctx, token, current.modelid, current_, setRowDataAndStore])
+
+  // ── reload: accept either a plain fn OR a ref (read .current at call) ──
+  const reloadFn = useCallback(() => {
+    if (typeof reload === 'function') {
+      reload()
+    } else if (reload && typeof reload === 'object' && 'current' in reload) {
+      reload.current()
+    }
+  }, [reload])
 
   const handleKeyPress = useCallback(
     (event: any) => {
@@ -134,16 +149,16 @@ export const UseCustomerForm = <T extends IBusinespartner>(
           submitEdit(event)
           return
         case 114:
-          reload ? reload() : reloadx()
+          (reload ? reloadFn : reloadx)()
           return
         default:
           return
       }
     },
-    [submitEdit, reload, reloadx]
+    [submitEdit, reload, reloadFn, reloadx]
   )
 
-  // Register key handler once, and let it reference the latest callback
+  // Register key handler
   useEffect(() => {
     const handler = (e: KeyboardEvent) => handleKeyPress(e)
     document.addEventListener('keydown', handler)
@@ -185,7 +200,7 @@ export const UseCustomerForm = <T extends IBusinespartner>(
 
   const submitQuery = (event: any) => {
     event.preventDefault()
-    Get(ctx, token, modelid, setRowData)
+    Get(ctx, token, modelid, setRowDataAndStore)
   }
 
   const addLine = (line: IBankAccount) => {
@@ -232,7 +247,7 @@ export const UseCustomerForm = <T extends IBusinespartner>(
       )
       if (index >= 0) {
         const newList = [...rowData]
-        newList[index] = updated
+        newList[index] = updated as T
         setRowDataAndStore(newList)
       }
     } catch (error) {
@@ -252,7 +267,6 @@ export const UseCustomerForm = <T extends IBusinespartner>(
     )
   }
 
-  // ── Render ──────────────────────────────────────────────────────────────
   const header: ReactNode = (
     <CommonFormHead
       title={title}
@@ -268,7 +282,7 @@ export const UseCustomerForm = <T extends IBusinespartner>(
       cancelEdit={cancelEdit}
       submitEdit={submitEdit}
       submitQuery={submitQuery}
-      reload={reload ?? reloadx}
+      reload={reload ? reloadFn : reloadx}
       toggle={toggle}
       toggleTable={toggleTable}
       logout={logout}

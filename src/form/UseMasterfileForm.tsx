@@ -1,25 +1,25 @@
-import {useEffect, useCallback, useState, JSX} from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore, useMemo, useCallback, JSX } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { ColDef, RowSelectedEvent } from 'ag-grid-community';
-import {IMasterfile, IWSModel} from '../Models.ts';
+import { IMasterfile, IWSModel } from '../Models.ts';
 import iwsStore from '../utils/Store';
-import useForm from './UseForm.ts';
+import useForm from './useForm.ts';
 import { CommonFormHead } from './CommonFormHead';
 import { MasterfileGrid } from '../IWSGrid.tsx';
-import {Add, Edit, Get} from './CrudController.ts';
+import { Add, Edit, Get } from './CrudController.ts';
 import { logout } from '../utils/FormUtils.tsx';
 import Login from './Login.tsx';
 import { formEnum } from '../utils/FormEnum.tsx';
 import type { State } from '../Props.ts';
 
 export default function useMasterfileForm<T extends IWSModel>(
-  currentTemplate: T,
+  current_: T,
   columnDefs: ColDef[],
   url: string
 ): {
   header: React.ReactNode;
-  body: (() => JSX.Element) | null;
+  body: JSX.Element | null;
   table: React.ReactNode;
   disable: boolean;
   state: State;
@@ -39,121 +39,87 @@ export default function useMasterfileForm<T extends IWSModel>(
   const { token, company } = profile;
   let module_ = menu?.get(!selected || selected === '/login' ? '/login' : selected);
   module_ = (module_ === '11111' || module_ === 11111) ? formEnum.LOGIN : module_;
-  const body = module_ === formEnum.LOGIN ? Login : null;
+  const body = module_ === formEnum.LOGIN ? <Login /> : null;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [edited, setEdited] = useState(false);
   const [added, setAdded] = useState(false);
   const [disable, setDisable] = useState(true);
-  const [current, setCurrent] = useState<T>(currentTemplate);
+  const [current, setCurrent] = useState<T>(current_);
 
-  // Load initial data from store (cast because store returns IWSModel[])
-  const [rowData, setRowData] = useState<T[]>(() =>
-    iwsStore.getByModelId(modelid) as T[]
+  // Subscribe to the STABLE raw snapshot
+  const snapshot = useSyncExternalStore(
+    iwsStore.subscribeSimple,
+    iwsStore.getRawMap,
+    iwsStore.getRawMap
   );
 
-  // Wrapper that updates both state and the store
-  const setRowDataAndStore = useCallback((value: React.SetStateAction<T[]>) => {
+  // Derive per-model array with stable identity
+  const rowData = useMemo<T[]>(() => {
+    const inner = snapshot.get(modelid);
+    return inner ? (Array.from(inner.values()) as T[]) : [];
+  }, [snapshot, modelid]);
+
+  const setRowData: React.Dispatch<React.SetStateAction<T[]>> = useCallback((value) => {
     if (typeof value === 'function') {
-      setRowData(prev => {
-        const newData = value(prev);
-        newData.forEach(item => iwsStore.set(item));
-        return newData;
-      });
+      const inner = iwsStore.getRawMap().get(modelid);
+      const base = inner ? (Array.from(inner.values()) as T[]) : [];
+      const next = (value as (p: T[]) => T[])(base);
+      next.forEach(item => iwsStore.set(item));
     } else {
-      setRowData(value);
       value.forEach(item => iwsStore.set(item));
     }
-  }, []);
+  }, [modelid]);
 
   const modifyUrl = url;
   const ctx = `${url}/${modelid}/${company}`;
   const zIndex = 9999;
 
-  // Reload: clear store and fetch fresh data
-  const reload = useCallback(() => {
+  const reload = () => {
     iwsStore.deleteByModelId(modelid);
-    Get(ctx, token ?? 'noToken', modelid, setRowDataAndStore);
-  }, [ctx, token, modelid, setRowDataAndStore]);
-
-  // Submit query (manual reload)
-  const submitQuery = (event: any) => {
-    event.preventDefault();
-    Get(ctx, token, modelid, setRowDataAndStore);
-    setCurrent(currentTemplate);
+    Get(ctx, token ?? 'noToken', modelid, setRowData);
   };
 
-  // Toggle edit mode
+  const submitQuery = (event: any) => {
+    event.preventDefault();
+    Get(ctx, token, modelid, setRowData);
+    setCurrent(current_);
+  };
+
   const edit = () => {
-    if (edited) {
-      setEdited(false);
-      setDisable(true);
-      setAdded(false);
-    } else {
-      setEdited(true);
-      setDisable(false);
-      setAdded(true);
-    }
+    if (edited) { setEdited(false); setDisable(true); setAdded(false); }
+    else { setEdited(true); setDisable(false); setAdded(true); }
   };
 
   const cancelEdit = () => {
-    if (edited) {
-      setEdited(false);
-      setDisable(true);
-      setAdded(true);
-    }
+    if (edited) { setEdited(false); setDisable(true); setAdded(true); }
   };
 
-  // Submit edit or new record
   const submitEdit = async (event: any) => {
-    event.preventDefault()
+    event.preventDefault();
     if (edited) {
-      const updatedRecord = await Edit(modifyUrl, token, { ...current })
+      const updatedRecord = await Edit(modifyUrl, token, { ...current });
       if (updatedRecord) {
-        const index = rowData.findIndex(obj => String(obj?.id) === String(updatedRecord.id))
-        if (index !== -1) {
-          const newRowData = [...rowData]
-          newRowData[index] = updatedRecord as T
-          setRowDataAndStore(newRowData)
-        }
-        setCurrent(updatedRecord as T)   // form gets the fresh value last
+        setRowData(prev => {
+          const index = prev.findIndex(obj => String(obj?.id) === String(updatedRecord.id));
+          if (index === -1) return prev;
+          const next = [...prev];
+          next[index] = updatedRecord as T;
+          return next;
+        });
+        setCurrent(updatedRecord as T);
       }
     } else if (!edited && !disable) {
-      await Add(modifyUrl, token, { ...current }, rowData, setRowDataAndStore, setCurrent)
+      await Add(modifyUrl, token, { ...current }, rowData, setRowData, setCurrent);
     }
-    setDisable(true)
-    setEdited(false)
-    setAdded(true)
-  }
-  // const submitEdit = async (event: any) => {
-  //   console.log('submitEdit current', current)
-  //   event.preventDefault();
-  //   if (edited) {
-  //     // Update existing record
-  //     const updatedRecord = await Edit(modifyUrl, token, { ...current }, setCurrent);
-  //     console.log('updatedRecord', updatedRecord);
-  //     if (updatedRecord) {
-  //       const index = rowData.findIndex(obj => String(obj?.id) === String(updatedRecord.id));
-  //       //const index = rowData.findIndex(obj => obj?.id === updatedRecord.id);
-  //       if (index !== -1) {
-  //         const newRowData = [...rowData];
-  //         newRowData[index] = updatedRecord as T;
-  //         setRowDataAndStore(newRowData);
-  //         setCurrent(updatedRecord as T);
-  //       }
-  //     }
-  //   } else if (!edited && !disable) {
-  //     // Add new record
-  //     await Add(modifyUrl, token, { ...current }, rowData, setRowDataAndStore, setCurrent);
-  //   }
-  //   setDisable(true);
-  //   setEdited(false);
-  //   setAdded(true);
-  // };
+    setDisable(true);
+    setEdited(false);
+    setAdded(true);
+  };
 
   const initAdd = () => {
-    const newRow = { ...currentTemplate, company: `${company}` };
+    const newRow = { ...current_, company: `${company}` };
     setCurrent(newRow);
     setAdded(true);
     setEdited(false);
@@ -161,54 +127,36 @@ export default function useMasterfileForm<T extends IWSModel>(
   };
 
   const onRowSelected = (event: RowSelectedEvent) => {
-    if (!event?.data) return
-    const row = event.data instanceof Array ? event.data[0] : event.data
-    setCurrent(prev => {
-      // Same row — do not let the grid overwrite a value the user just saved.
-      if (String(prev?.id) === String(row?.id)) return prev
-      return row
-    })
-  }
-  const handleKeyPress = useCallback((event: any) => {
+    if (!event?.data) return;
+    const row = event.data instanceof Array ? event.data[0] : event.data;
+    setCurrent(prev => (String(prev?.id) === String(row?.id) ? prev : row));
+  };
+
+  const handleKeyPress = (event: any) => {
     switch (event.keyCode) {
-      case 112: submitEdit(event); break // F1
-      case 114: reload(); break // F3
+      case 112: submitEdit(event); break;
+      case 114: reload(); break;
     }
-  }, [submitEdit, reload])
+  };
 
-  // const handleKeyPress = useCallback((event: any) => {
-  //   switch (event.keyCode) {
-  //     case 112: // F1
-  //       submitEdit(event);
-  //       break;
-  //     case 114: // F3
-  //       reload();
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }, []);
+  const handleKeyPressRef = useRef<(e: any) => void>(() => {});
+  useEffect(() => { handleKeyPressRef.current = handleKeyPress; });
 
-  // Subscribe to store changes (when other components modify the same modelid)
   useEffect(() => {
-    const subscription = iwsStore.subscribe(() => {
-      const freshData = iwsStore.getByModelId(modelid) as T[];
-      setRowData(freshData);
-      document.onkeydown = handleKeyPress
-      document.addEventListener('onKeyDown', handleKeyPress)
-    });
-    return () => {subscription.unsubscribe(); document.removeEventListener('onKeyDown', handleKeyPress)}
-  }, [modelid]);
-
-  // Initial load if store is empty (run once)
-  useEffect(() => {
-    if (rowData.length === 0) {
-      Get(ctx, token, modelid, setRowDataAndStore);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const listener = (e: KeyboardEvent) => handleKeyPressRef.current(e);
+    document.addEventListener('keydown', listener);
+    return () => document.removeEventListener('keydown', listener);
   }, []);
 
-  // ✅ CORRECT JSX syntax – not function calls
+  useEffect(() => {
+    const inner = iwsStore.getRawMap().get(modelid);
+    const cached = inner ? Array.from(inner.values()) : [];
+    if (cached.length === 0) {
+      Get(ctx, token, modelid, setRowData);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modelid]);
+
   const header = (
     <CommonFormHead
       title={title}
@@ -233,25 +181,17 @@ export default function useMasterfileForm<T extends IWSModel>(
     />
   );
 
-  const table =
+  const table = (
     <MasterfileGrid
       columnDefs={columnDefs}
       onRowSelected={onRowSelected}
-      rowData={rowData as unknown as IMasterfile[]} /* cast if MasterfileGrid expects IMasterfile[] */
+      rowData={rowData as unknown as IMasterfile[]}
     />
-
+  );
 
   return {
-    header,
-    body,
-    table,
-    disable,
-    state,
-    rowData,
-    setRowData,
-    current,
-    setCurrent,
-    zIndex,
-    handleKeyPress
+    header, body, table, disable, state,
+    rowData, setRowData, current, setCurrent,
+    zIndex, handleKeyPress
   };
 }
