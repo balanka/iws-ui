@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useSyncExternalStore } from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -20,7 +20,7 @@ import Login from './Login'
 import { logout } from '../utils/FormUtils.tsx'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import useForm from './UseForm.ts'
+import useForm from './useForm.ts'
 import { styles } from './BasicTreeTableProps.tsx'
 import BankStatementFormHead from './BankStatementFormHead.tsx'
 
@@ -28,7 +28,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule])
 
 const BankStatementForm = () => {
   const [{
-    profile, t, selected, language, toggle, toggleTable,
+    profile, t, language, toggle, toggleTable,
     handleLanguageChange, state, modelid, company, module_,
   }] = useForm()
 
@@ -39,20 +39,49 @@ const BankStatementForm = () => {
   const height = 33
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
   const current_: IBankStatement = initBS
   const [current, setCurrent] = useState<IBankStatement>(current_)
   const [rows, setRows] = useState<string[] | bigint[]>([])
-  const [rowData, setRowData] = useState<IBankStatement[]>([])
 
+  // ── Reactive store read for rowData ─────────────────────────────────────
+  const snapshot = useSyncExternalStore(
+    iwsStore.subscribeSimple,
+    iwsStore.getRawMap,
+    iwsStore.getRawMap
+  )
+
+  const rowData = useMemo<IBankStatement[]>(() => {
+    const inner = snapshot.get(initBS.modelid)
+    return inner ? (Array.from(inner.values()) as IBankStatement[]) : []
+  }, [snapshot])
+
+  // Write-through setter (kept for API compatibility)
+  const setRowData = (value: React.SetStateAction<IBankStatement[]>) => {
+    if (typeof value === 'function') {
+      const inner = iwsStore.getRawMap().get(initBS.modelid)
+      const base = inner ? (Array.from(inner.values()) as IBankStatement[]) : []
+      const next = (value as (p: IBankStatement[]) => IBankStatement[])(base)
+      next.forEach(item => iwsStore.set(item))
+    } else {
+      value.forEach(item => iwsStore.set(item))
+    }
+  }
+
+  // Initial load if store is empty
   useEffect(() => {
-    const subscription = iwsStore.subscribe((store) => {
-      setRowData(store.get(initBS.modelid) as unknown as IBankStatement[])
-    })
-    return () => subscription.unsubscribe()
-  }, [selected])
+    if (!token) return
+    const inner = iwsStore.getRawMap().get(initBS.modelid)
+    if (!inner || inner.size === 0) {
+      const ctx = `${module_?.ctx ?? ''}/${modelid}/${company}`
+      Get(ctx, token, modelid, (() => {}) as React.Dispatch<React.SetStateAction<IBankStatement[]>>)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, modelid, company])
 
-
+  // ── Early return AFTER all hooks ────────────────────────────────────────
   if (module_ === '11111' || module_ === 11111) return <Login />
+
   const modifyUrl = module_.ctx
   const ctx = `${module_.ctx}/${modelid}/${company}`
   const title = t(module_.title)
@@ -66,7 +95,6 @@ const BankStatementForm = () => {
       const updated = await Edit(modifyUrl, token, current)
       if (!updated) return
 
-      // id is a bigint, JSON returns number/string — compare as strings
       const index = rowData.findIndex(
         (obj) => String(obj?.id) === String(updated.id)
       )
@@ -77,9 +105,7 @@ const BankStatementForm = () => {
       }
     } catch (error) {
       console.error('Edit failed', error)
-      // TODO: show user notification
     }
-
   }
 
   const reload = () => {
@@ -106,9 +132,7 @@ const BankStatementForm = () => {
   }
 
   const importData = () => {
-    console.log('current', current)
     const url_ = `${module_.ctx}/${current.path}/${current.header}/${current.char}/${current.extension}/${company}`
-    console.log('url_', url_)
     url_ && Get(url_, token, current.modelid, setRowData)
   }
 
@@ -161,8 +185,7 @@ const BankStatementForm = () => {
           height: state.collapseForm ? minHeight : maxHeight,
           minWidth: '100%',
           display: state.collapseTable ? '' : 'none',
-        }}
-      >
+        }}>
         <BankStatementGrid
           columnDefs={bankStatementColumnDefs(t, locale ?? 'fr-FR', currency ?? 'EUR')}
           onRowSelected={onRowSelected}

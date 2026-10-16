@@ -3,7 +3,18 @@ import react from '@vitejs/plugin-react'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 
 export default defineConfig({
-  plugins: [react(), basicSsl()],
+  plugins: [
+    react({
+      babel: {
+        plugins: [
+          ['babel-plugin-react-compiler', {
+            sources: (filename) => filename.includes('src/form/')
+          }],
+        ],
+      },
+    }),
+    basicSsl(),
+  ],
 
   resolve: {
     // Force a single copy of React and its runtime, regardless of how
@@ -31,22 +42,22 @@ export default defineConfig({
           ) {
             return 'redux-vendor'
           }
-
           if (id.includes('node_modules/@coreui')) {
             return 'coreui-vendor'
           }
-
           if (id.includes('node_modules/ag-grid')) {
             return 'aggrid-vendor'
           }
-
-          if (id.includes('node_modules/@mui') ||
-            id.includes('node_modules/@emotion')) {
+          if (
+            id.includes('node_modules/@mui') ||
+            id.includes('node_modules/@emotion')
+          ) {
             return 'mui-vendor'
           }
-
-          if (id.includes('node_modules/react-datepicker') ||
-            id.includes('node_modules/@floating-ui')) {
+          if (
+            id.includes('node_modules/react-datepicker') ||
+            id.includes('node_modules/@floating-ui')
+          ) {
             return 'datepicker-vendor'
           }
 
@@ -72,10 +83,9 @@ export default defineConfig({
     https: true,
     proxy: {
       '/api': {
-        //target: 'https://192.168.178.102', // your Docker Nginx (HTTPS)
-        target: 'https://127.0.0.1', // your Docker Nginx (HTTPS)
+        target: 'https://127.0.0.1',
         changeOrigin: true,
-        secure: false, // accept self-signed certificate
+        secure: false,
         rewrite: (path) => path.replace(/^\/api/, '/api'),
       },
     },

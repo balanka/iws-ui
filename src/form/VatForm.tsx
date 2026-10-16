@@ -1,67 +1,78 @@
-import {VatMainForm} from "./VatMainForm.tsx";
-import Login from "./Login.tsx";
-import {CInputGroup} from "@coreui/react-pro";
-import iwsStore from "../utils/Store.tsx";
-import {IAccount, IVat} from "../Models.ts";
-import {Get} from "./CrudController.ts";
-import {isLoaded} from "../utils/FormUtils.tsx";
-import React, {useEffect, useState} from "react";
-import {vatColumnDefs} from "../ColumnsDefs.ts";
-import {ColDef} from "ag-grid-community";
-import useForm from "./UseForm.ts";
-import {initVat, MASTERFILE} from "./Menu.tsx";
-import {formEnum} from "../utils/FormEnum.tsx";
-import {styles} from './BasicTreeTableProps.tsx'
-import UseMasterfileForm from './UseMasterfileForm.tsx'
+import iwsStore from '../utils/Store';
+import { IAccount, IVat } from '../Models.ts';
+import { Get } from './CrudController.ts';
+import { isLoaded } from '../utils/FormUtils.tsx';
+import { useEffect, useMemo, useSyncExternalStore } from 'react';
+import { vatColumnDefs } from '../ColumnsDefs.ts';
+import { ColDef } from 'ag-grid-community';
+import useForm from './useForm.ts';
+import { initVat, MASTERFILE } from './Menu.tsx';
+import { formEnum } from '../utils/FormEnum.tsx';
+import useMasterfileForm from './useMasterfileForm.tsx';
+import { VatMainForm } from './VatMainForm.tsx';
+import { MasterfileFormShell } from './MasterfileFormShell.tsx';
 
 const VatForm = () => {
-  const [{ profile, selected, t, company, module_ }] = useForm()
-  const { token } = profile
+  const [{ profile, t, company }] = useForm();
+  const { token } = profile;
 
-  const current_: IVat = initVat
-  const acc_modelid = formEnum.ACCOUNT
-  const acc_ctx = `${MASTERFILE.acc}/${acc_modelid}/${company}`
-  const [accData, setAccData] = useState<IAccount[]>([])
-  const minHeight = 300
-  const maxHeight = 600
-  const height = 28
-  const colDef: ColDef[] = vatColumnDefs(t)
-  const { header, body, table, disable, state, current, setCurrent, zIndex } = UseMasterfileForm(current_, colDef, selected)
+  const accModelId = formEnum.ACCOUNT;
+  const accCtx = `${MASTERFILE.acc}/${accModelId}/${company}`;
 
+  // Reactive read of the account store — updates whenever iwsStore emits
+  const accSnapshot = useSyncExternalStore(
+    iwsStore.subscribeSimple,
+    iwsStore.getRawMap,
+    iwsStore.getRawMap
+  );
+
+  const accData = useMemo<IAccount[]>(() => {
+    const inner = accSnapshot.get(accModelId);
+    return inner ? (Array.from(inner.values()) as IAccount[]) : [];
+  }, [accSnapshot, accModelId]);
+
+  // Kick off account load once per company/token if store is empty
   useEffect(() => {
-    async function loadData() {
-      if (isLoaded(acc_modelid)) {
-        const cached: IAccount[] = iwsStore.getByModelId(acc_modelid)
-        setAccData(cached)
-      } else {
-        await Get(acc_ctx, token, acc_modelid, setAccData)
-      }
-      // remove this line — see below
-      // setCurrent(current_)
-    }
-    loadData()
-  }, [token, company])
+    if (!token) return;
+    if (isLoaded(accModelId)) return;
 
-  // NOW the early return, after all hooks:
-  if (module_ === '11111' || module_ === 11111) return <Login />
+    // Use a no-op setter — the store is the source of truth now
+    Get(accCtx, token, accModelId, () => { /* no-op */ });
+  }, [token, company, accModelId, accCtx]);
 
-  const safeBody = React.isValidElement(body) ? body : null
+  const colDef: ColDef[] = vatColumnDefs(t);
+  const current_: IVat = { ...initVat, company };
+
+  const {
+    header, body, table, disable, state,
+    current, setCurrent, zIndex
+  } = useMasterfileForm(current_, colDef, MASTERFILE.vat);
+
+  const setCurrentRaw = setCurrent as (v: IVat) => void;
+
+  const mainForm = (
+    <VatMainForm
+      current={current}
+      setCurrent={setCurrentRaw}
+      accData={accData}
+      t={t}
+      disable={disable}
+      height={28}
+      zIndex={zIndex}
+    />
+  );
+
   return (
-    <>
-      {header}
-      <CInputGroup
-        //@ts-ignore
-        style={{ ...styles.outer, display: !state.collapseForm ? 'none' : '' }}>
-        {safeBody ?? <VatMainForm current={current} setCurrent={setCurrent}
-                                  accData={accData} t={t} disable={disable}
-                                  height={height} zIndex={zIndex} />}
-      </CInputGroup>
-      <div style={{ ...styles.outer0, paddingTop: 2,
-        height: state.collapseForm ? minHeight : maxHeight,
-        display: state.collapseTable ? '' : 'none' }}>
-        {table}
-      </div>
-    </>
-  )
-}
-export default VatForm
+    <MasterfileFormShell
+      header={header}
+      body={body}
+      table={table}
+      state={state}
+      minHeight={300}
+      maxHeight={600}
+      mainForm={mainForm}
+    />
+  );
+};
+
+export default VatForm;

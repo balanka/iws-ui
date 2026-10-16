@@ -7,7 +7,7 @@ import {
   IFmodule, ILineFinancials, ILineTransaction, ILoggingContext, IMasterfile, IMasterfile2, IContact,
   IProfile, IRealEstate, IRoom, IStore,
   ISTORE_Return,
-  ISupplier, ITransaction, MenuRecord, ReminderBalance
+  ISupplier, ITransaction, MenuRecord, ReminderBalance, IVat
 } from '../Models'
 import {IJournalProps} from "../Props.ts";
 
@@ -187,6 +187,15 @@ export const initQuantity:IMasterfile ={
     modelid: 15,
     company: '',
   }
+export const initStock = {
+  article: '',
+  store: '',
+  quantity: 0.0,
+  unit: '',
+  price: 0.0,
+  amount: 0.0,
+  charge: '',
+}
 export const initStore:IStore = {
     id: '*',
     name: '*',
@@ -199,18 +208,9 @@ export const initStore:IStore = {
     account: '-1',
     oaccount: '-1',
     company: '',
-    stocks: [
-      {
-        article: '',
-        store: '',
-        quantity: 0.0,
-        unit: '',
-        price: 0.0,
-        amount: 0.0,
-        charge: '',
-      },
-    ],
+    stocks: [initStock]
   }
+
 export const initCloseAccPeriod = {
     id: '38',
     account: '',
@@ -314,7 +314,7 @@ export const initComp:ICompany= {
     enterdate: new Date(),
     postingdate: new Date(),
     changedate: new Date(),
-    modelid: 10,
+    modelid: formEnum.COMPANY,
     pageHeaderText: '',
     pageFooterText: '',
     headerText: '',
@@ -333,7 +333,7 @@ export const initComp:ICompany= {
     bankaccounts: [initBankAccount],
   }
 
-export const initVat = {
+export const initVat:IVat =  {
     id: '',
     name: '',
     description: '',
@@ -344,7 +344,7 @@ export const initVat = {
     postingdate: new Date(),
     changedate: new Date(),
     company: '',
-    modelid: 14,
+    modelid: formEnum.VAT,
   }
 
 export const initContact:IContact = {
@@ -383,7 +383,7 @@ export const initCust:ICustomer = {
     currency: '',
     contact:'',
     company: '',
-    modelid: 3,
+    modelid: formEnum.CUSTOMER,
     enterdate: new Date(),
     postingdate: new Date(),
     changedate: new Date(),
@@ -400,7 +400,7 @@ export const initSalaryItem = {
     enterdate: date,
     postingdate: date,
     changedate: date,
-    modelid: 171,
+    modelid: formEnum.SALARY_ITEM,
     company: '',
   }
 
@@ -410,7 +410,7 @@ export const initPayrollTaxRange = {
     toAmount: 0,
     tax: 0,
     taxClass: '',
-    modelid: 172,
+    modelid: formEnum.PAYROLL_TAX_RANGE,
     company: '',
   }
 
@@ -433,7 +433,7 @@ export const initEmp:IEmployee = {
         contact:'',
         company: '',
         salary: 0.0,
-        modelid: 33,
+        modelid: formEnum.EMPLOYEE,
         enterdate: new Date(),
         postingdate: new Date(),
         changedate: new Date(),
@@ -471,7 +471,7 @@ export const initSup:ISupplier = {
     currency: '',
     contact:'',
     company: '',
-    modelid: 1,
+    modelid: formEnum.SUPPLIER,
     enterdate: new Date(),
     postingdate: new Date(),
     changedate: new Date(),
@@ -494,7 +494,7 @@ export const initBS:IBankStatement = {
     company: '',
     companyIban: '',
     posted: false,
-    modelid: 18,
+    modelid: formEnum.BANKSTATEMENT,
     period: -1,
     path: '',
     header: '',
@@ -591,27 +591,6 @@ export const ARTICLE_ACCOUNT_QUERY_PARM:IJournalProps = {
   modelid:-1,
   currency:''
 }
-export const initPac  = {
-    id: '',
-    name: '',
-    period: '',
-    idebit: 0.0,
-    icredit: 0.0,
-    debit: 0.0,
-    credit: 0.0,
-    bdebit: 0.0,
-    bcredit: 0.0,
-    balance: 0.0,
-    currency: '',
-    company: '',
-    modelid: 106,
-    // query: {
-    //   account: '',
-    //   account2: '',
-    //   fromPeriod: '',
-    //   toPeriod: '',
-    // },
-  }
 
 export const initRole = {
     id: '121',
@@ -620,7 +599,7 @@ export const initRole = {
     enterdate: date,
     postingdate: date,
     changedate: date,
-    modelid: 121,
+    modelid: formEnum.ROLE,
     company: '',
     rights: [
       {
@@ -628,7 +607,7 @@ export const initRole = {
         roleid: -1,
         short: '',
         company: '',
-        modelid: 151,
+        modelid:formEnum.USER_RIGHT,
       },
     ],
   }
@@ -643,7 +622,7 @@ export const initUser = {
     company: '',
     id: 0,
     roles: [{ ...initRole }],
-    modelid: 111,
+    modelid:formEnum.USER,
     menu: '',
     locale:'fr-FR',
     rights: [[]],
@@ -656,7 +635,7 @@ export const initPermission = {
     enterdate: date,
     postingdate: date,
     changedate: date,
-    modelid: 141,
+    modelid: formEnum.PERMISSION,
     account: '-1',
     company: '',
   }
@@ -670,7 +649,7 @@ export const initfModule:IFmodule = {
     enterdate: new Date(),
     postingdate: new Date(),
     changedate: new Date(),
-    modelid: 151,
+    modelid: formEnum.FMODULE,
     account: '-1',
     isDebit: false,
     company: '',
@@ -691,7 +670,7 @@ export const initRoom:IRoom = {
     area: 0.0,
     company: '',
     kind: 0,
-    modelid: 152
+    modelid:formEnum.ROOM,
   }
 
 export const initApartment:IApartment= {
@@ -704,7 +683,7 @@ export const initApartment:IApartment= {
     changedate: new Date(),
     rooms:[],
     company: '',
-    modelid: 153
+    modelid: formEnum.APARTMENT
   }
 
 export const initFloor:IFloor = {
@@ -715,7 +694,7 @@ export const initFloor:IFloor = {
     postingdate: new Date(),
     changedate: new Date(),
     company: '',
-    modelid: 155,
+    modelid:formEnum.FLOOR,
     apartments:[]
   }
 
@@ -727,7 +706,7 @@ export const initRealEstate:IRealEstate = {
     postingdate: new Date(),
     changedate: new Date(),
     company: '',
-    modelid: 154,
+    modelid: formEnum.REALESTATE,
     apartments:[],
     floors:[],
   }

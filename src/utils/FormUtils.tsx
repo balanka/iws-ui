@@ -36,7 +36,12 @@ export const AgGridCheckbox =
         </div>
     )
 }
-export const isLoaded = (modelid:number)=> iwsStore.getByModelId(modelid)&& iwsStore.getByModelId(modelid).length>0
+
+export const isLoaded = (modelid: number) => {
+  const data = iwsStore.getByModelId(modelid)
+  return Array.isArray(data) && data.length > 0
+}
+//export const isLoaded = (modelid:number)=> iwsStore.getByModelId(modelid)&& iwsStore.getByModelId(modelid).length>0
 export const  checkIfStringStartsWith= (str:string, substrs:string[])=> {
   //const x = substrs ?? [].some(substr => str.startsWith(substr))
  // console.log('x', x)

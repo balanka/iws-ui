@@ -1,48 +1,53 @@
-import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
+import { AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry } from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 
-
 // @ts-ignore
-import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {PartnerMainForm} from './PartnerMainForm'
+import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
+import { PartnerMainForm } from './PartnerMainForm'
 
-import {MASTERFILE} from './Menu'
-import {PartnerColumnDefs} from '../ColumnsDefs.ts'
-import useForm from './UseForm.ts'
-import UseMasterfileForm from './UseMasterfileForm.tsx'
-import {styles} from './BasicTreeTableProps.tsx'
-import {CInputGroup} from "@coreui/react-pro";
-import React from "react";
-import Login from "./Login.tsx";
+import { MASTERFILE } from './Menu'
+import { PartnerColumnDefs } from '../ColumnsDefs.ts'
+import useForm from './useForm.ts'
+import useMasterfileForm from './useMasterfileForm.tsx'
+import { MasterfileFormShell } from './MasterfileFormShell.tsx'
+import type { IBusinespartner } from '../Models.ts'
 
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule])
 
-ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
- const PartnerForm = () => {
-     const [{t, module_}]  = useForm()
-     if (module_ === '11111' || module_ === 11111) return <Login/>
-     const height = 28
-     const current_ =  module_.state
-     const minHeight = 450
-     const maxHeight = 550
-     const colDef:ColDef[]= PartnerColumnDefs(t)
-     const {header, body, table, disable, state, current, setCurrent} = UseMasterfileForm(current_,  colDef, MASTERFILE.contact)
-    const safeBody = React.isValidElement(body) ? body : null
-    const mainForm = PartnerMainForm ({collapse:state.collapseForm,  current:current, setCurrent:setCurrent
-     , disable:disable, t:t, height:height})
-    return (
-      <>
-       {header}
-        <CInputGroup
-          //@ts-ignore
-          style={{...styles.outer , display: !state.collapseForm?'none':''}} >
-          { safeBody??mainForm }
-        </CInputGroup>
-        <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight
-          , display:state.collapseTable?'':'none'}}>
-         {table}
-       </div>
-     </>
-   )
+const PartnerForm = () => {
+  const [{ t, module_ }] = useForm()
+
+  const height = 28
+  const current_ = module_?.state ?? ({} as IBusinespartner)
+  const colDef: ColDef[] = PartnerColumnDefs(t)
+
+  const {
+    header, body, table, disable, state, current, setCurrent,
+  } = useMasterfileForm<IBusinespartner>(current_, colDef, MASTERFILE.contact)
+
+  const partner = (
+    <PartnerMainForm
+      collapse={state.collapseForm}
+      current={current}
+      setCurrent={setCurrent}
+      disable={disable}
+      t={t}
+      height={height}
+    />
+  )
+
+  return (
+    <MasterfileFormShell
+      header={header}
+      body={body}
+      table={table}
+      state={state}
+      minHeight={400}
+      maxHeight={700}
+      mainForm={partner}
+    />
+  )
 }
-export default  PartnerForm
+
+export default PartnerForm

@@ -1,58 +1,92 @@
-import React, {useEffect, useState} from 'react'
-import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
+import { useEffect, useMemo, useSyncExternalStore } from 'react'
+import { AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry } from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 
 // @ts-ignore
-import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
+import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { MasterfileFormWithout } from './MasterfileFormWithout'
-import {MASTERFILE} from './Menu'
-import {masterfileColumnDefs} from '../ColumnsDefs.ts'
-import useForm from './UseForm.ts'
-import UseMasterfileForm from './UseMasterfileForm.tsx'
-import {styles} from './BasicTreeTableProps.tsx'
-import {Get} from "./CrudController.ts";
-import {IMasterfile2} from "../Models.ts";
-import {formEnum} from "../utils/FormEnum.tsx";
-import Login from "./Login.tsx";
+import { MASTERFILE } from './Menu'
+import { masterfileColumnDefs } from '../ColumnsDefs.ts'
+import useForm from './useForm.ts'
+import UseMasterfileForm from './useMasterfileForm.tsx'
+import { Get } from './CrudController.ts'
+import { IMasterfile2 } from '../Models.ts'
+import { formEnum } from '../utils/FormEnum.tsx'
+import Login from './Login.tsx'
+import { MasterfileFormShell } from './MasterfileFormShell.tsx'
+import iwsStore from '../utils/Store.tsx'
 
+ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule])
 
-ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
- const RoomForm = () => {
-     const [{profile, t, company, module_}]  = useForm()
-    if (module_ === '11111' || module_ === 11111) return <Login/>
-    const {token} = profile
-    const url = MASTERFILE.apartment
-    const ctx =  `${url}/${formEnum.APARTMENT}/${company}`
+const RoomForm = () => {
+  const [{ profile, t, company, module_ }] = useForm()
+  const { token } = profile
 
-    const [accData, setAccData] = useState<IMasterfile2[]>([])
-     const height = 33
-     const current_ =  module_.state
-     const minHeight = 450
-     const maxHeight = 550
-     const colDef:ColDef[]= masterfileColumnDefs(t)
-     console.log('ctx')
-     const {header, body, table, disable, state, current, setCurrent} = UseMasterfileForm(current_, colDef, MASTERFILE.room)
+  const url = MASTERFILE.apartment
+  const apartmentModelId = formEnum.APARTMENT
+  const ctx = `${url}/${apartmentModelId}/${company}`
 
-   useEffect(() => {
-     Get(ctx, token, formEnum.APARTMENT, setAccData)
-     setCurrent(current_)
-   }, [])
+  const height = 33
+  const current_ = module_?.state ?? ({} as IMasterfile2)
+  const colDef: ColDef[] = masterfileColumnDefs(t)
 
+  // ── Reactive store read for parents ─────────────────────────────────────
+  const snapshot = useSyncExternalStore(
+    iwsStore.subscribeSimple,
+    iwsStore.getRawMap,
+    iwsStore.getRawMap
+  )
 
-   const safeBody = React.isValidElement(body) ? body : null;
-   const mainForm = MasterfileFormWithout({collapse:state.collapseForm,  current:current??current_, setCurrent:setCurrent
-     , disable:disable, height:height, accData:accData, t:t
-     , fieldName:t('common.parent'), propertyName:'parent'})
-    return (
-      <>
-       {header}
-        {safeBody??mainForm}
-       <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight
-         , display:state.collapseTable?'':'none'}}>
-         {table}
-       </div>
-     </>
-   )
+  const accData = useMemo<IMasterfile2[]>(() => {
+    const inner = snapshot.get(apartmentModelId)
+    return inner ? (Array.from(inner.values()) as IMasterfile2[]) : []
+  }, [snapshot, apartmentModelId])
+
+  const { header, body, table, disable, state, current, setCurrent } =
+    UseMasterfileForm<IMasterfile2>(current_, colDef, MASTERFILE.room)
+
+  // Fire-and-forget parent fetch — only if empty
+  useEffect(() => {
+    if (!token) return
+    const inner = iwsStore.getRawMap().get(apartmentModelId)
+    if (!inner || inner.size === 0) {
+      Get(ctx, token, apartmentModelId, (() => {}) as React.Dispatch<React.SetStateAction<IMasterfile2[]>>)
+    }
+  }, [token, company, ctx, apartmentModelId])
+
+  // Sync current when module changes
+  useEffect(() => {
+    setCurrent(current_)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [module_?.state])
+
+  // ── Early return AFTER all hooks ────────────────────────────────────────
+  if (module_ === '11111' || module_ === 11111) return <Login />
+
+  const mainForm = MasterfileFormWithout({
+    collapse: state.collapseForm,
+    current: current ?? current_,
+    setCurrent,
+    disable,
+    height,
+    accData,
+    t,
+    fieldName: t('common.parent'),
+    propertyName: 'parent',
+  })
+
+  return (
+    <MasterfileFormShell
+      header={header}
+      body={body}
+      table={table}
+      state={state}
+      minHeight={400}
+      maxHeight={700}
+      mainForm={mainForm}
+    />
+  )
 }
-export default  RoomForm
+
+export default RoomForm

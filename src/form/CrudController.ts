@@ -7,7 +7,7 @@ import { NavigateFunction } from 'react-router-dom';
 import { TFunction } from 'i18next';
 import { Dispatch, SetStateAction } from 'react';
 
-// ==================== Configuration ====================
+
 const getEnv = (key: string, defaultValue: string): string =>
   (window as any)._env_?.[key] ?? defaultValue;
 
@@ -27,7 +27,11 @@ export interface ApiResponse<T> {
   error: string | null;
   status: number;
 }
-
+// type FetchState<T> =
+//   | { status: 'idle' }
+//   | { status: 'loading' }
+//   | { status: 'success'; data: T }
+//   | { status: 'error'; error: Error };
 
 async function apiFetch<T>(url: string, method: HttpMethod, token?: string, body?: unknown
 ): Promise<ApiResponse<T>> {
@@ -404,7 +408,7 @@ async function updateRecord<T extends IWSModel>(
   try {
     const updated = await apiRequest<T>(url, 'PUT', token, record);
     const versioned = { ...updated, __version: Date.now() } as T;
-   // setCurrent(versioned);
+   // setCurrent(versioned); was causing bug: form displaying the old data after clicking save button on toolbar
     const modelId = (record as any).modelid ?? (updated as any).modelid;
     if (modelId !== undefined) {
       const storeData = iwsStore.getByModelId(modelId);

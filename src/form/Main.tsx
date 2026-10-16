@@ -14,7 +14,7 @@ import {JournalProps} from '../Props.ts'
 import { IAccount, IAccount2 } from '../Models'
 import { JournalMainForm } from './JournalMainForm'
 import { BalanceSheetHead } from './BalanceSheetHead'
-import useForm from './UseForm.ts'
+import useForm from './useForm.ts'
 import { formEnum } from "../utils/FormEnum.tsx"
 import { Get } from "./CrudController.ts"
 import { useDispatch } from "react-redux"

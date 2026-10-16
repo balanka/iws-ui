@@ -32,11 +32,8 @@ export const TransactionDetailsTabs = <T extends ITransaction, L extends ILineTr
   const detailsMaxHeight = 300;
   const disable = transaction?.posted;
   const gridApiRef = useRef<any>(null);
-  // Determine current line (first line or prop)
   let currentLine: ILineTransaction = isArrayAndNotEmpty(transaction?.lines)
-    ? transaction.lines[0]
-    : currentLineTransaction;
-
+    ? transaction.lines[0] : currentLineTransaction;
 
   // Build lines array for grid
   const linesx = !transaction?.lines?.length
@@ -46,21 +43,11 @@ export const TransactionDetailsTabs = <T extends ITransaction, L extends ILineTr
   const  setTr = setTransaction as Dispatch<SetStateAction<ITransaction>>
   const  setLine  = setCurrentLineTransaction as  Dispatch<SetStateAction<ILineTransaction>>
   const tx = t as TFunction<'transalation', undefined>
-  const props = {
-    transaction,
-    setTransaction:setTr,
-    currentLineTransaction,
-    setCurrentLineTransaction:setLine,
-    accountFilter,
-    oaccountFilter,
-    articleData,
-    vatData,
-    t:tx,
-    disable,
-    height,
-    locale,
-    currency,
-  };
+  const detailsForm  = <TransactionDetailsForm transaction={transaction} locale={locale} t ={tx} currency={currency}
+                                               setTransaction ={setTr}   currentLineTransaction={currentLineTransaction}
+                                               setCurrentLineTransaction={setLine} accountFilter={accountFilter} oaccountFilter={oaccountFilter}
+                                                articleData={articleData} vatData={vatData} disable={disable} height={height}
+                                               />
 
   const onRowSelected = (event: RowSelectedEvent) => {
     setCurrentLineTransaction(event.data);
@@ -81,7 +68,7 @@ export const TransactionDetailsTabs = <T extends ITransaction, L extends ILineTr
     }
   }, [collapseTable]);
 
-  const table = () => (
+  const table =  (
     <div
       style={{
         width: '100%',
@@ -101,9 +88,9 @@ export const TransactionDetailsTabs = <T extends ITransaction, L extends ILineTr
   );
 
   const tabContent = [
-    { title: t('transaction.line.title'), id: 1, form: table() },
-    { title: t('common.general'), id: 2, form: TransactionDetailsForm(props) },
-    { title: t('common.export'), id: 3, form: FileOutput() },
+    { title: t('transaction.line.title'), id: 1, form: table },
+    { title: t('common.general'), id: 2, form: detailsForm },
+    { title: t('common.export'), id: 3, form: <FileOutput/> },
   ];
 
   return <IWSTabs tabList={tabContent} />;

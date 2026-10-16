@@ -1,43 +1,45 @@
-import {AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry} from 'ag-grid-community'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-quartz.css'
+import { ColDef } from 'ag-grid-community'
+import { MASTERFILE } from './Menu'
+import { masterfileColumnDefs } from '../ColumnsDefs.ts'
+import { IRole } from '../Models.ts'
+import useForm from './useForm.ts'
+import useMasterfileForm from './useMasterfileForm.tsx'
+import RoleTabs from './RoleTabs.tsx'
+import { MasterfileFormShell } from './MasterfileFormShell.tsx'
 
-// @ts-ignore
-import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {MASTERFILE} from './Menu'
-import { masterfileColumnDefs} from '../ColumnsDefs.ts'
-import { IRole} from '../Models.ts'
-import useForm from './UseForm.ts'
-import UseMasterfileForm from './UseMasterfileForm.tsx';
-import RoleTabs from "./RoleTabs.tsx";
-import {styles} from './BasicTreeTableProps.tsx'
-import Login from "./Login.tsx";
-import React from "react";
+const RoleForm = () => {
+  const [{ t, module_ }] = useForm()
 
-ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule,])
+  const height = 33
+  const current_: IRole = module_?.state ?? ({} as IRole)
+  const coldef: ColDef[] = masterfileColumnDefs(t)
 
- const RoleForm = () => {
-     const [{ t, module_}]  = useForm()
-     if (module_ === '11111' || module_ === 11111) return <Login/>
-     const height = 33
-     const current_: IRole =  module_.state
-     const minHeight = 400
-     const maxHeight = 700
-     const coldef:ColDef[]= masterfileColumnDefs(t)
-     const {header, body, table, disable, state, current, setCurrent} = UseMasterfileForm(current_, coldef, MASTERFILE.role)
-     const safeBody = React.isValidElement(body) ? body : null
-     const mainForm = RoleTabs ({collapse:state.collapseForm,  current:current, setCurrent:setCurrent
-     , disable:disable, t:t, height:height})
+  const {
+    header, body, table, disable, state, current, setCurrent,
+  } = useMasterfileForm<IRole>(current_, coldef, MASTERFILE.role)
 
-   return (
-     <>
-       {header}
-       {safeBody??mainForm}
-       <div  style={{...styles.outer0, paddingTop:15, height: state.collapseForm?minHeight:maxHeight,  minWidth:"100%"
-         , display:state.collapseTable?'':'none'}}>
-         {table}
-       </div>
-     </>
-   )
+  const mainForm = (
+    <RoleTabs
+      collapse={state.collapseForm}
+      current={current}
+      setCurrent={setCurrent}
+      t={t}
+      disable={disable}
+      height={height}
+    />
+  )
+
+  return (
+    <MasterfileFormShell
+      header={header}
+      body={body}
+      table={table}
+      state={state}
+      minHeight={400}
+      maxHeight={700}
+      mainForm={mainForm}
+    />
+  )
 }
-export default  RoleForm
+
+export default RoleForm

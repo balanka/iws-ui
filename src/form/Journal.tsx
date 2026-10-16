@@ -15,8 +15,8 @@ import {formatumber2Digits} from '../utils/Utils.ts'
 import {useDispatch} from 'react-redux'
 import {logout} from '../utils/FormUtils.tsx'
 import {generateDocx} from '../utils/XlsUtils.ts'
-import useJForm from './UseJForm.ts'
-import useForm from './UseForm.ts'
+import useJForm from './useJForm.ts'
+import useForm from './useForm.ts'
 import {TEMPLATE_ENUM} from "../Props.ts";
 import {useEffect} from "react";
 

@@ -15,17 +15,15 @@ const RoleTabs = ({ collapse, current, setCurrent, disable, t, height }:RoleProp
   const minHeight = 200
   const maxHeight = 300
   const onRightSelected = (event: RowSelectedEvent) => {
-    console.log('event.data', event.data)
-    //console.log('current.roles.rights', current?.roles[0].rights)
     setCurrent((event.data instanceof Array) ? event.data[0] : event.data)
   }
 
-  const getGeneralForm = () =>
+  const generalForm =
     <MasterfileFormWithout collapse={collapse}
                            current={current} setCurrent={setCurrent}
                            disable={disable} t={t} height={height} accData={[]} propertyName={""} fieldName={""}/>
 
-  const getRightTable = () => (
+  const rightTable =
         <div
           // @ts-ignore
           style={{...styles.outer, paddingTop:15, height: collapse?minHeight:maxHeight,  minWidth:"100%"}}>
@@ -34,13 +32,13 @@ const RoleTabs = ({ collapse, current, setCurrent, disable, t, height }:RoleProp
                 theme="legacy" columnDefs={UserRightsColumns(t)} onRowSelected={onRightSelected}
                 rowData={current?.rights}/>
         </div>
-  )
+
 
   const GetTabContent = () => {
     return [
-      { title: t('common.general'), id: 1, form: getGeneralForm() },
+      { title: t('common.general'), id: 1, form: generalForm },
       //{ title: t('role.title'), id: 2, form: getRoleTable() },
-      { title: t('role.rights'), id: 2, form: getRightTable() },
+      { title: t('role.rights'), id: 2, form: rightTable },
     ]
   }
 

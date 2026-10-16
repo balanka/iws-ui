@@ -5,7 +5,7 @@ import { LOGIN_MENU } from './Menu'
 import '../../public/scss/style.scss'
 import {ILoggingContext, CompanyType, MenuItem} from '../Models.ts'
 import '../i18n.tsx';
-import useForm from './UseForm.ts'
+import useForm from './useForm.ts'
 import {LoginForm} from './LoginForm.tsx'
 import {languages} from './languages.ts'
 import {db, DEFAULT_COMPANIES} from '../utils/db.ts'
@@ -31,10 +31,6 @@ const Login = () => {
         setCompanyList(DEFAULT_COMPANIES);
       });
   }, []);
-  // useEffect(() => {
-  //   db.companies.toArray().then(setCompanyList)
-  //     .catch(err => console.error('Failed to load companies:', err))
-  // }, [])
 
   const submit = (event: any) => {
     event.preventDefault()

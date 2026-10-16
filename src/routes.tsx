@@ -1,7 +1,6 @@
 import { MASTERFILE } from './form/Menu'
 import './i18n'
 
-
 const dashboard = () =>import('./components/dashboard/Dashboard.tsx')
 const accountForm = ()  =>   import('./form/AccountForm.tsx')
 const companyForm = ()  =>   import('./form/CompanyForm.tsx')
@@ -15,7 +14,7 @@ const journal = () =>  import('./form/Journal')
 const inventoryJournalForm = () =>  import('./form/InventoryJournalForm')
 const bankStatementForm = () =>   import('./form/BankStatementForm')
 const storeForm = () =>   import('./form/StoreForm')
-const userForm = () =>   import('./form/UserForm')
+const userForm = () =>   import('./form/UserForm.tsx')
 const vatForm = () => import('./form/VatForm')
 const partnerForm = () => import('./form/PartnerForm')
 const fModuleForm = () => import('./form/FModuleForm')
@@ -75,7 +74,7 @@ const routes = ():{path:string, name?:string, element?: ()=>Promise<any>}[] => [
   { path: MASTERFILE.balancesheet, name: 'Balancesheet', element: basicTreeTable },
   { path: MASTERFILE.module, name: 'Module', element: masterfileForm},
   { path: MASTERFILE.fmodule, name: 'FModule', element: fModuleForm},
-  { path: MASTERFILE.comp, name: 'Company', element: masterfileForm },
+  //{ path: MASTERFILE.comp, name: 'Company', element: masterfileForm },
   { path: MASTERFILE.asset, name: 'Assets', element: assetForm},
   { path: '/users/login', name: 'Login', element: Login },
   { path: MASTERFILE.room, name: 'Room', element: roomForm},

@@ -15,7 +15,7 @@ import {TFunction} from "i18next";
 import {AgGridCheckbox, amountFormatter} from "./utils/FormUtils.tsx";
 import {dateRenderer, getDateFromString} from './utils/Utils'
 import {ColDef, ValueFormatterParams} from "ag-grid-community";
-import {initLineFinancials, initLineTransaction} from "./form/Menu.tsx";
+import {initLineFinancials, initLineTransaction, initStock} from "./form/Menu.tsx";
 
 export const accountColumnDefs=  (t: (arg0: string) => any):ColDef<IAccount>[] => [
   {
@@ -1479,6 +1479,20 @@ export const stockColumnDefs =  ( t: (arg0: string) => any, locale:string, curre
       minWidth: 10,
     },
     {
+      field: 'amount',
+      headerName: t('common.amount'),
+      cellStyle: {textAlign: 'right'},
+      valueFormatter: (params:ValueFormatterParams<IStock, number>) => {
+        const calculateTotal = (stock:IStock) => {
+          const quantity = stock?.quantity ?? 0.0
+          const price = stock?.price ?? 0.0
+          return Number(quantity * price)
+        }
+        return  amountFormatter(calculateTotal, params?.data??initStock, locale, currency)
+      },
+      minWidth: 70,
+    },
+    {
       field: 'charge',
       headerName: t('common.charge'),
       minWidth: 10,
@@ -1627,25 +1641,7 @@ export const vatColumnDefs = ( t: (arg0: string) => any) => [
     minWidth: 20,
     filter: "agTextColumnFilter",
   },
-  // {
-  //   field: 'enterdate',
-  //   headerName: t('common.enterdate'),
-  //   align: 'right',
-  //   minWidth: 6,
-  //
-  // },
-  // {
-  //   field: 'changedate',
-  //   headerName: t('common.changedate'),
-  //   align: 'right',
-  //   minWidth: 6,
-  // },
-  // {
-  //   field: 'postingdate',
-  //   headerName: t('common.postingdate'),
-  //   align: 'right',
-  //   minWidth: 6,
-  // },
+
   {
     field: 'company',
     headerName: t('common.company'),

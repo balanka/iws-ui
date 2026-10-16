@@ -1,4 +1,3 @@
-import { blue, green } from  '@mui/material/colors'
 export const styles = {
     outer1: {
       borderRadius: 1, // 5,
@@ -12,7 +11,7 @@ export const styles = {
     padding: 4,
   },
   outer: {
-    backgroundColor: blue,
+    //backgroundColor: blue[500],
     borderRadius: 5,
     boxShadow: '0 10px 30px #BBB',
     padding: 5,
@@ -71,14 +70,14 @@ export const styles = {
     display: 'flex',
     paddingTop: 20,
   },
-  middle: {
-    backgroundColor: green,
-    borderRadius: 5,
-    boxShadow: '0 10px 30px #BBB',
-    padding: 10,
-    paddingTop: 30,
-    paddingBottom: 30,
-  },
+    middle: {
+      //backgroundColor: green[500],
+      borderRadius: 5,
+      boxShadow: '0 10px 30px #BBB',
+      padding: 10,
+      paddingTop: 30,
+      paddingBottom: 30,
+    },
   middleSmall: {
     borderRadius: 5,
     boxShadow: '0 10px 20px #BBB',

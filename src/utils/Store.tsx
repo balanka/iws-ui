@@ -4,30 +4,34 @@ import type { IWSModel } from '../Models.ts';
 export type ModelId = number;
 export type EntityId = string | number | bigint;
 
-class IwsStore {
-  private store = new Map<ModelId, Map<EntityId, IWSModel>>();
-  private subject = new BehaviorSubject<Map<ModelId, Map<EntityId, IWSModel>>>(this.store);
+type StoreMap = Map<ModelId, Map<EntityId, IWSModel>>;
 
-  // Subscribe to full store changes
-  subscribe(callback: (store: Map<ModelId, Map<EntityId, IWSModel>>) => void) {
+class IwsStore {
+  private store: StoreMap = new Map();
+  // Snapshot reference exposed to React — replaced on every emit()
+  private snapshot: StoreMap = this.store;
+  private subject = new BehaviorSubject<StoreMap>(this.store);
+
+  // RxJS-style subscribe (kept for backward compat)
+  subscribe(callback: (store: StoreMap) => void) {
     return this.subject.subscribe(callback);
   }
 
-  /**
-   * Get all objects of a given modelid, typed as T[].
-   * Usage: const accounts = iwsStore.getByModelId<IAccount>(formEnum.ACCOUNT);
-   */
+  // React-friendly subscribe
+  subscribeSimple = (onStoreChange: () => void): (() => void) => {
+    const subscription = this.subject.subscribe(() => onStoreChange());
+    return () => subscription.unsubscribe();
+  };
+
   getByModelId<T extends IWSModel = IWSModel>(modelId: ModelId): T[] {
-    const innerMap = this.store.get(modelId);
+    const innerMap = this.snapshot.get(modelId);
     return innerMap ? (Array.from(innerMap.values()) as T[]) : [];
   }
 
-  // Get a single object, typed as T | undefined
   getOne<T extends IWSModel = IWSModel>(modelId: ModelId, id: EntityId): T | undefined {
-    return this.store.get(modelId)?.get(id) as T | undefined;
+    return this.snapshot.get(modelId)?.get(id) as T | undefined;
   }
 
-  // Insert or replace a single item
   set(item: IWSModel): void {
     const modelId = item.modelid;
     const id = item.id;
@@ -35,19 +39,13 @@ class IwsStore {
       console.warn('Item must have modelid, id, and company', item);
       return;
     }
-    let innerMap = this.store.get(modelId);
-    if (!innerMap) {
-      innerMap = new Map();
-      this.store.set(modelId, innerMap);
-    }
-    innerMap.set(id, item);
+    const existingInner = this.store.get(modelId);
+    const newInner = existingInner ? new Map(existingInner) : new Map<EntityId, IWSModel>();
+    newInner.set(id, item);
+    this.store.set(modelId, newInner);
     this.emit();
   }
 
-  /**
-   * PUT – replace all items for a given modelid.
-   * Now accepts a generic type T extends IWSModel.
-   */
   put<T extends IWSModel>(modelId: ModelId, items: T[]): void {
     const newInnerMap = new Map<EntityId, IWSModel>();
     for (const item of items) {
@@ -65,7 +63,6 @@ class IwsStore {
     this.emit();
   }
 
-  // Update a single item (partial merge)
   update(modelId: ModelId, id: EntityId, partialItem: Partial<IWSModel>): void {
     const innerMap = this.store.get(modelId);
     if (!innerMap) {
@@ -77,38 +74,41 @@ class IwsStore {
       console.warn(`No item with id ${id} for modelid ${modelId}`);
       return;
     }
-    const updated = { ...existing, ...partialItem };
-    innerMap.set(id, updated);
+    const newInner = new Map(innerMap);
+    newInner.set(id, { ...existing, ...partialItem });
+    this.store.set(modelId, newInner);
     this.emit();
   }
 
-  // Delete one object
   deleteOne(modelId: ModelId, id: EntityId): void {
     const innerMap = this.store.get(modelId);
     if (!innerMap) return;
-    innerMap.delete(id);
-    if (innerMap.size === 0) this.store.delete(modelId);
+    const newInner = new Map(innerMap);
+    newInner.delete(id);
+    if (newInner.size === 0) {
+      this.store.delete(modelId);
+    } else {
+      this.store.set(modelId, newInner);
+    }
     this.emit();
   }
 
-  // Delete all objects of a given modelid
   deleteByModelId(modelId: ModelId): void {
     if (this.store.delete(modelId)) this.emit();
   }
 
-  // Clear everything
   clear(): void {
-    this.store.clear();
+    this.store = new Map();
     this.emit();
   }
 
-  // Raw map access (use sparingly)
-  getRawMap(): Map<ModelId, Map<EntityId, IWSModel>> {
-    return this.store;
-  }
+  // Stable snapshot for useSyncExternalStore
+  getRawMap = (): StoreMap => this.snapshot;
 
   private emit(): void {
-    this.subject.next(new Map(this.store));
+    // New outer Map → new reference → React re-renders
+    this.snapshot = new Map(this.store);
+    this.subject.next(this.snapshot);
   }
 }
 

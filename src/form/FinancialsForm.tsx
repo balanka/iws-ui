@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState, useCallback, useEffect, useMemo, useSyncExternalStore } from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -42,29 +42,38 @@ import { CSpinner } from '@coreui/react-pro'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { capitalizeFirst, generateDocx } from '../utils/XlsUtils.ts'
-import useTransactionForm from './UseTransactionForm.ts'
-import useForm from './UseForm.ts'
+import useTransactionForm from './useTransactionForm.ts'
+import useForm from './useForm.ts'
 import { AddList, Get, Get3, GET4, GetListData } from './CrudController.ts'
 import { getLocalizedOrdinal, getMonthName, isArrayAndNotEmpty } from '../utils/Utils.ts'
 import { toCardinal } from 'n2words/fr-FR'
 import { TEMPLATE_ENUM } from '../Props.ts'
+import iwsStore from '../utils/Store.tsx'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule, SelectEditorModule])
 
 const FinancialsForm = () => {
-  // ── All hooks FIRST, unconditionally ────────────────────────────────────
-  const [{ profile, selected, t, toggle, toggleTable, state, module_ }] = useForm()
+  // ── useForm + router/redux ──────────────────────────────────────────────
+  const [{ profile, t, toggle, toggleTable, state, module_ }] = useForm()
   const { token, currency, company, locale } = profile
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const current_: IFinancials = { ...initFtr, company }
-  const initialLine: ILineFinancials = {
-    ...initLineFinancials,
-    currency: currency ?? '',
-    company: `-${company}`,
-  }
+  // ── Stable initial values ───────────────────────────────────────────────
+  const current_: IFinancials = useMemo(
+    () => ({ ...initFtr, company }),
+    [company]
+  )
+  const initialLine: ILineFinancials = useMemo(
+    () => ({
+      ...initLineFinancials,
+      currency: currency ?? '',
+      company: `-${company}`,
+    }),
+    [currency, company]
+  )
 
+  // ── State ───────────────────────────────────────────────────────────────
   const [currentLine, setCurrentLine] = useState<ILineFinancials>(initialLine)
   const [rowData, setRowData] = useState<IFinancials[]>([])
   const [model, setModel] = useState<number>(-1)
@@ -74,15 +83,7 @@ const FinancialsForm = () => {
     onNewLine, copyFromTransaction, setCopyFromTransaction, onDeleteLine, submitCancel,
     submitPost, copyCall, setGridApi, zIndex, handleLanguageChange, saveProps, modelid,
     isFetching, setIsFetching, gridOptions,
-  }] = useTransactionForm(
-    current_,
-    initialLine,
-    currentLine,
-    setCurrentLine,
-    rowData,
-    setRowData,
-    model
-  )
+  }] = useTransactionForm(current_, initialLine, currentLine, setCurrentLine, rowData, setRowData, model)
 
   const [title, setTitle] = useState(`${company} /${t(module_.title)}`)
 
@@ -94,120 +95,130 @@ const FinancialsForm = () => {
   const cc_ctx = `${MASTERFILE.masterfile}/${cc_modelid}/${company}`
   const contact_ctx = `${MASTERFILE.contact}/${contact_modelid}/${company}`
 
-  const [accData, setAccData] = useState<IAccount[]>([initAcc])
-  const [ccData, setCcData] = useState<IMasterfile[]>([])
-  const [contactData, setContactData] = useState<IContact[]>([])
+  // ── Reactive store reads ────────────────────────────────────────────────
+  const snapshot = useSyncExternalStore(
+    iwsStore.subscribeSimple,
+    iwsStore.getRawMap,
+    iwsStore.getRawMap
+  )
+
+  const accData = useMemo<IAccount[]>(() => {
+    const inner = snapshot.get(acc_modelid)
+    const list = inner ? (Array.from(inner.values()) as IAccount[]) : []
+    return list.length > 0 ? list : [initAcc]
+  }, [snapshot, acc_modelid])
+
+  const ccData = useMemo<IMasterfile[]>(() => {
+    const inner = snapshot.get(cc_modelid)
+    return inner ? (Array.from(inner.values()) as IMasterfile[]) : []
+  }, [snapshot, cc_modelid])
+
+  const contactData = useMemo<IContact[]>(() => {
+    const inner = snapshot.get(contact_modelid)
+    return inner ? (Array.from(inner.values()) as IContact[]) : []
+  }, [snapshot, contact_modelid])
+
   const [accFilter, setAccFilter] = useState<string[]>([])
   const [oaccFilter, setOAccFilter] = useState<string[]>([])
-  const [reminderBalance, setReminderBalance] = useState<ReminderBalance[]>([initReminderBalance])
+  const [, setReminderBalance] = useState<ReminderBalance[]>([initReminderBalance])
 
-  // ── Effects ─────────────────────────────────────────────────────────────
+  // ── Masterfile fetch — only if store is empty ───────────────────────────
   useEffect(() => {
-    Promise.all([
-      Get(acc_ctx, token, acc_modelid, setAccData),
-      Get(cc_ctx, token, cc_modelid, setCcData),
-      Get(contact_ctx, token, contact_modelid, setContactData),
-    ])
-      .then(() => {
-        console.log('All data fetched successfully')
-      })
-      .catch((error) => {
-        console.error('Error fetching data', error)
-      })
-  }, [selected, current.id])
+    if (!token) return
+    const snap = iwsStore.getRawMap()
 
-  // ── Early return AFTER all hooks ────────────────────────────────────────
-  if (module_ === '11111' || module_ === 11111) return <Login />
+    const tryFetch = <X,>(mId: number, url: string) => {
+      const inner = snap.get(mId)
+      if (!inner || inner.size === 0) {
+        Get(url, token, mId, (() => {}) as React.Dispatch<React.SetStateAction<X[]>>)
+      }
+    }
 
-  // ── Handlers ────────────────────────────────────────────────────────────
-  const submitQuery = (ctx: string, event?: any) => {
+    tryFetch<IAccount>(acc_modelid, acc_ctx)
+    tryFetch<IMasterfile>(cc_modelid, cc_ctx)
+    tryFetch<IContact>(contact_modelid, contact_ctx)
+  }, [token, company, acc_ctx, cc_ctx, contact_ctx, acc_modelid, cc_modelid, contact_modelid])
+
+  // ── Callbacks ───────────────────────────────────────────────────────────
+  const submitQuery = useCallback(async (ctx: string, event?: any) => {
     event?.preventDefault()
     setIsFetching(true)
-    Promise.all([
-      Get(acc_ctx, token, acc_modelid, setAccData),
-      Get(cc_ctx, token, cc_modelid, setCcData),
-      Get3(ctx, token, modelid, current_, setRowData, setCurrent),
-    ])
-      .then(() => {
-        console.log('All data fetched successfully')
-      })
-      .catch((error) => {
-        console.error('Error fetching data', error)
-      })
+    try {
+      const snap = iwsStore.getRawMap()
+      const jobs: Promise<unknown>[] = []
 
-    setIsFetching(false)
-  }
+      const tryFetch = <X,>(mId: number, url: string) => {
+        const inner = snap.get(mId)
+        if (!inner || inner.size === 0) {
+          jobs.push(Get(url, token, mId, (() => {}) as React.Dispatch<React.SetStateAction<X[]>>) as unknown as Promise<void>)
+        }
+      }
 
-  const handleModuleChange = (selected: any) => {
+      tryFetch<IAccount>(acc_modelid, acc_ctx)
+      tryFetch<IMasterfile>(cc_modelid, cc_ctx)
+      jobs.push(Get3(ctx, token, modelid, current_, setRowData, setCurrent) as unknown as Promise<void>)
+
+      await Promise.all(jobs)
+    } catch (error) {
+      console.error('Error fetching data', error)
+    } finally {
+      setIsFetching(false)
+    }
+  }, [acc_ctx, cc_ctx, token, acc_modelid, cc_modelid, modelid, current_, setCurrent, setIsFetching])
+
+  const handleModuleChange = useCallback((selected: any) => {
     const id = selected?.value !== undefined ? String(selected.value) : String(selected)
     const numericId = parseInt(id, 10)
     setModel(numericId)
 
     const mx: IFmodule = fmodule.find((m: IFmodule) => String(m.id) === id) ?? initfModule
     const moduleName = mx?.name ?? 'Not found'
-    const title_ = `${company}/${moduleName}`
+    setTitle(`${company}/${moduleName}`)
 
     const copyFromIds = (mx?.copyFrom ?? '-1').replace(/\s/g, '').split(',')
-    console.log('copyFromIds', copyFromIds)
 
-    setTitle(title_)
     setCurrent(current_)
     setAccFilter(mx.accFilter?.replace(/\s/g, '').split(','))
     setOAccFilter(mx.oaccFilter?.replace(/\s/g, '').split(','))
 
-    const modelidx = parseInt(id, 10)
-    setModel(modelidx)
-
-    const ctx_ = `${module_.ctx}/${modelidx}/${company}`
+    const ctx_ = `${module_.ctx}/${numericId}/${company}`
     const ctx_copyFrom = `${module_.ctx}/n/${company}/${copyFromIds}`
     const idx = copyFromIds.map((i) => parseInt(i, 10)).reduce((acc, curr) => acc + curr, 0)
 
     Get(ctx_copyFrom, token, idx, setCopyFromTransaction)
-    submitQuery(ctx_)
+    void submitQuery(ctx_)
 
     const currentx =
       rowData?.filter((m) => m.modelid === current_.modelid).length > 0
         ? rowData[0]
         : current_
-    setCurrent({ ...currentx, modelid: modelidx })
-  }
+    setCurrent({ ...currentx, modelid: numericId })
+  }, [fmodule, company, current_, module_, token, rowData, setCopyFromTransaction, setCurrent, submitQuery])
 
-  const onRowSelectedL = (event: RowSelectedEvent) => {
+  const onRowSelectedL = useCallback((event: RowSelectedEvent) => {
     if (!event?.data) return
     const line: ILineFinancials = isArrayAndNotEmpty(event.data) ? event.data[0] : event.data
     if (!line) return
-
-    // Ignore re-emits for the same line — AG Grid re-fires onRowSelected after
-    // rowData changes and would otherwise overwrite a just-committed amount.
     if (String(currentLine?.id) === String(line.id)) return
-
     setCurrentLine({ ...line })
-  }
+  }, [currentLine?.id])
 
-  const fmoduleData = (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id)
-  const minHeight = 300
-  const maxHeight = 650
-  const height = 30
+  const onGridReady = useCallback(
+    (params: GridReadyEvent) => setGridApi(params.api),
+    [setGridApi]
+  )
 
-  const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
+  const buildTotal = useCallback((c: ITransaction | IFinancials) => {
+    const trans = c as IFinancials
+    return trans?.lines?.reduce((acc: number, line: ILineFinancials) => acc + line.amount, 0.0)
+  }, [])
 
-  const buildTotal = (current: ITransaction | IFinancials) => {
-    // @ts-ignore
-    const trans: IFinancials = current
-    return trans?.lines?.reduce(
-      (acc: number, line: ILineFinancials) => acc + line.amount,
-      0.0
-    )
-  }
+  const formatLines = useCallback((line: ILineFinancials) => ({
+    ...line,
+    amount: line.amount.toLocaleString(locale, { style: 'currency', currency }),
+  }), [locale, currency])
 
-  const formatLines = (line: ILineFinancials) => {
-    return {
-      ...line,
-      amount: line.amount.toLocaleString(locale, { style: 'currency', currency }),
-    }
-  }
-
-  const getData: () => any = async (): Promise<any> => {
+  const getData = useCallback(async (): Promise<any> => {
     const ftr_ctx = `${module_.ctx}/${current.oid}/${formEnum.CUSTOMER_INVOICE}/${company}`
     const total_ = buildTotal(current)
     const contact = contactData.find((m) => m.id === current.contact) ?? initContact
@@ -220,14 +231,12 @@ const FinancialsForm = () => {
     const monthName = getMonthName(month - 1, locale ?? 'fr-FR')
     const date = new Date(year, month, 0)
     const invoiceData = (await GET4<IFinancials>(ftr_ctx, token)) ?? initFtr
-    console.log('invoiceData', invoiceData)
     const rent = (invoiceData.lines?.at(0) ?? initLineFinancials).amount
-    console.log('rent', rent)
     const lastDay = new Date(date.getFullYear(), date.getMonth(), 0).getDate()
 
     const startDay1AsOrdinal = getLocalizedOrdinal(1, locale ?? 'fr-FR')
     const rentx = rent ?? 1
-    const result = {
+    return {
       ...current,
       date: new Date().toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }),
       appartmentId,
@@ -251,20 +260,18 @@ const FinancialsForm = () => {
       totalText: toCardinal(total_).split(' ').map(capitalizeFirst).join('.'),
       lines: current.lines.map(formatLines),
     }
-    console.log('getData result', result)
-    return result
-  }
+  }, [module_, current, company, contactData, locale, token, currency, buildTotal, formatLines])
 
-  const getMonth = (d: ReminderBalance) => {
+  const getMonth = useCallback((d: ReminderBalance) => {
     const month = new Date(
       Number(d?.period.toString().substring(0, 4)),
       Number(d?.period.toString().substring(4, 6)) - 1,
       5, 0, 0, 0, 0
     ).toLocaleDateString(locale, { month: 'long' })
     return capitalizeFirst(month)
-  }
+  }, [locale])
 
-  const getData2 = async (): Promise<{ id: string; lines: any[] }> => {
+  const getData2 = useCallback(async () => {
     const ctx_ = `${module_.ctx}/balance/${current.account}/${company}`
     const appartmentId = current.costcenter.substring(
       current.costcenter.length - 2,
@@ -274,7 +281,7 @@ const FinancialsForm = () => {
     const contact = contactData.find((m) => m.id === current.contact) ?? initContact
     const total = Number(data.reduce((acc: number, line: ReminderBalance) => acc + line.balance, 0.0))
     setReminderBalance(data)
-    const result = {
+    return {
       id: current.id.toString(),
       appartmentId,
       name: contact.name,
@@ -298,21 +305,31 @@ const FinancialsForm = () => {
         }),
       })),
     }
-    console.log('reminderBalance', reminderBalance)
-    console.log('fresh reminderBalance', result)
-    return result
-  }
+  }, [module_, current, company, contactData, locale, token, currency, getMonth])
 
-  const chunkSize = 20
-  const processImport = (dataToImport: IFinancials[]) => {
+  const processImport = useCallback((dataToImport: IFinancials[]) => {
     const ctx_ = '/ftrL'
-    const arr = []
-    for (let i = 0; i < dataToImport.length; i += chunkSize) {
-      const chunk = dataToImport.slice(i, i + chunkSize)
+    const arr: Promise<unknown>[] = []
+    for (let i = 0; i < dataToImport.length; i += 20) {
+      const chunk = dataToImport.slice(i, i + 20)
       arr.push(AddList(ctx_, token, chunk, rowData, setRowData))
     }
-    Promise.all(arr).then((importedData) => console.log('importedData', importedData))
-  }
+    Promise.all(arr).catch((error) => {
+      console.error('Import failed', error)
+    })
+  }, [token, rowData, setRowData])
+
+  const fmoduleData = useMemo(
+    () => (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id),
+    [fmodule]
+  )
+
+  const minHeight = 300
+  const maxHeight = 650
+  const height = 30
+
+  // ── Early return AFTER all hooks ────────────────────────────────────────
+  if (module_ === '11111' || module_ === 11111) return <Login />
 
   // ── Render ──────────────────────────────────────────────────────────────
   return isFetching ? (
@@ -423,9 +440,8 @@ const FinancialsForm = () => {
           zIndex: 1,
           display: state.collapseTable ? '' : 'none',
         }}
-        maximize
-        direction="column"
-      >
+        data-maximize
+        data-direction="column">
         <TransactionGrid
           // @ts-ignore
           gridOptions={gridOptions(

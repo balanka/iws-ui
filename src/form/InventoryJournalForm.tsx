@@ -1,21 +1,20 @@
-import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule} from 'ag-grid-community'
+import { AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule } from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-ignore
-import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
-import {JournalFormHead} from './JournalFormHead'
-import { InventoryJournalMainForm }  from './InventoryJournalMainForm'
-import {inventoryJournalColumnsDefs} from '../ColumnsDefs.ts'
-import {InventoryJournal, IWSModel} from '../Models.ts'
-import {defaultColDefX, InventoryJournalGrid} from '../IWSGrid.tsx'
+import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
+import { JournalFormHead } from './JournalFormHead'
+import { InventoryJournalMainForm } from './InventoryJournalMainForm'
+import { inventoryJournalColumnsDefs } from '../ColumnsDefs.ts'
+import { InventoryJournal, IWSModel } from '../Models.ts'
+import { defaultColDefX, InventoryJournalGrid } from '../IWSGrid.tsx'
 import Login from './Login.tsx'
-import {useDispatch} from 'react-redux'
-import {logout} from '../utils/FormUtils.tsx'
-import {generateDocx} from '../utils/XlsUtils.ts'
-import useForm from './UseForm.ts'
-import useArticleAccountForm from "./UseArticleAccountForm.ts";
-import {TEMPLATE_ENUM} from "../Props.ts";
-
+import { useDispatch } from 'react-redux'
+import { logout } from '../utils/FormUtils.tsx'
+import { generateDocx } from '../utils/XlsUtils.ts'
+import useForm from './useForm.ts'
+import useArticleAccountForm from './useArticleAccountForm.ts'
+import { TEMPLATE_ENUM } from '../Props.ts'
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -24,35 +23,67 @@ ModuleRegistry.registerModules([
 ])
 
 const InventoryJournalForm = () => {
-  const [{ t, title, language, profile,  handleLanguageChange, module_}] = useForm()
-  const {currency, locale, company} = profile
-  const  [{ rowData, current_, current, setCurrent, submitQuery, onRowSelected, articleData, storeData
-    , fmodule, styles}] = useArticleAccountForm<InventoryJournal>()
-  if (module_ === '11111' || module_ === 11111) return <Login/>
+  const [{ t, title, language, profile, handleLanguageChange, module_ }] = useForm()
+  const { currency, locale, company } = profile
+
+  const [{
+    rowData, current, setCurrent, submitQuery, onRowSelected,
+    articleData, storeData, fmodule, styles,
+  }] = useArticleAccountForm<InventoryJournal>()
+
   const dispatch = useDispatch()
   const height = 20
 
-  console.log('current_', current_)
   const getData = () => {
     return []
   }
 
+  // ── Early return AFTER all hooks ────────────────────────────────────────
+  if (module_ === '11111' || module_ === 11111) return <Login />
+
   return (
-    <div  style={{...styles.inner}} >
-      <JournalFormHead style={{...styles.inner2}} title={title} submitQuery={submitQuery} dispatch={dispatch}
-                       logout ={logout}  balancesheet={false} t={t}
-                       template1EnumId={TEMPLATE_ENUM.FIRST} fmodule ={fmodule}
-                       current={ { ...current, id: `${current.fromPeriod}${current.toPeriod}`, modelid:current.modelid, company:company} as IWSModel}
-                       getData={getData} submitPrintPreview = {generateDocx}  language={language} handleLanguageChange={handleLanguageChange}
+    <div style={{ ...styles.inner }}>
+      <JournalFormHead
+        style={{ ...styles.inner2 }}
+        title={title}
+        submitQuery={submitQuery}
+        dispatch={dispatch}
+        logout={logout}
+        balancesheet={false}
+        t={t}
+        template1EnumId={TEMPLATE_ENUM.FIRST}
+        fmodule={fmodule}
+        current={{
+          ...current,
+          id: `${current.fromPeriod}${current.toPeriod}`,
+          modelid: current.modelid,
+          company,
+        } as IWSModel}
+        getData={getData}
+        submitPrintPreview={generateDocx}
+        language={language}
+        handleLanguageChange={handleLanguageChange}
       />
-      <InventoryJournalMainForm current={current} setCurrent={setCurrent} t={t} artData={articleData} storeData ={storeData} height={height}
+      <InventoryJournalMainForm
+        current={current}
+        setCurrent={setCurrent}
+        t={t}
+        artData={articleData}
+        storeData={storeData}
+        height={height}
         // @ts-ignore
-                       stylesx={{height: 950, paddingBottom: 5}} />
-      <div  style={{paddingLeft: 1, paddingRight: 1, paddingTop: 10, height: 560, width: "100%"}}>
-        <InventoryJournalGrid columnDefs ={inventoryJournalColumnsDefs(t, locale??'fr-FR', currency??'EUR')} defaultColDef ={{...defaultColDefX, filter:true}}
-                     onRowSelected={onRowSelected} rowData={rowData}/>
+        stylesx={{ height: 950, paddingBottom: 5 }}
+      />
+      <div style={{ paddingLeft: 1, paddingRight: 1, paddingTop: 10, height: 560, width: '100%' }}>
+        <InventoryJournalGrid
+          columnDefs={inventoryJournalColumnsDefs(t, locale ?? 'fr-FR', currency ?? 'EUR')}
+          defaultColDef={{ ...defaultColDefX, filter: true }}
+          onRowSelected={onRowSelected}
+          rowData={rowData}
+        />
       </div>
     </div>
   )
 }
-export default InventoryJournalForm
+
+export default <InventoryJournalForm></InventoryJournalForm>
