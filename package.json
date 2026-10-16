@@ -16,6 +16,7 @@
     "@types/react-dom": "^19.2.8",
     "@vitejs/plugin-react": "^5.2.0",
     "autoprefixer": "^10.5.0",
+    "babel-plugin-react-compiler": "19.1.0-rc.3",
     "postcss": "^8.5.28",
     "sass": "^1.104.0",
     "typescript": "^7.0.2",
@@ -69,5 +70,7 @@
     "vite": "^8.2.2",
     "xlsx": "https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz",
     "zustand": "^5.0.15"
-  }
+  },
+  "packageManager": "yarn@4.17.1",
+  "build:dev": "tsc && vite build --mode development"
 }
