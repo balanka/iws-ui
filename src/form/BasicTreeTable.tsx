@@ -168,13 +168,12 @@ const BasicTreeTable = () => {
         <div style={{...STYLES.inner}}>
           <BalanceSheetHead style={{...STYLES.inner2}} title={title} submitQuery={load} dispatch={dispatch}
                             logout={logout} t={t}
-                            //@ts-ignore
+                            //@ts-expect-error -- legacy, see TODO
                             templateFileName ={() =>""}/>
           <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
-            //@ts-ignore
+            //@ts-expect-error -- legacy, see TODO
                            stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
           <div
-            //@ts-ignore
                 style={{...stylesx.outer, height: 600, width: "100%", paddingTop: 10}} >
           </div>
         </div>

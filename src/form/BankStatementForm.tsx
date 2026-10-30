@@ -7,7 +7,7 @@ import {
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { Edit, Get, Get2 } from './CrudController'
 import { initBS, MASTERFILE } from './Menu'
@@ -158,7 +158,6 @@ const BankStatementForm = () => {
       />
 
       <div
-        // @ts-ignore
         style={{
           ...styles.outer,
           paddingTop: 1,
@@ -178,7 +177,6 @@ const BankStatementForm = () => {
       </div>
 
       <div
-        // @ts-ignore
         style={{
           ...styles.outer,
           paddingTop: 15,

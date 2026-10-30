@@ -65,7 +65,7 @@ const WidgetsBrand = ( {className, withCharts}:{className?:string, withCharts?:b
             { title: 'friends', value: '89K' },
             { title: 'feeds', value: '459' },
           ]}
-            // @ts-ignore
+            // @ts-expect-error -- legacy, see TODO
           style={{'--cui-card-cap-bg': '#3b5998',}}
         />
       </CCol>
@@ -98,7 +98,7 @@ const WidgetsBrand = ( {className, withCharts}:{className?:string, withCharts?:b
             { title: 'followers', value: '973k' },
             { title: 'tweets', value: '1.792' },
           ]}
-            // @ts-ignore
+            // @ts-expect-error -- legacy, see TODO
           style={{'--cui-card-cap-bg': '#00aced',}}
         />
       </CCol>
@@ -131,7 +131,7 @@ const WidgetsBrand = ( {className, withCharts}:{className?:string, withCharts?:b
             { title: 'contacts', value: '500' },
             { title: 'feeds', value: '1.292' },
           ]}
-            // @ts-ignore
+            // @ts-expect-error -- legacy, see TODO
           style={{'--cui-card-cap-bg': '#4875b4',}}
         />
       </CCol>

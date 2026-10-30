@@ -1,8 +1,7 @@
 import {JSX, useCallback, useRef} from 'react';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import { useSelector } from 'react-redux';
-import {CBadge, CFormSelect, CHeaderToggler, CInputGroup, CTooltip} from '@coreui/react-pro';
+import {CBadge, CFormSelect, CHeaderToggler, CInputGroup} from '@coreui/react-pro';
 import { IoMdMenu } from 'react-icons/io';
 import { languages } from './languages';
 
@@ -25,13 +24,8 @@ import LocalPrintshopSharpIcon from '@mui/icons-material/LocalPrintshopSharp';
 import {TransactionToolBarProps} from "../Props.ts";
 import {IFinancials, ILineFinancials, ILineTransaction, ITransaction} from "../Models.ts";
 import { parseExcelToFinancials } from '../utils/FileImport';
-const ToolbarButton = ({ tooltip, onClick, disabled, icon, zIndex }: any) => (
-  <CTooltip content={tooltip} placement="top" style={{zIndex: zIndex??99999 }}>
-    <IconButton size="small" sx={{ height: 22, width: 18}} onClick={onClick} disabled={disabled}>
-      {icon}
-    </IconButton>
-  </CTooltip>
-)
+import {ToolbarButton} from '../components/ToolbarButton'
+
 
 export const FinancialsFormHead = ({
                                      title, collapse, initAdd, onNewLine, onDeleteLine, submitCancel, submitEdit,

@@ -3,7 +3,7 @@ import { AllCommunityModule, ClientSideRowModelModule, ModuleRegistry } from 'ag
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { FModuleMainForm } from './FModuleMainForm'
 import { Get } from './CrudController'
@@ -105,7 +105,6 @@ const FModuleForm = () => {
     <>
       {header}
       <CInputGroup
-        // @ts-ignore
         style={{ ...styles.outer, display: !state.collapseForm ? 'none' : '', width: '100%' }}
       >
         {safeBody ?? mainForm}

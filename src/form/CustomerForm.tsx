@@ -136,7 +136,7 @@ const CustomerForm = () => {
       contactData={contactData}
       zIndex={zIndex - 1}
       onGridReady={onGridReady}
-      // @ts-ignore
+      // @ts-expect-error -- legacy, see TODO
       stylesx={{
         ...styles,
         height: state.collapseForm ? minHeight : maxHeight,

@@ -1,7 +1,7 @@
 import { AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule } from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { JournalFormHead } from './JournalFormHead'
 import { InventoryJournalMainForm } from './InventoryJournalMainForm'
@@ -71,7 +71,7 @@ const InventoryJournalForm = () => {
         artData={articleData}
         storeData={storeData}
         height={height}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         stylesx={{ height: 950, paddingBottom: 5 }}
       />
       <div style={{ paddingLeft: 1, paddingRight: 1, paddingTop: 10, height: 560, width: '100%' }}>

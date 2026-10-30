@@ -1,21 +1,25 @@
 import React, { JSX } from 'react';
 import { CCol, CInputGroup } from '@coreui/react-pro'
-import {DatePickerField, InputField, TextareaField,  MasterfileXComboBox} from './common'
+import {DatePickerField, InputField, TextareaField, MasterfileXComboBox} from './common'
 import { styles } from './FormsProps'
 import { CustomerGeneralFormProps } from '../Props'
 import {initContact, initCurrency} from "./Menu.tsx";
 import { IBusinespartner, IMasterfile} from "../Models.ts";
 
-export const CustomerGeneralForm = ({
-                                      collapse = true,
-                                      ccyData,
-                                      contactData,
-                                      current,
-                                      setCurrent,
-                                      disable,
-                                      t,
-                                      height = 28
-                                    }: CustomerGeneralFormProps & { collapse?: boolean; height?: number }): JSX.Element | null => {
+export const CustomerGeneralForm = <P extends IBusinespartner>({
+                                                                 collapse = true,
+                                                                 current, setCurrent, ccyData, contactData, disable, t, height,
+                                                               }: CustomerGeneralFormProps<P>& { collapse?: boolean; height?: number }): JSX.Element | null => {
+// export const CustomerGeneralForm = ({
+//                                       collapse = true,
+//                                       ccyData,
+//                                       contactData,
+//                                       current,
+//                                       setCurrent,
+//                                       disable,
+//                                       t,
+//                                       height = 28
+//                                     }: CustomerGeneralFormProps & { collapse?: boolean; height?: number }): JSX.Element | null => {
   if (!collapse) return null;
   //console.log('contactData', contactData)
   const inputStyle = { height: height - 3, width: '100%', fontSize: '0.875rem' };
@@ -28,7 +32,8 @@ export const CustomerGeneralForm = ({
                        , fieldName: keyof IBusinespartner, styles?: React.CSSProperties)=> {
     const initAccx = { id: String(initData.id), name: initData.name };
     const acc_data = data.map((m: IMasterfile) => ({id: `${m.id}`, name: m.name}));
-    return MasterfileXComboBox<IBusinespartner, { id: string, name: string }>({
+
+    return MasterfileXComboBox<P, { id: string, name: string }>({
       current, setCurrent, data: acc_data, fieldName: fieldName, defaultValue:initAccx, height:height,  zIndex: 10, styles:styles, disable
     })
   }

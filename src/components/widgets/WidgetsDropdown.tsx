@@ -23,18 +23,18 @@ const WidgetsDropdown = ({className}:{className?:any}) => {
     document.documentElement.addEventListener('ColorSchemeChange', () => {
       if (widgetChartRef1.current) {
         setTimeout(() => {
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           widgetChartRef1.current.data.datasets[0].pointBackgroundColor = getStyle('--cui-primary')
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           widgetChartRef1.current.update()
         })
       }
 
       if (widgetChartRef2.current) {
         setTimeout(() => {
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           widgetChartRef2.current.data.datasets[0].pointBackgroundColor = getStyle('--cui-info')
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           widgetChartRef2.current.update()
         })
       }
@@ -100,7 +100,7 @@ const WidgetsDropdown = ({className}:{className?:any}) => {
                     },
                     grid: {
                       display: false,
-                      // @ts-ignore
+                      // @ts-expect-error -- legacy, see TODO
                       drawBorder: false,
                     },
                     ticks: {
@@ -191,7 +191,7 @@ const WidgetsDropdown = ({className}:{className?:any}) => {
                     },
                     grid: {
                       display: false,
-                      // @ts-ignore
+                      // @ts-expect-error -- legacy, see TODO
                       drawBorder: false,
                     },
                     ticks: {
@@ -378,7 +378,7 @@ const WidgetsDropdown = ({className}:{className?:any}) => {
                     },
                     grid: {
                       display: false,
-                      // @ts-ignore
+                      // @ts-expect-error -- legacy, see TODO
                       drawBorder: false,
                       drawTicks: false,
                     },

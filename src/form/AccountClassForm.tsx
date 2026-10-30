@@ -3,7 +3,7 @@ import { AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry } 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { MasterfileFormWithout } from './MasterfileFormWithout'
 import { Get } from './CrudController'

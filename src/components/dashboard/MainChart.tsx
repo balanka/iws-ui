@@ -10,23 +10,23 @@ const MainChart = () => {
     document.documentElement.addEventListener('ColorSchemeChange', () => {
       if (chartRef.current) {
         setTimeout(() => {
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           chartRef.current.options.scales.x.grid.borderColor = getStyle(
             '--cui-border-color-translucent',
           )
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           chartRef.current.options.scales.x.grid.color = getStyle('--cui-border-color-translucent')
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           chartRef.current.options.scales.x.ticks.color = getStyle('--cui-body-color')
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           chartRef.current.options.scales.y.grid.borderColor = getStyle(
             '--cui-border-color-translucent',
           )
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           chartRef.current.options.scales.y.grid.color = getStyle('--cui-border-color-translucent')
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           chartRef.current.options.scales.y.ticks.color = getStyle('--cui-body-color')
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           chartRef.current.update()
         })
       }

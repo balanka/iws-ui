@@ -1,7 +1,7 @@
-import { JSX } from 'react'
+import {Dispatch, JSX, SetStateAction} from 'react'
 import { FormRow1Col } from './common'
 import { FormMasterfileXComboBox } from './common'
-import { IAccount, ICompany, IVat } from '../Models'
+import {IAccount, ICompany, IVat} from '../Models'
 import { TFunction } from 'i18next'
 import { initAcc, initVat } from './Menu'
 import {styles} from "./FormsProps.tsx";
@@ -9,7 +9,7 @@ import {CInputGroup} from "@coreui/react-pro";
 
 interface CompanyAccountFormProps {
   readonly current: ICompany
-  readonly setCurrent: (art: any) => void
+  readonly setCurrent: Dispatch<SetStateAction<ICompany>>
   readonly accData: IAccount[]
   readonly vatData: IVat[]
   readonly t: TFunction<'translation', undefined>

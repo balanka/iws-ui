@@ -7,10 +7,11 @@ import {bankAccountColumnDefs} from '../ColumnsDefs'
 import IWSTabs from './IWSTabs.tsx'
 import {BankAccountForm} from './BankAccountForm.tsx'
 import {CustomerTabProps, } from '../Props'
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {initBankAccount} from './Menu.tsx'
 import {styles} from "./BasicTreeTableProps.tsx";
+import {ICustomer, IEmployee, ISupplier} from "../Models.ts";
 
 const CustomerTabs  = ({ collapse, current, setCurrent
                            , currentBankAccount, setCurrentBankAccount, t, accData, bankData, vatData
@@ -22,10 +23,9 @@ const CustomerTabs  = ({ collapse, current, setCurrent
 
   const table =
     <div
-      // @ts-ignore
       style={{...styles.outer, height:180, padding:5, paddingTop: 20 }} >
             <BankAccountGrid
-                // @ts-ignore
+                // @ts-expect-error -- legacy, see TODO
                 theme="legacy" columnDefs ={bankAccountColumnDefs(t)}  defaultColDef={defaultColDef} onGridReady={onGridReady}
                 rowData ={current?.bankaccounts??[initBankAccount]} onRowSelected ={onRowSelected}/>
     </div>
@@ -38,7 +38,7 @@ const CustomerTabs  = ({ collapse, current, setCurrent
   const customerAccountForm = <CustomerAccountMainForm current={current} setCurrent={setCurrent}
                                        accData={accData} vatData={vatData} t={t} disable={disable} height={height}
                                                        zIndex={zIndex}/>
-  const generalForm = <CustomerGeneralForm collapse={collapse} current={current} setCurrent={setCurrent} t={t}
+  const generalForm = <CustomerGeneralForm<ICustomer | ISupplier | IEmployee> collapse={collapse} current={current} setCurrent={setCurrent} t={t}
                                            ccyData={ccyData} contactData={contactData} disable={disable}  height={height}/>
   const tabContent = [
       { title: t('common.general'), id: 1, form: generalForm},
@@ -49,8 +49,6 @@ const CustomerTabs  = ({ collapse, current, setCurrent
       //{ title: t('TEST2'), id: 6, form: FileInput()},
       //{ title: t('TEST3'), id: 7, form: FileOutput()},
     ]
-  return <IWSTabs
-    //@ts-ignore
-    tabList={tabContent} />
+  return <IWSTabs tabList={tabContent}/>
 }
 export {CustomerTabs}

@@ -107,7 +107,7 @@ const getGridOptions= ( columnDefs:ColDef[], defaultColDef:DefaultColDefType, on
             if (params.node.rowIndex % 2 === 0) {
                 return { background: '#fff9e6' };
             }//else if(params.data.toPeriod===-1) {}
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           if (params?.data?.period  === 0) {
             return {
               //background: 'black',
@@ -172,7 +172,7 @@ export const AccountGrid: FC<Props<IAccount>> = ({ columnDefs, defaultColDef, on
     <AgGridReact
         theme = {myTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={{...getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected), paginationPageSizeSelector: [20, 50, 80,120, 200]}}
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
@@ -185,7 +185,7 @@ export const BankAccountGrid: FC<Props<IBankAccount>> = ({ columnDefs, defaultCo
         ref={gridRef}
         theme = {myTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected)}
         rowData ={rowData}
         onGridReady={onGridReady}
@@ -196,7 +196,7 @@ export const StockGrid: FC<Props<IStock>> = ({ columnDefs, defaultColDef, onRowS
     <AgGridReact
         theme = {myTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
@@ -206,7 +206,7 @@ export const ArticleGrid: FC<Props<IArticle>> = ({ columnDefs, defaultColDef, on
     <AgGridReact
         theme = {pacTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
@@ -215,7 +215,7 @@ export const CustomerGrid: FC<Props<ICustomer|ISupplier|IEmployee>> = ({ columnD
     <AgGridReact
         theme = {pacTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
         onGridReady={onGridReady}
@@ -225,7 +225,7 @@ export const AssetGrid: FC<Props<IAsset>> = ({ columnDefs, defaultColDef, onRowS
     <AgGridReact
         theme = {myTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
@@ -236,7 +236,7 @@ export const MasterfileGrid = ({ columnDefs, defaultColDef, onRowSelected, gridO
     rowData={rowData}
     onRowSelected={onRowSelected}
     getRowId={(params) => String(params.data.id)}
-    // @ts-ignore
+    // @ts-expect-error -- legacy, see TODO
     gridOptions={gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected)}
     animateRows={false}
   />
@@ -247,7 +247,7 @@ export const MasterfileGrid = ({ columnDefs, defaultColDef, onRowSelected, gridO
     //    // onRowClicked={onRowSelected, setCurrent}
     //     getRowId={getRowId}
     //     onRowSelected = {onRowSelected}
-    //     // @ts-ignore
+    //     // @ts-expect-error -- legacy, see TODO
     //     gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
     //     rowData ={rowData}
     //     resetRowDataOnUpdate ={true}
@@ -257,7 +257,7 @@ export const RoleGrid: FC<Props<IRole>> = ({ columnDefs, defaultColDef, onRowSel
     <AgGridReact
         theme = {myTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
@@ -267,7 +267,7 @@ export const RightGrid: FC<Props<IUserRight>> = ({ columnDefs, defaultColDef, on
     <AgGridReact
         theme = {myTheme}
         onRowSelected = {onRowSelected}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
@@ -275,7 +275,7 @@ export const RightGrid: FC<Props<IUserRight>> = ({ columnDefs, defaultColDef, on
     />
  export const PeriodicAccountBalanceGrid: FC<Props<IPeriodicAccountBalance2>> = ({ columnDefs, defaultColDef
                          , onRowSelected, onSelectionChanged, gridOptions, gridRef, rowData }:Props<IPeriodicAccountBalance2>) => {
-   // @ts-ignore
+   // @ts-expect-error -- legacy, see TODO
    const gridOptions_ = {...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
      , paginationPageSize: 20, paginationPageSizeSelector: [20, 50, 80]}
    return (< AgGridReact
@@ -284,20 +284,20 @@ export const RightGrid: FC<Props<IUserRight>> = ({ columnDefs, defaultColDef, on
    onRowSelected = {onRowSelected}
    rowSelection="multiple"
    onSelectionChanged={onSelectionChanged}
-   // @ts-ignore
+   // @ts-expect-error -- legacy, see TODO
    gridOptions = {gridOptions_}
    rowData = {rowData}
    resetRowDataOnUpdate = {true}
    />)
  }
 export const JournalGrid: FC<Props<IJournal>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<IJournal>)=> {
-  // @ts-ignore
+  // @ts-expect-error -- legacy, see TODO
   const gridOptions_ = {...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
     , paginationPageSize: 20, paginationPageSizeSelector: [30, 50, 80]}
   return (<AgGridReact
     theme={pacTheme}
     onRowSelected={onRowSelected}
-    // @ts-ignore
+    // @ts-expect-error -- legacy, see TODO
     gridOptions={gridOptions_}
     rowData={rowData}
     //onGridReady={onGridReady}
@@ -305,13 +305,13 @@ export const JournalGrid: FC<Props<IJournal>> = ({ columnDefs, defaultColDef, on
   />)
 }
 export const InventoryJournalGrid: FC<Props<InventoryJournal>> = ({ columnDefs, defaultColDef, onRowSelected, gridOptions, rowData }:Props<InventoryJournal>)=> {
-  // @ts-ignore
+  // @ts-expect-error -- legacy, see TODO
   const gridOptions_ = {...(gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected))
     , paginationPageSize: 20, paginationPageSizeSelector: [30, 50, 80]}
   return (<AgGridReact
     theme={pacTheme}
     onRowSelected={onRowSelected}
-    // @ts-ignore
+    // @ts-expect-error -- legacy, see TODO
     gridOptions={gridOptions_}
     rowData={rowData}
     //onGridReady={onGridReady}
@@ -322,7 +322,7 @@ export const StoreGrid: FC<Props<IStore>> = ({ columnDefs, defaultColDef, onRowS
     <AgGridReact
         theme = {myTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
@@ -331,7 +331,7 @@ export const UserGrid: FC<Props<IUser>> = ({ columnDefs, defaultColDef, onRowSel
     <AgGridReact
         theme = {myTheme}
         onRowSelected = {onRowSelected}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
         rowData ={rowData}
         resetRowDataOnUpdate ={true}
@@ -344,7 +344,7 @@ export const BankStatementGrid: FC<Props<IBankStatement>> = ({ columnDefs, defau
     rowData={rowData}
     onRowSelected={onRowSelected}
     getRowId={(params) => String(params.data.id)}
-    // @ts-ignore
+    // @ts-expect-error -- legacy, see TODO
     gridOptions={gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected)}
     animateRows={false}
   />
@@ -358,7 +358,7 @@ export const TransactionGrid: FC<Props<ITransaction | IFinancials>> = ({
     rowData={rowData}
     onRowSelected={onRowSelected}
     getRowId={(params) => String(params.data.id)}
-    // @ts-ignore
+    // @ts-expect-error -- legacy, see TODO
     gridOptions={gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected)}
     animateRows={false}
   />
@@ -372,7 +372,7 @@ export const TransactionGrid: FC<Props<ITransaction | IFinancials>> = ({
 //     rowData={rowData}
 //     onRowSelected={onRowSelected}
 //     getRowId={(params) => String(params.data.id)}
-//     // @ts-ignore
+//     // @ts-expect-error -- legacy, see TODO
 //     gridOptions={gridOptions ?? getGridOptions(columnDefs, defaultColDef ?? defaultColDefX, onRowSelected)}
 //     animateRows={false}
 //   />
@@ -384,7 +384,7 @@ export const LineTFinancialsGrid: FC<Props<ILineFinancials>> = ({ columnDefs, de
         theme = {myTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
         onCellValueChanged={onCellValueChanged}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={gridOptions?? getGridOptionsL(columnDefs, defaultColDef?? defaultColDefX, onRowSelected, rowData, pagination) }
         rowData ={rowData}
         onGridReady={onGridReady}
@@ -400,7 +400,7 @@ export const LineTransactionGrid: FC<Props<ILineTransaction>> = ({ columnDefs, d
         theme = {myTheme} //{theme ?? "legacy"}
         onRowSelected = {onRowSelected}
         onCellValueChanged={onCellValueChanged}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
         gridOptions ={gridOptions?? getGridOptionsL(columnDefs, defaultColDef?? defaultColDefX, onRowSelected, rowData, pagination) }
         rowData ={rowData}
         onGridReady={onGridReady}
@@ -411,7 +411,7 @@ export const VatGrid: FC<Props<IVat>> = ({ columnDefs, defaultColDef, onRowSelec
       <AgGridReact
          theme = {myTheme} //{theme ?? "legacy"}
          onRowSelected = {onRowSelected}
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
          gridOptions ={gridOptions?? getGridOptions(columnDefs, defaultColDef?? defaultColDefX, onRowSelected) }
          rowData ={rowData}
          resetRowDataOnUpdate ={true}
@@ -427,7 +427,7 @@ export const VatGrid: FC<Props<IVat>> = ({ columnDefs, defaultColDef, onRowSelec
 //     defaultColDef={defaultColDef}
 //     autoGroupColumnDef={autoGroupColumnDef}
 //     onRowSelected = {onRowSelected}
-//     // @ts-ignore
+//     // @ts-expect-error -- legacy, see TODO
 //     getRowId={getRowId}
 //     treeData={true}
 //     treeDataParentIdField={"parentId"}

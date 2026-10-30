@@ -82,7 +82,7 @@ export const FModuleMainForm = ({
         <CCol sm={5}>
           <MasterfileXComboBox fieldName="copyFrom" current={current} setCurrent={setCurrent}
             isMulti={true} zIndex={zIndex}
-            //@ts-ignore
+            //@ts-expect-error -- legacy, see TODO
             data={rowData} defaultValue={initfModule} disable={disable} styles={comboStyles}
           />
         </CCol>

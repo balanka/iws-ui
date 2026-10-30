@@ -30,7 +30,6 @@ export const InventoryJournalMainForm = ({
             style={{ height: 25, width: '100%', fontSize: 12 }}
             value={{ value: currentArticle?.id || '', label: currentArticle ? `${currentArticle.id} ${currentArticle.name}` : '' }}
             onChange={(value) => setCurrent({ ...current, article: value })}
-            // @ts-ignore
             values={[...artData, initArticle].sort(sortById).map(toOption)}
           />
         </CInputGroup>
@@ -45,7 +44,6 @@ export const InventoryJournalMainForm = ({
             style={{ height: 25, width: '100%', fontSize: 12 }}
             value={{ value: currentStore?.id || '', label: currentStore ? `${currentStore.id} ${currentStore.name}` : '' }}
             onChange={(value) => setCurrent({ ...current, store: value })}
-            // @ts-ignore
             values={[...storeData, initStore].sort(sortById).map(toOption)}
           />
         </CInputGroup>

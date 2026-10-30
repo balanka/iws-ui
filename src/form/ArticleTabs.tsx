@@ -5,7 +5,7 @@ import {stockColumnDefs} from '../ColumnsDefs.ts'
 import {ArticleGeneralForm} from './ArticleGeneralForm'
 import {ArticleAccountForm} from './ArticleAccountForm'
 import {ArticleQRForm} from './ArticleQRForm.tsx'
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {IStock} from "../Models.ts";
 import {ArticleProps} from "../Props.ts";
@@ -19,10 +19,9 @@ export  const ArticleTabs = ({collapse, current, setCurrent,  accData, vatData
                                               setCurrent((event.data instanceof Array)?event.data[0]:event.data)
   const getTable = () =>
       <div
-        // @ts-ignore
         style={{...styles.outer, height:180, display: !collapse?'none':''}} >
       <StockGrid
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           theme="legacy" columnDefs ={stockColumnDefs(t, locale, currency)}
                        onRowSelected={onRowSelected} rowData ={current?.stocks?current?.stocks:initArticle.stocks}/>
       </div>

@@ -21,7 +21,7 @@ interface FinancialsMainFormProps {
   readonly storeData: IMasterfile[];
   readonly accData: IAccount[];
   readonly contactData?: IMasterfile[];
-  readonly modules: IFmodule[];
+  readonly modules: ()=>IFmodule[];
   readonly copyFromTransaction: IFinancials[];
   readonly handleModuleChange: (value: any) => void;
   readonly submitCopy: (id: bigint, modelid: number) => void;
@@ -75,7 +75,7 @@ export const FinancialsMainForm = ({
   let currentLine = isArrayAndNotEmpty(currentx?.lines)? currentx?.lines[0]:currentLineFinancials
   currentLine = (currentx?.lines?.length===1)?currentLine:currentLineFinancials
   const modelid = currentx?.modelid ?? 0;
-  const currentModule = modules.find((m: IFmodule) => m.id === BigInt(modelid)) ?? initfModule;
+  const currentModule = modules().find((m: IFmodule) => m.id === BigInt(modelid)) ?? initfModule;
   const total = currentx?.lines?.reduce((prev, cur) => prev + (cur?.amount || 0), 0) ?? 0;
   const inputStyle = { height: height - 5, width: '100%', fontSize: '0.875rem' };
   const currencyStyle = { height: height - 5, padding:4, textAlign: 'right' as const, width: '100%' };
@@ -90,7 +90,7 @@ export const FinancialsMainForm = ({
           <InputField fieldName="id" current={currentx} setCurrent={setCurrent} value={currentx.id} disabled={currentx.posted} style={{ ...inputStyle, width: '50%', textAlign: 'right' }} />
           <Label>{t('fmodule.title')}</Label>
           <ComboBox style={inputStyle} value={{ value: `${BigInt(currentModule?.id ?? 0)}`, label: `${BigInt(currentModule?.id ?? 0)}
-           ${currentModule?.name ?? ''}` }} onChange={handleModuleChange} values={modules.slice().sort(sortById).map(toOption)}
+           ${currentModule?.name ?? ''}` }} onChange={handleModuleChange} values={modules().slice().sort(sortById).map(toOption)}
                     key="moduleComboBox" height ={height-5}
                     zIndex={99999} />
         </CCol>

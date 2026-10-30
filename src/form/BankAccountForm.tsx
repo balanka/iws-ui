@@ -39,7 +39,6 @@ export const BankAccountForm = ({
 
   return (
     <div
-      // @ts-ignore
       style={{...styles.outer, height:180, padding:5 }} >
       <CInputGroup style={{ height, marginBottom: 8 }}>
         <CCol sm="2"><FieldLabel title={t('common.iban')} /></CCol>

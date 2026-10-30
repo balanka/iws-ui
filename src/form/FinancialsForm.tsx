@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo, useSyncExternalStore } from 'react'
+import { useState, useEffect, useMemo, useSyncExternalStore } from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -9,7 +9,7 @@ import {
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import { styles, styles as stylesx } from './BasicTreeTableProps.tsx'
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { FinancialsMainForm } from './FinancialsMainForm'
 import { FinancialsFormHead } from './FinancialsFormHead.tsx'
@@ -140,7 +140,7 @@ const FinancialsForm = () => {
   }, [token, company, acc_ctx, cc_ctx, contact_ctx, acc_modelid, cc_modelid, contact_modelid])
 
   // ── Callbacks ───────────────────────────────────────────────────────────
-  const submitQuery = useCallback(async (ctx: string, event?: any) => {
+  const submitQuery = async (ctx: string, event?: any) => {
     event?.preventDefault()
     setIsFetching(true)
     try {
@@ -164,9 +164,9 @@ const FinancialsForm = () => {
     } finally {
       setIsFetching(false)
     }
-  }, [acc_ctx, cc_ctx, token, acc_modelid, cc_modelid, modelid, current_, setCurrent, setIsFetching])
+  } //, [acc_ctx, cc_ctx, token, acc_modelid, cc_modelid, modelid, current_, setCurrent, setIsFetching])
 
-  const handleModuleChange = useCallback((selected: any) => {
+  const handleModuleChange = (selected: any) => {
     const id = selected?.value !== undefined ? String(selected.value) : String(selected)
     const numericId = parseInt(id, 10)
     setModel(numericId)
@@ -184,42 +184,35 @@ const FinancialsForm = () => {
     const ctx_ = `${module_.ctx}/${numericId}/${company}`
     const ctx_copyFrom = `${module_.ctx}/n/${company}/${copyFromIds}`
     const idx = copyFromIds.map((i) => parseInt(i, 10)).reduce((acc, curr) => acc + curr, 0)
-
     Get(ctx_copyFrom, token, idx, setCopyFromTransaction)
     void submitQuery(ctx_)
-
     const currentx =
       rowData?.filter((m) => m.modelid === current_.modelid).length > 0
         ? rowData[0]
         : current_
     setCurrent({ ...currentx, modelid: numericId })
-  }, [fmodule, company, current_, module_, token, rowData, setCopyFromTransaction, setCurrent, submitQuery])
+  }
 
-  const onRowSelectedL = useCallback((event: RowSelectedEvent) => {
+  const onRowSelectedL = (event: RowSelectedEvent) => {
     if (!event?.data) return
     const line: ILineFinancials = isArrayAndNotEmpty(event.data) ? event.data[0] : event.data
     if (!line) return
     if (String(currentLine?.id) === String(line.id)) return
     setCurrentLine({ ...line })
-  }, [currentLine?.id])
+  }
 
-  const onGridReady = useCallback(
-    (params: GridReadyEvent) => setGridApi(params.api),
-    [setGridApi]
-  )
+  const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
 
-  const buildTotal = useCallback((c: ITransaction | IFinancials) => {
-    const trans = c as IFinancials
-    return trans?.lines?.reduce((acc: number, line: ILineFinancials) => acc + line.amount, 0.0)
-  }, [])
+  const buildTotal = (c: ITransaction | IFinancials) =>
+     (c as IFinancials)?.lines?.reduce((acc: number, line: ILineFinancials) => acc + line.amount, 0.0)
 
-  const formatLines = useCallback((line: ILineFinancials) => ({
+  const formatLines = (line: ILineFinancials) => ({
     ...line,
     amount: line.amount.toLocaleString(locale, { style: 'currency', currency }),
-  }), [locale, currency])
+  })
 
-  const getData = useCallback(async (): Promise<any> => {
-    const ftr_ctx = `${module_.ctx}/${current.oid}/${formEnum.CUSTOMER_INVOICE}/${company}`
+  const getData = async (): Promise<any> => {
+    const ftr_ctx = `${module_.ctx}/${current.oid}/${formEnum.CUSTOMER_INVOICE_LOGISTIC}/${company}`
     const total_ = buildTotal(current)
     const contact = contactData.find((m) => m.id === current.contact) ?? initContact
     const appartmentId = current.costcenter.substring(
@@ -260,18 +253,18 @@ const FinancialsForm = () => {
       totalText: toCardinal(total_).split(' ').map(capitalizeFirst).join('.'),
       lines: current.lines.map(formatLines),
     }
-  }, [module_, current, company, contactData, locale, token, currency, buildTotal, formatLines])
+  }
 
-  const getMonth = useCallback((d: ReminderBalance) => {
+  const getMonth = (d: ReminderBalance) => {
     const month = new Date(
       Number(d?.period.toString().substring(0, 4)),
       Number(d?.period.toString().substring(4, 6)) - 1,
       5, 0, 0, 0, 0
     ).toLocaleDateString(locale, { month: 'long' })
     return capitalizeFirst(month)
-  }, [locale])
+  }
 
-  const getData2 = useCallback(async () => {
+  const getData2 = async () => {
     const ctx_ = `${module_.ctx}/balance/${current.account}/${company}`
     const appartmentId = current.costcenter.substring(
       current.costcenter.length - 2,
@@ -305,9 +298,9 @@ const FinancialsForm = () => {
         }),
       })),
     }
-  }, [module_, current, company, contactData, locale, token, currency, getMonth])
+  }
 
-  const processImport = useCallback((dataToImport: IFinancials[]) => {
+  const processImport = (dataToImport: IFinancials[]) => {
     const ctx_ = '/ftrL'
     const arr: Promise<unknown>[] = []
     for (let i = 0; i < dataToImport.length; i += 20) {
@@ -317,20 +310,14 @@ const FinancialsForm = () => {
     Promise.all(arr).catch((error) => {
       console.error('Import failed', error)
     })
-  }, [token, rowData, setRowData])
+  }
 
-  const fmoduleData = useMemo(
-    () => (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id),
-    [fmodule]
-  )
+  const fmoduleData = () => (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id)
+  if (module_ === '11111' || module_ === 11111) return <Login />
 
   const minHeight = 300
   const maxHeight = 650
   const height = 30
-
-  // ── Early return AFTER all hooks ────────────────────────────────────────
-  if (module_ === '11111' || module_ === 11111) return <Login />
-
   // ── Render ──────────────────────────────────────────────────────────────
   return isFetching ? (
     <CSpinner color="primary" />
@@ -372,7 +359,6 @@ const FinancialsForm = () => {
       />
 
       <div
-        // @ts-ignore
         style={{
           ...styles.outer,
           width: '100%',
@@ -403,7 +389,6 @@ const FinancialsForm = () => {
         />
 
         <div
-          // @ts-ignore
           style={{
             ...stylesx.outer,
             display: !state.collapseForm ? 'none' : '',
@@ -415,7 +400,7 @@ const FinancialsForm = () => {
           }}
         >
           <LineTFinancialsGrid
-            // @ts-ignore
+            // @ts-expect-error -- legacy, see TODO
             theme="legacy"
             columnDefs={LinesFinancialsColumns(t, locale ?? 'fr-GN', currency ?? 'GNF')}
             onRowSelected={onRowSelectedL}
@@ -431,7 +416,6 @@ const FinancialsForm = () => {
       </div>
 
       <div
-        // @ts-ignore
         style={{
           ...stylesx.outer,
           height: state.collapseForm ? minHeight : maxHeight,
@@ -443,7 +427,7 @@ const FinancialsForm = () => {
         data-maximize
         data-direction="column">
         <TransactionGrid
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           gridOptions={gridOptions(
             (t: any) => financialsColumnDefs(t, locale ?? 'fr-GN', currency ?? 'GNF'),
             locale ?? 'fr-GN',

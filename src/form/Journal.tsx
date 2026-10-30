@@ -1,7 +1,7 @@
 import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule} from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { JournalMainForm} from './JournalMainForm'
 import { JournalFormHead } from './JournalFormHead'
@@ -81,7 +81,7 @@ const Journal = () => {
                        getData={getData} submitPrintPreview = {generateDocx}  language={language} handleLanguageChange={handleLanguageChange}
       />
       <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
-        // @ts-ignore
+        // @ts-expect-error -- legacy, see TODO
                        stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
       <div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: '100%'}}>
       {/*<div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 5, height: 560, width: '100%'}}>*/}

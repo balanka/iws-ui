@@ -4,7 +4,7 @@ import {saveXlsx} from './../utils/XlsUtils.ts'
 import {SaveProps} from "../Props.ts";
 
 function FileOutput() {
-    const [data, setData] = React.useState<Accountx[]>();
+    const [data, setData] = React.useState<Accountx[]>([]);
     type A = { id:string, name: string, parent:string}
     type Accountx = A &{ modelid?:number, company:string}
 
@@ -24,7 +24,7 @@ function FileOutput() {
         }
         reader.readAsBinaryString(file)
     };
-    const saveProps:SaveProps= { 'fileNames':["MYSavedData.xlsx", "MYSavedData.xlsx"], 'sheetName':"Sheet1", data:data }
+    const saveProps:SaveProps <Accountx>= { 'fileNames':["MYSavedData.xlsx", "MYSavedData.xlsx"], 'sheetName':"Sheet1", data:data }
     const onClick = () => saveXlsx(saveProps)
     return (
         <div>

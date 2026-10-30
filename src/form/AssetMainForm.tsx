@@ -19,22 +19,13 @@ export const AssetMainForm = ({ collapse, current, setCurrent, t, accData, ccyDa
 
   const inputStyle = {height: height - 3, width: '100%', fontSize: '0.875rem'};
   const inputRight = {...inputStyle, textAlign: 'right' as const, padding: 2};
-//   const handleCurrencyChange = (field: string) => (value: string | undefined) => {
-//     // Remove thousands separators and convert decimal comma to dot
-//     let cleanValue = value || '0';
-//     cleanValue = cleanValue.replace(/\./g, ''); // Remove thousands separators
-//     cleanValue = cleanValue.replace(/,/g, '.'); // Convert decimal comma to dot
-//     const numberValue = parseFloat(cleanValue);
-//     const finalValue = isNaN(numberValue) ? 0 : numberValue;
-//   setCurrent({...current, [field]: finalValue});
-// }
 
   const accComboBox = (data:IMasterfile[], initData:IMasterfile, fieldName:string,)=> {
     const initAccx = {id: initData.id, name: initData.name}
     const acc_data = data.map((m: IMasterfile) => ({id: m.id, name: m.name}));
     return MasterfileXComboBox<IAsset, { id: string, name: string }>({
       current, setCurrent
-      //@ts-ignore
+      //@ts-expect-error -- legacy, see TODO
       , data: acc_data, initAccx, fieldName: fieldName, zIndex: 10, inputStyle, disable
     })
   }
