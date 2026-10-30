@@ -28,10 +28,7 @@ export const MasterfileFormShell = ({
   return (
     <>
       {header}
-      <CInputGroup
-        //@ts-ignore — CoreUI style prop accepts custom CSS vars
-        style={{ ...styles.outer, display: state.collapseForm ? '' : 'none' }}
-      >
+      <CInputGroup style={{ ...styles.outer, display: state.collapseForm ? '' : 'none' }}>
         {body ?? mainForm}
       </CInputGroup>
       <div

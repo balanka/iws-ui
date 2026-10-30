@@ -3,7 +3,7 @@ import { UserMainForm } from './UserMainForm'
 import IWSTabs from './IWSTabs.tsx'
 import {UserFormProps} from '../Props.ts'
 import {RightGrid, RoleGrid} from '../IWSGrid.tsx'
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import {
   UserRightsColumns,
@@ -44,7 +44,7 @@ const UserTabs = ({ collapse, current, setCurrent, disable, t, height }:UserForm
 
   const gridOptions: GridOptions<IRole> = {
     rowStyle: { background: 'lightBlue' },
-    // @ts-ignore
+    // @ts-expect-error -- legacy, see TODO
     getRowStyle: (params: { node: { rowIndex: number} }) => {
       if (params.node.rowIndex % 2 === 0) {
         return { background: '#fff9e6' }
@@ -66,9 +66,9 @@ const UserTabs = ({ collapse, current, setCurrent, disable, t, height }:UserForm
     autoSizeStrategy: {
       type: "fitGridWidth",
     },
-    // @ts-ignore
+    // @ts-expect-error -- legacy, see TODO
     columnDefs: UserRoleColumnDefs(t),
-    // @ts-ignore
+    // @ts-expect-error -- legacy, see TODO
     detailCellRendererParams: {
       detailGridOptions: {
         columnDefs:UserRightsColumns(t),
@@ -89,7 +89,7 @@ const UserTabs = ({ collapse, current, setCurrent, disable, t, height }:UserForm
   const getRightTable = () => (
       <div  style={{...styles.outer, paddingTop:15, height: collapse?minHeight:maxHeight,  minWidth:"100%"}}>
         <RightGrid
-            // @ts-ignore
+            // @ts-expect-error -- legacy, see TODO
             theme="legacy" columnDefs={UserRightsColumns(t)} onRowSelected={onRightSelected}
             rowData={current?.rights}/>
       </div>
@@ -97,7 +97,7 @@ const UserTabs = ({ collapse, current, setCurrent, disable, t, height }:UserForm
   const getRoleTable = () => (
       <div  style={{...styles.outer, paddingTop:15, height: collapse?minHeight:maxHeight, display: !collapse ? 'none' : ''}}>
           <RoleGrid
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
             theme="legacy" gridOptions ={gridOptions} onRowSelected={onRowSelected}
             rowData={current?.roles??initRole}/>
       </div>

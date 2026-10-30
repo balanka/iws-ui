@@ -40,14 +40,14 @@ const AppHeader = () => {
   const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
   const logout = () => { console.log('Logout!!!!'); iwsStore.clear(); navigate('/dashboard'); window.location.reload()}
   const dispatch = useDispatch()
-  // @ts-ignore
+  // @ts-expect-error -- legacy, see TODO
   const sidebarShow = useSelector((state) => state.sidebarShow)
   const [language, setLanguage] = useState()
 
   useEffect(() => {
     document.addEventListener('scroll', () => {
       headerRef.current &&
-      // @ts-ignore
+      // @ts-expect-error -- legacy, see TODO
         headerRef.current.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0)
     })
   }, [])
@@ -92,7 +92,7 @@ const AppHeader = () => {
           <CNavItem>
 
             <CNavLink to="/dashboard"
-                // @ts-ignore
+                // @ts-expect-error -- legacy, see TODO
                       component={NavLink}></CNavLink>
           </CNavItem>
           <CNavItem>
@@ -110,7 +110,7 @@ const AppHeader = () => {
           </CNavItem>
           <CNavItem>
             <CNavLink to="/tab" href="#"
-                // @ts-ignore
+                // @ts-expect-error -- legacy, see TODO
                 component={NavLink}></CNavLink>
           </CNavItem>
           <CNavItem>
@@ -142,7 +142,7 @@ const AppHeader = () => {
               <CDropdownItem
                 active={colorMode === 'light'}
                 className="d-flex align-items-center"
-                  // @ts-ignore
+                  // @ts-expect-error -- legacy, see TODO
                 component="button"
                 type="button"
                 onClick={() => setColorMode('light')}
@@ -152,7 +152,7 @@ const AppHeader = () => {
               <CDropdownItem
                 active={colorMode === 'dark'}
                 className="d-flex align-items-center"
-                  // @ts-ignore
+                  // @ts-expect-error -- legacy, see TODO
                 component="button"
                 type="button"
                 onClick={() => setColorMode('dark')}
@@ -162,7 +162,7 @@ const AppHeader = () => {
               <CDropdownItem
                 active={colorMode === 'auto'}
                 className="d-flex align-items-center"
-                  // @ts-ignore
+                  // @ts-expect-error -- legacy, see TODO
                 component="button"
                 type="button"
                 onClick={() => setColorMode('auto')}

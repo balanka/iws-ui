@@ -151,7 +151,7 @@ export const LoginForm = ({languages, companies, current, t, i18n, profile, setP
                   </CCardBody>
                 </CCard>
                 <
-                  // @ts-ignore
+                  // @ts-expect-error -- legacy, see TODO
                   Show when={profile.error} fallback={signUp(t)} children={errorFn(profile.error)}/>
               </CCardGroup>
             </CCol>

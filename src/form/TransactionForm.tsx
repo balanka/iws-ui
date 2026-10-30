@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo, useSyncExternalStore } from 'react'
+import { useState, useEffect, useMemo, useSyncExternalStore } from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -8,7 +8,7 @@ import {
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import { styles } from './BasicTreeTableProps.tsx'
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { FinancialsFormHead } from './FinancialsFormHead.tsx'
 import { TransactionMainForm } from './TransactionMainForm.tsx'
@@ -64,11 +64,14 @@ const TransactionForm = () => {
   const isLogin = module_ === '11111' || module_ === 11111
   const titleText = isLogin ? company : `${company}/${t((module_ as any)?.title)}`
   const current_: ITransaction = initLtr
+  const minHeight = 220
+  const maxHeight = 800
+  const height = 35
+
   const initialLine: ILineTransaction = useMemo(
     () => ({ ...initLineTransaction, currency: currency ?? localex }),
     [currency, localex]
   )
-
   const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
   const [rowData, setRowData] = useState<ITransaction[]>([])
   const [model, setModel] = useState<number>(-1)
@@ -126,11 +129,6 @@ const TransactionForm = () => {
     return inner ? (Array.from(inner.values()) as ICustomer[]) : []
   }, [snapshot, cust_modelid])
 
-  // const supplierData = useMemo<ISupplier[]>(() => {
-  //   const inner = snapshot.get(sup_modelid)
-  //   return inner ? (Array.from(inner.values()) as ISupplier[]) : []
-  // }, [snapshot, sup_modelid])
-
   // ── Form state (partner selection, filters, etc.) ───────────────────────
   const [partnerId, setPartnerId] = useState<number>(-1)
   const [accFilter, setAccFilter] = useState<string[]>([])
@@ -150,7 +148,6 @@ const TransactionForm = () => {
   useEffect(() => {
     if (!token) return
     const snap = iwsStore.getRawMap()
-
     const tryFetch = <X,>(mId: number, url: string) => {
       const inner = snap.get(mId)
       if (!inner || inner.size === 0) {
@@ -170,78 +167,73 @@ const TransactionForm = () => {
     art_modelid, store_modelid, vat_modelid, cust_modelid, sup_modelid, acc_modelid,
   ])
 
-  // ── Memoized helpers ────────────────────────────────────────────────────
-  const onGridReady = useCallback(
-    (params: GridReadyEvent) => setGridApi(params.api),
-    [setGridApi]
-  )
+  const onGridReady = (params: GridReadyEvent) => setGridApi(params.api)
 
-  const formatLines = useCallback(
-    (line: ILineTransaction | ILineFinancials): ILineTransaction | ILineFinancials => {
-      const l = line as ILineTransaction
-      return {
-        ...l,
-        quantity: l.quantity.toLocaleString('de-DE'),
-        price: l.price.toLocaleString('de-DE'),
-        vat: l.vat.toLocaleString('de-DE'),
-        net: (l.quantity * l.price + l.vat).toLocaleString('de-DE'),
-      } as unknown as ILineTransaction
-    }, []
-  )
+  const formatLines = (line: ILineTransaction | ILineFinancials): ILineTransaction | ILineFinancials => {
+    const l = line as ILineTransaction
+    return {
+      ...l,
+      quantity: l.quantity.toLocaleString('de-DE'),
+      price: l.price.toLocaleString('de-DE'),
+      vat: toLocaleString2(l.vat, locale||'de-DE', currency||'EUR'),
+      net: toLocaleString2(l.quantity * l.price, locale||'de-DE', currency||'EUR'),
+    } as unknown as ILineTransaction
+  }
 
-  const buildVatTotal = useCallback(
-    (c: ITransaction | IFinancials) =>
-      ((c?.lines ?? []) as ILineTransaction[]).reduce((acc, line) => acc + line.vat, 0.0),
-    []
-  )
+  const buildVatTotal = (c: ITransaction | IFinancials) =>
+    ((c?.lines ?? []) as ILineTransaction[]).reduce((acc, line) => acc + line.vat, 0.0)
 
-  const buildTotal = useCallback(
-    (c: ITransaction | IFinancials) =>
-      (c as ITransaction)?.lines?.reduce(
-        (acc: number, line: ILineTransaction) => acc + line.quantity * line.price + line.vat,
-        0.0
-      ),
-    []
-  )
-
-  const getData = useCallback((): any => {
-    const total = buildTotal(current)
+  const buildTotal = (c: ITransaction | IFinancials) =>
+    (c as ITransaction)?.lines?.reduce(
+      (acc: number, line: ILineTransaction) => acc + line.quantity * line.price,
+      0.0
+    )
+  const  toLocaleString2 = (amount:number, locale:string, currency:string)=>
+    amount? new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount)
+    : ''
+  const getData = (): any => {
+    const net = buildTotal(current)
+    const vatTotal = buildVatTotal(current)
+    const total = Math.round(net + vatTotal)
     const customer = customerData.find((m) => m.id === current.account) ?? initCust
     const address = `${customer.street} ${customer.city} ${customer.country}`
     const year = Number(`${current.period}`.substring(0, 4))
     const month = Number(`${current.period}`.substring(5, 6))
     const monthName = capitalize1rst(getMonthName(month - 1, locale ?? 'fr-FR'))
-    return {
-      id: current.id,
+    return {id: current.id,
       oid: current.oid,
       customerId: current.account,
       name: customer.name,
       phone: customer.phone,
       address,
       date: new Date().toLocaleDateString(locale, {
-        day: 'numeric', month: 'long', year: 'numeric',
+      day: 'numeric', month: 'long', year: 'numeric',
       }),
-      transdate: new Date(current?.transdate).toLocaleDateString(locale, {
-        day: 'numeric', month: 'long', year: 'numeric',
-      }),
+      transdate: new Date(current?.transdate).toLocaleDateString(locale, {day: 'numeric', month: 'long', year: 'numeric'}),
       period: `${monthName} ${year}`,
+      net:  toLocaleString2(net, locale||'de-DE', currency||'EUR'),
+      vatTotal: toLocaleString2(vatTotal, locale||'de-DE', currency||'EUR'),
       total: total?.toLocaleString(locale, { style: 'currency', currency }),
-      vatTotal: buildVatTotal(current),
       totalText: toCardinal(total).split(' ').map(capitalizeFirst).join(' '),
       lines: current.lines.map(formatLines),
       text: current.text,
       footText: current.footText,
     }
-  }, [current, customerData, locale, currency, buildTotal, buildVatTotal, formatLines])
+  }
 
-  const getData2 = useCallback(async (): Promise<ReminderBalance[]> => {
+  const getData2 = async (): Promise<ReminderBalance[]> => {
     const ctx = `${module_.ctx}/${current.account}/${company}`
     const data = await GetListData<ReminderBalance>(ctx, token, formEnum.REMINDER_BALANCE)
     setReminderBalance(data)
     return data
-  }, [module_, current.account, company, token])
+  }
 
-  const submitQuery = useCallback(async (
+  const submitQuery = async (
     ctx: string,
     partnerCtx: string,
     partnerModelid: number
@@ -250,7 +242,6 @@ const TransactionForm = () => {
     try {
       const snap = iwsStore.getRawMap()
       const jobs: Promise<unknown>[] = []
-
       const tryFetch = <X,>(mId: number, url: string) => {
         const inner = snap.get(mId)
         if (!inner || inner.size === 0) {
@@ -271,17 +262,13 @@ const TransactionForm = () => {
     } finally {
       setIsFetching(false)
     }
-  }, [
-    art_ctx, store_ctx, vat_ctx, token,
-    art_modelid, store_modelid, vat_modelid,
-    modelid, current_, setCurrent, setIsFetching,
-  ])
+  }
 
-  const processImport = useCallback((data2Import: ITransaction[]) => {
+  const processImport = (data2Import: ITransaction[]) => {
     if (import.meta.env.DEV) console.log('data2Import', data2Import)
-  }, [])
+  }
 
-  const handleModuleChange = useCallback(async (selectedValue: any) => {
+  const handleModuleChange = async (selectedValue: any) => {
     const id = selectedValue?.value !== undefined ? String(selectedValue.value) : String(selectedValue)
     const numericId = parseInt(id, 10)
     setModel(numericId)
@@ -321,28 +308,16 @@ const TransactionForm = () => {
     if (_partnerCtx.length > 0) {
       await submitQuery(ctx, partnerCtx, partnerType)
     }
-  }, [
-    fmodule, titleText, company, module_, token,
-    setCopyFromTransaction, submitQuery,
-  ])
+  }
 
-  const fmoduleData = useMemo(
-    () => (fmodule ?? []).filter((m: IFmodule) => m.parent === TRANSACTION.id),
-    [fmodule]
-  )
-
-  const minHeight = 220
-  const maxHeight = 800
-  const height = 35
+  const fmoduleData = (fmodule ?? []).filter((m) => m.parent === TRANSACTION.id)
 
   const accDatax: ICustomer[] | ISupplier[] | IAccount[] =
     model === formEnum.ACCOUNT ? accData : accData1
   const stData = storeData?.filter((m) => !m.id.toString().includes('*'))
 
-  // ── Early return AFTER all hooks ────────────────────────────────────────
   if (isLogin) return <Login />
 
-  // ── Render ──────────────────────────────────────────────────────────────
   return isFetching ? (
     <CSpinner color="primary" />
   ) : (
@@ -358,7 +333,7 @@ const TransactionForm = () => {
         onDeleteLine={onDeleteLine}
         submitPost={submitPost}
         getData={getData}
-        getData2={getData2}
+        getData2={company === '5700' ? getData2 : getData}
         fmodule={fmodule}
         submitPrintPreview={generateDocx}
         template1EnumId={TEMPLATE_ENUM.FIRST}
@@ -383,7 +358,6 @@ const TransactionForm = () => {
       />
 
       <div
-        // @ts-ignore
         style={{
           ...styles.outer,
           width: '100%',
@@ -409,7 +383,6 @@ const TransactionForm = () => {
         />
 
         <div
-          // @ts-ignore
           style={{
             backgroundColor: 'transparent',
             padding: 1,
@@ -437,7 +410,6 @@ const TransactionForm = () => {
       </div>
 
       <div
-        // @ts-ignore
         style={{
           ...styles.outer,
           height: state.collapseForm ? minHeight : maxHeight,
@@ -447,7 +419,7 @@ const TransactionForm = () => {
         }}
       >
         <TransactionGrid
-          // @ts-ignore
+          // @ts-expect-error -- legacy, see TODO
           gridOptions={gridOptions(
             (t: any) => transactionColumnDefs(t, locale ?? 'fr-GN', currency ?? 'GNF'),
             locale ?? 'fr-GN',

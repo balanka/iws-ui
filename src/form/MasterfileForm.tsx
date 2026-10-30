@@ -3,7 +3,7 @@ import { AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry } 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { Get } from './CrudController'
 import { MASTERFILE } from './Menu'
@@ -79,12 +79,10 @@ const MasterfileForm = () => {
     <>
       {header}
       <CInputGroup
-        // @ts-ignore
         style={{ ...styles.outer, width: '100%', display: !state.collapseForm ? 'none' : '' }}
       >
         {safeBody ?? (
           <MasterfileFormWithChildren
-            // @ts-ignore
             current={current}
             setCurrent={setCurrent}
             accData={accData}
@@ -92,8 +90,7 @@ const MasterfileForm = () => {
             disable={disable}
             height={height}
             fieldName={t('fmodule.parent')}
-            propertyName="parent"
-          />
+            propertyName="parent" collapse={false}          />
         )}
       </CInputGroup>
       <div

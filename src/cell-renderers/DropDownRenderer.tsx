@@ -1,5 +1,5 @@
 // import type { ICellRendererComp } from "ag-grid-community";
-// // @ts-ignore
+// // @ts-expect-error -- legacy, see TODO
 // import {ICellRendererParams} from "ag-grid-community/dist/types/src/rendering/cellRenderers/iCellRenderer";
 // export class DropdownRenderer implements ICellRendererComp {
 //     private eGui!: HTMLDivElement;

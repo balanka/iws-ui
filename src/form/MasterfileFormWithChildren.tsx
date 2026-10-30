@@ -3,17 +3,17 @@ import { CCol, CInputGroup } from '@coreui/react-pro';
 import { DatePickerField, InputField, TextareaField, FieldLabel, FormMasterfileXComboBox } from './common';
 import { styles } from './FormsProps';
 import { MasterfileProps2 } from '../Props';
-import { IMasterfile2, IStore } from '../Models';
+import {IMasterfile, IMasterfile2, IStore} from '../Models';
 import { initAcc } from './Menu';
 
-interface MasterfileFormWithChildrenProps extends MasterfileProps2<IMasterfile2 | IStore> {
+interface MasterfileFormWithChildrenProps extends MasterfileProps2<IMasterfile |IMasterfile2 | IStore> {
   fieldName: string;
   propertyName: string;
   accData: any[];
   children?: (props: {
     fieldName: string;
     propertyName: string;
-    current: IMasterfile2 | IStore;
+    current: IMasterfile |IMasterfile2 | IStore;
     setCurrent: (arg: any) => void;
     data: any[];
     defaultValue: any;

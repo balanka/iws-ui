@@ -6,7 +6,7 @@ import { TransactionDetailsForm } from './TransactionDetailsForm';
 import FileOutput from './FileOutput';
 import { ILineTransaction, ITransaction } from '../Models';
 import { isArrayAndNotEmpty } from '../utils/Utils';
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events';
 import {TransactionDetailsTabProps} from "../Props.ts";
 import {TFunction} from "i18next";

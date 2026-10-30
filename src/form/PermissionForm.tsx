@@ -1,8 +1,6 @@
 import { AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry } from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-// @ts-ignore
-import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { MASTERFILE } from './Menu'
 import useForm from './useForm.ts'
 import { PermissionMainForm } from './PermissionMainForm.tsx'

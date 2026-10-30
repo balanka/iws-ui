@@ -1,10 +1,15 @@
-import React, { FC } from 'react'
+import React, {Dispatch, FC, SetStateAction} from 'react'
 import ComboBox from '../ComboBox.tsx'
 import {toOption, transactionToOption} from '../../utils/FormUtils.tsx'
 import { formEnum } from '../../utils/FormEnum.tsx'
 import { getFiltered } from '../../utils/FormUtils.tsx'
 import {FinancialsCBoxProps2, FinancialsCBoxProps3} from "../../Props.ts"
-import {IFinancials, ILineFinancials, IMasterfile, ITransaction} from "../../Models.ts"
+import {
+  IFinancials,
+  ILineFinancials,
+  IMasterfile,
+  ITransaction
+} from "../../Models.ts"
 
 // Base props for all combo boxes
 interface BaseComboBoxProps {
@@ -219,58 +224,11 @@ export const FromTransactionComboBox: FC<FromTransactionComboBoxProps> = ({
     />
   )
 }
-// Option type from CoreUI (you can import it if available, or define it)
-//type Option = { value: string | number; label: string }
 
-// export const MasterfileComboBox: FC<FinancialsCBoxProps2<IFinancials | ITransaction, IMasterfile>> = ({
-//                                                                                                         current,
-//                                                                                                         setCurrent,
-//                                                                                                         data,
-//                                                                                                         fieldName,
-//                                                                                                         //defaultValue,
-//                                                                                                         accFilter = [],
-//                                                                                                         //zIndex,
-//                                                                                                         styles,
-//                                                                                                         height,
-//                                                                                                       }) => {
-//   // 1. Safely access the selected IDs array using type assertion (since fieldName is dynamic)
-//   const selectedIds = (current as Record<string, any>)[fieldName] ?? []
-//
-//   // 2. Filter data if needed
-//   const filtered = current.modelid === formEnum.ACCOUNT ? getFiltered(data, accFilter) : data
-//
-//   // 3. Build options list (Option[])
-//   const options: Option[] = filtered.slice().sort(sortById)?.map((item) => ({
-//     value: String(item.id),   // convert to string for uniformity
-//     label: `${item.id} ${item.name}`,
-//   }))
-//
-//   // 4. Handle change – receives selected Option[] (objects)
-//   const handleChange = (selectedOptions: Option[]) => {
-//     // Extract just the values (primitive array)
-//     const values = selectedOptions?.map((opt) => opt.value)
-//     setCurrent({ ...current, [fieldName]: values })
-//   }
-//
-//   return (
-//     <CMultiSelect
-//       style={{ ...styles, height, minWidth: 100, width: '100%', color: '#6b7280', fontSize: 12 }}
-//       disabled={current.posted}
-//       value={selectedIds.map(String)}   // value expects array of primitives (strings/numbers)
-//       options={options}
-//       onChange={handleChange}
-//       placeholder="Select..."
-//       selectionType="tags"   // or "pill"
-//       multiple={false}
-//      // zIndex={zIndex}
-//     />
-//   )
-// }
 export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction, IMasterfile>> =({current, setCurrent, data
                                                                , fieldName, defaultValue,  accFilter = [], zIndex, styles, height })=>{
-  // @ts-ignore
+  // @ts-expect-error -- legacy, see TODO
   const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === current[fieldName])??defaultValue
-  // @ts-ignore
   const filtered= (defaultValue.modelid===formEnum.ACCOUNT) && accFilter.length>0?getFiltered(data, accFilter):data
   //const filtered=  accFilter.length>0?getFiltered(data, accFilter):data
   console.log('📊 Raw data:', data);
@@ -285,7 +243,6 @@ export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction
       disable={current.posted}
       value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
       onChange={(value:any, _event:any) => setCurrent({...current, [fieldName]: value })}
-      // @ts-ignore
       values={filtered.slice().sort(sortById).map(toOption)}
       zIndex={zIndex}
     />
@@ -293,7 +250,10 @@ export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction
 }
 interface MasterfileComboboxProps<T extends Record<string, any>, U extends { id: string; name: string }> {
   current: T;
-  setCurrent: (arg: T) => void;
+  setCurrent: Dispatch<SetStateAction<T>>;
+  //setCurrent: Dispatch<SetStateAction<ICustomer | ISupplier | IEmployee |ICompany|IAsset|IFmodule>>
+  //setCurrent:Dispatch<SetStateAction<ICustomer>>|Dispatch<SetStateAction<ISupplier>>|Dispatch<SetStateAction<IEmployee>>|
+  //  Dispatch<SetStateAction<ICompany>>|Dispatch<SetStateAction<IAsset>>|Dispatch<SetStateAction<IFmodule>>;
   data: U[];
   fieldName: keyof T;
   defaultValue: U;
@@ -369,34 +329,10 @@ export const MasterfileXComboBox = <T extends Record<string, any>, U extends { i
     // Store as space-separated string
     const joined = ids.join(' ');
     console.log('Stored string:', joined);
-    setCurrent({ ...current, [fieldName]: joined });
+   // const currentx: T  = ;
+    setCurrent({ ...current, [fieldName]: joined } as T);
   };
 
-//   const selectedValue = isMulti
-//     ? // If current[fieldName] is an array of IDs
-//     (Array.isArray(current[fieldName])
-//       ? current[fieldName]
-//         .map((id: string) => {
-//           const item = items.find(acc => acc?.id === id);
-//           return item ? { value: item.id, label: `${item.id} ${item.name}` } : null;
-//         })
-//         .filter(Boolean) // remove nulls
-//       : []) // fallback to empty array
-//     : // Single mode: find the single selected item
-//     (() => {
-//       const found = items.find(acc => acc?.id === current[fieldName]);
-//       return found ? { value: found.id, label: `${found.id} ${found.name}` } : { value: '', label: '' };
-//     })();
-
-  // const onChange = (value: {value:string, label:String} []) => {
-  //   console.log('value', value)
-  //   const valuex = value.filter(v=>v.value)
-  //   console.log('valuex', valuex)
-  //   const v = //value.filter(m=>m?.value?.length>0)
-  //     valuex.map( (v:{value:string, label:String})=>v.value)//.filter(v=>v.length>0)
-  //   console.log('vvalue', v)
-  //   setCurrent({ ...current, [fieldName]: v.join(' ') })
-  // }
 
 // Now pass selectedValue to ComboBox
   return (

@@ -3,7 +3,7 @@ import { styles } from './BasicTreeTableProps.jsx'
 import {stockColumnDefs} from '../ColumnsDefs.ts'
 import { CustomerAccountMainForm } from './CustomerAccountMainForm'
 import { MasterfileFormWithout} from './MasterfileFormWithout'
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import IWSTabs from "./IWSTabs.tsx";
 import {CustomerAccountMainFormProps, StoreGeneralFormProps, StoreProps} from '../Props'
@@ -17,7 +17,6 @@ export  const StoreTabs =(
   const geform  =({collapse, current, setCurrent, accData,   t,  disable, height }:StoreGeneralFormProps) =>{
     return (
       <div
-      //@ts-ignore
         style={{...styles.outer, paddingBottom:10, display: !collapse?'none':''}} >
         <MasterfileFormWithout collapse={collapse} current={current} setCurrent={setCurrent} accData={accData} t={t}
                                disable={disable} height={height} propertyName={'account'} fieldName={'common.account'}/>
@@ -28,7 +27,7 @@ export  const StoreTabs =(
   const getTable = () =>
       <div  style={{...styles.outer0, paddingTop:15, height:minMaxHieght,  minWidth:"100%"}}>
           <StockGrid
-              // @ts-ignore
+              // @ts-expect-error -- legacy, see TODO
               theme="legacy" columnDefs ={stockColumnDefs(t, locale, currency)}
                        onRowSelected={()=>{}} rowData ={current?.stocks??initStore.stocks} />
       </div>

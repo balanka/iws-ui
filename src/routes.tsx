@@ -36,6 +36,16 @@ const smartTableColumnAndRowsGroupsExample = () => import('./form/SmartTableColu
 const Login = ()   => import('./form/Login')
 
 const routes = ():{path:string, name?:string, element?: ()=>Promise<any>}[] => [
+  {
+    path: '/transaction-combined-htmx/:id',
+    name: 'transactions (combined, HTMX)',
+    element: () => import('./htmx/TransactionsCombinedPage'),
+  },
+  {
+    path: '/financials-combined-htmx/:id',
+    name: 'Financials (combined, HTMX)',
+    element: () => import('./htmx/FinancialsCombinedPage'),
+  },
   { path: '/accounting',  name: 'Accounting' },
   { path: '/ftr', name: 'financials', element: financialsForm },
   { path: '/ltr', name: 'transaction', element: transactionForm },

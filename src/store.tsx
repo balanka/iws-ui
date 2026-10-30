@@ -5,7 +5,7 @@ const initialState = {
   theme: 'light',
 }
 
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 const changeState = (state = initialState, { type, ...rest }) => {
   switch (type) {
     case 'set':

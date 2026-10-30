@@ -1,4 +1,14 @@
-import { useEffect, useRef, useState, useSyncExternalStore, useMemo, useCallback, JSX } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  useMemo,
+  useCallback,
+  JSX,
+  Dispatch,
+  SetStateAction
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { ColDef, RowSelectedEvent } from 'ag-grid-community';
@@ -24,16 +34,13 @@ export default function useMasterfileForm<T extends IWSModel>(
   disable: boolean;
   state: State;
   rowData: T[];
-  setRowData: React.Dispatch<React.SetStateAction<T[]>>;
+  setRowData: Dispatch<SetStateAction<T[]>>;
   current: T;
-  setCurrent: React.Dispatch<React.SetStateAction<T>>;
+  setCurrent: Dispatch<SetStateAction<T>>;
   zIndex: number;
   handleKeyPress: (event: any) => void;
 } {
-  const [{
-    profile, menu, selected, t, title,
-    language, state, toggle, toggleTable,
-    handleLanguageChange, modelid
+  const [{profile, menu, selected, t, title, language, state, toggle, toggleTable, handleLanguageChange, modelid
   }] = useForm();
 
   const { token, company } = profile;

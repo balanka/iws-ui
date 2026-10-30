@@ -22,7 +22,7 @@ export const DatePickerField = ({
               setCurrent({ ...current, [fieldName]: newValue })
             }
           }}
-          //@ts-ignore
+          //@ts-expect-error -- legacy, see TODO
           style={{ height: `${height??28 - 3}px`, width: '100%', zIndex: zIndex }}
        />
       </div>

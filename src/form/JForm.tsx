@@ -9,7 +9,7 @@ import {
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import { JournalFormHead } from './JournalFormHead'
 import { JournalMainForm } from './JournalMainForm'
@@ -170,10 +170,10 @@ const JForm = () => {
             <JournalFormHead style={{...styles.inner2}} title={title} submitQuery={submitQuery} dispatch={dispatch}
                              logout={logout} submitQuery2={submitQuery2} balancesheet={true} t={t}
                              fmodule ={fmodule} getData={getData} enumId={TEMPLATE_ENUM.FIRST} current ={{...current, currency:currency, company:company}}
-                             // @ts-ignore
+                             // @ts-expect-error -- legacy, see TODO
                              submitPrintPreview = {generateDocx} language={language} handleLanguageChange={handleLanguageChange}/>
             <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height}
-                // @ts-ignore
+                // @ts-expect-error -- legacy, see TODO
                              stylesx={{height: 950, paddingBottom: 5}} ids={['3310', "1100"]}/>
             <div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: '100%'}}>
               {/*<PacTable items={rowData.map(format)} key ='packTable'/>*/}

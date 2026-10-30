@@ -68,7 +68,7 @@ export const JournalFormHead = <T,>({
         </CHeaderToggler>
         <ToolbarButton
           tooltip={t('toolTip.common.print')}
-          //@ts-ignore
+          //@ts-expect-error -- legacy, see TODO
           onClick={() => submitPrintPreview(current, getData, fmodule, template1EnumId)}
           icon={<PrintOutlined fontSize="small" />}
         />

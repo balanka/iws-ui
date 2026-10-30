@@ -2,7 +2,7 @@ import { AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry } 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { userColumnDefs } from '../ColumnsDefs.ts'
 import { IUser } from '../Models.ts'
@@ -44,7 +44,6 @@ const UserForm = () => {
     <>
       {header}
       <CInputGroup
-        //@ts-ignore — CoreUI style prop accepts custom CSS vars
         style={{ ...styles.outer, display: state.collapseForm ? '' : 'none' }}
       >
         {body ?? mainForm}

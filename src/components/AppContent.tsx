@@ -20,7 +20,7 @@ const AppContent = () => {
                 <Route
                   key={idx}
                   path={route.path}
-                    // @ts-ignore
+                    // @ts-expect-error -- legacy, see TODO
                    exact={true}
                   element={<LazyComponent />}
                 />

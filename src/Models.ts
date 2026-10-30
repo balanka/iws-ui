@@ -1,4 +1,4 @@
-export interface IAccount  extends IMasterfile{
+export interface IAccount  extends IMasterfile {
   account:string,
   isDebit:boolean,
   balancesheet:boolean,
@@ -112,19 +112,19 @@ export interface IJournal {
 
 export interface InventoryJournal {
     id:bigint,
-    contact:String,
+    contact:string,
     transid:bigint,
     oid:string,
     store: string,
     account: string,
-    article:String,
+    article:string,
     quantity:number,
-    unit:String,
+    unit:string,
     stock:number,
     wholeStock:number,
     price:number,
     avgPrice:number,
-    currency:String,
+    currency:string,
     transdate: Date,
     postingdate:Date,
     enterdate:Date,
@@ -190,8 +190,8 @@ export interface ICompany  extends IBusinespartner {
     logoContent: string,
     logoName: string,
     contentType:string,
-    fax: string,
     locale: string,
+    company: string,
 }
 
 export interface IBankAccount  extends IWSModel {

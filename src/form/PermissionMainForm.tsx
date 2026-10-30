@@ -12,13 +12,13 @@ export const PermissionMainForm = ({
   <div style={{ ...styles.outer, display: !collapse ? 'none' : '' }}>
 
     <MasterfileFormWithout collapse={collapse}
-      //@ts-ignore
                            current={current} setCurrent={setCurrent} disable={disable} t={t} height={height}
                            accData={[]} propertyName={""} fieldName={""} />
     <CRow className="g-2 align-items-center mt-2">
       <CCol md={2}><FieldLabel title={t('common.permission')} /></CCol>
       <CCol md={10}>
-        <InputField fieldName="permission" current={current} setCurrent={setCurrent} value={current.short} disabled={disable} style={{ height: height - 3, width: '100%' }} />
+        <InputField fieldName="permission" current={current} setCurrent={setCurrent} value={current.short}
+                    disabled={disable} style={{ height: height - 3, width: '100%' }} />
       </CCol>
     </CRow>
   </div>

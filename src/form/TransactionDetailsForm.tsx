@@ -45,15 +45,39 @@ const getPrice = (transaction:ITransaction, article: IArticle) => {
         :0.0
 }
 
+const getVat2 = (line: ILineTransaction
+                 , value:string, vatData: IVat []): [string, number] => {
+
+  const vat = vatData?.find((vat: { id: any }) => vat.id === value) ?? initVat
+  console.log(' vat ', vat)
+  const percent = vat?.percent ?? 0.0
+  const vatAmount_  = percent * line.quantity * line.price
+  const vatCode_ = `${vat?.id}` || '-1'
+  console.log(' percent ', percent)
+  console.log(' vatAmount_ ', vatAmount_)
+  const [vatCode, vatAmount] =(line.modelid === formEnum.SALES_ORDER ||
+    line.modelid === formEnum.CUSTOMER_INVOICE_LOGISTIC ||
+    line.modelid === formEnum.DELIVERY||
+    line.modelid === formEnum.PURCHASE_ORDER ||
+    line.modelid === formEnum.SUPPLIER_INVOICE ||
+    line.modelid === formEnum.GOODRECEIVING)
+    ? [vatCode_, vatAmount_]: [vatCode_, 0.0]
+  return [vatCode, vatAmount]
+
+}
+
 const getVat = (line: ILineTransaction, value:string, articleData: IArticle []
                 , vatData: IVat []): [string, number] => {
   const article = articleData?.find((acc: { id: any }) => acc.id === value) ?? initArticle
   const vat = vatData?.find((vat: { id: any }) => vat.id === article?.vatCode) ?? initVat
+  console.log(' vat ', vat)
   const percent = vat?.percent ?? 0.0
   const vatAmount_  = percent * line.quantity * line.price
   const vatCode_ = `${vat?.id}` || '-1'
+  console.log(' percent ', percent)
+  console.log(' vatAmount_ ', vatAmount_)
   const [vatCode, vatAmount] =(line.modelid === formEnum.SALES_ORDER ||
-    line.modelid === formEnum.CUSTOMER_INVOICE ||
+    line.modelid === formEnum.CUSTOMER_INVOICE_LOGISTIC ||
     line.modelid === formEnum.DELIVERY||
     line.modelid === formEnum.PURCHASE_ORDER ||
     line.modelid === formEnum.SUPPLIER_INVOICE ||
@@ -139,22 +163,6 @@ export const TransactionDetailsForm = ({
               setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
             }}
           />
-          {/*<InputField*/}
-          {/*  fieldName="quantity"*/}
-          {/*  current={currentLineTransaction}*/}
-          {/*  setCurrent={setCurrentLineTransaction}*/}
-          {/*  value={Number(currentLineTransaction.quantity)}*/}
-          {/*  onChange={(event: any) => {*/}
-          {/*    const [, vatAmount] = getVat(currentLineTransaction, currentLineTransaction.article, articleData, vatData)*/}
-          {/*    const netAmount =  event.target.value * currentLineTransaction.price*/}
-          {/*    const currentx = { ...currentLineTransaction, quantity: Number(event.target.value)*/}
-          {/*      , vat: vatAmount, net:netAmount, total:netAmount+vatAmount, company:transaction.company }*/}
-          {/*    setCurrentLineTransaction(currentx)*/}
-          {/*    setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)*/}
-          {/*  }}*/}
-          {/*  disabled={disable}*/}
-          {/*  style={{ height: height, textAlign: 'right' }}*/}
-          {/*/>*/}
           <InputField
             fieldName="unit"
             current={currentLineTransaction}
@@ -177,9 +185,12 @@ export const TransactionDetailsForm = ({
             //key={`vat-${currentLineTransaction?.vatCode || 'empty'}`}
             value={{ value: currentVat?.id || '', label: currentVat ? `${currentVat.id} ${currentVat.name}` : '' }}
             onChange={(value: any) => {
-              const [, vatAmount] = getVat(currentLineTransaction, currentLineTransaction.article, articleData, vatData)
+              const [vatCode, vatAmount] = getVat2(currentLineTransaction, value, vatData)
+              console.log(' value ', value)
+              console.log(' vatCode ', vatCode)
+              console.log(' vatAmount ', vatAmount)
               const netAmount =  currentLineTransaction.quantity * currentLineTransaction.price
-              const currentx = { ...currentLineTransaction, vatCode: value, vat: vatAmount, net:netAmount
+              const currentx = { ...currentLineTransaction, vatCode: vatCode, vat: vatAmount, net:netAmount
                 , total:netAmount+vatAmount, company:transaction.company }
               console.log(' currentx', currentx)
               setCurrentLineTransaction(currentx)

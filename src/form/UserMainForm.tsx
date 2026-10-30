@@ -33,7 +33,7 @@ export const UserMainForm = ({ collapse, current, setCurrent, disable, t }: User
           <CCol sm={8} className="d-flex gap-2">
             <Label>{row.left.label}</Label>
             {renderField(row.left,
-              // @ts-ignore
+              // @ts-expect-error -- legacy, see TODO
               current[row.left.name])}
           </CCol>
           <CCol sm={4} className="d-flex gap-2">
@@ -41,7 +41,7 @@ export const UserMainForm = ({ collapse, current, setCurrent, disable, t }: User
               <>
                 <Label>{row.right.label}</Label>
                 {renderField(row.right,
-                  // @ts-ignore
+                  // @ts-expect-error -- legacy, see TODO
                   current[row.right.name])}
               </>
             )}

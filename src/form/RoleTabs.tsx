@@ -1,7 +1,7 @@
 import IWSTabs from './IWSTabs.tsx'
 import {RoleProps} from '../Props.ts'
 import {RightGrid} from '../IWSGrid.tsx'
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type {RowSelectedEvent} from "ag-grid-community/dist/types/src/events";
 import {
   UserRightsColumns,
@@ -25,10 +25,9 @@ const RoleTabs = ({ collapse, current, setCurrent, disable, t, height }:RoleProp
 
   const rightTable =
         <div
-          // @ts-ignore
           style={{...styles.outer, paddingTop:15, height: collapse?minHeight:maxHeight,  minWidth:"100%"}}>
             <RightGrid
-            // @ts-ignore
+            // @ts-expect-error -- legacy, see TODO
                 theme="legacy" columnDefs={UserRightsColumns(t)} onRowSelected={onRightSelected}
                 rowData={current?.rights}/>
         </div>

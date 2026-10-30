@@ -8,31 +8,41 @@ import {
   IMasterfile2, IContact, IProfile, IRole,
   IStore,
   ISupplier, ITransaction, IUser,
-  IVat, IWSLine, IWSModel, IWSTransaction
+  IVat, IWSLine, IWSModel, IWSTransaction, type IRealEstate
 } from "./Models.ts";
 import {type i18n, TFunction} from "i18next";
 import React, {CSSProperties, Dispatch, ReactNode, SetStateAction} from "react";
 import {ColDef, GridApi, GridOptions, GridReadyEvent} from "ag-grid-community";
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type {RowSelectedEvent} from "ag-grid-community/dist/types/src/events";
 import {NavigateFunction} from "react-router-dom";
 import './i18n.tsx'
 import I18n from "./i18n.tsx";
 
+export interface FormStyles {
+  outer: CSSProperties
+  outer0: CSSProperties
+  inner: CSSProperties
+  inner2: CSSProperties
+  // add any others that exist in BasicTreeTableProps.tsx
+}
 export interface AddressProps {
     current: IAddress,
-    setCurrent: (arg: any | ICustomer | ISupplier | IEmployee) => void,
+    setCurrent: Dispatch<SetStateAction<ICustomer>>| Dispatch<SetStateAction<ISupplier>>|
+      Dispatch<SetStateAction<IEmployee>>|Dispatch<SetStateAction<ICompany>>|Dispatch<SetStateAction<IContact>>
+      |Dispatch<SetStateAction<IMasterfile>>,
     t: TFunction<'transalation', undefined>,
     disable: boolean,
     height: number
 }
-export interface SaveProps {fileNames:[string, string], sheetName:string, data: any}
-export interface printDocProps  { e:any, templateFileName:string, data:any}
+export interface SaveProps <A> {fileNames:[string, string], sheetName:string, data: A[]}
+//export interface printDocProps<A>  { e:any, templateFileName:string, data:A}
 export interface BankAccountFormProps {
      currentBankAccount: IBankAccount
     , setCurrentBankAccount: (arg:IBankAccount)=>void
     , businessPartner:ICustomer|ISupplier|IEmployee|ICompany
-    , setBusinessPartner: (arg:any)=>void
+    , setBusinessPartner: Dispatch<SetStateAction<ICustomer>>|Dispatch<SetStateAction<ISupplier>>|
+    Dispatch<SetStateAction<IEmployee>>| Dispatch<SetStateAction<ICompany>>
     , bankData: IMasterfile[]
     , t:TFunction<'transalation', undefined>
     , zIndex:number
@@ -42,7 +52,7 @@ export interface BankAccountFormProps {
 export interface CustomerTabProps {
   collapse:boolean
     , current: ICustomer | ISupplier | IEmployee
-    , setCurrent: (set: any ) => void
+    , setCurrent: Dispatch<SetStateAction<ICustomer | ISupplier | IEmployee>>
     , currentBankAccount:IBankAccount
     , setCurrentBankAccount:(arg:IBankAccount) =>void
     , token: string
@@ -63,7 +73,7 @@ export interface CustomerTabProps {
 export interface CompanyTabProps {
      collapse:boolean
     ,  current: ICompany
-    , setCurrent: (set: any ) => void
+    , setCurrent: Dispatch<SetStateAction<ICompany>>
     , currentBankAccount:IBankAccount
     , setCurrentBankAccount:(arg:IBankAccount) =>void
     , token: string
@@ -126,7 +136,9 @@ export interface ArticleGeneralFormProps {
 }
 export interface CustomerAccountMainFormProps {
   readonly current: IArticle | ICustomer | ISupplier | IEmployee | ICompany|IStore
-  readonly setCurrent: (art: any) => void;
+  readonly setCurrent:  Dispatch<SetStateAction<ICustomer>>|Dispatch<SetStateAction<ISupplier>>|
+    Dispatch<SetStateAction<IEmployee>> |Dispatch<SetStateAction<ICompany>>|Dispatch<SetStateAction<IArticle>>
+  |Dispatch<SetStateAction<IStore>>;
   readonly accData: IAccount[];
   readonly vatData: IVat[];
   readonly ccData?: IMasterfile[];
@@ -138,7 +150,7 @@ export interface CustomerAccountMainFormProps {
 export interface AssetProps {
     collapse:boolean
     , current: IAsset
-    , setCurrent: (arg: IAsset) => void
+    , setCurrent: |Dispatch<SetStateAction<IAsset>>
     , accData: IAccount[]
     , ccyData: IMasterfile[]
     , t: TFunction<'transalation', undefined>
@@ -152,7 +164,7 @@ export interface AssetProps {
 export interface BankStatementProps {
     collapse:boolean,
     current: IBankStatement,
-    setCurrent: (arg: any | IBankStatement) => void,
+    setCurrent: (arg: IBankStatement) => void,
     t: TFunction<'transalation', undefined>,
     locale: string,
     currency: string,
@@ -173,7 +185,9 @@ export interface AccountMainProps {
 export interface MasterfileProps2<A extends IMasterfile|IMasterfile2|IStore>{
     collapse:boolean,
     current: A,
-    setCurrent: (arg: any) => void,
+    setCurrent:  Dispatch<SetStateAction<IMasterfile>>| Dispatch<SetStateAction<IMasterfile2>> |
+      Dispatch<SetStateAction<IStore>>| Dispatch<SetStateAction<IBusinespartner>>|
+      Dispatch<SetStateAction<IRealEstate>>|Dispatch<SetStateAction<IRole>>,
     accData: IMasterfile[],
     t: TFunction<'translation', undefined>,
     disable: boolean,
@@ -184,7 +198,7 @@ export interface MasterfileProps2<A extends IMasterfile|IMasterfile2|IStore>{
 export interface FModuleProps2<A extends IMasterfile2>{
   collapse:boolean,
   current: A,
-  setCurrent: (arg: any) => void,
+  setCurrent: Dispatch<SetStateAction<IFmodule>>,
   accData: IMasterfile[],
   accountData: IMasterfile[],
   rowData: A[],
@@ -196,7 +210,7 @@ export interface FModuleProps2<A extends IMasterfile2>{
 export interface MasterfileProps<A extends IMasterfile> {
   collapse: boolean,
   current: A,
-  setCurrent: (arg: any) => void,
+  setCurrent: Dispatch<SetStateAction<IMasterfile>>|Dispatch<SetStateAction<IBusinespartner>>,
   t: TFunction<'translation', undefined>,
   disable: boolean,
   height: number
@@ -205,7 +219,7 @@ export interface MasterfileProps<A extends IMasterfile> {
 export interface RoleProps {
     collapse: boolean,
     current: IRole,
-    setCurrent: (arg: IRole) => void,
+    setCurrent: Dispatch<SetStateAction<IRole>>,
     t: TFunction<'translation', undefined>,
     disable: boolean,
     height: number
@@ -214,7 +228,7 @@ export interface RoleProps {
 export interface StoreGeneralFormProps {
      collapse: boolean
     , current: IStore
-    , setCurrent: (art: any | IStore) => void
+    , setCurrent:Dispatch<SetStateAction<IStore>>
     , accData: IAccount[]
     , locale: string
     , t: TFunction<'transalation', undefined>
@@ -224,7 +238,7 @@ export interface StoreGeneralFormProps {
 export interface StoreProps {
       collapse: boolean
     , current: IStore
-    , setCurrent: (art: any | IStore) => void
+    , setCurrent: Dispatch<SetStateAction<IStore>>
     , ccData: IMasterfile[]
     , accData: IAccount[]
     , locale: string
@@ -235,17 +249,17 @@ export interface StoreProps {
     , height: number
     , minMaxHieght:number
 }
+ export interface CustomerGeneralFormProps<P extends IBusinespartner = IBusinespartner> {
+     collapse: boolean,
+     current: P,
+     setCurrent: Dispatch<SetStateAction<P>>,
+     ccyData: IMasterfile[],
+     contactData: IContact[],
+     disable: boolean,
+     t: TFunction<'transalation', undefined>,
+     height: number
+   }
 
-export interface CustomerGeneralFormProps {
-    collapse:boolean,
-    current: IBusinespartner,
-    setCurrent: (arg: IBusinespartner) => void,
-    ccyData:IMasterfile[],
-    contactData:IContact[],
-    disable: boolean,
-    t: TFunction<'transalation', undefined>,
-     height:number
-}
 export type ILine = ILineTransaction|ILineFinancials
 
 
@@ -257,8 +271,8 @@ export interface TransactionDetailsTabProps<T extends ITransaction, L extends IL
   setCurrentLineTransaction: Dispatch<SetStateAction<L>>;
   accountFilter: string[];
   oaccountFilter: string[];
-  articleData: any[];
-  vatData: any[];
+  articleData: IArticle[];
+  vatData: IVat[];
   t: (key: string) => string;
   onGridReady?: (params: GridReadyEvent) => void;
   zIndex?: number;
@@ -285,26 +299,26 @@ export interface TransactionDetailsFormProps<T extends IWSTransaction<L>, L exte
 
 export interface FinancialsCBoxProps3<A, B, L> {
   current: A,
-  setCurrent: (arg: any) => void,
+  setCurrent: (arg: A) => void,
   currentLine: L,
-  setCurrentLine: (arg: any) => void,
+  setCurrentLine: (arg: L) => void,
   data: B[],
   id:string,
   name:string,
   defaultValue:B
   accFilter?:string[],
   zIndex: number,
-  styles: any
+  styles: FormStyles
 }
 export interface FinancialsCBoxProps2<A, B> {
   current: A,
-  setCurrent: (arg: any) => void,
+  setCurrent: Dispatch<SetStateAction<A>>,
   data: B[],
   fieldName:string,
   defaultValue:B
   accFilter?:string[],
   zIndex: number,
-  styles: any,
+  styles: React.CSSProperties,
   height?: number
 }
 
@@ -314,9 +328,9 @@ export interface UserFormProps { collapse: boolean, current:IUser, setCurrent:(a
 }
 export  interface TransactionToolBarProps<A extends IWSTransaction<L>, L extends  IWSLine>{
   title:string
-  , saveProps:SaveProps, collapse:boolean
-  , initAdd:()=>void, onNewLine:()=>void, onDeleteLine:(arg:any)=>void
-  , submitCancel:(e:any)=>void, submitEdit: (arg:any)=>void
+  , saveProps:SaveProps <L>, collapse:boolean
+  , initAdd:()=>void, onNewLine:()=>void, onDeleteLine:(arg:L)=>void
+  , submitCancel:(e:any)=>void, submitEdit: (arg:A)=>void
   , getData:()=>any
   , getData2 :()=> Promise<any>
   , fmodule:IFmodule[]
@@ -414,7 +428,7 @@ export interface UseTransactionFormResult<T extends IWSTransaction<L>, L extends
   , templateName:(current:T, fmodule:IFmodule[])=>[string, string]
   , zIndex:number
   , handleLanguageChange:(event:any) =>void
-  , saveProps:SaveProps
+  , saveProps:SaveProps <L>
   , modelid:number
   , isFetching:boolean
   , setIsFetching:Dispatch<SetStateAction<boolean>>

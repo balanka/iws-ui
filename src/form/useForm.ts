@@ -1,7 +1,7 @@
     import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule} from 'ag-grid-community'
     import 'ag-grid-community/styles/ag-grid.css'
     import 'ag-grid-community/styles/ag-theme-quartz.css'
-    // @ts-ignore
+    // @ts-expect-error -- legacy, see TODO
     import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
     import { useStore} from './Menu'
     import {formEnum} from '../utils/FormEnum'

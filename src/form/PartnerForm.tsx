@@ -2,16 +2,14 @@ import { AllCommunityModule, ClientSideRowModelModule, ColDef, ModuleRegistry } 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 
-// @ts-ignore
-import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { PartnerMainForm } from './PartnerMainForm'
-
 import { MASTERFILE } from './Menu'
 import { PartnerColumnDefs } from '../ColumnsDefs.ts'
 import useForm from './useForm.ts'
 import useMasterfileForm from './useMasterfileForm.tsx'
 import { MasterfileFormShell } from './MasterfileFormShell.tsx'
 import type { IBusinespartner } from '../Models.ts'
+
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule])
 

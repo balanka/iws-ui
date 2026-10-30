@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx'
-import {printDocProps, SaveProps} from '../Props.ts'
-import {TemplateHandler} from 'easy-template-x'
+import {SaveProps} from '../Props.ts'
+//import {TemplateHandler} from 'easy-template-x'
 import {IFmodule, IWSModel} from '../Models.ts'
 //import JSZip from 'jszip';
 import PizZip from "pizzip";
@@ -10,7 +10,7 @@ import {initfModule} from "../form/Menu.tsx";
 //import pdf2md from '@opendocsg/pdf2md'
 
 
-export const  saveXlsx =  ({fileNames, sheetName, data }:SaveProps):void => {
+export const  saveXlsx =  <A>({fileNames, sheetName, data }:SaveProps<A>):void => {
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
@@ -18,7 +18,7 @@ export const  saveXlsx =  ({fileNames, sheetName, data }:SaveProps):void => {
     XLSX.writeFile(workbook, fileName);
 }
 
-export const saveFile =({templateFileName, blob}:{templateFileName: string, blob: Blob}):void => {
+export const saveFile = ({templateFileName, blob}:{templateFileName: string, blob: Blob}):void => {
     const blobUrl = URL.createObjectURL(blob);
     // create temp link element
     let link:any= document.createElement("a");
@@ -34,11 +34,11 @@ export const saveFile =({templateFileName, blob}:{templateFileName: string, blob
         link = null;
     }, 0);
 }
-export const showFile = async ({e, templateFileName, data}:printDocProps) => {
-    e.preventDefault()
-  new TemplateHandler().process(e.target.files[0], data)
-    .then ((doc:Blob) => saveFile({templateFileName:templateFileName, blob:doc}))
-}
+// export const showFile = async ({e, templateFileName, data}:printDocProps) => {
+//     e.preventDefault()
+//   new TemplateHandler().process(e.target.files[0], data)
+//     .then ((doc:Blob) => saveFile({templateFileName:templateFileName, blob:doc}))
+// }
 
 
 export const generateDocx = async <A extends IWSModel>(
@@ -94,7 +94,7 @@ export function templateNames <T extends IWSModel>(current:T, fmodule:IFmodule[]
 }
 // export const getAsArrayBuffer = async (templateFileName:String) : Promise<ArrayBuffer|undefined> => {
 //   try {
-//     //@ts-ignore
+//     //@ts-expect-error -- legacy, see TODO
 //     const response = await fetch(templateFileName)
 //     const blob = await response.blob()
 //     const arrayBuffer = await blob.arrayBuffer()

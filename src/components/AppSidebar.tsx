@@ -11,7 +11,6 @@ const AppSidebar = () => {
   const unfoldable = useSelector((state:any) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state:any) => state.sidebarShow)
 
-  // @ts-ignore
   return (
     <CSidebar
       className="border-end"
@@ -26,7 +25,7 @@ const AppSidebar = () => {
       <CSidebarHeader className="border-bottom">
 
         <CSidebarBrand className="d-none d-md-flex"
-                    // @ts-ignore
+                    // @ts-expect-error -- legacy, see TODO
                        to="/">
           <CIcon customClassName="sidebar-brand-full" icon={logo} height={100} width={200} />
         </CSidebarBrand>

@@ -4,6 +4,7 @@ import 'core-js';
 import App from './App';
 import store from './store';
 import { getDb, initDefaultData } from './utils/db.ts';
+import './index.css'
 
 BigInt.prototype.toJSON = function () {
   return this.toString();

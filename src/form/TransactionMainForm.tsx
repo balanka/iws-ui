@@ -23,7 +23,6 @@ export const TransactionMainForm = ({
   console.log('accData', accData)
   return (
     <div
-      //@ts-ignore
       style={{ ...styles.outer, paddingBottom:2, width:'100%', height:210,  display: !collapse ? 'none' : ''  }}>
       {/* Row 1 */}
       <FormRow height={height}>

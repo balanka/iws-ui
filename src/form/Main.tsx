@@ -162,18 +162,18 @@ export const Main = () => {
       <BalanceSheetHead style={{...STYLES.inner2}}
                         title={title} submitQuery={load} dispatch={dispatch}
                         logout={logout} t={t}
-        //@ts-ignore
+        //@ts-expect-error -- legacy, see TODO
                         templateFileName={""}/>
       <JournalMainForm current={current} setCurrent={setCurrent} t={t} accData={accData} height={height-5}
-        //@ts-ignore
+        //@ts-expect-error -- legacy, see TODO
                        stylesx={{height: 950, paddingBottom: 5, width: '100%'}} ids={['3310', "1100"]}/>
       <div style={{paddingLeft: 1, paddingRight: 1, paddingTop: 20, height: 600, width: '100%'}}>
       {/*<div*/}
-      {/*  //@ts-ignore*/}
+      {/*  //@ts-expect-error -- legacy, see TODO*/}
       {/*  style={{...STYLES.outer, height: 600, width: "100%", paddingTop: 20}}>*/}
         <AgGridReact theme={myTheme}
                      treeData={true}
-                      //@ts-ignore
+                      //@ts-expect-error -- legacy, see TODO
                      gridOptions={gridOptions(t)} rowData={v}/>
       </div>
     </div>

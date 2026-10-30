@@ -13,7 +13,7 @@ import {
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
-// @ts-ignore
+// @ts-expect-error -- legacy, see TODO
 import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
 import { Add, COPY, Edit, EditRow, Get, Get2 } from './CrudController.ts'
 import { MASTERFILE } from './Menu.tsx'
@@ -325,7 +325,7 @@ const useTransactionForm = <
     return names
   }, [current, fmodule])
 
-  const saveProps: SaveProps = {
+  const saveProps: SaveProps <L> = {
     fileNames: exportFileName(),
     sheetName,
     data: current?.lines ?? [],

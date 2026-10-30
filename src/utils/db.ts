@@ -2,6 +2,7 @@
 
 import Dexie, { Table } from 'dexie';
 import { CompanyType, ICompany, IAccount, MenuItem } from '../Models';
+import {formEnum} from "./FormEnum.tsx";
 
 // ---------------------------------------------------------------------------
 // Shared message
@@ -37,7 +38,7 @@ export class AppDatabase extends Dexie {
         'balanceSheetAcc, incomeStmtAcc, cashAcc, account, oaccount, ' +
         'accountName, oaccountName, pageHeaderText, headerText, ' +
         'pageFooterText, footerText, logoContent, logoName, contentType, ' +
-        'contact, locale, fax'
+        'contact, locale'
     });
   }
 }
@@ -201,7 +202,7 @@ export async function initDefaultData(): Promise<void> {
       enterdate: new Date(),
       postingdate: new Date(),
       changedate: new Date(),
-      modelid: 10,
+      modelid: formEnum.COMPANY,
       pageHeaderText: '',
       headerText: '',
       pageFooterText: '',
@@ -211,7 +212,6 @@ export async function initDefaultData(): Promise<void> {
       contentType: '',
       contact: '',
       locale: '',
-      fax: '',
       company: '',
       bankaccounts: []
     });
