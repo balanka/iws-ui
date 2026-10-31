@@ -32,12 +32,23 @@
     return spec.map(function (s) { return s[0] + ':' + s[1]; }).join(',');
   }
   document.body.addEventListener('click', function (e) {
-    var link = e.target.closest('.table-sort');
+    var link = e.target.closest('.table-sort, .daisy-table-sort');
     if (!link) return;
-    var wrapper = link.closest('.htmx-table-wrapper');
-    var hidden = wrapper && wrapper.querySelector('input[name="sort"]');
+
+    var wrapper = link.closest('.htmx-daisy-table-wrapper, .htmx-table-wrapper');
+    if (!wrapper) return;
+
+    if (wrapper.classList.contains('htmx-swapping')) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    var hidden = wrapper.querySelector('input[name="sort"]');
     var key = link.dataset.sortKey;
     if (!key || !hidden) return;
+
+    // Compute new sort spec
     var spec = parseSpec(hidden.value);
     var idx = spec.findIndex(function (s) { return s[0] === key; });
     var shift = e.shiftKey;
@@ -55,6 +66,36 @@
       }
     }
     hidden.value = encodeSpec(spec);
+
+    // Prevent HTMX's own click handler from firing a second request
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Build the URL from the sort link's data-table-path, plus the
+    // current filters + modelid/company, then fire via htmx.ajax
+    var baseUrl = link.dataset.tablePath || '/html/transaction-list';
+    var params = new URLSearchParams();
+    params.set('sort', hidden.value);
+
+    ['modelid', 'company', 'q'].forEach(function (name) {
+      var el = wrapper.querySelector('[name="' + name + '"]')
+        || document.querySelector('[name="' + name + '"]');
+      if (el && el.value) params.set(name, el.value);
+    });
+
+    wrapper.querySelectorAll('[data-filter-input]').forEach(function (el) {
+      if (el.name && el.value) params.set(el.name, el.value);
+    });
+
+    console.log('[sort] GET', baseUrl + '?' + params.toString());
+
+    if (window.htmx) {
+      htmx.ajax('GET', baseUrl + '?' + params.toString(), {
+        target: wrapper,
+        swap: 'outerHTML',
+        pushUrl: true
+      });
+    }
   }, true);
 })();
 

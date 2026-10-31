@@ -151,7 +151,7 @@ const CompanyForm = () => {
       ccyData={ccyData}
       contactData={contactData}
       onGridReady={onGridReady}
-      // @ts-ignore
+      // @ts-expect-error -- legacy, see TODO
       stylesx={{
         ...styles,
         height: state.collapseForm ? minHeight : maxHeight,

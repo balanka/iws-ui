@@ -1402,7 +1402,7 @@ select.filter-select:disabled {
   display: inline-block;
   width: auto;
 }
-
+.htmx-swapping .daisy-table-sort { pointer-events: none; cursor: wait; }
 /* Transaction list + any table using data-col-key on numeric columns */
 .htmx-daisy .daisy-table tbody td[data-col-key="id"],
 .htmx-daisy .daisy-table tbody td[data-col-key="period"],

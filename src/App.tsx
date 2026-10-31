@@ -1,5 +1,5 @@
 import React, {Suspense, useEffect} from 'react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import '../public/scss/style.scss'
 import {CSpinner} from "@coreui/react-pro";
 
@@ -14,14 +14,14 @@ const App = () => {
     window.process = {...window.process,}
   }, [])
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Suspense fallback={<CSpinner color="primary" />}>
         <Routes>
           <Route  path="/login"  element={<Login/> } />
           <Route path="*"  element={<DefaultLayout />} />
         </Routes>
       </Suspense>
-    </HashRouter>
+    </BrowserRouter>
   )
 }
 
