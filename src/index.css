@@ -4,6 +4,7 @@
 /* Tailwind — theme + utilities (no preflight reset) */
 @import "tailwindcss/theme.css";
 @import "tailwindcss/utilities.css";
+@import "./htmx-fragments.css";
 
 /* Scan the Scala backend for DaisyUI class names */
 @source "/Users/iwsmac/tools/xx/iws-zio/src/main/scala/com/kabasoft/iws/api/*.scala";
