@@ -49,8 +49,9 @@ const ComboBox = <T extends Base>({
       minHeight: height || minHeight,
       display: 'flex',
       alignItems: 'center',
-      backgroundColor: '#fff', // Set a safe default
+      backgroundColor: state.isDisabled ? '#d1d5db' : '#fff',  // ← was always '#fff'
     }),
+
 
     // ValueContainer: DO NOT spread ...style
     valueContainer: (base: any) => ({

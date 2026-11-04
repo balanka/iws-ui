@@ -51,8 +51,6 @@ export const FormMasterfileXComboBox = ({
 
                                         }:MasterfileXComboBoxProps) => {
   const currentAcc = (data ?? [...defaultValue]).find((acc) => acc.id === current[fieldName]) ?? defaultValue;
-  // console.log('currentAcc', currentAcc)
-  // console.log('current[fieldName]', current[fieldName])
   return (
     <ComboBox<{ value: string | bigint; label: string }>
       style={{
