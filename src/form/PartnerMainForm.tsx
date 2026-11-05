@@ -25,8 +25,7 @@ export const PartnerMainForm = ({
         collapse={false}
         accData={[]}
         propertyName=""
-        fieldName=""
-      >
+        fieldName="">
         <AddressForm
           current={current}
           setCurrent={setCurrent}

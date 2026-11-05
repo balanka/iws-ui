@@ -8,7 +8,7 @@ import {
   IMasterfile2, IContact, IProfile, IRole,
   IStore,
   ISupplier, ITransaction, IUser,
-  IVat, IWSLine, IWSModel, IWSTransaction, type IRealEstate
+  IVat, IWSLine, IWSModel, IWSTransaction, type IRealEstate, IPermission
 } from "./Models.ts";
 import {type i18n, TFunction} from "i18next";
 import React, {CSSProperties, Dispatch, ReactNode, SetStateAction} from "react";
@@ -187,7 +187,8 @@ export interface MasterfileProps2<A extends IMasterfile|IMasterfile2|IStore>{
     current: A,
     setCurrent:  Dispatch<SetStateAction<IMasterfile>>| Dispatch<SetStateAction<IMasterfile2>> |
       Dispatch<SetStateAction<IStore>>| Dispatch<SetStateAction<IBusinespartner>>|
-      Dispatch<SetStateAction<IRealEstate>>|Dispatch<SetStateAction<IRole>>,
+      Dispatch<SetStateAction<IRealEstate>>|Dispatch<SetStateAction<IRole>>
+      |Dispatch<SetStateAction<IPermission>> |Dispatch<SetStateAction<IContact>>,
     accData: IMasterfile[],
     t: TFunction<'translation', undefined>,
     disable: boolean,
@@ -210,7 +211,8 @@ export interface FModuleProps2<A extends IMasterfile2>{
 export interface MasterfileProps<A extends IMasterfile> {
   collapse: boolean,
   current: A,
-  setCurrent: Dispatch<SetStateAction<IMasterfile>>|Dispatch<SetStateAction<IBusinespartner>>,
+  setCurrent: Dispatch<SetStateAction<IMasterfile>>|Dispatch<SetStateAction<IBusinespartner>>
+    |Dispatch<SetStateAction<IContact>>,
   t: TFunction<'translation', undefined>,
   disable: boolean,
   height: number

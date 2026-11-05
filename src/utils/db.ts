@@ -55,7 +55,8 @@ export const DEFAULT_COMPANIES: CompanyType[] = [
   { id: '5000', name: 'SALAM' },
   { id: '5500', name: 'ETOILE CHANGE' },
   { id: '5600', name: 'SPI-GUINEE' },
-  { id: '5700', name: 'SIMGUI SARL' }
+  { id: '5700', name: 'SIMGUI SARL' },
+  { id: '20xx', name: 'TEST' },
 ];
 
 // ---------------------------------------------------------------------------

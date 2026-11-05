@@ -8,7 +8,7 @@ import { PartnerColumnDefs } from '../ColumnsDefs.ts'
 import useForm from './useForm.ts'
 import useMasterfileForm from './useMasterfileForm.tsx'
 import { MasterfileFormShell } from './MasterfileFormShell.tsx'
-import type { IBusinespartner } from '../Models.ts'
+import {IContact} from '../Models.ts'
 
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule])
@@ -17,12 +17,11 @@ const PartnerForm = () => {
   const [{ t, module_ }] = useForm()
 
   const height = 28
-  const current_ = module_?.state ?? ({} as IBusinespartner)
+  const current_ = module_?.state ?? ({} as IContact)
   const colDef: ColDef[] = PartnerColumnDefs(t)
 
-  const {
-    header, body, table, disable, state, current, setCurrent,
-  } = useMasterfileForm<IBusinespartner>(current_, colDef, MASTERFILE.contact)
+  const {header, body, table, disable, state, current, setCurrent} =
+    useMasterfileForm<IContact>(current_, colDef, MASTERFILE.contact)
 
   const partner = (
     <PartnerMainForm

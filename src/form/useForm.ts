@@ -1,8 +1,6 @@
     import {AllCommunityModule, ClientSideRowModelModule, ModuleRegistry, PinnedRowModule} from 'ag-grid-community'
     import 'ag-grid-community/styles/ag-grid.css'
     import 'ag-grid-community/styles/ag-theme-quartz.css'
-    // @ts-expect-error -- legacy, see TODO
-    import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
     import { useStore} from './Menu'
     import {formEnum} from '../utils/FormEnum'
     import {useTranslation} from "react-i18next";
@@ -17,12 +15,10 @@
       console.log('selected', selected)
       let module_ = menu && menu.get(!selected || selected === '/login' ? '/login' : selected)
       module_ = typeof module_ !== 'undefined' && module_ ? module_ : formEnum.LOGIN
-      console.log('module_', module_)
       const modelid: number = module_ ? module_.modelid : 1111
       const title =  `${company}/${t(module_.title)}`
       const [language, setLanguage] = useState('en-US')
       const [state, setState] = useState <State>({collapseForm: true, collapseTable: true, fadeIn: true, timeout: 300})
-      //const [visible, setVisible] = useState <boolean>( true)
       const toggle = () => setState({...state, collapseForm: !state.collapseForm})
       const toggleTable = () =>  setState({...state, collapseTable: !state.collapseTable}) //setVisible(!visible)
       const handleLanguageChange = (event:any) => {

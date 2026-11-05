@@ -356,6 +356,7 @@ export const initContact:IContact = {
     country: '',
     phone: '',
     email: '',
+    contact: '',
     modelid:formEnum.CONTACT,
     enterdate: new Date(),
     postingdate: new Date(),

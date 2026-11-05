@@ -145,10 +145,11 @@ export interface IAddress {
   phone:string,
   email:string,
   }
-export interface IContact extends IMasterfile, IAddress {}
+export interface IContact extends IMasterfile, IAddress {
+  contact:string
+}
 
 export interface IBusinespartner  extends IContact, IStockAccount {
-  contact:string,
   taxCode: string,
   vatCode:string,
   currency?:string,
