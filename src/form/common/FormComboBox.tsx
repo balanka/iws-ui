@@ -189,6 +189,7 @@ interface FromTransactionComboBoxProps {
   height?:number
 }
 
+
 export const FromTransactionComboBox: FC<FromTransactionComboBoxProps> = ({
                                                                             current,
                                                                             transactions,
@@ -223,10 +224,12 @@ export const FromTransactionComboBox: FC<FromTransactionComboBoxProps> = ({
   )
 }
 
-export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction, IMasterfile>> =({current, setCurrent, data
-                                                               , fieldName, defaultValue,  accFilter = [], zIndex, styles, height })=>{
-  // @ts-expect-error -- legacy, see TODO
-  const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === current[fieldName])??defaultValue
+export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction, IMasterfile>> =
+  ({current, setCurrent, data, fieldName, defaultValue,  accFilter = [], zIndex, styles, height }:
+   FinancialsCBoxProps2<IFinancials|ITransaction, IMasterfile>)=>{
+  //@ts-ignore
+  const idx= current[fieldName]
+  const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === idx)??defaultValue
   const filtered= (defaultValue.modelid===formEnum.ACCOUNT) && accFilter.length>0?getFiltered(data, accFilter):data
   //const filtered=  accFilter.length>0?getFiltered(data, accFilter):data
   console.log('📊 Raw data:', data);
@@ -249,9 +252,6 @@ export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction
 interface MasterfileComboboxProps<T extends Record<string, any>, U extends { id: string; name: string }> {
   current: T;
   setCurrent: Dispatch<SetStateAction<T>>;
-  //setCurrent: Dispatch<SetStateAction<ICustomer | ISupplier | IEmployee |ICompany|IAsset|IFmodule>>
-  //setCurrent:Dispatch<SetStateAction<ICustomer>>|Dispatch<SetStateAction<ISupplier>>|Dispatch<SetStateAction<IEmployee>>|
-  //  Dispatch<SetStateAction<ICompany>>|Dispatch<SetStateAction<IAsset>>|Dispatch<SetStateAction<IFmodule>>;
   data: U[];
   fieldName: keyof T;
   defaultValue: U;
@@ -286,10 +286,10 @@ export const MasterfileXComboBox = <T extends Record<string, any>, U extends { i
   const items = [defaultValue, ...data];
 
 // Determine the selected value(s) based on isMulti
-  console.log('🔍 current[fieldName]:', current[fieldName]);
-  console.log('🔍 typeof:', typeof current[fieldName]);
-  console.log('🔍 isMulti:', isMulti);
-
+//   console.log('🔍 current[fieldName]:', current[fieldName]);
+//   console.log('🔍 typeof:', typeof current[fieldName]);
+//   console.log('🔍 isMulti:', isMulti);
+//   console.log('🔍 current:', current);
   const selectedValue = isMulti
     ? (() => {
       const raw = current[fieldName];
@@ -321,13 +321,12 @@ export const MasterfileXComboBox = <T extends Record<string, any>, U extends { i
     })();
 
   const onChange = (value: {value: string, label: string}[]) => {
-    console.log('Raw onChange value:', value);
-    const ids = value.filter(v => v && v.value).map(v => v.value);
-    console.log('Extracted IDs (array):', ids);
+   // console.log('Raw onChange value:', value);
+    const ids = !Array.isArray(value)?value:
+    value?.filter(v => v && v.value).map(v => v.value);
+    //console.log('Extracted IDs (array):', ids);
     // Store as space-separated string
-    const joined = ids.join(' ');
-    console.log('Stored string:', joined);
-   // const currentx: T  = ;
+    const joined = !Array.isArray(value)?value:ids.join(' ');
     setCurrent({ ...current, [fieldName]: joined } as T);
   };
 

@@ -33,6 +33,7 @@ export const BankStatementMainForm = ({ current, setCurrent, t, locale, currency
         <CCol sm={6} className="d-flex gap-2"><Label>{t('bankstatement.postingtext')}</Label><InputField fieldName="postingtext" current={current} setCurrent={setCurrent} value={current.postingtext} disabled={current.posted} style={inputStyle} /></CCol>
         <CCol sm={6} className="d-flex gap-2"><Label>{t('bankstatement.amount')}</Label>
           <AmountField
+            id="bankstatement.amount"
             key={current.id}
             amount={current.amount ?? 0}
             locale={locale}

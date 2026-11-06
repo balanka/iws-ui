@@ -72,6 +72,7 @@ export const TransactionMainForm = ({
         <CCol sm={3} className="d-flex gap-2 align-items-center">
           <Label bold>{t('common.total')}</Label>
           <AmountField
+            id="transaction.total"
             amount={total ?? 0}
             locale={locale}
             currency={currency}

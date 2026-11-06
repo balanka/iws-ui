@@ -10,21 +10,14 @@ export const CustomerGeneralForm = <P extends IBusinespartner>({
                                                                  collapse = true,
                                                                  current, setCurrent, ccyData, contactData, disable, t, height,
                                                                }: CustomerGeneralFormProps<P>& { collapse?: boolean; height?: number }): JSX.Element | null => {
-// export const CustomerGeneralForm = ({
-//                                       collapse = true,
-//                                       ccyData,
-//                                       contactData,
-//                                       current,
-//                                       setCurrent,
-//                                       disable,
-//                                       t,
-//                                       height = 28
-//                                     }: CustomerGeneralFormProps & { collapse?: boolean; height?: number }): JSX.Element | null => {
+
   if (!collapse) return null;
-  //console.log('contactData', contactData)
   const inputStyle = { height: height - 3, width: '100%', fontSize: '0.875rem' };
   const textareaStyle = { width: '100%', minHeight: 60, fontSize: '0.875rem' };
   const rowMargin = { marginBottom: '6px' };
+  const currencyStyle = { ...inputStyle, width: 170};
+  //const currencyStyle = { ...inputStyle, minWidth: 100, maxWidth: 200 };
+
   const Label = ({ children, w = 100 }: { children: React.ReactNode; w?: number }) =>
     <div style={{ minWidth: w }}>{children}</div>
 
@@ -134,8 +127,8 @@ export const CustomerGeneralForm = <P extends IBusinespartner>({
         </CCol>
         <CCol sm={2} style={{ paddingLeft: 10, paddingRight: 40 }}><Label>{t('common.currency')}</Label></CCol>
         <CCol  md="2" style={{paddingLeft: 45}}>
-          {accComboBox(ccyData, initCurrency, height-8, "currency", inputStyle)}
-          {accComboBox(contactData, initContact, height-8, "contact", inputStyle)}
+          {accComboBox(ccyData, initCurrency, height-8, "currency", currencyStyle)}
+          {accComboBox(contactData, initContact, height-8, "contact", currencyStyle)}
         </CCol>
       </CInputGroup>
     </CInputGroup>

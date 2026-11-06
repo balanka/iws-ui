@@ -226,6 +226,7 @@ export const FinancialsMainForm = ({
         <CCol sm={4} className="d-flex gap-2">
           <Label>{t('financials.line.amount')}</Label>
           <AmountField
+            id="financials.line.amount"
             amount={currentLine?.amount ?? 0}
             locale={locale}
             currency={currency}
@@ -264,6 +265,7 @@ export const FinancialsMainForm = ({
         <CCol sm={4} className="d-flex gap-2">
           <Label bold>{t('common.total')}</Label>
           <AmountField
+            id="financials.total"
             amount={total ?? 0}
             locale={locale}
             currency={currency}

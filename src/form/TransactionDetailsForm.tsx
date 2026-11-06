@@ -137,6 +137,7 @@ export const TransactionDetailsForm = ({
         <CCol sm={4} className="d-flex gap-2">
           <Label>{t('transaction.line.quantity')}</Label>
           <AmountField
+            id="transaction.line.quantity"
             amount={Number(currentLineTransaction.quantity) || 0}
             locale={locale}
             // no `currency` prop → rendered as a plain number
@@ -202,6 +203,7 @@ export const TransactionDetailsForm = ({
         <CCol sm={4} className="d-flex gap-2">
           <Label>{t('transaction.line.price')}</Label>
           <AmountField
+            id="transaction.line.price"
             amount={currentLineTransaction.price ?? 0}
             locale={locale}
             currency={currency}

@@ -27,6 +27,7 @@ export const ArticleGeneralForm = ({
   const inputStyle = { height: height - 3, width: '100%', fontSize: '0.875rem' };
   const numberStyle = { height: height - 3, width: '100%', fontSize: '0.875rem', textAlign: 'right' as const, padding: 2 };
   const textareaStyle = { width: '100%', minHeight: 60, fontSize: '0.875rem' };
+  const priceStyle = { ...numberStyle, width: 170 };
 
   return (
     <div style={{ ...styles.outer, paddingBottom: 10, display: !collapse ? 'none' : '' }}>
@@ -129,32 +130,16 @@ export const ArticleGeneralForm = ({
         </CCol>
         <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('article.pprice')}</Label></CCol>
         <CCol sm="3">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 , paddingLeft:40 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft: 40}}>
             <AmountField
+              id="article.pprice"
               amount={current?.pprice??0.0}
               locale={locale}
               currency={currency}
               disabled={disable}
-              style={numberStyle}
+              style={{ ...priceStyle}}
               onCommit={(amount) => setCurrent({...current, pprice:amount})}
             />
-            {/*<CurrencyInput*/}
-            {/*  value={current.pprice}*/}
-            {/*  intlConfig={{ locale, currency }}*/}
-            {/*  groupSeparator="."*/}
-            {/*  decimalSeparator=","*/}
-            {/*  decimalsLimit={2}*/}
-            {/*  decimalScale={2}*/}
-            {/*  onValueChange={(value) => {*/}
-            {/*    let cleanValue = value || '0';*/}
-            {/*    cleanValue = cleanValue.replace(/\./g, ''); // Remove thousands separators*/}
-            {/*    cleanValue = cleanValue.replace(/,/g, '.'); // Convert decimal comma to dot*/}
-            {/*    const numberValue = parseFloat(cleanValue);*/}
-            {/*    const finalValue = isNaN(numberValue) ? 0 : numberValue;*/}
-            {/*    setCurrent({...current, pprice: finalValue})}}*/}
-            {/*  disabled={disable}*/}
-            {/*  style={numberStyle}*/}
-            {/*/>*/}
           </div>
         </CCol>
       </CInputGroup>
@@ -177,32 +162,16 @@ export const ArticleGeneralForm = ({
         </CCol>
         <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('article.sprice')}</Label></CCol>
         <CCol sm="3">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 , paddingLeft:40 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft: 40}}>
             <AmountField
+              id="article.sprice"
               amount={current?.sprice??0.0}
               locale={locale}
               currency={currency}
               disabled={disable}
-              style={numberStyle}
+              style={{ ...priceStyle}}
               onCommit={(amount) => setCurrent({...current, sprice:amount})}
             />
-            {/*<CurrencyInput*/}
-            {/*  value={current.sprice}*/}
-            {/*  intlConfig={{ locale, currency }}*/}
-            {/*  groupSeparator="."*/}
-            {/*  decimalSeparator=","*/}
-            {/*  decimalsLimit={2}*/}
-            {/*  decimalScale={2}*/}
-            {/*  onValueChange={(value) => {*/}
-            {/*    let cleanValue = value || '0';*/}
-            {/*    cleanValue = cleanValue.replace(/\./g, ''); // Remove thousands separators*/}
-            {/*    cleanValue = cleanValue.replace(/,/g, '.'); // Convert decimal comma to dot*/}
-            {/*    const numberValue = parseFloat(cleanValue);*/}
-            {/*    const finalValue = isNaN(numberValue) ? 0 : numberValue;*/}
-            {/*    setCurrent({...current, sprice: finalValue})}}*/}
-            {/*  disabled={disable}*/}
-            {/*  style={numberStyle}*/}
-            {/*/>*/}
           </div>
         </CCol>
       </CInputGroup>
@@ -225,25 +194,16 @@ export const ArticleGeneralForm = ({
         </CCol>
         <CCol sm="2" style={{ paddingLeft: 10 }}><Label>{t('article.avgPrice')}</Label></CCol>
         <CCol sm="3">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft:40 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft: 40 }}>
             <AmountField
+              id="article.avgPrice"
               amount={current.avgPrice ?? 0}
               locale={locale}
               currency={currency}
               disabled
               onCommit={() => {}}
-              style={numberStyle}
+              style={{ ...priceStyle}}
             />
-            {/*<CurrencyInput*/}
-            {/*  value={current.avgPrice}*/}
-            {/*  intlConfig={{ locale, currency }}*/}
-            {/*  groupSeparator="."*/}
-            {/*  decimalSeparator=","*/}
-            {/*  decimalsLimit={2}*/}
-            {/*  decimalScale={2}*/}
-            {/*  disabled={disable}*/}
-            {/*  style={numberStyle}*/}
-            {/*/>*/}
           </div>
         </CCol>
       </CInputGroup>

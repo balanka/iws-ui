@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { CFormInput } from '@coreui/react-pro'
 
 type AmountFieldProps = {
+  id: string,
   amount: number
   locale: string
   currency?: string
@@ -12,6 +13,7 @@ type AmountFieldProps = {
 }
 
 export function AmountField({
+                              id,
                               amount,
                               locale,
                               currency,
@@ -22,6 +24,7 @@ export function AmountField({
                             }: AmountFieldProps) {
   const safeDecimals = Math.max(0, Math.min(20, decimals ?? 2))
   const resolvedLocale = locale || 'de-DE'
+
 
   // Build a formatter once per (locale, currency, decimals) change
   const formatter = currency
@@ -70,7 +73,7 @@ export function AmountField({
 
   return (
     <CFormInput
-      id="amountFieldId"
+      id= {id}
       className="input-sm text-end"
       disabled={disabled}
       style={style}

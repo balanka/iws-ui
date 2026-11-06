@@ -1,9 +1,15 @@
-import { JSX } from 'react'
+import React, { JSX } from 'react'
 import { CRow, CCol, CContainer } from '@coreui/react-pro'
-import { DatePickerField, InputField, TextareaField,  BooleanField, FormMasterfileXComboBox } from './common'
+import {
+  DatePickerField,
+  InputField,
+  TextareaField,
+  BooleanField,
+  FormMasterfileXComboBox,
+} from './common'
 import { styles } from './FormsProps'
 import { AccountMainProps } from '../Props'
-import { initAcc } from './Menu'
+import {initAcc, initCurrency} from './Menu'
 
 const FormRow = ({ children }: { children: React.ReactNode }) => (
   <CRow className="g-2 align-items-center mb-2">
@@ -15,9 +21,10 @@ const Label = ({ children, width = 100 }: { children: React.ReactNode; width?: n
   <div style={{ minWidth: width }}>{children}</div>
 );
 
-export const AccountMainForm = ({ current, setCurrent, accData, t, disable }: AccountMainProps): JSX.Element => {
+
+export const AccountMainForm = ({ current, setCurrent, accData, currencyData, t, disable }: AccountMainProps): JSX.Element => {
   const inputStyle = { height: 28, width: '100%', fontSize: '0.875rem' };
-  const inputStyleRight = { ...inputStyle, textAlign: 'right' as const };
+  //const inputStyleRight = { ...inputStyle, textAlign: 'right' as const };
   const textareaStyle = { width: '100%', minHeight: 40, fontSize: '0.875rem', paddingTop: 5 };
 
   return (
@@ -71,6 +78,19 @@ export const AccountMainForm = ({ current, setCurrent, accData, t, disable }: Ac
         {/* Row 4: Currency and Company */}
         <FormRow>
           <CCol sm={6} className="d-flex gap-3 align-items-center">
+            <Label>{t('common.currency')}</Label>
+            <FormMasterfileXComboBox
+              fieldName="currency"
+              current={current}
+              setCurrent={setCurrent}
+              data={currencyData}
+              defaultValue={initCurrency}
+              zIndex={11}
+              disable={disable}
+              styles={inputStyle}
+            />
+          </CCol>
+          <CCol sm={6} className="d-flex gap-2 align-items-center">
             <BooleanField
               fieldName="isDebit"
               current={current}
@@ -89,10 +109,17 @@ export const AccountMainForm = ({ current, setCurrent, accData, t, disable }: Ac
               checked={current.balancesheet}
               style={{ height: 30, paddingLeft: 20, width: 150 }}
             />
-          </CCol>
-          <CCol sm={6} className="d-flex gap-2 align-items-center">
-            <Label>{t('common.currency')}</Label>
-            <InputField fieldName="currency" current={current} setCurrent={setCurrent} value={current.currency} disabled={disable} style={inputStyleRight} />
+            {/*<Label>{t('common.currency')}</Label>*/}
+            {/*<FormMasterfileXComboBox*/}
+            {/*  fieldName="currency"*/}
+            {/*  current={current}*/}
+            {/*  setCurrent={setCurrent}*/}
+            {/*  data={currencyData}*/}
+            {/*  defaultValue={initCurrency}*/}
+            {/*  zIndex={11}*/}
+            {/*  disable={disable}*/}
+            {/*  styles={inputStyle}*/}
+            {/*/>*/}
           </CCol>
           {/*<CCol sm={6} className="d-flex gap-2 align-items-center">*/}
           {/*  <Label>{t('common.company')}</Label>*/}

@@ -176,6 +176,7 @@ export interface AccountMainProps {
   current: IAccount,
   setCurrent: (arg: IAccount) => void,
   accData: IAccount[],
+  currencyData: IMasterfile[],
   t: TFunction<'transalation', undefined>,
   locale: string,
   disable: boolean,

@@ -58,6 +58,7 @@ export const AssetMainForm = ({ collapse, current, setCurrent, t, accData, ccyDa
         <FormRow>
           <CCol sm={4} className="d-flex gap-2"><Label w={80}>{t('asset.amount')}</Label>
             <AmountField
+              id="asset.amount"
               amount={current?.amount??0.0}
               locale={locale}
               currency={currency}
@@ -77,9 +78,8 @@ export const AssetMainForm = ({ collapse, current, setCurrent, t, accData, ccyDa
         </FormRow>
         <FormRow>
           <CCol sm={4} className="d-flex gap-2"><Label w={80}>{t('asset.scrapValue')}</Label>
-            {/*<CurrencyInput value={current?.scrapValue??0.0} intlConfig={{ locale, currency }} groupSeparator="." decimalSeparator="," decimalsLimit={2} decimalScale={2} */}
-            {/*               onValueChange={handleCurrencyChange('scrapValue')} disabled={disable} style={inputRight} />*/}
             <AmountField
+              id="asset.scrapValue"
               amount={current?.scrapValue??0.0}
               locale={locale}
               currency={currency}
