@@ -76,11 +76,17 @@ export const logout = (navigate:NavigateFunction) => {
 }
 
 // FormRow component (same pattern as TransactionMainForm)
-export  const FormRow = ({ children, height }: { children: React.ReactNode, height:number }) =>
-  <CRow className="g-2 align-items-center mb-2" style={{ height: height - 4 }}>{children}</CRow>
+export  const FormRow = ({ children, height, style }: { children: React.ReactNode, height:number|undefined, style?:React.CSSProperties|undefined}) => {
+  const height_ = height ? height-4 : 10
+  const style_ = style ?? { height: height_, paddingTop: 5}
+  return <CRow className="g-2 align-items-center mb-2"
+               style={style_}>{children}</CRow>
+}
 
-export const Label = ({ children, width = 80, bold = false }: any) =>
-  <div style={{ minWidth: width, fontWeight: bold ? 'bold' : 'normal', paddingLeft: 10 }}>{children}</div>
+export const Label = ({ children, width = 80, bold = false, style }: any) =>{
+  const style_ = style ?? { minWidth: width, fontWeight: bold ? 'bold' : 'normal', paddingLeft: 10}
+  return <div style={style_}>{children}</div>
+}
 
 export function amountFormatter<A> (fn:(p:A)=>number, param:A, locale:string, currency:string) {
   const amount = fn(param)

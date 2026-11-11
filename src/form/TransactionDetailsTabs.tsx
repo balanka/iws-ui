@@ -27,7 +27,7 @@ export const TransactionDetailsTabs = <T extends ITransaction, L extends ILineTr
                                                                                              locale,
                                                                                              currency,
                                                                                            }: TransactionDetailsTabProps<T, L>) => {
-  const height = 20;
+  const height = 30;
   const detailsMinHeight = 120;
   const detailsMaxHeight = 300;
   const disable = transaction?.posted;

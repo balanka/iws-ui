@@ -1,15 +1,17 @@
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../../public/css/datepicker.css';
+import React from "react";
 
 export const DatePickerField = ({
                            fieldName, current, setCurrent, selected,
-                           label, disabled, onChange, zIndex, height = 28 }: {
+                           label, disabled, onChange, zIndex, height = 28, style }: {
     fieldName: string, current: any, setCurrent?: (arg: any) => void
   , selected?: Date | null, label: string, disabled: boolean
-  , onChange?: (event: any) => void, zIndex?:number, height?:number
+  , onChange?: (event: any) => void, zIndex?:number, height?:number , style?:React.CSSProperties| undefined
 }) => (
-    <div style={{ minWidth:'60%',  width:'80%',  textAlign:'right', zIndex: zIndex??9998 }}>
+     // <div style={style ?? { minWidth:'60%',  width:'80%',  textAlign:'right', zIndex: zIndex??9998 }}>
+    <div style={style ?? { height: `${height??28 - 3}px`,  textAlign:'right', zIndex: zIndex??9998 }}>
        <DatePicker
           disabled={disabled}
           selected={selected ? new Date(selected) : null}
@@ -22,8 +24,7 @@ export const DatePickerField = ({
               setCurrent({ ...current, [fieldName]: newValue })
             }
           }}
-          //@ts-expect-error -- legacy, see TODO
-          style={{ height: `${height??28 - 3}px`, width: '100%', zIndex: zIndex }}
+          // style={{ height: `${height??28 - 3}px`, width: '100%', zIndex: zIndex }}
        />
       </div>
   )

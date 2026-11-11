@@ -81,7 +81,7 @@ const FinancialsForm = () => {
   const [{
     language, fmodule, current, setCurrent, initAdd, reload, submitEdit, onRowSelected,
     onNewLine, copyFromTransaction, setCopyFromTransaction, onDeleteLine, submitCancel,
-    submitPost, copyCall, setGridApi, zIndex, handleLanguageChange, saveProps, modelid,
+    submitPost, copyCall, setGridApi, zIndex, handleLanguageChange, saveProps,
     isFetching, setIsFetching, gridOptions,
   }] = useTransactionForm(current_, initialLine, currentLine, setCurrentLine, rowData, setRowData, model)
 
@@ -140,9 +140,12 @@ const FinancialsForm = () => {
   }, [token, company, acc_ctx, cc_ctx, contact_ctx, acc_modelid, cc_modelid, contact_modelid])
 
   // ── Callbacks ───────────────────────────────────────────────────────────
-  const submitQuery = async (ctx: string, event?: any) => {
+  const submitQuery = async (ctx: string,  modelid4Fetch:number, event?: any) => {
     event?.preventDefault()
-    setIsFetching(true)
+    //setIsFetching(true)
+    //let shown = false
+    const showTimer = setTimeout(() => { //shown = true;
+      setIsFetching(true) }, 150)
     try {
       const snap = iwsStore.getRawMap()
       const jobs: Promise<unknown>[] = []
@@ -156,42 +159,62 @@ const FinancialsForm = () => {
 
       tryFetch<IAccount>(acc_modelid, acc_ctx)
       tryFetch<IMasterfile>(cc_modelid, cc_ctx)
-      jobs.push(Get3(ctx, token, modelid, current_, setRowData, setCurrent) as unknown as Promise<void>)
+      jobs.push(Get3(ctx, token, modelid4Fetch, current_, setRowData, setCurrent) as unknown as Promise<void>)
 
       await Promise.all(jobs)
     } catch (error) {
       console.error('Error fetching data', error)
     } finally {
+      clearTimeout(showTimer)
+      // if (shown) {
+      //   // keep it up at least 200 ms so it doesn't blink
+      //   await new Promise((r) => setTimeout(r, 200))
+      // }
       setIsFetching(false)
     }
   } //, [acc_ctx, cc_ctx, token, acc_modelid, cc_modelid, modelid, current_, setCurrent, setIsFetching])
 
-  const handleModuleChange = (selected: any) => {
-    const id = selected?.value !== undefined ? String(selected.value) : String(selected)
-    const numericId = parseInt(id, 10)
+  const handleModuleChange = (selectedValue: any) => {
+    const numericId = parseInt(String(selectedValue?.value ?? selectedValue), 10)
     setModel(numericId)
-
-    const mx: IFmodule = fmodule.find((m: IFmodule) => String(m.id) === id) ?? initfModule
-    const moduleName = mx?.name ?? 'Not found'
-    setTitle(`${company}/${moduleName}`)
-
-    const copyFromIds = (mx?.copyFrom ?? '-1').replace(/\s/g, '').split(',')
-
-    setCurrent(current_)
+    const mx: IFmodule = fmodule.find((m: IFmodule) => parseInt(`${m?.id}`, 10) === numericId) ?? initfModule
+    setTitle(`${company}/${mx?.name ?? 'Not found'}`)
     setAccFilter(mx.accFilter?.replace(/\s/g, '').split(','))
     setOAccFilter(mx.oaccFilter?.replace(/\s/g, '').split(','))
-
+    const copyFromIds = (mx?.copyFrom ?? '-1').replace(/\s/g, '').split(',')
     const ctx_ = `${module_.ctx}/${numericId}/${company}`
     const ctx_copyFrom = `${module_.ctx}/n/${company}/${copyFromIds}`
-    const idx = copyFromIds.map((i) => parseInt(i, 10)).reduce((acc, curr) => acc + curr, 0)
+    const idx = copyFromIds.map((i) => parseInt(i, 10)).reduce((a, c) => a + c, 0)
+
     Get(ctx_copyFrom, token, idx, setCopyFromTransaction)
-    void submitQuery(ctx_)
-    const currentx =
-      rowData?.filter((m) => m.modelid === current_.modelid).length > 0
-        ? rowData[0]
-        : current_
-    setCurrent({ ...currentx, modelid: numericId })
+    void submitQuery(ctx_, numericId)
   }
+  // const handleModuleChange = (selected: any) => {
+  //   const id = selected?.value !== undefined ? String(selected.value) : String(selected)
+  //   const numericId = parseInt(id, 10)
+  //   setModel(numericId)
+  //
+  //   const mx: IFmodule = fmodule.find((m: IFmodule) => String(m.id) === id) ?? initfModule
+  //   const moduleName = mx?.name ?? 'Not found'
+  //   setTitle(`${company}/${moduleName}`)
+  //
+  //   const copyFromIds = (mx?.copyFrom ?? '-1').replace(/\s/g, '').split(',')
+  //
+  //   setCurrent(current_)
+  //   setAccFilter(mx.accFilter?.replace(/\s/g, '').split(','))
+  //   setOAccFilter(mx.oaccFilter?.replace(/\s/g, '').split(','))
+  //
+  //   const ctx_ = `${module_.ctx}/${numericId}/${company}`
+  //   const ctx_copyFrom = `${module_.ctx}/n/${company}/${copyFromIds}`
+  //   const idx = copyFromIds.map((i) => parseInt(i, 10)).reduce((acc, curr) => acc + curr, 0)
+  //   Get(ctx_copyFrom, token, idx, setCopyFromTransaction)
+  //   void submitQuery(ctx_, numericId)
+  //   // const currentx =
+  //   //   rowData?.filter((m) => m.modelid === current_.modelid).length > 0
+  //   //     ? rowData[0]
+  //   //     : current_
+  //   // setCurrent({ ...currentx, modelid: numericId })
+  // }
 
   const onRowSelectedL = (event: RowSelectedEvent) => {
     if (!event?.data) return
@@ -311,17 +334,24 @@ const FinancialsForm = () => {
       console.error('Import failed', error)
     })
   }
-
-  const fmoduleData = () => (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id)
+  const fmoduleData = useMemo(() => (fmodule ?? []).filter((m: IFmodule) => m.parent === FINANCIALS.id), [fmodule])
   if (module_ === '11111' || module_ === 11111) return <Login />
 
   const minHeight = 300
   const maxHeight = 650
   const height = 30
   // ── Render ──────────────────────────────────────────────────────────────
-  return isFetching ? (
-    <CSpinner color="primary" />
-  ) : (
+  return  (
+    <>
+      {isFetching && (
+        <div style={{
+          position: 'absolute', inset: 0, display: 'flex',
+          alignItems: 'center', justifyContent: 'center',
+          background: 'rgba(255,255,255,0.5)', zIndex: 9999,
+        }}>
+          <CSpinner color="primary" />
+        </div>
+      )}
     <>
       <FinancialsFormHead
         title={title}
@@ -440,6 +470,7 @@ const FinancialsForm = () => {
         />
       </div>
     </>
+   </>
   )
 }
 

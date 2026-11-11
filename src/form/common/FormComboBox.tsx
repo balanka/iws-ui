@@ -232,7 +232,8 @@ export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction
   const currentAcc = (data ??  [defaultValue]).find((acc) => acc.id === idx)??defaultValue
   const filtered= (defaultValue.modelid===formEnum.ACCOUNT) && accFilter.length>0?getFiltered(data, accFilter):data
   //const filtered=  accFilter.length>0?getFiltered(data, accFilter):data
-  console.log('📊 Raw data:', data);
+  console.log('📊 height', height);
+    console.log('📊 Raw data:', data);
   console.log('📊 Data length:', data?.length);
   console.log('📊 accFilter:', accFilter);
   console.log('📊 Filtered data:', filtered);
@@ -240,7 +241,8 @@ export const MasterfileComboBox:FC<FinancialsCBoxProps2<IFinancials|ITransaction
   console.log('📊 Mapped options:', filtered?.slice()?.sort(sortById)?.map(toOption));
   return (
     <ComboBox<{value:string|bigint,  label:string}>
-      style={{...styles, height:height,  width:'100%', color: '#6b7280', fontSize:12}}
+      style={styles}
+      // style={{...styles, height:height,  width:'100%', color: '#6b7280', fontSize:12}}
       disable={current.posted}
       value={ {value:currentAcc?currentAcc.id:'', label: currentAcc?`${currentAcc.id} ${currentAcc.name}` :''}}
       onChange={(value:any, _event:any) => setCurrent({...current, [fieldName]: value })}

@@ -1,4 +1,3 @@
-//import React from 'react'
 import {AddressForm} from './AddressForm'
 import {CustomerAccountMainForm} from './CustomerAccountMainForm'
 import {CustomerGeneralForm} from './CustomerGeneralForm'

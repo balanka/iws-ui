@@ -1,19 +1,17 @@
 import React from 'react'
-import { CRow, CCol, CContainer } from '@coreui/react-pro'
+import { CCol, CContainer } from '@coreui/react-pro'
 import ComboBox from './ComboBox'
 import { InputField, TextareaField, DatePickerField } from './common'
 import {ILineTransaction, IArticle, ITransaction, IVat} from '../Models'
 import { sortById } from '../utils/Utils'
-import { toOption } from '../utils/FormUtils'
+import { FormRow, Label, toOption } from '../utils/FormUtils'
 import { initArticle, initVat } from './Menu'
 import { formEnum } from '../utils/FormEnum'
 import { TransactionDetailsFormProps } from "../Props.ts"
-//import CurrencyInput from "react-currency-input-field";
 import {AmountField} from "./common/AmountField.tsx";
 
-const styles = { minHeight: 25, height: 25, width: '100%', color: '#6b7280', fontSize: 12 }
-const FormRow = ({ children }: any) => <CRow className="g-2 align-items-center mb-2">{children}</CRow>
-const Label = ({ children, w = 80 }: any) => <div style={{ minWidth: w }}>{children}</div>
+const styles = { minHeight: 25, height: 30, width: '100%', color: '#6b7280', fontSize: 12 }
+
 
 const setTransactionR = (
   transaction: ITransaction,
@@ -49,12 +47,9 @@ const getVat2 = (line: ILineTransaction
                  , value:string, vatData: IVat []): [string, number] => {
 
   const vat = vatData?.find((vat: { id: any }) => vat.id === value) ?? initVat
-  console.log(' vat ', vat)
   const percent = vat?.percent ?? 0.0
   const vatAmount_  = percent * line.quantity * line.price
   const vatCode_ = `${vat?.id}` || '-1'
-  console.log(' percent ', percent)
-  console.log(' vatAmount_ ', vatAmount_)
   const [vatCode, vatAmount] =(line.modelid === formEnum.SALES_ORDER ||
     line.modelid === formEnum.CUSTOMER_INVOICE_LOGISTIC ||
     line.modelid === formEnum.DELIVERY||
@@ -70,12 +65,9 @@ const getVat = (line: ILineTransaction, value:string, articleData: IArticle []
                 , vatData: IVat []): [string, number] => {
   const article = articleData?.find((acc: { id: any }) => acc.id === value) ?? initArticle
   const vat = vatData?.find((vat: { id: any }) => vat.id === article?.vatCode) ?? initVat
-  console.log(' vat ', vat)
   const percent = vat?.percent ?? 0.0
   const vatAmount_  = percent * line.quantity * line.price
   const vatCode_ = `${vat?.id}` || '-1'
-  console.log(' percent ', percent)
-  console.log(' vatAmount_ ', vatAmount_)
   const [vatCode, vatAmount] =(line.modelid === formEnum.SALES_ORDER ||
     line.modelid === formEnum.CUSTOMER_INVOICE_LOGISTIC ||
     line.modelid === formEnum.DELIVERY||
@@ -102,15 +94,18 @@ export const TransactionDetailsForm = ({
   // Find current article and vat
   const currentArticle = articleData?.find((acc: { id: any }) => acc.id === currentLineTransaction.article) ?? initArticle
   const currentVat = vatData?.find((vat: { id: any }) => vat.id === currentLineTransaction.vatCode) ?? initVat
+  const netAmount = currentLineTransaction.quantity * currentLineTransaction.price
+  const numberStyle = { height: (height??30) - 3,  fontSize: '0.875rem', textAlign: 'right' as const, padding: 10 };
+
 
   return (
     <CContainer fluid className="p-0">
       {/* Row 1: Article & Quantity */}
-      <FormRow>
-        <CCol sm={8} className="d-flex gap-2">
-          <Label>{t('transaction.line.article')}</Label>
+      <FormRow height={height}>
+        <CCol sm={6} className="d-flex gap-2">
+          <Label with={30} paddingLeft={20}>{t('transaction.line.article')}</Label>
           <ComboBox
-            style={styles}
+            style={{...styles, width: '80%'}}
             disable={disable}
             key={`article-${currentLineTransaction?.article || 'empty'}`}
             value={{ value: currentArticle?.id || '', label: currentArticle ? `${currentArticle.id} ${currentArticle.name}` : '' }}
@@ -134,16 +129,15 @@ export const TransactionDetailsForm = ({
             values={articleData.length>0?articleData?.slice().sort(sortById).map(toOption):[toOption(initArticle)]}
           />
         </CCol>
-        <CCol sm={4} className="d-flex gap-2">
-          <Label>{t('transaction.line.quantity')}</Label>
+        <CCol sm={3} className="d-flex gap-1">
+          <Label width={10} paddingLeft={5}>{t('transaction.line.quantity')}</Label>
           <AmountField
             id="transaction.line.quantity"
             amount={Number(currentLineTransaction.quantity) || 0}
             locale={locale}
-            // no `currency` prop → rendered as a plain number
-            decimals={3}
+            decimals={2}
             disabled={disable}
-            style={{ height: height, textAlign: 'right' }}
+            style={{ ...numberStyle, width: '60%', paddingLeft:5 }}
             onCommit={(value) => {
               const [, vatAmount] = getVat(
                 currentLineTransaction,
@@ -164,55 +158,50 @@ export const TransactionDetailsForm = ({
               setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
             }}
           />
+        </CCol>
+       <CCol sm={3} className="d-flex gap-1">
           <InputField
             fieldName="unit"
             current={currentLineTransaction}
             setCurrent={setCurrentLineTransaction}
             value={currentLineTransaction.unit}
             disabled={true}
-            style={{ height: height, textAlign: 'left' }}
+            style={{ height: height, width:'20%', textAlign: 'left', paddingLeft:1 }}
           />
         </CCol>
       </FormRow>
 
       {/* Row 2: VAT & Price */}
-      <FormRow>
-        <CCol sm={8} className="d-flex gap-2">
-          <Label>{t('common.vatCode')}</Label>
+      <FormRow height={height}>
+        <CCol sm={6} className="d-flex gap-2">
+          <Label with={30} paddingLeft={20}>{t('common.vatCode')}</Label>
           <ComboBox
-            style={styles}
+            style={{...styles, width: '80%'}}
             disable={disable}
             key = 'vatCode'
-            //key={`vat-${currentLineTransaction?.vatCode || 'empty'}`}
             value={{ value: currentVat?.id || '', label: currentVat ? `${currentVat.id} ${currentVat.name}` : '' }}
             onChange={(value: any) => {
               const [vatCode, vatAmount] = getVat2(currentLineTransaction, value, vatData)
-              console.log(' value ', value)
-              console.log(' vatCode ', vatCode)
-              console.log(' vatAmount ', vatAmount)
               const netAmount =  currentLineTransaction.quantity * currentLineTransaction.price
               const currentx = { ...currentLineTransaction, vatCode: vatCode, vat: vatAmount, net:netAmount
                 , total:netAmount+vatAmount, company:transaction.company }
-              console.log(' currentx', currentx)
               setCurrentLineTransaction(currentx)
               setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
             }}
             values={vatData.length>0?vatData?.slice().sort(sortById).map(toOption):[toOption(initVat)]}
           />
         </CCol>
-        <CCol sm={4} className="d-flex gap-2">
-          <Label>{t('transaction.line.price')}</Label>
+        <CCol sm={3} className="d-flex gap-1">
+          <Label with={10} paddingLeft={2}>{t('transaction.line.price')}</Label>
           <AmountField
             id="transaction.line.price"
             amount={currentLineTransaction.price ?? 0}
             locale={locale}
             currency={currency}
             disabled={transaction.posted}
-            style={{ height: height??32-20, textAlign: 'right' }}
-            //style={{ ...currencyStyle, fontSize: 12, fontWeight: 'bold', width: '65%' }}
+            style={{ ...numberStyle, width: '60%', paddingLeft:5 }}
             onCommit={(value) => {
               const finalValue = value || 0
-
               const [, vatAmount] = getVat(
                 currentLineTransaction,
                 currentLineTransaction.article,
@@ -234,12 +223,23 @@ export const TransactionDetailsForm = ({
             }}
           />
         </CCol>
+        <CCol sm={3} className="d-flex gap-1">
+            <Label with={5} paddingLeft={1} >{t('common.vat')}</Label>
+            <AmountField
+              id="common.vat"
+              amount={currentLineTransaction.vat ?? 0}
+              locale={locale}
+              currency={currency}
+              disabled
+              style={{ ...numberStyle, width: '60%', paddingLeft:5 }}
+            />
+        </CCol>
       </FormRow>
 
       {/* Row 3: Text & Due Date */}
-      <FormRow>
-        <CCol sm={8} className="d-flex gap-2">
-          <Label>{t('transaction.line.text')}</Label>
+      <FormRow height={height}>
+        <CCol sm={6} className="d-flex gap-2">
+          <Label with={10} paddingLeft={10}>{t('transaction.line.text')}</Label>
           <TextareaField
             fieldName="text"
             placeholder={t('transaction.line.text')}
@@ -252,11 +252,11 @@ export const TransactionDetailsForm = ({
               setCurrentLineTransaction(currentx)
               setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
             }}
-            style={{ width: '100%' }}
+            style={{ width: '80%' }}
           />
         </CCol>
-        <CCol sm={4} className="d-flex gap-2">
-          <Label w={70}>{t('transaction.line.duedate')}</Label>
+        <CCol sm={3} className="d-flex gap-1">
+          <Label with={10} paddingLeft={2}>{t('transaction.line.duedate')}</Label>
           <DatePickerField
             fieldName="duedate"
             label={t('transaction.line.duedate')}
@@ -269,7 +269,19 @@ export const TransactionDetailsForm = ({
               setTransactionR(transaction, setTransaction, currentx, setCurrentLineTransaction)
             }}
             disabled={disable}
+            style={{...numberStyle, width: '65%', paddingLeft:5, zIndex: 9999 }}
           />
+        </CCol>
+        <CCol sm={3} className="d-flex gap-1">
+            <Label with={5} paddingLeft={1}>{t('common.total')}</Label>
+            <AmountField
+              id="common.total"
+              amount={netAmount + currentLineTransaction.vat}
+              locale={locale}
+              currency={currency}
+              disabled
+              style={{...numberStyle,  width: '60%', paddingLeft:5 }}
+            />
         </CCol>
       </FormRow>
     </CContainer>

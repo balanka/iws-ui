@@ -3,8 +3,6 @@ import { styles } from './BasicTreeTableProps.jsx'
 import {stockColumnDefs} from '../ColumnsDefs.ts'
 import { CustomerAccountMainForm } from './CustomerAccountMainForm'
 import { MasterfileFormWithout} from './MasterfileFormWithout'
-// @ts-expect-error -- legacy, see TODO
-import type {RowSelectedEvent} from 'ag-grid-community/dist/types/src/events'
 import IWSTabs from "./IWSTabs.tsx";
 import {CustomerAccountMainFormProps, StoreGeneralFormProps, StoreProps} from '../Props'
 import {initStore} from "./Menu.tsx";

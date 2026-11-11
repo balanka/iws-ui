@@ -1,4 +1,4 @@
-import {JSX, Dispatch, SetStateAction} from 'react'
+import {JSX, Dispatch, SetStateAction, useMemo} from 'react'
 import {CCol, CContainer, CInputGroup} from '@coreui/react-pro'
 import { BooleanField, InputField, DatePickerField, TextareaField, FormMasterfileXComboBox,
   FromTransactionComboBox, FormMasterfileComboBox2,
@@ -21,7 +21,7 @@ interface FinancialsMainFormProps {
   readonly storeData: IMasterfile[];
   readonly accData: IAccount[];
   readonly contactData?: IMasterfile[];
-  readonly modules: ()=>IFmodule[];
+  readonly modules: IFmodule[];
   readonly copyFromTransaction: IFinancials[];
   readonly handleModuleChange: (value: any) => void;
   readonly submitCopy: (id: bigint, modelid: number) => void;
@@ -72,13 +72,22 @@ export const FinancialsMainForm = ({
                                    }: FinancialsMainFormProps): JSX.Element | null => {
   if (!collapse) return null;
   const currentx: IFinancials =   current
+  const modelid = currentx?.modelid ?? 0;
+  //const currentLine = currentLineFinancials
   let currentLine = isArrayAndNotEmpty(currentx?.lines)? currentx?.lines[0]:currentLineFinancials
   currentLine = (currentx?.lines?.length===1)?currentLine:currentLineFinancials
-  const modelid = currentx?.modelid ?? 0;
-  const currentModule = modules().find((m: IFmodule) => m.id === BigInt(modelid)) ?? initfModule;
+  const currentModule = useMemo(() => modules.find((m) => m.id === BigInt(modelid)) ?? initfModule, [modules, modelid])
+  const moduleOptions = useMemo(() => modules.slice().sort(sortById).map(toOption), [modules])
+  const moduleValue = useMemo(() => ({
+    value: `${BigInt(currentModule?.id ?? 0)}`,
+    label: `${BigInt(currentModule?.id ?? 0)} ${currentModule?.name ?? ''}`,
+  }), [currentModule])
+
+ // const currentModule = modules.find((m: IFmodule) => m.id === BigInt(modelid)) ?? initfModule;
   const total = currentx?.lines?.reduce((prev, cur) => prev + (cur?.amount || 0), 0) ?? 0;
   const inputStyle = { height: height - 5, width: '100%', fontSize: '0.875rem' };
   const currencyStyle = { height: height - 5, padding:4, textAlign: 'right' as const, width: '100%' };
+
   const amountStyle = { ...currencyStyle, paddingLeft: 5, paddingRight: 5, fontSize: 12, fontWeight: 'bold', width: '65%' };
   return (
   <div style={{ ...styles.outer, height:200, display: !collapse ? 'none' : '' }}>
@@ -89,12 +98,11 @@ export const FinancialsMainForm = ({
           <Label>{t('common.id')}</Label>
           <InputField fieldName="id" current={currentx} setCurrent={setCurrent} value={currentx.id} disabled={currentx.posted} style={{ ...inputStyle, width: '50%', textAlign: 'right' }} />
           <Label>{t('fmodule.title')}</Label>
-          <ComboBox style={inputStyle} value={{ value: `${BigInt(currentModule?.id ?? 0)}`, label: `${BigInt(currentModule?.id ?? 0)}
-           ${currentModule?.name ?? ''}` }} onChange={handleModuleChange} values={modules().slice().sort(sortById).map(toOption)}
+          <ComboBox style={inputStyle} value={moduleValue} onChange={handleModuleChange} values={moduleOptions}
                     key="moduleComboBox" height ={height-5}
                     zIndex={99999} />
         </CCol>
-        <CCol sm={4} className="d-flex gap-2 ">
+        <CCol sm={3} className="d-flex gap-2 ">
           <Label>{t('common.contact')}</Label>
           <FormMasterfileXComboBox key="contactComboBox"
                                    fieldName="contact"
@@ -130,6 +138,7 @@ export const FinancialsMainForm = ({
                              const date = new Date(event);
                              const month_ = date.getMonth() + 1;
                              const month = month_ < 10 ? `0${month_}` : `${month_}`;
+                             console.log("month_: month", `${month_ } ${month}`);
                              const period = Number(`${date.getFullYear()}${month}`);
                              setCurrent({...currentx, transdate: date, period})
                            }}
@@ -178,7 +187,7 @@ export const FinancialsMainForm = ({
                                    height={height-10}
                                    styles={inputStyle} fontSize={12} setTransaction ={setTransactionF}/>
         </CCol>
-        <CCol sm={4} className="d-flex gap-2">
+        <CCol sm={3} className="d-flex gap-2">
           <Label>{t('transaction.period')}</Label>
             <CInputGroup>
               <InputField
@@ -187,7 +196,7 @@ export const FinancialsMainForm = ({
                 setCurrent={setCurrent}
                 value={currentx.period}
                 disabled={true}
-                style={{ height: height - 7, paddingLeft: 3, width: '50%', textAlign: 'right' }}
+                style={{ height: height - 7, paddingLeft: 3, width: '90', textAlign: 'right' }}
               />
               <BooleanField
                 fieldName="posted"
@@ -270,7 +279,6 @@ export const FinancialsMainForm = ({
             locale={locale}
             currency={currency}
             disabled
-            onCommit={() => {}}
             style={amountStyle}
           />
         </CCol>

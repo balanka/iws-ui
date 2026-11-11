@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useSyncExternalStore } from 'react'
+//import { useCallback, useState, useEffect, useMemo, useSyncExternalStore } from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -55,7 +56,7 @@ ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule])
 
 const TransactionForm = () => {
   // ── Hooks: useForm + router/redux ───────────────────────────────────────
-  const [{ profile, t, toggle, toggleTable, state, module_, modelid }] = useForm()
+  const [{ profile, t, toggle, toggleTable, state, module_ }] = useForm()
   const { token, currency, locale, company } = profile
   const localex = locale ?? 'fr-FR'
   const currencyx = currency ?? 'EUR'
@@ -75,6 +76,7 @@ const TransactionForm = () => {
   const [currentLine, setCurrentLine] = useState<ILineTransaction>(initialLine)
   const [rowData, setRowData] = useState<ITransaction[]>([])
   const [model, setModel] = useState<number>(-1)
+  //const [, setPendingModule] = useState<number | null>(null)
 
   const [{
     language, fmodule, current, setCurrent, initAdd, reload, submitEdit, copyFromTransaction, setCopyFromTransaction,
@@ -96,6 +98,13 @@ const TransactionForm = () => {
   const store_ctx = `${MASTERFILE.store}/${store_modelid}/${company}`
   const sup_ctx = `${MASTERFILE.sup}/${sup_modelid}/${company}`
   const cust_ctx = `${MASTERFILE.cust}/${cust_modelid}/${company}`
+
+  // ── Form state (partner selection, filters, etc.) ───────────────────────
+  const [partnerId, setPartnerId] = useState<number>(-1)
+  const [accFilter, setAccFilter] = useState<string[]>([])
+  const [oaccFilter, setOAccFilter] = useState<string[]>([])
+  const [title, setTitle] = useState(titleText)
+  const [, setReminderBalance] = useState<ReminderBalance[]>([])
 
   // ── Reactive store snapshot ─────────────────────────────────────────────
   const snapshot = useSyncExternalStore(
@@ -129,13 +138,6 @@ const TransactionForm = () => {
     return inner ? (Array.from(inner.values()) as ICustomer[]) : []
   }, [snapshot, cust_modelid])
 
-  // ── Form state (partner selection, filters, etc.) ───────────────────────
-  const [partnerId, setPartnerId] = useState<number>(-1)
-  const [accFilter, setAccFilter] = useState<string[]>([])
-  const [oaccFilter, setOAccFilter] = useState<string[]>([])
-  const [title, setTitle] = useState(titleText)
-  const [, setReminderBalance] = useState<ReminderBalance[]>([])
-
   // Partner list is derived from the store, keyed by partnerId
   const accData1 = useMemo<ICustomer[] | ISupplier[]>(() => {
     if (partnerId <= 0) return [initCust]
@@ -143,6 +145,17 @@ const TransactionForm = () => {
     if (!inner || inner.size === 0) return [initCust]
     return Array.from(inner.values()) as ICustomer[] | ISupplier[]
   }, [snapshot, partnerId])
+
+  const fmoduleData = useMemo(() => (fmodule ?? []).filter((m) => m.parent === TRANSACTION.id), [fmodule])
+  const stData = useMemo(() => storeData?.filter((m) => !m.id.toString().includes('*')) ?? [], [storeData])
+  const accDatax = useMemo<ICustomer[] | ISupplier[] | IAccount[]>(
+    () => (model === formEnum.ACCOUNT ? accData : accData1),
+    [model, accData, accData1]
+  )
+
+
+
+
 
   // ── Masterfile fetch — only if store is empty ───────────────────────────
   useEffect(() => {
@@ -171,12 +184,16 @@ const TransactionForm = () => {
 
   const formatLines = (line: ILineTransaction | ILineFinancials): ILineTransaction | ILineFinancials => {
     const l = line as ILineTransaction
+    const net = l.quantity * l.price
+    const vat = l.vat
+    const price = l.price
+
     return {
       ...l,
       quantity: l.quantity.toLocaleString('de-DE'),
-      price: l.price.toLocaleString('de-DE'),
-      vat: toLocaleString2(l.vat, locale||'de-DE', currency||'EUR'),
-      net: toLocaleString2(l.quantity * l.price, locale||'de-DE', currency||'EUR'),
+      price: price?.toLocaleString(locale, { style: 'currency', currency }),
+      vat: vat?.toLocaleString(locale, { style: 'currency', currency }),
+      net: net?.toLocaleString(locale, { style: 'currency', currency }),
     } as unknown as ILineTransaction
   }
 
@@ -188,14 +205,14 @@ const TransactionForm = () => {
       (acc: number, line: ILineTransaction) => acc + line.quantity * line.price,
       0.0
     )
-  const  toLocaleString2 = (amount:number, locale:string, currency:string)=>
-    amount? new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(amount)
-    : ''
+  // const  toLocaleString2 = (amount:number, locale:string, currency:string)=>
+  //   amount? new Intl.NumberFormat(locale, {
+  //     style: 'currency',
+  //     currency: currency,
+  //     minimumFractionDigits: 2,
+  //     maximumFractionDigits: 2,
+  //   }).format(amount)
+  //   : ''
   const getData = (): any => {
     const net = buildTotal(current)
     const vatTotal = buildVatTotal(current)
@@ -216,8 +233,10 @@ const TransactionForm = () => {
       }),
       transdate: new Date(current?.transdate).toLocaleDateString(locale, {day: 'numeric', month: 'long', year: 'numeric'}),
       period: `${monthName} ${year}`,
-      net:  toLocaleString2(net, locale||'de-DE', currency||'EUR'),
-      vatTotal: toLocaleString2(vatTotal, locale||'de-DE', currency||'EUR'),
+     // net:  toLocaleString2(net, locale||'de-DE', currency||'EUR'),
+      //vatTotal: toLocaleString2(vatTotal, locale||'de-DE', currency||'EUR'),
+      net: net?.toLocaleString(locale, { style: 'currency', currency }),
+      vatTotal: vatTotal.toLocaleString(locale, { style: 'currency', currency }),
       total: total?.toLocaleString(locale, { style: 'currency', currency }),
       totalText: toCardinal(total).split(' ').map(capitalizeFirst).join(' '),
       lines: current.lines.map(formatLines),
@@ -236,10 +255,10 @@ const TransactionForm = () => {
   const submitQuery = async (
     ctx: string,
     partnerCtx: string,
-    partnerModelid: number
+    partnerModelid: number, modelid2Fetch: number
   ) => {
-    setIsFetching(true)
-    try {
+     const timer = setTimeout(() => setIsFetching(true), 150)
+     try {
       const snap = iwsStore.getRawMap()
       const jobs: Promise<unknown>[] = []
       const tryFetch = <X,>(mId: number, url: string) => {
@@ -254,14 +273,12 @@ const TransactionForm = () => {
       tryFetch<IVat>(vat_modelid, vat_ctx)
       if (partnerModelid > 0) tryFetch(partnerModelid, partnerCtx)
 
-      jobs.push(Get3(ctx, token, modelid, current_, setRowData, setCurrent) as unknown as Promise<void>)
+      jobs.push(Get3(ctx, token, modelid2Fetch, current_, setRowData, setCurrent) as unknown as Promise<void>)
 
       await Promise.all(jobs)
-    } catch (error) {
-      console.error('Error fetching data', error)
-    } finally {
-      setIsFetching(false)
-    }
+     } catch (error) {
+       console.error('Error fetching data', error)
+     } finally { clearTimeout(timer);setIsFetching(false) }
   }
 
   const processImport = (data2Import: ITransaction[]) => {
@@ -269,12 +286,10 @@ const TransactionForm = () => {
   }
 
   const handleModuleChange = async (selectedValue: any) => {
-    const id = selectedValue?.value !== undefined ? String(selectedValue.value) : String(selectedValue)
-    const numericId = parseInt(id, 10)
+    const numericId = parseInt(String(selectedValue?.value ?? selectedValue), 10)
     setModel(numericId)
 
-    const mx: IFmodule =
-      fmodule.find((m: IFmodule) => parseInt(`${m?.id}`, 10) === numericId) ?? initfModule
+    const mx: IFmodule = fmodule.find((m: IFmodule) => parseInt(`${m?.id}`, 10) === numericId) ?? initfModule
 
     const moduleName = mx?.name ?? titleText
     setTitle(`${company}/${moduleName}`)
@@ -283,9 +298,9 @@ const TransactionForm = () => {
       ? mx.copyFrom.split(',').map((mid: string) => parseInt(mid, 10))
       : []
 
-    setPartnerId(parseInt(mx?.account, 10))
-    setAccFilter(mx?.accFilter?.replace(/\s/g, '').split(',') ?? [])
-    setOAccFilter(mx?.oaccFilter?.replace(/\s/g, '').split(',') ?? [])
+      setPartnerId(parseInt(mx?.account, 10))
+      setAccFilter(mx?.accFilter?.replace(/\s/g, '').split(',') ?? [])
+      setOAccFilter(mx?.oaccFilter?.replace(/\s/g, '').split(',') ?? [])
 
     const ctx = `${module_.ctx}/${mx.id}/${company}`
     const ctx_copyFrom = `${module_.ctx}/${copyFromIds.join(',')}/${company}`
@@ -306,21 +321,21 @@ const TransactionForm = () => {
     }
 
     if (_partnerCtx.length > 0) {
-      await submitQuery(ctx, partnerCtx, partnerType)
+      await submitQuery(ctx, partnerCtx, partnerType, numericId)
     }
   }
 
-  const fmoduleData = (fmodule ?? []).filter((m) => m.parent === TRANSACTION.id)
-
-  const accDatax: ICustomer[] | ISupplier[] | IAccount[] =
-    model === formEnum.ACCOUNT ? accData : accData1
-  const stData = storeData?.filter((m) => !m.id.toString().includes('*'))
-
   if (isLogin) return <Login />
 
-  return isFetching ? (
-    <CSpinner color="primary" />
-  ) : (
+  return (
+    <>
+    {isFetching && (
+    <div style={{ position: 'absolute', inset: 0, display: 'flex',
+      alignItems: 'center', justifyContent: 'center',
+      background: 'rgba(255,255,255,0.5)', zIndex: 9999 }}>
+      <CSpinner color="primary" />
+    </div>
+    )}
     <>
       <FinancialsFormHead
         title={title}
@@ -432,6 +447,7 @@ const TransactionForm = () => {
         />
       </div>
     </>
+ </>
   )
 }
 

@@ -26,7 +26,7 @@ const ComboBox = <T extends Base>({
                                     isMulti
                                   }: GenericSelectProps<T>) => {
   //const zindex = zIndex ?? 99999
-  const minHeight = 24
+  const minHeight =height?height-5 :24 //24
   const customStyles = {
     // Only apply user styles to the outermost container (safe)
     container: (base: any) => ({

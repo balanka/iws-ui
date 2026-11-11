@@ -9,7 +9,7 @@ type AmountFieldProps = {
   decimals?: number
   disabled?: boolean
   style?: React.CSSProperties
-  onCommit: (amount: number) => void
+  onCommit?: (amount: number) => void
 }
 
 export function AmountField({
@@ -24,6 +24,7 @@ export function AmountField({
                             }: AmountFieldProps) {
   const safeDecimals = Math.max(0, Math.min(20, decimals ?? 2))
   const resolvedLocale = locale || 'de-DE'
+  const onCommit_ = onCommit?? (()=>{})
 
 
   // Build a formatter once per (locale, currency, decimals) change
@@ -67,7 +68,7 @@ export function AmountField({
     // Round to `safeDecimals` before committing so display and state agree
     const rounded = Number(finalValue.toFixed(safeDecimals))
 
-    onCommit(rounded)
+    onCommit_(rounded)
     setAmountText(formatValue(rounded))
   }
 

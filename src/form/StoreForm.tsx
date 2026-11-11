@@ -1,4 +1,3 @@
-// src/form/StoreForm.tsx
 import { useEffect, useMemo, useSyncExternalStore } from 'react';
 import {
   AllCommunityModule,

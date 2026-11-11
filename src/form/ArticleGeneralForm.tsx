@@ -201,7 +201,6 @@ export const ArticleGeneralForm = ({
               locale={locale}
               currency={currency}
               disabled
-              onCommit={() => {}}
               style={{ ...priceStyle}}
             />
           </div>
