@@ -130,7 +130,7 @@ interface FormMasterfileComboBox2Props {
   name: string;      // Field name for the name (e.g., "accountName")
   accFilter?: string[];
   height?:number,
-  //zIndex?: number;
+  zIndex?: number;
   styles?: React.CSSProperties;
   fontSize?: number;
   setTransaction: ( transaction:IFinancials
@@ -150,8 +150,8 @@ export const FormMasterfileComboBox2 = ({
                                                 name,
                                                 accFilter = [],
                                                 height,
-                                                //zIndex = 1000,
-                                                styles = {},
+                                                zIndex,
+                                                styles ,
                                                 //fontSize = 12,
                                                 //disable = false
                                                 setTransaction,
@@ -159,18 +159,18 @@ export const FormMasterfileComboBox2 = ({
   const filtered = getFiltered(data, accFilter);
   let currentLinex: any = { ...currentLine };
   let currentLinex1: { [index: string]: any } = { ...currentLinex };
+  const styles_ =styles?styles:{minHeight:22, height:height, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}
   return (
     <ComboBox<{value:string|bigint,  label:string}>
-      style={{...styles, minHeight:22, height:height, minWidth:100, width:'100%', color: '#6b7280', fontSize:12}}
+      style={styles_}
       disable={current.posted}
       value={{value: currentLinex1[id], label: `${currentLinex1[id]} ${currentLinex1[name]}`}}
       onChange={(value:any,  _event:any) => {
         const currentAccountx = filtered?.find((acc: { id: any }) => acc.id ===value)
         const currentLinex = {...currentLine, [id]: currentAccountx?currentAccountx.id:'', [name]: currentAccountx ?currentAccountx.name:''}
-        //setCurrentLine({...currentLinex})
         setTransaction(current, setCurrent, currentLinex, setCurrentLine)
       }}
-
+      zIndex={zIndex}
       values={filtered.slice().sort(sortById).map(toOption)}
     />
   )

@@ -44,7 +44,7 @@ import { useDispatch } from 'react-redux'
 import { capitalizeFirst, generateDocx } from '../utils/XlsUtils.ts'
 import useTransactionForm from './useTransactionForm.ts'
 import useForm from './useForm.ts'
-import { AddList, Get, Get3, GET4, GetListData } from './CrudController.ts'
+import {AddList, Get, Get3, GET4, GetListData, UpdateStore} from './CrudController.ts'
 import { getLocalizedOrdinal, getMonthName, isArrayAndNotEmpty } from '../utils/Utils.ts'
 import { toCardinal } from 'n2words/fr-FR'
 import { TEMPLATE_ENUM } from '../Props.ts'
@@ -127,38 +127,36 @@ const FinancialsForm = () => {
     if (!token) return
     const snap = iwsStore.getRawMap()
 
-    const tryFetch = <X,>(mId: number, url: string) => {
+    const tryFetch = (mId: number, url: string) => {
       const inner = snap.get(mId)
       if (!inner || inner.size === 0) {
-        Get(url, token, mId, (() => {}) as React.Dispatch<React.SetStateAction<X[]>>)
+        UpdateStore(url, token, mId)
       }
     }
 
-    tryFetch<IAccount>(acc_modelid, acc_ctx)
-    tryFetch<IMasterfile>(cc_modelid, cc_ctx)
-    tryFetch<IContact>(contact_modelid, contact_ctx)
+    tryFetch(acc_modelid, acc_ctx)
+    tryFetch(cc_modelid, cc_ctx)
+    tryFetch(contact_modelid, contact_ctx)
   }, [token, company, acc_ctx, cc_ctx, contact_ctx, acc_modelid, cc_modelid, contact_modelid])
 
   // ── Callbacks ───────────────────────────────────────────────────────────
   const submitQuery = async (ctx: string,  modelid4Fetch:number, event?: any) => {
     event?.preventDefault()
-    //setIsFetching(true)
-    //let shown = false
     const showTimer = setTimeout(() => { //shown = true;
       setIsFetching(true) }, 150)
     try {
       const snap = iwsStore.getRawMap()
       const jobs: Promise<unknown>[] = []
 
-      const tryFetch = <X,>(mId: number, url: string) => {
+      const tryFetch = (mId: number, url: string) => {
         const inner = snap.get(mId)
         if (!inner || inner.size === 0) {
-          jobs.push(Get(url, token, mId, (() => {}) as React.Dispatch<React.SetStateAction<X[]>>) as unknown as Promise<void>)
+          jobs.push(UpdateStore(url, token, mId) as unknown as Promise<void>)
         }
       }
 
-      tryFetch<IAccount>(acc_modelid, acc_ctx)
-      tryFetch<IMasterfile>(cc_modelid, cc_ctx)
+      tryFetch(acc_modelid, acc_ctx)
+      tryFetch(cc_modelid, cc_ctx)
       jobs.push(Get3(ctx, token, modelid4Fetch, current_, setRowData, setCurrent) as unknown as Promise<void>)
 
       await Promise.all(jobs)
@@ -166,13 +164,9 @@ const FinancialsForm = () => {
       console.error('Error fetching data', error)
     } finally {
       clearTimeout(showTimer)
-      // if (shown) {
-      //   // keep it up at least 200 ms so it doesn't blink
-      //   await new Promise((r) => setTimeout(r, 200))
-      // }
       setIsFetching(false)
     }
-  } //, [acc_ctx, cc_ctx, token, acc_modelid, cc_modelid, modelid, current_, setCurrent, setIsFetching])
+  }
 
   const handleModuleChange = (selectedValue: any) => {
     const numericId = parseInt(String(selectedValue?.value ?? selectedValue), 10)

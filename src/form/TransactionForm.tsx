@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo, useSyncExternalStore } from 'react'
-//import { useCallback, useState, useEffect, useMemo, useSyncExternalStore } from 'react'
 import {
   AllCommunityModule,
   ClientSideRowModelModule,
@@ -9,8 +8,7 @@ import {
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 import { styles } from './BasicTreeTableProps.tsx'
-// @ts-expect-error -- legacy, see TODO
-import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
+
 import { FinancialsFormHead } from './FinancialsFormHead.tsx'
 import { TransactionMainForm } from './TransactionMainForm.tsx'
 import {
@@ -47,7 +45,7 @@ import { capitalizeFirst, generateDocx } from './../utils/XlsUtils.ts'
 import useTransactionForm from './useTransactionForm.ts'
 import useForm from './useForm.ts'
 import { formEnum } from '../utils/FormEnum.tsx'
-import { Get, Get3, GetListData, Gets } from './CrudController.ts'
+import { Get3, GetListData, Gets, UpdateStore} from './CrudController.ts'
 import { toCardinal } from 'n2words/fr-FR'
 import { TEMPLATE_ENUM } from '../Props.ts'
 import { capitalize1rst, getMonthName } from '../utils/Utils.ts'
@@ -161,19 +159,19 @@ const TransactionForm = () => {
   useEffect(() => {
     if (!token) return
     const snap = iwsStore.getRawMap()
-    const tryFetch = <X,>(mId: number, url: string) => {
+    const tryFetch = (mId: number, url: string) => {
       const inner = snap.get(mId)
       if (!inner || inner.size === 0) {
-        Get(url, token, mId, (() => {}) as React.Dispatch<React.SetStateAction<X[]>>)
+        UpdateStore(url, token, mId)
       }
     }
 
-    tryFetch<IArticle>(art_modelid, art_ctx)
-    tryFetch<IStore>(store_modelid, store_ctx)
-    tryFetch<IVat>(vat_modelid, vat_ctx)
-    tryFetch<ICustomer>(cust_modelid, cust_ctx)
-    tryFetch<ISupplier>(sup_modelid, sup_ctx)
-    tryFetch<IAccount>(acc_modelid, acc_ctx)
+    tryFetch(art_modelid, art_ctx)
+    tryFetch(store_modelid, store_ctx)
+    tryFetch(vat_modelid, vat_ctx)
+    tryFetch(cust_modelid, cust_ctx)
+    tryFetch(sup_modelid, sup_ctx)
+    tryFetch(acc_modelid, acc_ctx)
   }, [
     token, company,
     art_ctx, store_ctx, vat_ctx, cust_ctx, sup_ctx, acc_ctx,
@@ -261,16 +259,16 @@ const TransactionForm = () => {
      try {
       const snap = iwsStore.getRawMap()
       const jobs: Promise<unknown>[] = []
-      const tryFetch = <X,>(mId: number, url: string) => {
+      const tryFetch = (mId: number, url: string) => {
         const inner = snap.get(mId)
         if (!inner || inner.size === 0) {
-          jobs.push(Get(url, token, mId, (() => {}) as React.Dispatch<React.SetStateAction<X[]>>) as unknown as Promise<void>)
+          jobs.push(UpdateStore(url, token, mId) as unknown as Promise<void>)
         }
       }
 
-      tryFetch<IArticle>(art_modelid, art_ctx)
-      tryFetch<IStore>(store_modelid, store_ctx)
-      tryFetch<IVat>(vat_modelid, vat_ctx)
+      tryFetch(art_modelid, art_ctx)
+      tryFetch(store_modelid, store_ctx)
+      tryFetch(vat_modelid, vat_ctx)
       if (partnerModelid > 0) tryFetch(partnerModelid, partnerCtx)
 
       jobs.push(Get3(ctx, token, modelid2Fetch, current_, setRowData, setCurrent) as unknown as Promise<void>)

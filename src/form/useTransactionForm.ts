@@ -19,7 +19,7 @@ import { Add, COPY, Edit, EditRow, Get, Get2 } from './CrudController.ts'
 import { MASTERFILE } from './Menu.tsx'
 import iwsStore from '../utils/Store.tsx'
 import { formEnum } from '../utils/FormEnum.tsx'
-import { IFmodule, IModule, IWSTransaction } from '../Models.ts'
+import { IFmodule, IModule, IWSTransaction} from '../Models.ts'
 import { ILine, SaveProps, UseTransactionFormResult } from '../Props.ts'
 import useForm from './useForm.ts'
 import { isArrayAndNotEmpty } from '../utils/Utils.ts'
@@ -27,6 +27,33 @@ import { TFunction } from 'i18next'
 import { templateNames } from '../utils/XlsUtils.ts'
 
 ModuleRegistry.registerModules([AllCommunityModule, ClientSideRowModelModule])
+
+// ── Empty-line helpers ────────────────────────────────────────────────────
+/** A value is "empty" if undefined, null, or '' */
+const isEmpty = (v: unknown): boolean =>
+  v === undefined || v === null || v === ''
+
+/**
+ * Finds the first line that is empty on at least one of the given fields.
+ * Preferentially returns a row that's empty on *all* provided fields
+ * (the "fresh blank line"), falling back to any row empty on one field.
+ */
+const isDeleted = (l: any): boolean =>
+  l?.transid === BigInt(-2) || String(l?.transid) === '-2'
+
+const findReusableEmptyLineIndex = <L,>(
+  lines: L[] | undefined,
+  fields: (keyof L)[]
+): number => {
+  if (!lines || lines.length === 0) return -1
+  const allEmpty = lines.findIndex(
+    (l) => !isDeleted(l) && fields.every((f) => isEmpty((l as any)?.[f]))
+  )
+  if (allEmpty !== -1) return allEmpty
+  return lines.findIndex(
+    (l) => !isDeleted(l) && fields.some((f) => isEmpty((l as any)?.[f]))
+  )
+}
 
 const useTransactionForm = <
   T extends IWSTransaction<L>,
@@ -75,12 +102,10 @@ const useTransactionForm = <
     return inner ? (Array.from(inner.values()) as IFmodule[]) : []
   }, [snapshot, fmodule_modelid])
 
-  // ── 3. Initial load: seed rowData from store if it already has entries,
-  //       and fetch reference data (fmodule / module) if their stores are empty.
+  // ── 3. Initial load ─────────────────────────────────────────────────────
   useEffect(() => {
     if (!token) return
 
-    // Seed the caller's rowData once from the store if it's populated
     if (!initRef.current) {
       const cached = iwsStore.getRawMap().get(current_.modelid)
       if (cached && cached.size > 0) {
@@ -132,13 +157,61 @@ const useTransactionForm = <
 
   const submitAdd = (event: any) => {
     event.preventDefault()
-    const row: T = { ...current, modelid: model, company }
+    const row = { ...current, modelid: model, company }
+
     Add(modifyUrl, token, row, rowData, setRowData, setCurrent)
   }
 
+  const syncRowData = (nextCurrent: T) => {
+    setRowData((prev) => {
+      const idx = prev.findIndex((r) => String(r.id) === String(nextCurrent.id))
+      if (idx < 0) return prev
+      const next = [...prev]
+      next[idx] = nextCurrent
+      return next
+    })
+  }
+  /**
+   * Add or reuse a line.
+   *
+   * - If the current transaction is a `Transaction` (has `article` lines):
+   *   reuse the first line whose `article` is empty.
+   * - If the current transaction is a `Financials` (has `account`/`oaccount` lines):
+   *   reuse the first line whose `account` AND `oaccount` are both empty
+   *   (the "blank line"), or, failing that, the first line empty on either.
+   *
+   * This guarantees at most one blank line per form.
+   */
   const addLine = (line: L, setCurrentFn: Dispatch<SetStateAction<T>>) => {
     setCurrentFn((prevCurrent: T) => {
       if (!prevCurrent) return prevCurrent
+
+      const dx: T = { ...prevCurrent }
+      const existingLines: L[] = Object.prototype.hasOwnProperty.call(dx, 'lines')
+        ? [...(dx.lines ?? [])]
+        : []
+
+      const isFinancialsLine = 'account' in (line as any) || 'oaccount' in (line as any)
+      const emptyFields: (keyof L)[] = isFinancialsLine
+        ? (['account', 'oaccount'] as (keyof L)[])
+        : (['article', 'vatCode'] as (keyof L)[])
+
+      const emptyIdx = findReusableEmptyLineIndex(existingLines, emptyFields)
+
+      if (emptyIdx !== -1) {
+        const merged: L = {
+          ...existingLines[emptyIdx],
+          ...line,
+          company: existingLines[emptyIdx].company ?? company,
+          modelid: existingLines[emptyIdx].modelid ?? prevCurrent.modelid,
+        }
+        existingLines[emptyIdx] = merged
+        dx.lines = existingLines
+        setCurrentLine({ ...merged })
+        syncRowData(dx)
+        return dx
+      }
+
       const newLine: L = {
         ...line,
         id: BigInt(-1),
@@ -146,37 +219,34 @@ const useTransactionForm = <
         company,
         modelid: prevCurrent.modelid,
       }
-      const dx: T = { ...prevCurrent }
+
       if (Object.prototype.hasOwnProperty.call(dx, 'lines')) {
         dx.lines = [...(dx.lines ?? []), newLine]
       } else {
         dx['lines'] = [{ ...newLine }]
       }
-      if (gridApi) {
-        gridApi.applyTransactionAsync({ add: [newLine] })
-      }
       setCurrentLine({ ...newLine })
+      syncRowData(dx)
       return dx
     })
   }
 
   const onNewLine = () => addLine(initialLine, setCurrent)
 
-  const onRemoveSelectedLine = (
-    event: any,
-    current: T,
-    setCurrent: Dispatch<SetStateAction<T>>
-  ) => {
-    event.preventDefault()
-    const dx: T = { ...current }
-    if (!Object.prototype.hasOwnProperty.call(dx, 'lines')) dx['lines'] = []
-    const idx = dx?.lines?.findIndex(
-      (obj: ILine) => String(obj?.id) === String(currentLine?.id)
-    )
-    if (idx >= 0) dx.lines[idx] = { ...currentLine, transid: BigInt(-2) }
-    gridApi?.applyTransaction({ remove: [currentLine] })
-    setCurrent(dx)
-  }
+  // const onRemoveSelectedLine = (
+  //   event: any,
+  //   current: T,
+  //   setCurrent: Dispatch<SetStateAction<T>>
+  // ) => {
+  //   event.preventDefault()
+  //   const dx: T = { ...current }
+  //   if (!Object.prototype.hasOwnProperty.call(dx, 'lines')) dx['lines'] = []
+  //   const idx = dx?.lines?.findIndex((obj: ILine) => String(obj?.id) === String(currentLine?.id))
+  //   if (idx >= 0) dx.lines[idx] = { ...currentLine, transid: BigInt(-2) }
+  //   gridApi?.applyTransaction({ remove: [currentLine] })
+  //   setCurrent(dx)
+  //   // ← no gridApi call; React re-renders the grid from dx.lines
+  // }
 
   const callSubmitEdit = async (
     event: any,
@@ -241,22 +311,35 @@ const useTransactionForm = <
   const submitCancel = (event: any) =>
     callSubmitCancel(event, ctx || modifyUrl, token, current, rowData)
 
-  const onDeleteLine = async (event: any) => {
-    onRemoveSelectedLine(event, current, setCurrent)
-    let updated: T
-    if (BigInt(current.id ?? 0) > 0n) {
-      updated = await Edit(modifyUrl, token, current)
-    } else {
-      updated = current
-    }
-    const index = rowData.findIndex(
-      (obj: T) => String(obj?.id) === String(updated?.id)
+  const buildRemovedLine = (current: T, currentLine: L): T => {
+    const dx: T = { ...current }
+    if (!Object.prototype.hasOwnProperty.call(dx, 'lines')) dx['lines'] = []
+    const idx = dx.lines.findIndex(
+      (obj: ILine) => String(obj?.id) === String(currentLine?.id)
     )
-    if (index >= 0) {
-      const newList = [...rowData]
-      newList[index] = updated
-      setRowData(newList)
+    if (idx >= 0) dx.lines[idx] = { ...currentLine, transid: BigInt(-2) }
+    return dx
+  }
+
+  // const onRemoveSelectedLine = (event: any, current: T, setCurrent: Dispatch<SetStateAction<T>>) => {
+  //   event.preventDefault()
+  //   const dx = buildRemovedLine(current, currentLine)
+  //   gridApi?.applyTransaction({ remove: [currentLine] })
+  //   setCurrent(dx)
+  // }
+  const onDeleteLine = async (event: any) => {
+    event.preventDefault()
+    const dx = buildRemovedLine(current, currentLine)
+    setCurrent(dx)
+    gridApi?.applyTransaction({ remove: [currentLine] })
+
+    let updated: T = dx
+    if (BigInt(dx.id ?? 0) > 0n) {
+      const fromServer = await Edit(modifyUrl, token, dx)
+      if (fromServer) updated = fromServer
     }
+    setCurrent(updated)
+    syncRowData(updated)
   }
 
   const reload = () => {
@@ -301,8 +384,6 @@ const useTransactionForm = <
     }
   }
 
-  // Latest-ref pattern — the listener stays stable, the ref always points
-  // at the freshest handler. No useCallback needed.
   useEffect(() => {
     handleKeyPressRef.current = handleKeyPress
   })
@@ -325,7 +406,7 @@ const useTransactionForm = <
     return names
   }, [current, fmodule])
 
-  const saveProps: SaveProps <L> = {
+  const saveProps: SaveProps<L> = {
     fileNames: exportFileName(),
     sheetName,
     data: current?.lines ?? [],
@@ -388,7 +469,7 @@ const useTransactionForm = <
   return [{
     language,
     fmodule,
-    setFmodule: () => {},   // kept for API compat; fmodule is now reactive
+    setFmodule: () => {},
     current,
     setCurrent,
     initAdd,

@@ -9,11 +9,11 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-quartz.css'
 // @ts-expect-error -- legacy, see TODO
 import type { RowSelectedEvent } from 'ag-grid-community/dist/types/src/events'
-import { Get } from './CrudController'
+import {Get, UpdateStore} from './CrudController'
 import { ARTICLE_ACCOUNT_QUERY_PARM, MASTERFILE } from './Menu'
 import { formEnum } from '../utils/FormEnum'
 import { IJournalProps, UseArticleAccountResult } from '../Props.ts'
-import { IArticle, IFmodule, IModule, IStore } from '../Models.ts'
+import { IArticle, IFmodule, IStore } from '../Models.ts'
 import useForm from './useForm.ts'
 import iwsStore from '../utils/Store.tsx'
 
@@ -108,17 +108,17 @@ const useArticleAccountForm = <T,>(): [UseArticleAccountResult<T>] => {
     if (!token) return
     const snap = iwsStore.getRawMap()
 
-    const tryFetch = <X,>(modelId: number, ctx: string) => {
+    const tryFetch = (modelId: number, ctx: string) => {
       const inner = snap.get(modelId)
       if (!inner || inner.size === 0) {
-        Get(ctx, token, modelId, (() => {}) as React.Dispatch<React.SetStateAction<X[]>>)
+        UpdateStore(ctx, token, modelId)
       }
     }
 
-    tryFetch<IArticle>(art_modelid, art_ctx)
-    tryFetch<IStore>(store_modelid, store_ctx)
-    tryFetch<IModule>(module_modelid, module_ctx)
-    tryFetch<IFmodule>(fmodule_modelid, fmodule_ctx)
+    tryFetch(art_modelid, art_ctx)
+    tryFetch(store_modelid, store_ctx)
+    tryFetch(module_modelid, module_ctx)
+    tryFetch(fmodule_modelid, fmodule_ctx)
   }, [
     token, company,
     art_ctx, store_ctx, module_ctx, fmodule_ctx,

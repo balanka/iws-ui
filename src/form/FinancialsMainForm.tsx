@@ -1,6 +1,7 @@
 import {JSX, Dispatch, SetStateAction, useMemo} from 'react'
 import {CCol, CContainer, CInputGroup} from '@coreui/react-pro'
-import { BooleanField, InputField, DatePickerField, TextareaField, FormMasterfileXComboBox,
+import {
+  BooleanField, InputField, DatePickerField, TextareaField, FormMasterfileXComboBox,
   FromTransactionComboBox, FormMasterfileComboBox2,
 } from './common'
 import {  styles } from './FormsProps'
@@ -225,7 +226,7 @@ export const FinancialsMainForm = ({
             name="oaccountName"
             accFilter={oaccountFilter}
             height={height-10}
-            //zIndex={zIndex}
+            zIndex={zIndex}
             styles={inputStyle}
             fontSize={12}
             setTransaction ={setTransactionF}

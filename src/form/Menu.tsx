@@ -544,7 +544,7 @@ export const initLineTransaction:ILineTransaction = {
       unit: '',
       price: 0.0,
       currency: '',
-      vatCode: '-1',
+      vatCode: '',
       vat: 0.0,
       net:0.0, //{return this.quantity*this.price},
       total:0.0,

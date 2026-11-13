@@ -265,6 +265,29 @@ async function fetchList<T>(ctx: string, token: string, modelId: number
   }
 }
 
+// ==================== CRUD Operations ====================
+/**
+ * Fetch list – updates iwsStore.
+ */
+async function fetchAndUpdateStore<T>(ctx: string, token: string, modelId: number): Promise<void> {
+  const url = buildUrl(ctx);
+  console.warn(`Fetching!!!!!!`, url);
+  try {
+    const data = await fetchWithAuth<T[]>(url, token);
+    console.warn(`Expected array for modelId ${modelId}, got`, data);
+    if (Array.isArray(data)) {
+      iwsStore.put(modelId, data as IWSModel[]);
+    } else {
+      console.warn(`Expected array for modelId ${modelId}, got`, data);
+    }
+  } catch (error) {
+    console.error(`Failed to fetch ${ctx}`, error);
+    if (JSON.stringify(error).includes('401')) {
+      console.warn('Session expired – redirect to login');
+    }
+  }
+}
+
 /**
  * Fetch single record or first item of an array.
  */
@@ -498,7 +521,7 @@ function editRow<T>(edited: T, isNew: boolean, setCurrent: Dispatch<SetStateActi
 }
 
 // ==================== Exported API ====================
-export const Get = fetchList;
+
 export const Gets = async <T>(
   ctx: string,
   token: string,
@@ -539,6 +562,7 @@ export const Login = async (
     navigate
   );
 };
+export const Get = fetchList;
 export const Get2 = fetchSingle;
 export const Get3 = fetchListAndSetCurrent;
 export const Add = createRecord;
@@ -548,3 +572,4 @@ export const Edit = updateRecord;
 export const EditRow = editRow;
 export const COPY = copyRecord;
 export const GET4 = getSingle;
+export const UpdateStore = fetchAndUpdateStore
